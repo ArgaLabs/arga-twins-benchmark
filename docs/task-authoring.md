@@ -18,7 +18,7 @@ benchmark/instances/<split>/<instance-id>/
   verify.yaml
 ```
 
-`prompt.txt` is the only task instruction sent to the candidate. Seed files, verification rules, expected state, and meaningful hidden identifiers remain in the trusted runner zone.
+`prompt.txt` is the only task instruction sent to the candidate. The compiler also copies that concrete task text into the saved Scenario's descriptive metadata so operators can identify it in Arga; this does not make it a seeding prompt. Seed files, verification rules, expected state, and meaningful hidden identifiers remain in the trusted runner zone.
 
 ## Required task properties
 
@@ -35,7 +35,9 @@ benchmark/instances/<split>/<instance-id>/
 
 ## Seeding rule
 
-The compiler emits Arga Scenario JSON with `twins` and exact `seed_config` only, and the runner imports it through `arga test-runner scenarios import --json`. It must omit `Scenario.prompt`; prompt-based repair is not a reproducible fixture source.
+The compiler emits an Arga Scenario with a human-readable `name`, a `description` containing the concrete task, the selected `twins`, exact checked-in `seed_config`, and a deterministic content-hash tag. It must omit `Scenario.prompt`; prompt-based fixture generation or repair is not a reproducible seed source.
+
+The runner uses `arga test-runner scenarios list --tag ... --json` and `arga test-runner scenarios import --json` to save each compiled Scenario once and reuse it by content hash. Changing the task, fixture, or other fingerprinted instance-bundle content produces a new hash and therefore a new saved Scenario; cleanup tears down only the episode's twin run.
 
 ## Variant rule
 

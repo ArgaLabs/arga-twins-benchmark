@@ -18,7 +18,7 @@
 
 > **Implementation amendment — 19 July 2026**
 >
-> Experiments provision and manage exact-seeded twin runs exclusively through the authenticated Arga CLI. Arga does not deploy the candidate: the benchmark invokes the agent separately and gives it only the provisioned provider API URLs and ordinary twin-native credentials. The checked-in development catalog now targets 12 templates × four variants = 48 instances. See `architecture.md` and `running-experiments.md` for the authoritative execution contract.
+> Experiments save and reuse exact-seeded Scenarios, then provision and manage twin runs exclusively through the authenticated Arga CLI. Each saved Scenario has a readable name and concrete task description while leaving `Scenario.prompt` unset; its fixture comes only from checked-in `seed_config`. Arga does not deploy the candidate: the benchmark invokes the agent separately and gives it only the provisioned provider API URLs and ordinary twin-native credentials. The checked-in development catalog now targets 12 templates × four variants = 48 instances. See `architecture.md` and `running-experiments.md` for the authoritative execution contract.
 
 # Executive Summary
 

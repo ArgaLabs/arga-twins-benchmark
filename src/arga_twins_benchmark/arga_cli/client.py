@@ -61,7 +61,9 @@ class TwinRun:
 
 
 class ArgaCli(Protocol):
-    async def import_scenario(self, scenario_file: Path) -> str: ...
+    async def list_scenarios(self, *, tag: str) -> list[Mapping[str, Any]]: ...
+
+    async def import_scenario(self, scenario_file: Path) -> Mapping[str, Any]: ...
 
     async def create_twin_run(
         self,
@@ -77,8 +79,6 @@ class ArgaCli(Protocol):
     async def reset(self, run_id: str) -> Mapping[str, Any]: ...
 
     async def teardown(self, run_id: str) -> Mapping[str, Any]: ...
-
-    async def delete_scenario(self, scenario_id: str) -> Mapping[str, Any]: ...
 
 
 class SubprocessArgaCli:
@@ -132,8 +132,29 @@ class SubprocessArgaCli:
             return None
         return Path(self._credential_home.name)
 
-    async def import_scenario(self, scenario_file: Path) -> str:
-        payload = await self._run_json(
+    async def list_scenarios(self, *, tag: str) -> list[Mapping[str, Any]]:
+        payload = await self._run_json_value(
+            "test-runner",
+            "scenarios",
+            "list",
+            "--api-url",
+            self.api_url,
+            "--tag",
+            tag,
+            "--json",
+        )
+        if not isinstance(payload, list):
+            raise ArgaCliError("Arga CLI scenario list JSON output must be an array")
+
+        scenarios: list[Mapping[str, Any]] = []
+        for index, item in enumerate(cast(list[object], payload)):
+            if not isinstance(item, dict):
+                raise ArgaCliError(f"Arga CLI scenario list item {index} must be an object")
+            scenarios.append(cast(dict[str, Any], item))
+        return scenarios
+
+    async def import_scenario(self, scenario_file: Path) -> Mapping[str, Any]:
+        return await self._run_json(
             "test-runner",
             "scenarios",
             "import",
@@ -143,10 +164,6 @@ class SubprocessArgaCli:
             str(scenario_file),
             "--json",
         )
-        scenario_id = payload.get("id")
-        if not isinstance(scenario_id, str) or not scenario_id:
-            raise ArgaCliError("scenario import did not return a non-empty id")
-        return scenario_id
 
     async def create_twin_run(
         self,
@@ -215,18 +232,7 @@ class SubprocessArgaCli:
             "--json",
         )
 
-    async def delete_scenario(self, scenario_id: str) -> Mapping[str, Any]:
-        return await self._run_json(
-            "test-runner",
-            "scenarios",
-            "delete",
-            "--api-url",
-            self.api_url,
-            scenario_id,
-            "--json",
-        )
-
-    async def _run_json(self, *arguments: str) -> dict[str, Any]:
+    async def _run_json_value(self, *arguments: str) -> object:
         process = await asyncio.create_subprocess_exec(
             *self.command(*arguments),
             stdout=asyncio.subprocess.PIPE,
@@ -238,9 +244,13 @@ class SubprocessArgaCli:
             message = stderr.decode(errors="replace").strip() or stdout.decode(errors="replace").strip()
             raise ArgaCliError(f"Arga CLI exited with {process.returncode}: {message}")
         try:
-            payload = json.loads(stdout)
+            payload: object = json.loads(stdout)
         except json.JSONDecodeError as error:
             raise ArgaCliError(f"Arga CLI did not return JSON: {stdout.decode(errors='replace').strip()}") from error
+        return payload
+
+    async def _run_json(self, *arguments: str) -> dict[str, Any]:
+        payload = await self._run_json_value(*arguments)
         if not isinstance(payload, dict):
             raise ArgaCliError("Arga CLI JSON output must be an object")
         return cast(dict[str, Any], payload)

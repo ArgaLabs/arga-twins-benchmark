@@ -11,8 +11,10 @@ from arga_twins_benchmark.specs.models import BindingSpec, InstanceSpec, Templat
 def compile_scenario(catalog_root: Path, instance_id: str) -> dict[str, Any]:
     """Compile one benchmark instance into an exact Arga Scenario import payload.
 
-    The task prompt is deliberately absent: Arga receives only deterministic
-    twin fixture state. The candidate adapter receives the prompt later.
+    The task is stored as descriptive Scenario metadata, but Scenario.prompt is
+    deliberately absent: Arga receives exact fixture state and therefore never
+    generates scored seed data from the task text. The candidate adapter still
+    receives the task separately when an episode runs.
     """
 
     documents = validate_catalog(catalog_root)
@@ -54,9 +56,11 @@ def compile_scenario(catalog_root: Path, instance_id: str) -> dict[str, Any]:
 
     twins = sorted({binding.roles[role] for role in template.required_roles})
     content_hash = fingerprint_instance_bundle(catalog_root, instance_id)
+    task_description = (instance_document.path.parent / instance.prompt_file).read_text().strip()
+    variant_name = instance.variant.value.replace("_", " ").title()
     return {
-        "name": f"arga-bench/{instance_id}/{content_hash[:12]}",
-        "description": f"Deterministic fixture for benchmark instance {instance_id}",
+        "name": f"Arga Benchmark: {template.title} [{variant_name}] ({instance_id})",
+        "description": task_description,
         "twins": twins,
         "seed_config": seed_config,
         "tags": ["arga-bench", f"instance:{instance_id}", f"content-sha256:{content_hash}"],

@@ -7,9 +7,10 @@ The repository is a client-side compiler, runner, and evaluator. Benchmark seman
 ```mermaid
 flowchart LR
     C["Catalog: world + template + binding + variant"] --> P["Compiler"]
-    P --> S["Exact seed-only Scenario JSON"]
+    P --> S["Named Scenario: task description + exact seed_config"]
     S --> CLI["Authenticated Arga CLI"]
-    CLI --> T["Provisioned provider twins"]
+    CLI --> RGS["Durable saved Scenario"]
+    RGS --> T["Provisioned provider twins"]
     R["Episode runner"] --> CLI
     R --> I["External candidate adapter"]
     T --> I
@@ -23,7 +24,7 @@ The runner never calls an Arga server endpoint. Its infrastructure adapter invok
 
 - `specs`: Pydantic source of truth for catalog and result contracts.
 - `catalog`: load, validate, compile, and fingerprint declarative content. No network calls.
-- `arga_cli`: typed subprocess wrapper for Scenario import/delete and twin-run create/status/reset/teardown.
+- `arga_cli`: typed subprocess wrapper for Scenario list/import and twin-run create/status/reset/teardown.
 - `agents`: candidate invocation protocol. An adapter may use a process, container, hosted endpoint, or SDK.
 - `runner`: durable episode state machine, retry policy, cancellation, and teardown.
 - `evaluation`: canonical snapshots, state diffs, predicates, collateral-damage detection, and harm classification.
@@ -54,7 +55,7 @@ It never receives `admin_url`, `proxy_token`, `seed_results`, Arga authenticatio
 ```text
 PLANNED
   -> MANIFEST_VALIDATED
-  -> SCENARIO_REGISTERED
+  -> SCENARIO_SAVED_OR_REUSED
   -> TWIN_RUN_REQUESTED
   -> TWINS_READY_AND_SEEDED
   -> BASELINE_CAPTURED
@@ -67,7 +68,9 @@ PLANNED
   -> COMPLETE
 ```
 
-On the audited Arga contract, `twin-runs create --wait` reaches `ready` only after deployment, exact Scenario seeding, and post-seed health checks. The wrapper still checks the JSON status because CLI exit success alone does not distinguish a failed run or wait timeout. Teardown runs in `finally`; mutation-capable candidate invocation is never retried blindly.
+The compiler gives each Scenario a stable, readable name, puts the concrete candidate task in `description`, copies checked-in data into `seed_config`, and leaves `Scenario.prompt` unset. A `content-sha256:*` tag identifies the fingerprinted instance bundle. Before provisioning, the runner asks the Arga CLI for that tag: it reuses one matching saved Scenario, imports when none exists, and treats duplicates or mismatched content as an error rather than choosing arbitrarily.
+
+On the audited Arga contract, `twin-runs create --wait` reaches `ready` only after deployment, exact Scenario seeding, and post-seed health checks. The wrapper still checks the JSON status because CLI exit success alone does not distinguish a failed run or wait timeout. Twin-run teardown runs in `finally`, but the saved Scenario remains available for future runs. Mutation-capable candidate invocation is never retried blindly.
 
 ## Artifact contract
 

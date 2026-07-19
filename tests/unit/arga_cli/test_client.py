@@ -1,3 +1,8 @@
+import asyncio
+import json
+import sys
+from pathlib import Path
+
 import pytest
 
 from arga_twins_benchmark.arga_cli import ArgaCliError, SubprocessArgaCli, TwinRun
@@ -14,6 +19,69 @@ def test_command_uses_configured_executable_and_api_url() -> None:
         "run-1",
         "--json",
     )
+
+
+def test_list_scenarios_filters_by_content_hash_tag_and_accepts_json_array(tmp_path: Path) -> None:
+    executable = tmp_path / "fake_arga.py"
+    executable.write_text(
+        """\
+import json
+import sys
+
+expected = [
+    "test-runner",
+    "scenarios",
+    "list",
+    "--api-url",
+    "https://arga.example",
+    "--tag",
+    "content-sha256:abc123",
+    "--json",
+]
+if sys.argv[1:] != expected:
+    raise SystemExit(f"unexpected arguments: {sys.argv[1:]!r}")
+print(json.dumps([{"id": "scenario-1", "name": "Saved benchmark task"}]))
+"""
+    )
+    client = SubprocessArgaCli(executable=(sys.executable, str(executable)), api_url="https://arga.example")
+
+    scenarios = asyncio.run(client.list_scenarios(tag="content-sha256:abc123"))
+
+    assert scenarios == [{"id": "scenario-1", "name": "Saved benchmark task"}]
+
+
+def test_import_scenario_returns_the_full_saved_record(tmp_path: Path) -> None:
+    executable = tmp_path / "fake_arga.py"
+    executable.write_text(
+        """\
+import json
+import sys
+
+scenario_file = sys.argv[sys.argv.index("--file") + 1]
+payload = json.loads(open(scenario_file).read())
+print(json.dumps({"id": "scenario-1", **payload, "prompt": None, "is_preset": False}))
+"""
+    )
+    scenario_file = tmp_path / "scenario.json"
+    scenario_file.write_text(
+        json.dumps(
+            {
+                "name": "Saved benchmark task",
+                "description": "Do the task",
+                "twins": ["github"],
+                "seed_config": {"github": {"repositories": []}},
+                "tags": ["arga-bench", "content-sha256:abc123"],
+            }
+        )
+    )
+    client = SubprocessArgaCli(executable=(sys.executable, str(executable)), api_url="https://arga.example")
+
+    saved = asyncio.run(client.import_scenario(scenario_file))
+
+    assert saved["id"] == "scenario-1"
+    assert saved["description"] == "Do the task"
+    assert saved["seed_config"] == {"github": {"repositories": []}}
+    assert saved["prompt"] is None
 
 
 def test_supplied_api_key_is_scoped_to_temporary_cli_home() -> None:

@@ -5,7 +5,8 @@
 Deliverables:
 
 - Pydantic models and committed JSON Schemas.
-- Catalog validation, deterministic fingerprints, and seed-only Scenario compiler.
+- Catalog validation, deterministic fingerprints, and exact-seeded Scenario compiler.
+- Durable named Scenarios with task descriptions, content-hash reuse, and no `Scenario.prompt`.
 - Typed subprocess adapter for the audited Arga CLI lifecycle.
 - Twelve semantic families and 48 specified development instances.
 - Controlled-clock, authorization, required/forbidden mutation, budget, and output contracts.
@@ -16,7 +17,7 @@ Exit criterion: every artifact validates and fingerprints reproducibly without l
 
 Deliverables:
 
-- Runner that imports a Scenario and manages twin runs through the Arga CLI only.
+- Runner that saves or reuses a Scenario and manages twin runs through the Arga CLI only.
 - Pluggable candidate adapter that receives sanitized provider endpoints and invokes the agent separately.
 - Durable state machine, immutable artifacts, and credential-redacted CLI traces.
 - Canonical state diffing, deterministic predicates, and infrastructure-invalid classification.

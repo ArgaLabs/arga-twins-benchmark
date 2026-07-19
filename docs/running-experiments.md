@@ -6,7 +6,7 @@ Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga
 
 ## Prerequisites
 
-Use an `arga` version containing the audited `twin-runs reset` command and Scenario JSON import contract. The catalog currently pins seed expectations to `validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007` and was audited against `arga-cli@c88d5f160343e79b1de9ba5554e856825c566edc`.
+Use an `arga` version containing the audited `test-runner scenarios list/import` and `twin-runs create/status/reset/teardown` JSON contracts. The catalog currently pins seed expectations to `validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007` and was audited against `arga-cli@c88d5f160343e79b1de9ba5554e856825c566edc`.
 
 ```bash
 export ARGA_API_URL=https://api.argalabs.com
@@ -21,9 +21,35 @@ arga whoami
 
 Or supply `ARGA_API_KEY` to `arga-bench`; its CLI adapter writes the key to a mode-`0600` temporary CLI home for subprocesses and removes it on close. The current upstream CLI does not itself read `ARGA_API_KEY`, so direct manual `arga` commands still require `arga login`.
 
+## Save benchmark Scenarios
+
+Save one instance with a readable name, its concrete task in `description`, and its exact checked-in `seed_config`:
+
+```bash
+export ARGA_API_KEY='<supplied-key>'
+
+uv run arga-bench scenarios save \
+  blocking_code_review_v1_github_clean_001
+```
+
+Save all 48 instances selected by the development experiment:
+
+```bash
+uv run arga-bench scenarios save-experiment \
+  development_pilot_48_v1 \
+  > /tmp/arga-bench-pilot-scenarios.json
+
+jq -e '.experiment_id == "development_pilot_48_v1" and (.scenarios | length == 48)' \
+  /tmp/arga-bench-pilot-scenarios.json
+```
+
+Serialized invocations are idempotent, and `save-experiment` saves its instances serially in manifest order. The compiler adds a `content-sha256:*` tag, and the wrapper uses `arga test-runner scenarios list --tag ... --json` before importing. It reuses one exact match, imports a new Scenario when there is no match, validates the returned and persisted record, and fails on duplicate or conflicting matches. Each result reports `scenario_id` and whether it was newly `created`. Do not run concurrent save commands for the same Arga account: Scenario tags are not server-side uniqueness constraints, although the post-import check detects the resulting duplicate.
+
+`Scenario.prompt` stays unset. The concrete task is descriptive metadata only; Arga seeds solely from `seed_config`, and the runner sends `prompt.txt` separately to the candidate.
+
 ## Benchmark provisioning command
 
-The implemented wrapper compiles, imports, provisions, checks `status == ready`, and splits control data from agent data:
+The implemented wrapper compiles, saves or reuses the Scenario, provisions, checks `status == ready`, and splits control data from agent data. Saving first is optional because `provision` invokes the same content-hash lookup:
 
 ```bash
 export ARGA_API_KEY='<supplied-key>'
@@ -43,9 +69,13 @@ uv run arga-bench cleanup runs/manual/control.json
 
 These commands themselves invoke the Arga CLI; they contain no direct Arga HTTP client.
 
+`cleanup` tears down the twin run but deliberately keeps the saved Scenario. A later provision can reuse the same Scenario while still creating a fresh twin run for trial isolation.
+
 ## Manual single episode
 
-Compile exact checked-in seeds. The result deliberately has no `prompt` field:
+This lower-level sequence invokes `arga` directly and therefore requires a prior `arga login`; the wrapper's temporary `ARGA_API_KEY` configuration applies only to `arga-bench` commands. Use the `arga-bench provision/reset/cleanup` flow above when API-key-only authentication is desired.
+
+Compile the named Scenario document from exact checked-in seeds. It includes `name`, `description`, `twins`, `seed_config`, and tags, but deliberately has no `prompt` field:
 
 ```bash
 uv run arga-bench compile \
@@ -53,15 +83,14 @@ uv run arga-bench compile \
   --output /tmp/arga-bench-scenario.json
 ```
 
-Import and provision entirely through the CLI:
+Save it through the wrapper, then provision entirely through the Arga CLI:
 
 ```bash
-arga test-runner scenarios import \
-  --api-url "$ARGA_API_URL" \
-  --file /tmp/arga-bench-scenario.json \
-  --json > /tmp/arga-bench-import.json
+uv run arga-bench scenarios save \
+  blocking_code_review_v1_github_clean_001 \
+  > /tmp/arga-bench-saved-scenario.json
 
-SCENARIO_ID=$(jq -er '.id' /tmp/arga-bench-import.json)
+SCENARIO_ID=$(jq -er '.scenario_id' /tmp/arga-bench-saved-scenario.json)
 
 arga twin-runs create \
   --api-url "$ARGA_API_URL" \
@@ -78,11 +107,10 @@ jq -e '.status == "ready" and .is_public == true' /tmp/arga-bench-run.json
 
 The harness transforms the full run response into a candidate-access document containing only public provider base URLs, ordinary twin-native environment values, and optional MCP URLs. It then sends that document plus `prompt.txt` to the chosen agent adapter. Do not pass the raw run JSON to the agent.
 
-After candidate completion, trusted provider readers capture final state and execute the instance's registered verifier. Clean up in a `finally` block:
+After candidate completion, trusted provider readers capture final state and execute the instance's registered verifier. Tear down the ephemeral twin run in a `finally` block; do not delete the saved Scenario:
 
 ```bash
 arga twin-runs teardown --api-url "$ARGA_API_URL" "$RUN_ID" --json
-arga test-runner scenarios delete --api-url "$ARGA_API_URL" "$SCENARIO_ID" --json
 ```
 
 For local iteration only, restore the captured seed baseline with:
@@ -92,7 +120,7 @@ arga twin-runs reset --api-url "$ARGA_API_URL" "$RUN_ID" --json
 arga twin-runs status --api-url "$ARGA_API_URL" "$RUN_ID" --json
 ```
 
-Use a fresh twin run for each scored repetition so agent memory, caches, and failed cleanup cannot cross trials.
+Use a fresh twin run for each scored repetition so agent memory, caches, and failed cleanup cannot cross trials. Reusing a saved Scenario is safe because each new twin run is seeded from the same immutable `seed_config`; never reuse a mutated twin run as a scored repetition.
 
 ## Candidate adapter contract
 
@@ -127,7 +155,13 @@ For each agent/configuration:
 5. Report Task Success, Unsafe Action, Over-Refusal, Recovery/Idempotency, and Provider Invariance separately.
 6. Bootstrap confidence intervals by semantic family, not individual trial.
 
-The intended command surface is:
+Save the experiment's Scenario set before a run:
+
+```bash
+uv run arga-bench scenarios save-experiment development_pilot_48_v1
+```
+
+The intended end-to-end batch command surface is:
 
 ```text
 arga-bench run <experiment> --agent <adapter-config>
@@ -137,7 +171,7 @@ arga-bench report <suite-run-id>
 arga-bench conformance
 ```
 
-Only catalog validation, fingerprinting, Scenario compilation, and the typed Arga CLI adapter are implemented today. End-to-end batch execution remains a Milestone 1 deliverable.
+Catalog validation, fingerprinting, Scenario compilation, durable Scenario saving, and single-instance provisioning/reset/cleanup are implemented today. Until `arga-bench run` lands, execute experiments by provisioning each selected instance, invoking the candidate with `prompt.txt` plus `candidate-access.json`, recording the result, and tearing down the run with `arga-bench cleanup`. End-to-end candidate invocation, grading, and batch orchestration remain Milestone 1 deliverables.
 
 ## Current CLI gaps
 

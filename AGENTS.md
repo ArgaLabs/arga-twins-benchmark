@@ -6,6 +6,7 @@ This repository inherits the durable workspace instructions in `/Users/tonghx/AG
 
 - Keep the agent-facing task prompt outside Arga `Scenario.prompt`.
 - Use the authenticated Arga CLI for every Arga control-plane operation. Do not call Arga server endpoints directly.
+- Save durable Scenarios with a human-readable name and the concrete task in `description`; reuse exact content-hash matches and keep them when twin runs are torn down.
 - Run candidate agents separately and pass them only ordinary provider API URLs and twin-native credentials.
 - Provision twins from exact, checked-in `seed_config` files. Never generate scored fixtures with an LLM.
 - Keep task semantics provider-neutral; provider details belong in bindings, seeds, canonicalizers, and verifiers.

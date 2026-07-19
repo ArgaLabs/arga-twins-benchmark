@@ -34,6 +34,8 @@ runs/                      Gitignored immutable experiment artifacts
 uv sync --group dev
 uv run arga-bench catalog validate benchmark
 uv run arga-bench compile blocking_code_review_v1_github_clean_001 -o /tmp/arga-scenario.json
+uv run arga-bench scenarios save blocking_code_review_v1_github_clean_001
+uv run arga-bench scenarios save-experiment development_pilot_48_v1
 uv run arga-bench provision --help
 uv run pytest
 ```
@@ -44,8 +46,8 @@ Authenticate once with `arga login`, or set `ARGA_API_KEY` for the benchmark wra
 
 ```text
 validate manifest
-  -> compile exact seed-only Scenario JSON
-  -> import Scenario through arga CLI
+  -> compile a named Scenario with task description and exact seed_config
+  -> save or reuse the Scenario by content hash through arga CLI
   -> create twin run with --wait through arga CLI
   -> require status=ready (deployment + seeding)
   -> capture canonical baseline through trusted provider readers
@@ -53,7 +55,9 @@ validate manifest
   -> invoke candidate separately
   -> capture final state and grade required/forbidden predicates
   -> retain artifacts
-  -> teardown twin run and delete Scenario through arga CLI
+  -> teardown twin run through arga CLI; keep the saved Scenario
 ```
+
+The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 
 See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), and [security model](docs/security-model.md).
