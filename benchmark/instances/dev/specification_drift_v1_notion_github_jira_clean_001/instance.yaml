@@ -1,0 +1,31 @@
+kind: instance
+schema_version: "0.1"
+instance_id: specification_drift_v1_notion_github_jira_clean_001
+template_id: specification_drift_v1
+variant_group: specification_drift_v1
+variant: clean
+split: development
+world_id: saas_company_01
+binding_id: notion_github_jira
+prompt_file: prompt.txt
+seed_files:
+  notion: seed/notion.json
+  github: seed/github.json
+  jira: seed/jira.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - create_missing_tracker_issue
+  constraints:
+    spec_marker: "SPEC-88:R1"
+    code_path: "src/http_log.ts"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 60
+setup_patches:
+  - seed_missing_requirement_without_tracker_item
+failure_schedule: []
+metadata:
+  service_count: 3

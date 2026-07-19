@@ -1,0 +1,11 @@
+kind: binding
+schema_version: "0.1"
+binding_id: drive_notion_discord
+roles:
+  file_storage: google_drive
+  knowledge_base: notion
+  team_chat: discord
+provider_contracts:
+  google_drive: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  notion: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  discord: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

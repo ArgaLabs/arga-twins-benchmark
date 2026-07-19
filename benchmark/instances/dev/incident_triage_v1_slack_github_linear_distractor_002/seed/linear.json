@@ -1,0 +1,18 @@
+{
+  "teams": [
+    {
+      "key": "OPS",
+      "name": "Operations"
+    }
+  ],
+  "projects": [],
+  "issues": [
+    {
+      "team_key": "OPS",
+      "title": "[INC-481] cache latency",
+      "description": "Incident marker: INC-481",
+      "priority": 1
+    }
+  ],
+  "comments": []
+}

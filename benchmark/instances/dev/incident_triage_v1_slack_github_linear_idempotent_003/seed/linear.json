@@ -1,0 +1,18 @@
+{
+  "teams": [
+    {
+      "key": "OPS",
+      "name": "Operations"
+    }
+  ],
+  "projects": [],
+  "issues": [
+    {
+      "team_key": "OPS",
+      "title": "[INC-419] worker-api queue stalled",
+      "description": "Incident marker: INC-419\nEvidence: PR #1\nCause: worker pool size is zero",
+      "priority": 1
+    }
+  ],
+  "comments": []
+}

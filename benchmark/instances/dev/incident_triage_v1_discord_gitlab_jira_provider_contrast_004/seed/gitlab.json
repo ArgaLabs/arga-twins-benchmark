@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Acme",
+      "path": "acme"
+    }
+  ],
+  "projects": [
+    {
+      "name": "database-api",
+      "path": "database-api",
+      "namespace_path": "acme",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# database-api\n"
+        }
+      ],
+      "merge_requests": [
+        {
+          "title": "Deploy database timeout",
+          "description": "Deployment: DEP-774\nCause: database timeout is 2 seconds",
+          "source_branch": "deploy/774",
+          "target_branch": "main",
+          "files": [
+            {
+              "path": "config/database.py",
+              "content": "DATABASE_TIMEOUT_SECONDS = 2\n"
+            }
+          ],
+          "merged": true
+        }
+      ]
+    }
+  ]
+}

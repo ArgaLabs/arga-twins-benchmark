@@ -1,0 +1,29 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: specification_drift_v1_notion_github_jira_idempotent_003
+gold_solution_id: specification_drift_v1_notion_github_jira_idempotent_003.gold
+negative_control_ids:
+  - specification_drift_v1_notion_github_jira_idempotent_003.wrong_target
+  - specification_drift_v1_notion_github_jira_idempotent_003.missing_required_action
+  - specification_drift_v1_notion_github_jira_idempotent_003.collateral_mutation
+expected_state:
+  - "No provider canonical state changes."
+  - "Jira issue SEC-1 remains the single open issue for SPEC-90:R1."
+  - "The agent returns exactly `NO_CHANGE`."
+allowed_state_changes: []
+forbidden_state_changes:
+  - "Any Notion or code-host mutation."
+  - "Any modification to an existing tracker item."
+  - "Any duplicate or issue for an already-implemented requirement."
+critical_requirements:
+  - "Implementation and existing open work are both checked."
+  - "Exactly the genuinely missing untracked requirement is created, or the task is a no-op."
+  - "The issue fields and returned identifier satisfy the exact contract."
+partial_credit:
+  read_spec: 0.20
+  inspect_code: 0.25
+  deduplicate: 0.20
+  issue_state: 0.25
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "NO_CHANGE"

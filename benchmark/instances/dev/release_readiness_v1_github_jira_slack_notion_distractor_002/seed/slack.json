@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "name": "ops-lead"
+    }
+  ],
+  "channels": [
+    {
+      "name": "releases",
+      "messages": [
+        {
+          "text": "READINESS REL-250: BLOCKED - security approval missing.",
+          "user": "ops-lead"
+        }
+      ]
+    }
+  ]
+}

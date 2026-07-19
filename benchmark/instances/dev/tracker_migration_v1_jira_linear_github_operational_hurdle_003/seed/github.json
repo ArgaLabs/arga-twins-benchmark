@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "hooks",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# hooks\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "MIG-33: jitter",
+          "body": "",
+          "head": "mig-33",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/retry.ts",
+              "content": "export const jitter = true;\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

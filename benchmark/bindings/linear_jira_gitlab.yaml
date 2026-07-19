@@ -1,0 +1,11 @@
+kind: binding
+schema_version: "0.1"
+binding_id: linear_jira_gitlab
+roles:
+  source_tracker: linear
+  target_tracker: jira
+  code_host: gitlab
+provider_contracts:
+  linear: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  jira: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  gitlab: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

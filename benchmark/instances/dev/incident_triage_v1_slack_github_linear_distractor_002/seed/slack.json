@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "name": "ops-lead"
+    }
+  ],
+  "channels": [
+    {
+      "name": "incidents",
+      "messages": [
+        {
+          "text": "[INC-481] cache latency after DEP-9901",
+          "user": "ops-lead"
+        },
+        {
+          "text": "[INC-418] auth-api returning 401 after DEP-9902",
+          "user": "ops-lead"
+        },
+        {
+          "text": "Resolved: database alert INC-410",
+          "user": "ops-lead"
+        }
+      ]
+    }
+  ]
+}

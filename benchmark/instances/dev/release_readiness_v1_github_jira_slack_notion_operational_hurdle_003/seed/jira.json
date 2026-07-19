@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "key": "REL",
+      "name": "Releases",
+      "issues": [
+        {
+          "summary": "REL-206 release record",
+          "description": "Blocked release record.",
+          "status": "In Progress"
+        },
+        {
+          "summary": "REL-206 data blocker",
+          "description": "Completed blocker.",
+          "status": "Done"
+        }
+      ]
+    }
+  ]
+}

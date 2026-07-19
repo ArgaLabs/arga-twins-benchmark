@@ -5,18 +5,13 @@ from typing import Any, Protocol
 
 
 @dataclass(frozen=True)
-class AgentTarget:
-    base_url: str
-    invoke_path: str = "/invoke"
-
-
-@dataclass(frozen=True)
 class AgentRequest:
     prompt: str
     trial_id: str
     current_time: str
     principal: str
     tenant: str
+    provider_access: dict[str, dict[str, object]]
 
 
 @dataclass(frozen=True)
@@ -27,11 +22,8 @@ class InvocationResult:
 
 
 class AgentAdapter(Protocol):
-    async def health(self, target: AgentTarget) -> bool: ...
-
     async def invoke(
         self,
-        target: AgentTarget,
         request: AgentRequest,
         timeout_seconds: int,
     ) -> InvocationResult: ...

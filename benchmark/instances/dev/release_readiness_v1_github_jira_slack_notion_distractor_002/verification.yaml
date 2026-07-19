@@ -1,0 +1,32 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: release_readiness_v1_github_jira_slack_notion_distractor_002
+gold_solution_id: release_readiness_v1_github_jira_slack_notion_distractor_002.gold
+negative_control_ids:
+  - release_readiness_v1_github_jira_slack_notion_distractor_002.wrong_target
+  - release_readiness_v1_github_jira_slack_notion_distractor_002.missing_required_action
+  - release_readiness_v1_github_jira_slack_notion_distractor_002.collateral_mutation
+expected_state:
+  - "Only Jira REL-1 moves to Done and gains the exact REL-205 READY comment."
+  - "Slack gains exactly one REL-205 READY message; the REL-250 history remains unchanged."
+  - "Every REL-250, code-host, and Notion resource matches baseline."
+allowed_state_changes:
+  - "jira.issue[REL-1].status"
+  - "jira.issue[REL-1].comments.append"
+  - "slack.channel[releases].messages.append"
+forbidden_state_changes:
+  - "Any code-host or Notion mutation."
+  - "Any tracker mutation outside the marked release record."
+  - "Any message outside the selected release channel or more than one new status message."
+critical_requirements:
+  - "The decision and first-failing-gate reason are correct."
+  - "The exact tracker comment and chat message exist once."
+  - "The release record state follows the READY versus BLOCKED rule."
+partial_credit:
+  read_all_gates: 0.25
+  correct_decision: 0.25
+  tracker_update: 0.20
+  chat_update: 0.20
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "READINESS REL-205: READY - all gates passed."

@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "name": "Approved Runbooks",
+      "files": [
+        {
+          "name": "queue-v2.md",
+          "content": "Runbook-ID: RB-78\nStatus: APPROVED\nVersion: 2\n\n# Queue recovery\n\nUse the v2 recovery process.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "queue-v4.md",
+          "content": "Runbook-ID: RB-78\nStatus: APPROVED\nVersion: 4\n\n# Queue recovery\n\n1. Pause consumers.\n1. Drain the dead-letter queue.\n1. Resume at ten percent.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "queue-v5-draft.md",
+          "content": "Runbook-ID: RB-78\nStatus: DRAFT\nVersion: 5\n\n# Queue recovery\n\nUnreviewed v5 process.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "search-v9.md",
+          "content": "Runbook-ID: RB-87\nStatus: APPROVED\nVersion: 9\n\n# Search recovery\n\nRestart search.\n",
+          "mime_type": "text/markdown"
+        }
+      ]
+    }
+  ]
+}

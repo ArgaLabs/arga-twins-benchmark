@@ -1,0 +1,36 @@
+{
+  "customers": [],
+  "products": [
+    {
+      "name": "Pro Monthly",
+      "prices": [
+        {
+          "unit_amount": 7900,
+          "currency": "usd"
+        }
+      ]
+    },
+    {
+      "name": "Pro Monthly",
+      "prices": [
+        {
+          "unit_amount": 2900,
+          "currency": "usd"
+        },
+        {
+          "unit_amount": 7900,
+          "currency": "eur"
+        }
+      ]
+    },
+    {
+      "name": "Pro Annual",
+      "prices": [
+        {
+          "unit_amount": 79000,
+          "currency": "usd"
+        }
+      ]
+    }
+  ]
+}

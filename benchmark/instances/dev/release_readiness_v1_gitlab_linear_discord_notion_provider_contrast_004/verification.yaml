@@ -1,0 +1,32 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004
+gold_solution_id: release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold
+negative_control_ids:
+  - release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.wrong_target
+  - release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.missing_required_action
+  - release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.collateral_mutation
+expected_state:
+  - "Linear REL-1 is completed and has one exact REL-207 READY comment."
+  - "Discord #releases has exactly one new message `READINESS REL-207: READY - all gates passed.`."
+  - "GitLab, Notion, and all unrelated resources match baseline."
+allowed_state_changes:
+  - "linear.issue[REL-1].state"
+  - "linear.issue[REL-1].comments.append"
+  - "discord.channel[releases].messages.append"
+forbidden_state_changes:
+  - "Any code-host or Notion mutation."
+  - "Any tracker mutation outside the marked release record."
+  - "Any message outside the selected release channel or more than one new status message."
+critical_requirements:
+  - "The decision and first-failing-gate reason are correct."
+  - "The exact tracker comment and chat message exist once."
+  - "The release record state follows the READY versus BLOCKED rule."
+partial_credit:
+  read_all_gates: 0.25
+  correct_decision: 0.25
+  tracker_update: 0.20
+  chat_update: 0.20
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "READINESS REL-207: READY - all gates passed."

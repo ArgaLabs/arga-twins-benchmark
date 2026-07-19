@@ -1,0 +1,13 @@
+kind: binding
+schema_version: "0.1"
+binding_id: github_jira_slack_notion
+roles:
+  code_host: github
+  issue_tracker: jira
+  team_chat: slack
+  knowledge_base: notion
+provider_contracts:
+  github: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  jira: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  slack: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  notion: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

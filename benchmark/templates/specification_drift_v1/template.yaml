@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: specification_drift_v1
+title: Specification drift audit
+description: Compare approved requirements with implementation and create only genuinely missing tracker work.
+track: capability
+required_roles: [knowledge_base, code_host, issue_tracker]
+variants: [clean, distractor, idempotent, provider_contrast]

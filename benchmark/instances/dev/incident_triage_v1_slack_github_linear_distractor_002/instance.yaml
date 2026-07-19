@@ -1,0 +1,33 @@
+kind: instance
+schema_version: "0.1"
+instance_id: incident_triage_v1_slack_github_linear_distractor_002
+template_id: incident_triage_v1
+variant_group: incident_triage_v1
+variant: distractor
+split: development
+world_id: saas_company_01
+binding_id: slack_github_linear
+prompt_file: prompt.txt
+seed_files:
+  slack: seed/slack.json
+  github: seed/github.json
+  linear: seed/linear.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - create_or_reuse_incident_issue
+    - acknowledge_incident_in_source_channel
+  constraints:
+    incident_marker: "INC-418"
+    deployment_marker: "DEP-9902"
+    status_channel: "incidents"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 60
+setup_patches:
+  - seed_multiple_reports_and_deployments
+failure_schedule: []
+metadata:
+  service_count: 3

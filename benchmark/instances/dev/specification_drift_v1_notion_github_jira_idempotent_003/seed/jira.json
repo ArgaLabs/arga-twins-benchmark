@@ -1,0 +1,15 @@
+{
+  "projects": [
+    {
+      "key": "SEC",
+      "name": "Security",
+      "issues": [
+        {
+          "summary": "[SPEC-90:R1] Cap retries at three",
+          "description": "Spec marker: SPEC-90:R1\nGap: Retry cap is seven\nCode evidence: src/retry.ts.",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

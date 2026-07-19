@@ -1,0 +1,86 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "payments",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# payments\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "Support library refresh",
+          "body": "",
+          "head": "chore/support-1",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "src/support1.ts",
+              "content": "export const ok = true;\n"
+            }
+          ]
+        },
+        {
+          "title": "Support telemetry",
+          "body": "",
+          "head": "chore/support-2",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "src/support2.ts",
+              "content": "export const ok = true;\n"
+            }
+          ]
+        },
+        {
+          "title": "REL-205: checkout fix",
+          "body": "",
+          "head": "rel-205-checkout",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "src/checkout.ts",
+              "content": "export const fixed = true;\n"
+            }
+          ]
+        },
+        {
+          "title": "REL-250: future work",
+          "body": "",
+          "head": "rel-250-future",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/future.ts",
+              "content": "export const future = true;\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

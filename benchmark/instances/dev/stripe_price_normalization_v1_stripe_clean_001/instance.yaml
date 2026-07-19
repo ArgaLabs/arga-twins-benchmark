@@ -1,0 +1,36 @@
+kind: instance
+schema_version: '0.1'
+instance_id: stripe_price_normalization_v1_stripe_clean_001
+template_id: stripe_price_normalization_v1
+variant_group: stripe_price_normalization_v1
+variant: clean
+split: development
+world_id: saas_company_01
+binding_id: stripe
+prompt_file: prompt.txt
+seed_files:
+  stripe: seed/stripe.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+  - normalize_unique_target_price
+  constraints:
+    product_name: Pro Monthly
+    unit_amount: 7900
+    currency: usd
+    nickname: pro-monthly-usd-79
+    lookup_key: pro_monthly_usd_7900
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 20
+setup_patches:
+- seed_existing_products_and_prices
+- seed_exact_price_match
+- seed_price_distractors
+failure_schedule: []
+metadata:
+  service_count: 1
+  controlled_clock: '2030-05-14T12:00:00Z'
+  risk: high

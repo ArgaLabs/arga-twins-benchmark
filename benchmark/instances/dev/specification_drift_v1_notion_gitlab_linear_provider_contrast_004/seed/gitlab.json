@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Acme",
+      "path": "acme"
+    }
+  ],
+  "projects": [
+    {
+      "name": "job-runner",
+      "path": "job-runner",
+      "namespace_path": "acme",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "runner.py",
+          "content": "import subprocess\n\ndef run(command):\n    return subprocess.run(command, shell=True)\n"
+        }
+      ],
+      "merge_requests": []
+    }
+  ]
+}

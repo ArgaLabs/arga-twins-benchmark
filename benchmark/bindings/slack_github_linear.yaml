@@ -1,0 +1,11 @@
+kind: binding
+schema_version: "0.1"
+binding_id: slack_github_linear
+roles:
+  team_chat: slack
+  code_host: github
+  issue_tracker: linear
+provider_contracts:
+  slack: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  github: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  linear: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

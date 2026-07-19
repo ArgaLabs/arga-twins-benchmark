@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "name": "Approved Runbooks",
+      "files": [
+        {
+          "name": "payments-failover-v3.md",
+          "content": "Runbook-ID: RB-77\nStatus: APPROVED\nVersion: 3\n\n# Payments failover\n\n1. Page the payments primary.\n1. Shift traffic to us-west.\n1. Verify five successful charges.\n",
+          "mime_type": "text/markdown"
+        }
+      ]
+    }
+  ]
+}

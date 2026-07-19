@@ -1,0 +1,55 @@
+kind: experiment
+schema_version: "0.1"
+experiment_id: development_pilot_48_v1
+instances:
+  - approved_external_share_v1_drive_notion_adversarial_004
+  - approved_external_share_v1_drive_notion_authorized_001
+  - approved_external_share_v1_drive_notion_distractor_003
+  - approved_external_share_v1_drive_notion_unauthorized_002
+  - attendee_correction_v1_gmail_calendar_adversarial_004
+  - attendee_correction_v1_gmail_calendar_authorized_001
+  - attendee_correction_v1_gmail_calendar_distractor_003
+  - attendee_correction_v1_gmail_calendar_unauthorized_002
+  - blocking_code_review_v1_github_clean_001
+  - blocking_code_review_v1_github_distractor_002
+  - blocking_code_review_v1_github_operational_hurdle_003
+  - blocking_code_review_v1_gitlab_provider_contrast_004
+  - constrained_calendar_scheduling_v1_gmail_calendar_clean_001
+  - constrained_calendar_scheduling_v1_gmail_calendar_distractor_002
+  - constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003
+  - constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004
+  - incident_triage_v1_discord_gitlab_jira_provider_contrast_004
+  - incident_triage_v1_slack_github_linear_clean_001
+  - incident_triage_v1_slack_github_linear_distractor_002
+  - incident_triage_v1_slack_github_linear_idempotent_003
+  - invoice_triage_v1_gmail_adversarial_004
+  - invoice_triage_v1_gmail_authorized_001
+  - invoice_triage_v1_gmail_idempotent_003
+  - invoice_triage_v1_gmail_unauthorized_002
+  - policy_promotion_v1_notion_adversarial_004
+  - policy_promotion_v1_notion_authorized_001
+  - policy_promotion_v1_notion_idempotent_003
+  - policy_promotion_v1_notion_unauthorized_002
+  - release_readiness_v1_github_jira_slack_notion_clean_001
+  - release_readiness_v1_github_jira_slack_notion_distractor_002
+  - release_readiness_v1_github_jira_slack_notion_operational_hurdle_003
+  - release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004
+  - runbook_publication_v1_drive_notion_discord_provider_contrast_004
+  - runbook_publication_v1_drive_notion_slack_clean_001
+  - runbook_publication_v1_drive_notion_slack_distractor_002
+  - runbook_publication_v1_drive_notion_slack_idempotent_003
+  - specification_drift_v1_notion_github_jira_clean_001
+  - specification_drift_v1_notion_github_jira_distractor_002
+  - specification_drift_v1_notion_github_jira_idempotent_003
+  - specification_drift_v1_notion_gitlab_linear_provider_contrast_004
+  - stripe_price_normalization_v1_stripe_adversarial_004
+  - stripe_price_normalization_v1_stripe_ambiguous_003
+  - stripe_price_normalization_v1_stripe_clean_001
+  - stripe_price_normalization_v1_stripe_distractor_002
+  - tracker_migration_v1_jira_linear_github_clean_001
+  - tracker_migration_v1_jira_linear_github_distractor_002
+  - tracker_migration_v1_jira_linear_github_operational_hurdle_003
+  - tracker_migration_v1_linear_jira_gitlab_provider_contrast_004
+repeats: 5
+random_seed: 20260719
+concurrency: 4

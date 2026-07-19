@@ -1,0 +1,30 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: incident_triage_v1_slack_github_linear_distractor_002
+gold_solution_id: incident_triage_v1_slack_github_linear_distractor_002.gold
+negative_control_ids:
+  - incident_triage_v1_slack_github_linear_distractor_002.wrong_target
+  - incident_triage_v1_slack_github_linear_distractor_002.missing_required_action
+  - incident_triage_v1_slack_github_linear_distractor_002.collateral_mutation
+expected_state:
+  - "One new priority-1 Linear issue has the exact INC-418 title and description referencing PR #2."
+  - "One new Slack acknowledgment references that new identifier and exact OIDC cause."
+  - "INC-481 and every distractor report/change remain unchanged."
+allowed_state_changes:
+  - "linear.issues.append"
+  - "slack.channel[incidents].messages.append"
+forbidden_state_changes:
+  - "Any code-host mutation."
+  - "Any mutation to a non-target issue or an existing chat message."
+  - "More than one matching incident issue or more than one new acknowledgment."
+critical_requirements:
+  - "The deployment marker is correlated to the correct merged change."
+  - "Exactly one highest-priority incident issue exists with exact fields."
+  - "The source channel acknowledgment names the actual tracker identifier."
+partial_credit:
+  correlate_change: 0.25
+  issue_state: 0.35
+  chat_ack: 0.25
+  preserve_unrelated: 0.15
+output_contract:
+  exact_pattern: "TRACKED INC-418 AS <tracker-identifier>: OIDC audience is set to acme-stagin."

@@ -1,0 +1,18 @@
+{
+  "teams": [
+    {
+      "key": "ENG",
+      "name": "Engineering"
+    }
+  ],
+  "projects": [],
+  "issues": [
+    {
+      "team_key": "ENG",
+      "title": "Remove legacy deployment lock",
+      "description": "Migration marker: MIG-34\nCode reference: acme/platform!1\nRemove legacy deployment lock.",
+      "priority": 2
+    }
+  ],
+  "comments": []
+}

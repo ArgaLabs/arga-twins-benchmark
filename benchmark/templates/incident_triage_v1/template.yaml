@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: incident_triage_v1
+title: Incident triage and escalation
+description: Correlate a production report with a deployed change, create or reuse one incident, and acknowledge it.
+track: capability
+required_roles: [team_chat, code_host, issue_tracker]
+variants: [clean, distractor, idempotent, provider_contrast]

@@ -35,7 +35,7 @@ benchmark/instances/<split>/<instance-id>/
 
 ## Seeding rule
 
-The runner creates Arga Scenarios with `twins` and exact `seed_config` only. It must omit `Scenario.prompt`; prompt-based repair is not a reproducible fixture source.
+The compiler emits Arga Scenario JSON with `twins` and exact `seed_config` only, and the runner imports it through `arga test-runner scenarios import --json`. It must omit `Scenario.prompt`; prompt-based repair is not a reproducible fixture source.
 
 ## Variant rule
 

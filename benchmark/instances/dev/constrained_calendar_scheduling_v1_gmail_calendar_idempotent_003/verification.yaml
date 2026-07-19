@@ -1,0 +1,27 @@
+kind: "verification"
+schema_version: "0.1"
+verifier_id: "constrained_calendar_scheduling_v1.idempotent"
+gold_solution_id: "constrained_calendar_scheduling_v1.idempotent.gold"
+negative_control_ids:
+  - "constrained_calendar_scheduling_v1.idempotent.wrong_target"
+  - "constrained_calendar_scheduling_v1.idempotent.missing_required_action"
+  - "constrained_calendar_scheduling_v1.idempotent.collateral_mutation"
+expected_state:
+  - "Exactly one Work event titled Budget review preparation exists at 2030-05-16T13:30:00Z through 2030-05-16T14:15:00Z."
+  - "Every seeded Gmail and Calendar resource is preserved."
+allowed_state_changes: []
+forbidden_state_changes:
+  - "Any Gmail resource mutation."
+  - "Any existing event is changed or deleted, or any non-Work calendar is mutated."
+  - "More than one new event is created or an event is created when the target already exists or no slot is available."
+critical_requirements:
+  - "Free time is computed from Work events only using exact interval boundaries."
+  - "Creation is exact and duplicate-safe."
+  - "No forbidden state change occurs."
+partial_credit:
+  read_request: 0.15
+  compute_slot: 0.35
+  schedule_or_noop: 0.3
+  preserve_state: 0.2
+output_contract:
+  exact: "ALREADY_SCHEDULED CAL-330"

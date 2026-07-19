@@ -1,0 +1,29 @@
+{
+  "messages": [
+    {
+      "subject": "[ATT-88] Approved attendee correction",
+      "body": "Request ATT-88. Calendar: Work. Event summary: Launch review. Current start: 2030-05-16T15:00:00Z. Add missing attendee alex@acme.example.",
+      "from": "calendar-admin@acme-events.example",
+      "to": [
+        "owner@gmail-twin.local"
+      ],
+      "labels": [
+        "INBOX",
+        "UNREAD"
+      ],
+      "thread_id": "thr_att_88"
+    },
+    {
+      "subject": "[ATT-89] Unapproved attendee idea",
+      "body": "This unrelated note is not an approved calendar-admin request.",
+      "from": "colleague@acme.example",
+      "to": [
+        "owner@gmail-twin.local"
+      ],
+      "labels": [
+        "INBOX"
+      ],
+      "thread_id": "thr_att_89"
+    }
+  ]
+}

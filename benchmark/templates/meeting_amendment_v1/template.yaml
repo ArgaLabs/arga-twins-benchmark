@@ -1,8 +1,0 @@
-kind: template
-schema_version: "0.1"
-template_id: meeting_amendment_v1
-title: Meeting amendment reconciliation
-description: Reconcile an approved scheduling amendment across email and calendar without duplication or collateral changes.
-track: capability
-required_roles: [email, calendar]
-variants: [clean, distractor, idempotent, provider_contrast]

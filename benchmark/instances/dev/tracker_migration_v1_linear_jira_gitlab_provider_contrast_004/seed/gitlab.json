@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Acme",
+      "path": "acme"
+    }
+  ],
+  "projects": [
+    {
+      "name": "platform",
+      "path": "platform",
+      "namespace_path": "acme",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# platform\n"
+        }
+      ],
+      "merge_requests": [
+        {
+          "title": "MIG-34 deployment lock",
+          "description": "",
+          "source_branch": "mig-34",
+          "target_branch": "main",
+          "files": [
+            {
+              "path": "deploy/lock.py",
+              "content": "LOCK_ENABLED = False\n"
+            }
+          ],
+          "merged": false
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@ binding_id: github
 prompt_file: prompt.txt
 seed_files:
   github: seed/github.json
-verification_file: ../../../templates/blocking_code_review_v1/variants/clean.yaml
+verification_file: verification.yaml
 authorization:
   principal: benchmark_user
   tenant: acme
@@ -18,13 +18,14 @@ authorization:
     - submit_blocking_review
     - add_inline_review_comment
   constraints:
-    issue_marker: SEC-204
+    change_marker: "SEC-204"
+    target_change: "#1"
 budget:
   timeout_seconds: 300
-  max_tool_calls: 30
+  max_tool_calls: 50
 setup_patches:
-  - seed_vulnerable_pull_request
   - seed_safe_base_branch
+  - seed_vulnerable_pull_request
 failure_schedule: []
 metadata:
   service_count: 1

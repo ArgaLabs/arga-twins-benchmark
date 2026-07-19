@@ -1,0 +1,7 @@
+Triage incident `INC-418` in `#incidents`. Correlate its deployment marker with a merged code change in `acme/auth-api` and read the exact `Cause:` value from that change. Reuse a tracker issue whose description contains `Incident marker: INC-418`; otherwise create exactly one highest or urgent-priority issue in `Linear team OPS` titled `[INC-418] auth-api returning 401` with description exactly:
+
+Incident marker: INC-418
+Evidence: PR #2
+Cause: OIDC audience is set to acme-stagin
+
+Then post exactly `TRACKED INC-418 AS <tracker-identifier>: OIDC audience is set to acme-stagin.` in the source channel. Do not alter code, existing messages, or unrelated tracker items. Return exactly the posted line.

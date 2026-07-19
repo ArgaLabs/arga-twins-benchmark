@@ -1,0 +1,33 @@
+kind: instance
+schema_version: "0.1"
+instance_id: incident_triage_v1_slack_github_linear_idempotent_003
+template_id: incident_triage_v1
+variant_group: incident_triage_v1
+variant: idempotent
+split: development
+world_id: saas_company_01
+binding_id: slack_github_linear
+prompt_file: prompt.txt
+seed_files:
+  slack: seed/slack.json
+  github: seed/github.json
+  linear: seed/linear.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - create_or_reuse_incident_issue
+    - acknowledge_incident_in_source_channel
+  constraints:
+    incident_marker: "INC-419"
+    deployment_marker: "DEP-771"
+    existing_issue: "OPS-1"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 60
+setup_patches:
+  - seed_existing_incident_without_chat_acknowledgment
+failure_schedule: []
+metadata:
+  service_count: 3

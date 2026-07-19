@@ -1,0 +1,17 @@
+{
+  "guilds": [
+    {
+      "name": "Acme Ops",
+      "channels": [
+        {
+          "name": "incidents",
+          "messages": [
+            {
+              "content": "[INC-420] database-api requests timing out after DEP-774"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

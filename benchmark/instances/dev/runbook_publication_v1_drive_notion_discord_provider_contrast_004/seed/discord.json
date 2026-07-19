@@ -1,0 +1,13 @@
+{
+  "guilds": [
+    {
+      "name": "Acme Ops",
+      "channels": [
+        {
+          "name": "operations",
+          "messages": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "teams": [
+    {
+      "key": "OPS",
+      "name": "Operations"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Reliability",
+      "team_key": "OPS"
+    }
+  ],
+  "issues": [
+    {
+      "team_key": "OPS",
+      "title": "Retry failed deliveries with jitter",
+      "description": "Migration marker: MIG-33\nCode reference: acme/hooks#1\nOld retry wording.\n\nMigration source: OPS-1",
+      "priority": 3,
+      "project": "Reliability"
+    }
+  ],
+  "comments": []
+}

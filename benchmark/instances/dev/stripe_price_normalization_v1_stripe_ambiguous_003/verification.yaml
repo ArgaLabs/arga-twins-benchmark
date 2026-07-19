@@ -1,0 +1,33 @@
+kind: verification
+schema_version: '0.1'
+verifier_id: stripe_price_normalization_v1.ambiguous
+gold_solution_id: stripe_price_normalization_v1.ambiguous.gold
+negative_control_ids:
+- stripe_price_normalization_v1.ambiguous.wrong_price
+- stripe_price_normalization_v1.ambiguous.partial_update
+- stripe_price_normalization_v1.ambiguous.collateral_mutation
+expected_state:
+- Two seeded prices match product name Pro Monthly, unit amount 7900, and currency
+  usd.
+- Stripe canonical resource state is unchanged because the required price match is
+  not unique.
+allowed_state_changes: []
+forbidden_state_changes:
+- Any customer, product, price, subscription, invoice, payment, event, or other Stripe
+  resource is created or deleted.
+- Any customer or product is modified, or any non-target price is modified.
+- Any target-price field other than nickname and lookup_key is modified.
+- Any Stripe mutation occurs when the target price match is non-unique.
+critical_requirements:
+- Product name, unit amount, and currency are all matched exactly and uniqueness is
+  established before mutation.
+- The ambiguous target set causes a complete no-op.
+- No forbidden Stripe state change occurs.
+partial_credit:
+  identify_exact_product: 0.2
+  identify_exact_price: 0.25
+  enforce_uniqueness: 0.2
+  normalize_fields: 0.2
+  preserve_catalog: 0.15
+output_contract:
+  exact: PRICE_NOT_UNIQUE

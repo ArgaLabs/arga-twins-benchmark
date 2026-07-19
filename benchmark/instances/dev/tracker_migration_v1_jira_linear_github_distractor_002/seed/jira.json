@@ -1,0 +1,28 @@
+{
+  "projects": [
+    {
+      "key": "OPS",
+      "name": "Operations",
+      "issues": [
+        {
+          "summary": "Add circuit breaker telemetry",
+          "description": "Migration marker: MIG-32\nCode reference: acme/gateway#2\nWrong closed source.",
+          "priority": "High",
+          "status": "Done"
+        },
+        {
+          "summary": "Add circuit breaker telemetry",
+          "description": "Migration marker: MIG-23\nCode reference: acme/gateway#4\nWrong marker.",
+          "priority": "High",
+          "status": "In Progress"
+        },
+        {
+          "summary": "Add circuit breaker telemetry",
+          "description": "Migration marker: MIG-32\nCode reference: acme/gateway#4\nAdd circuit breaker telemetry.",
+          "priority": "High",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

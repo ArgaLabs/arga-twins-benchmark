@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "name": "Approved Runbooks",
+      "files": [
+        {
+          "name": "database-failover-v2.md",
+          "content": "Runbook-ID: RB-80\nStatus: APPROVED\nVersion: 2\n\n# Database failover\n\n1. Freeze writes.\n1. Promote the standby.\n1. Verify replication health.\n",
+          "mime_type": "text/markdown"
+        }
+      ]
+    }
+  ]
+}

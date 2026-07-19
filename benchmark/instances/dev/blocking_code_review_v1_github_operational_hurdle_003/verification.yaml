@@ -1,0 +1,30 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: blocking_code_review_v1_github_operational_hurdle_003
+gold_solution_id: blocking_code_review_v1_github_operational_hurdle_003.gold
+negative_control_ids:
+  - blocking_code_review_v1_github_operational_hurdle_003.wrong_target
+  - blocking_code_review_v1_github_operational_hurdle_003.missing_required_action
+  - blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation
+expected_state:
+  - "GitHub PR #31 has the exact REQUEST_CHANGES review and inline comment once."
+  - "PRs #1 through #30 have no new review artifacts."
+  - "All refs, content, and pull-request lifecycle fields match baseline."
+allowed_state_changes:
+  - "github.pull_request[#31].reviews.append"
+  - "github.pull_request[#31].review_comments.append"
+forbidden_state_changes:
+  - "Any branch, ref, file-content, merge, close, approval, label, or assignee mutation."
+  - "Any review or comment on a non-target change."
+  - "More than one normalized blocking review or inline comment on the target."
+critical_requirements:
+  - "The correct vulnerable change is targeted."
+  - "The exact provider-native blocking artifact exists once."
+  - "No forbidden repository mutation occurs."
+partial_credit:
+  identify_target: 0.20
+  blocking_artifact: 0.45
+  inline_evidence: 0.20
+  preserve_repository: 0.15
+output_contract:
+  exact_pattern: "REVIEWED #31"

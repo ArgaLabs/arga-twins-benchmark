@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: tracker_migration_v1
+title: Cross-tracker migration
+description: Migrate one selected open issue across tracker providers while preserving provenance and avoiding duplicates.
+track: capability
+required_roles: [source_tracker, target_tracker, code_host]
+variants: [clean, distractor, operational_hurdle, provider_contrast]

@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Acme",
+      "path": "acme"
+    }
+  ],
+  "projects": [
+    {
+      "name": "payments",
+      "path": "payments",
+      "namespace_path": "acme",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# payments\n"
+        }
+      ],
+      "merge_requests": [
+        {
+          "title": "REL-207: retry",
+          "description": "",
+          "source_branch": "rel-207-retry",
+          "target_branch": "main",
+          "files": [
+            {
+              "path": "src/retry.ts",
+              "content": "export const retries = 3;\n"
+            }
+          ],
+          "merged": true
+        },
+        {
+          "title": "REL-207: metrics",
+          "description": "",
+          "source_branch": "rel-207-metrics",
+          "target_branch": "main",
+          "files": [
+            {
+              "path": "src/metrics.ts",
+              "content": "export const metrics = true;\n"
+            }
+          ],
+          "merged": true
+        }
+      ]
+    }
+  ]
+}

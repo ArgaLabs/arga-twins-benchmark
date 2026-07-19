@@ -1,0 +1,7 @@
+kind: binding
+schema_version: "0.1"
+binding_id: notion
+roles:
+  knowledge_base: notion
+provider_contracts:
+  notion: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

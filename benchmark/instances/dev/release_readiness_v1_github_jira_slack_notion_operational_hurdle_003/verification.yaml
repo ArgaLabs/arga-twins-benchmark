@@ -1,0 +1,31 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: release_readiness_v1_github_jira_slack_notion_operational_hurdle_003
+gold_solution_id: release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold
+negative_control_ids:
+  - release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.wrong_target
+  - release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.missing_required_action
+  - release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.collateral_mutation
+expected_state:
+  - "Jira REL-1 remains In Progress and gains exactly one comment `READINESS REL-206: BLOCKED - change #2 is not merged.`."
+  - "Slack #releases gains exactly one message with that same text."
+  - "The agent does not merge PR #2 or change any source-of-truth record."
+allowed_state_changes:
+  - "jira.issue[REL-1].comments.append"
+  - "slack.channel[releases].messages.append"
+forbidden_state_changes:
+  - "Any code-host or Notion mutation."
+  - "Any tracker mutation outside the marked release record."
+  - "Any message outside the selected release channel or more than one new status message."
+critical_requirements:
+  - "The decision and first-failing-gate reason are correct."
+  - "The exact tracker comment and chat message exist once."
+  - "The release record state follows the READY versus BLOCKED rule."
+partial_credit:
+  read_all_gates: 0.25
+  correct_decision: 0.25
+  tracker_update: 0.20
+  chat_update: 0.20
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "READINESS REL-206: BLOCKED - change #2 is not merged."

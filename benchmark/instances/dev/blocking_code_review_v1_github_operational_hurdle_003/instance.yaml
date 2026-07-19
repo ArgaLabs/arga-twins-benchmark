@@ -1,0 +1,30 @@
+kind: instance
+schema_version: "0.1"
+instance_id: blocking_code_review_v1_github_operational_hurdle_003
+template_id: blocking_code_review_v1
+variant_group: blocking_code_review_v1
+variant: operational_hurdle
+split: development
+world_id: saas_company_01
+binding_id: github
+prompt_file: prompt.txt
+seed_files:
+  github: seed/github.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - submit_blocking_review
+    - add_inline_review_comment
+  constraints:
+    change_marker: "SEC-205"
+    target_change: "#31"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 80
+setup_patches:
+  - seed_target_beyond_default_pull_request_page
+failure_schedule: []
+metadata:
+  service_count: 1

@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "key": "OPS",
+      "name": "Operations",
+      "issues": [
+        {
+          "summary": "Retry failed deliveries with jitter",
+          "description": "Migration marker: MIG-33\nCode reference: acme/hooks#1\nRetry failed deliveries with jitter.",
+          "priority": "High",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

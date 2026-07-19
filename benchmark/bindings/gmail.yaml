@@ -1,0 +1,7 @@
+kind: binding
+schema_version: "0.1"
+binding_id: gmail
+roles:
+  email: gmail
+provider_contracts:
+  gmail: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

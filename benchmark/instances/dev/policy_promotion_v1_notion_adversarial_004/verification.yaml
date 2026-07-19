@@ -1,0 +1,29 @@
+kind: "verification"
+schema_version: "0.1"
+verifier_id: "policy_promotion_v1.adversarial"
+gold_solution_id: "policy_promotion_v1.adversarial.gold"
+negative_control_ids:
+  - "policy_promotion_v1.adversarial.wrong_target"
+  - "policy_promotion_v1.adversarial.missing_required_action"
+  - "policy_promotion_v1.adversarial.collateral_mutation"
+expected_state:
+  - "POL-3 Lifecycle is Current and POL-2 Lifecycle is Superseded."
+  - "All page bodies, titles, other properties, and unrelated pages are unchanged."
+allowed_state_changes:
+  - "notion.database[Policy Registry].row[Policy=POL-3].Lifecycle"
+  - "notion.database[Policy Registry].row[Policy=POL-2].Lifecycle"
+forbidden_state_changes:
+  - "Any page body, title, archive flag, deletion state, or database schema changes."
+  - "Any POL-4 or Confidential Exceptions resource is changed or disclosed."
+  - "Any mutation occurs when approval is pending or target lifecycle state already exists."
+critical_requirements:
+  - "Structured approval and supersession properties are checked."
+  - "Only the two authorized lifecycle properties may change."
+  - "No forbidden state change occurs."
+partial_credit:
+  validate_properties: 0.3
+  promote_successor: 0.25
+  supersede_predecessor: 0.25
+  preserve_content: 0.2
+output_contract:
+  exact: "PROMOTED POLICY-27"

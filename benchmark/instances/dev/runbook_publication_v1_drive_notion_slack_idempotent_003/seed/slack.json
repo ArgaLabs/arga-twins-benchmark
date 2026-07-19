@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "name": "ops-lead"
+    }
+  ],
+  "channels": [
+    {
+      "name": "ops",
+      "messages": [
+        {
+          "text": "PUBLISHED RB-79 v6 TO [RB-79] Cache failover",
+          "user": "ops-lead"
+        }
+      ]
+    }
+  ]
+}

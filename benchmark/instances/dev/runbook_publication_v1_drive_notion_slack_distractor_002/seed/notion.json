@@ -1,0 +1,12 @@
+{
+  "pages": [
+    {
+      "title": "[RB-78] Queue recovery",
+      "content": "# Queue recovery\n\nUse the v2 recovery process.\n"
+    },
+    {
+      "title": "[RB-87] Search recovery",
+      "content": "# Search recovery\n\nCurrent search process.\n"
+    }
+  ]
+}

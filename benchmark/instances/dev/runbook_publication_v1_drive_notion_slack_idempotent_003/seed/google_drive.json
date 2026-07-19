@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "name": "Approved Runbooks",
+      "files": [
+        {
+          "name": "cache-failover-v6.md",
+          "content": "Runbook-ID: RB-79\nStatus: APPROVED\nVersion: 6\n\n# Cache failover\n\n1. Disable cache writes.\n1. Promote the replica.\n1. Re-enable writes.\n",
+          "mime_type": "text/markdown"
+        }
+      ]
+    }
+  ]
+}

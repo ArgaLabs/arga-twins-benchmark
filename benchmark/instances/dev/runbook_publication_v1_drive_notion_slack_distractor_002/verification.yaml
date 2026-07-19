@@ -1,0 +1,31 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: runbook_publication_v1_drive_notion_slack_distractor_002
+gold_solution_id: runbook_publication_v1_drive_notion_slack_distractor_002.gold
+negative_control_ids:
+  - runbook_publication_v1_drive_notion_slack_distractor_002.wrong_target
+  - runbook_publication_v1_drive_notion_slack_distractor_002.missing_required_action
+  - runbook_publication_v1_drive_notion_slack_distractor_002.collateral_mutation
+expected_state:
+  - "The RB-78 destination Markdown exactly equals the approved v4 body, not draft v5 or RB-87 v9."
+  - "Slack #ops gains exactly one RB-78 v4 publication message."
+  - "The RB-87 page, every Drive file, and all other state remain unchanged."
+allowed_state_changes:
+  - "notion.page[RB-78].markdown"
+  - "slack.channel[ops].messages.append"
+forbidden_state_changes:
+  - "Any Google Drive mutation."
+  - "Any Notion page creation or mutation outside the destination page."
+  - "Any message outside the selected channel or duplicate publication message."
+critical_requirements:
+  - "The highest eligible approved version is selected."
+  - "The existing destination identity is preserved and its Markdown exactly matches the selected body."
+  - "The exact publication is announced once, or the already-current episode is a complete no-op."
+partial_credit:
+  select_version: 0.25
+  notion_content: 0.35
+  chat_announcement: 0.20
+  idempotency: 0.10
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "PUBLISHED RB-78 v4 TO [RB-78] Queue recovery"

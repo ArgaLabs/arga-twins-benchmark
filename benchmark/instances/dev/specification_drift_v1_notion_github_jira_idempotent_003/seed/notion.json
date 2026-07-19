@@ -1,0 +1,8 @@
+{
+  "pages": [
+    {
+      "title": "[SPEC-90] Retry policy",
+      "content": "# SPEC-90 Retry policy\n\nStatus: APPROVED\n\nMUST\n- Requirement-ID: SPEC-90:R1\n- Requirement: Cap request retries at three.\n- Issue title: [SPEC-90:R1] Cap retries at three\n- Gap text: Retry cap is seven\n- Code path: src/retry.ts\n"
+    }
+  ]
+}

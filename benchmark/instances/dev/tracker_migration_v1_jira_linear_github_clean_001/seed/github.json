@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "hooks",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# hooks\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "MIG-31: webhook retry",
+          "body": "",
+          "head": "mig-31-retry",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/retry.ts",
+              "content": "export const retry = true;\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

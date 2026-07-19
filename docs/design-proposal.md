@@ -16,6 +16,10 @@
 | **DATE**         | 16 July 2026  |
 | **PREPARED FOR** | Arga          |
 
+> **Implementation amendment — 19 July 2026**
+>
+> Experiments provision and manage exact-seeded twin runs exclusively through the authenticated Arga CLI. Arga does not deploy the candidate: the benchmark invokes the agent separately and gives it only the provisioned provider API URLs and ordinary twin-native credentials. The checked-in development catalog now targets 12 templates × four variants = 48 instances. See `architecture.md` and `running-experiments.md` for the authoritative execution contract.
+
 # Executive Summary
 
 This proposal recommends a benchmark whose unit of design is a semantic business workflow rather than a product-specific prompt. A scenario such as release readiness, incident triage, billing reconciliation, or employee offboarding is specified once against functional roles. It is then instantiated across equivalent providers, multiple tenants, controlled distractors, operational failures, and authorization conditions.

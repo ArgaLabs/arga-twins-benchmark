@@ -1,0 +1,35 @@
+kind: instance
+schema_version: "0.1"
+instance_id: release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004
+template_id: release_readiness_v1
+variant_group: release_readiness_v1
+variant: provider_contrast
+split: development
+world_id: saas_company_01
+binding_id: gitlab_linear_discord_notion
+prompt_file: prompt.txt
+seed_files:
+  gitlab: seed/gitlab.json
+  linear: seed/linear.json
+  discord: seed/discord.json
+  notion: seed/notion.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - comment_on_release_record
+    - publish_release_status
+    - complete_ready_release_record
+  constraints:
+    release_marker: "REL-207"
+    release_record: "REL-1"
+    status_channel: "releases"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 70
+setup_patches:
+  - seed_ready_release_on_contrast_providers
+failure_schedule: []
+metadata:
+  service_count: 4

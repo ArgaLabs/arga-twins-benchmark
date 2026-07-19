@@ -1,0 +1,7 @@
+Triage incident `INC-420` in `#incidents`. Correlate its deployment marker with a merged code change in `acme/database-api` and read the exact `Cause:` value from that change. Reuse a tracker issue whose description contains `Incident marker: INC-420`; otherwise create exactly one highest or urgent-priority issue in `Jira project OPS` titled `[INC-420] database-api requests timing out` with description exactly:
+
+Incident marker: INC-420
+Evidence: MR !1
+Cause: database timeout is 2 seconds
+
+Then post exactly `TRACKED INC-420 AS <tracker-identifier>: database timeout is 2 seconds.` in the source channel. Do not alter code, existing messages, or unrelated tracker items. Return exactly the posted line.

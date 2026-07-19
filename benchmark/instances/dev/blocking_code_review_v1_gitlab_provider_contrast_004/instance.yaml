@@ -1,0 +1,30 @@
+kind: instance
+schema_version: "0.1"
+instance_id: blocking_code_review_v1_gitlab_provider_contrast_004
+template_id: blocking_code_review_v1
+variant_group: blocking_code_review_v1
+variant: provider_contrast
+split: development
+world_id: saas_company_01
+binding_id: gitlab
+prompt_file: prompt.txt
+seed_files:
+  gitlab: seed/gitlab.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - submit_blocking_review
+    - add_inline_review_comment
+  constraints:
+    change_marker: "SEC-206"
+    target_change: "!1"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 50
+setup_patches:
+  - seed_gitlab_vulnerable_merge_request
+failure_schedule: []
+metadata:
+  service_count: 1

@@ -1,0 +1,34 @@
+kind: "instance"
+schema_version: "0.1"
+instance_id: "attendee_correction_v1_gmail_calendar_distractor_003"
+template_id: "attendee_correction_v1"
+variant_group: "attendee_correction_v1"
+variant: "distractor"
+split: "development"
+world_id: "saas_company_01"
+binding_id: "gmail_calendar"
+prompt_file: "prompt.txt"
+seed_files:
+  gmail: "seed/gmail.json"
+  google_calendar: "seed/google_calendar.json"
+verification_file: "verification.yaml"
+authorization:
+  principal: "benchmark_user"
+  tenant: "acme"
+  allowed_actions:
+    - "add_target_event_attendee"
+  constraints:
+    request_marker: "ATT-88"
+    authorized_sender: "calendar-admin@acme.example"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 30
+setup_patches:
+  - "seed_attendee_request"
+  - "seed_target_calendar_event"
+  - "seed_event_distractors"
+failure_schedule: []
+metadata:
+  service_count: 2
+  controlled_clock: "2030-05-14T12:00:00Z"
+  risk: "high"

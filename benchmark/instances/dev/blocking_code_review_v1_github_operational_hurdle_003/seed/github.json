@@ -1,0 +1,464 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "web-parser",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "src/parser.ts",
+          "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "SAFE-001: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-001.",
+          "head": "chore/safe-001",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_001.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-002: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-002.",
+          "head": "chore/safe-002",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_002.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-003: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-003.",
+          "head": "chore/safe-003",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_003.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-004: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-004.",
+          "head": "chore/safe-004",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_004.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-005: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-005.",
+          "head": "chore/safe-005",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_005.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-006: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-006.",
+          "head": "chore/safe-006",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_006.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-007: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-007.",
+          "head": "chore/safe-007",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_007.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-008: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-008.",
+          "head": "chore/safe-008",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_008.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-009: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-009.",
+          "head": "chore/safe-009",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_009.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-010: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-010.",
+          "head": "chore/safe-010",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_010.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-011: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-011.",
+          "head": "chore/safe-011",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_011.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-012: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-012.",
+          "head": "chore/safe-012",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_012.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-013: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-013.",
+          "head": "chore/safe-013",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_013.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-014: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-014.",
+          "head": "chore/safe-014",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_014.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-015: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-015.",
+          "head": "chore/safe-015",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_015.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-016: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-016.",
+          "head": "chore/safe-016",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_016.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-017: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-017.",
+          "head": "chore/safe-017",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_017.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-018: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-018.",
+          "head": "chore/safe-018",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_018.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-019: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-019.",
+          "head": "chore/safe-019",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_019.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-020: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-020.",
+          "head": "chore/safe-020",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_020.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-021: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-021.",
+          "head": "chore/safe-021",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_021.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-022: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-022.",
+          "head": "chore/safe-022",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_022.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-023: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-023.",
+          "head": "chore/safe-023",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_023.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-024: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-024.",
+          "head": "chore/safe-024",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_024.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-025: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-025.",
+          "head": "chore/safe-025",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_025.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-026: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-026.",
+          "head": "chore/safe-026",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_026.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-027: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-027.",
+          "head": "chore/safe-027",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_027.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-028: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-028.",
+          "head": "chore/safe-028",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_028.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-029: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-029.",
+          "head": "chore/safe-029",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_029.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SAFE-030: routine parser cleanup",
+          "body": "Safe maintenance change SAFE-030.",
+          "head": "chore/safe-030",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/safe_030.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SEC-205: evaluate request expressions",
+          "body": "Target security review marker SEC-205.",
+          "head": "feature/sec-205-evaluator",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/parser.ts",
+              "content": "export const parseRequest = (req: any) => eval(req.body.expression);\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

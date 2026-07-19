@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "name": "ops-lead"
+    }
+  ],
+  "channels": [
+    {
+      "name": "incidents",
+      "messages": [
+        {
+          "text": "[INC-419] worker-api queue stalled after DEP-771",
+          "user": "ops-lead"
+        }
+      ]
+    }
+  ]
+}

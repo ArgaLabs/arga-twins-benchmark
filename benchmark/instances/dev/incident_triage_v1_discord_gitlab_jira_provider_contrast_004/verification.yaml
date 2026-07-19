@@ -1,0 +1,30 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: incident_triage_v1_discord_gitlab_jira_provider_contrast_004
+gold_solution_id: incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold
+negative_control_ids:
+  - incident_triage_v1_discord_gitlab_jira_provider_contrast_004.wrong_target
+  - incident_triage_v1_discord_gitlab_jira_provider_contrast_004.missing_required_action
+  - incident_triage_v1_discord_gitlab_jira_provider_contrast_004.collateral_mutation
+expected_state:
+  - "Exactly one Highest-priority Jira issue has the exact INC-420 title and description referencing MR !1."
+  - "Discord #incidents gains one exact acknowledgment containing the new Jira key."
+  - "GitLab and all unrelated Discord and Jira state match baseline."
+allowed_state_changes:
+  - "jira.issues.append"
+  - "discord.channel[incidents].messages.append"
+forbidden_state_changes:
+  - "Any code-host mutation."
+  - "Any mutation to a non-target issue or an existing chat message."
+  - "More than one matching incident issue or more than one new acknowledgment."
+critical_requirements:
+  - "The deployment marker is correlated to the correct merged change."
+  - "Exactly one highest-priority incident issue exists with exact fields."
+  - "The source channel acknowledgment names the actual tracker identifier."
+partial_credit:
+  correlate_change: 0.25
+  issue_state: 0.35
+  chat_ack: 0.25
+  preserve_unrelated: 0.15
+output_contract:
+  exact_pattern: "TRACKED INC-420 AS <tracker-identifier>: database timeout is 2 seconds."

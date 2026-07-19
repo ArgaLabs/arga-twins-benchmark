@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "auth-api",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# auth-api\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "Deploy cache tuning",
+          "body": "Deployment: DEP-9901\nCause: cache TTL is too low",
+          "head": "deploy/9901",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "config/cache.py",
+              "content": "TTL = 30\n"
+            }
+          ]
+        },
+        {
+          "title": "Deploy auth audience",
+          "body": "Deployment: DEP-9902\nCause: OIDC audience is set to acme-stagin",
+          "head": "deploy/9902",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "config/auth.py",
+              "content": "OIDC_AUDIENCE = \"acme-stagin\"\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

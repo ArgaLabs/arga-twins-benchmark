@@ -1,0 +1,33 @@
+kind: instance
+schema_version: "0.1"
+instance_id: runbook_publication_v1_drive_notion_slack_distractor_002
+template_id: runbook_publication_v1
+variant_group: runbook_publication_v1
+variant: distractor
+split: development
+world_id: saas_company_01
+binding_id: drive_notion_slack
+prompt_file: prompt.txt
+seed_files:
+  google_drive: seed/google_drive.json
+  notion: seed/notion.json
+  slack: seed/slack.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - replace_target_notion_markdown
+    - announce_runbook_publication
+  constraints:
+    runbook_marker: "RB-78"
+    selected_version: "4"
+    status_channel: "ops"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 55
+setup_patches:
+  - seed_approved_draft_and_wrong_runbook_versions
+failure_schedule: []
+metadata:
+  service_count: 3

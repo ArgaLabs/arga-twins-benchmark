@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Acme",
+      "path": "acme"
+    }
+  ],
+  "projects": [
+    {
+      "name": "web-parser",
+      "path": "web-parser",
+      "namespace_path": "acme",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "src/parser.ts",
+          "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
+        }
+      ],
+      "merge_requests": [
+        {
+          "title": "SEC-206: support expression parsing",
+          "description": "Implements expression parsing for SEC-206.",
+          "source_branch": "feature/sec-206-expression-parser",
+          "target_branch": "main",
+          "files": [
+            {
+              "path": "src/parser.ts",
+              "content": "export const parseRequest = (req: any) => eval(req.body.expression);\n"
+            }
+          ],
+          "merged": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "web-parser",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "src/parser.ts",
+          "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "SEC-240: normalize expression input",
+          "body": "Safe parser cleanup for SEC-240.",
+          "head": "feature/sec-240-normalize",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/parser.ts",
+              "content": "export const parse = (input: string) => JSON.parse(input);\n"
+            }
+          ]
+        },
+        {
+          "title": "SEC-204: support expression parsing",
+          "body": "Implements request-driven expression parsing for SEC-204.",
+          "head": "feature/sec-204-expression-parser",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/parser.ts",
+              "content": "export const parseRequest = (req: any) => eval(req.body.expression);\n"
+            }
+          ]
+        },
+        {
+          "title": "Expression parser documentation",
+          "body": "Documentation only; no SEC-204 implementation.",
+          "head": "docs/expression-parser",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "docs/parser.md",
+              "content": "# Expression parser\nUse JSON.parse for untrusted input.\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

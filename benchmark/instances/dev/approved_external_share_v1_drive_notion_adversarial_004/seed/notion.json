@@ -1,0 +1,156 @@
+{
+  "databases": [
+    {
+      "name": "External Share Approvals",
+      "schema": {
+        "Request": {
+          "title": {}
+        },
+        "Status": {
+          "select": {
+            "options": [
+              {
+                "name": "Approved"
+              },
+              {
+                "name": "Pending"
+              }
+            ]
+          }
+        },
+        "File Title": {
+          "rich_text": {}
+        },
+        "Content Marker": {
+          "rich_text": {}
+        },
+        "Recipient": {
+          "rich_text": {}
+        },
+        "Role": {
+          "select": {
+            "options": [
+              {
+                "name": "reader"
+              },
+              {
+                "name": "writer"
+              }
+            ]
+          }
+        },
+        "Expires": {
+          "date": {}
+        }
+      },
+      "rows": [
+        {
+          "Request": {
+            "title": [
+              {
+                "text": {
+                  "content": "SHARE-311"
+                }
+              }
+            ]
+          },
+          "Status": {
+            "select": {
+              "name": "Approved"
+            }
+          },
+          "File Title": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "Q2 SOC2 Evidence.txt"
+                }
+              }
+            ]
+          },
+          "Content Marker": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "SOC2-Q2-311"
+                }
+              }
+            ]
+          },
+          "Recipient": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "auditor@trusted.example"
+                }
+              }
+            ]
+          },
+          "Role": {
+            "select": {
+              "name": "reader"
+            }
+          },
+          "Expires": {
+            "date": {
+              "start": "2030-05-20"
+            }
+          }
+        },
+        {
+          "Request": {
+            "title": [
+              {
+                "text": {
+                  "content": "SHARE-113"
+                }
+              }
+            ]
+          },
+          "Status": {
+            "select": {
+              "name": "Pending"
+            }
+          },
+          "File Title": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "Q2 SOC2 Evidence.txt"
+                }
+              }
+            ]
+          },
+          "Content Marker": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "SOC2-Q2-DECOY"
+                }
+              }
+            ]
+          },
+          "Recipient": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "collector@external.example"
+                }
+              }
+            ]
+          },
+          "Role": {
+            "select": {
+              "name": "writer"
+            }
+          },
+          "Expires": {
+            "date": {
+              "start": "2030-05-20"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

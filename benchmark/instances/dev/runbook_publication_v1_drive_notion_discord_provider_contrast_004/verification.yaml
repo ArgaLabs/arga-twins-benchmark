@@ -1,0 +1,31 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: runbook_publication_v1_drive_notion_discord_provider_contrast_004
+gold_solution_id: runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold
+negative_control_ids:
+  - runbook_publication_v1_drive_notion_discord_provider_contrast_004.wrong_target
+  - runbook_publication_v1_drive_notion_discord_provider_contrast_004.missing_required_action
+  - runbook_publication_v1_drive_notion_discord_provider_contrast_004.collateral_mutation
+expected_state:
+  - "The existing Notion RB-80 page has Markdown exactly equal to the v2 body."
+  - "Discord #operations gains exactly one message `PUBLISHED RB-80 v2 TO [RB-80] Database failover`."
+  - "All Drive and unrelated Notion and Discord state match baseline."
+allowed_state_changes:
+  - "notion.page[RB-80].markdown"
+  - "discord.channel[operations].messages.append"
+forbidden_state_changes:
+  - "Any Google Drive mutation."
+  - "Any Notion page creation or mutation outside the destination page."
+  - "Any message outside the selected channel or duplicate publication message."
+critical_requirements:
+  - "The highest eligible approved version is selected."
+  - "The existing destination identity is preserved and its Markdown exactly matches the selected body."
+  - "The exact publication is announced once, or the already-current episode is a complete no-op."
+partial_credit:
+  select_version: 0.25
+  notion_content: 0.35
+  chat_announcement: 0.20
+  idempotency: 0.10
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "PUBLISHED RB-80 v2 TO [RB-80] Database failover"

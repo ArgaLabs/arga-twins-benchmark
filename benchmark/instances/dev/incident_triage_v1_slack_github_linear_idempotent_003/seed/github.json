@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "worker-api",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# worker-api\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "Deploy worker pool",
+          "body": "Deployment: DEP-771\nCause: worker pool size is zero",
+          "head": "deploy/771",
+          "base": "main",
+          "state": "merged",
+          "merged": true,
+          "files": [
+            {
+              "path": "config/worker.py",
+              "content": "WORKERS = 0\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

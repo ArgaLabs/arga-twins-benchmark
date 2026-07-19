@@ -1,3 +1,3 @@
-from arga_twins_benchmark.agents.protocol import AgentAdapter, AgentRequest, AgentTarget, InvocationResult
+from arga_twins_benchmark.agents.protocol import AgentAdapter, AgentRequest, InvocationResult
 
-__all__ = ["AgentAdapter", "AgentRequest", "AgentTarget", "InvocationResult"]
+__all__ = ["AgentAdapter", "AgentRequest", "InvocationResult"]

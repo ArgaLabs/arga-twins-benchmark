@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: release_readiness_v1
+title: Release readiness
+description: Reconcile release gates across code, tracker, knowledge base, and team chat before publishing a status.
+track: capability
+required_roles: [code_host, issue_tracker, team_chat, knowledge_base]
+variants: [clean, distractor, operational_hurdle, provider_contrast]

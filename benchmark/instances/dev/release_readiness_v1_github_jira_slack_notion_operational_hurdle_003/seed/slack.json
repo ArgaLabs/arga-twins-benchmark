@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "name": "ops-lead"
+    }
+  ],
+  "channels": [
+    {
+      "name": "releases",
+      "messages": []
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "key": "REL",
+      "name": "Releases",
+      "issues": [
+        {
+          "summary": "REL-204 release record",
+          "description": "Release coordination record.",
+          "status": "In Progress"
+        },
+        {
+          "summary": "REL-204 migration blocker",
+          "description": "Blocking item for REL-204.",
+          "status": "Done"
+        }
+      ]
+    }
+  ]
+}

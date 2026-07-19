@@ -1,0 +1,31 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: tracker_migration_v1_jira_linear_github_distractor_002
+gold_solution_id: tracker_migration_v1_jira_linear_github_distractor_002.gold
+negative_control_ids:
+  - tracker_migration_v1_jira_linear_github_distractor_002.wrong_target
+  - tracker_migration_v1_jira_linear_github_distractor_002.missing_required_action
+  - tracker_migration_v1_jira_linear_github_distractor_002.collateral_mutation
+expected_state:
+  - "Exactly one new Linear target is created from Jira OPS-3 with priority 2 and `Migration source: OPS-3`."
+  - "Only Jira OPS-3 gains the exact migration comment."
+  - "The OPS-8 provenance decoy and wrong source candidates are unchanged."
+allowed_state_changes:
+  - "linear.issues.append"
+  - "jira.issue[OPS-3].comments.append"
+forbidden_state_changes:
+  - "Any source issue lifecycle or field mutation other than the exact migration comment."
+  - "Any code-host mutation."
+  - "Any duplicate target or mutation to unrelated tracker items."
+critical_requirements:
+  - "The unique open source issue and code reference are resolved."
+  - "One exact target exists with preserved content, priority, and provenance."
+  - "The exact source comment and output identify the actual target."
+partial_credit:
+  select_source: 0.20
+  target_content: 0.35
+  source_comment: 0.20
+  deduplicate: 0.15
+  preserve_code: 0.10
+output_contract:
+  exact_pattern: "MIGRATED OPS-3 -> <target-identifier>"

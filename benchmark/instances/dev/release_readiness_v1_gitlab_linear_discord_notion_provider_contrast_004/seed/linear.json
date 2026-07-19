@@ -1,0 +1,18 @@
+{
+  "teams": [
+    {
+      "key": "REL",
+      "name": "Releases"
+    }
+  ],
+  "projects": [],
+  "issues": [
+    {
+      "team_key": "REL",
+      "title": "REL-207 release record",
+      "description": "Release coordination record.",
+      "priority": 2
+    }
+  ],
+  "comments": []
+}

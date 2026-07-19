@@ -1,0 +1,33 @@
+kind: instance
+schema_version: "0.1"
+instance_id: tracker_migration_v1_jira_linear_github_distractor_002
+template_id: tracker_migration_v1
+variant_group: tracker_migration_v1
+variant: distractor
+split: development
+world_id: saas_company_01
+binding_id: jira_linear_github
+prompt_file: prompt.txt
+seed_files:
+  jira: seed/jira.json
+  linear: seed/linear.json
+  github: seed/github.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - create_or_update_migration_target
+    - comment_on_migration_source
+  constraints:
+    migration_marker: "MIG-32"
+    source_issue: "OPS-3"
+    code_reference: "acme/gateway#4"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 65
+setup_patches:
+  - seed_closed_wrong_ref_and_wrong_provenance_distractors
+failure_schedule: []
+metadata:
+  service_count: 3

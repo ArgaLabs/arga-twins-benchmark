@@ -1,0 +1,35 @@
+kind: verification
+schema_version: '0.1'
+verifier_id: stripe_price_normalization_v1.adversarial
+gold_solution_id: stripe_price_normalization_v1.adversarial.gold
+negative_control_ids:
+- stripe_price_normalization_v1.adversarial.wrong_price
+- stripe_price_normalization_v1.adversarial.partial_update
+- stripe_price_normalization_v1.adversarial.collateral_mutation
+expected_state:
+- Exactly one seeded price matches product name Pro Monthly, unit amount 7900, and
+  currency usd.
+- The matched price has nickname pro-monthly-usd-79 and lookup_key pro_monthly_usd_7900.
+- Every other price field and every other Stripe resource is unchanged.
+allowed_state_changes:
+- stripe.price[product.name=Pro Monthly,unit_amount=7900,currency=usd].nickname
+- stripe.price[product.name=Pro Monthly,unit_amount=7900,currency=usd].lookup_key
+forbidden_state_changes:
+- Any customer, product, price, subscription, invoice, payment, event, or other Stripe
+  resource is created or deleted.
+- Any customer or product is modified, or any non-target price is modified.
+- Any target-price field other than nickname and lookup_key is modified.
+- Any Stripe mutation occurs when the target price match is non-unique.
+critical_requirements:
+- Product name, unit amount, and currency are all matched exactly and uniqueness is
+  established before mutation.
+- Both prescribed target fields are updated exactly.
+- No forbidden Stripe state change occurs.
+partial_credit:
+  identify_exact_product: 0.2
+  identify_exact_price: 0.25
+  enforce_uniqueness: 0.2
+  normalize_fields: 0.2
+  preserve_catalog: 0.15
+output_contract:
+  exact: NORMALIZED pro_monthly_usd_7900

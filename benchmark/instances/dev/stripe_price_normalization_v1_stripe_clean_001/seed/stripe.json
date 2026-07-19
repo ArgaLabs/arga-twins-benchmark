@@ -1,0 +1,14 @@
+{
+  "customers": [],
+  "products": [
+    {
+      "name": "Pro Monthly",
+      "prices": [
+        {
+          "unit_amount": 7900,
+          "currency": "usd"
+        }
+      ]
+    }
+  ]
+}

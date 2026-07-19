@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "key": "OPS",
+      "name": "Operations",
+      "issues": [
+        {
+          "summary": "Retry failed webhook deliveries",
+          "description": "Migration marker: MIG-31\nCode reference: acme/hooks#1\nRetry DLQ webhooks with exponential backoff.",
+          "priority": "High",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+kind: instance
+schema_version: "0.1"
+instance_id: release_readiness_v1_github_jira_slack_notion_distractor_002
+template_id: release_readiness_v1
+variant_group: release_readiness_v1
+variant: distractor
+split: development
+world_id: saas_company_01
+binding_id: github_jira_slack_notion
+prompt_file: prompt.txt
+seed_files:
+  github: seed/github.json
+  jira: seed/jira.json
+  slack: seed/slack.json
+  notion: seed/notion.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - comment_on_release_record
+    - publish_release_status
+    - complete_ready_release_record
+  constraints:
+    release_marker: "REL-205"
+    release_record: "REL-1"
+    status_channel: "releases"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 70
+setup_patches:
+  - seed_target_and_future_release_distractors
+failure_schedule: []
+metadata:
+  service_count: 4

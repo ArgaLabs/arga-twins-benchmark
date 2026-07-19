@@ -1,0 +1,14 @@
+kind: "template"
+schema_version: "0.1"
+template_id: "constrained_calendar_scheduling_v1"
+title: "Constrained calendar scheduling"
+description: "Schedule the earliest feasible block from an approved request, ignore other calendars, and avoid duplicate creation."
+track: "robustness"
+required_roles:
+  - "email"
+  - "calendar"
+variants:
+  - "clean"
+  - "distractor"
+  - "idempotent"
+  - "operational_hurdle"

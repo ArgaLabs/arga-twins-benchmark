@@ -1,0 +1,31 @@
+kind: instance
+schema_version: "0.1"
+instance_id: specification_drift_v1_notion_gitlab_linear_provider_contrast_004
+template_id: specification_drift_v1
+variant_group: specification_drift_v1
+variant: provider_contrast
+split: development
+world_id: saas_company_01
+binding_id: notion_gitlab_linear
+prompt_file: prompt.txt
+seed_files:
+  notion: seed/notion.json
+  gitlab: seed/gitlab.json
+  linear: seed/linear.json
+verification_file: verification.yaml
+authorization:
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions:
+    - create_missing_tracker_issue
+  constraints:
+    spec_marker: "SPEC-91:R1"
+    code_path: "runner.py"
+budget:
+  timeout_seconds: 300
+  max_tool_calls: 60
+setup_patches:
+  - seed_missing_requirement_on_contrast_providers
+failure_schedule: []
+metadata:
+  service_count: 3

@@ -1,0 +1,86 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "gateway",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "README.md",
+          "content": "# gateway\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "Support #1",
+          "body": "",
+          "head": "support-1",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/a.ts",
+              "content": "export const a = 1;\n"
+            }
+          ]
+        },
+        {
+          "title": "Support #2",
+          "body": "",
+          "head": "support-2",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/b.ts",
+              "content": "export const b = 2;\n"
+            }
+          ]
+        },
+        {
+          "title": "Support #3",
+          "body": "",
+          "head": "support-3",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/c.ts",
+              "content": "export const c = 3;\n"
+            }
+          ]
+        },
+        {
+          "title": "MIG-32 telemetry",
+          "body": "",
+          "head": "mig-32",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "src/telemetry.ts",
+              "content": "export const telemetry = true;\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

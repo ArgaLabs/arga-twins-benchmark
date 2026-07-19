@@ -1,0 +1,8 @@
+{
+  "pages": [
+    {
+      "title": "[SPEC-89] HTTP privacy",
+      "content": "# SPEC-89 HTTP privacy\n\nStatus: APPROVED\n\nMUST\n- Requirement-ID: SPEC-89:R1\n- Requirement: Redact Cookie headers before logging.\n- Issue title: [SPEC-89:R1] Redact Cookie header\n- Gap text: Cookie header is logged\n- Code path: src/http_log.ts\n\nMUST\n- Requirement-ID: SPEC-89:R2\n- Requirement: Redact Authorization headers before logging.\n- Issue title: [SPEC-89:R2] Redact Authorization header\n- Gap text: Authorization header is logged\n- Code path: src/http_log.ts\n"
+    }
+  ]
+}

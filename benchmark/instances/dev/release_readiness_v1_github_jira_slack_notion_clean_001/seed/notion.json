@@ -1,0 +1,8 @@
+{
+  "pages": [
+    {
+      "title": "[REL-204] Release checklist",
+      "content": "# REL-204 release checklist\n\nStatus: APPROVED\n\n## Required changes\n- GitHub PR #1\n- GitHub PR #2\n\n## Blocking items\n- Jira REL-2\n\nSecurity approval: APPROVED\n"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "api-gateway",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "src/http_log.ts",
+          "content": "export const sanitize = (headers: any) => ({ ...headers, authorization: \"[REDACTED]\" });\n"
+        }
+      ],
+      "prs": []
+    }
+  ]
+}

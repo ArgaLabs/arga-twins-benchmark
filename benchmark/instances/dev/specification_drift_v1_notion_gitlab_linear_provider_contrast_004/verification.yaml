@@ -1,0 +1,30 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: specification_drift_v1_notion_gitlab_linear_provider_contrast_004
+gold_solution_id: specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold
+negative_control_ids:
+  - specification_drift_v1_notion_gitlab_linear_provider_contrast_004.wrong_target
+  - specification_drift_v1_notion_gitlab_linear_provider_contrast_004.missing_required_action
+  - specification_drift_v1_notion_gitlab_linear_provider_contrast_004.collateral_mutation
+expected_state:
+  - "Exactly one Linear issue is created with title `[SPEC-91:R1] Remove shell execution`."
+  - "Its description exactly identifies SPEC-91:R1, the shell-execution gap, and runner.py."
+  - "The output names its generated identifier and all source state is unchanged."
+allowed_state_changes:
+  - "linear.issues.append"
+forbidden_state_changes:
+  - "Any Notion or code-host mutation."
+  - "Any modification to an existing tracker item."
+  - "Any duplicate or issue for an already-implemented requirement."
+critical_requirements:
+  - "Implementation and existing open work are both checked."
+  - "Exactly the genuinely missing untracked requirement is created, or the task is a no-op."
+  - "The issue fields and returned identifier satisfy the exact contract."
+partial_credit:
+  read_spec: 0.20
+  inspect_code: 0.25
+  deduplicate: 0.20
+  issue_state: 0.25
+  preserve_sources: 0.10
+output_contract:
+  exact_pattern: "CREATED <tracker-identifier>"

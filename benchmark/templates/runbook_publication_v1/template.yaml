@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: runbook_publication_v1
+title: Approved runbook publication
+description: Publish the highest approved runbook version from storage to the knowledge base and announce it once.
+track: capability
+required_roles: [file_storage, knowledge_base, team_chat]
+variants: [clean, distractor, idempotent, provider_contrast]

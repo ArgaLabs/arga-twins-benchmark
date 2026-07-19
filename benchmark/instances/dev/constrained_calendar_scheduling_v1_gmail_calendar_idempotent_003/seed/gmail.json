@@ -1,0 +1,17 @@
+{
+  "messages": [
+    {
+      "subject": "[CAL-330] Approved focus block",
+      "body": "Approved request CAL-330. On Work calendar, schedule Budget review preparation for the earliest 45-minute free interval on 2030-05-16 from 13:00 through 16:00 UTC.",
+      "from": "calendar-admin@acme.example",
+      "to": [
+        "owner@gmail-twin.local"
+      ],
+      "labels": [
+        "INBOX",
+        "UNREAD"
+      ],
+      "thread_id": "thr_cal_330"
+    }
+  ]
+}

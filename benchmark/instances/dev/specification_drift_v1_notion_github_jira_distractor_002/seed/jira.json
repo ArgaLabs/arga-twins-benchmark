@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "key": "SEC",
+      "name": "Security",
+      "issues": [
+        {
+          "summary": "[SPEC-89:R2] Redact Authorization header",
+          "description": "Spec marker: SPEC-89:R2\nHistorical completed work.",
+          "status": "Done"
+        },
+        {
+          "summary": "[SPEC-98:R1] Redact query token",
+          "description": "Spec marker: SPEC-98:R1",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

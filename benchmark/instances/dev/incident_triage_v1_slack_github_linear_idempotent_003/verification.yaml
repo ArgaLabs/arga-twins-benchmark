@@ -1,0 +1,29 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: incident_triage_v1_slack_github_linear_idempotent_003
+gold_solution_id: incident_triage_v1_slack_github_linear_idempotent_003.gold
+negative_control_ids:
+  - incident_triage_v1_slack_github_linear_idempotent_003.wrong_target
+  - incident_triage_v1_slack_github_linear_idempotent_003.missing_required_action
+  - incident_triage_v1_slack_github_linear_idempotent_003.collateral_mutation
+expected_state:
+  - "Linear issue OPS-1 and the total issue count are unchanged."
+  - "Slack gains exactly one message `TRACKED INC-419 AS OPS-1: worker pool size is zero.`."
+  - "No duplicate incident issue or second acknowledgment exists."
+allowed_state_changes:
+  - "slack.channel[incidents].messages.append"
+forbidden_state_changes:
+  - "Any code-host mutation."
+  - "Any mutation to a non-target issue or an existing chat message."
+  - "More than one matching incident issue or more than one new acknowledgment."
+critical_requirements:
+  - "The deployment marker is correlated to the correct merged change."
+  - "Exactly one highest-priority incident issue exists with exact fields."
+  - "The source channel acknowledgment names the actual tracker identifier."
+partial_credit:
+  correlate_change: 0.25
+  issue_state: 0.35
+  chat_ack: 0.25
+  preserve_unrelated: 0.15
+output_contract:
+  exact_pattern: "TRACKED INC-419 AS OPS-1: worker pool size is zero."

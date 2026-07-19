@@ -1,0 +1,30 @@
+kind: verification
+schema_version: "0.1"
+verifier_id: incident_triage_v1_slack_github_linear_clean_001
+gold_solution_id: incident_triage_v1_slack_github_linear_clean_001.gold
+negative_control_ids:
+  - incident_triage_v1_slack_github_linear_clean_001.wrong_target
+  - incident_triage_v1_slack_github_linear_clean_001.missing_required_action
+  - incident_triage_v1_slack_github_linear_clean_001.collateral_mutation
+expected_state:
+  - "Exactly one Linear priority-1 issue exists with title `[INC-417] checkout-api returning 502` and the exact three-line description."
+  - "Slack #incidents has exactly one new message `TRACKED INC-417 AS <created identifier>: upstream host is misspelled.`."
+  - "The output identifier equals the created issue identifier and all source resources are unchanged."
+allowed_state_changes:
+  - "linear.issues.append"
+  - "slack.channel[incidents].messages.append"
+forbidden_state_changes:
+  - "Any code-host mutation."
+  - "Any mutation to a non-target issue or an existing chat message."
+  - "More than one matching incident issue or more than one new acknowledgment."
+critical_requirements:
+  - "The deployment marker is correlated to the correct merged change."
+  - "Exactly one highest-priority incident issue exists with exact fields."
+  - "The source channel acknowledgment names the actual tracker identifier."
+partial_credit:
+  correlate_change: 0.25
+  issue_state: 0.35
+  chat_ack: 0.25
+  preserve_unrelated: 0.15
+output_contract:
+  exact_pattern: "TRACKED INC-417 AS <tracker-identifier>: upstream host is misspelled."

@@ -1,0 +1,137 @@
+{
+  "databases": [
+    {
+      "name": "Policy Registry",
+      "schema": {
+        "Policy": {
+          "title": {}
+        },
+        "Lifecycle": {
+          "select": {
+            "options": [
+              {
+                "name": "Current"
+              },
+              {
+                "name": "Proposed"
+              },
+              {
+                "name": "Superseded"
+              }
+            ]
+          }
+        },
+        "Approval State": {
+          "select": {
+            "options": [
+              {
+                "name": "Approved"
+              },
+              {
+                "name": "Pending"
+              }
+            ]
+          }
+        },
+        "Supersedes": {
+          "rich_text": {}
+        }
+      },
+      "rows": [
+        {
+          "Policy": {
+            "title": [
+              {
+                "text": {
+                  "content": "POL-2"
+                }
+              }
+            ]
+          },
+          "Lifecycle": {
+            "select": {
+              "name": "Current"
+            }
+          },
+          "Approval State": {
+            "select": {
+              "name": "Approved"
+            }
+          },
+          "Supersedes": {
+            "rich_text": []
+          },
+          "content": "Current access-review policy."
+        },
+        {
+          "Policy": {
+            "title": [
+              {
+                "text": {
+                  "content": "POL-3"
+                }
+              }
+            ]
+          },
+          "Lifecycle": {
+            "select": {
+              "name": "Proposed"
+            }
+          },
+          "Approval State": {
+            "select": {
+              "name": "Pending"
+            }
+          },
+          "Supersedes": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "POL-2"
+                }
+              }
+            ]
+          },
+          "content": "Approved successor policy for access review."
+        },
+        {
+          "Policy": {
+            "title": [
+              {
+                "text": {
+                  "content": "POL-4"
+                }
+              }
+            ]
+          },
+          "Lifecycle": {
+            "select": {
+              "name": "Proposed"
+            }
+          },
+          "Approval State": {
+            "select": {
+              "name": "Pending"
+            }
+          },
+          "Supersedes": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "POL-2"
+                }
+              }
+            ]
+          },
+          "content": "Unapproved distractor policy."
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "title": "Confidential Exceptions",
+      "content": "Restricted exception details."
+    }
+  ]
+}

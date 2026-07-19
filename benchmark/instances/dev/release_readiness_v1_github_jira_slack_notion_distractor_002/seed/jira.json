@@ -1,0 +1,30 @@
+{
+  "projects": [
+    {
+      "key": "REL",
+      "name": "Releases",
+      "issues": [
+        {
+          "summary": "REL-205 release record",
+          "description": "Target release record.",
+          "status": "In Progress"
+        },
+        {
+          "summary": "REL-205 checkout blocker",
+          "description": "Target blocker.",
+          "status": "Done"
+        },
+        {
+          "summary": "REL-250 release record",
+          "description": "Future release record.",
+          "status": "In Progress"
+        },
+        {
+          "summary": "REL-250 unresolved blocker",
+          "description": "Future blocker.",
+          "status": "In Progress"
+        }
+      ]
+    }
+  ]
+}

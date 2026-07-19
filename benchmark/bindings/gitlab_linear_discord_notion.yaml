@@ -1,0 +1,13 @@
+kind: binding
+schema_version: "0.1"
+binding_id: gitlab_linear_discord_notion
+roles:
+  code_host: gitlab
+  issue_tracker: linear
+  team_chat: discord
+  knowledge_base: notion
+provider_contracts:
+  gitlab: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  linear: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  discord: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  notion: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

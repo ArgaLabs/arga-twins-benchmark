@@ -1,0 +1,8 @@
+{
+  "pages": [
+    {
+      "title": "[SPEC-91] Command execution",
+      "content": "# SPEC-91 Command execution\n\nStatus: APPROVED\n\nMUST\n- Requirement-ID: SPEC-91:R1\n- Requirement: Execute commands without a shell.\n- Issue title: [SPEC-91:R1] Remove shell execution\n- Gap text: Command runner enables shell execution\n- Code path: runner.py\n"
+    }
+  ]
+}
