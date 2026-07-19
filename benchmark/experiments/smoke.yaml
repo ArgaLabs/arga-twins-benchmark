@@ -1,0 +1,9 @@
+kind: experiment
+schema_version: "0.1"
+experiment_id: development_smoke_v1
+instances:
+  - meeting_amendment_v1_gmail_calendar_clean_001
+  - blocking_code_review_v1_github_clean_001
+repeats: 1
+random_seed: 20260719
+concurrency: 1

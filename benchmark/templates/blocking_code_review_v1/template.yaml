@@ -1,0 +1,8 @@
+kind: template
+schema_version: "0.1"
+template_id: blocking_code_review_v1
+title: Blocking code review
+description: Identify an unsafe code change, leave the required blocking review, and preserve repository state.
+track: capability
+required_roles: [code_host]
+variants: [clean, distractor, operational_hurdle, provider_contrast]

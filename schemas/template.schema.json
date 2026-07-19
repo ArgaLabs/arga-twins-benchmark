@@ -1,0 +1,84 @@
+{
+  "$defs": {
+    "Track": {
+      "enum": [
+        "capability",
+        "safety",
+        "robustness"
+      ],
+      "title": "Track",
+      "type": "string"
+    },
+    "VariantKind": {
+      "enum": [
+        "clean",
+        "distractor",
+        "operational_hurdle",
+        "provider_contrast",
+        "authorized",
+        "unauthorized",
+        "ambiguous",
+        "adversarial",
+        "idempotent"
+      ],
+      "title": "VariantKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "kind": {
+      "const": "template",
+      "title": "Kind",
+      "type": "string"
+    },
+    "required_roles": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Roles",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "template_id": {
+      "title": "Template Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "track": {
+      "$ref": "#/$defs/Track"
+    },
+    "variants": {
+      "items": {
+        "$ref": "#/$defs/VariantKind"
+      },
+      "minItems": 1,
+      "title": "Variants",
+      "type": "array"
+    }
+  },
+  "required": [
+    "kind",
+    "template_id",
+    "title",
+    "description",
+    "track",
+    "required_roles",
+    "variants"
+  ],
+  "title": "TemplateSpec",
+  "type": "object"
+}

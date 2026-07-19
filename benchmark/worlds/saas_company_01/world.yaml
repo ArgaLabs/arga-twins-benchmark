@@ -1,0 +1,19 @@
+kind: world
+schema_version: "0.1"
+world_id: saas_company_01
+controlled_clock: 2030-05-14T12:00:00Z
+tenants:
+  - acme
+identities:
+  - id: benchmark_user
+    display_name: Benchmark User
+    email: owner@gmail-twin.local
+    roles: [employee]
+  - id: launch_organizer
+    display_name: Launch Organizer
+    email: organizer@acme.example
+    roles: [meeting_organizer]
+invariants:
+  - The same marker identifies a workflow across bound providers.
+  - Candidate actions are restricted to the acme tenant.
+  - The controlled clock is fixed for the entire episode.

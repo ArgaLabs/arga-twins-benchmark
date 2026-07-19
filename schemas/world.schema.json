@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "IdentitySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "display_name"
+      ],
+      "title": "IdentitySpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "controlled_clock": {
+      "format": "date-time",
+      "title": "Controlled Clock",
+      "type": "string"
+    },
+    "identities": {
+      "items": {
+        "$ref": "#/$defs/IdentitySpec"
+      },
+      "title": "Identities",
+      "type": "array"
+    },
+    "invariants": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Invariants",
+      "type": "array"
+    },
+    "kind": {
+      "const": "world",
+      "title": "Kind",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenants": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Tenants",
+      "type": "array"
+    },
+    "world_id": {
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "world_id",
+    "controlled_clock",
+    "tenants"
+  ],
+  "title": "WorldSpec",
+  "type": "object"
+}

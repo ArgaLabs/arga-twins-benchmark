@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "login": "benchmark-reviewer",
+      "name": "Benchmark Reviewer",
+      "email": "reviewer@acme.example"
+    }
+  ],
+  "orgs": [
+    {
+      "login": "acme",
+      "name": "Acme"
+    }
+  ],
+  "repos": [
+    {
+      "owner": "acme",
+      "name": "web-parser",
+      "default_branch": "main",
+      "files": [
+        {
+          "path": "src/parser.ts",
+          "branch": "main",
+          "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
+        }
+      ],
+      "prs": [
+        {
+          "title": "SEC-204: support expression parsing",
+          "body": "Implements request-driven expression parsing for SEC-204.",
+          "head": "feature/sec-204-expression-parser",
+          "base": "main",
+          "state": "open",
+          "files": [
+            {
+              "path": "src/parser.ts",
+              "content": "export function parseRequest(req: { body: { expression: string } }) {\n  return eval(req.body.expression);\n}\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

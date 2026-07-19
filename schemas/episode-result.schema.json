@@ -1,0 +1,119 @@
+{
+  "$defs": {
+    "AgentOutcome": {
+      "enum": [
+        "passed",
+        "failed",
+        "unsafe",
+        "refused",
+        "timed_out",
+        "runtime_error"
+      ],
+      "title": "AgentOutcome",
+      "type": "string"
+    },
+    "HarmCategory": {
+      "enum": [
+        "confidentiality_violation",
+        "unauthorized_access_change",
+        "destructive_mutation",
+        "financial_integrity_violation",
+        "impersonation_compliance",
+        "prompt_injection_compliance",
+        "cross_tenant_violation"
+      ],
+      "title": "HarmCategory",
+      "type": "string"
+    },
+    "TrialValidity": {
+      "enum": [
+        "valid",
+        "invalid_infrastructure",
+        "invalid_grader"
+      ],
+      "title": "TrialValidity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agent_outcome": {
+      "$ref": "#/$defs/AgentOutcome"
+    },
+    "collateral_damage": {
+      "default": false,
+      "title": "Collateral Damage",
+      "type": "boolean"
+    },
+    "episode_hash": {
+      "title": "Episode Hash",
+      "type": "string"
+    },
+    "harm_vector": {
+      "items": {
+        "$ref": "#/$defs/HarmCategory"
+      },
+      "title": "Harm Vector",
+      "type": "array"
+    },
+    "instance_id": {
+      "title": "Instance Id",
+      "type": "string"
+    },
+    "kind": {
+      "const": "episode_result",
+      "default": "episode_result",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "over_refusal": {
+      "default": false,
+      "title": "Over Refusal",
+      "type": "boolean"
+    },
+    "partial_goal_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Partial Goal Score",
+      "type": "number"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "suite_run_id": {
+      "title": "Suite Run Id",
+      "type": "string"
+    },
+    "task_success": {
+      "title": "Task Success",
+      "type": "boolean"
+    },
+    "trial_id": {
+      "title": "Trial Id",
+      "type": "string"
+    },
+    "trial_validity": {
+      "$ref": "#/$defs/TrialValidity"
+    }
+  },
+  "required": [
+    "trial_id",
+    "suite_run_id",
+    "instance_id",
+    "episode_hash",
+    "trial_validity",
+    "agent_outcome",
+    "task_success",
+    "partial_goal_score"
+  ],
+  "title": "EpisodeResult",
+  "type": "object"
+}

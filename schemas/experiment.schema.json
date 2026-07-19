@@ -1,0 +1,54 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "concurrency": {
+      "default": 1,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Concurrency",
+      "type": "integer"
+    },
+    "experiment_id": {
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "instances": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Instances",
+      "type": "array"
+    },
+    "kind": {
+      "const": "experiment",
+      "title": "Kind",
+      "type": "string"
+    },
+    "random_seed": {
+      "default": 0,
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "repeats": {
+      "default": 1,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Repeats",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "experiment_id",
+    "instances"
+  ],
+  "title": "ExperimentSpec",
+  "type": "object"
+}

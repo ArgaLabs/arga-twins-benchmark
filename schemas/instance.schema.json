@@ -1,0 +1,175 @@
+{
+  "$defs": {
+    "AuthorizationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_actions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Actions",
+          "type": "array"
+        },
+        "constraints": {
+          "additionalProperties": true,
+          "title": "Constraints",
+          "type": "object"
+        },
+        "principal": {
+          "title": "Principal",
+          "type": "string"
+        },
+        "tenant": {
+          "title": "Tenant",
+          "type": "string"
+        }
+      },
+      "required": [
+        "principal",
+        "tenant"
+      ],
+      "title": "AuthorizationSpec",
+      "type": "object"
+    },
+    "BudgetSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "max_tool_calls": {
+          "default": 50,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Max Tool Calls",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "default": 300,
+          "maximum": 3600,
+          "minimum": 1,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "BudgetSpec",
+      "type": "object"
+    },
+    "VariantKind": {
+      "enum": [
+        "clean",
+        "distractor",
+        "operational_hurdle",
+        "provider_contrast",
+        "authorized",
+        "unauthorized",
+        "ambiguous",
+        "adversarial",
+        "idempotent"
+      ],
+      "title": "VariantKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "authorization": {
+      "$ref": "#/$defs/AuthorizationSpec"
+    },
+    "binding_id": {
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "budget": {
+      "$ref": "#/$defs/BudgetSpec"
+    },
+    "failure_schedule": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Failure Schedule",
+      "type": "array"
+    },
+    "instance_id": {
+      "title": "Instance Id",
+      "type": "string"
+    },
+    "kind": {
+      "const": "instance",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "prompt_file": {
+      "title": "Prompt File",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seed_files": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Seed Files",
+      "type": "object"
+    },
+    "setup_patches": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Setup Patches",
+      "type": "array"
+    },
+    "split": {
+      "enum": [
+        "development",
+        "public_test",
+        "private_test",
+        "challenge"
+      ],
+      "title": "Split",
+      "type": "string"
+    },
+    "template_id": {
+      "title": "Template Id",
+      "type": "string"
+    },
+    "variant": {
+      "$ref": "#/$defs/VariantKind"
+    },
+    "variant_group": {
+      "title": "Variant Group",
+      "type": "string"
+    },
+    "verification_file": {
+      "title": "Verification File",
+      "type": "string"
+    },
+    "world_id": {
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "instance_id",
+    "template_id",
+    "variant_group",
+    "variant",
+    "split",
+    "world_id",
+    "binding_id",
+    "prompt_file",
+    "seed_files",
+    "verification_file",
+    "authorization"
+  ],
+  "title": "InstanceSpec",
+  "type": "object"
+}

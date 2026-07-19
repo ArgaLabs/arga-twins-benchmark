@@ -1,0 +1,7 @@
+kind: binding
+schema_version: "0.1"
+binding_id: github
+roles:
+  code_host: github
+provider_contracts:
+  github: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

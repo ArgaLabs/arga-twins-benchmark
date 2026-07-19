@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arga-twins-benchmark"
+version = "0.1.0"
+description = "Provider-general benchmark and experiment harness for Arga service twins"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.0",
+    "pydantic>=2.10.0",
+    "pyyaml>=6.0.2",
+    "typer>=0.15.0",
+]
+
+[project.scripts]
+arga-bench = "arga_twins_benchmark.cli:app"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.400",
+    "pytest>=8.3.0",
+    "ruff>=0.9.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pyright]
+include = ["src", "tests", "scripts"]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"

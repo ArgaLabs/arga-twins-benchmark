@@ -1,0 +1,9 @@
+kind: binding
+schema_version: "0.1"
+binding_id: gmail_calendar
+roles:
+  email: gmail
+  calendar: google_calendar
+provider_contracts:
+  gmail: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007
+  google_calendar: validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007

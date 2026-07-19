@@ -1,0 +1,86 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "allowed_state_changes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed State Changes",
+      "type": "array"
+    },
+    "critical_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Critical Requirements",
+      "type": "array"
+    },
+    "expected_state": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Expected State",
+      "type": "array"
+    },
+    "forbidden_state_changes": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Forbidden State Changes",
+      "type": "array"
+    },
+    "gold_solution_id": {
+      "title": "Gold Solution Id",
+      "type": "string"
+    },
+    "kind": {
+      "const": "verification",
+      "title": "Kind",
+      "type": "string"
+    },
+    "negative_control_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Negative Control Ids",
+      "type": "array"
+    },
+    "output_contract": {
+      "additionalProperties": true,
+      "title": "Output Contract",
+      "type": "object"
+    },
+    "partial_credit": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Partial Credit",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "verifier_id": {
+      "title": "Verifier Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "verifier_id",
+    "gold_solution_id",
+    "negative_control_ids",
+    "expected_state",
+    "forbidden_state_changes",
+    "critical_requirements"
+  ],
+  "title": "VerificationSpec",
+  "type": "object"
+}

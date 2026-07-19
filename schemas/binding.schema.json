@@ -1,0 +1,44 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "binding_id": {
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "kind": {
+      "const": "binding",
+      "title": "Kind",
+      "type": "string"
+    },
+    "provider_contracts": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Provider Contracts",
+      "type": "object"
+    },
+    "roles": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Roles",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "binding_id",
+    "roles",
+    "provider_contracts"
+  ],
+  "title": "BindingSpec",
+  "type": "object"
+}
