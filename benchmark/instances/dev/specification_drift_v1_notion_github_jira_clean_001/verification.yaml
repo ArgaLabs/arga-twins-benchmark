@@ -27,4 +27,48 @@ partial_credit:
   issue_state: 0.25
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "CREATED <tracker-identifier>"
+  mode: structured_facts
+  required_facts:
+    specification: SPEC-88
+    evaluated_requirements: ["SPEC-88:R1"]
+    missing_requirements: ["SPEC-88:R1"]
+    tracker_action: created
+    tracker_identifier: SEC-1
+    source_preserved: true
+  forbidden_facts:
+    duplicate_created: true
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_knowledge, provider_role: knowledge_base, method: POST, path: /v1/search, canonicalizer: notion_spec_pages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/api-gateway/contents/src/http_log.ts?ref=main", canonicalizer: github_file_and_ref_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DSEC", canonicalizer: jira_SEC_issues_stable}
+  state_assertions:
+    - id: sa_missing_issue
+      provider_role: issue_tracker
+      resource_type: issue
+      selector: {project_key: SEC, summary: "[SPEC-88:R1] Redact Authorization header", description: "Spec marker: SPEC-88:R1\nGap: Authorization header is logged\nCode evidence: src/http_log.ts."}
+      expected: {new_since_baseline: true, status_type: open}
+      cardinality: 1
+    - {id: sa_spec_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[SPEC-88] HTTP logging"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_policy_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[POLICY] Specification drift audits"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: file, selector: {repository: acme/api-gateway, path: src/http_log.ts, ref: main}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_missing_issue, provider_role: issue_tracker, resource_type: issue, operation: create, selector: {project_key: SEC, marker: "SPEC-88:R1"}, fields: [summary, description, project, issue_type], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 8
+    required_calls:
+      - {id: search_spec_pages, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_audit_policy, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3$", min_count: 1, max_count: 1}
+      - {id: read_target_spec, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f$", min_count: 1, max_count: 1}
+      - {id: read_requirement_code, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/api-gateway/contents/src/http_log\\.ts\\?ref=main$", min_count: 1}
+      - {id: read_tracker_scope, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/project/SEC$", min_count: 1}
+      - {id: search_tracker_markers, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/search\\?jql=(?=[^#]*(?:project(?:=|%3D)SEC))(?=[^#]*SPEC-88(?::|%3A)R1)[^#]+$", min_count: 1}
+      - {id: create_missing_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue$", min_count: 1, max_count: 1}
+      - {id: confirm_tracker_state, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/SEC-1$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_create_missing_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

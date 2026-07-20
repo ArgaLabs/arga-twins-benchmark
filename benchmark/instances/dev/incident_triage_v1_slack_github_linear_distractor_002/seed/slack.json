@@ -9,6 +9,10 @@
       "name": "incidents",
       "messages": [
         {
+          "text": "ON-CALL POLICY: Triage only the requested active incident. Correlate its deployment marker to a merged change and inspect that change's changed configuration. Normalize an incorrect OIDC audience as `OIDC audience is set to <literal value>`. Search OPS descriptions for `Incident marker: <id>` before creating priority 1 work. New issue descriptions contain `Incident marker`, `Evidence`, and `Cause`; acknowledge once as `TRACKED <incident> AS <tracker-id>: <cause>.`",
+          "user": "ops-lead"
+        },
+        {
           "text": "[INC-481] cache latency after DEP-9901",
           "user": "ops-lead"
         },

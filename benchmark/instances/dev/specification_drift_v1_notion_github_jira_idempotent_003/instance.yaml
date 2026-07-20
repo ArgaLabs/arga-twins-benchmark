@@ -21,6 +21,46 @@ authorization:
   constraints:
     spec_marker: "SPEC-90:R1"
     existing_issue: "SEC-1"
+complexity:
+  minimum_agent_steps: 6
+  minimum_tool_calls: 7
+  agent_steps:
+    - id: discover_specification_material
+      kind: discover
+      description: Search the knowledge base for the audit policy and target specification.
+      tool_interactions: [search_spec_pages]
+    - id: retrieve_audit_contract
+      kind: retrieve
+      description: Read the audit policy before interpreting the specification.
+      depends_on: [discover_specification_material]
+      tool_interactions: [read_audit_policy]
+    - id: retrieve_target_specification
+      kind: retrieve
+      description: Read the approved target and enumerate every MUST requirement and referenced code path.
+      depends_on: [retrieve_audit_contract]
+      tool_interactions: [read_target_spec]
+    - id: inspect_requirement_implementation
+      kind: retrieve
+      description: Inspect the referenced implementation at the repository's default branch.
+      depends_on: [retrieve_target_specification]
+      tool_interactions: [read_requirement_code]
+    - id: reconcile_tracker_work
+      kind: correlate
+      description: Resolve target-project metadata, search by exact marker, and inspect the canonical open work.
+      depends_on: [inspect_requirement_implementation]
+      tool_interactions: [read_tracker_scope, search_tracker_markers, read_existing_issue]
+    - id: decide_idempotent_action
+      kind: decide
+      description: Join all evidence and determine that the existing canonical issue must be reused unchanged.
+      depends_on: [reconcile_tracker_work]
+  tool_interactions:
+    - {id: search_spec_pages, provider_role: knowledge_base, kind: read, target: POST /v1/search, purpose: Discover the policy and target specification without assuming page identifiers.}
+    - {id: read_audit_policy, provider_role: knowledge_base, kind: read, target: "GET /v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3", purpose: "Retrieve audit scope and deduplication rules from the seeded policy page."}
+    - {id: read_target_spec, provider_role: knowledge_base, kind: read, target: "GET /v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f", purpose: Retrieve approval state and every MUST requirement from the seeded SPEC-90 page.}
+    - {id: read_requirement_code, provider_role: code_host, kind: read, target: "GET /repos/acme/api-gateway/contents/src/retry.ts?ref=main", purpose: Test required behavior against the referenced implementation.}
+    - {id: read_tracker_scope, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/project/SEC, purpose: Establish the exact target project before reconciliation.}
+    - {id: search_tracker_markers, provider_role: issue_tracker, kind: read, target: "GET /rest/api/3/search?jql=project=SEC AND description~\"SPEC-90:R1\"", purpose: Locate canonical open exact-marker work.}
+    - {id: read_existing_issue, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/issue/SEC-1, purpose: "Verify exact marker, fields, and open state before choosing no-op."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

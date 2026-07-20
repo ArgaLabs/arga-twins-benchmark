@@ -1,4 +1,405 @@
 {
+  "$defs": {
+    "DeterministicVerificationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "mutation_policy": {
+          "$ref": "#/$defs/MutationPolicySpec"
+        },
+        "snapshot_queries": {
+          "items": {
+            "$ref": "#/$defs/SnapshotQuerySpec"
+          },
+          "minItems": 1,
+          "title": "Snapshot Queries",
+          "type": "array"
+        },
+        "state_assertions": {
+          "items": {
+            "$ref": "#/$defs/StateAssertionSpec"
+          },
+          "minItems": 1,
+          "title": "State Assertions",
+          "type": "array"
+        },
+        "trace_policy": {
+          "$ref": "#/$defs/TracePolicySpec"
+        }
+      },
+      "required": [
+        "snapshot_queries",
+        "state_assertions",
+        "mutation_policy",
+        "trace_policy"
+      ],
+      "title": "DeterministicVerificationSpec",
+      "type": "object"
+    },
+    "MutationMatcherSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "critical": {
+          "default": true,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fields",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "max_count": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Max Count",
+          "type": "integer"
+        },
+        "min_count": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Min Count",
+          "type": "integer"
+        },
+        "operation": {
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "minProperties": 1,
+          "title": "Selector",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "provider_role",
+        "resource_type",
+        "operation",
+        "selector",
+        "fields"
+      ],
+      "title": "MutationMatcherSpec",
+      "type": "object"
+    },
+    "MutationPolicySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "items": {
+            "$ref": "#/$defs/MutationMatcherSpec"
+          },
+          "title": "Allowed",
+          "type": "array"
+        },
+        "default": {
+          "const": "deny",
+          "default": "deny",
+          "title": "Default",
+          "type": "string"
+        },
+        "required": {
+          "items": {
+            "$ref": "#/$defs/MutationMatcherSpec"
+          },
+          "title": "Required",
+          "type": "array"
+        }
+      },
+      "title": "MutationPolicySpec",
+      "type": "object"
+    },
+    "OutputContractSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "critical": {
+          "default": false,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "forbidden_facts": {
+          "additionalProperties": true,
+          "title": "Forbidden Facts",
+          "type": "object"
+        },
+        "mode": {
+          "default": "none",
+          "enum": [
+            "none",
+            "structured_facts"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "required_facts": {
+          "additionalProperties": true,
+          "title": "Required Facts",
+          "type": "object"
+        }
+      },
+      "title": "OutputContractSpec",
+      "type": "object"
+    },
+    "SnapshotQuerySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "canonicalizer": {
+          "minLength": 1,
+          "title": "Canonicalizer",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "GET",
+            "POST"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "provider_role",
+        "method",
+        "path",
+        "canonicalizer"
+      ],
+      "title": "SnapshotQuerySpec",
+      "type": "object"
+    },
+    "StateAssertionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "cardinality": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Cardinality",
+          "type": "integer"
+        },
+        "critical": {
+          "default": true,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "expected": {
+          "additionalProperties": true,
+          "minProperties": 1,
+          "title": "Expected",
+          "type": "object"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "minProperties": 1,
+          "title": "Selector",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "provider_role",
+        "resource_type",
+        "selector",
+        "expected"
+      ],
+      "title": "StateAssertionSpec",
+      "type": "object"
+    },
+    "TraceCallRuleSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_missing_status": {
+          "default": false,
+          "title": "Allow Missing Status",
+          "type": "boolean"
+        },
+        "distinct_by": {
+          "default": "call",
+          "enum": [
+            "call",
+            "path",
+            "operation",
+            "path_and_operation"
+          ],
+          "title": "Distinct By",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "max_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Count"
+        },
+        "methods": {
+          "items": {
+            "enum": [
+              "GET",
+              "POST",
+              "PATCH",
+              "PUT",
+              "DELETE"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Methods",
+          "type": "array"
+        },
+        "min_count": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Min Count",
+          "type": "integer"
+        },
+        "operation_pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Operation Pattern"
+        },
+        "path_pattern": {
+          "minLength": 1,
+          "title": "Path Pattern",
+          "type": "string"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "status_max": {
+          "default": 299,
+          "maximum": 599,
+          "minimum": 100,
+          "title": "Status Max",
+          "type": "integer"
+        },
+        "status_min": {
+          "default": 200,
+          "maximum": 599,
+          "minimum": 100,
+          "title": "Status Min",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "provider_role",
+        "methods",
+        "path_pattern"
+      ],
+      "title": "TraceCallRuleSpec",
+      "type": "object"
+    },
+    "TracePolicySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_mutating_calls": {
+          "items": {
+            "$ref": "#/$defs/TraceCallRuleSpec"
+          },
+          "title": "Allowed Mutating Calls",
+          "type": "array"
+        },
+        "forbidden_path_prefixes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Path Prefixes",
+          "type": "array"
+        },
+        "min_tool_calls": {
+          "minimum": 6,
+          "title": "Min Tool Calls",
+          "type": "integer"
+        },
+        "required_calls": {
+          "items": {
+            "$ref": "#/$defs/TraceCallRuleSpec"
+          },
+          "minItems": 1,
+          "title": "Required Calls",
+          "type": "array"
+        }
+      },
+      "required": [
+        "min_tool_calls",
+        "required_calls"
+      ],
+      "title": "TracePolicySpec",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "properties": {
     "allowed_state_changes": {
@@ -15,6 +416,9 @@
       "minItems": 1,
       "title": "Critical Requirements",
       "type": "array"
+    },
+    "deterministic": {
+      "$ref": "#/$defs/DeterministicVerificationSpec"
     },
     "expected_state": {
       "items": {
@@ -50,9 +454,7 @@
       "type": "array"
     },
     "output_contract": {
-      "additionalProperties": true,
-      "title": "Output Contract",
-      "type": "object"
+      "$ref": "#/$defs/OutputContractSpec"
     },
     "partial_credit": {
       "additionalProperties": {
@@ -79,7 +481,8 @@
     "negative_control_ids",
     "expected_state",
     "forbidden_state_changes",
-    "critical_requirements"
+    "critical_requirements",
+    "deterministic"
   ],
   "title": "VerificationSpec",
   "type": "object"

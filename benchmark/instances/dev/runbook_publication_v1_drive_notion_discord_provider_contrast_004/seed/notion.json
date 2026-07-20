@@ -3,6 +3,10 @@
     {
       "title": "[RB-80] Database failover",
       "content": "# Database failover\n\nOld version 1 instructions.\n"
+    },
+    {
+      "title": "[RB-08] Database backup",
+      "content": "# Database backup\n\nCurrent backup procedure.\n"
     }
   ]
 }

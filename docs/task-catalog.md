@@ -2,6 +2,8 @@
 
 The first catalog is a balanced 12-family × four-variant matrix. Each instance directory contains the exact candidate `prompt.txt`, checked-in `seed/*.json`, authorization/budget metadata in `instance.yaml`, and a deterministic `verification.yaml` describing required state, allowed mutations, forbidden mutations, critical requirements, partial-credit diagnostics, and output contract.
 
+The generated [48-task matrix](task-matrix.md) links every exact prompt, seed file, call/step count, required result, and verifier manifest.
+
 | Family | What the agent must do | Twins | Four controlled variants | Primary verification |
 | --- | --- | --- | --- | --- |
 | Blocking code review | Find the marked vulnerable change and leave exactly one provider-native blocking review without changing the repository. | GitHub / GitLab | clean, distractor, pagination hurdle, provider contrast | Exact review/discussion and inline comment; repository hash unchanged |

@@ -27,4 +27,58 @@ partial_credit:
   inline_evidence: 0.20
   preserve_repository: 0.15
 output_contract:
-  exact_pattern: "REVIEWED !1"
+  mode: structured_facts
+  required_facts: {decision: changes_requested, target_change: 1, discussion_count: 1, provider_artifact: unresolved_diff_discussion}
+  forbidden_facts: {repository_mutated: true}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_project, provider_role: code_host, method: GET, path: /api/v4/projects/acme%2Fweb-parser, canonicalizer: gitlab_project_stable}
+    - {id: sq_branches, provider_role: code_host, method: GET, path: /api/v4/projects/acme%2Fweb-parser/repository/branches, canonicalizer: gitlab_branches_stable}
+    - {id: sq_merge_requests, provider_role: code_host, method: GET, path: "/api/v4/projects/acme%2Fweb-parser/merge_requests?state=all", canonicalizer: gitlab_merge_requests_stable}
+    - {id: sq_contents, provider_role: code_host, method: GET, path: "/api/v4/projects/acme%2Fweb-parser/repository/files/src%2Fparser.ts?ref=feature/sec-206-expression-parser", canonicalizer: gitlab_file_hash}
+    - {id: sq_discussions, provider_role: code_host, method: GET, path: /api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions, canonicalizer: gitlab_discussions_stable}
+  state_assertions:
+    - id: sa_blocking_discussion
+      provider_role: code_host
+      resource_type: merge_request_diff_discussion
+      selector: {project: acme/web-parser, merge_request_iid: 1, body: "BLOCKING: untrusted input reaches eval. Replace eval with a non-executing parser.", path: src/parser.ts, new_line: 1}
+      expected: {resolved: false, author_username: benchmark-reviewer, commit_sha: "baseline.merge_request[1].sha"}
+      cardinality: 1
+    - id: sa_merge_request_preserved
+      provider_role: code_host
+      resource_type: merge_request
+      selector: {project: acme/web-parser, iid: 1}
+      expected: {state: opened, merged: false, approved: false, fields_equal_baseline: true, except: [discussions]}
+      cardinality: 1
+    - id: sa_project_preserved
+      provider_role: code_host
+      resource_type: project_snapshot
+      selector: {project: acme/web-parser}
+      expected: {equals_baseline_except: [merge_request.1.discussions]}
+      cardinality: 1
+  mutation_policy:
+    default: deny
+    required:
+      - id: mr_create_discussion
+        provider_role: code_host
+        resource_type: merge_request_diff_discussion
+        operation: create
+        selector: {project: acme/web-parser, merge_request_iid: 1, path: src/parser.ts, new_line: 1, resolved: false}
+        fields: [body, position, resolved, author]
+        min_count: 1
+        max_count: 1
+    allowed: []
+  trace_policy:
+    min_tool_calls: 7
+    required_calls:
+      - {id: read_review_policy, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/repository/files/SECURITY_REVIEW\\.md\\?ref=main$", min_count: 1, max_count: 1}
+      - {id: list_open_changes, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests\\?state=opened$", min_count: 1}
+      - {id: read_target_change, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests/1$", min_count: 1}
+      - {id: read_source_file, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/repository/files/src%2Fparser\\.ts\\?ref=feature/sec-206-expression-parser$", min_count: 1}
+      - {id: list_target_discussions, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions$", min_count: 1}
+      - {id: create_target_discussion, provider_role: code_host, methods: [POST], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions$", min_count: 1, max_count: 1}
+      - {id: confirm_target_discussion, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_discussion, provider_role: code_host, methods: [POST], path_pattern: "^/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

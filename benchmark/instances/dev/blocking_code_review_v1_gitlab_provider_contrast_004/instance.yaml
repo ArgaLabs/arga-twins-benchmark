@@ -20,6 +20,78 @@ authorization:
   constraints:
     change_marker: "SEC-206"
     target_change: "!1"
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 7
+  agent_steps:
+    - id: discover_policy_and_changes
+      kind: discover
+      description: Locate the project review policy and enumerate open merge requests.
+      tool_interactions: [read_review_policy, list_open_changes]
+    - id: retrieve_target_context
+      kind: retrieve
+      description: Read target diff refs and the source-branch file needed for an inline discussion.
+      depends_on: [discover_policy_and_changes]
+      tool_interactions: [read_target_change, read_source_file]
+    - id: correlate_policy_to_code
+      kind: correlate
+      description: Determine whether request-controlled input reaches executable evaluation.
+      depends_on: [retrieve_target_context]
+    - id: check_existing_discussions
+      kind: retrieve
+      description: Check existing discussions to avoid duplicate blocking evidence.
+      depends_on: [correlate_policy_to_code]
+      tool_interactions: [list_target_discussions]
+    - id: decide_review_action
+      kind: decide
+      description: Select the single unresolved diff discussion required by policy.
+      depends_on: [check_existing_discussions]
+    - id: create_blocking_discussion
+      kind: mutate
+      description: Create the provider-native blocking discussion on the vulnerable line.
+      depends_on: [decide_review_action]
+      tool_interactions: [create_target_discussion]
+    - id: confirm_discussion_state
+      kind: confirm
+      description: Re-read discussions and confirm exact final cardinality.
+      depends_on: [create_blocking_discussion]
+      tool_interactions: [confirm_target_discussion]
+  tool_interactions:
+    - id: read_review_policy
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/repository/files/SECURITY_REVIEW.md?ref=main
+      purpose: Retrieve authoritative criteria and discussion text.
+    - id: list_open_changes
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/merge_requests?state=opened
+      purpose: Locate the active expression-parser change.
+    - id: read_target_change
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/merge_requests/1
+      purpose: Retrieve the target source branch and diff refs required for the inline position.
+    - id: read_source_file
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/repository/files/src%2Fparser.ts?ref=feature/sec-206-expression-parser
+      purpose: Inspect authoritative source-branch code evidence.
+    - id: list_target_discussions
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions
+      purpose: Avoid duplicate blocking discussion.
+    - id: create_target_discussion
+      provider_role: code_host
+      kind: write
+      target: POST /api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions
+      purpose: Create the sole unresolved inline blocking artifact.
+    - id: confirm_target_discussion
+      provider_role: code_host
+      kind: read
+      target: GET /api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions
+      purpose: Confirm exact final artifact state.
 budget:
   timeout_seconds: 300
   max_tool_calls: 50

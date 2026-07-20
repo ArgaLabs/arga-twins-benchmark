@@ -27,4 +27,57 @@ partial_credit:
   chat_ack: 0.25
   preserve_unrelated: 0.15
 output_contract:
-  exact_pattern: "TRACKED INC-418 AS <tracker-identifier>: OIDC audience is set to acme-stagin."
+  mode: structured_facts
+  required_facts:
+    incident: INC-418
+    correlated_change: "GitHub PR #2"
+    root_cause: OIDC audience is set to acme-stagin
+    tracker_action: created
+    acknowledged: true
+  forbidden_facts:
+    incident: [INC-481, INC-410]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_chat, provider_role: team_chat, method: POST, path: /api/conversations.list, canonicalizer: slack_channels_messages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/auth-api/pulls?state=all", canonicalizer: github_repository_and_pulls_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: POST, path: /graphql, canonicalizer: linear_team_OPS_issues_stable}
+  state_assertions:
+    - id: sa_incident_issue
+      provider_role: issue_tracker
+      resource_type: issue
+      selector: {team_key: OPS, title: "[INC-418] auth-api returning 401", description: "Incident marker: INC-418\nEvidence: PR #2\nCause: OIDC audience is set to acme-stagin", priority: 1}
+      expected: {new_since_baseline: true, state_type: open}
+      cardinality: 1
+    - id: sa_acknowledgment
+      provider_role: team_chat
+      resource_type: message
+      selector: {channel_name: incidents, text_pattern: "^TRACKED INC-418 AS OPS-[0-9]+: OIDC audience is set to acme-stagin\\.$"}
+      expected: {tracker_identifier_matches: sa_incident_issue.identifier, new_since_baseline: true}
+      cardinality: 1
+    - {id: sa_distractor_preserved, provider_role: issue_tracker, resource_type: issue, selector: {identifier: OPS-1, marker: INC-481}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: repository_snapshot, selector: {repository: acme/auth-api}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_prior_messages_preserved, provider_role: team_chat, resource_type: message_collection, selector: {channel_name: incidents, baseline_only: true}, expected: {equals_baseline: true}, cardinality: 4}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_issue, provider_role: issue_tracker, resource_type: issue, operation: create, selector: {team_key: OPS, marker: INC-418}, fields: [title, description, priority, team], min_count: 1, max_count: 1}
+      - {id: mr_create_ack, provider_role: team_chat, resource_type: message, operation: create, selector: {channel_name: incidents, incident: INC-418}, fields: [text, author], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 10
+    required_calls:
+      - {id: list_incident_channels, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.list$", min_count: 1}
+      - {id: read_incident_channel, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+      - {id: list_merged_changes, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/auth-api/pulls\\?state=closed$", min_count: 1}
+      - {id: read_correlated_diff, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/auth-api/pulls/2/files$", min_count: 1}
+      - {id: resolve_tracker_team, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^team$", min_count: 1}
+      - {id: search_incident_tracker, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueSearch$", min_count: 1}
+      - {id: create_incident_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 1, max_count: 1}
+      - {id: publish_acknowledgment, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+      - {id: confirm_tracker_state, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue$", min_count: 1}
+      - {id: confirm_acknowledgment, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_create_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 1, max_count: 1}
+      - {id: tm_create_ack, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

@@ -1,7 +1,1 @@
-Audit approved Notion specification `[SPEC-89] HTTP privacy` against repository `acme/api-gateway` and tracker `Jira project SEC`. For every `MUST` requirement, check its referenced code path. If it is not implemented and no open issue description contains `Spec marker: <Requirement-ID>`, create exactly one issue using the requirement's exact `Issue title` and this exact description:
-
-Spec marker: <Requirement-ID>
-Gap: <Gap text>
-Code evidence: <Code path>.
-
-Do not edit Notion or code, duplicate existing work, or alter unrelated issues. Return `CREATED <identifier>` if one issue is created, otherwise exactly `NO_CHANGE`.
+Audit approved specification `[SPEC-89] HTTP privacy` against repository `acme/api-gateway` and Jira project `SEC`. Apply the specification-audit policy in the knowledge base, evaluate every required behavior at its referenced implementation, distinguish target work from tracker distractors, and create only genuinely missing work. Preserve the specification, repository, and existing tracker records. Return a compact JSON fact report with the specification, evaluated and missing requirement IDs, tracker action, and tracker identifier.

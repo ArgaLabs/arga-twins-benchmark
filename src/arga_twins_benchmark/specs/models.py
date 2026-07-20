@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import math
+import re
+from collections import Counter
 from datetime import datetime
 from enum import StrEnum
 from typing import Any, Literal
@@ -43,6 +45,20 @@ class AgentOutcome(StrEnum):
     REFUSED = "refused"
     TIMED_OUT = "timed_out"
     RUNTIME_ERROR = "runtime_error"
+
+
+class AgentStepKind(StrEnum):
+    DISCOVER = "discover"
+    RETRIEVE = "retrieve"
+    CORRELATE = "correlate"
+    DECIDE = "decide"
+    MUTATE = "mutate"
+    CONFIRM = "confirm"
+
+
+class ToolInteractionKind(StrEnum):
+    READ = "read"
+    WRITE = "write"
 
 
 class HarmCategory(StrEnum):
@@ -103,6 +119,98 @@ class BudgetSpec(StrictModel):
     max_tool_calls: int = Field(default=50, ge=1, le=1000)
 
 
+class ToolInteractionSpec(StrictModel):
+    id: str = Field(min_length=1)
+    provider_role: str = Field(min_length=1)
+    kind: ToolInteractionKind
+    target: str = Field(min_length=1)
+    purpose: str = Field(min_length=1)
+
+
+class AgentStepSpec(StrictModel):
+    id: str = Field(min_length=1)
+    kind: AgentStepKind
+    description: str = Field(min_length=1)
+    depends_on: list[str] = Field(default_factory=list)
+    tool_interactions: list[str] = Field(default_factory=list)
+
+
+class ComplexitySpec(StrictModel):
+    minimum_agent_steps: int = Field(ge=6)
+    minimum_tool_calls: int = Field(ge=6)
+    agent_steps: list[AgentStepSpec] = Field(min_length=6)
+    tool_interactions: list[ToolInteractionSpec] = Field(min_length=6)
+
+    @model_validator(mode="after")
+    def validate_workflow(self) -> ComplexitySpec:
+        step_ids = [step.id for step in self.agent_steps]
+        interaction_ids = [interaction.id for interaction in self.tool_interactions]
+        if len(step_ids) != len(set(step_ids)):
+            raise ValueError("agent step IDs must be unique")
+        if len(interaction_ids) != len(set(interaction_ids)):
+            raise ValueError("tool interaction IDs must be unique")
+        if len(self.agent_steps) < self.minimum_agent_steps:
+            raise ValueError("agent_steps must satisfy minimum_agent_steps")
+        known_steps = set(step_ids)
+        known_interactions = set(interaction_ids)
+        referenced_interactions: Counter[str] = Counter()
+        dependencies: dict[str, set[str]] = {}
+        for step in self.agent_steps:
+            unknown_dependencies = set(step.depends_on) - known_steps
+            if unknown_dependencies:
+                raise ValueError(f"step {step.id!r} has unknown dependencies {sorted(unknown_dependencies)}")
+            if step.id in step.depends_on:
+                raise ValueError(f"step {step.id!r} cannot depend on itself")
+            unknown_interactions = set(step.tool_interactions) - known_interactions
+            if unknown_interactions:
+                raise ValueError(
+                    f"step {step.id!r} references unknown tool interactions {sorted(unknown_interactions)}"
+                )
+            dependencies[step.id] = set(step.depends_on)
+            referenced_interactions.update(step.tool_interactions)
+
+        unreferenced_interactions = known_interactions - set(referenced_interactions)
+        if unreferenced_interactions:
+            raise ValueError(f"tool interactions are not linked to an agent step: {sorted(unreferenced_interactions)}")
+        multiply_referenced = sorted(
+            interaction_id for interaction_id, count in referenced_interactions.items() if count != 1
+        )
+        if multiply_referenced:
+            raise ValueError(f"tool interactions must belong to exactly one agent step: {multiply_referenced}")
+
+        visiting: set[str] = set()
+        visited: set[str] = set()
+
+        def visit(step_id: str) -> None:
+            if step_id in visiting:
+                raise ValueError("agent step dependency graph must be acyclic")
+            if step_id in visited:
+                return
+            visiting.add(step_id)
+            for dependency in dependencies[step_id]:
+                visit(dependency)
+            visiting.remove(step_id)
+            visited.add(step_id)
+
+        for step_id in step_ids:
+            visit(step_id)
+
+        depths: dict[str, int] = {}
+
+        def dependency_depth(step_id: str) -> int:
+            if step_id not in depths:
+                parent_depth = max((dependency_depth(parent) for parent in dependencies[step_id]), default=0)
+                depths[step_id] = parent_depth + 1
+            return depths[step_id]
+
+        longest_dependency_path = max(dependency_depth(step_id) for step_id in step_ids)
+        if longest_dependency_path < self.minimum_agent_steps:
+            raise ValueError(
+                "agent step dependency graph must contain a causal path that satisfies minimum_agent_steps"
+            )
+        return self
+
+
 class AuthorizationSpec(StrictModel):
     principal: str
     tenant: str
@@ -124,10 +232,130 @@ class InstanceSpec(StrictModel):
     seed_files: dict[str, str] = Field(min_length=1)
     verification_file: str
     authorization: AuthorizationSpec
+    complexity: ComplexitySpec
     budget: BudgetSpec = Field(default_factory=BudgetSpec)
     setup_patches: list[str] = Field(default_factory=list)
     failure_schedule: list[str] = Field(default_factory=list)
     metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class SnapshotQuerySpec(StrictModel):
+    id: str = Field(min_length=1)
+    provider_role: str = Field(min_length=1)
+    method: Literal["GET", "POST"]
+    path: str = Field(min_length=1)
+    canonicalizer: str = Field(min_length=1)
+
+
+class StateAssertionSpec(StrictModel):
+    id: str = Field(min_length=1)
+    provider_role: str = Field(min_length=1)
+    resource_type: str = Field(min_length=1)
+    selector: dict[str, Any] = Field(min_length=1)
+    expected: dict[str, Any] = Field(min_length=1)
+    cardinality: int = Field(default=1, ge=0)
+    critical: bool = True
+
+
+class MutationMatcherSpec(StrictModel):
+    id: str = Field(min_length=1)
+    provider_role: str = Field(min_length=1)
+    resource_type: str = Field(min_length=1)
+    operation: Literal["create", "update", "delete"]
+    selector: dict[str, Any] = Field(min_length=1)
+    fields: list[str] = Field(min_length=1)
+    min_count: int = Field(default=1, ge=0)
+    max_count: int = Field(default=1, ge=0)
+    critical: bool = True
+
+    @model_validator(mode="after")
+    def validate_cardinality(self) -> MutationMatcherSpec:
+        if self.max_count < self.min_count:
+            raise ValueError("mutation max_count must be at least min_count")
+        return self
+
+
+class MutationPolicySpec(StrictModel):
+    default: Literal["deny"] = "deny"
+    required: list[MutationMatcherSpec] = Field(default_factory=lambda: list[MutationMatcherSpec]())
+    allowed: list[MutationMatcherSpec] = Field(default_factory=lambda: list[MutationMatcherSpec]())
+
+    @model_validator(mode="after")
+    def validate_optional_rules(self) -> MutationPolicySpec:
+        if any(rule.min_count != 0 for rule in self.allowed):
+            raise ValueError("allowed mutation rules must use min_count 0; use required for mandatory mutations")
+        return self
+
+
+class TraceCallRuleSpec(StrictModel):
+    id: str = Field(min_length=1)
+    provider_role: str = Field(min_length=1)
+    methods: list[Literal["GET", "POST", "PATCH", "PUT", "DELETE"]] = Field(min_length=1)
+    path_pattern: str = Field(min_length=1)
+    operation_pattern: str | None = None
+    distinct_by: Literal["call", "path", "operation", "path_and_operation"] = "call"
+    status_min: int = Field(default=200, ge=100, le=599)
+    status_max: int = Field(default=299, ge=100, le=599)
+    allow_missing_status: bool = False
+    min_count: int = Field(default=1, ge=0)
+    max_count: int | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def validate_cardinality(self) -> TraceCallRuleSpec:
+        if self.max_count is not None and self.max_count < self.min_count:
+            raise ValueError("trace max_count must be at least min_count")
+        if self.status_max < self.status_min:
+            raise ValueError("trace status_max must be at least status_min")
+        try:
+            re.compile(self.path_pattern)
+            if self.operation_pattern is not None:
+                re.compile(self.operation_pattern)
+        except re.error as error:
+            raise ValueError(f"invalid trace pattern: {error}") from error
+        return self
+
+
+class TracePolicySpec(StrictModel):
+    min_tool_calls: int = Field(ge=6)
+    required_calls: list[TraceCallRuleSpec] = Field(min_length=1)
+    allowed_mutating_calls: list[TraceCallRuleSpec] = Field(default_factory=lambda: list[TraceCallRuleSpec]())
+    forbidden_path_prefixes: list[str] = Field(
+        default_factory=lambda: ["/admin", "/_admin", "/_twin", "/_ui", "/inspect", "/reset"]
+    )
+
+
+class DeterministicVerificationSpec(StrictModel):
+    snapshot_queries: list[SnapshotQuerySpec] = Field(min_length=1)
+    state_assertions: list[StateAssertionSpec] = Field(min_length=1)
+    mutation_policy: MutationPolicySpec
+    trace_policy: TracePolicySpec
+
+    @model_validator(mode="after")
+    def validate_identifiers(self) -> DeterministicVerificationSpec:
+        identifiers = [query.id for query in self.snapshot_queries]
+        identifiers.extend(assertion.id for assertion in self.state_assertions)
+        identifiers.extend(rule.id for rule in self.mutation_policy.required)
+        identifiers.extend(rule.id for rule in self.mutation_policy.allowed)
+        identifiers.extend(rule.id for rule in self.trace_policy.required_calls)
+        identifiers.extend(rule.id for rule in self.trace_policy.allowed_mutating_calls)
+        if len(identifiers) != len(set(identifiers)):
+            raise ValueError("deterministic verification IDs must be unique")
+        return self
+
+
+class OutputContractSpec(StrictModel):
+    mode: Literal["none", "structured_facts"] = "none"
+    required_facts: dict[str, Any] = Field(default_factory=dict)
+    forbidden_facts: dict[str, Any] = Field(default_factory=dict)
+    critical: bool = False
+
+    @model_validator(mode="after")
+    def validate_mode(self) -> OutputContractSpec:
+        if self.mode == "none" and (self.required_facts or self.forbidden_facts or self.critical):
+            raise ValueError("output mode 'none' cannot declare facts or be critical")
+        if self.mode == "structured_facts" and not self.required_facts:
+            raise ValueError("structured output contracts must declare at least one required fact")
+        return self
 
 
 class VerificationSpec(StrictModel):
@@ -141,7 +369,8 @@ class VerificationSpec(StrictModel):
     forbidden_state_changes: list[str] = Field(min_length=1)
     critical_requirements: list[str] = Field(min_length=1)
     partial_credit: dict[str, float] = Field(default_factory=dict)
-    output_contract: dict[str, Any] = Field(default_factory=dict)
+    output_contract: OutputContractSpec = Field(default_factory=OutputContractSpec)
+    deterministic: DeterministicVerificationSpec
 
     @model_validator(mode="after")
     def validate_partial_credit(self) -> VerificationSpec:

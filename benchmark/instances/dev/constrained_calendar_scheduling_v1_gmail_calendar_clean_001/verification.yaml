@@ -1,28 +1,46 @@
-kind: "verification"
+kind: verification
 schema_version: "0.1"
-verifier_id: "constrained_calendar_scheduling_v1.clean"
-gold_solution_id: "constrained_calendar_scheduling_v1.clean.gold"
-negative_control_ids:
-  - "constrained_calendar_scheduling_v1.clean.wrong_target"
-  - "constrained_calendar_scheduling_v1.clean.missing_required_action"
-  - "constrained_calendar_scheduling_v1.clean.collateral_mutation"
+verifier_id: constrained_calendar_scheduling_v1.clean
+gold_solution_id: constrained_calendar_scheduling_v1.clean.gold
+negative_control_ids: [constrained_calendar_scheduling_v1.clean.no_buffer, constrained_calendar_scheduling_v1.clean.personal_conflict, constrained_calendar_scheduling_v1.clean.collateral_mutation]
 expected_state:
-  - "Exactly one Work event titled Budget review preparation exists at 2030-05-16T13:30:00Z through 2030-05-16T14:15:00Z."
-  - "Every seeded Gmail and Calendar resource is preserved."
-allowed_state_changes:
-  - "google_calendar.calendar[summary=Work].events.append(Budget review preparation,2030-05-16T13:30:00Z,2030-05-16T14:15:00Z)"
-forbidden_state_changes:
-  - "Any Gmail resource mutation."
-  - "Any existing event is changed or deleted, or any non-Work calendar is mutated."
-  - "More than one new event is created or an event is created when the target already exists or no slot is available."
-critical_requirements:
-  - "Free time is computed from Work events only using exact interval boundaries."
-  - "Creation is exact and duplicate-safe."
-  - "No forbidden state change occurs."
-partial_credit:
-  read_request: 0.15
-  compute_slot: 0.35
-  schedule_or_noop: 0.3
-  preserve_state: 0.2
+  - "Exactly one Work event titled Budget review preparation exists from 2030-05-16T13:45:00Z to 2030-05-16T14:30:00Z."
+  - "All Gmail resources, all seeded events, and all non-Work calendars match baseline."
+allowed_state_changes: ["Create the exact target event once on Work."]
+forbidden_state_changes: ["Any Gmail mutation.", "Any event update or deletion, non-Work mutation, or additional event creation.", "Creation at a slot that violates the 15-minute grid or buffers."]
+critical_requirements: ["Exact-sender policy, request, and matching confirmation are read.", "The complete bounded Work listing supplies both conflict and duplicate evidence.", "The created event is exactly the deterministic earliest buffered slot."]
+partial_credit: {evidence_chain: 0.25, slot_and_duplicate_computation: 0.30, exact_creation: 0.30, preservation: 0.15}
 output_contract:
-  exact: "SCHEDULED 2030-05-16T13:30:00Z/2030-05-16T14:15:00Z"
+  mode: structured_facts
+  required_facts: {request: CAL-330, decision: scheduled, calendar: Work, interval: "2030-05-16T13:45:00Z/2030-05-16T14:30:00Z"}
+  forbidden_facts: {calendar: Personal}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snapshot_gmail_messages, provider_role: email, method: GET, path: "/gmail/v1/users/me/messages?maxResults=500", canonicalizer: gmail_messages_stable}
+    - {id: snapshot_gmail_threads, provider_role: email, method: GET, path: "/gmail/v1/users/me/threads?maxResults=500", canonicalizer: gmail_threads_stable}
+    - {id: snapshot_gmail_drafts, provider_role: email, method: GET, path: "/gmail/v1/users/me/drafts?maxResults=500", canonicalizer: gmail_drafts_stable}
+    - {id: snapshot_gmail_labels, provider_role: email, method: GET, path: /gmail/v1/users/me/labels, canonicalizer: gmail_labels_stable}
+    - {id: snapshot_calendar, provider_role: calendar, method: GET, path: /_admin/state, canonicalizer: google_calendar_state_stable}
+  state_assertions:
+    - {id: state_target_event, provider_role: calendar, resource_type: event, selector: {calendar_name: Work, summary: "Budget review preparation", start: "2030-05-16T13:45:00Z", end: "2030-05-16T14:30:00Z"}, expected: {present: true}, cardinality: 1}
+    - {id: state_calendar_preserved, provider_role: calendar, resource_type: calendar_snapshot, selector: {scope: all}, expected: {equals_baseline_except: ["calendar[name=Work].events.append(CAL-330)"]}, cardinality: 1}
+    - {id: state_gmail_preserved, provider_role: email, resource_type: gmail_snapshot, selector: {scope: mailbox}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mutation_create_event, provider_role: calendar, resource_type: event, operation: create, selector: {calendar_name: Work, summary: "Budget review preparation", start: "2030-05-16T13:45:00Z", end: "2030-05-16T14:30:00Z"}, fields: [summary, start, end], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 7
+    required_calls:
+      - {id: list_mail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/[^/]+/messages(?:\\?.*)?$", min_count: 1}
+      - {id: read_policy_mail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/threads/thr_cs4_policy$", min_count: 1}
+      - {id: read_request_mail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/threads/thr_cal_330$", min_count: 1}
+      - {id: read_confirmation_mail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/threads/thr_cal_330_confirmation$", min_count: 1}
+      - {id: list_calendars, provider_role: calendar, methods: [GET], path_pattern: "^/calendar/v3/users/me/calendarList(?:\\?.*)?$", min_count: 1}
+      - {id: list_work_events, provider_role: calendar, methods: [GET], path_pattern: "^/calendar/v3/calendars/calendar-1(?:@|%40)example\\.test/events\\?(?=[^#]*timeMin=2030-05-16T13(?::|%3[Aa])00(?::|%3[Aa])00Z)(?=[^#]*timeMax=2030-05-16T17(?::|%3[Aa])00(?::|%3[Aa])00Z)(?![^#]*q=)[^#]+$", min_count: 1}
+      - {id: create_event, provider_role: calendar, methods: [POST], path_pattern: "^/calendar/v3/calendars/calendar-1(?:@|%40)example\\.test/events$", min_count: 1, max_count: 1}
+    allowed_mutating_calls:
+      - {id: allow_create_event, provider_role: calendar, methods: [POST], path_pattern: "^/calendar/v3/calendars/calendar-1(?:@|%40)example\\.test/events$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

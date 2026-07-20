@@ -21,6 +21,10 @@
       "default_branch": "main",
       "files": [
         {
+          "path": "SECURITY_REVIEW.md",
+          "content": "# Expression parser review policy\n\nInspect merge-request metadata, existing discussions, and the source-branch file. If request-controlled input reaches eval, create exactly one unresolved diff discussion on the vulnerable new line with body `BLOCKING: untrusted input reaches eval. Replace eval with a non-executing parser.` Never approve or mutate project state.\n"
+        },
+        {
           "path": "src/parser.ts",
           "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
         }

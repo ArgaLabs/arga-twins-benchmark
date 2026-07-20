@@ -8,15 +8,14 @@ negative_control_ids:
   - release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.collateral_mutation
 expected_state:
   - "Jira REL-1 remains In Progress and gains exactly one comment `READINESS REL-206: BLOCKED - change #2 is not merged.`."
-  - "Slack #releases gains exactly one message with that same text."
+  - "Slack #releases retains its one pre-existing message with that same text and gains no duplicate."
   - "The agent does not merge PR #2 or change any source-of-truth record."
 allowed_state_changes:
   - "jira.issue[REL-1].comments.append"
-  - "slack.channel[releases].messages.append"
 forbidden_state_changes:
   - "Any code-host or Notion mutation."
   - "Any tracker mutation outside the marked release record."
-  - "Any message outside the selected release channel or more than one new status message."
+  - "Any chat mutation, including reposting or editing the pre-existing target status."
 critical_requirements:
   - "The decision and first-failing-gate reason are correct."
   - "The exact tracker comment and chat message exist once."
@@ -28,4 +27,40 @@ partial_credit:
   chat_update: 0.20
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "READINESS REL-206: BLOCKED - change #2 is not merged."
+  mode: structured_facts
+  required_facts: {release: REL-206, decision: BLOCKED, first_failing_gate: "GitHub PR #2", tracker_record: REL-1, publication_status: reused_existing, tracker_status: In Progress, publication_count: 1, duplicate_count: 0}
+  forbidden_facts: {source_mutated: true}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_notion, provider_role: knowledge_base, method: POST, path: /v1/search, canonicalizer: notion_pages_complete}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/payments/pulls?state=all", canonicalizer: github_repository_and_pulls_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DREL", canonicalizer: jira_issues_comments_stable}
+    - {id: sq_chat, provider_role: team_chat, method: POST, path: /api/conversations.list, canonicalizer: slack_channels_messages_stable}
+  state_assertions:
+    - {id: sa_record_preserved, provider_role: issue_tracker, resource_type: issue, selector: {key: REL-1}, expected: {status: In Progress, fields_equal_baseline: true, except: [comments]}, cardinality: 1}
+    - {id: sa_record_comment, provider_role: issue_tracker, resource_type: issue_comment, selector: {issue_key: REL-1, body: "READINESS REL-206: BLOCKED - change #2 is not merged."}, expected: {new_since_baseline: true}, cardinality: 1}
+    - {id: sa_release_message, provider_role: team_chat, resource_type: message, selector: {channel_name: releases, text: "READINESS REL-206: BLOCKED - change #2 is not merged."}, expected: {new_since_baseline: false, fields_equal_baseline: true}, cardinality: 1}
+    - {id: sa_sources_preserved, provider_role: code_host, resource_type: repository_snapshot, selector: {repository: acme/payments}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_knowledge_preserved, provider_role: knowledge_base, resource_type: page_collection, selector: {workspace: default}, expected: {equals_baseline: true}, cardinality: 2}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_comment_record, provider_role: issue_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: REL-1}, fields: [body, author], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 10
+    required_calls:
+      - {id: search_release_pages, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_release_policy, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3$", min_count: 1, max_count: 1}
+      - {id: read_release_checklist, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f$", min_count: 1, max_count: 1}
+      - {id: read_required_change_one, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/payments/pulls/1$", min_count: 1}
+      - {id: read_required_change_two, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/payments/pulls/2$", min_count: 1}
+      - {id: read_tracker_gates, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/search\\?jql=project(?:=|%3D)REL$", min_count: 1}
+      - {id: list_release_channels, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.list$", min_count: 1}
+      - {id: read_release_channel, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+      - {id: comment_release_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/comment$", min_count: 1, max_count: 1}
+      - {id: confirm_release_record, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/REL-1$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_comment_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/comment$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

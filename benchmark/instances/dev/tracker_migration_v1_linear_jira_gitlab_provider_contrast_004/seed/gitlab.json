@@ -22,7 +22,11 @@
       "files": [
         {
           "path": "README.md",
-          "content": "# platform\n"
+          "content": "# platform\n\nOperational migrations follow .arga/tracker-migration.md.\n"
+        },
+        {
+          "path": ".arga/tracker-migration.md",
+          "content": "Policy-ID: TRACKER-MIGRATION-V2\nStatus: ACTIVE\n\nRequests are identified by a Migration marker on an open source issue and an existing open merge request. For Linear sources, publish to Jira project MIG. Map Linear priorities 1/2/3 to Jira Highest/High/Medium. Preserve title and full description, append a blank line and Migration source: <source-identifier>, and reuse only exact provenance. After confirmation, add exactly Migrated to <target-identifier>. to the Linear source. Never close the source, modify code, or touch unrelated records.\n"
         }
       ],
       "merge_requests": [

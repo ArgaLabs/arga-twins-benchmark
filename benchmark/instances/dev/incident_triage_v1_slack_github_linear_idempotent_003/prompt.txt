@@ -1,7 +1,1 @@
-Triage incident `INC-419` in `#incidents`. Correlate its deployment marker with a merged code change in `acme/worker-api` and read the exact `Cause:` value from that change. Reuse a tracker issue whose description contains `Incident marker: INC-419`; otherwise create exactly one highest or urgent-priority issue in `Linear team OPS` titled `[INC-419] worker-api queue stalled` with description exactly:
-
-Incident marker: INC-419
-Evidence: PR #1
-Cause: worker pool size is zero
-
-Then post exactly `TRACKED INC-419 AS <tracker-identifier>: worker pool size is zero.` in the source channel. Do not alter code, existing messages, or unrelated tracker items. Return exactly the posted line.
+Triage the active `INC-419` report in the incidents channel according to the on-call policy published there. Correlate its deployment marker to authoritative changed-file evidence, reuse any existing canonical escalation, and publish at most one acknowledgment. Preserve code, existing messages, and unrelated tracker work. Return a compact JSON report containing the incident, correlated change, root cause, tracker identifier, whether the tracker item was created or reused, and acknowledgment status.

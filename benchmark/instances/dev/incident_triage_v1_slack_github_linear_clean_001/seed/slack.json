@@ -9,6 +9,10 @@
       "name": "incidents",
       "messages": [
         {
+          "text": "ON-CALL POLICY: For an active incident, correlate its deployment marker to a merged change and inspect that change's changed configuration. Normalize a misspelled upstream hostname as `upstream host is misspelled`. Search OPS issue descriptions for `Incident marker: <id>` before creating priority 1 work. New issues use the alert text as title and description lines `Incident marker`, `Evidence`, and `Cause`. Acknowledge once as `TRACKED <incident> AS <tracker-id>: <cause>.` Never modify source evidence or prior messages.",
+          "user": "ops-lead"
+        },
+        {
           "text": "[INC-417] checkout-api returning 502 after DEP-8821",
           "user": "ops-lead"
         }

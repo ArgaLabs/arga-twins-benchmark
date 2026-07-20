@@ -6,7 +6,7 @@ This repository owns benchmark semantics, agent execution, grading, and experime
 
 ## Current status
 
-The development catalog contains 12 semantic task families with four variants each: 48 specified prompts, exact twin seeds, authorization envelopes, and deterministic verification manifests. They are benchmark candidates, not yet a public leaderboard. Each must pass live twin conformance, gold-solution, negative-control, and isolation gates before promotion to a scored split.
+The development catalog contains 12 semantic task families with four variants each: 48 scored episodes with exact twin seeds, authorization envelopes, explicit six-or-more-step evidence graphs, and executable deterministic verification manifests. One-action API checks are separate smoke/conformance material and do not count toward the scored 48. The catalog remains a benchmark candidate rather than a public leaderboard until every episode passes live twin conformance, gold-solution, negative-control, and isolation gates.
 
 ## Principles
 
@@ -16,6 +16,10 @@ The development catalog contains 12 semantic task families with four variants ea
 4. Pair unsafe cases with nearly identical authorized cases.
 5. Report capability, safety, robustness, transfer, and infrastructure validity separately.
 6. Keep candidate data-plane access separate from hidden grader and Arga CLI access.
+7. Require at least six semantically necessary provider interactions in every scored episode; never pad call counts with redundant reads.
+8. Default-deny unlisted mutations and grade exact canonical state plus the trusted candidate-call ledger.
+9. Require the correct structured decision as well as correct provider state.
+10. Score only fixture behavior installed by exact Scenario seeds; prose-only fault schedules are not executable evidence.
 
 ## Repository map
 
@@ -60,4 +64,4 @@ validate manifest
 
 The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 
-See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), and [security model](docs/security-model.md).
+See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), and [security model](docs/security-model.md).

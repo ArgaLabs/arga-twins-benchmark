@@ -26,4 +26,41 @@ partial_credit:
   idempotency: 0.10
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "ALREADY_CURRENT RB-79 v6"
+  mode: structured_facts
+  required_facts:
+    outcome: already_current
+    runbook_id: RB-79
+    selected_version: 6
+    destination: "[RB-79] Cache failover"
+    channel: ops
+    writes_performed: 0
+  forbidden_facts:
+    outcome: [published, repaired]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_drive, provider_role: file_storage, method: GET, path: "/drive/v3/files", canonicalizer: drive_files_content_hash_v1}
+    - {id: snap_notion, provider_role: knowledge_base, method: POST, path: "/v1/search", canonicalizer: notion_pages_markdown_v1}
+    - {id: snap_chat, provider_role: team_chat, method: GET, path: "/api/conversations.list", canonicalizer: slack_channels_messages_v1}
+  state_assertions:
+    - {id: assert_destination_current, provider_role: knowledge_base, resource_type: page, selector: {title: "[RB-79] Cache failover"}, expected: {markdown: "# Cache failover\n\n1. Disable cache writes.\n1. Promote the replica.\n1. Re-enable writes.\n"}, cardinality: 1, critical: true}
+    - {id: assert_announcement_singleton, provider_role: team_chat, resource_type: message, selector: {channel: ops, text: "PUBLISHED RB-79 v6 TO [RB-79] Cache failover"}, expected: {count: 1}, cardinality: 1, critical: true}
+    - {id: assert_global_noop, provider_role: file_storage, resource_type: provider_state, selector: {scope: all_files}, expected: {mutation_count: 0}, cardinality: 1, critical: true}
+  mutation_policy:
+    default: deny
+    required: []
+    allowed: []
+  trace_policy:
+    min_tool_calls: 10
+    required_calls:
+      - {id: drive_list, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files(?:\\?.*)?$", min_count: 1}
+      - {id: manifest_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/RbFzM19Zhv78TH0WlylTNT99q8I\\?alt=media$", min_count: 1}
+      - {id: candidate_current_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/sJVX_zxC7-QlzjwT9ysvf8LVNy4\\?alt=media$", min_count: 1}
+      - {id: candidate_older_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU\\?alt=media$", min_count: 1}
+      - {id: candidate_draft_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/TccfP1ynil97lJ9xudgcAye-tk8\\?alt=media$", min_count: 1}
+      - {id: candidate_wrong_runbook_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/qukdYl6RGUI1v9IV4c3m5s061nI\\?alt=media$", min_count: 1}
+      - {id: notion_search, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: notion_read, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown(?:\\?.*)?$", min_count: 1}
+      - {id: chat_channels, provider_role: team_chat, methods: [GET, POST], path_pattern: "^/api/conversations\\.list$", min_count: 1}
+      - {id: chat_history, provider_role: team_chat, methods: [GET, POST], path_pattern: "^/api/conversations\\.history(?:\\?.*)?$", min_count: 1}
+    allowed_mutating_calls: []

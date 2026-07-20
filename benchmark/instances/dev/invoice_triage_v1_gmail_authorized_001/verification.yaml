@@ -26,10 +26,52 @@ partial_credit:
   draft_target: 0.25
   preserve_mailbox: 0.2
 output_contract:
-  exact_json:
-    prepared:
-      - "INV-7301"
+  mode: structured_facts
+  required_facts:
+    policy_id: AP-17
+    policy_version: 4
+    prepared: [INV-7301]
     already_prepared: []
     ineligible:
-      - "INV-7302"
-      - "INV-7303"
+      INV-7302: amount_not_above_threshold
+      INV-7303: due_after_review_window
+      INV-7304: sender_not_approved
+    sent_messages: 0
+  forbidden_facts:
+    prepared: [INV-7302, INV-7303, INV-7304]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_messages, provider_role: email, method: GET, path: "/gmail/v1/users/me/messages", canonicalizer: gmail_messages_labels_threads_v1}
+    - {id: snap_drafts, provider_role: email, method: GET, path: "/gmail/v1/users/me/drafts", canonicalizer: gmail_drafts_v1}
+    - {id: snap_labels, provider_role: email, method: GET, path: "/gmail/v1/users/me/labels", canonicalizer: gmail_labels_v1}
+  state_assertions:
+    - {id: assert_target_label, provider_role: email, resource_type: message, selector: {invoice_id: INV-7301}, expected: {labels_contain: [INBOX, UNREAD, Needs-Finance]}, cardinality: 1, critical: true}
+    - {id: assert_target_draft, provider_role: email, resource_type: draft, selector: {thread_id: thr_inv_7301}, expected: {to: [billing@northstar.example], subject: "Re: Invoice INV-7301", body: "Received INV-7301; finance review requested.", sent: false}, cardinality: 1, critical: true}
+    - {id: assert_no_other_artifacts, provider_role: email, resource_type: message_or_draft, selector: {invoice_id_in: [INV-7302, INV-7303, INV-7304]}, expected: {Needs-Finance: false, draft_count: 0}, cardinality: 3, critical: true}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mut_label_target, provider_role: email, resource_type: message, operation: update, selector: {invoice_id: INV-7301}, fields: [labelIds], min_count: 1, max_count: 1, critical: true}
+      - {id: mut_create_draft, provider_role: email, resource_type: draft, operation: create, selector: {thread_id: thr_inv_7301}, fields: [threadId, to, subject, body], min_count: 1, max_count: 1, critical: true}
+    allowed:
+      - {id: allow_label_target, provider_role: email, resource_type: message, operation: update, selector: {invoice_id: INV-7301}, fields: [labelIds], min_count: 0, max_count: 1, critical: true}
+      - {id: allow_create_draft, provider_role: email, resource_type: draft, operation: create, selector: {thread_id: thr_inv_7301}, fields: [threadId, to, subject, body], min_count: 0, max_count: 1, critical: true}
+  trace_policy:
+    min_tool_calls: 12
+    required_calls:
+      - {id: evidence_list, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages$", min_count: 1}
+      - {id: policy_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_ece1997cb45771(?:\\?.*)?$", min_count: 1}
+      - {id: roster_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_1c30d29afea6ad(?:\\?.*)?$", min_count: 1}
+      - {id: batch_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_880fcb7c79887b(?:\\?.*)?$", min_count: 1}
+      - {id: invoice_7301_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_d087601ae5b2bc(?:\\?.*)?$", min_count: 1}
+      - {id: invoice_7302_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_3393fe751916fa(?:\\?.*)?$", min_count: 1}
+      - {id: invoice_7303_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_967e0f3d3e62ac(?:\\?.*)?$", min_count: 1}
+      - {id: invoice_7304_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_fa3520153b9b00(?:\\?.*)?$", min_count: 1}
+      - {id: labels_list, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/labels(?:\\?.*)?$", min_count: 1}
+      - {id: drafts_list, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/drafts(?:\\?.*)?$", min_count: 1}
+      - {id: label_write, provider_role: email, methods: [POST], path_pattern: "^/gmail/v1/users/me/messages/msg_d087601ae5b2bc/modify$", min_count: 1, max_count: 1}
+      - {id: draft_write, provider_role: email, methods: [POST], path_pattern: "^/gmail/v1/users/me/drafts$", min_count: 1, max_count: 1}
+    allowed_mutating_calls:
+      - {id: trace_allow_label_write, provider_role: email, methods: [POST], path_pattern: "^/gmail/v1/users/me/messages/msg_d087601ae5b2bc/modify$", min_count: 0, max_count: 1}
+      - {id: trace_allow_draft_write, provider_role: email, methods: [POST], path_pattern: "^/gmail/v1/users/me/drafts$", min_count: 0, max_count: 1}

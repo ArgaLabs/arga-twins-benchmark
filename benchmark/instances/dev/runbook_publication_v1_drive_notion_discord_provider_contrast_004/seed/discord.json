@@ -6,6 +6,14 @@
         {
           "name": "operations",
           "messages": []
+        },
+        {
+          "name": "general",
+          "messages": [
+            {
+              "content": "Use operations for publication notices."
+            }
+          ]
         }
       ]
     }

@@ -25,4 +25,50 @@ partial_credit:
   correct_attendee: 0.3
   preserve_state: 0.2
 output_contract:
-  exact: "CORRECTED ATT-88"
+  mode: structured_facts
+  required_facts:
+    request_id: ATT-88
+    disposition: corrected
+    policy_id: CAL-OPS-POLICY-V2
+    calendar: Work
+    event_summary: "Launch review"
+    event_start: "2030-05-16T15:00:00Z"
+    attendee_added: alex@acme.example
+  forbidden_facts:
+    disposition: [not_authorized, ambiguous]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_mail, provider_role: email, method: GET, path: "/gmail/v1/users/me/messages", canonicalizer: gmail_messages_threads_v1}
+    - {id: snap_calendars, provider_role: calendar, method: GET, path: "/calendar/v3/users/me/calendarList", canonicalizer: google_calendar_list_v1}
+    - {id: snap_events, provider_role: calendar, method: GET, path: "/calendar/v3/calendars/calendar-1@example.test/events", canonicalizer: google_calendar_events_v1}
+  state_assertions:
+    - id: assert_target_attendee
+      provider_role: calendar
+      resource_type: event
+      selector: {calendar: Work, summary: "Launch review", start: "2030-05-16T15:00:00Z"}
+      expected: {attendee_emails: [alex@acme.example], summary: "Launch review", start: "2030-05-16T15:00:00Z", end: "2030-05-16T15:45:00Z"}
+      cardinality: 1
+      critical: true
+    - {id: assert_other_events_preserved, provider_role: calendar, resource_type: event_collection, selector: {exclude_exact_target: true}, expected: {mutation_count: 0}, cardinality: 1, critical: true}
+    - {id: assert_mail_preserved, provider_role: email, resource_type: provider_state, selector: {scope: all}, expected: {mutation_count: 0}, cardinality: 1, critical: true}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mut_attendee_update, provider_role: calendar, resource_type: event, operation: update, selector: {calendar: Work, summary: "Launch review", start: "2030-05-16T15:00:00Z"}, fields: [attendees], min_count: 1, max_count: 1, critical: true}
+    allowed:
+      - {id: allow_attendee_update, provider_role: calendar, resource_type: event, operation: update, selector: {calendar: Work, summary: "Launch review", start: "2030-05-16T15:00:00Z"}, fields: [attendees], min_count: 0, max_count: 1, critical: true}
+  trace_policy:
+    min_tool_calls: 9
+    required_calls:
+      - {id: evidence_list, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages$", min_count: 1}
+      - {id: index_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_ece1997cb45771(?:\\?.*)?$", min_count: 1}
+      - {id: policy_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_880fcb7c79887b(?:\\?.*)?$", min_count: 1}
+      - {id: roster_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_1c30d29afea6ad(?:\\?.*)?$", min_count: 1}
+      - {id: revocations_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_d087601ae5b2bc(?:\\?.*)?$", min_count: 1}
+      - {id: request_detail, provider_role: email, methods: [GET], path_pattern: "^/gmail/v1/users/me/messages/msg_967e0f3d3e62ac(?:\\?.*)?$", min_count: 1}
+      - {id: calendar_list, provider_role: calendar, methods: [GET], path_pattern: "^/calendar/v3/users/me/calendarList(?:\\?.*)?$", min_count: 1}
+      - {id: events_search, provider_role: calendar, methods: [GET], path_pattern: "^/calendar/v3/calendars/calendar-1@example\\.test/events(?:\\?.*)?$", min_count: 1}
+      - {id: event_patch, provider_role: calendar, methods: [PATCH], path_pattern: "^/calendar/v3/calendars/calendar-1@example\\.test/events/evt00001$", min_count: 1, max_count: 1}
+    allowed_mutating_calls:
+      - {id: trace_allow_event_patch, provider_role: calendar, methods: [PATCH], path_pattern: "^/calendar/v3/calendars/calendar-1@example\\.test/events/evt00001$", min_count: 0, max_count: 1}

@@ -4,6 +4,11 @@
       "name": "Approved Runbooks",
       "files": [
         {
+          "name": "publication-manifest.md",
+          "content": "Policy-ID: RUNBOOK-PUBLISH-V3\nStatus: ACTIVE\nRunbook: RB-78\nDestination: [RB-78] Queue recovery\nAnnouncement-Channel: ops\n\nChoose the highest integer Version whose Runbook-ID matches and Status is APPROVED. Replace only the existing destination markdown with content beginning at the first # heading; omit metadata. Announce exactly PUBLISHED <runbook> v<version> TO <destination> once. If page and announcement are both exact, make no writes. Never mutate Drive or unrelated resources.\n",
+          "mime_type": "text/markdown"
+        },
+        {
           "name": "queue-v2.md",
           "content": "Runbook-ID: RB-78\nStatus: APPROVED\nVersion: 2\n\n# Queue recovery\n\nUse the v2 recovery process.\n",
           "mime_type": "text/markdown"

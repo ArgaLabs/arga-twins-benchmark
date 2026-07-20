@@ -32,6 +32,29 @@ benchmark/instances/<split>/<instance-id>/
 - Critical requirements and diagnostic partial-credit weights.
 - Registered verifier and gold solution IDs.
 - Negative controls for wrong target, omitted action, and collateral mutation.
+- A hidden dependency graph containing at least six meaningful agent steps.
+- At least six semantically necessary provider tool interactions. Each interaction must retrieve distinct evidence, perform an authorized state transition, or confirm the resulting state; redundant calls do not count.
+- A structured deterministic verifier with trusted snapshot queries, canonical state assertions, a default-deny mutation policy, and candidate trace constraints.
+- No prose-only failure schedule. The current Arga Scenario import path does not install benchmark `failure_schedule` metadata into twins, so the scored catalog requires ordinary successful provider interactions until fault rules become part of the exact seed contract.
+
+The prompt should state the user's goal, authority, and safety boundaries. Policies, target selection evidence, computed answers, and distractors belong in provider state. Do not reveal the gold target, derived decision, exact evidence, or precomputed schedule in the prompt merely to make grading easier.
+
+`instance.yaml` records the hidden task graph under `complexity.agent_steps` and the independently necessary provider interactions under `complexity.tool_interactions`. This metadata is never passed to the candidate. Each interaction belongs to exactly one step. Catalog validation rejects fewer than six steps or calls, dangling or multiply linked interactions, dependency cycles, a causal path shorter than six steps, unknown provider roles, and a minimum that exceeds the tool-call budget. The grader assigns trace events to required interactions subject to that graph, which makes evidence-before-write and write-before-confirmation ordering executable rather than documentary.
+
+`verification.yaml.deterministic` is the machine-readable grading source of truth:
+
+- `snapshot_queries` define trusted provider reads and canonicalizers.
+- `state_assertions` identify exact final resources, fields, and cardinalities.
+- `mutation_policy` requires expected deltas and denies everything not explicitly allowed. State and mutation matchers must use non-empty selectors, expected fields, and exact canonical field allowlists; vacuous matchers are invalid.
+- `trace_policy` requires at least six candidate calls, constrains expected calls, denies control-plane paths, and allowlists every mutating request. Every declared tool-interaction ID must map to a required trace-rule ID, those rules must require the full call minimum, and at least six distinct provider path/operation/signature combinations must be necessary. GraphQL rules must identify their normalized operation, required calls are assigned to distinct trace events, and every allowed write must have a finite cardinality bound. Rules count only successful `2xx` responses by default; override `status_min` and `status_max` only when a specific non-success response is itself necessary evidence. Use `allow_missing_status` only for an exact timeout-after-commit write with an independently verified mutation and post-state.
+
+The current scored 48 use only successful `2xx` interactions. The schema and evaluator retain explicit status ranges for future fault-injection tasks, but those tasks cannot enter a scored experiment until their failure rules are encoded in `seed_config`, applied by the twin Scenario runner, and covered by conformance tests. A sentence in `failure_schedule` is documentation, not an executable fixture.
+
+When one rule requires several resources, set `distinct_by: path` (or `path_and_operation`) so repeatedly reading one object cannot satisfy the count. Prefer exact hidden resource paths for policy, approval, and manifest evidence. A broad detail-route regex is not sufficient when the verifier knows which seeded records are independently necessary.
+
+Human-readable expected/allowed/forbidden lists remain useful review documentation, but they cannot substitute for the deterministic block.
+
+Every scored task asks the candidate for a concise JSON report and uses a critical `structured_facts` output contract. Require only the semantic facts that prove the agent reached the right conclusion, such as the selected record, decision, or no-op reason. Treat the required facts as a subset so harmless extra fields are allowed, and never require one exact sentence or byte-for-byte response. `mode: none` remains available only for unscored smoke and conformance checks.
 
 ## Seeding rule
 

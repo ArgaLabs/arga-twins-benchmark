@@ -28,7 +28,7 @@
       "merge_requests": [
         {
           "title": "Deploy database timeout",
-          "description": "Deployment: DEP-774\nCause: database timeout is 2 seconds",
+          "description": "Deployment: DEP-774",
           "source_branch": "deploy/774",
           "target_branch": "main",
           "files": [

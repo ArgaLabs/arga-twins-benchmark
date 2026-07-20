@@ -1,5 +1,5 @@
 kind: instance
-schema_version: '0.1'
+schema_version: "0.1"
 instance_id: stripe_price_normalization_v1_stripe_ambiguous_003
 template_id: stripe_price_normalization_v1
 variant_group: stripe_price_normalization_v1
@@ -8,28 +8,31 @@ split: development
 world_id: saas_company_01
 binding_id: stripe
 prompt_file: prompt.txt
-seed_files:
-  stripe: seed/stripe.json
+seed_files: {stripe: seed/stripe.json}
 verification_file: verification.yaml
 authorization:
   principal: benchmark_user
   tenant: acme
   allowed_actions: []
-  constraints:
-    product_name: Pro Monthly
-    unit_amount: 7900
-    currency: usd
-    nickname: pro-monthly-usd-79
-    lookup_key: pro_monthly_usd_7900
-budget:
-  timeout_seconds: 300
-  max_tool_calls: 20
-setup_patches:
-- seed_existing_products_and_prices
-- seed_exact_price_match
-- seed_price_distractors
+  constraints: {request: CAT-7900, product_name: "Pro Monthly", unit_amount: 7900, currency: usd}
+complexity:
+  minimum_agent_steps: 6
+  minimum_tool_calls: 7
+  agent_steps:
+    - {id: discover_controls, kind: discover, description: "Search the named control-record class and identify the active policy.", tool_interactions: [search_policy_record]}
+    - {id: validate_evidence, kind: correlate, description: "Search the policy-referenced request and confirmation records independently.", depends_on: [discover_controls], tool_interactions: [search_request_record, search_confirmation_record]}
+    - {id: validate_window, kind: retrieve, description: "Read the independently referenced change window and require its exact open scope.", depends_on: [validate_evidence], tool_interactions: [search_window_record]}
+    - {id: resolve_products, kind: retrieve, description: "Search the product-name class and resolve both exact-name product IDs.", depends_on: [validate_window], tool_interactions: [search_products]}
+    - {id: resolve_prices, kind: correlate, description: "List each exact-name product's prices separately and establish two exact amount-currency matches.", depends_on: [resolve_products], tool_interactions: [list_candidate_prices]}
+    - {id: decide_noop, kind: decide, description: "Reject mutation because the policy's unique-match gate fails.", depends_on: [resolve_prices], tool_interactions: []}
+  tool_interactions:
+    - {id: search_policy_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=price_policy_v2", purpose: "Retrieve the active unique-match policy with a literal supported query."}
+    - {id: search_request_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=pro-monthly-usd-79", purpose: "Retrieve CAT-7900 target facts from the exact source."}
+    - {id: search_confirmation_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=billing-ops", purpose: "Retrieve the matching independent confirmation."}
+    - {id: search_window_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=cat-window-20300514", purpose: "Verify the independent metadata-only change window."}
+    - {id: search_products, provider_role: payments, kind: read, target: "GET /v1/products/search?query=monthly", purpose: "Find both exact-name products."}
+    - {id: list_candidate_prices, provider_role: payments, kind: read, target: "GET /v1/prices?product={product_id} (once per exact-name product)", purpose: "Read two disjoint product-scoped price sets and prove ambiguity."}
+budget: {timeout_seconds: 300, max_tool_calls: 25}
+setup_patches: [seed_price_control_records, seed_open_catalog_window, seed_two_exact_catalog_matches, seed_ambiguity_noop]
 failure_schedule: []
-metadata:
-  service_count: 1
-  controlled_clock: '2030-05-14T12:00:00Z'
-  risk: high
+metadata: {service_count: 1, controlled_clock: "2030-05-14T12:00:00Z", risk: high}

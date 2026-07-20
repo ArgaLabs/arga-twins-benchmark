@@ -1,5 +1,56 @@
 {
   "$defs": {
+    "AgentStepKind": {
+      "enum": [
+        "discover",
+        "retrieve",
+        "correlate",
+        "decide",
+        "mutate",
+        "confirm"
+      ],
+      "title": "AgentStepKind",
+      "type": "string"
+    },
+    "AgentStepSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/AgentStepKind"
+        },
+        "tool_interactions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tool Interactions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "description"
+      ],
+      "title": "AgentStepSpec",
+      "type": "object"
+    },
     "AuthorizationSpec": {
       "additionalProperties": false,
       "properties": {
@@ -52,6 +103,90 @@
       "title": "BudgetSpec",
       "type": "object"
     },
+    "ComplexitySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_steps": {
+          "items": {
+            "$ref": "#/$defs/AgentStepSpec"
+          },
+          "minItems": 6,
+          "title": "Agent Steps",
+          "type": "array"
+        },
+        "minimum_agent_steps": {
+          "minimum": 6,
+          "title": "Minimum Agent Steps",
+          "type": "integer"
+        },
+        "minimum_tool_calls": {
+          "minimum": 6,
+          "title": "Minimum Tool Calls",
+          "type": "integer"
+        },
+        "tool_interactions": {
+          "items": {
+            "$ref": "#/$defs/ToolInteractionSpec"
+          },
+          "minItems": 6,
+          "title": "Tool Interactions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "minimum_agent_steps",
+        "minimum_tool_calls",
+        "agent_steps",
+        "tool_interactions"
+      ],
+      "title": "ComplexitySpec",
+      "type": "object"
+    },
+    "ToolInteractionKind": {
+      "enum": [
+        "read",
+        "write"
+      ],
+      "title": "ToolInteractionKind",
+      "type": "string"
+    },
+    "ToolInteractionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ToolInteractionKind"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "provider_role",
+        "kind",
+        "target",
+        "purpose"
+      ],
+      "title": "ToolInteractionSpec",
+      "type": "object"
+    },
     "VariantKind": {
       "enum": [
         "clean",
@@ -79,6 +214,9 @@
     },
     "budget": {
       "$ref": "#/$defs/BudgetSpec"
+    },
+    "complexity": {
+      "$ref": "#/$defs/ComplexitySpec"
     },
     "failure_schedule": {
       "items": {
@@ -168,7 +306,8 @@
     "prompt_file",
     "seed_files",
     "verification_file",
-    "authorization"
+    "authorization",
+    "complexity"
   ],
   "title": "InstanceSpec",
   "type": "object"

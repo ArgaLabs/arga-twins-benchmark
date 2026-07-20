@@ -19,7 +19,84 @@ authorization:
     - add_inline_review_comment
   constraints:
     change_marker: "SEC-204"
-    target_change: "#1"
+    target_change: "#2"
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 8
+  agent_steps:
+    - id: discover_policy_and_candidates
+      kind: discover
+      description: Locate the governing repository policy and enumerate open candidate changes.
+      tool_interactions: [read_review_policy, list_open_changes]
+    - id: retrieve_candidate_context
+      kind: retrieve
+      description: Retrieve the target's changed-file evidence without trusting pull-request prose.
+      depends_on: [discover_policy_and_candidates]
+      tool_interactions: [read_target_diff]
+    - id: correlate_policy_to_code
+      kind: correlate
+      description: Determine whether request-controlled data reaches executable evaluation under the policy.
+      depends_on: [retrieve_candidate_context]
+    - id: check_existing_artifacts
+      kind: retrieve
+      description: Check reviews and inline comments so the operation is neither duplicated nor broadened.
+      depends_on: [correlate_policy_to_code]
+      tool_interactions: [list_target_reviews, list_target_comments]
+    - id: decide_review_action
+      kind: decide
+      description: Select the sole warranted target and exact policy-native artifacts.
+      depends_on: [check_existing_artifacts]
+    - id: submit_blocking_artifacts
+      kind: mutate
+      description: Submit the blocking review and attached inline evidence atomically.
+      depends_on: [decide_review_action]
+      tool_interactions: [create_target_review]
+    - id: confirm_review_state
+      kind: confirm
+      description: Re-read the target review state and confirm no duplicate artifact was created.
+      depends_on: [submit_blocking_artifacts]
+      tool_interactions: [confirm_target_reviews, confirm_target_comments]
+  tool_interactions:
+    - id: read_review_policy
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main
+      purpose: Retrieve the authoritative review criteria and required artifact text.
+    - id: list_open_changes
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls?state=open
+      purpose: Enumerate the target and documentation distractor.
+    - id: read_target_diff
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/files
+      purpose: Locate the actual request-to-eval data flow and review line.
+    - id: list_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/reviews
+      purpose: Prevent a duplicate blocking review.
+    - id: list_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/comments
+      purpose: Prevent a duplicate inline comment.
+    - id: create_target_review
+      provider_role: code_host
+      kind: write
+      target: POST /repos/acme/web-parser/pulls/2/reviews
+      purpose: Create the single policy-required blocking review with inline evidence.
+    - id: confirm_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/reviews
+      purpose: Confirm the final blocking review count and target identity.
+    - id: confirm_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/comments
+      purpose: Confirm the final inline comment count and target identity.
 budget:
   timeout_seconds: 300
   max_tool_calls: 50

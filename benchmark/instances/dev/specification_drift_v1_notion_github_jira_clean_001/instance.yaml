@@ -21,6 +21,57 @@ authorization:
   constraints:
     spec_marker: "SPEC-88:R1"
     code_path: "src/http_log.ts"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 8
+  agent_steps:
+    - id: discover_specification_material
+      kind: discover
+      description: Search the knowledge base for the audit policy and target specification.
+      tool_interactions: [search_spec_pages]
+    - id: retrieve_audit_contract
+      kind: retrieve
+      description: Read the audit policy before interpreting the specification.
+      depends_on: [discover_specification_material]
+      tool_interactions: [read_audit_policy]
+    - id: retrieve_target_specification
+      kind: retrieve
+      description: Read the approved target and enumerate every MUST requirement and referenced code path.
+      depends_on: [retrieve_audit_contract]
+      tool_interactions: [read_target_spec]
+    - id: inspect_requirement_implementation
+      kind: retrieve
+      description: Inspect the referenced implementation at the repository's default branch.
+      depends_on: [retrieve_target_specification]
+      tool_interactions: [read_requirement_code]
+    - id: reconcile_tracker_work
+      kind: correlate
+      description: Resolve target-project creation metadata and search open work carrying the requirement marker.
+      depends_on: [inspect_requirement_implementation]
+      tool_interactions: [read_tracker_scope, search_tracker_markers]
+    - id: decide_missing_work
+      kind: decide
+      description: Join policy, specification, implementation, and tracker evidence to determine the necessary action.
+      depends_on: [reconcile_tracker_work]
+    - id: create_missing_work
+      kind: mutate
+      description: Create exactly one policy-compliant issue for the missing untracked requirement.
+      depends_on: [decide_missing_work]
+      tool_interactions: [create_missing_issue]
+    - id: confirm_audit_outcome
+      kind: confirm
+      description: Confirm the exact deterministic issue created after the decision.
+      depends_on: [create_missing_work]
+      tool_interactions: [confirm_tracker_state]
+  tool_interactions:
+    - {id: search_spec_pages, provider_role: knowledge_base, kind: read, target: POST /v1/search, purpose: Discover the policy and target specification without assuming page identifiers.}
+    - {id: read_audit_policy, provider_role: knowledge_base, kind: read, target: GET /v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3, purpose: "Retrieve audit scope, deduplication, and issue-construction rules."}
+    - {id: read_target_spec, provider_role: knowledge_base, kind: read, target: GET /v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f, purpose: Retrieve approval state and every MUST requirement.}
+    - {id: read_requirement_code, provider_role: code_host, kind: read, target: "GET /repos/acme/api-gateway/contents/src/http_log.ts?ref=main", purpose: Test each required behavior against the referenced implementation.}
+    - {id: read_tracker_scope, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/project/SEC, purpose: Resolve project and issue-type metadata required for creation.}
+    - {id: search_tracker_markers, provider_role: issue_tracker, kind: read, target: "GET /rest/api/3/search?jql=project=SEC AND description~\"SPEC-88:R1\"", purpose: Deduplicate against exact-marker target-project work.}
+    - {id: create_missing_issue, provider_role: issue_tracker, kind: write, target: POST /rest/api/3/issue, purpose: Create the one missing policy-compliant work item.}
+    - {id: confirm_tracker_state, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/issue/SEC-1, purpose: Confirm exact fields and one canonical issue.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

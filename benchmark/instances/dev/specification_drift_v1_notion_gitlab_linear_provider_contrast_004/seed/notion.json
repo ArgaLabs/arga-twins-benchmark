@@ -1,6 +1,10 @@
 {
   "pages": [
     {
+      "title": "[POLICY] Specification drift audits",
+      "content": "# Specification drift audit policy\n\nScope only a named specification whose status is APPROVED. Read every MUST requirement and inspect each referenced code path before deciding whether work is missing. Search open tracker work by the exact `Spec marker: <Requirement-ID>` line; completed work does not deduplicate a current gap. For each missing implementation without an open matching item, create exactly one issue with the requirement's `Issue title` and this three-line description:\n\nSpec marker: <Requirement-ID>\nGap: <Gap text>\nCode evidence: <Code path>.\n\nNever edit the knowledge base, repository, or existing tracker items. Report compact JSON facts for the specification, evaluated requirements, missing requirements, tracker action, and tracker identifier."
+    },
+    {
       "title": "[SPEC-91] Command execution",
       "content": "# SPEC-91 Command execution\n\nStatus: APPROVED\n\nMUST\n- Requirement-ID: SPEC-91:R1\n- Requirement: Execute commands without a shell.\n- Issue title: [SPEC-91:R1] Remove shell execution\n- Gap text: Command runner enables shell execution\n- Code path: runner.py\n"
     }

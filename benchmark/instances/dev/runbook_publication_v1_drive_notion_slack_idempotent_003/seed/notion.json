@@ -3,6 +3,10 @@
     {
       "title": "[RB-79] Cache failover",
       "content": "# Cache failover\n\n1. Disable cache writes.\n1. Promote the replica.\n1. Re-enable writes.\n"
+    },
+    {
+      "title": "[RB-97] Cache warming",
+      "content": "# Cache warming\n\nCurrent unrelated process.\n"
     }
   ]
 }

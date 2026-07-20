@@ -16,6 +16,11 @@ This repository inherits the durable workspace instructions in `/Users/tonghx/AG
 - Never expose seeds, expected state, verifier code, gold solutions, Arga credentials, or twin admin/reset routes to candidate agents.
 - Keep private-test and challenge instances outside the public repository.
 - Use a fixed controlled clock and explicit dates in scored fixtures.
+- Every instance in the scored 48-episode pilot must require at least six semantically necessary agent steps and six provider tool interactions. Redundant calls added only to inflate difficulty do not count.
+- Every scored instance must include structured, executable snapshot, state, mutation, and trace verification. Prose verification is explanatory only and cannot be the grading source of truth.
+- Every scored instance must require critical structured result facts; harmless extra fields are allowed, but a wrong decision or classification cannot pass.
+- Do not use prose-only `failure_schedule` entries in scored experiments. Fault behavior must be installed through exact Scenario seed data and proven by twin conformance before a non-success call can be required.
+- Keep one-action API checks outside the scored 48; use them only for smoke or conformance testing.
 
 ## Development
 

@@ -3,6 +3,10 @@
     {
       "title": "[RB-77] Payments failover",
       "content": "# Payments failover\n\nOld version 2 instructions.\n"
+    },
+    {
+      "title": "[RB-17] Fraud response",
+      "content": "# Fraud response\n\nCurrent unrelated process.\n"
     }
   ]
 }

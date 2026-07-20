@@ -28,4 +28,68 @@ partial_credit:
   deduplicate: 0.15
   preserve_code: 0.10
 output_contract:
-  exact_pattern: "MIGRATED OPS-1 -> <target-identifier>"
+  mode: structured_facts
+  required_facts:
+    outcome: created
+    policy_id: TRACKER-MIGRATION-V2
+    source_identifier: OPS-1
+    destination_provider: linear
+    destination_project: Reliability
+    evidence: {code_reference: "acme/hooks#1", destination_verified: true, source_audit_verified: true}
+  forbidden_facts:
+    outcome: [failed, skipped]
+    source_identifier: [OPS-2]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_source, provider_role: source_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DOPS", canonicalizer: jira_issues_and_comments_v1}
+    - {id: snap_target, provider_role: target_tracker, method: POST, path: "/graphql", canonicalizer: linear_issues_projects_comments_v1}
+    - {id: snap_code, provider_role: code_host, method: GET, path: "/repos/acme/hooks/pulls/1", canonicalizer: github_pull_and_repo_tree_v1}
+  state_assertions:
+    - id: assert_target
+      provider_role: target_tracker
+      resource_type: issue
+      selector: {description_contains: "Migration source: OPS-1", team_key: OPS, project: Reliability}
+      expected:
+        title: "Retry failed webhook deliveries"
+        priority: 2
+        description: "Migration marker: MIG-31\nCode reference: acme/hooks#1\nRetry DLQ webhooks with exponential backoff.\n\nMigration source: OPS-1"
+      cardinality: 1
+      critical: true
+    - id: assert_source_audit
+      provider_role: source_tracker
+      resource_type: issue_comment
+      selector: {issue_key: OPS-1, body_pattern: "^Migrated to [A-Z]+-[0-9]+\\.$"}
+      expected: {count: 1}
+      cardinality: 1
+      critical: true
+    - id: assert_code_preserved
+      provider_role: code_host
+      resource_type: repository
+      selector: {owner: acme, repo: hooks}
+      expected: {mutation_count: 0}
+      cardinality: 1
+      critical: true
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mut_target_create, provider_role: target_tracker, resource_type: issue, operation: create, selector: {description_contains: "Migration source: OPS-1"}, fields: [title, description, priority, team, project], min_count: 1, max_count: 1, critical: true}
+      - {id: mut_source_comment, provider_role: source_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: OPS-1}, fields: [body], min_count: 1, max_count: 1, critical: true}
+    allowed:
+      - {id: allow_target_create, provider_role: target_tracker, resource_type: issue, operation: create, selector: {team_key: OPS, project: Reliability}, fields: [title, description, priority, team, project], min_count: 0, max_count: 1, critical: true}
+      - {id: allow_source_comment, provider_role: source_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: OPS-1}, fields: [body], min_count: 0, max_count: 1, critical: true}
+  trace_policy:
+    min_tool_calls: 9
+    required_calls:
+      - {id: source_search, provider_role: source_tracker, methods: [GET, POST], path_pattern: "^/rest/api/3/search(?:/jql)?(?:\\?.*)?$", min_count: 1}
+      - {id: source_comments, provider_role: source_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/OPS-1/comment(?:\\?.*)?$", min_count: 1}
+      - {id: policy_read, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/hooks/contents/\\.arga/tracker-migration\\.md(?:\\?.*)?$", min_count: 1}
+      - {id: code_reference_read, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/hooks/pulls/1(?:\\?.*)?$", min_count: 1}
+      - {id: target_scope_read, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^team$", min_count: 1}
+      - {id: target_search, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issues$", min_count: 1}
+      - {id: target_create, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 1, max_count: 1}
+      - {id: source_comment_write, provider_role: source_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/OPS-1/comment$", min_count: 1, max_count: 1}
+      - {id: target_confirm, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: trace_allow_target_create, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 0, max_count: 1}
+      - {id: trace_allow_source_comment, provider_role: source_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/OPS-1/comment$", min_count: 0, max_count: 1}

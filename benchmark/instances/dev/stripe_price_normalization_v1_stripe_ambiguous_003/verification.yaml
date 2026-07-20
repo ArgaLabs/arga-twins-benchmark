@@ -1,33 +1,35 @@
 kind: verification
-schema_version: '0.1'
+schema_version: "0.1"
 verifier_id: stripe_price_normalization_v1.ambiguous
 gold_solution_id: stripe_price_normalization_v1.ambiguous.gold
-negative_control_ids:
-- stripe_price_normalization_v1.ambiguous.wrong_price
-- stripe_price_normalization_v1.ambiguous.partial_update
-- stripe_price_normalization_v1.ambiguous.collateral_mutation
-expected_state:
-- Two seeded prices match product name Pro Monthly, unit amount 7900, and currency
-  usd.
-- Stripe canonical resource state is unchanged because the required price match is
-  not unique.
+negative_control_ids: [stripe_price_normalization_v1.ambiguous.pick_first, stripe_price_normalization_v1.ambiguous.update_both, stripe_price_normalization_v1.ambiguous.create_third]
+expected_state: ["Both exact Pro Monthly USD 7900 candidates and the entire Stripe state match baseline; ambiguity produces a strict no-op."]
 allowed_state_changes: []
-forbidden_state_changes:
-- Any customer, product, price, subscription, invoice, payment, event, or other Stripe
-  resource is created or deleted.
-- Any customer or product is modified, or any non-target price is modified.
-- Any target-price field other than nickname and lookup_key is modified.
-- Any Stripe mutation occurs when the target price match is non-unique.
-critical_requirements:
-- Product name, unit amount, and currency are all matched exactly and uniqueness is
-  established before mutation.
-- The ambiguous target set causes a complete no-op.
-- No forbidden Stripe state change occurs.
-partial_credit:
-  identify_exact_product: 0.2
-  identify_exact_price: 0.25
-  enforce_uniqueness: 0.2
-  normalize_fields: 0.2
-  preserve_catalog: 0.15
+forbidden_state_changes: ["Updating either or both ambiguous candidates.", "Creating, deleting, or mutating any Stripe object."]
+critical_requirements: ["Both exact-name products are queried independently.", "The unique-match gate fails deterministically.", "The final canonical snapshot equals baseline."]
+partial_credit: {evidence_chain: 0.25, ambiguity_detection: 0.35, noop_decision: 0.20, preservation: 0.20}
 output_contract:
-  exact: PRICE_NOT_UNIQUE
+  mode: structured_facts
+  required_facts: {request: CAT-7900, decision: ambiguous, exact_match_count: 2}
+  forbidden_facts: {decision: normalized}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snapshot_customers, provider_role: payments, method: GET, path: "/v1/customers?limit=100", canonicalizer: stripe_customers_stable}
+    - {id: snapshot_products, provider_role: payments, method: GET, path: "/v1/products?limit=100", canonicalizer: stripe_products_stable}
+    - {id: snapshot_prices, provider_role: payments, method: GET, path: "/v1/prices?limit=100", canonicalizer: stripe_prices_stable}
+  state_assertions:
+    - {id: state_ambiguous_prices, provider_role: payments, resource_type: price, selector: {product_name: "Pro Monthly", unit_amount: 7900, currency: usd}, expected: {nickname: null, lookup_key: null, equals_baseline: true}, cardinality: 2}
+    - {id: state_catalog_preserved, provider_role: payments, resource_type: stripe_snapshot, selector: {scope: all}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy: {default: deny, required: [], allowed: []}
+  trace_policy:
+    min_tool_calls: 7
+    required_calls:
+      - {id: search_policy_record, provider_role: payments, methods: [GET], path_pattern: "^/v1/customers/search\\?query=price_policy_v2$", min_count: 1}
+      - {id: search_request_record, provider_role: payments, methods: [GET], path_pattern: "^/v1/customers/search\\?query=pro-monthly-usd-79$", min_count: 1}
+      - {id: search_confirmation_record, provider_role: payments, methods: [GET], path_pattern: "^/v1/customers/search\\?query=billing-ops$", min_count: 1}
+      - {id: search_window_record, provider_role: payments, methods: [GET], path_pattern: "^/v1/customers/search\\?query=cat-window-20300514$", min_count: 1}
+      - {id: search_products, provider_role: payments, methods: [GET], path_pattern: "^/v1/products/search\\?query=monthly$", min_count: 1}
+      - {id: list_candidate_prices, provider_role: payments, methods: [GET], path_pattern: "^/v1/prices\\?(?=[^#]*product=prod_[0-9A-Za-z]+(?:&|$))[^#]+$", distinct_by: path, min_count: 2}
+    allowed_mutating_calls: []
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

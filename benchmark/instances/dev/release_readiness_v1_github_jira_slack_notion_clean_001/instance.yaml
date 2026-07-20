@@ -25,6 +25,63 @@ authorization:
     release_marker: "REL-204"
     release_record: "REL-1"
     status_channel: "releases"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 14
+  agent_steps:
+    - id: discover_release_sources
+      kind: discover
+      description: Find the target checklist and governing release policy without selecting a similarly named page.
+      tool_interactions: [search_release_pages]
+    - id: retrieve_release_rules
+      kind: retrieve
+      description: Read both the policy and checklist to obtain gate order and provider references.
+      depends_on: [discover_release_sources]
+      tool_interactions: [read_release_policy, read_release_checklist]
+    - id: verify_code_gates
+      kind: retrieve
+      description: Resolve every required code change and verify its merged state.
+      depends_on: [retrieve_release_rules]
+      tool_interactions: [read_required_change_one, read_required_change_two]
+    - id: verify_tracker_gates
+      kind: correlate
+      description: Join blocker references to tracker state and resolve the allowed completion transition.
+      depends_on: [verify_code_gates]
+      tool_interactions: [read_tracker_gates, read_release_transitions]
+    - id: preflight_publication
+      kind: retrieve
+      description: Resolve the release channel and ensure no target status has already been published.
+      depends_on: [verify_tracker_gates]
+      tool_interactions: [list_release_channels, read_release_channel]
+    - id: decide_readiness
+      kind: decide
+      description: Apply gate precedence and derive the first failing gate or READY decision.
+      depends_on: [preflight_publication]
+    - id: record_and_publish
+      kind: mutate
+      description: Comment on and complete the ready release record, then publish one channel status.
+      depends_on: [decide_readiness]
+      tool_interactions: [comment_release_record, transition_release_record, publish_release_status]
+    - id: confirm_release_outcome
+      kind: confirm
+      description: Confirm tracker state and exactly one matching channel publication.
+      depends_on: [record_and_publish]
+      tool_interactions: [confirm_release_record, confirm_release_channel]
+  tool_interactions:
+    - {id: search_release_pages, provider_role: knowledge_base, kind: read, target: POST /v1/search, purpose: Locate policy and REL-204 checklist pages.}
+    - {id: read_release_policy, provider_role: knowledge_base, kind: read, target: GET /v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3, purpose: Retrieve gate ordering and update rules.}
+    - {id: read_release_checklist, provider_role: knowledge_base, kind: read, target: GET /v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f, purpose: Retrieve REL-204 references and expected gates.}
+    - {id: read_required_change_one, provider_role: code_host, kind: read, target: GET /repos/acme/payments/pulls/1, purpose: Verify the first required change is merged.}
+    - {id: read_required_change_two, provider_role: code_host, kind: read, target: GET /repos/acme/payments/pulls/2, purpose: Verify the second required change is merged.}
+    - {id: read_tracker_gates, provider_role: issue_tracker, kind: read, target: "GET /rest/api/3/search?jql=project=REL", purpose: Resolve REL-1 and blocker REL-2 states.}
+    - {id: read_release_transitions, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/issue/REL-1/transitions, purpose: Resolve the provider transition that completes a READY record.}
+    - {id: list_release_channels, provider_role: team_chat, kind: read, target: POST /api/conversations.list, purpose: Resolve the releases channel identifier.}
+    - {id: read_release_channel, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Prevent duplicate target publication.}
+    - {id: comment_release_record, provider_role: issue_tracker, kind: write, target: POST /rest/api/3/issue/REL-1/comment, purpose: Record the policy-derived decision.}
+    - {id: transition_release_record, provider_role: issue_tracker, kind: write, target: POST /rest/api/3/issue/REL-1/transitions, purpose: Complete the READY release record.}
+    - {id: publish_release_status, provider_role: team_chat, kind: write, target: POST /api/chat.postMessage, purpose: Publish the sole release status.}
+    - {id: confirm_release_record, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/issue/REL-1, purpose: Confirm status and comment cardinality.}
+    - {id: confirm_release_channel, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Confirm one exact target publication.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 70

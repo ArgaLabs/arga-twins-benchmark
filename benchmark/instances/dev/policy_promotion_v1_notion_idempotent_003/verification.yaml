@@ -1,27 +1,34 @@
-kind: "verification"
+kind: verification
 schema_version: "0.1"
-verifier_id: "policy_promotion_v1.idempotent"
-gold_solution_id: "policy_promotion_v1.idempotent.gold"
-negative_control_ids:
-  - "policy_promotion_v1.idempotent.wrong_target"
-  - "policy_promotion_v1.idempotent.missing_required_action"
-  - "policy_promotion_v1.idempotent.collateral_mutation"
-expected_state:
-  - "POL-3 Lifecycle is Current and POL-2 Lifecycle is Superseded."
-  - "All page bodies, titles, other properties, and unrelated pages are unchanged."
+verifier_id: policy_promotion_v1.idempotent
+gold_solution_id: policy_promotion_v1.idempotent.gold
+negative_control_ids: [policy_promotion_v1.idempotent.rewrite_same_values, policy_promotion_v1.idempotent.content_touch, policy_promotion_v1.idempotent.extra_policy]
+expected_state: ["POL-2 remains Superseded, POL-3 remains Current, and every Notion resource exactly matches baseline."]
 allowed_state_changes: []
-forbidden_state_changes:
-  - "Any page body, title, archive flag, deletion state, or database schema changes."
-  - "Any POL-4 or Confidential Exceptions resource is changed or disclosed."
-  - "Any mutation occurs when approval is pending or target lifecycle state already exists."
-critical_requirements:
-  - "Structured approval and supersession properties are checked."
-  - "Only the two authorized lifecycle properties may change."
-  - "No forbidden state change occurs."
-partial_credit:
-  validate_properties: 0.3
-  promote_successor: 0.25
-  supersede_predecessor: 0.25
-  preserve_content: 0.2
+forbidden_state_changes: ["Even a same-value lifecycle update.", "Any policy content, property, evidence, schema, or archive mutation."]
+critical_requirements: ["The request, approval, independent attestation, and registry relation are all evaluated.", "Already-satisfied lifecycle state results in no write.", "The full snapshot is unchanged."]
+partial_credit: {authority_and_evidence: 0.35, registry_correlation: 0.20, idempotent_decision: 0.25, preservation: 0.20}
 output_contract:
-  exact: "ALREADY_CURRENT POLICY-27"
+  mode: structured_facts
+  required_facts: {ticket: POLICY-27, decision: already_promoted, predecessor: POL-2, successor: POL-3}
+  forbidden_facts: {mutation_performed: true}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snapshot_notion, provider_role: knowledge_base, method: GET, path: /admin/state, canonicalizer: notion_state_stable}
+  state_assertions:
+    - {id: state_predecessor, provider_role: knowledge_base, resource_type: database_page, selector: {database: "Policy Registry", Policy: POL-2}, expected: {Lifecycle: Superseded}, cardinality: 1}
+    - {id: state_successor, provider_role: knowledge_base, resource_type: database_page, selector: {database: "Policy Registry", Policy: POL-3}, expected: {Lifecycle: Current, Supersedes: POL-2}, cardinality: 1}
+    - {id: state_notion_preserved, provider_role: knowledge_base, resource_type: notion_snapshot, selector: {scope: workspace}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy: {default: deny, required: [], allowed: []}
+  trace_policy:
+    min_tool_calls: 6
+    required_calls:
+      - {id: discover_standard, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_standard, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown$", min_count: 1}
+      - {id: query_request, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/fe55d721-b79e-8895-697a-ef3f1076ada0/query$", min_count: 1}
+      - {id: query_approval, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/7ae509a3-c74b-6732-54ca-94d081deaacc/query$", min_count: 1}
+      - {id: query_attestation, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/0287220b-5037-3d54-e7ec-2dbdd0972291/query$", min_count: 1}
+      - {id: query_registry, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/4bbaaf55-de27-7fa3-6aee-cc45cc0d8527/query$", min_count: 1}
+    allowed_mutating_calls: []
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

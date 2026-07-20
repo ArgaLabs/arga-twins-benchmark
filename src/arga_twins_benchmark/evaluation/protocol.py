@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
+type JsonValue = None | bool | int | float | str | list[JsonValue] | dict[str, JsonValue]
+
 
 @dataclass(frozen=True)
 class Mutation:
@@ -11,8 +13,8 @@ class Mutation:
     resource_id: str
     operation: str
     field: str | None = None
-    before: Any = None
-    after: Any = None
+    before: JsonValue = None
+    after: JsonValue = None
 
 
 @dataclass(frozen=True)

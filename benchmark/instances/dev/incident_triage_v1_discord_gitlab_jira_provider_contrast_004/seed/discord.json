@@ -7,6 +7,9 @@
           "name": "incidents",
           "messages": [
             {
+              "content": "ON-CALL POLICY: Correlate an active incident's deployment marker to a merged change and inspect that change's source-branch configuration. Normalize a database timeout setting as `database timeout is <value> seconds`. Search OPS descriptions for `Incident marker: <id>` before creating a Highest-priority issue. New descriptions contain `Incident marker`, `Evidence`, and `Cause`. Acknowledge once as `TRACKED <incident> AS <tracker-key>: <cause>.`"
+            },
+            {
               "content": "[INC-420] database-api requests timing out after DEP-774"
             }
           ]

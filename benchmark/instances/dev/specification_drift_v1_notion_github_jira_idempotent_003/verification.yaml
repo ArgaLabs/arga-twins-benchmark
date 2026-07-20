@@ -26,4 +26,46 @@ partial_credit:
   issue_state: 0.25
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "NO_CHANGE"
+  mode: structured_facts
+  required_facts:
+    specification: SPEC-90
+    evaluated_requirements: ["SPEC-90:R1"]
+    missing_requirements: ["SPEC-90:R1"]
+    tracker_action: reused
+    tracker_identifier: SEC-1
+    source_preserved: true
+  forbidden_facts:
+    issue_created: true
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_knowledge, provider_role: knowledge_base, method: POST, path: /v1/search, canonicalizer: notion_spec_pages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/api-gateway/contents/src/retry.ts?ref=main", canonicalizer: github_file_and_ref_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DSEC", canonicalizer: jira_SEC_issues_stable}
+  state_assertions:
+    - id: sa_existing_issue
+      provider_role: issue_tracker
+      resource_type: issue
+      selector: {key: SEC-1, project_key: SEC, summary: "[SPEC-90:R1] Cap retries at three", description: "Spec marker: SPEC-90:R1\nGap: Retry cap is seven\nCode evidence: src/retry.ts."}
+      expected: {equals_baseline: true, status: In Progress}
+      cardinality: 1
+    - {id: sa_marker_unique, provider_role: issue_tracker, resource_type: issue, selector: {project_key: SEC, marker: "SPEC-90:R1"}, expected: {status_type: open}, cardinality: 1}
+    - {id: sa_spec_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[SPEC-90] Retry policy"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_policy_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[POLICY] Specification drift audits"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: file, selector: {repository: acme/api-gateway, path: src/retry.ts, ref: main}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy:
+    default: deny
+    required: []
+    allowed: []
+  trace_policy:
+    min_tool_calls: 7
+    required_calls:
+      - {id: search_spec_pages, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_audit_policy, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3$", min_count: 1}
+      - {id: read_target_spec, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f$", min_count: 1}
+      - {id: read_requirement_code, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/api-gateway/contents/src/retry\\.ts\\?ref=main$", min_count: 1}
+      - {id: read_tracker_scope, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/project/SEC$", min_count: 1}
+      - {id: search_tracker_markers, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/search\\?jql=(?=[^#]*(?:project(?:=|%3D)SEC))(?=[^#]*SPEC-90(?::|%3A)R1)[^#]+$", min_count: 1}
+      - {id: read_existing_issue, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/SEC-1$", min_count: 1}
+    allowed_mutating_calls: []
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

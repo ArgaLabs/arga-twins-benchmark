@@ -4,8 +4,28 @@
       "name": "Approved Runbooks",
       "files": [
         {
+          "name": "publication-manifest.md",
+          "content": "Policy-ID: RUNBOOK-PUBLISH-V3\nStatus: ACTIVE\nRunbook: RB-77\nDestination: [RB-77] Payments failover\nAnnouncement-Channel: ops\n\nChoose the highest integer Version whose Runbook-ID matches and Status is APPROVED. Replace only the existing destination markdown with content beginning at the first # heading; omit metadata. Announce exactly PUBLISHED <runbook> v<version> TO <destination> once. If page and announcement are both exact, make no writes. Never mutate Drive or unrelated resources.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "payments-failover-v2.md",
+          "content": "Runbook-ID: RB-77\nStatus: APPROVED\nVersion: 2\n\n# Payments failover\n\nOld approved process.\n",
+          "mime_type": "text/markdown"
+        },
+        {
           "name": "payments-failover-v3.md",
           "content": "Runbook-ID: RB-77\nStatus: APPROVED\nVersion: 3\n\n# Payments failover\n\n1. Page the payments primary.\n1. Shift traffic to us-west.\n1. Verify five successful charges.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "payments-failover-v4-draft.md",
+          "content": "Runbook-ID: RB-77\nStatus: DRAFT\nVersion: 4\n\n# Payments failover\n\nUnreviewed draft.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "fraud-response-v9.md",
+          "content": "Runbook-ID: RB-17\nStatus: APPROVED\nVersion: 9\n\n# Fraud response\n\nUnrelated runbook.\n",
           "mime_type": "text/markdown"
         }
       ]

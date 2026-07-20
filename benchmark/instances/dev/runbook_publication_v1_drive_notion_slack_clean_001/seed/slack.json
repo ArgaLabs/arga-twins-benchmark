@@ -8,6 +8,15 @@
     {
       "name": "ops",
       "messages": []
+    },
+    {
+      "name": "general",
+      "messages": [
+        {
+          "text": "Runbook drafts belong in Drive, not this channel.",
+          "user": "ops-lead"
+        }
+      ]
     }
   ]
 }
