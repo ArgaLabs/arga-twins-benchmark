@@ -160,7 +160,9 @@ def _retryable_infrastructure_result(result: dict[str, Any]) -> bool:
     error_type = result.get("error_type")
     error = str(result.get("error", ""))
     if error_type == "_StateCaptureHttpError":
-        return any(f"HTTP {status}" in error for status in (429, 502, 503, 504))
+        return any(f"HTTP {status}" in error for status in (429, 502, 503, 504)) or (
+            "gmail admin state returned HTTP 410" in error
+        )
     if error_type == "StateCaptureError":
         return "request failed" in error
     return error_type in _RETRYABLE_INFRASTRUCTURE_ERROR_TYPES

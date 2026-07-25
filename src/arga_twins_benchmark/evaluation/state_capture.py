@@ -396,7 +396,7 @@ async def _capture_admin_state(
                 retry_base_delay_seconds=retry_base_delay_seconds,
             )
         except _StateCaptureHttpError as error:
-            if error.status_code != 404 or index == len(paths) - 1:
+            if error.status_code not in {404, 410} or index == len(paths) - 1:
                 raise
     raise AssertionError("admin state path iteration must return or raise")
 

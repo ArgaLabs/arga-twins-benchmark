@@ -291,7 +291,8 @@ def test_manifest_declared_state_route_is_sent_only_to_admin_origin() -> None:
     assert snapshot.queries["reviews"].body == {"reviews": 0}
 
 
-def test_provider_specific_admin_state_path_and_fallback() -> None:
+@pytest.mark.parametrize("legacy_status", [404, 410])
+def test_provider_specific_admin_state_path_and_fallback(legacy_status: int) -> None:
     payload = control_payload()
     twins = cast(dict[str, Any], cast(dict[str, Any], payload["twin_run"])["twins"])
     twins.clear()
@@ -314,7 +315,7 @@ def test_provider_specific_admin_state_path_and_fallback() -> None:
         path = request.url.path
         paths.append((host, path))
         if host == "admin-gmail.example" and path == "/admin/state":
-            return httpx.Response(404, json={"error": "not found"})
+            return httpx.Response(legacy_status, json={"error": "legacy alias unavailable"})
         return httpx.Response(200, json={"ok": True})
 
     async def capture() -> TrustedStateSnapshot:

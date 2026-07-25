@@ -84,7 +84,17 @@ def test_resume_skips_completed_trial_and_records_original_runner_commit(tmp_pat
     assert metadata["terminal_result_preserved"] is True
 
 
-def test_resume_archives_state_capture_504_and_returns_fresh_attempt_directory(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "capture_error",
+    [
+        "google_drive admin state returned HTTP 504",
+        "gmail admin state returned HTTP 410",
+    ],
+)
+def test_resume_archives_retryable_state_capture_error_and_returns_fresh_attempt_directory(
+    tmp_path: Path,
+    capture_error: str,
+) -> None:
     trial_id = "failed-trial"
     trial_dir = tmp_path / "trials" / trial_id
     trial_dir.mkdir(parents=True)
@@ -94,7 +104,7 @@ def test_resume_archives_state_capture_504_and_returns_fresh_attempt_directory(t
                 "terminal": True,
                 "status": "runtime_error",
                 "error_type": "_StateCaptureHttpError",
-                "error": "google_drive admin state returned HTTP 504",
+                "error": capture_error,
                 "cleanup_succeeded": True,
                 "runner_commit": "failed-commit",
             }
