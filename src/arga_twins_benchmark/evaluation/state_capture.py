@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -90,6 +91,7 @@ _STABLE_ID_FIELDS = (
     "email",
     "name",
 )
+_RETRYABLE_STATE_CAPTURE_STATUS_CODES = frozenset({429, 502, 503, 504})
 
 
 class StateCaptureError(RuntimeError):
@@ -260,11 +262,19 @@ class TrustedStateCapturer:
         *,
         client: httpx.AsyncClient | None = None,
         timeout_seconds: float = 30.0,
+        max_attempts: int = 3,
+        retry_base_delay_seconds: float = 0.5,
     ) -> None:
         if timeout_seconds <= 0:
             raise ValueError("timeout_seconds must be positive")
+        if max_attempts < 1:
+            raise ValueError("max_attempts must be positive")
+        if retry_base_delay_seconds < 0:
+            raise ValueError("retry_base_delay_seconds must be non-negative")
         self._client = client
         self._timeout = timeout_seconds
+        self._max_attempts = max_attempts
+        self._retry_base_delay_seconds = retry_base_delay_seconds
 
     async def capture(
         self,
@@ -317,6 +327,8 @@ class TrustedStateCapturer:
                 client,
                 target=target,
                 proxy_token=proxy_token,
+                max_attempts=self._max_attempts,
+                retry_base_delay_seconds=self._retry_base_delay_seconds,
             )
             if not isinstance(state, dict):
                 raise StateCaptureError(f"{provider_name} admin state must be a JSON object")
@@ -339,6 +351,8 @@ class TrustedStateCapturer:
                 proxy_token=proxy_token,
                 label=f"snapshot query {query.id}",
                 json_body=snapshot_query_request_body(query),
+                max_attempts=self._max_attempts,
+                retry_base_delay_seconds=self._retry_base_delay_seconds,
             )
             query_captures[query.id] = CapturedQueryState(
                 query_id=query.id,
@@ -365,6 +379,8 @@ async def _capture_admin_state(
     *,
     target: TrustedProviderTarget,
     proxy_token: str | None,
+    max_attempts: int,
+    retry_base_delay_seconds: float,
 ) -> JsonValue:
     paths = _ADMIN_STATE_PATHS.get(target.provider_name, (ADMIN_STATE_PATH,))
     for index, path in enumerate(paths):
@@ -376,6 +392,8 @@ async def _capture_admin_state(
                 headers=_verifier_headers(target),
                 proxy_token=proxy_token,
                 label=f"{target.provider_name} admin state",
+                max_attempts=max_attempts,
+                retry_base_delay_seconds=retry_base_delay_seconds,
             )
         except _StateCaptureHttpError as error:
             if error.status_code != 404 or index == len(paths) - 1:
@@ -391,6 +409,8 @@ async def _request_json(
     headers: Mapping[str, str],
     proxy_token: str | None,
     label: str,
+    max_attempts: int,
+    retry_base_delay_seconds: float,
 ) -> JsonValue:
     return (
         await _request_json_response(
@@ -400,6 +420,8 @@ async def _request_json(
             headers=headers,
             proxy_token=proxy_token,
             label=label,
+            max_attempts=max_attempts,
+            retry_base_delay_seconds=retry_base_delay_seconds,
         )
     ).body
 
@@ -412,22 +434,40 @@ async def _request_json_response(
     headers: Mapping[str, str],
     proxy_token: str | None,
     label: str,
+    max_attempts: int,
+    retry_base_delay_seconds: float,
     json_body: dict[str, JsonValue] | None = None,
 ) -> _JsonResponse:
     request_headers = dict(headers)
     if proxy_token:
         request_headers["Cookie"] = f"arga_env_proxy_token={quote(proxy_token, safe='')}"
-    try:
-        response = await client.request(
-            method,
-            url,
-            headers=request_headers,
-            json=json_body,
-        )
-    except httpx.HTTPError as error:
-        raise StateCaptureError(f"{label} request failed: {type(error).__name__}") from error
-    if not 200 <= response.status_code <= 299:
-        raise _StateCaptureHttpError(label, response.status_code)
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = await client.request(
+                method,
+                url,
+                headers=request_headers,
+                json=json_body,
+            )
+        except httpx.TransportError as error:
+            if attempt == max_attempts:
+                raise StateCaptureError(
+                    f"{label} request failed after {max_attempts} attempts: {type(error).__name__}"
+                ) from error
+            await asyncio.sleep(retry_base_delay_seconds * (2 ** (attempt - 1)))
+            continue
+        if (
+            response.status_code in _RETRYABLE_STATE_CAPTURE_STATUS_CODES
+            and attempt < max_attempts
+        ):
+            await response.aclose()
+            await asyncio.sleep(retry_base_delay_seconds * (2 ** (attempt - 1)))
+            continue
+        if not 200 <= response.status_code <= 299:
+            raise _StateCaptureHttpError(label, response.status_code)
+        break
+    else:
+        raise AssertionError("state capture retry loop must return or raise")
     try:
         raw_body = response.json()
     except json.JSONDecodeError as error:

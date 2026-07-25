@@ -84,6 +84,185 @@ def _slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
 
 
+def _runner_commit() -> str:
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+
+
+def _read_json_object(path: Path) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    raw: object = json.loads(path.read_text())
+    return cast(dict[str, Any], raw) if isinstance(raw, dict) else None
+
+
+def _inferred_attempt_runner_commit(
+    *,
+    trial_dir: Path,
+    output_root: Path,
+    result: dict[str, Any] | None,
+) -> tuple[str | None, str]:
+    if result is not None and isinstance(result.get("runner_commit"), str):
+        return cast(str, result["runner_commit"]), "trial_result"
+    attempt = _read_json_object(trial_dir / "attempt.json")
+    if attempt is not None and isinstance(attempt.get("runner_commit"), str):
+        return cast(str, attempt["runner_commit"]), "attempt_metadata"
+    suite = _read_json_object(output_root / "suite.json")
+    if suite is not None and isinstance(suite.get("runner_commit"), str):
+        return cast(str, suite["runner_commit"]), "suite_manifest"
+    return None, "unknown"
+
+
+def _cleanup_artifact_succeeded(trial_dir: Path, result: dict[str, Any] | None) -> bool:
+    if result is not None and result.get("cleanup_succeeded") is True:
+        return True
+    cleanup = _read_json_object(trial_dir / "cleanup.json")
+    return cleanup is not None and "error" not in cleanup
+
+
+def _next_attempt_number(output_root: Path, trial_id: str) -> int:
+    archive_root = output_root / "attempts" / trial_id
+    archived_numbers = [
+        int(match.group(1))
+        for path in archive_root.glob("attempt-*")
+        if (match := re.fullmatch(r"attempt-(\d+)", path.name)) is not None
+    ]
+    return max(archived_numbers, default=0) + 1
+
+
+_RETRYABLE_INFRASTRUCTURE_ERROR_TYPES = frozenset(
+    {
+        "ArgaCliError",
+        "CancelledError",
+        "ConnectError",
+        "ConnectTimeout",
+        "KeyboardInterrupt",
+        "NetworkError",
+        "PoolTimeout",
+        "ProxyError",
+        "ReadError",
+        "ReadTimeout",
+        "RemoteProtocolError",
+        "TimeoutError",
+        "TimeoutExpired",
+        "WriteError",
+        "WriteTimeout",
+        "_StateCaptureHttpError",
+    }
+)
+
+
+def _retryable_infrastructure_result(result: dict[str, Any]) -> bool:
+    if result.get("terminal") is not True or result.get("status") != "runtime_error":
+        return False
+    error_type = result.get("error_type")
+    error = str(result.get("error", ""))
+    if error_type == "_StateCaptureHttpError":
+        return any(f"HTTP {status}" in error for status in (429, 502, 503, 504))
+    if error_type == "StateCaptureError":
+        return "request failed" in error
+    return error_type in _RETRYABLE_INFRASTRUCTURE_ERROR_TYPES
+
+
+async def _prepare_trial_attempt(
+    *,
+    output_root: Path,
+    trial_id: str,
+    runner_commit: str,
+) -> tuple[Path, int, dict[str, Any] | None]:
+    """Return a clean trial directory, preserving and cleaning any stale attempt."""
+
+    trial_dir = output_root / "trials" / trial_id
+    result = _read_json_object(trial_dir / "result.json")
+    if (
+        result is not None
+        and result.get("terminal") is True
+        and not _retryable_infrastructure_result(result)
+    ):
+        prior_commit, commit_source = _inferred_attempt_runner_commit(
+            trial_dir=trial_dir,
+            output_root=output_root,
+            result=result,
+        )
+        prior_attempt = result.get("attempt")
+        if not isinstance(prior_attempt, int) or prior_attempt < 1:
+            prior_attempt = _next_attempt_number(output_root, trial_id)
+        attempt_metadata = trial_dir / "attempt.json"
+        if not attempt_metadata.exists():
+            write_private_json(
+                attempt_metadata,
+                {
+                    "protocol": "arga-bench-trial-attempt/1",
+                    "attempt": prior_attempt,
+                    "runner_commit": prior_commit,
+                    "runner_commit_source": commit_source,
+                    "terminal_result_preserved": True,
+                },
+            )
+        return trial_dir, prior_attempt, result
+
+    attempt_number = _next_attempt_number(output_root, trial_id)
+    if not trial_dir.exists() or not any(trial_dir.iterdir()):
+        trial_dir.mkdir(parents=True, exist_ok=True)
+        return trial_dir, attempt_number, None
+
+    cleanup_payload: dict[str, Any] | None = None
+    control_path = trial_dir / "control.json"
+    if not _cleanup_artifact_succeeded(trial_dir, result) and control_path.is_file():
+        try:
+            cleanup_payload = await cleanup_instance(control_path)
+        except BaseException as cleanup_error:
+            cleanup_payload = {
+                "error_type": type(cleanup_error).__name__,
+                "error": str(cleanup_error),
+            }
+        write_private_json(trial_dir / "resume-cleanup.json", cleanup_payload)
+        if "error" in cleanup_payload:
+            blocked = {
+                "protocol": "arga-bench-trial-result/1",
+                "terminal": True,
+                "trial_id": trial_id,
+                "status": "runtime_error",
+                "error_type": "UnsafeResumeBlocked",
+                "error": "prior attempt cleanup failed; a fresh twin was not provisioned",
+                "cleanup": cleanup_payload,
+                "cleanup_succeeded": False,
+                "resume_blocked": True,
+                "runner_commit": runner_commit,
+                "finished_at": _utc_now(),
+            }
+            return trial_dir, attempt_number, blocked
+
+    prior_commit, commit_source = _inferred_attempt_runner_commit(
+        trial_dir=trial_dir,
+        output_root=output_root,
+        result=result,
+    )
+    archive_root = output_root / "attempts" / trial_id
+    archive_root.mkdir(parents=True, exist_ok=True)
+    archive_dir = archive_root / f"attempt-{attempt_number:04d}"
+    if archive_dir.exists():
+        raise RuntimeError(f"attempt archive already exists: {archive_dir}")
+    trial_dir.rename(archive_dir)
+    write_private_json(
+        archive_dir / "attempt.json",
+        {
+            "protocol": "arga-bench-trial-attempt/1",
+            "attempt": attempt_number,
+            "runner_commit": prior_commit,
+            "runner_commit_source": commit_source,
+            "archived_at": _utc_now(),
+            "archive_reason": (
+                "runtime_error"
+                if result is not None and result.get("status") == "runtime_error"
+                else "interrupted_nonterminal_attempt"
+            ),
+            "resume_cleanup": cleanup_payload,
+        },
+    )
+    trial_dir.mkdir(parents=True)
+    return trial_dir, attempt_number + 1, None
+
+
 def load_env_file(path: Path) -> list[str]:
     """Load a minimal KEY=VALUE env file without logging its values."""
 
@@ -200,11 +379,38 @@ def _trace_call_records(gateway: ProviderGateway, bundle: InstanceBundle) -> lis
                 method=method,
                 path=str(getattr(raw, "path", "")),
                 status_code=cast(int | None, getattr(raw, "status_code", None)),
-                mutating=method in {"POST", "PATCH", "PUT", "DELETE"},
+                mutating=_trace_call_is_mutating(raw),
                 operation=cast(str | None, getattr(raw, "operation", None)),
             )
         )
     return records
+
+
+_READ_ONLY_POST_PATHS = (
+    re.compile(r"^/v1/search(?:\?.*)?$"),
+    re.compile(r"^/v1/(?:data_sources|databases)/[^/]+/query(?:\?.*)?$"),
+    re.compile(
+        r"^/api/(?:auth\.test|conversations\.(?:history|info|list|replies)|"
+        r"search\.(?:all|files|messages)|users\.(?:info|list))(?:\?.*)?$"
+    ),
+)
+
+
+def _trace_call_is_mutating(raw: object) -> bool:
+    method = str(getattr(raw, "method", "")).upper()
+    if method in {"", "GET"}:
+        return False
+    if method in {"PATCH", "PUT", "DELETE"}:
+        return True
+    if method != "POST":
+        return True
+    operation_type = getattr(raw, "operation_type", None)
+    if operation_type == "query":
+        return False
+    if operation_type == "mutation":
+        return True
+    path = str(getattr(raw, "path", ""))
+    return not any(pattern.fullmatch(path) for pattern in _READ_ONLY_POST_PATHS)
 
 
 def _preliminary_grade(
@@ -262,17 +468,27 @@ async def run_trial(
     plan: TrialPlan,
     output_root: Path,
     ttl_minutes: int = 60,
+    runner_commit: str | None = None,
 ) -> dict[str, Any]:
-    trial_dir = output_root / "trials" / plan.trial_id
+    runner_commit = runner_commit or _runner_commit()
+    trial_dir, attempt_number, existing_result = await _prepare_trial_attempt(
+        output_root=output_root,
+        trial_id=plan.trial_id,
+        runner_commit=runner_commit,
+    )
+    if existing_result is not None:
+        return existing_result
     result_path = trial_dir / "result.json"
-    if result_path.is_file():
-        existing: object = json.loads(result_path.read_text())
-        if isinstance(existing, dict):
-            existing_result = cast(dict[str, Any], existing)
-            if existing_result.get("terminal") is True:
-                return existing_result
-
-    trial_dir.mkdir(parents=True, exist_ok=True)
+    write_private_json(
+        trial_dir / "attempt.json",
+        {
+            "protocol": "arga-bench-trial-attempt/1",
+            "attempt": attempt_number,
+            "runner_commit": runner_commit,
+            "runner_commit_source": "current_process",
+            "started_at": _utc_now(),
+        },
+    )
     control_path = trial_dir / "control.json"
     candidate_path = trial_dir / "candidate-access.json"
     state: dict[str, Any] = {
@@ -282,6 +498,8 @@ async def run_trial(
         "instance_id": plan.instance_id,
         "model_id": plan.model.model_id,
         "repeat": plan.repeat,
+        "attempt": attempt_number,
+        "runner_commit": runner_commit,
         "phase": EpisodeState.MANIFEST_VALIDATED,
         "started_at": _utc_now(),
     }
@@ -324,6 +542,8 @@ async def run_trial(
         prompt_payload = {
             "protocol": "arga-bench-trial-prompt/1",
             "model": asdict(plan.model),
+            "attempt": attempt_number,
+            "runner_commit": runner_commit,
             "system_prompt": SYSTEM_PROMPT,
             "user_prompt": bundle.prompt,
             "tool_definition": gateway.tool_definition,
@@ -401,6 +621,8 @@ async def run_trial(
             "instance_id": plan.instance_id,
             "episode_hash": fingerprint_instance_bundle(catalog_root, plan.instance_id),
             "model": asdict(plan.model),
+            "attempt": attempt_number,
+            "runner_commit": runner_commit,
             "response_model": getattr(invocation, "response_model", None),
             "status": getattr(invocation, "status", None),
             "stop_reason": getattr(invocation, "stop_reason", None),
@@ -421,6 +643,8 @@ async def run_trial(
             "suite_run_id": plan.suite_run_id,
             "instance_id": plan.instance_id,
             "model": asdict(plan.model),
+            "attempt": attempt_number,
+            "runner_commit": runner_commit,
             "status": "runtime_error",
             "error_type": type(error).__name__,
             "error": str(error),
@@ -481,11 +705,13 @@ async def run_experiment_matrix(
         model_profiles=model_profiles,
         repeats=repeats,
     )
+    current_runner_commit = _runner_commit()
     manifest: dict[str, Any] = {
         "protocol": "arga-bench-suite/1",
         "suite_run_id": suite_run_id,
         "experiment_id": experiment_id,
-        "runner_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "runner_commit": current_runner_commit,
+        "runner_commits": [current_runner_commit],
         "created_at": _utc_now(),
         "repeats": repeats,
         "concurrency": concurrency,
@@ -507,7 +733,20 @@ async def run_experiment_matrix(
             raise ValueError(
                 f"cannot resume suite {suite_run_id!r}; manifest fields changed: {', '.join(mismatched)}"
             )
+        revisions = existing_mapping.get("runner_commits")
+        if not isinstance(revisions, list):
+            revisions = [existing_mapping.get("runner_commit")]
+        runner_commits = [
+            revision
+            for revision in cast(list[object], revisions)
+            if isinstance(revision, str)
+        ]
+        if current_runner_commit not in runner_commits:
+            runner_commits.append(current_runner_commit)
+        existing_mapping["runner_commits"] = runner_commits
+        existing_mapping["last_resumed_at"] = _utc_now()
         manifest = existing_mapping
+        write_private_json(manifest_path, manifest)
     else:
         write_private_json(manifest_path, manifest)
 
@@ -535,6 +774,7 @@ async def run_experiment_matrix(
                 plan=plan,
                 output_root=suite_dir,
                 ttl_minutes=ttl_minutes,
+                runner_commit=current_runner_commit,
             )
             print(
                 json.dumps(

@@ -118,6 +118,93 @@ def test_capture_uses_admin_origin_for_whole_state_and_data_origin_for_queries()
     assert "verifier-proxy-secret" not in rendered_artifact
 
 
+@pytest.mark.parametrize("transient_status", [429, 502, 503, 504])
+def test_capture_retries_only_retryable_verifier_statuses(transient_status: int) -> None:
+    attempts = 0
+
+    def handler(_: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        if attempts < 3:
+            return httpx.Response(transient_status, json={"error": "transient"})
+        return httpx.Response(200, json={"ok": True})
+
+    async def capture() -> TrustedStateSnapshot:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            return await TrustedStateCapturer(
+                client=client,
+                max_attempts=3,
+                retry_base_delay_seconds=0,
+            ).capture(control_payload(), roles={"code_host": "github"})
+
+    snapshot = asyncio.run(capture())
+
+    assert attempts == 3
+    assert snapshot.providers["github"].state == {"ok": True}
+
+
+def test_capture_retries_transport_errors_but_not_permanent_http_errors() -> None:
+    transport_attempts = 0
+
+    def transient_handler(request: httpx.Request) -> httpx.Response:
+        nonlocal transport_attempts
+        transport_attempts += 1
+        if transport_attempts == 1:
+            raise httpx.ConnectError("temporary verifier connection failure", request=request)
+        return httpx.Response(200, json={"ok": True})
+
+    async def capture_transient() -> None:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(transient_handler)) as client:
+            await TrustedStateCapturer(
+                client=client,
+                max_attempts=2,
+                retry_base_delay_seconds=0,
+            ).capture(control_payload(), roles={"code_host": "github"})
+
+    asyncio.run(capture_transient())
+    assert transport_attempts == 2
+
+    permanent_attempts = 0
+
+    def permanent_handler(_: httpx.Request) -> httpx.Response:
+        nonlocal permanent_attempts
+        permanent_attempts += 1
+        return httpx.Response(400, json={"error": "invalid verifier request"})
+
+    async def capture_permanent() -> None:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(permanent_handler)) as client:
+            await TrustedStateCapturer(
+                client=client,
+                max_attempts=3,
+                retry_base_delay_seconds=0,
+            ).capture(control_payload(), roles={"code_host": "github"})
+
+    with pytest.raises(StateCaptureError, match="HTTP 400"):
+        asyncio.run(capture_permanent())
+    assert permanent_attempts == 1
+
+
+def test_capture_reports_exhausted_transient_attempts() -> None:
+    attempts = 0
+
+    def handler(_: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        return httpx.Response(504, json={"error": "still unavailable"})
+
+    async def capture() -> None:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            await TrustedStateCapturer(
+                client=client,
+                max_attempts=3,
+                retry_base_delay_seconds=0,
+            ).capture(control_payload(), roles={"code_host": "github"})
+
+    with pytest.raises(StateCaptureError, match="HTTP 504"):
+        asyncio.run(capture())
+    assert attempts == 3
+
+
 @pytest.mark.parametrize(
     ("provider", "header", "expected"),
     [
