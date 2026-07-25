@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import tempfile
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,6 +25,8 @@ CLEAN_TERMINAL_TWIN_RUN_STATUSES = frozenset(
         "cleaned_up",
     }
 )
+STOP_WAITING_TWIN_RUN_STATUSES = CLEAN_TERMINAL_TWIN_RUN_STATUSES | {"failed", "error"}
+TWIN_RUN_POLL_INTERVAL_SECONDS = 2.0
 
 
 @dataclass(frozen=True)
@@ -168,29 +171,86 @@ async def provision_instance(
                 twins=twins,
                 scenario_id=saved_scenario.scenario_id,
                 ttl_minutes=ttl_minutes,
-                timeout_seconds=timeout_seconds,
             )
+            write_private_json(
+                control_output,
+                _control_payload(
+                    instance_id=instance_id,
+                    saved_scenario=saved_scenario,
+                    run=run,
+                ),
+            )
+            run = await _wait_for_twin_run(
+                arga=arga,
+                run=run,
+                timeout_seconds=timeout_seconds,
+                on_status=lambda latest: write_private_json(
+                    control_output,
+                    _control_payload(
+                        instance_id=instance_id,
+                        saved_scenario=saved_scenario,
+                        run=latest,
+                    ),
+                ),
+            )
+            if run.status != "ready":
+                error = run.raw.get("error")
+                detail = f": {error}" if error else ""
+                raise ArgaCliError(f"twin run {run.run_id} ended in status {run.status!r}{detail}")
+
             candidate_access = run.candidate_access()
-            control_payload: dict[str, Any] = {
-                "protocol": "arga-bench-control/1",
-                "instance_id": instance_id,
-                "scenario_id": saved_scenario.scenario_id,
-                "scenario_created": saved_scenario.created,
-                "scenario_content_sha256": saved_scenario.content_sha256,
-                "run_id": run.run_id,
-                "twin_run": dict(run.raw),
-            }
             candidate_payload: dict[str, Any] = {
                 "protocol": "arga-bench-candidate-access/1",
                 "provider_access": candidate_access,
             }
-            write_private_json(control_output, control_payload)
             write_private_json(candidate_output, candidate_payload)
         except BaseException:
             if run is not None:
                 with suppress(Exception):
-                    await arga.teardown(run.run_id)
+                    await _cleanup_twin_run(arga, run.run_id)
             raise
+
+
+def _control_payload(
+    *,
+    instance_id: str,
+    saved_scenario: SavedScenario,
+    run: TwinRun,
+) -> dict[str, Any]:
+    return {
+        "protocol": "arga-bench-control/1",
+        "instance_id": instance_id,
+        "scenario_id": saved_scenario.scenario_id,
+        "scenario_created": saved_scenario.created,
+        "scenario_content_sha256": saved_scenario.content_sha256,
+        "run_id": run.run_id,
+        "twin_run": dict(run.raw),
+    }
+
+
+async def _wait_for_twin_run(
+    *,
+    arga: ArgaCli,
+    run: TwinRun,
+    timeout_seconds: int,
+    on_status: Callable[[TwinRun], None],
+) -> TwinRun:
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be positive")
+
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + timeout_seconds
+    latest = run
+    while latest.status != "ready" and _normalized_status(latest.status) not in STOP_WAITING_TWIN_RUN_STATUSES:
+        remaining = deadline - loop.time()
+        if remaining <= 0:
+            raise ArgaCliError(
+                f"timed out waiting for twin run {latest.run_id} to become ready; last status was {latest.status!r}"
+            )
+        await asyncio.sleep(min(TWIN_RUN_POLL_INTERVAL_SECONDS, remaining))
+        latest = await arga.status(latest.run_id)
+        on_status(latest)
+    return latest
 
 
 async def reset_instance(control_file: Path) -> dict[str, Any]:
@@ -201,6 +261,12 @@ async def reset_instance(control_file: Path) -> dict[str, Any]:
 
 async def cleanup_instance(control_file: Path, *, arga: ArgaCli | None = None) -> dict[str, Any]:
     _, run_id = read_control_ids(control_file)
+    return await cleanup_twin_run(run_id, arga=arga)
+
+
+async def cleanup_twin_run(run_id: str, *, arga: ArgaCli | None = None) -> dict[str, Any]:
+    """Tear down one exact run through the Arga CLI and confirm terminal outcomes."""
+
     if arga is not None:
         return await _cleanup_twin_run(arga, run_id)
     async with SubprocessArgaCli() as cli:
@@ -222,8 +288,10 @@ async def _cleanup_twin_run(arga: ArgaCli, run_id: str) -> dict[str, Any]:
                 f"but `arga twin-runs status` could not confirm cleanup: {status_error}"
             ) from teardown_error
 
-        normalized_status = run.status.strip().lower().replace("-", "_").replace(" ", "_")
-        if normalized_status not in CLEAN_TERMINAL_TWIN_RUN_STATUSES:
+        normalized_status = _normalized_status(run.status)
+        raw_twins = run.raw.get("twins")
+        failed_without_twins = normalized_status == "failed" and isinstance(raw_twins, dict) and not raw_twins
+        if normalized_status not in CLEAN_TERMINAL_TWIN_RUN_STATUSES and not failed_without_twins:
             raise ArgaCliError(
                 f"teardown reported twin run {run_id!r} is already terminal, "
                 f"but `arga twin-runs status` returned unconfirmed cleanup status {run.status!r}"
@@ -244,6 +312,10 @@ async def _cleanup_twin_run(arga: ArgaCli, run_id: str) -> dict[str, Any]:
 def _is_already_terminal_teardown_error(error: ArgaCliError) -> bool:
     message = str(error).lower()
     return "cannot teardown" in message and ("status" in message or "terminal" in message)
+
+
+def _normalized_status(status: str) -> str:
+    return status.strip().lower().replace("-", "_").replace(" ", "_")
 
 
 def write_private_json(path: Path, payload: dict[str, Any]) -> None:

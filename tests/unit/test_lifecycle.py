@@ -10,6 +10,7 @@ from arga_twins_benchmark.arga_cli import ArgaCliError, TwinRun
 from arga_twins_benchmark.catalog import compile_scenario
 from arga_twins_benchmark.lifecycle import (
     cleanup_instance,
+    provision_instance,
     read_control_ids,
     save_experiment_scenarios,
     save_scenario,
@@ -50,7 +51,6 @@ class FakeArgaCli:
         twins: Sequence[str],
         scenario_id: str,
         ttl_minutes: int,
-        timeout_seconds: int,
     ) -> TwinRun:
         raise AssertionError("create_twin_run is not expected in these tests")
 
@@ -86,11 +86,13 @@ class TerminalTeardownArgaCli(FakeArgaCli):
         status: str,
         teardown_error: str = "Cannot teardown run in status: cancelled",
         status_error: ArgaCliError | None = None,
+        twins: Mapping[str, Any] | None = None,
     ) -> None:
         super().__init__()
         self.run_status = status
         self.teardown_error = teardown_error
         self.status_error = status_error
+        self.twins = dict(twins or {})
         self.status_calls: list[str] = []
 
     async def teardown(self, run_id: str) -> Mapping[str, Any]:
@@ -101,8 +103,60 @@ class TerminalTeardownArgaCli(FakeArgaCli):
         self.status_calls.append(run_id)
         if self.status_error is not None:
             raise self.status_error
-        payload: Mapping[str, Any] = {"run_id": run_id, "status": self.run_status, "twins": {}}
+        payload: Mapping[str, Any] = {
+            "run_id": run_id,
+            "status": self.run_status,
+            "twins": self.twins,
+        }
         return TwinRun.from_payload(payload)
+
+
+class ProvisioningArgaCli(FakeArgaCli):
+    def __init__(
+        self,
+        *,
+        scenarios: Sequence[Mapping[str, Any]],
+        control_path: Path,
+        statuses: Sequence[TwinRun],
+    ) -> None:
+        super().__init__(scenarios=scenarios)
+        self.control_path = control_path
+        self.statuses = list(statuses)
+        self.created_runs: list[dict[str, object]] = []
+
+    async def __aenter__(self) -> "ProvisioningArgaCli":
+        return self
+
+    async def __aexit__(self, _exc_type: object, _exc: object, _traceback: object) -> None:
+        return None
+
+    async def create_twin_run(
+        self,
+        *,
+        twins: Sequence[str],
+        scenario_id: str,
+        ttl_minutes: int,
+    ) -> TwinRun:
+        self.created_runs.append(
+            {
+                "twins": list(twins),
+                "scenario_id": scenario_id,
+                "ttl_minutes": ttl_minutes,
+            }
+        )
+        return TwinRun.from_payload(
+            {
+                "run_id": "run-queued",
+                "status": "queued",
+                "twins": {},
+                "is_public": True,
+            }
+        )
+
+    async def status(self, run_id: str) -> TwinRun:
+        assert run_id == "run-queued"
+        assert self.control_path.is_file(), "run ID must be durable before the first status poll"
+        return self.statuses.pop(0)
 
 
 def test_private_json_is_mode_0600(tmp_path: Path) -> None:
@@ -240,6 +294,64 @@ def test_save_experiment_saves_all_forty_eight_scenarios() -> None:
     assert all(scenario.created for scenario in saved)
 
 
+def test_provision_persists_run_id_before_polling_and_exports_only_ready_access(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    instance_id = "blocking_code_review_v1_github_clean_001"
+    compiled = compile_scenario(Path("benchmark"), instance_id)
+    control = tmp_path / "control.json"
+    candidate = tmp_path / "candidate.json"
+    ready = TwinRun.from_payload(
+        {
+            "run_id": "run-queued",
+            "status": "ready",
+            "twins": {
+                "github": {
+                    "base_url": "https://pub-github.example",
+                    "admin_url": "https://admin-github.example",
+                    "env_vars": {"GITHUB_TOKEN": "provider-token"},
+                }
+            },
+            "is_public": True,
+        }
+    )
+    arga = ProvisioningArgaCli(
+        scenarios=[{"id": "scenario-existing", **compiled}],
+        control_path=control,
+        statuses=[ready],
+    )
+    monkeypatch.setattr("arga_twins_benchmark.lifecycle.SubprocessArgaCli", lambda: arga)
+    monkeypatch.setattr("arga_twins_benchmark.lifecycle.TWIN_RUN_POLL_INTERVAL_SECONDS", 0)
+
+    asyncio.run(
+        provision_instance(
+            catalog_root=Path("benchmark"),
+            instance_id=instance_id,
+            control_output=control,
+            candidate_output=candidate,
+            ttl_minutes=60,
+            timeout_seconds=10,
+        )
+    )
+
+    assert arga.created_runs == [
+        {
+            "twins": ["github"],
+            "scenario_id": "scenario-existing",
+            "ttl_minutes": 60,
+        }
+    ]
+    assert json.loads(control.read_text())["run_id"] == "run-queued"
+    assert json.loads(control.read_text())["twin_run"]["status"] == "ready"
+    assert json.loads(candidate.read_text())["provider_access"] == {
+        "github": {
+            "base_url": "https://pub-github.example",
+            "env": {"GITHUB_TOKEN": "provider-token"},
+        }
+    }
+
+
 def test_cleanup_tears_down_run_but_preserves_saved_scenario(tmp_path: Path) -> None:
     control = tmp_path / "control.json"
     control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
@@ -251,7 +363,7 @@ def test_cleanup_tears_down_run_but_preserves_saved_scenario(tmp_path: Path) -> 
     assert arga.torn_down_runs == ["run-1"]
 
 
-@pytest.mark.parametrize("terminal_status", ["cancelled", "expired", "torn_down"])
+@pytest.mark.parametrize("terminal_status", ["cancelled", "expired", "failed", "torn_down"])
 def test_cleanup_confirms_already_clean_terminal_run_via_cli_status(
     tmp_path: Path,
     terminal_status: str,
@@ -289,10 +401,13 @@ def test_cleanup_does_not_swallow_ambiguous_teardown_error(tmp_path: Path) -> No
     assert arga.status_calls == []
 
 
-def test_cleanup_rejects_unconfirmed_terminal_status(tmp_path: Path) -> None:
+def test_cleanup_rejects_failed_status_when_twins_still_exist(tmp_path: Path) -> None:
     control = tmp_path / "control.json"
     control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
-    arga = TerminalTeardownArgaCli(status="failed")
+    arga = TerminalTeardownArgaCli(
+        status="failed",
+        twins={"github": {"base_url": "https://pub-github.example"}},
+    )
 
     with pytest.raises(ArgaCliError, match="unconfirmed cleanup status 'failed'"):
         asyncio.run(cleanup_instance(control, arga=arga))

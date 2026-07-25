@@ -220,6 +220,38 @@ def test_resume_archives_transient_model_api_500_for_fresh_twin_retry(tmp_path: 
     assert json.loads((archived / "attempt.json").read_text())["archive_reason"] == "api_error"
 
 
+def test_resume_archives_model_transport_error_for_fresh_twin_retry(tmp_path: Path) -> None:
+    trial_id = "model-transport-error"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "api_error",
+                "stop_reason": "transport_error",
+                "cleanup_succeeded": True,
+                "tool_calls": 0,
+            }
+        )
+    )
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert existing is None
+    assert attempt == 2
+    archived = tmp_path / "attempts" / trial_id / "attempt-0001"
+    assert json.loads((archived / "result.json").read_text())["stop_reason"] == (
+        "transport_error"
+    )
+
+
 def test_resume_preserves_non_transient_model_api_error(tmp_path: Path) -> None:
     trial_id = "model-api-400"
     trial_dir = tmp_path / "trials" / trial_id
@@ -242,6 +274,144 @@ def test_resume_preserves_non_transient_model_api_error(tmp_path: Path) -> None:
 
     assert existing == api_error
     assert attempt == 1
+    assert not (tmp_path / "attempts").exists()
+
+
+def test_resume_retries_cleanup_without_replaying_completed_model(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "completed-cleanup-failure"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    control_path = trial_dir / "control.json"
+    control_path.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    completed = {
+        "terminal": True,
+        "status": "completed",
+        "trial_id": trial_id,
+        "attempt": 1,
+        "final_text": "preserve this exact answer",
+        "cleanup_succeeded": False,
+    }
+    (trial_dir / "result.json").write_text(json.dumps(completed))
+    cleaned: list[Path] = []
+
+    async def fake_cleanup(path: Path) -> dict[str, Any]:
+        cleaned.append(path)
+        return {"twin_run": {"run_id": "run-1", "status": "cancelled"}}
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_instance", fake_cleanup)
+
+    prepared_dir, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="resume-commit",
+        )
+    )
+
+    assert cleaned == [control_path]
+    assert prepared_dir == trial_dir
+    assert attempt == 1
+    assert existing is not None
+    assert existing["status"] == "completed"
+    assert existing["final_text"] == "preserve this exact answer"
+    assert existing["cleanup_succeeded"] is True
+    assert not (tmp_path / "attempts").exists()
+    persisted = json.loads((trial_dir / "result.json").read_text())
+    assert persisted["cleanup_succeeded"] is True
+    assert persisted["cleanup"]["twin_run"]["status"] == "cancelled"
+
+
+def test_resume_preserves_completed_model_when_cleanup_retry_still_fails(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "completed-cleanup-still-failing"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "control.json").write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    completed = {
+        "terminal": True,
+        "status": "completed",
+        "trial_id": trial_id,
+        "attempt": 1,
+        "final_text": "do not replay me",
+        "cleanup_succeeded": False,
+    }
+    (trial_dir / "result.json").write_text(json.dumps(completed))
+
+    async def fake_cleanup(_: Path) -> dict[str, Any]:
+        raise RuntimeError("CLI teardown still unavailable")
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_instance", fake_cleanup)
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="resume-commit",
+        )
+    )
+
+    assert attempt == 1
+    assert existing is not None
+    assert existing["status"] == "completed"
+    assert existing["final_text"] == "do not replay me"
+    assert existing["cleanup_succeeded"] is False
+    assert existing["cleanup"]["error_type"] == "RuntimeError"
+    assert not (tmp_path / "attempts").exists()
+
+
+def test_resume_reconciles_successful_cleanup_artifact_without_replaying_or_teardown(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "completed-cleanup-result-write-crash"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "control.json").write_text(
+        '{"scenario_id": "scenario-1", "run_id": "run-1"}'
+    )
+    (trial_dir / "cleanup.json").write_text(
+        '{"twin_run":{"run_id":"run-1","status":"cancelled"}}'
+    )
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "completed",
+                "trial_id": trial_id,
+                "attempt": 1,
+                "final_text": "already completed",
+                "cleanup_succeeded": False,
+            }
+        )
+    )
+
+    async def unexpected_cleanup(_: Path) -> dict[str, Any]:
+        raise AssertionError("proven cleanup must not be repeated")
+
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.cleanup_instance",
+        unexpected_cleanup,
+    )
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="resume-commit",
+        )
+    )
+
+    assert attempt == 1
+    assert existing is not None
+    assert existing["status"] == "completed"
+    assert existing["final_text"] == "already completed"
+    assert existing["cleanup_succeeded"] is True
+    assert existing["cleanup"]["twin_run"]["status"] == "cancelled"
     assert not (tmp_path / "attempts").exists()
 
 
@@ -273,6 +443,48 @@ def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
     assert attempt == 2
     archived = tmp_path / "attempts" / trial_id / "attempt-0001"
     assert json.loads((archived / "result.json").read_text())["error_type"] == "CancelledError"
+
+
+def test_resume_confirms_legacy_failed_provision_run_before_fresh_retry(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "legacy-failed-provision"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    run_id = "6b2d9f94-0d4e-4fc4-be53-736aff750f26"
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "runtime_error",
+                "error_type": "ArgaCliError",
+                "error": (f"twin run {run_id} ended in status 'failed': Timed out waiting for job job-1"),
+                "cleanup_succeeded": False,
+            }
+        )
+    )
+    cleaned: list[str] = []
+
+    async def fake_cleanup(target_run_id: str) -> dict[str, Any]:
+        cleaned.append(target_run_id)
+        return {"twin_run": {"run_id": target_run_id, "status": "failed", "twins": {}}}
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_twin_run", fake_cleanup)
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert cleaned == [run_id]
+    assert existing is None
+    assert attempt == 2
+    archived = tmp_path / "attempts" / trial_id / "attempt-0001"
+    assert json.loads((archived / "resume-cleanup.json").read_text())["twin_run"]["run_id"] == run_id
 
 
 def test_resume_cleans_interrupted_twin_before_archiving(

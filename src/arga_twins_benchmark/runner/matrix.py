@@ -22,7 +22,12 @@ from arga_twins_benchmark.evaluation.state_capture import (
     TrustedStateSnapshot,
     diff_trusted_states,
 )
-from arga_twins_benchmark.lifecycle import cleanup_instance, provision_instance, write_private_json
+from arga_twins_benchmark.lifecycle import (
+    cleanup_instance,
+    cleanup_twin_run,
+    provision_instance,
+    write_private_json,
+)
 from arga_twins_benchmark.providers import ProviderGateway
 from arga_twins_benchmark.runner.prompting import (
     MODEL_PROFILES,
@@ -166,6 +171,7 @@ def _retryable_infrastructure_result(result: dict[str, Any]) -> bool:
             "http_503",
             "http_504",
             "http_529",
+            "transport_error",
         }
     if result.get("status") != "runtime_error":
         return False
@@ -180,6 +186,46 @@ def _retryable_infrastructure_result(result: dict[str, Any]) -> bool:
     return error_type in _RETRYABLE_INFRASTRUCTURE_ERROR_TYPES
 
 
+def _inferred_failed_provision_run_id(result: dict[str, Any] | None) -> str | None:
+    """Recover legacy failed-provision run IDs written before control persistence."""
+
+    if result is None or result.get("status") != "runtime_error" or result.get("error_type") != "ArgaCliError":
+        return None
+    match = re.search(
+        r"\btwin run "
+        r"([0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}) "
+        r"ended in status\b",
+        str(result.get("error", "")),
+        flags=re.IGNORECASE,
+    )
+    return match.group(1) if match is not None else None
+
+
+async def _retry_prior_cleanup(
+    *,
+    trial_dir: Path,
+    result: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if _cleanup_artifact_succeeded(trial_dir, result):
+        return None
+
+    control_path = trial_dir / "control.json"
+    try:
+        if control_path.is_file():
+            cleanup_payload = await cleanup_instance(control_path)
+        elif (run_id := _inferred_failed_provision_run_id(result)) is not None:
+            cleanup_payload = await cleanup_twin_run(run_id)
+        else:
+            return None
+    except BaseException as cleanup_error:
+        cleanup_payload = {
+            "error_type": type(cleanup_error).__name__,
+            "error": str(cleanup_error),
+        }
+    write_private_json(trial_dir / "resume-cleanup.json", cleanup_payload)
+    return cleanup_payload
+
+
 async def _prepare_trial_attempt(
     *,
     output_root: Path,
@@ -190,11 +236,33 @@ async def _prepare_trial_attempt(
 
     trial_dir = output_root / "trials" / trial_id
     result = _read_json_object(trial_dir / "result.json")
-    if (
-        result is not None
-        and result.get("terminal") is True
-        and not _retryable_infrastructure_result(result)
-    ):
+    preserve_terminal_result = (
+        result is not None and result.get("terminal") is True and not _retryable_infrastructure_result(result)
+    )
+    if preserve_terminal_result:
+        assert result is not None
+        existing_cleanup = _read_json_object(trial_dir / "cleanup.json")
+        if (
+            result.get("cleanup_succeeded") is not True
+            and existing_cleanup is not None
+            and "error" not in existing_cleanup
+        ):
+            result["cleanup"] = existing_cleanup
+            result["cleanup_succeeded"] = True
+            result["cleanup_reconciled_at"] = _utc_now()
+            write_private_json(trial_dir / "result.json", result)
+        elif (
+            cleanup_payload := await _retry_prior_cleanup(
+                trial_dir=trial_dir,
+                result=result,
+            )
+        ) is not None:
+            result["cleanup"] = cleanup_payload
+            result["cleanup_succeeded"] = "error" not in cleanup_payload
+            result["cleanup_retried_at"] = _utc_now()
+            write_private_json(trial_dir / "cleanup.json", cleanup_payload)
+            write_private_json(trial_dir / "result.json", result)
+
         prior_commit, commit_source = _inferred_attempt_runner_commit(
             trial_dir=trial_dir,
             output_root=output_root,
@@ -222,17 +290,8 @@ async def _prepare_trial_attempt(
         trial_dir.mkdir(parents=True, exist_ok=True)
         return trial_dir, attempt_number, None
 
-    cleanup_payload: dict[str, Any] | None = None
-    control_path = trial_dir / "control.json"
-    if not _cleanup_artifact_succeeded(trial_dir, result) and control_path.is_file():
-        try:
-            cleanup_payload = await cleanup_instance(control_path)
-        except BaseException as cleanup_error:
-            cleanup_payload = {
-                "error_type": type(cleanup_error).__name__,
-                "error": str(cleanup_error),
-            }
-        write_private_json(trial_dir / "resume-cleanup.json", cleanup_payload)
+    cleanup_payload = await _retry_prior_cleanup(trial_dir=trial_dir, result=result)
+    if cleanup_payload is not None:
         if "error" in cleanup_payload:
             blocked = {
                 "protocol": "arga-bench-trial-result/1",

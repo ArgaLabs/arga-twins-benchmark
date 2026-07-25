@@ -84,6 +84,48 @@ print(json.dumps({"id": "scenario-1", **payload, "prompt": None, "is_preset": Fa
     assert saved["prompt"] is None
 
 
+def test_create_twin_run_returns_immediate_queued_run_without_waiting(tmp_path: Path) -> None:
+    executable = tmp_path / "fake_arga.py"
+    executable.write_text(
+        """\
+import json
+import sys
+
+expected = [
+    "twin-runs",
+    "create",
+    "--api-url",
+    "https://arga.example",
+    "--twins",
+    "github,slack",
+    "--scenario-id",
+    "scenario-1",
+    "--ttl",
+    "60",
+    "--json",
+]
+if sys.argv[1:] != expected:
+    raise SystemExit(f"unexpected arguments: {sys.argv[1:]!r}")
+print(json.dumps({"run_id": "run-1", "status": "queued", "twins": {}, "is_public": True}))
+"""
+    )
+    client = SubprocessArgaCli(
+        executable=(sys.executable, str(executable)),
+        api_url="https://arga.example",
+    )
+
+    run = asyncio.run(
+        client.create_twin_run(
+            twins=["slack", "github"],
+            scenario_id="scenario-1",
+            ttl_minutes=60,
+        )
+    )
+
+    assert run.run_id == "run-1"
+    assert run.status == "queued"
+
+
 def test_supplied_api_key_is_scoped_to_temporary_cli_home() -> None:
     client = SubprocessArgaCli(executable=("arga",), api_key="secret-test-key")
     temporary_home = client.credential_home
