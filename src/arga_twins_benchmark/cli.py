@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import asyncio
 import json
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any, cast
 
 import typer
 
@@ -16,6 +17,17 @@ from arga_twins_benchmark.lifecycle import (
     reset_instance,
     save_experiment_scenarios,
     save_scenario,
+)
+from arga_twins_benchmark.runner import (
+    MODEL_PROFILES,
+    ModelProfile,
+    TrialPlan,
+    load_env_file,
+    load_experiment_bundles,
+    render_prompt_ledger_markdown,
+    run_experiment_matrix,
+    run_trial,
+    write_prompt_ledger,
 )
 
 app = typer.Typer(no_args_is_help=True, help="Arga Twins Benchmark tools")
@@ -118,6 +130,155 @@ def cleanup(
     typer.echo(json.dumps(asyncio.run(cleanup_instance(control_file)), indent=2, sort_keys=True))
 
 
+@app.command("prompts")
+def prompts(
+    experiment_id: Annotated[str, typer.Argument(help="Experiment identifier")],
+    output: Annotated[Path, typer.Option("--output", "-o", help="Private JSON prompt ledger")],
+    markdown_output: Annotated[
+        Path | None,
+        typer.Option("--markdown-output", help="Optional reader-friendly Markdown prompt ledger"),
+    ] = None,
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+) -> None:
+    write_prompt_ledger(output, root, experiment_id)
+    payload: object = json.loads(output.read_text())
+    if not isinstance(payload, dict):
+        raise AssertionError("prompt ledger must be an object")
+    prompt_payload = cast(dict[str, Any], payload)
+    if markdown_output is not None:
+        markdown_output.parent.mkdir(parents=True, exist_ok=True)
+        markdown_output.write_text(render_prompt_ledger_markdown(prompt_payload))
+        markdown_output.chmod(0o600)
+    typer.echo(
+        json.dumps(
+            {
+                "experiment_id": experiment_id,
+                "entries": prompt_payload.get("entry_count"),
+                "json": str(output),
+                "markdown": str(markdown_output) if markdown_output is not None else None,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("run-instance")
+def run_instance(
+    instance_id: Annotated[str, typer.Argument(help="Instance identifier")],
+    model: Annotated[str, typer.Option("--model", help="Exact requested model ID")],
+    experiment_id: Annotated[
+        str,
+        typer.Option("--experiment", help="Experiment containing the instance"),
+    ] = "development_pilot_48_v1",
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    output_root: Annotated[Path, typer.Option("--output-root", help="Run artifact root")] = Path("runs"),
+    env_file: Annotated[Path | None, typer.Option("--env-file", help="Ignored KEY=VALUE credentials file")] = Path(
+        ".env"
+    ),
+    ttl_minutes: Annotated[int, typer.Option("--ttl", min=1, max=480)] = 60,
+) -> None:
+    if env_file is not None:
+        load_env_file(env_file)
+    profiles = _select_model_profiles(model)
+    if len(profiles) != 1:
+        raise typer.BadParameter("run-instance requires exactly one model")
+    _, bundles = load_experiment_bundles(root, experiment_id)
+    if instance_id not in bundles:
+        raise typer.BadParameter(f"{instance_id!r} is not in experiment {experiment_id!r}")
+    suite_run_id = f"canary-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}"
+    plan = TrialPlan(
+        suite_run_id=suite_run_id,
+        trial_id=f"{suite_run_id}--{instance_id}--{profiles[0].model_id}",
+        repeat=1,
+        instance_id=instance_id,
+        model=profiles[0],
+    )
+    result = asyncio.run(
+        run_trial(
+            catalog_root=root,
+            bundle=bundles[instance_id],
+            plan=plan,
+            output_root=output_root / suite_run_id,
+            ttl_minutes=ttl_minutes,
+        )
+    )
+    typer.echo(
+        json.dumps(
+            {
+                "trial_id": result.get("trial_id"),
+                "instance_id": result.get("instance_id"),
+                "model": result.get("model"),
+                "response_model": result.get("response_model"),
+                "status": result.get("status"),
+                "stop_reason": result.get("stop_reason"),
+                "tool_calls": result.get("tool_calls"),
+                "cleanup_succeeded": result.get("cleanup_succeeded"),
+                "artifact_dir": str(output_root / suite_run_id / "trials" / plan.trial_id),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("run-matrix")
+def run_matrix(
+    experiment_id: Annotated[str, typer.Argument(help="Experiment identifier")] = "development_pilot_48_v1",
+    models: Annotated[
+        str,
+        typer.Option("--models", help="Comma-separated exact model IDs; defaults to the preregistered three"),
+    ] = ",".join(profile.model_id for profile in MODEL_PROFILES),
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    output_root: Annotated[Path, typer.Option("--output-root", help="Run artifact root")] = Path("runs"),
+    env_file: Annotated[Path | None, typer.Option("--env-file", help="Ignored KEY=VALUE credentials file")] = Path(
+        ".env"
+    ),
+    repeats: Annotated[int, typer.Option("--repeats", min=1, max=20)] = 1,
+    concurrency: Annotated[int, typer.Option("--concurrency", min=1, max=16)] = 4,
+    ttl_minutes: Annotated[int, typer.Option("--ttl", min=1, max=480)] = 60,
+    suite_run_id: Annotated[
+        str | None,
+        typer.Option("--suite-run-id", help="Resume an existing suite directory with the same manifest"),
+    ] = None,
+) -> None:
+    if env_file is not None:
+        loaded = load_env_file(env_file)
+        typer.echo(f"Loaded credential variables: {', '.join(loaded) if loaded else '(already set)'}", err=True)
+    profiles = _select_model_profiles(models)
+    summary = asyncio.run(
+        run_experiment_matrix(
+            catalog_root=root,
+            experiment_id=experiment_id,
+            output_root=output_root,
+            model_profiles=profiles,
+            repeats=repeats,
+            concurrency=concurrency,
+            ttl_minutes=ttl_minutes,
+            suite_run_id=suite_run_id,
+        )
+    )
+    typer.echo(
+        json.dumps(
+            {
+                key: summary.get(key)
+                for key in (
+                    "suite_run_id",
+                    "trial_count",
+                    "terminal_count",
+                    "runtime_error_count",
+                    "cleanup_failure_count",
+                    "trace_output_pass_count",
+                    "state_grade_complete",
+                    "completed_at",
+                )
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
 async def _save_instance_scenario(*, catalog_root: Path, instance_id: str) -> SavedScenario:
     async with SubprocessArgaCli() as arga:
         return await save_scenario(arga=arga, catalog_root=catalog_root, instance_id=instance_id)
@@ -130,6 +291,22 @@ async def _save_experiment_scenarios(*, catalog_root: Path, experiment_id: str) 
             catalog_root=catalog_root,
             experiment_id=experiment_id,
         )
+
+
+def _select_model_profiles(models: str) -> tuple[ModelProfile, ...]:
+    requested = {item.strip().lower() for item in models.split(",") if item.strip()}
+    aliases = {
+        profile.model_id.lower(): profile
+        for profile in MODEL_PROFILES
+    }
+    aliases.update({profile.label.lower(): profile for profile in MODEL_PROFILES})
+    unknown = requested - set(aliases)
+    if unknown:
+        raise typer.BadParameter(f"unknown models: {', '.join(sorted(unknown))}")
+    selected = tuple(profile for profile in MODEL_PROFILES if profile in {aliases[item] for item in requested})
+    if not selected:
+        raise typer.BadParameter("at least one model is required")
+    return selected
 
 
 if __name__ == "__main__":

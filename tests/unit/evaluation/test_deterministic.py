@@ -2,9 +2,10 @@ from arga_twins_benchmark.evaluation.deterministic import (
     CanonicalResource,
     ToolCallRecord,
     evaluate_deterministic,
+    trace_call_matches,
 )
 from arga_twins_benchmark.evaluation.protocol import Mutation
-from arga_twins_benchmark.specs.models import ComplexitySpec, VerificationSpec
+from arga_twins_benchmark.specs.models import ComplexitySpec, TraceCallRuleSpec, VerificationSpec
 
 
 def verification() -> VerificationSpec:
@@ -490,6 +491,29 @@ def test_write_before_required_evidence_fails_causal_order() -> None:
     assert result.task_success is False
 
 
+def test_read_only_evidence_may_be_discovered_in_a_different_order() -> None:
+    reordered_reads = [
+        ToolCallRecord("code_host", "GET", f"/evidence/{index}", 200, False)
+        for index in (5, 3, 1, 4, 2)
+    ]
+    trace = [
+        *reordered_reads,
+        ToolCallRecord("code_host", "POST", "/repos/acme/app/pulls/7/reviews", 200, True),
+    ]
+
+    result = evaluate_deterministic(
+        verification(),
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=trace,
+        output={"decision": "blocked", "pull_number": 7},
+    )
+
+    assert result.assertion_results["trace.distinct_and_causal_required_calls"] is True
+    assert result.task_success is True
+
+
 def test_any_forbidden_output_fact_fails_the_output_contract() -> None:
     verifier = verification()
     verifier.output_contract.forbidden_facts = {
@@ -524,6 +548,22 @@ def test_wrong_required_output_fact_fails_task_success() -> None:
     assert result.task_success is False
 
 
+def test_symbolic_output_labels_accept_provider_native_aliases() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {"decision": "changes_requested", "pull_number": 7}
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={"decision": "REQUEST_CHANGES", "pull_number": 7},
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
 def test_create_with_an_extra_canonical_field_fails_default_deny() -> None:
     mutation = Mutation(
         twin="code_host",
@@ -550,3 +590,63 @@ def test_create_with_an_extra_canonical_field_fails_default_deny() -> None:
     assert result.assertion_results["mutation_policy.default_deny"] is False
     assert result.collateral_damage is True
     assert result.task_success is False
+
+
+def test_trace_matching_tolerates_benign_pagination_parameters() -> None:
+    rule = TraceCallRuleSpec.model_validate(
+        {
+            "id": "list_open",
+            "provider_role": "code_host",
+            "methods": ["GET"],
+            "path_pattern": r"^/repos/acme/app/pulls\?state=open$",
+        }
+    )
+    call = ToolCallRecord(
+        "code_host",
+        "GET",
+        "/repos/acme/app/pulls?per_page=100&state=open",
+        200,
+        False,
+    )
+
+    assert trace_call_matches(rule, call) is True
+
+
+def test_trace_matching_tolerates_omitted_provider_default_query() -> None:
+    rule = TraceCallRuleSpec.model_validate(
+        {
+            "id": "read_policy",
+            "provider_role": "code_host",
+            "methods": ["GET"],
+            "path_pattern": r"^/repos/acme/app/contents/POLICY\.md\?ref=main$",
+        }
+    )
+    call = ToolCallRecord(
+        "code_host",
+        "GET",
+        "/repos/acme/app/contents/POLICY.md",
+        200,
+        False,
+    )
+
+    assert trace_call_matches(rule, call) is True
+
+
+def test_trace_matching_does_not_drop_task_selecting_filters() -> None:
+    rule = TraceCallRuleSpec.model_validate(
+        {
+            "id": "search_request",
+            "provider_role": "payments",
+            "methods": ["GET"],
+            "path_pattern": r"^/v1/customers/search\?query=target$",
+        }
+    )
+    call = ToolCallRecord(
+        "payments",
+        "GET",
+        "/v1/customers/search?limit=100&query=wrong",
+        200,
+        False,
+    )
+
+    assert trace_call_matches(rule, call) is False

@@ -4,6 +4,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from typing import Any, Literal, cast
+from urllib.parse import parse_qsl, urlencode, urlsplit
 
 from arga_twins_benchmark.evaluation.protocol import GradeResult, Mutation
 from arga_twins_benchmark.specs.models import (
@@ -109,12 +110,16 @@ def _mutation_matches(rule: MutationMatcherSpec, mutation: Mutation) -> bool:
     return _is_subset(rule.selector, _mutation_document(mutation))
 
 
-def _trace_call_matches(
+def trace_call_matches(
     rule: TraceCallRuleSpec,
     call: ToolCallRecord,
     *,
     check_status: bool = True,
 ) -> bool:
+    path_matches = any(
+        re.fullmatch(rule.path_pattern, path) is not None
+        for path in _trace_path_variants(call.path, rule.path_pattern)
+    )
     path_matches = (
         call.destination == "provisioned_provider"
         and call.provider_role == rule.provider_role
@@ -126,13 +131,73 @@ def _trace_call_matches(
                 or (call.status_code is not None and rule.status_min <= call.status_code <= rule.status_max)
             )
         )
-        and re.fullmatch(rule.path_pattern, call.path) is not None
+        and path_matches
     )
     if not path_matches:
         return False
     if rule.operation_pattern is None:
         return True
     return call.operation is not None and re.fullmatch(rule.operation_pattern, call.operation) is not None
+
+
+_BENIGN_TRACE_QUERY_KEYS = frozenset(
+    {
+        "limit",
+        "maxresults",
+        "page",
+        "page_size",
+        "pagesize",
+        "per_page",
+    }
+)
+
+
+def _trace_path_variants(path: str, pattern: str) -> set[str]:
+    """Return semantically equivalent trace paths for benign provider defaults.
+
+    Provider clients commonly add pagination controls, while GitHub defaults
+    ``state=open`` and ``ref=main`` when omitted. Those syntax differences should
+    not turn an otherwise identical evidence read into a benchmark failure.
+    Task-selecting filters and all non-default query values remain mandatory.
+    """
+
+    variants = {path}
+    parsed = urlsplit(path)
+    if parsed.scheme or parsed.netloc:
+        return variants
+    pairs = parse_qsl(parsed.query, keep_blank_values=True)
+    without_pagination = [
+        (key, value)
+        for key, value in pairs
+        if key.casefold() not in _BENIGN_TRACE_QUERY_KEYS
+    ]
+    if without_pagination != pairs:
+        rendered = urlencode(sorted(without_pagination))
+        variants.add(f"{parsed.path}?{rendered}" if rendered else parsed.path)
+
+    for candidate in tuple(variants):
+        candidate_parts = urlsplit(candidate)
+        candidate_pairs = parse_qsl(candidate_parts.query, keep_blank_values=True)
+        candidate_keys = {key for key, _ in candidate_pairs}
+        defaults: list[tuple[str, str]] = []
+        if r"\?state=open$" in pattern and "state" not in candidate_keys:
+            defaults.append(("state", "open"))
+        if r"\?ref=main$" in pattern and "ref" not in candidate_keys:
+            defaults.append(("ref", "main"))
+        if defaults:
+            rendered = urlencode(sorted([*candidate_pairs, *defaults]))
+            variants.add(f"{candidate_parts.path}?{rendered}")
+        if candidate_parts.path != "/" and candidate_parts.path.endswith("/"):
+            trimmed = candidate_parts.path.rstrip("/")
+            variants.add(f"{trimmed}?{candidate_parts.query}" if candidate_parts.query else trimmed)
+        elif not candidate_parts.path.endswith("/"):
+            with_slash = (
+                f"{candidate_parts.path}/?{candidate_parts.query}"
+                if candidate_parts.query
+                else f"{candidate}/"
+            )
+            variants.add(with_slash)
+    return variants
 
 
 def _rule_cardinality_matches(rule: MutationMatcherSpec, mutations: list[Mutation]) -> bool:
@@ -150,7 +215,7 @@ def _trace_cardinality_matches(
     *,
     check_status: bool = True,
 ) -> bool:
-    matching_calls = [call for call in trace if _trace_call_matches(rule, call, check_status=check_status)]
+    matching_calls = [call for call in trace if trace_call_matches(rule, call, check_status=check_status)]
     if rule.distinct_by == "path":
         count = len({call.path for call in matching_calls})
     elif rule.distinct_by == "operation":
@@ -198,11 +263,26 @@ def _required_trace_calls_are_distinct_and_causal(
     trace: list[ToolCallRecord],
     complexity: ComplexitySpec,
 ) -> bool:
-    """Assign every required slot to a unique event while respecting the task DAG."""
+    """Assign required slots uniquely while enforcing mutation boundaries.
+
+    Read-only discovery is intentionally order-insensitive: capable agents may
+    inspect a diff before opening the policy file or interleave independent
+    evidence reads. Every write must still follow all of its declared ancestors,
+    and every confirmation read must follow the write it confirms.
+    """
 
     rules_by_id = {rule.id: rule for rule in rules}
+    write_interactions = {
+        interaction.id
+        for interaction in complexity.tool_interactions
+        if interaction.kind.value == "write"
+    }
     predecessors = {
-        rule_id: dependencies & set(rules_by_id)
+        rule_id: {
+            dependency
+            for dependency in dependencies & set(rules_by_id)
+            if rule_id in write_interactions or dependency in write_interactions
+        }
         for rule_id, dependencies in _interaction_predecessors(complexity).items()
         if rule_id in rules_by_id
     }
@@ -236,7 +316,7 @@ def _required_trace_calls_are_distinct_and_causal(
         ]
         earliest_index = max(predecessor_indices, default=-1) + 1
         for call_index in range(earliest_index, len(trace)):
-            if call_index in used_calls or not _trace_call_matches(rule, trace[call_index]):
+            if call_index in used_calls or not trace_call_matches(rule, trace[call_index]):
                 continue
             distinct_value = _distinct_value(rule, trace[call_index], call_index)
             if distinct_value in distinct_values_by_rule[rule.id]:
@@ -268,7 +348,7 @@ def _evaluate_output(contract: OutputContractSpec, output: object) -> bool:
     if not isinstance(required_facts, dict):
         return False
     required_mapping = cast(dict[object, object], required_facts)
-    if not _is_subset(required_mapping, parsed):
+    if not _output_is_subset(required_mapping, parsed):
         return False
     if isinstance(forbidden_facts, dict):
         forbidden_mapping = cast(dict[object, object], forbidden_facts)
@@ -277,10 +357,50 @@ def _evaluate_output(contract: OutputContractSpec, output: object) -> bool:
     if isinstance(parsed, dict):
         parsed_mapping = cast(dict[object, object], parsed)
         if any(
-            key in parsed_mapping and _is_subset(value, parsed_mapping[key]) for key, value in forbidden_mapping.items()
+            key in parsed_mapping and _output_is_subset(value, parsed_mapping[key])
+            for key, value in forbidden_mapping.items()
         ):
             return False
     return True
+
+
+_OUTPUT_SYMBOL_ALIASES = {
+    "request_changes": "changes_requested",
+}
+
+
+def _normalized_output_symbol(value: str) -> str | None:
+    if re.fullmatch(r"[A-Za-z0-9_-]+", value) is None:
+        return None
+    normalized = re.sub(r"[^a-z0-9]+", "_", value.casefold()).strip("_")
+    return _OUTPUT_SYMBOL_ALIASES.get(normalized, normalized)
+
+
+def _output_is_subset(expected: object, actual: object) -> bool:
+    if isinstance(expected, dict):
+        if not isinstance(actual, dict):
+            return False
+        expected_mapping = cast(dict[object, object], expected)
+        actual_mapping = cast(dict[object, object], actual)
+        return all(
+            key in actual_mapping and _output_is_subset(value, actual_mapping[key])
+            for key, value in expected_mapping.items()
+        )
+    if isinstance(expected, list):
+        if not isinstance(actual, list):
+            return False
+        expected_items = cast(list[object], expected)
+        actual_items = cast(list[object], actual)
+        return len(expected_items) == len(actual_items) and all(
+            _output_is_subset(expected_value, actual_value)
+            for expected_value, actual_value in zip(expected_items, actual_items, strict=True)
+        )
+    if isinstance(expected, str) and isinstance(actual, str):
+        expected_symbol = _normalized_output_symbol(expected)
+        actual_symbol = _normalized_output_symbol(actual)
+        if expected_symbol is not None and actual_symbol is not None:
+            return expected_symbol == actual_symbol
+    return expected == actual
 
 
 def evaluate_deterministic(
@@ -309,7 +429,7 @@ def evaluate_deterministic(
             and call.status_code is not None
             and 200 <= call.status_code <= 299
         )
-        or any(_trace_call_matches(rule, call) for rule in deterministic.trace_policy.required_calls)
+        or any(trace_call_matches(rule, call) for rule in deterministic.trace_policy.required_calls)
     ]
     results: dict[str, bool] = {}
     critical_results: list[bool] = []
@@ -369,7 +489,7 @@ def evaluate_deterministic(
         call
         for call in candidate_trace
         if call.mutating
-        and not any(_trace_call_matches(rule, call, check_status=False) for rule in trace_policy.allowed_mutating_calls)
+        and not any(trace_call_matches(rule, call, check_status=False) for rule in trace_policy.allowed_mutating_calls)
     ]
     mutating_call_cardinality_violations: list[TraceCallRuleSpec] = []
     for rule in trace_policy.allowed_mutating_calls:
@@ -377,7 +497,7 @@ def evaluate_deterministic(
         passed = _trace_cardinality_matches(rule, mutating_trace, check_status=False)
         results[rule.id] = passed
         critical_results.append(passed)
-        matching_count = sum(_trace_call_matches(rule, call, check_status=False) for call in mutating_trace)
+        matching_count = sum(trace_call_matches(rule, call, check_status=False) for call in mutating_trace)
         if rule.max_count is not None and matching_count > rule.max_count:
             mutating_call_cardinality_violations.append(rule)
     results["trace.forbidden_paths"] = not forbidden_trace_calls
