@@ -41,6 +41,8 @@ from arga_twins_benchmark.specs.models import (
     WorldSpec,
 )
 
+PROVISION_TIMEOUT_SECONDS = 1_200
+
 
 @dataclass(frozen=True)
 class InstanceBundle:
@@ -520,7 +522,7 @@ async def run_trial(
             control_output=control_path,
             candidate_output=candidate_path,
             ttl_minutes=ttl_minutes,
-            timeout_seconds=600,
+            timeout_seconds=PROVISION_TIMEOUT_SECONDS,
         )
         state["phase"] = EpisodeState.TWINS_READY_AND_SEEDED
         write_private_json(trial_dir / "state.json", state)
