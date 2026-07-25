@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, cast
@@ -10,12 +12,18 @@ from typing import Any, cast
 import pytest
 
 from arga_twins_benchmark.runner.matrix import (
+    DirtyRunnerTreeError,
+    _merge_resumed_suite_manifest,  # pyright: ignore[reportPrivateUsage]
     _preliminary_grade,  # pyright: ignore[reportPrivateUsage]
     _prepare_trial_attempt,  # pyright: ignore[reportPrivateUsage]
+    _runner_commit,  # pyright: ignore[reportPrivateUsage]
+    _SuiteRunLock,  # pyright: ignore[reportPrivateUsage]
     _trace_call_records,  # pyright: ignore[reportPrivateUsage]
+    _validate_resume_prompt_ledger,  # pyright: ignore[reportPrivateUsage]
     build_trial_plans,
     load_env_file,
     load_experiment_bundles,
+    run_experiment_matrix,
 )
 from arga_twins_benchmark.runner.prompting import MODEL_PROFILES
 
@@ -59,6 +67,381 @@ def test_build_trial_plans_interleaves_models_per_instance() -> None:
     assert len(plans) == 144
     assert [plan.model.model_id for plan in plans[:3]] == [profile.model_id for profile in MODEL_PROFILES]
     assert len({plan.trial_id for plan in plans}) == 144
+
+
+def _suite_manifest(*, concurrency: int = 4) -> dict[str, Any]:
+    return {
+        "protocol": "arga-bench-suite/1",
+        "suite_run_id": "suite-1",
+        "experiment_id": "experiment-1",
+        "runner_commit": "original-commit",
+        "runner_commits": ["original-commit"],
+        "created_at": "2030-01-01T00:00:00+00:00",
+        "repeats": 1,
+        "concurrency": concurrency,
+        "ttl_minutes": 60,
+        "orphan_twin_lease_grace_seconds": 300,
+        "trial_count": 1,
+        "models": [{"model_id": "model-1", "fallback": False}],
+        "trials": [{"trial_id": "trial-1", "model": {"model_id": "model-1"}}],
+    }
+
+
+def test_resume_can_lower_concurrency_without_changing_suite_identity() -> None:
+    existing = _suite_manifest(concurrency=4)
+    expected = _suite_manifest(concurrency=1)
+
+    merged = _merge_resumed_suite_manifest(
+        existing,
+        expected,
+        requested_concurrency=1,
+        current_runner_commit="resume-commit",
+        resumed_at="2030-01-02T00:00:00+00:00",
+    )
+
+    assert existing == _suite_manifest(concurrency=4)
+    assert merged["concurrency"] == 4
+    assert merged["initial_concurrency"] == 4
+    assert merged["last_execution_concurrency"] == 1
+    assert merged["runner_commit"] == "original-commit"
+    assert merged["runner_commits"] == ["original-commit", "resume-commit"]
+    assert merged["concurrency_history"] == [
+        {
+            "event": "suite_created",
+            "concurrency": 4,
+            "recorded_at": "2030-01-01T00:00:00+00:00",
+            "runner_commit": "original-commit",
+            "backfilled_from_legacy": True,
+        },
+        {
+            "event": "suite_resumed",
+            "concurrency": 1,
+            "recorded_at": "2030-01-02T00:00:00+00:00",
+            "runner_commit": "resume-commit",
+        },
+    ]
+
+
+def test_each_resume_appends_concurrency_history_without_rewriting_prior_entries() -> None:
+    initial = _suite_manifest(concurrency=4)
+    first = _merge_resumed_suite_manifest(
+        initial,
+        _suite_manifest(concurrency=2),
+        requested_concurrency=2,
+        current_runner_commit="resume-one",
+        resumed_at="2030-01-02T00:00:00+00:00",
+    )
+    prior_history = json.loads(json.dumps(first["concurrency_history"]))
+
+    second = _merge_resumed_suite_manifest(
+        first,
+        _suite_manifest(concurrency=1),
+        requested_concurrency=1,
+        current_runner_commit="resume-two",
+        resumed_at="2030-01-03T00:00:00+00:00",
+    )
+
+    assert second["concurrency_history"][:-1] == prior_history
+    assert second["concurrency_history"][-1] == {
+        "event": "suite_resumed",
+        "concurrency": 1,
+        "recorded_at": "2030-01-03T00:00:00+00:00",
+        "runner_commit": "resume-two",
+    }
+    assert second["runner_commits"] == ["original-commit", "resume-one", "resume-two"]
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "match"),
+    [
+        ("event", "unexpected", "event must be 'suite_resumed'"),
+        ("recorded_at", "2029-12-31T00:00:00+00:00", "timestamps are not chronological"),
+    ],
+)
+def test_resume_rejects_inconsistent_concurrency_history(
+    field: str,
+    value: str,
+    match: str,
+) -> None:
+    prior = _merge_resumed_suite_manifest(
+        _suite_manifest(concurrency=4),
+        _suite_manifest(concurrency=2),
+        requested_concurrency=2,
+        current_runner_commit="resume-one",
+        resumed_at="2030-01-02T00:00:00+00:00",
+    )
+    prior["concurrency_history"][1][field] = value
+
+    with pytest.raises(ValueError, match=match):
+        _merge_resumed_suite_manifest(
+            prior,
+            _suite_manifest(concurrency=1),
+            requested_concurrency=1,
+            current_runner_commit="resume-two",
+            resumed_at="2030-01-03T00:00:00+00:00",
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "changed_value"),
+    [
+        ("suite_run_id", "different-suite"),
+        ("experiment_id", "different-experiment"),
+        ("repeats", 2),
+        ("ttl_minutes", 30),
+        ("orphan_twin_lease_grace_seconds", 600),
+        ("trial_count", 2),
+        ("models", [{"model_id": "different-model", "fallback": False}]),
+        ("trials", [{"trial_id": "different-trial", "model": {"model_id": "model-1"}}]),
+    ],
+)
+def test_resume_rejects_immutable_suite_identity_changes(field: str, changed_value: object) -> None:
+    existing = _suite_manifest()
+    expected = _suite_manifest(concurrency=1)
+    expected[field] = changed_value
+
+    with pytest.raises(ValueError, match=f"manifest fields changed: {field}"):
+        _merge_resumed_suite_manifest(
+            existing,
+            expected,
+            requested_concurrency=1,
+            current_runner_commit="resume-commit",
+            resumed_at="2030-01-02T00:00:00+00:00",
+        )
+
+
+def test_resume_backfills_legacy_ttl_fields_but_rejects_invalid_concurrency_history() -> None:
+    legacy = _suite_manifest()
+    del legacy["ttl_minutes"]
+    del legacy["orphan_twin_lease_grace_seconds"]
+    merged = _merge_resumed_suite_manifest(
+        legacy,
+        _suite_manifest(concurrency=1),
+        requested_concurrency=1,
+        current_runner_commit="resume-commit",
+        resumed_at="2030-01-02T00:00:00+00:00",
+    )
+
+    assert merged["ttl_minutes"] == 60
+    assert merged["orphan_twin_lease_grace_seconds"] == 300
+
+    inconsistent_history = _suite_manifest()
+    inconsistent_history["initial_concurrency"] = 2
+    with pytest.raises(ValueError, match="initial_concurrency does not match"):
+        _merge_resumed_suite_manifest(
+            inconsistent_history,
+            _suite_manifest(concurrency=1),
+            requested_concurrency=1,
+            current_runner_commit="resume-commit",
+            resumed_at="2030-01-02T00:00:00+00:00",
+        )
+
+
+def test_resume_validates_prompt_ledger_identity_without_using_generated_at() -> None:
+    existing = {
+        "protocol": "arga-bench-prompt-ledger/1",
+        "experiment_id": "experiment-1",
+        "models": [{"model_id": "model-1"}],
+        "entry_count": 1,
+        "entries": [{"instance_id": "instance-1", "model_id": "model-1", "user_prompt": "original"}],
+        "generated_at": "2030-01-01T00:00:00+00:00",
+    }
+    regenerated = {**existing, "generated_at": "2030-01-02T00:00:00+00:00"}
+
+    _validate_resume_prompt_ledger(existing, regenerated, suite_run_id="suite-1")
+
+    regenerated["entries"] = [{"instance_id": "instance-1", "model_id": "model-1", "user_prompt": "changed"}]
+    with pytest.raises(ValueError, match="prompt ledger or experiment content changed"):
+        _validate_resume_prompt_ledger(existing, regenerated, suite_run_id="suite-1")
+
+
+def test_run_matrix_resume_uses_new_concurrency_without_rewriting_identity_artifacts(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    suite_dir = tmp_path / "suite-1"
+    suite_dir.mkdir()
+    existing_manifest = _suite_manifest(concurrency=4)
+    existing_manifest["models"] = []
+    existing_manifest["trial_count"] = 0
+    existing_manifest["trials"] = []
+    (suite_dir / "suite.json").write_text(json.dumps(existing_manifest))
+    existing_ledger: dict[str, Any] = {
+        "protocol": "arga-bench-prompt-ledger/1",
+        "experiment_id": "experiment-1",
+        "models": [],
+        "entry_count": 0,
+        "entries": [],
+        "generated_at": "2030-01-01T00:00:00+00:00",
+    }
+    original_ledger_text = json.dumps(existing_ledger)
+    (suite_dir / "prompt-ledger.json").write_text(original_ledger_text)
+    (suite_dir / "prompt-ledger.md").write_text("original prompt ledger\n")
+
+    regenerated_ledger: dict[str, Any] = {
+        **existing_ledger,
+        "generated_at": "2030-01-02T00:00:00+00:00",
+    }
+
+    def fake_load_experiment(*_args: object) -> tuple[Any, dict[str, Any]]:
+        return SimpleNamespace(), {}
+
+    def fake_prompt_ledger(*_args: object, **_kwargs: object) -> dict[str, Any]:
+        return regenerated_ledger
+
+    def fake_trial_plans(*_args: object, **_kwargs: object) -> list[Any]:
+        return []
+
+    def fail_render(*_args: object) -> str:
+        raise AssertionError("resume must not rewrite prompt ledger markdown")
+
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.load_experiment_bundles",
+        fake_load_experiment,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.prompt_ledger_payload",
+        fake_prompt_ledger,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.build_trial_plans",
+        fake_trial_plans,
+    )
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix._runner_commit", lambda: "resume-commit")
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix._utc_now",
+        lambda: "2030-01-02T00:00:00+00:00",
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.render_prompt_ledger_markdown",
+        fail_render,
+    )
+
+    summary = asyncio.run(
+        run_experiment_matrix(
+            catalog_root=tmp_path / "unused-catalog",
+            experiment_id="experiment-1",
+            output_root=tmp_path,
+            model_profiles=(),
+            repeats=1,
+            concurrency=1,
+            ttl_minutes=60,
+            suite_run_id="suite-1",
+        )
+    )
+
+    resumed_manifest = json.loads((suite_dir / "suite.json").read_text())
+    assert resumed_manifest["concurrency"] == 4
+    assert resumed_manifest["last_execution_concurrency"] == 1
+    assert [entry["concurrency"] for entry in resumed_manifest["concurrency_history"]] == [4, 1]
+    assert (suite_dir / "prompt-ledger.json").read_text() == original_ledger_text
+    assert (suite_dir / "prompt-ledger.md").read_text() == "original prompt ledger\n"
+    assert summary["execution_concurrency"] == 1
+    assert summary["concurrency_history_entries"] == 2
+
+
+def test_matrix_holds_a_cross_process_lock_for_the_entire_run(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def fake_locked_runner(**_kwargs: object) -> dict[str, Any]:
+        lock_path = tmp_path / "suite-1" / ".matrix.lock"
+        probe = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                (
+                    "import sys\n"
+                    "from pathlib import Path\n"
+                    "from arga_twins_benchmark.runner.matrix import _SuiteRunLock, SuiteRunLockedError\n"
+                    "try:\n"
+                    "    with _SuiteRunLock(Path(sys.argv[1])):\n"
+                    "        pass\n"
+                    "except SuiteRunLockedError:\n"
+                    "    print('blocked')\n"
+                    "else:\n"
+                    "    raise SystemExit('concurrent process unexpectedly acquired suite lock')\n"
+                ),
+                str(lock_path),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert probe.returncode == 0, probe.stderr
+        assert probe.stdout.strip() == "blocked"
+        return {"suite_run_id": "suite-1", "status": "test-complete"}
+
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix._run_experiment_matrix_locked",
+        fake_locked_runner,
+    )
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix._runner_commit", lambda: "clean-commit")
+
+    summary = asyncio.run(
+        run_experiment_matrix(
+            catalog_root=tmp_path / "unused",
+            experiment_id="experiment-1",
+            output_root=tmp_path,
+            model_profiles=(),
+            suite_run_id="suite-1",
+        )
+    )
+
+    assert summary["status"] == "test-complete"
+    lock_payload = json.loads((tmp_path / "suite-1" / ".matrix.lock").read_text())
+    assert lock_payload["protocol"] == "arga-bench-suite-lock/1"
+
+
+def test_suite_lock_releases_if_owner_metadata_cannot_be_synced(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    lock_path = tmp_path / "suite-1" / ".matrix.lock"
+    real_fsync = os.fsync
+
+    def fail_fsync(_file_descriptor: int) -> None:
+        raise OSError("simulated lock metadata sync failure")
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.os.fsync", fail_fsync)
+    with pytest.raises(OSError, match="simulated lock metadata sync failure"):
+        with _SuiteRunLock(lock_path):
+            raise AssertionError("unreachable")
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.os.fsync", real_fsync)
+    with _SuiteRunLock(lock_path):
+        pass
+
+
+def test_runner_commit_fails_closed_for_a_dirty_source_tree(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_check_output(command: list[str], *, text: bool) -> str:
+        assert text is True
+        return "commit-123\n" if "rev-parse" in command else " M src/runner.py\n"
+
+    monkeypatch.setattr(subprocess, "check_output", fake_check_output)
+
+    with pytest.raises(DirtyRunnerTreeError, match="commit them before starting or resuming"):
+        _runner_commit()
+
+
+def test_runner_commit_uses_the_source_repository_from_an_alternate_cwd(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    commands: list[list[str]] = []
+
+    def fake_check_output(command: list[str], *, text: bool) -> str:
+        assert text is True
+        commands.append(command)
+        return "commit-123\n" if "rev-parse" in command else ""
+
+    monkeypatch.setattr(subprocess, "check_output", fake_check_output)
+    monkeypatch.chdir(tmp_path)
+
+    assert _runner_commit() == "commit-123"
+    expected_repository = Path(_runner_commit.__code__.co_filename).resolve().parents[3]
+    assert len(commands) == 2
+    assert all(command[1:3] == ["-C", str(expected_repository)] for command in commands)
 
 
 def test_load_env_file_does_not_overwrite_existing_values(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

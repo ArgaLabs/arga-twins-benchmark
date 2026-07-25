@@ -20,10 +20,13 @@ from arga_twins_benchmark.agents.models import (
     ToolSchemaInput,
     normalize_tool_schemas,
 )
+from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 MAX_OUTPUT_TOKENS = 16_384
+
+
 class AnthropicMessagesAdapter:
     def __init__(
         self,
@@ -277,6 +280,8 @@ class AnthropicMessagesAdapter:
                                 try:
                                     tool_output = await execute_tool(cast(str, name), arguments)
                                 except asyncio.CancelledError:
+                                    raise
+                                except RetryableInfrastructureError:
                                     raise
                                 except Exception as error:
                                     tool_output = {

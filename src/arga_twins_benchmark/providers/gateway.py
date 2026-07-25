@@ -12,9 +12,47 @@ from urllib.parse import parse_qsl, unquote, urlencode, urlsplit
 
 import httpx
 
+from arga_twins_benchmark.errors import RetryableInfrastructureError
+
 PROVIDER_API_TOOL_NAME: Final = "provider_api"
 
 _ALLOWED_METHODS: Final = frozenset({"GET", "POST", "PATCH", "PUT", "DELETE"})
+_DEFAULT_PROXY_INFRASTRUCTURE_FAILURE_THRESHOLD: Final = 3
+# This marker is authoritative only when the preview proxy strips it from all
+# upstream responses and injects it exclusively on proxy-generated failures.
+# Until that server-side contract is deployed, envelope failures stay tool-visible.
+_PREVIEW_PROXY_FAILURE_HEADER: Final = "x-arga-preview-proxy-failure"
+_PREVIEW_PROXY_FAILURE_HEADER_VALUE: Final = "1"
+_PREVIEW_PROXY_FAILURE_SIGNATURES: Final[dict[str, tuple[int, str, str, bool]]] = {
+    "authentication_required": (401, "runtime", "auth_failure", False),
+    "environment_deploy_failed": (409, "deploy", "deploy_failure", False),
+    "environment_destroyed": (410, "cleanup", "proxy_failure", False),
+    "environment_not_ready": (409, "deploy", "deploy_failure", True),
+    "invalid_token": (401, "runtime", "auth_failure", False),
+    "pr_preview_not_found": (404, "runtime", "proxy_failure", False),
+    "preview_host_not_found": (404, "runtime", "proxy_failure", False),
+    "proxy_runtime_error": (500, "runtime", "proxy_failure", False),
+    "run_not_found": (404, "runtime", "proxy_failure", False),
+    "surface_not_ready": (409, "deploy", "deploy_failure", True),
+    "upstream_connect_error": (502, "runtime", "connect_error", True),
+    "upstream_connect_timeout": (502, "runtime", "connect_error", True),
+    "upstream_http_error": (502, "runtime", "proxy_failure", True),
+    "upstream_timeout": (504, "runtime", "timeout", True),
+    "user_not_found": (401, "runtime", "auth_failure", False),
+}
+_IMMEDIATE_PREVIEW_PROXY_FAILURE_CODES: Final = frozenset(
+    {
+        "authentication_required",
+        "environment_deploy_failed",
+        "environment_destroyed",
+        "invalid_token",
+        "pr_preview_not_found",
+        "preview_host_not_found",
+        "proxy_runtime_error",
+        "run_not_found",
+        "user_not_found",
+    }
+)
 _CONTROL_PLANE_PREFIXES: Final = frozenset(
     {
         "_admin",
@@ -44,6 +82,7 @@ _BLOCKED_REQUEST_HEADERS: Final = frozenset(
         "trailer",
         "transfer-encoding",
         "upgrade",
+        "x-request-id",
     }
 )
 _SENSITIVE_RESPONSE_HEADERS: Final = frozenset(
@@ -63,6 +102,30 @@ _MISSING: Final = object()
 
 class ProviderGatewayConfigurationError(ValueError):
     """Raised when provisioned candidate access cannot form a safe gateway."""
+
+
+class ProviderInfrastructureError(RetryableInfrastructureError):
+    """Raised when repeated transport or exact proxy failures prove the twin unavailable."""
+
+    def __init__(
+        self,
+        *,
+        code: str,
+        status_code: int | None,
+        consecutive_failures: int,
+    ) -> None:
+        self.code = code
+        self.status_code = status_code
+        self.consecutive_failures = consecutive_failures
+        failure_origin = (
+            f"preview proxy returned {code} (HTTP {status_code})"
+            if status_code is not None
+            else code
+        )
+        super().__init__(
+            "provider infrastructure unavailable: "
+            f"{failure_origin}; consecutive infrastructure failures: {consecutive_failures}"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,6 +170,7 @@ class ProviderGateway:
         timeout_seconds: float = 30.0,
         max_response_bytes: int = 262_144,
         max_request_bytes: int = 262_144,
+        proxy_infrastructure_failure_threshold: int = _DEFAULT_PROXY_INFRASTRUCTURE_FAILURE_THRESHOLD,
         client: httpx.AsyncClient | None = None,
     ) -> None:
         if timeout_seconds <= 0:
@@ -115,12 +179,16 @@ class ProviderGateway:
             raise ProviderGatewayConfigurationError("max_response_bytes must be positive")
         if max_request_bytes < 1:
             raise ProviderGatewayConfigurationError("max_request_bytes must be positive")
+        if proxy_infrastructure_failure_threshold < 1:
+            raise ProviderGatewayConfigurationError("proxy infrastructure failure threshold must be positive")
 
         self._providers = _validate_provider_access(provider_access)
         self._roles = _validate_provider_roles(provider_roles or {}, self._providers)
         self._timeout_seconds = timeout_seconds
         self._max_response_bytes = max_response_bytes
         self._max_request_bytes = max_request_bytes
+        self._proxy_infrastructure_failure_threshold = proxy_infrastructure_failure_threshold
+        self._consecutive_proxy_infrastructure_failures = 0
         self._client = client or httpx.AsyncClient(timeout=timeout_seconds, follow_redirects=False)
         self._owns_client = client is None
         self._trace_records: list[ProviderTraceRecord] = []
@@ -265,6 +333,25 @@ class ProviderGateway:
                 truncated=truncated,
                 error=None,
             )
+            proxy_failure_code = _preview_proxy_infrastructure_failure_code(
+                status_code=response.status_code,
+                body=response_body,
+                response_request_id=response.headers.get("x-request-id"),
+                proxy_failure_marker=response.headers.get(_PREVIEW_PROXY_FAILURE_HEADER),
+            )
+            if proxy_failure_code is None:
+                self._consecutive_proxy_infrastructure_failures = 0
+            else:
+                self._consecutive_proxy_infrastructure_failures += 1
+                if (
+                    proxy_failure_code in _IMMEDIATE_PREVIEW_PROXY_FAILURE_CODES
+                    or self._consecutive_proxy_infrastructure_failures >= self._proxy_infrastructure_failure_threshold
+                ):
+                    raise ProviderInfrastructureError(
+                        code=proxy_failure_code,
+                        status_code=response.status_code,
+                        consecutive_failures=self._consecutive_proxy_infrastructure_failures,
+                    )
             return {
                 "ok": response.is_success,
                 "requested_provider": requested_provider,
@@ -278,7 +365,53 @@ class ProviderGateway:
                 "error": None,
                 "trace": trace.to_dict(),
             }
+        except (
+            httpx.NetworkError,
+            httpx.ProxyError,
+            httpx.RemoteProtocolError,
+            httpx.TimeoutException,
+        ) as exc:
+            self._consecutive_proxy_infrastructure_failures += 1
+            latency_ms = _elapsed_ms(started)
+            error = _public_error(exc)
+            trace = self._append_trace(
+                started_at=started_at,
+                requested_provider=requested_provider,
+                provider=resolved_provider if resolved_provider in self._providers else None,
+                method=method,
+                path=effective_path,
+                operation=operation,
+                operation_type=operation_type,
+                status_code=None,
+                latency_ms=latency_ms,
+                response_bytes=0,
+                truncated=False,
+                error=error,
+            )
+            if (
+                self._consecutive_proxy_infrastructure_failures
+                >= self._proxy_infrastructure_failure_threshold
+            ):
+                raise ProviderInfrastructureError(
+                    code=_transport_infrastructure_failure_code(exc),
+                    status_code=None,
+                    consecutive_failures=self._consecutive_proxy_infrastructure_failures,
+                ) from exc
+            return {
+                "ok": False,
+                "requested_provider": requested_provider,
+                "provider": resolved_provider if resolved_provider in self._providers else None,
+                "method": method,
+                "path": effective_path,
+                "status_code": None,
+                "headers": {},
+                "body": None,
+                "truncated": False,
+                "error": error,
+                "trace": trace.to_dict(),
+            }
         except (httpx.HTTPError, ValueError) as exc:
+            self._consecutive_proxy_infrastructure_failures = 0
             latency_ms = _elapsed_ms(started)
             error = _public_error(exc)
             trace = self._append_trace(
@@ -352,6 +485,53 @@ class ProviderGateway:
         )
         self._trace_records.append(trace)
         return trace
+
+
+def _preview_proxy_infrastructure_failure_code(
+    *,
+    status_code: int,
+    body: object,
+    response_request_id: str | None,
+    proxy_failure_marker: str | None,
+) -> str | None:
+    """Recognize a proxy-owned marker plus the exact structured Arga failure envelope."""
+
+    if proxy_failure_marker != _PREVIEW_PROXY_FAILURE_HEADER_VALUE or not isinstance(body, dict):
+        return None
+    response_body = cast(dict[str, object], body)
+    code = response_body.get("code")
+    body_request_id = response_body.get("request_id")
+    failure_value = response_body.get("failure")
+    if (
+        not isinstance(code, str)
+        or not isinstance(failure_value, dict)
+        or not isinstance(body_request_id, str)
+        or not body_request_id
+        or body_request_id != response_request_id
+    ):
+        return None
+    signature = _PREVIEW_PROXY_FAILURE_SIGNATURES.get(code)
+    if signature is None:
+        return None
+    expected_status, expected_phase, expected_kind, expected_retryable = signature
+    failure = cast(dict[str, object], failure_value)
+    if (
+        status_code != expected_status
+        or failure.get("code") != code
+        or failure.get("phase") != expected_phase
+        or failure.get("kind") != expected_kind
+        or failure.get("retryable") is not expected_retryable
+    ):
+        return None
+    return code
+
+
+def _transport_infrastructure_failure_code(exc: httpx.TransportError) -> str:
+    if isinstance(exc, httpx.TimeoutException):
+        return "transport_timeout"
+    if isinstance(exc, httpx.ConnectError):
+        return "transport_connect_error"
+    return "transport_error"
 
 
 def _validate_provider_access(

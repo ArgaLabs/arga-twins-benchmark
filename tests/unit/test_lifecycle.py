@@ -1,5 +1,7 @@
 import asyncio
 import json
+import os
+import stat
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any, cast
@@ -183,6 +185,74 @@ def test_private_json_is_mode_0600(tmp_path: Path) -> None:
 
     assert json.loads(output.read_text()) == {"secret": "value"}
     assert oct(output.stat().st_mode & 0o777) == "0o600"
+
+
+def test_private_json_atomically_replaces_from_synced_private_file(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    output = tmp_path / "control.json"
+    output.write_text('{"old": true}\n')
+    output.chmod(0o644)
+    real_fsync = os.fsync
+    real_replace = os.replace
+    synced_file_types: list[int] = []
+    replacements: list[tuple[Path, Path, int]] = []
+
+    def tracked_fsync(file_descriptor: int) -> None:
+        synced_file_types.append(stat.S_IFMT(os.fstat(file_descriptor).st_mode))
+        real_fsync(file_descriptor)
+
+    def tracked_replace(source: str | Path, destination: str | Path) -> None:
+        source_path = Path(source)
+        destination_path = Path(destination)
+        replacements.append(
+            (
+                source_path,
+                destination_path,
+                source_path.stat().st_mode & 0o777,
+            )
+        )
+        assert source_path.parent == destination_path.parent
+        assert json.loads(source_path.read_text()) == {"secret": "new"}
+        real_replace(source, destination)
+
+    monkeypatch.setattr("arga_twins_benchmark.lifecycle.os.fsync", tracked_fsync)
+    monkeypatch.setattr("arga_twins_benchmark.lifecycle.os.replace", tracked_replace)
+
+    write_private_json(output, {"secret": "new"})
+
+    assert len(replacements) == 1
+    temporary_path, destination_path, temporary_mode = replacements[0]
+    assert temporary_path.name.startswith(f".{output.name}.")
+    assert temporary_path.suffix == ".tmp"
+    assert destination_path == output
+    assert temporary_mode == 0o600
+    assert stat.S_IFREG in synced_file_types
+    assert stat.S_IFDIR in synced_file_types
+    assert json.loads(output.read_text()) == {"secret": "new"}
+    assert output.stat().st_mode & 0o777 == 0o600
+    assert list(tmp_path.glob(f".{output.name}.*.tmp")) == []
+
+
+def test_private_json_preserves_destination_and_cleans_temp_when_replace_fails(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    output = tmp_path / "control.json"
+    output.write_text('{"old": true}\n')
+
+    def fail_replace(source: str | Path, destination: str | Path) -> None:
+        del source, destination
+        raise OSError("simulated replace failure")
+
+    monkeypatch.setattr("arga_twins_benchmark.lifecycle.os.replace", fail_replace)
+
+    with pytest.raises(OSError, match="simulated replace failure"):
+        write_private_json(output, {"secret": "new"})
+
+    assert json.loads(output.read_text()) == {"old": True}
+    assert list(tmp_path.glob(f".{output.name}.*.tmp")) == []
 
 
 def test_control_ids_are_required(tmp_path: Path) -> None:

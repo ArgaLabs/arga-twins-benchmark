@@ -40,7 +40,21 @@ def _build_suite(tmp_path: Path, *, broken: bool = False) -> Path:
             "protocol": "arga-bench-suite/1",
             "suite_run_id": "suite-1",
             "experiment_id": "experiment-1",
+            "runner_commit": "commit-1",
+            "runner_commits": ["commit-1"],
+            "created_at": "2030-01-01T00:00:00+00:00",
             "trial_count": 1,
+            "concurrency": 4,
+            "initial_concurrency": 4,
+            "last_execution_concurrency": 4,
+            "concurrency_history": [
+                {
+                    "event": "suite_created",
+                    "concurrency": 4,
+                    "recorded_at": "2030-01-01T00:00:00+00:00",
+                    "runner_commit": "commit-1",
+                }
+            ],
             "trials": [
                 {
                     "trial_id": trial_id,
@@ -152,6 +166,15 @@ def test_audit_suite_accepts_complete_exact_local_evidence(tmp_path: Path) -> No
     assert report["integrity_passed"] is True
     assert report["benchmark_contract_passed"] is True
     assert report["scoring_ready"] is True
+    assert report["concurrency"] == {
+        "original_concurrency": 4,
+        "initial_concurrency": 4,
+        "last_execution_concurrency": 4,
+        "history_entries": 1,
+        "legacy_backfilled": False,
+        "valid": True,
+        "issues": [],
+    }
     assert report["by_model"] == {
         "model-1": {
             "expected": 1,
@@ -178,3 +201,69 @@ def test_audit_suite_reports_each_integrity_and_readiness_failure(tmp_path: Path
     assert checks["cleanup_identity"]["violation_count"] == 1
     assert checks["cleanup_inert"]["violation_count"] == 1
     assert checks["state_grade_completeness"]["violation_count"] == 1
+
+
+def test_audit_safely_backfills_a_legacy_concurrency_manifest(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    manifest_path = suite_dir / "suite.json"
+    manifest = json.loads(manifest_path.read_text())
+    for field in ("initial_concurrency", "last_execution_concurrency", "concurrency_history"):
+        del manifest[field]
+    manifest["runner_commits"] = ["commit-1", "commit-2"]
+    manifest["last_resumed_at"] = "2030-01-02T00:00:00+00:00"
+    _write_json(manifest_path, manifest)
+
+    report = audit_suite(suite_dir)
+
+    assert report["integrity_passed"] is True
+    assert report["concurrency"] == {
+        "original_concurrency": 4,
+        "initial_concurrency": 4,
+        "last_execution_concurrency": 4,
+        "history_entries": 2,
+        "legacy_backfilled": True,
+        "valid": True,
+        "issues": [],
+    }
+
+
+def test_audit_rejects_invalid_concurrency_events_and_timestamp_order(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    manifest_path = suite_dir / "suite.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["last_execution_concurrency"] = 2
+    manifest["last_resumed_at"] = "2029-12-31T00:00:00+00:00"
+    manifest["concurrency_history"].append(
+        {
+            "event": "arbitrary_event",
+            "concurrency": 2,
+            "recorded_at": "2029-12-31T00:00:00+00:00",
+            "runner_commit": "commit-1",
+        }
+    )
+    _write_json(manifest_path, manifest)
+
+    report = audit_suite(suite_dir)
+
+    assert report["integrity_passed"] is False
+    assert report["checks"]["concurrency_history"]["violation_count"] == 1
+    issues = report["concurrency"]["issues"]
+    assert "concurrency_history[1].event must be 'suite_resumed'" in issues
+    assert "concurrency history timestamps are not chronological" in issues
+
+
+def test_missing_trial_does_not_reduce_suite_level_concurrency_audit_coverage(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    next((suite_dir / "trials").glob("*/result.json")).unlink()
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["concurrency_history"] == {
+        "checked": 1,
+        "passed_count": 1,
+        "not_applicable": 0,
+        "violations": [],
+        "violation_count": 0,
+        "passed": True,
+        "coverage_complete": True,
+    }

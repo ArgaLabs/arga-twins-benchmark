@@ -4,6 +4,7 @@ import hashlib
 import json
 from collections import Counter, defaultdict
 from collections.abc import Mapping
+from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
 from urllib.parse import unquote, urlsplit
@@ -36,7 +37,8 @@ _CLEAN_TERMINAL_STATUSES = frozenset(
         "failed",
     }
 )
-_CHECK_NAMES = (
+_SUITE_CHECK_NAMES = ("concurrency_history",)
+_TRIAL_CHECK_NAMES = (
     "response_model",
     "prompt_hash",
     "no_fallback",
@@ -48,6 +50,7 @@ _CHECK_NAMES = (
     "cleanup_inert",
     "state_grade_completeness",
 )
+_CHECK_NAMES = _SUITE_CHECK_NAMES + _TRIAL_CHECK_NAMES
 
 
 class SuiteAuditError(ValueError):
@@ -56,6 +59,180 @@ class SuiteAuditError(ValueError):
 
 def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+def _parse_aware_timestamp(value: object) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo is not None else None
+
+
+def _manifest_concurrency_audit(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    original = manifest.get("concurrency")
+    initial = manifest.get("initial_concurrency", original)
+    last_execution = manifest.get("last_execution_concurrency", initial)
+    raw_history = manifest.get("concurrency_history")
+    raw_runner_commits = manifest.get("runner_commits")
+    issues: list[str] = []
+    legacy_backfilled = False
+
+    if (
+        isinstance(original, bool)
+        or not isinstance(original, int)
+        or not 1 <= original <= 16
+        or isinstance(initial, bool)
+        or not isinstance(initial, int)
+        or not 1 <= initial <= 16
+    ):
+        issues.append("concurrency and initial_concurrency must be integers between 1 and 16")
+    elif original != initial:
+        issues.append("initial_concurrency does not match the preserved concurrency")
+    if (
+        isinstance(last_execution, bool)
+        or not isinstance(last_execution, int)
+        or not 1 <= last_execution <= 16
+    ):
+        issues.append("last_execution_concurrency must be an integer between 1 and 16")
+
+    runner_commit = manifest.get("runner_commit")
+    if not isinstance(runner_commit, str) or not runner_commit:
+        issues.append("runner_commit must be a non-empty string")
+
+    runner_commit_items: list[str] = []
+    if raw_runner_commits is None and isinstance(runner_commit, str) and runner_commit:
+        runner_commit_items = [runner_commit]
+        legacy_backfilled = True
+    elif (
+        not isinstance(raw_runner_commits, list)
+        or not raw_runner_commits
+        or not all(isinstance(commit, str) and commit for commit in cast(list[object], raw_runner_commits))
+    ):
+        issues.append("runner_commits must be an array of non-empty strings")
+    else:
+        runner_commit_items = list(cast(list[str], raw_runner_commits))
+        if len(set(runner_commit_items)) != len(runner_commit_items):
+            issues.append("runner_commits contains duplicates")
+        if runner_commit_items and runner_commit_items[0] != runner_commit:
+            issues.append("runner_commits does not begin with runner_commit")
+    runner_commits = set(runner_commit_items)
+
+    history: list[dict[str, Any]] = []
+    if raw_history is None:
+        created_at = manifest.get("created_at")
+        created_timestamp = _parse_aware_timestamp(created_at)
+        if (
+            created_timestamp is None
+            or not isinstance(created_at, str)
+            or not isinstance(runner_commit, str)
+            or not runner_commit
+            or isinstance(initial, bool)
+            or not isinstance(initial, int)
+            or not 1 <= initial <= 16
+        ):
+            issues.append("legacy concurrency history cannot be safely backfilled")
+        else:
+            history.append(
+                {
+                    "event": "suite_created",
+                    "concurrency": initial,
+                    "recorded_at": created_at,
+                    "runner_commit": runner_commit,
+                    "backfilled_from_legacy": True,
+                }
+            )
+            last_resumed_at = manifest.get("last_resumed_at")
+            if last_resumed_at is not None:
+                last_resumed_timestamp = _parse_aware_timestamp(last_resumed_at)
+                if last_resumed_timestamp is None or last_resumed_timestamp < created_timestamp:
+                    issues.append("legacy last_resumed_at is invalid or precedes created_at")
+                else:
+                    legacy_resume_commit = runner_commit_items[-1] if runner_commit_items else runner_commit
+                    history.append(
+                        {
+                            "event": "suite_resumed",
+                            "concurrency": last_execution,
+                            "recorded_at": last_resumed_at,
+                            "runner_commit": legacy_resume_commit,
+                            "backfilled_from_legacy": True,
+                        }
+                    )
+            legacy_backfilled = True
+    elif not isinstance(raw_history, list) or not raw_history:
+        issues.append("concurrency_history is missing or empty")
+    else:
+        for index, raw_entry in enumerate(cast(list[object], raw_history)):
+            if not isinstance(raw_entry, dict):
+                issues.append(f"concurrency_history[{index}] is not an object")
+                continue
+            entry = cast(dict[str, Any], raw_entry)
+            concurrency = entry.get("concurrency")
+            if (
+                isinstance(concurrency, bool)
+                or not isinstance(concurrency, int)
+                or not 1 <= concurrency <= 16
+            ):
+                issues.append(f"concurrency_history[{index}].concurrency is invalid")
+            expected_event = "suite_created" if index == 0 else "suite_resumed"
+            if entry.get("event") != expected_event:
+                issues.append(f"concurrency_history[{index}].event must be {expected_event!r}")
+            if not isinstance(entry.get("runner_commit"), str) or not entry["runner_commit"]:
+                issues.append(f"concurrency_history[{index}].runner_commit is invalid")
+            if _parse_aware_timestamp(entry.get("recorded_at")) is None:
+                issues.append(f"concurrency_history[{index}].recorded_at is not an aware timestamp")
+            if entry.get("backfilled_from_legacy") is True:
+                legacy_backfilled = True
+            history.append(entry)
+
+    if history and history[0].get("concurrency") != initial:
+        issues.append("first concurrency history entry does not preserve initial_concurrency")
+    if history and history[-1].get("concurrency") != last_execution:
+        issues.append("last concurrency history entry does not match last_execution_concurrency")
+    if history and history[0].get("runner_commit") != runner_commit:
+        issues.append("first concurrency history commit does not match runner_commit")
+    timestamps = [_parse_aware_timestamp(entry.get("recorded_at")) for entry in history]
+    valid_timestamps = [timestamp for timestamp in timestamps if timestamp is not None]
+    if len(valid_timestamps) == len(history) and any(
+        current < previous for previous, current in zip(valid_timestamps, valid_timestamps[1:], strict=False)
+    ):
+        issues.append("concurrency history timestamps are not chronological")
+    created_timestamp = _parse_aware_timestamp(manifest.get("created_at"))
+    if history and (created_timestamp is None or timestamps[0] != created_timestamp):
+        issues.append("first concurrency history timestamp does not match created_at")
+    last_resumed_at = manifest.get("last_resumed_at")
+    if len(history) == 1 and last_resumed_at is not None:
+        issues.append("last_resumed_at exists without a resume history entry")
+    elif len(history) > 1:
+        parsed_last_resumed_at = _parse_aware_timestamp(last_resumed_at)
+        if parsed_last_resumed_at is None or timestamps[-1] != parsed_last_resumed_at:
+            issues.append("last concurrency history timestamp does not match last_resumed_at")
+    for index, entry in enumerate(history):
+        commit = entry.get("runner_commit")
+        if isinstance(commit, str) and commit not in runner_commits:
+            issues.append(f"concurrency_history[{index}].runner_commit is absent from runner_commits")
+    if history and not legacy_backfilled:
+        ordered_history_commits = list(
+            dict.fromkeys(
+                cast(str, entry["runner_commit"])
+                for entry in history
+                if isinstance(entry.get("runner_commit"), str) and entry["runner_commit"]
+            )
+        )
+        if ordered_history_commits != runner_commit_items:
+            issues.append("runner_commits order does not match concurrency_history")
+
+    return {
+        "original_concurrency": original,
+        "initial_concurrency": initial,
+        "last_execution_concurrency": last_execution,
+        "history_entries": len(history),
+        "legacy_backfilled": legacy_backfilled,
+        "valid": not issues,
+        "issues": issues,
+    }
 
 
 def _read_json_object(path: Path, *, label: str) -> dict[str, Any]:
@@ -707,6 +884,18 @@ def audit_suite(
 
     checks = _new_check_totals()
     violation_trials: dict[str, set[str]] = defaultdict(set)
+    concurrency_audit = _manifest_concurrency_audit(manifest)
+    concurrency_issues = cast(list[str], concurrency_audit["issues"])
+    if concurrency_issues:
+        _record_violation(
+            checks,
+            violation_trials,
+            check="concurrency_history",
+            trial_id="<suite>",
+            detail="; ".join(concurrency_issues),
+        )
+    else:
+        _record_pass(checks, "concurrency_history")
     for issue in ledger_issues:
         _record_violation(
             checks,
@@ -755,7 +944,7 @@ def audit_suite(
         by_model_counts[requested_model][f"status:{status}"] += 1
 
         if result is None:
-            for check_name in _CHECK_NAMES:
+            for check_name in _TRIAL_CHECK_NAMES:
                 _record_skip(checks, check_name)
             continue
 
@@ -869,6 +1058,7 @@ def audit_suite(
     suite_complete = observed_results == len(plans) and terminal_results == len(plans)
     matrix_fully_evaluable = completed_results == len(plans)
     integrity_check_names = (
+        "concurrency_history",
         "response_model",
         "prompt_hash",
         "no_fallback",
@@ -891,6 +1081,7 @@ def audit_suite(
         "suite_dir": str(suite_dir),
         "prompt_ledger": str(ledger_path),
         "minimum_tool_calls": minimum_tool_calls,
+        "concurrency": concurrency_audit,
         "expected_trials": len(plans),
         "observed_results": observed_results,
         "terminal_results": terminal_results,

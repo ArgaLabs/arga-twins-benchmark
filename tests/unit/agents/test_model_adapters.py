@@ -11,6 +11,7 @@ import pytest
 from arga_twins_benchmark.agents.anthropic import AnthropicMessagesAdapter
 from arga_twins_benchmark.agents.openai import OpenAIResponsesAdapter
 from arga_twins_benchmark.agents.runner import invoke_model
+from arga_twins_benchmark.providers import ProviderInfrastructureError
 
 TOOL_SCHEMA = {
     "name": "provider_api",
@@ -64,7 +65,8 @@ def openai_response(
         "status": status,
         "model": model,
         "output": output,
-        "usage": usage or {
+        "usage": usage
+        or {
             "input_tokens": 12,
             "output_tokens": 3,
             "total_tokens": 15,
@@ -241,9 +243,7 @@ def test_anthropic_timeout_cancels_slow_tool() -> None:
         return httpx.Response(
             200,
             json=anthropic_message(
-                content=[
-                    {"type": "tool_use", "id": "tool-1", "name": "provider_api", "input": {"path": "/slow"}}
-                ],
+                content=[{"type": "tool_use", "id": "tool-1", "name": "provider_api", "input": {"path": "/slow"}}],
                 stop_reason="tool_use",
             ),
         )
@@ -273,6 +273,52 @@ def test_anthropic_timeout_cancels_slow_tool() -> None:
     assert result.status == "timed_out"
     assert result.stop_reason == "timeout"
     assert result.tool_calls == 0
+
+
+def test_anthropic_propagates_retryable_provider_infrastructure_error() -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json=anthropic_message(
+                content=[
+                    {
+                        "type": "tool_use",
+                        "id": "tool-1",
+                        "name": "provider_api",
+                        "input": {"method": "GET", "path": "/records"},
+                    }
+                ],
+                stop_reason="tool_use",
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise ProviderInfrastructureError(
+            code="environment_destroyed",
+            status_code=410,
+            consecutive_failures=1,
+        )
+
+    client = async_client(handler)
+    adapter = AnthropicMessagesAdapter(
+        api_key="test-anthropic-key",
+        model_id="claude-opus-4-8",
+        client=client,
+    )
+
+    with pytest.raises(ProviderInfrastructureError, match="environment_destroyed"):
+        asyncio.run(
+            adapter.invoke(
+                system_prompt="system",
+                user_prompt="user",
+                tool_schema=TOOL_SCHEMA,
+                execute_tool=execute_tool,
+                max_tool_calls=1,
+                timeout_seconds=10,
+            )
+        )
+
+    asyncio.run(client.aclose())
 
 
 def test_openai_responses_runs_function_loop_and_replays_output_items() -> None:
@@ -369,6 +415,48 @@ def test_openai_responses_runs_function_loop_and_replays_output_items() -> None:
     assert any(item.get("type") == "reasoning" for item in requests[1]["input"])
     assert any(item.get("type") == "function_call" for item in requests[1]["input"])
     assert any(item.get("type") == "function_call_output" for item in requests[1]["input"])
+
+
+def test_openai_propagates_retryable_provider_infrastructure_error() -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json=openai_response(
+                output=[
+                    {
+                        "id": "fc_1",
+                        "type": "function_call",
+                        "call_id": "call_1",
+                        "name": "provider_api",
+                        "arguments": '{"method":"GET","path":"/records"}',
+                    }
+                ]
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise ProviderInfrastructureError(
+            code="upstream_timeout",
+            status_code=504,
+            consecutive_failures=3,
+        )
+
+    client = async_client(handler)
+    adapter = OpenAIResponsesAdapter(api_key="test-openai-key", client=client)
+
+    with pytest.raises(ProviderInfrastructureError, match="upstream_timeout"):
+        asyncio.run(
+            adapter.invoke(
+                system_prompt="system",
+                user_prompt="user",
+                tool_schema=TOOL_SCHEMA,
+                execute_tool=execute_tool,
+                max_tool_calls=1,
+                timeout_seconds=10,
+            )
+        )
+
+    asyncio.run(client.aclose())
 
 
 def test_openai_responses_handles_refusal() -> None:

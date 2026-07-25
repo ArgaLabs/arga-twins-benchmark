@@ -7,7 +7,11 @@ from typing import cast
 import httpx
 import pytest
 
-from arga_twins_benchmark.providers import ProviderGateway, ProviderGatewayConfigurationError
+from arga_twins_benchmark.providers import (
+    ProviderGateway,
+    ProviderGatewayConfigurationError,
+    ProviderInfrastructureError,
+)
 
 
 def _access(*providers: str) -> dict[str, dict[str, object]]:
@@ -22,6 +26,49 @@ def _access(*providers: str) -> dict[str, dict[str, object]]:
 
 def _run(gateway: ProviderGateway, tool_input: dict[str, object]) -> dict[str, object]:
     return asyncio.run(gateway.execute(tool_input))
+
+
+def _preview_proxy_failure_body(code: str) -> dict[str, object]:
+    signatures = {
+        "authentication_required": ("runtime", "auth_failure", False),
+        "environment_deploy_failed": ("deploy", "deploy_failure", False),
+        "environment_destroyed": ("cleanup", "proxy_failure", False),
+        "environment_not_ready": ("deploy", "deploy_failure", True),
+        "invalid_token": ("runtime", "auth_failure", False),
+        "pr_preview_not_found": ("runtime", "proxy_failure", False),
+        "preview_host_not_found": ("runtime", "proxy_failure", False),
+        "proxy_runtime_error": ("runtime", "proxy_failure", False),
+        "run_not_found": ("runtime", "proxy_failure", False),
+        "surface_not_ready": ("deploy", "deploy_failure", True),
+        "upstream_connect_error": ("runtime", "connect_error", True),
+        "upstream_connect_timeout": ("runtime", "connect_error", True),
+        "upstream_http_error": ("runtime", "proxy_failure", True),
+        "upstream_timeout": ("runtime", "timeout", True),
+        "user_not_found": ("runtime", "auth_failure", False),
+    }
+    phase, kind, retryable = signatures[code]
+    return {
+        "code": code,
+        "detail": f"preview proxy failure: {code}",
+        "failure": {
+            "code": code,
+            "phase": phase,
+            "kind": kind,
+            "retryable": retryable,
+        },
+        "request_id": "request-1",
+    }
+
+
+def _preview_proxy_failure_response(status_code: int, code: str) -> httpx.Response:
+    return httpx.Response(
+        status_code,
+        headers={
+            "x-arga-preview-proxy-failure": "1",
+            "x-request-id": "request-1",
+        },
+        json=_preview_proxy_failure_body(code),
+    )
 
 
 @pytest.mark.parametrize(
@@ -214,6 +261,32 @@ def test_rejects_invalid_candidate_inputs(tool_input: dict[str, object]) -> None
     asyncio.run(client.aclose())
 
 
+def test_candidate_cannot_forge_preview_proxy_request_id() -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return _preview_proxy_failure_response(410, "environment_destroyed")
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    result = _run(
+        gateway,
+        {
+            "provider": "github",
+            "method": "GET",
+            "path": "/repos/acme/app",
+            "headers": {"X-Request-ID": "request-1"},
+        },
+    )
+
+    assert result["error"] == "request header 'X-Request-ID' cannot be supplied by the candidate"
+    assert calls == 0
+    asyncio.run(client.aclose())
+
+
 def test_bounds_response_bytes_and_marks_truncation() -> None:
     client = httpx.AsyncClient(
         transport=httpx.MockTransport(
@@ -329,6 +402,314 @@ def test_network_error_is_sanitized_and_traced() -> None:
 
     assert result["error"] == "provider request failed: ConnectError"
     assert gateway.trace_records[0].error == "provider request failed: ConnectError"
+    asyncio.run(client.aclose())
+
+
+def test_repeated_connect_errors_trip_at_conservative_threshold() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("could not reach secret endpoint", request=request)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    async def exercise() -> None:
+        for _ in range(2):
+            result = await gateway.execute(
+                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
+            )
+            assert result["error"] == "provider request failed: ConnectError"
+        with pytest.raises(ProviderInfrastructureError) as exc_info:
+            await gateway.execute(
+                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
+            )
+        assert exc_info.value.code == "transport_connect_error"
+        assert exc_info.value.status_code is None
+        assert exc_info.value.consecutive_failures == 3
+
+    asyncio.run(exercise())
+
+    assert len(gateway.trace_records) == 3
+    assert [record.error for record in gateway.trace_records] == [
+        "provider request failed: ConnectError",
+        "provider request failed: ConnectError",
+        "provider request failed: ConnectError",
+    ]
+    asyncio.run(client.aclose())
+
+
+def test_repeated_timeouts_trip_at_conservative_threshold() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout("secret timeout detail", request=request)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    async def exercise() -> None:
+        for _ in range(2):
+            result = await gateway.execute(
+                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
+            )
+            assert result["error"] == "provider request timed out"
+        with pytest.raises(ProviderInfrastructureError) as exc_info:
+            await gateway.execute(
+                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
+            )
+        assert exc_info.value.code == "transport_timeout"
+        assert exc_info.value.status_code is None
+        assert exc_info.value.consecutive_failures == 3
+
+    asyncio.run(exercise())
+
+    assert len(gateway.trace_records) == 3
+    assert [record.error for record in gateway.trace_records] == [
+        "provider request timed out",
+        "provider request timed out",
+        "provider request timed out",
+    ]
+    asyncio.run(client.aclose())
+
+
+def test_repeated_local_protocol_errors_remain_tool_visible_and_do_not_trip_circuit() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.LocalProtocolError("invalid local request framing", request=request)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    async def exercise() -> list[dict[str, object]]:
+        return [
+            await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
+            for _ in range(4)
+        ]
+
+    results = asyncio.run(exercise())
+
+    assert [result["error"] for result in results] == [
+        "provider request failed: LocalProtocolError",
+    ] * 4
+    assert len(gateway.trace_records) == 4
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
+    ("status_code", "code"),
+    [
+        (401, "authentication_required"),
+        (409, "environment_deploy_failed"),
+        (410, "environment_destroyed"),
+        (409, "environment_not_ready"),
+        (401, "invalid_token"),
+        (404, "pr_preview_not_found"),
+        (404, "preview_host_not_found"),
+        (500, "proxy_runtime_error"),
+        (404, "run_not_found"),
+        (409, "surface_not_ready"),
+        (502, "upstream_connect_error"),
+        (502, "upstream_connect_timeout"),
+        (502, "upstream_http_error"),
+        (504, "upstream_timeout"),
+        (401, "user_not_found"),
+    ],
+)
+def test_all_proxy_owned_unavailability_envelopes_trip_the_configured_circuit(
+    status_code: int,
+    code: str,
+) -> None:
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _request: _preview_proxy_failure_response(status_code, code)
+        )
+    )
+    gateway = ProviderGateway(
+        _access("gmail"),
+        proxy_infrastructure_failure_threshold=1,
+        client=client,
+    )
+
+    with pytest.raises(ProviderInfrastructureError) as exc_info:
+        _run(gateway, {"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+
+    assert exc_info.value.code == code
+    assert exc_info.value.status_code == status_code
+    asyncio.run(client.aclose())
+
+
+def test_environment_destroyed_preview_proxy_failure_trips_immediately_after_tracing() -> None:
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _request: _preview_proxy_failure_response(410, "environment_destroyed")
+        )
+    )
+    gateway = ProviderGateway(_access("gmail"), client=client)
+
+    with pytest.raises(ProviderInfrastructureError) as exc_info:
+        _run(gateway, {"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+
+    assert exc_info.value.code == "environment_destroyed"
+    assert exc_info.value.status_code == 410
+    assert exc_info.value.consecutive_failures == 1
+    assert len(gateway.trace_records) == 1
+    assert gateway.trace_records[0].status_code == 410
+    asyncio.run(client.aclose())
+
+
+def test_consecutive_exact_preview_proxy_failures_trip_at_conservative_threshold() -> None:
+    responses = [
+        (502, "upstream_http_error"),
+        (502, "upstream_connect_error"),
+        (502, "upstream_connect_timeout"),
+    ]
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        status_code, code = responses.pop(0)
+        return _preview_proxy_failure_response(status_code, code)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("gmail", "google_calendar"), client=client)
+
+    async def exercise() -> None:
+        first = await gateway.execute({"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+        second = await gateway.execute(
+            {
+                "provider": "google_calendar",
+                "method": "GET",
+                "path": "/calendar/v3/users/me/calendarList",
+            }
+        )
+        assert first["status_code"] == 502
+        assert second["status_code"] == 502
+        with pytest.raises(ProviderInfrastructureError) as exc_info:
+            await gateway.execute({"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+        assert exc_info.value.code == "upstream_connect_timeout"
+        assert exc_info.value.consecutive_failures == 3
+
+    asyncio.run(exercise())
+
+    assert len(gateway.trace_records) == 3
+    assert [record.status_code for record in gateway.trace_records] == [502, 502, 502]
+    asyncio.run(client.aclose())
+
+
+def test_non_proxy_response_resets_consecutive_preview_proxy_failure_streak() -> None:
+    responses = [
+        _preview_proxy_failure_response(502, "upstream_connect_error"),
+        _preview_proxy_failure_response(504, "upstream_timeout"),
+        httpx.Response(503, json={"error": {"code": "provider_temporarily_unavailable"}}),
+        _preview_proxy_failure_response(502, "upstream_connect_error"),
+        _preview_proxy_failure_response(504, "upstream_timeout"),
+    ]
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return responses.pop(0)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("gmail"), client=client)
+
+    async def exercise() -> list[dict[str, object]]:
+        return [
+            await gateway.execute({"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+            for _ in range(5)
+        ]
+
+    results = asyncio.run(exercise())
+
+    assert [result["status_code"] for result in results] == [502, 504, 503, 502, 504]
+    assert len(gateway.trace_records) == 5
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
+    ("body_request_id", "response_request_id"),
+    [
+        ("request-1", None),
+        ("", ""),
+        ("request-1", "request-2"),
+    ],
+)
+def test_proxy_failure_requires_matching_nonempty_body_and_response_request_ids(
+    body_request_id: str,
+    response_request_id: str | None,
+) -> None:
+    body = _preview_proxy_failure_body("environment_destroyed")
+    body["request_id"] = body_request_id
+    headers = {"x-arga-preview-proxy-failure": "1"}
+    if response_request_id is not None:
+        headers["x-request-id"] = response_request_id
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(lambda _request: httpx.Response(410, headers=headers, json=body))
+    )
+    gateway = ProviderGateway(_access("gmail"), client=client)
+
+    result = _run(gateway, {"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+
+    assert result["status_code"] == 410
+    assert result["body"] == body
+    assert len(gateway.trace_records) == 1
+    asyncio.run(client.aclose())
+
+
+def test_matching_proxy_envelope_without_proxy_owned_marker_does_not_trip_circuit() -> None:
+    body = _preview_proxy_failure_body("environment_destroyed")
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _request: httpx.Response(
+                410,
+                headers={"x-request-id": "request-1"},
+                json=body,
+            )
+        )
+    )
+    gateway = ProviderGateway(_access("gmail"), client=client)
+
+    result = _run(gateway, {"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+
+    assert result["status_code"] == 410
+    assert result["body"] == body
+    assert len(gateway.trace_records) == 1
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
+    ("status_code", "body"),
+    [
+        (410, {"code": "environment_destroyed"}),
+        (
+            410,
+            {
+                "code": "environment_destroyed",
+                "failure": {
+                    "code": "environment_destroyed",
+                    "phase": "provider",
+                    "kind": "gone",
+                    "retryable": False,
+                },
+            },
+        ),
+        (409, _preview_proxy_failure_body("environment_destroyed")),
+        (502, {"code": "upstream_connect_error", "message": "provider-owned error"}),
+        (504, {"error": {"code": "upstream_timeout"}}),
+    ],
+)
+def test_arbitrary_http_statuses_and_provider_errors_do_not_trip_circuit(
+    status_code: int,
+    body: dict[str, object],
+) -> None:
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _request: httpx.Response(
+                status_code,
+                headers={"x-request-id": "request-1"},
+                json=body,
+            )
+        )
+    )
+    gateway = ProviderGateway(_access("gmail"), client=client)
+
+    result = _run(gateway, {"provider": "gmail", "method": "GET", "path": "/gmail/v1/users/me/messages"})
+
+    assert result["status_code"] == status_code
+    assert result["body"] == body
+    assert len(gateway.trace_records) == 1
     asyncio.run(client.aclose())
 
 

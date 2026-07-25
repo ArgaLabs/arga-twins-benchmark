@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import tempfile
 from collections.abc import Callable, Mapping
 from contextlib import suppress
@@ -381,8 +382,37 @@ def _normalized_status(status: str) -> str:
 
 def write_private_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-    path.chmod(0o600)
+    encoded_payload = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    file_descriptor, temporary_name = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary_path = Path(temporary_name)
+
+    try:
+        os.fchmod(file_descriptor, 0o600)
+        temporary_file = os.fdopen(file_descriptor, "wb")
+        file_descriptor = -1
+        with temporary_file:
+            temporary_file.write(encoded_payload)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+
+        os.replace(temporary_path, path)
+
+        directory_descriptor = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory_descriptor)
+        finally:
+            os.close(directory_descriptor)
+    except BaseException:
+        if file_descriptor >= 0:
+            with suppress(OSError):
+                os.close(file_descriptor)
+        with suppress(OSError):
+            temporary_path.unlink()
+        raise
 
 
 def read_control_ids(path: Path) -> tuple[str, str]:

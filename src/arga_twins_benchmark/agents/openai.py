@@ -20,6 +20,7 @@ from arga_twins_benchmark.agents.models import (
     ToolSchemaInput,
     normalize_tool_schemas,
 )
+from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
 MAX_OUTPUT_TOKENS = 16_384
@@ -279,6 +280,8 @@ class OpenAIResponsesAdapter:
                                 try:
                                     tool_output = await execute_tool(cast(str, name), arguments)
                                 except asyncio.CancelledError:
+                                    raise
+                                except RetryableInfrastructureError:
                                     raise
                                 except Exception as error:
                                     tool_output = {
