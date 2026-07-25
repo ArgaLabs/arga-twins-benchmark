@@ -221,6 +221,17 @@ Resume preserves completed or substantive terminal outcomes, confirms prior clea
 
 Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, and immutable archived attempts. Candidate traces contain only calls routed to the provisioned provider endpoints.
 
+Audit the saved evidence without making any network calls:
+
+```bash
+uv run python scripts/audit_suite.py \
+  runs/<suite-run-id> \
+  --prompt-ledger runs/prompt-ledger-48x3.json \
+  --minimum-tool-calls 6
+```
+
+The audit checks exact response-model identity, prompt hashes, disabled fallback, provider destinations, control-plane avoidance, call counts, cleanup run-ID identity, and state-grade completeness. Add `--fail-unless-scoring-ready` in CI when an incomplete matrix or incomplete semantic state grade must fail the job.
+
 ## Batch protocol
 
 For each agent/configuration:
