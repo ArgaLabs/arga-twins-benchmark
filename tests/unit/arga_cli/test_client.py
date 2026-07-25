@@ -106,7 +106,7 @@ expected = [
 ]
 if sys.argv[1:] != expected:
     raise SystemExit(f"unexpected arguments: {sys.argv[1:]!r}")
-print(json.dumps({"run_id": "run-1", "status": "queued", "twins": {}, "is_public": True}))
+print(json.dumps({"run_id": "run-1"}))
 """
     )
     client = SubprocessArgaCli(

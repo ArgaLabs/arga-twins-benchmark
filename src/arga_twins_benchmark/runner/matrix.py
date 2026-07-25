@@ -10,7 +10,7 @@ import traceback
 import uuid
 from contextlib import suppress
 from dataclasses import asdict, dataclass, is_dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, cast
 
@@ -24,6 +24,7 @@ from arga_twins_benchmark.evaluation.state_capture import (
 )
 from arga_twins_benchmark.lifecycle import (
     cleanup_instance,
+    cleanup_payload_proves_inert,
     cleanup_twin_run,
     provision_instance,
     write_private_json,
@@ -47,6 +48,7 @@ from arga_twins_benchmark.specs.models import (
 )
 
 PROVISION_TIMEOUT_SECONDS = 1_200
+ORPHAN_TWIN_LEASE_GRACE_SECONDS = 300
 
 
 @dataclass(frozen=True)
@@ -80,10 +82,7 @@ def _jsonable(value: object) -> object:
     if isinstance(value, list):
         return [_jsonable(item) for item in cast(list[object], value)]
     if isinstance(value, dict):
-        return {
-            str(key): _jsonable(item)
-            for key, item in cast(dict[object, object], value).items()
-        }
+        return {str(key): _jsonable(item) for key, item in cast(dict[object, object], value).items()}
     return value
 
 
@@ -119,11 +118,29 @@ def _inferred_attempt_runner_commit(
     return None, "unknown"
 
 
+def _expected_cleanup_run_id(
+    trial_dir: Path,
+    result: dict[str, Any] | None,
+) -> str | None:
+    control = _read_json_object(trial_dir / "control.json")
+    if control is not None:
+        run_id = control.get("run_id")
+        if isinstance(run_id, str) and run_id:
+            return run_id
+    return _inferred_failed_provision_run_id(result)
+
+
 def _cleanup_artifact_succeeded(trial_dir: Path, result: dict[str, Any] | None) -> bool:
-    if result is not None and result.get("cleanup_succeeded") is True:
-        return True
+    expected_run_id = _expected_cleanup_run_id(trial_dir, result)
+    if expected_run_id is None:
+        return False
     cleanup = _read_json_object(trial_dir / "cleanup.json")
-    return cleanup is not None and "error" not in cleanup
+    if not cleanup_payload_proves_inert(
+        cleanup,
+        expected_run_id=expected_run_id,
+    ):
+        return False
+    return result is None or result.get("cleanup_succeeded") is True
 
 
 def _next_attempt_number(output_root: Path, trial_id: str) -> int:
@@ -201,10 +218,123 @@ def _inferred_failed_provision_run_id(result: dict[str, Any] | None) -> str | No
     return match.group(1) if match is not None else None
 
 
+def _parse_utc_timestamp(value: object) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(UTC)
+
+
+def _orphan_lease_expiry_evidence(
+    result: dict[str, Any] | None,
+    *,
+    ttl_minutes: int,
+) -> dict[str, Any]:
+    started_at = _parse_utc_timestamp(result.get("started_at") if result else None)
+    if started_at is None or ttl_minutes <= 0:
+        return {
+            "error_type": "UnsafeResumeNoCleanupIdentity",
+            "error": (
+                "the prior attempt has no recoverable Arga run ID and no valid timestamped lease-expiry evidence"
+            ),
+        }
+
+    retry_not_before = started_at + timedelta(
+        minutes=ttl_minutes,
+        seconds=ORPHAN_TWIN_LEASE_GRACE_SECONDS,
+    )
+    observed_at = datetime.now(UTC)
+    if observed_at < retry_not_before:
+        return {
+            "error_type": "OrphanTwinLeaseActive",
+            "error": (
+                "the prior create may have succeeded without persisting its "
+                f"Arga run ID; retry is quarantined until {retry_not_before.isoformat()}"
+            ),
+            "retry_not_before": retry_not_before.isoformat(),
+        }
+
+    return {
+        "protocol": "arga-bench-orphan-lease-expiry/1",
+        "outcome": "lease_window_elapsed",
+        "run_id_recoverable": False,
+        "attempt_started_at": started_at.isoformat(),
+        "ttl_minutes": ttl_minutes,
+        "grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
+        "retry_not_before": retry_not_before.isoformat(),
+        "observed_at": observed_at.isoformat(),
+    }
+
+
+def _orphan_lease_expiry_proves_elapsed(
+    payload: dict[str, Any],
+    *,
+    result: dict[str, Any] | None,
+    ttl_minutes: int,
+) -> bool:
+    if payload.get("protocol") != "arga-bench-orphan-lease-expiry/1":
+        return False
+    if payload.get("outcome") != "lease_window_elapsed":
+        return False
+    if payload.get("run_id_recoverable") is not False:
+        return False
+    if payload.get("ttl_minutes") != ttl_minutes:
+        return False
+    if payload.get("grace_seconds") != ORPHAN_TWIN_LEASE_GRACE_SECONDS:
+        return False
+
+    result_started_at = _parse_utc_timestamp(result.get("started_at") if result else None)
+    evidence_started_at = _parse_utc_timestamp(payload.get("attempt_started_at"))
+    retry_not_before = _parse_utc_timestamp(payload.get("retry_not_before"))
+    observed_at = _parse_utc_timestamp(payload.get("observed_at"))
+    if (
+        result_started_at is None
+        or evidence_started_at != result_started_at
+        or retry_not_before is None
+        or observed_at is None
+    ):
+        return False
+    expected_not_before = result_started_at + timedelta(
+        minutes=ttl_minutes,
+        seconds=ORPHAN_TWIN_LEASE_GRACE_SECONDS,
+    )
+    return (
+        retry_not_before == expected_not_before
+        and observed_at >= expected_not_before
+        and datetime.now(UTC) >= expected_not_before
+    )
+
+
+def _resume_cleanup_payload_proves_safe(
+    *,
+    trial_dir: Path,
+    result: dict[str, Any] | None,
+    cleanup_payload: dict[str, Any],
+    ttl_minutes: int,
+) -> bool:
+    expected_run_id = _expected_cleanup_run_id(trial_dir, result)
+    if expected_run_id is not None:
+        return cleanup_payload_proves_inert(
+            cleanup_payload,
+            expected_run_id=expected_run_id,
+        )
+    return _orphan_lease_expiry_proves_elapsed(
+        cleanup_payload,
+        result=result,
+        ttl_minutes=ttl_minutes,
+    )
+
+
 async def _retry_prior_cleanup(
     *,
     trial_dir: Path,
     result: dict[str, Any] | None,
+    ttl_minutes: int,
 ) -> dict[str, Any] | None:
     if _cleanup_artifact_succeeded(trial_dir, result):
         return None
@@ -216,7 +346,10 @@ async def _retry_prior_cleanup(
         elif (run_id := _inferred_failed_provision_run_id(result)) is not None:
             cleanup_payload = await cleanup_twin_run(run_id)
         else:
-            return None
+            cleanup_payload = _orphan_lease_expiry_evidence(
+                result,
+                ttl_minutes=ttl_minutes,
+            )
     except BaseException as cleanup_error:
         cleanup_payload = {
             "error_type": type(cleanup_error).__name__,
@@ -231,6 +364,7 @@ async def _prepare_trial_attempt(
     output_root: Path,
     trial_id: str,
     runner_commit: str,
+    ttl_minutes: int = 60,
 ) -> tuple[Path, int, dict[str, Any] | None]:
     """Return a clean trial directory, preserving and cleaning any stale attempt."""
 
@@ -242,10 +376,15 @@ async def _prepare_trial_attempt(
     if preserve_terminal_result:
         assert result is not None
         existing_cleanup = _read_json_object(trial_dir / "cleanup.json")
+        expected_run_id = _expected_cleanup_run_id(trial_dir, result)
         if (
             result.get("cleanup_succeeded") is not True
             and existing_cleanup is not None
-            and "error" not in existing_cleanup
+            and expected_run_id is not None
+            and cleanup_payload_proves_inert(
+                existing_cleanup,
+                expected_run_id=expected_run_id,
+            )
         ):
             result["cleanup"] = existing_cleanup
             result["cleanup_succeeded"] = True
@@ -255,10 +394,16 @@ async def _prepare_trial_attempt(
             cleanup_payload := await _retry_prior_cleanup(
                 trial_dir=trial_dir,
                 result=result,
+                ttl_minutes=ttl_minutes,
             )
         ) is not None:
             result["cleanup"] = cleanup_payload
-            result["cleanup_succeeded"] = "error" not in cleanup_payload
+            result["cleanup_succeeded"] = _resume_cleanup_payload_proves_safe(
+                trial_dir=trial_dir,
+                result=result,
+                cleanup_payload=cleanup_payload,
+                ttl_minutes=ttl_minutes,
+            )
             result["cleanup_retried_at"] = _utc_now()
             write_private_json(trial_dir / "cleanup.json", cleanup_payload)
             write_private_json(trial_dir / "result.json", result)
@@ -290,16 +435,31 @@ async def _prepare_trial_attempt(
         trial_dir.mkdir(parents=True, exist_ok=True)
         return trial_dir, attempt_number, None
 
-    cleanup_payload = await _retry_prior_cleanup(trial_dir=trial_dir, result=result)
+    cleanup_payload = await _retry_prior_cleanup(
+        trial_dir=trial_dir,
+        result=result,
+        ttl_minutes=ttl_minutes,
+    )
     if cleanup_payload is not None:
-        if "error" in cleanup_payload:
+        if not _resume_cleanup_payload_proves_safe(
+            trial_dir=trial_dir,
+            result=result,
+            cleanup_payload=cleanup_payload,
+            ttl_minutes=ttl_minutes,
+        ):
             blocked = {
                 "protocol": "arga-bench-trial-result/1",
                 "terminal": True,
                 "trial_id": trial_id,
                 "status": "runtime_error",
-                "error_type": "UnsafeResumeBlocked",
-                "error": "prior attempt cleanup failed; a fresh twin was not provisioned",
+                "error_type": cleanup_payload.get(
+                    "error_type",
+                    "UnsafeResumeBlocked",
+                ),
+                "error": cleanup_payload.get(
+                    "error",
+                    "prior attempt cleanup was not proven safe; a fresh twin was not provisioned",
+                ),
                 "cleanup": cleanup_payload,
                 "cleanup_succeeded": False,
                 "resume_blocked": True,
@@ -378,14 +538,10 @@ def load_experiment_bundles(
         raise ValueError(f"unknown experiment {experiment_id!r}")
 
     bindings = {
-        document.model.binding_id: document.model
-        for document in documents
-        if isinstance(document.model, BindingSpec)
+        document.model.binding_id: document.model for document in documents if isinstance(document.model, BindingSpec)
     }
     worlds = {
-        document.model.world_id: document.model
-        for document in documents
-        if isinstance(document.model, WorldSpec)
+        document.model.world_id: document.model for document in documents if isinstance(document.model, WorldSpec)
     }
     verifications = {
         document.path.resolve(): document.model
@@ -506,9 +662,7 @@ def _preliminary_grade(
         trace=trace,
         output=output,
     )
-    trace_rule_ids = {
-        rule.id for rule in bundle.verification.deterministic.trace_policy.required_calls
-    } | {
+    trace_rule_ids = {rule.id for rule in bundle.verification.deterministic.trace_policy.required_calls} | {
         rule.id for rule in bundle.verification.deterministic.trace_policy.allowed_mutating_calls
     }
     trace_rule_ids.update(
@@ -521,11 +675,7 @@ def _preliminary_grade(
             "output.contract",
         }
     )
-    relevant = {
-        key: passed
-        for key, passed in grade.assertion_results.items()
-        if key in trace_rule_ids
-    }
+    relevant = {key: passed for key, passed in grade.assertion_results.items() if key in trace_rule_ids}
     return {
         "protocol": "arga-bench-preliminary-grade/1",
         "complete": False,
@@ -551,6 +701,7 @@ async def run_trial(
         output_root=output_root,
         trial_id=plan.trial_id,
         runner_commit=runner_commit,
+        ttl_minutes=ttl_minutes,
     )
     if existing_result is not None:
         return existing_result
@@ -748,7 +899,15 @@ async def run_trial(
         write_private_json(trial_dir / "state.json", state)
 
     result["cleanup"] = cleanup_payload
-    result["cleanup_succeeded"] = isinstance(cleanup_payload, dict) and "error" not in cleanup_payload
+    expected_run_id = _expected_cleanup_run_id(trial_dir, result)
+    result["cleanup_succeeded"] = (
+        isinstance(cleanup_payload, dict)
+        and expected_run_id is not None
+        and cleanup_payload_proves_inert(
+            cleanup_payload,
+            expected_run_id=expected_run_id,
+        )
+    )
     write_private_json(result_path, result)
     return result
 
@@ -791,6 +950,8 @@ async def run_experiment_matrix(
         "created_at": _utc_now(),
         "repeats": repeats,
         "concurrency": concurrency,
+        "ttl_minutes": ttl_minutes,
+        "orphan_twin_lease_grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
         "trial_count": len(plans),
         "models": [asdict(profile) for profile in model_profiles],
         "trials": [asdict(plan) for plan in plans],
@@ -801,22 +962,27 @@ async def run_experiment_matrix(
         if not isinstance(existing_manifest, dict):
             raise ValueError("existing suite manifest must be an object")
         existing_mapping = cast(dict[str, Any], existing_manifest)
-        immutable_fields = ("suite_run_id", "experiment_id", "repeats", "concurrency", "trial_count", "models")
-        mismatched = [
-            field for field in immutable_fields if existing_mapping.get(field) != manifest.get(field)
-        ]
+        if "ttl_minutes" not in existing_mapping:
+            existing_mapping["ttl_minutes"] = ttl_minutes
+        if "orphan_twin_lease_grace_seconds" not in existing_mapping:
+            existing_mapping["orphan_twin_lease_grace_seconds"] = ORPHAN_TWIN_LEASE_GRACE_SECONDS
+        immutable_fields = (
+            "suite_run_id",
+            "experiment_id",
+            "repeats",
+            "concurrency",
+            "ttl_minutes",
+            "orphan_twin_lease_grace_seconds",
+            "trial_count",
+            "models",
+        )
+        mismatched = [field for field in immutable_fields if existing_mapping.get(field) != manifest.get(field)]
         if mismatched:
-            raise ValueError(
-                f"cannot resume suite {suite_run_id!r}; manifest fields changed: {', '.join(mismatched)}"
-            )
+            raise ValueError(f"cannot resume suite {suite_run_id!r}; manifest fields changed: {', '.join(mismatched)}")
         revisions = existing_mapping.get("runner_commits")
         if not isinstance(revisions, list):
             revisions = [existing_mapping.get("runner_commit")]
-        runner_commits = [
-            revision
-            for revision in cast(list[object], revisions)
-            if isinstance(revision, str)
-        ]
+        runner_commits = [revision for revision in cast(list[object], revisions) if isinstance(revision, str)]
         if current_runner_commit not in runner_commits:
             runner_commits.append(current_runner_commit)
         existing_mapping["runner_commits"] = runner_commits

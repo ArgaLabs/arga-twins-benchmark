@@ -27,6 +27,7 @@ CLEAN_TERMINAL_TWIN_RUN_STATUSES = frozenset(
 )
 STOP_WAITING_TWIN_RUN_STATUSES = CLEAN_TERMINAL_TWIN_RUN_STATUSES | {"failed", "error"}
 TWIN_RUN_POLL_INTERVAL_SECONDS = 2.0
+CLEANUP_CONFIRM_TIMEOUT_SECONDS = 120
 
 
 @dataclass(frozen=True)
@@ -274,39 +275,99 @@ async def cleanup_twin_run(run_id: str, *, arga: ArgaCli | None = None) -> dict[
 
 
 async def _cleanup_twin_run(arga: ArgaCli, run_id: str) -> dict[str, Any]:
+    teardown_payload: dict[str, Any] | None = None
+    teardown_outcome = "accepted"
     try:
-        return {"twin_run": dict(await arga.teardown(run_id))}
+        teardown_payload = dict(await arga.teardown(run_id))
     except ArgaCliError as teardown_error:
         if not _is_already_terminal_teardown_error(teardown_error):
             raise
+        teardown_outcome = "already_terminal"
 
+    run = await _wait_for_inert_twin_run(
+        arga=arga,
+        run_id=run_id,
+        timeout_seconds=CLEANUP_CONFIRM_TIMEOUT_SECONDS,
+    )
+    return {
+        "twin_run": _status_payload(run),
+        "teardown": {
+            "outcome": teardown_outcome,
+            "response": teardown_payload,
+        },
+        "confirmation": {
+            "outcome": "terminal_without_twins",
+            "confirmed_status": run.status,
+        },
+    }
+
+
+async def _wait_for_inert_twin_run(
+    *,
+    arga: ArgaCli,
+    run_id: str,
+    timeout_seconds: int,
+) -> TwinRun:
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be positive")
+
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + timeout_seconds
+    last_status: str | None = None
+    while True:
         try:
             run = await arga.status(run_id)
         except ArgaCliError as status_error:
             raise ArgaCliError(
-                f"teardown reported twin run {run_id!r} is already terminal, "
-                f"but `arga twin-runs status` could not confirm cleanup: {status_error}"
-            ) from teardown_error
+                f"`arga twin-runs status` could not confirm cleanup for {run_id!r}: {status_error}"
+            ) from status_error
 
-        normalized_status = _normalized_status(run.status)
-        raw_twins = run.raw.get("twins")
-        failed_without_twins = normalized_status == "failed" and isinstance(raw_twins, dict) and not raw_twins
-        if normalized_status not in CLEAN_TERMINAL_TWIN_RUN_STATUSES and not failed_without_twins:
+        if run.run_id != run_id:
             raise ArgaCliError(
-                f"teardown reported twin run {run_id!r} is already terminal, "
-                f"but `arga twin-runs status` returned unconfirmed cleanup status {run.status!r}"
-            ) from teardown_error
+                f"`arga twin-runs status` returned run {run.run_id!r} while confirming cleanup for {run_id!r}"
+            )
+        last_status = run.status
+        if _twin_run_is_confirmed_inert(run):
+            return run
 
-        status_payload = dict(run.raw)
-        status_payload.setdefault("run_id", run.run_id)
-        status_payload.setdefault("status", run.status)
-        return {
-            "twin_run": status_payload,
-            "teardown": {
-                "outcome": "already_clean_terminal",
-                "confirmed_status": run.status,
-            },
-        }
+        remaining = deadline - loop.time()
+        if remaining <= 0:
+            raise ArgaCliError(f"timed out confirming cleanup for twin run {run_id!r}; last status was {last_status!r}")
+        await asyncio.sleep(min(TWIN_RUN_POLL_INTERVAL_SECONDS, remaining))
+
+
+def cleanup_payload_proves_inert(
+    payload: Mapping[str, Any] | None,
+    *,
+    expected_run_id: str | None = None,
+) -> bool:
+    if payload is None or "error" in payload:
+        return False
+    raw_run = payload.get("twin_run")
+    if not isinstance(raw_run, dict):
+        return False
+    try:
+        run = TwinRun.from_payload(cast(dict[str, Any], raw_run))
+    except ArgaCliError:
+        return False
+    return (expected_run_id is None or run.run_id == expected_run_id) and (_twin_run_is_confirmed_inert(run))
+
+
+def _twin_run_is_confirmed_inert(run: TwinRun) -> bool:
+    normalized_status = _normalized_status(run.status)
+    raw_twins = run.raw.get("twins")
+    explicit_no_twins = isinstance(raw_twins, dict) and not raw_twins
+    return explicit_no_twins and (
+        normalized_status in CLEAN_TERMINAL_TWIN_RUN_STATUSES or normalized_status == "failed"
+    )
+
+
+def _status_payload(run: TwinRun) -> dict[str, Any]:
+    payload = dict(run.raw)
+    payload.setdefault("run_id", run.run_id)
+    payload.setdefault("status", run.status)
+    payload.setdefault("twins", {})
+    return payload
 
 
 def _is_already_terminal_teardown_error(error: ArgaCliError) -> bool:

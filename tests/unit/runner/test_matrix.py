@@ -20,6 +20,21 @@ from arga_twins_benchmark.runner.matrix import (
 from arga_twins_benchmark.runner.prompting import MODEL_PROFILES
 
 
+def _write_confirmed_cleanup(trial_dir: Path, *, run_id: str = "run-1") -> None:
+    (trial_dir / "control.json").write_text(json.dumps({"scenario_id": "scenario-1", "run_id": run_id}))
+    (trial_dir / "cleanup.json").write_text(
+        json.dumps(
+            {
+                "twin_run": {
+                    "run_id": run_id,
+                    "status": "cancelled",
+                    "twins": {},
+                }
+            }
+        )
+    )
+
+
 def test_load_experiment_bundles_resolves_prompts_bindings_and_verifiers() -> None:
     experiment, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
 
@@ -64,8 +79,14 @@ def test_resume_skips_completed_trial_and_records_original_runner_commit(tmp_pat
     trial_dir = tmp_path / "trials" / trial_id
     trial_dir.mkdir(parents=True)
     (tmp_path / "suite.json").write_text(json.dumps({"runner_commit": "original-commit"}))
-    completed = {"terminal": True, "status": "completed", "trial_id": trial_id}
+    completed = {
+        "terminal": True,
+        "status": "completed",
+        "trial_id": trial_id,
+        "cleanup_succeeded": True,
+    }
     (trial_dir / "result.json").write_text(json.dumps(completed))
+    _write_confirmed_cleanup(trial_dir)
 
     prepared_dir, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -111,7 +132,7 @@ def test_resume_archives_retryable_state_capture_error_and_returns_fresh_attempt
             }
         )
     )
-    (trial_dir / "control.json").write_text('{"old": "twin"}')
+    _write_confirmed_cleanup(trial_dir)
 
     prepared_dir, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -144,6 +165,7 @@ def test_resume_preserves_arbitrary_programming_runtime_error_as_terminal(tmp_pa
         "cleanup_succeeded": True,
     }
     (trial_dir / "result.json").write_text(json.dumps(programming_error))
+    _write_confirmed_cleanup(trial_dir)
 
     prepared_dir, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -159,7 +181,7 @@ def test_resume_preserves_arbitrary_programming_runtime_error_as_terminal(tmp_pa
     assert not (tmp_path / "attempts").exists()
 
 
-def test_resume_archives_tls_transport_failure_for_fresh_twin_retry(tmp_path: Path) -> None:
+def test_resume_blocks_tls_transport_retry_without_cleanup_identity(tmp_path: Path) -> None:
     trial_id = "tls-transport-error"
     trial_dir = tmp_path / "trials" / trial_id
     trial_dir.mkdir(parents=True)
@@ -171,6 +193,7 @@ def test_resume_archives_tls_transport_failure_for_fresh_twin_retry(tmp_path: Pa
                 "error_type": "SSLError",
                 "error": "ssl/tls alert bad record mac",
                 "cleanup_succeeded": True,
+                "started_at": "2099-01-01T00:00:00+00:00",
             }
         )
     )
@@ -183,10 +206,62 @@ def test_resume_archives_tls_transport_failure_for_fresh_twin_retry(tmp_path: Pa
         )
     )
 
+    assert existing is not None
+    assert existing["resume_blocked"] is True
+    assert existing["error_type"] == "OrphanTwinLeaseActive"
+    assert attempt == 1
+    assert not (tmp_path / "attempts").exists()
+
+
+def test_resume_confirms_historical_cleaning_up_artifact_before_fresh_retry(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "historical-cleaning-up"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    control_path = trial_dir / "control.json"
+    control_path.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "runtime_error",
+                "error_type": "SSLError",
+                "error": "ssl/tls alert bad record mac",
+                "cleanup_succeeded": True,
+            }
+        )
+    )
+    _write_confirmed_cleanup(trial_dir)
+    (trial_dir / "cleanup.json").write_text('{"twin_run":{"run_id":"run-1","status":"cleaning_up","twins":{}}}')
+    cleaned: list[Path] = []
+
+    async def fake_cleanup(path: Path) -> dict[str, Any]:
+        cleaned.append(path)
+        return {
+            "twin_run": {
+                "run_id": "run-1",
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_instance", fake_cleanup)
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert cleaned == [control_path]
     assert existing is None
     assert attempt == 2
     archived = tmp_path / "attempts" / trial_id / "attempt-0001"
-    assert json.loads((archived / "result.json").read_text())["error_type"] == "SSLError"
+    assert json.loads((archived / "resume-cleanup.json").read_text())["twin_run"]["status"] == "cancelled"
 
 
 def test_resume_archives_transient_model_api_500_for_fresh_twin_retry(tmp_path: Path) -> None:
@@ -204,6 +279,7 @@ def test_resume_archives_transient_model_api_500_for_fresh_twin_retry(tmp_path: 
             }
         )
     )
+    _write_confirmed_cleanup(trial_dir)
 
     _, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -235,6 +311,7 @@ def test_resume_archives_model_transport_error_for_fresh_twin_retry(tmp_path: Pa
             }
         )
     )
+    _write_confirmed_cleanup(trial_dir)
 
     _, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -247,9 +324,57 @@ def test_resume_archives_model_transport_error_for_fresh_twin_retry(tmp_path: Pa
     assert existing is None
     assert attempt == 2
     archived = tmp_path / "attempts" / trial_id / "attempt-0001"
-    assert json.loads((archived / "result.json").read_text())["stop_reason"] == (
-        "transport_error"
+    assert json.loads((archived / "result.json").read_text())["stop_reason"] == ("transport_error")
+
+
+def test_resume_rejects_cleanup_evidence_for_a_different_run(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trial_id = "mismatched-cleanup-run"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "runtime_error",
+                "error_type": "SSLError",
+                "error": "transient",
+                "cleanup_succeeded": True,
+            }
+        )
     )
+    _write_confirmed_cleanup(trial_dir, run_id="run-expected")
+    (trial_dir / "cleanup.json").write_text('{"twin_run":{"run_id":"run-other","status":"cancelled","twins":{}}}')
+
+    async def mismatched_cleanup(_: Path) -> dict[str, Any]:
+        return {
+            "twin_run": {
+                "run_id": "run-other",
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
+
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.cleanup_instance",
+        mismatched_cleanup,
+    )
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert attempt == 1
+    assert existing is not None
+    assert existing["resume_blocked"] is True
+    assert existing["cleanup_succeeded"] is False
+    assert not (tmp_path / "attempts").exists()
 
 
 def test_resume_preserves_non_transient_model_api_error(tmp_path: Path) -> None:
@@ -263,6 +388,7 @@ def test_resume_preserves_non_transient_model_api_error(tmp_path: Path) -> None:
         "cleanup_succeeded": True,
     }
     (trial_dir / "result.json").write_text(json.dumps(api_error))
+    _write_confirmed_cleanup(trial_dir)
 
     _, attempt, existing = asyncio.run(
         _prepare_trial_attempt(
@@ -299,7 +425,13 @@ def test_resume_retries_cleanup_without_replaying_completed_model(
 
     async def fake_cleanup(path: Path) -> dict[str, Any]:
         cleaned.append(path)
-        return {"twin_run": {"run_id": "run-1", "status": "cancelled"}}
+        return {
+            "twin_run": {
+                "run_id": "run-1",
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
 
     monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_instance", fake_cleanup)
 
@@ -371,12 +503,8 @@ def test_resume_reconciles_successful_cleanup_artifact_without_replaying_or_tear
     trial_id = "completed-cleanup-result-write-crash"
     trial_dir = tmp_path / "trials" / trial_id
     trial_dir.mkdir(parents=True)
-    (trial_dir / "control.json").write_text(
-        '{"scenario_id": "scenario-1", "run_id": "run-1"}'
-    )
-    (trial_dir / "cleanup.json").write_text(
-        '{"twin_run":{"run_id":"run-1","status":"cancelled"}}'
-    )
+    (trial_dir / "control.json").write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    (trial_dir / "cleanup.json").write_text('{"twin_run":{"run_id":"run-1","status":"cancelled","twins":{}}}')
     (trial_dir / "result.json").write_text(
         json.dumps(
             {
@@ -415,7 +543,9 @@ def test_resume_reconciles_successful_cleanup_artifact_without_replaying_or_tear
     assert not (tmp_path / "attempts").exists()
 
 
-def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
+def test_resume_archives_cancelled_runner_attempt_after_orphan_lease_expiry(
+    tmp_path: Path,
+) -> None:
     trial_id = "cancelled-trial"
     trial_dir = tmp_path / "trials" / trial_id
     trial_dir.mkdir(parents=True)
@@ -427,6 +557,7 @@ def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
                 "error_type": "CancelledError",
                 "error": "",
                 "cleanup_succeeded": True,
+                "started_at": "2020-01-01T00:00:00+00:00",
             }
         )
     )
@@ -443,6 +574,9 @@ def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
     assert attempt == 2
     archived = tmp_path / "attempts" / trial_id / "attempt-0001"
     assert json.loads((archived / "result.json").read_text())["error_type"] == "CancelledError"
+    expiry = json.loads((archived / "resume-cleanup.json").read_text())
+    assert expiry["protocol"] == "arga-bench-orphan-lease-expiry/1"
+    assert expiry["outcome"] == "lease_window_elapsed"
 
 
 def test_resume_confirms_legacy_failed_provision_run_before_fresh_retry(
@@ -501,7 +635,13 @@ def test_resume_cleans_interrupted_twin_before_archiving(
 
     async def fake_cleanup(path: Path) -> dict[str, Any]:
         cleaned.append(path)
-        return {"run_id": "old-run", "status": "cancelled"}
+        return {
+            "twin_run": {
+                "run_id": "old-run",
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
 
     monkeypatch.setattr("arga_twins_benchmark.runner.matrix.cleanup_instance", fake_cleanup)
 
@@ -518,10 +658,8 @@ def test_resume_cleans_interrupted_twin_before_archiving(
     assert existing is None
     assert attempt == 2
     assert prepared_dir.is_dir()
-    assert json.loads((archive / "resume-cleanup.json").read_text())["status"] == "cancelled"
-    assert json.loads((archive / "attempt.json").read_text())["archive_reason"] == (
-        "interrupted_nonterminal_attempt"
-    )
+    assert json.loads((archive / "resume-cleanup.json").read_text())["twin_run"]["status"] == "cancelled"
+    assert json.loads((archive / "attempt.json").read_text())["archive_reason"] == ("interrupted_nonterminal_attempt")
 
 
 def test_resume_blocks_fresh_provision_when_old_twin_cleanup_fails(
@@ -639,10 +777,7 @@ def test_approved_share_read_only_post_calls_are_not_marked_as_mutations() -> No
     preliminary = _preliminary_grade(
         bundle,
         gateway=gateway,
-        output=(
-            '{"request":"SHARE-311","decision":"shared",'
-            '"recipient":"auditor@trusted.example","role":"reader"}'
-        ),
+        output=('{"request":"SHARE-311","decision":"shared","recipient":"auditor@trusted.example","role":"reader"}'),
     )
 
     assert [record.mutating for record in records] == [False] * 8 + [True, False]

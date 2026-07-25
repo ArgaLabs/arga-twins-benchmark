@@ -10,6 +10,7 @@ from arga_twins_benchmark.arga_cli import ArgaCliError, TwinRun
 from arga_twins_benchmark.catalog import compile_scenario
 from arga_twins_benchmark.lifecycle import (
     cleanup_instance,
+    cleanup_payload_proves_inert,
     provision_instance,
     read_control_ids,
     save_experiment_scenarios,
@@ -24,6 +25,7 @@ class FakeArgaCli:
         self.listed_tags: list[str] = []
         self.imported_scenarios: list[dict[str, Any]] = []
         self.torn_down_runs: list[str] = []
+        self.status_calls: list[str] = []
 
     async def list_scenarios(self, *, tag: str) -> list[Mapping[str, Any]]:
         self.listed_tags.append(tag)
@@ -55,7 +57,8 @@ class FakeArgaCli:
         raise AssertionError("create_twin_run is not expected in these tests")
 
     async def status(self, run_id: str) -> TwinRun:
-        raise AssertionError("status is not expected in these tests")
+        self.status_calls.append(run_id)
+        return TwinRun.from_payload({"run_id": run_id, "status": "torn_down", "twins": {}})
 
     async def reset(self, run_id: str) -> Mapping[str, Any]:
         raise AssertionError("reset is not expected in these tests")
@@ -93,7 +96,6 @@ class TerminalTeardownArgaCli(FakeArgaCli):
         self.teardown_error = teardown_error
         self.status_error = status_error
         self.twins = dict(twins or {})
-        self.status_calls: list[str] = []
 
     async def teardown(self, run_id: str) -> Mapping[str, Any]:
         self.torn_down_runs.append(run_id)
@@ -157,6 +159,22 @@ class ProvisioningArgaCli(FakeArgaCli):
         assert run_id == "run-queued"
         assert self.control_path.is_file(), "run ID must be durable before the first status poll"
         return self.statuses.pop(0)
+
+
+class CleanupPollingArgaCli(FakeArgaCli):
+    def __init__(self, *, statuses: Sequence[TwinRun]) -> None:
+        super().__init__()
+        self.statuses = list(statuses)
+
+    async def teardown(self, run_id: str) -> Mapping[str, Any]:
+        self.torn_down_runs.append(run_id)
+        return {"run_id": run_id, "status": "cleaning_up"}
+
+    async def status(self, run_id: str) -> TwinRun:
+        self.status_calls.append(run_id)
+        if len(self.statuses) > 1:
+            return self.statuses.pop(0)
+        return self.statuses[0]
 
 
 def test_private_json_is_mode_0600(tmp_path: Path) -> None:
@@ -359,8 +377,101 @@ def test_cleanup_tears_down_run_but_preserves_saved_scenario(tmp_path: Path) -> 
 
     result = asyncio.run(cleanup_instance(control, arga=arga))
 
-    assert result["twin_run"] == {"run_id": "run-1", "status": "torn_down"}
+    assert result["twin_run"] == {
+        "run_id": "run-1",
+        "status": "torn_down",
+        "twins": {},
+    }
+    assert result["teardown"] == {
+        "outcome": "accepted",
+        "response": {"run_id": "run-1", "status": "torn_down"},
+    }
+    assert result["confirmation"]["outcome"] == "terminal_without_twins"
     assert arga.torn_down_runs == ["run-1"]
+    assert arga.status_calls == ["run-1"]
+
+
+def test_cleanup_polls_from_cleaning_up_until_terminal_without_twins(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = CleanupPollingArgaCli(
+        statuses=[
+            TwinRun.from_payload({"run_id": "run-1", "status": "cleaning_up", "twins": {}}),
+            TwinRun.from_payload({"run_id": "run-1", "status": "cancelled", "twins": {}}),
+        ]
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.lifecycle.TWIN_RUN_POLL_INTERVAL_SECONDS",
+        0,
+    )
+
+    result = asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert result["twin_run"]["status"] == "cancelled"
+    assert result["teardown"]["response"]["status"] == "cleaning_up"
+    assert result["confirmation"]["confirmed_status"] == "cancelled"
+    assert arga.status_calls == ["run-1", "run-1"]
+
+
+def test_cleanup_rejects_status_payload_for_a_different_run(tmp_path: Path) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = CleanupPollingArgaCli(
+        statuses=[TwinRun.from_payload({"run_id": "run-other", "status": "cancelled", "twins": {}})]
+    )
+
+    with pytest.raises(
+        ArgaCliError,
+        match="returned run 'run-other'.*cleanup for 'run-1'",
+    ):
+        asyncio.run(cleanup_instance(control, arga=arga))
+
+
+def test_cleanup_artifact_must_match_expected_run_id() -> None:
+    payload: dict[str, Any] = {
+        "twin_run": {
+            "run_id": "run-other",
+            "status": "cancelled",
+            "twins": {},
+        }
+    }
+
+    assert cleanup_payload_proves_inert(payload)
+    assert not cleanup_payload_proves_inert(
+        payload,
+        expected_run_id="run-expected",
+    )
+
+
+def test_cleanup_fails_when_cleaning_up_never_becomes_terminal(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = CleanupPollingArgaCli(
+        statuses=[TwinRun.from_payload({"run_id": "run-1", "status": "cleaning_up", "twins": {}})]
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.lifecycle.CLEANUP_CONFIRM_TIMEOUT_SECONDS",
+        0.001,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.lifecycle.TWIN_RUN_POLL_INTERVAL_SECONDS",
+        0.001,
+    )
+
+    with pytest.raises(
+        ArgaCliError,
+        match="timed out confirming cleanup.*last status was 'cleaning_up'",
+    ):
+        asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert arga.torn_down_runs == ["run-1"]
+    assert arga.status_calls
 
 
 @pytest.mark.parametrize("terminal_status", ["cancelled", "expired", "failed", "torn_down"])
@@ -380,7 +491,11 @@ def test_cleanup_confirms_already_clean_terminal_run_via_cli_status(
         "twins": {},
     }
     assert result["teardown"] == {
-        "outcome": "already_clean_terminal",
+        "outcome": "already_terminal",
+        "response": None,
+    }
+    assert result["confirmation"] == {
+        "outcome": "terminal_without_twins",
         "confirmed_status": terminal_status,
     }
     assert arga.torn_down_runs == ["run-1"]
@@ -401,18 +516,29 @@ def test_cleanup_does_not_swallow_ambiguous_teardown_error(tmp_path: Path) -> No
     assert arga.status_calls == []
 
 
-def test_cleanup_rejects_failed_status_when_twins_still_exist(tmp_path: Path) -> None:
+def test_cleanup_rejects_failed_status_when_twins_still_exist(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     control = tmp_path / "control.json"
     control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
     arga = TerminalTeardownArgaCli(
         status="failed",
         twins={"github": {"base_url": "https://pub-github.example"}},
     )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.lifecycle.CLEANUP_CONFIRM_TIMEOUT_SECONDS",
+        0.001,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.lifecycle.TWIN_RUN_POLL_INTERVAL_SECONDS",
+        0.001,
+    )
 
-    with pytest.raises(ArgaCliError, match="unconfirmed cleanup status 'failed'"):
+    with pytest.raises(ArgaCliError, match="timed out confirming cleanup.*last status was 'failed'"):
         asyncio.run(cleanup_instance(control, arga=arga))
 
-    assert arga.status_calls == ["run-1"]
+    assert arga.status_calls
 
 
 def test_cleanup_does_not_swallow_status_lookup_error(tmp_path: Path) -> None:

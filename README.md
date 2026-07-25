@@ -52,15 +52,22 @@ Authenticate once with `arga login`, or set `ARGA_API_KEY` for the benchmark wra
 validate manifest
   -> compile a named Scenario with task description and exact seed_config
   -> save or reuse the Scenario by content hash through arga CLI
-  -> create twin run with --wait through arga CLI
-  -> require status=ready (deployment + seeding)
+  -> start twin run through arga CLI and persist its run ID immediately
+  -> poll CLI status until ready (deployment + seeding)
   -> capture canonical baseline through trusted provider readers
   -> give only provider URLs/credentials to candidate adapter
   -> invoke candidate separately
   -> capture final state and grade required/forbidden predicates
   -> retain artifacts
-  -> teardown twin run through arga CLI; keep the saved Scenario
+  -> teardown through arga CLI and confirm the exact run is terminal with zero exposed twins
+  -> keep the saved Scenario
 ```
+
+The current Arga status contract confirms control-plane terminal state, not
+completion of the asynchronous VM cleanup job. The harness binds that evidence
+to the exact run ID and never silently treats a different or missing run as
+clean. If a create response is lost before its run ID is persisted, resume is
+quarantined until the configured TTL plus a five-minute grace period.
 
 The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 

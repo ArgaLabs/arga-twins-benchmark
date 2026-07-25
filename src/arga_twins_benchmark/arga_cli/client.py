@@ -188,6 +188,8 @@ class SubprocessArgaCli:
             str(ttl_minutes),
             "--json",
         )
+        payload.setdefault("status", "queued")
+        payload.setdefault("twins", {})
         run = _parse_twin_run(payload)
         return run
 
