@@ -89,6 +89,7 @@ def test_resume_skips_completed_trial_and_records_original_runner_commit(tmp_pat
     [
         "google_drive admin state returned HTTP 504",
         "gmail admin state returned HTTP 410",
+        "github admin state returned HTTP 410",
     ],
 )
 def test_resume_archives_retryable_state_capture_error_and_returns_fresh_attempt_directory(
