@@ -142,6 +142,7 @@ _RETRYABLE_INFRASTRUCTURE_ERROR_TYPES = frozenset(
         "ReadError",
         "ReadTimeout",
         "RemoteProtocolError",
+        "SSLError",
         "TimeoutError",
         "TimeoutExpired",
         "WriteError",

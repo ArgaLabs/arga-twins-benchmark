@@ -148,6 +148,36 @@ def test_resume_preserves_arbitrary_programming_runtime_error_as_terminal(tmp_pa
     assert not (tmp_path / "attempts").exists()
 
 
+def test_resume_archives_tls_transport_failure_for_fresh_twin_retry(tmp_path: Path) -> None:
+    trial_id = "tls-transport-error"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "runtime_error",
+                "error_type": "SSLError",
+                "error": "ssl/tls alert bad record mac",
+                "cleanup_succeeded": True,
+            }
+        )
+    )
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert existing is None
+    assert attempt == 2
+    archived = tmp_path / "attempts" / trial_id / "attempt-0001"
+    assert json.loads((archived / "result.json").read_text())["error_type"] == "SSLError"
+
+
 def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
     trial_id = "cancelled-trial"
     trial_dir = tmp_path / "trials" / trial_id
