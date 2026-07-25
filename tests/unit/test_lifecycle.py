@@ -79,6 +79,32 @@ class RacingImportArgaCli(FakeArgaCli):
         return saved
 
 
+class TerminalTeardownArgaCli(FakeArgaCli):
+    def __init__(
+        self,
+        *,
+        status: str,
+        teardown_error: str = "Cannot teardown run in status: cancelled",
+        status_error: ArgaCliError | None = None,
+    ) -> None:
+        super().__init__()
+        self.run_status = status
+        self.teardown_error = teardown_error
+        self.status_error = status_error
+        self.status_calls: list[str] = []
+
+    async def teardown(self, run_id: str) -> Mapping[str, Any]:
+        self.torn_down_runs.append(run_id)
+        raise ArgaCliError(self.teardown_error)
+
+    async def status(self, run_id: str) -> TwinRun:
+        self.status_calls.append(run_id)
+        if self.status_error is not None:
+            raise self.status_error
+        payload: Mapping[str, Any] = {"run_id": run_id, "status": self.run_status, "twins": {}}
+        return TwinRun.from_payload(payload)
+
+
 def test_private_json_is_mode_0600(tmp_path: Path) -> None:
     output = tmp_path / "nested" / "control.json"
     write_private_json(output, {"secret": "value"})
@@ -223,3 +249,66 @@ def test_cleanup_tears_down_run_but_preserves_saved_scenario(tmp_path: Path) -> 
 
     assert result["twin_run"] == {"run_id": "run-1", "status": "torn_down"}
     assert arga.torn_down_runs == ["run-1"]
+
+
+@pytest.mark.parametrize("terminal_status", ["cancelled", "expired", "torn_down"])
+def test_cleanup_confirms_already_clean_terminal_run_via_cli_status(
+    tmp_path: Path,
+    terminal_status: str,
+) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = TerminalTeardownArgaCli(status=terminal_status)
+
+    result = asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert result["twin_run"] == {
+        "run_id": "run-1",
+        "status": terminal_status,
+        "twins": {},
+    }
+    assert result["teardown"] == {
+        "outcome": "already_clean_terminal",
+        "confirmed_status": terminal_status,
+    }
+    assert arga.torn_down_runs == ["run-1"]
+    assert arga.status_calls == ["run-1"]
+
+
+def test_cleanup_does_not_swallow_ambiguous_teardown_error(tmp_path: Path) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = TerminalTeardownArgaCli(
+        status="cancelled",
+        teardown_error="Arga CLI exited with 1: connection reset",
+    )
+
+    with pytest.raises(ArgaCliError, match="connection reset"):
+        asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert arga.status_calls == []
+
+
+def test_cleanup_rejects_unconfirmed_terminal_status(tmp_path: Path) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = TerminalTeardownArgaCli(status="failed")
+
+    with pytest.raises(ArgaCliError, match="unconfirmed cleanup status 'failed'"):
+        asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert arga.status_calls == ["run-1"]
+
+
+def test_cleanup_does_not_swallow_status_lookup_error(tmp_path: Path) -> None:
+    control = tmp_path / "control.json"
+    control.write_text('{"scenario_id": "scenario-1", "run_id": "run-1"}')
+    arga = TerminalTeardownArgaCli(
+        status="cancelled",
+        status_error=ArgaCliError("status lookup timed out"),
+    )
+
+    with pytest.raises(ArgaCliError, match="could not confirm cleanup.*status lookup timed out"):
+        asyncio.run(cleanup_instance(control, arga=arga))
+
+    assert arga.status_calls == ["run-1"]

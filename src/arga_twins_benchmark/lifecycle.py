@@ -13,6 +13,17 @@ from arga_twins_benchmark.catalog import compile_scenario, validate_catalog
 from arga_twins_benchmark.specs.models import ExperimentSpec
 
 CONTENT_HASH_TAG_PREFIX = "content-sha256:"
+CLEAN_TERMINAL_TWIN_RUN_STATUSES = frozenset(
+    {
+        "cancelled",
+        "canceled",
+        "expired",
+        "torn_down",
+        "terminated",
+        "deleted",
+        "cleaned_up",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -191,9 +202,48 @@ async def reset_instance(control_file: Path) -> dict[str, Any]:
 async def cleanup_instance(control_file: Path, *, arga: ArgaCli | None = None) -> dict[str, Any]:
     _, run_id = read_control_ids(control_file)
     if arga is not None:
-        return {"twin_run": dict(await arga.teardown(run_id))}
+        return await _cleanup_twin_run(arga, run_id)
     async with SubprocessArgaCli() as cli:
-        return {"twin_run": dict(await cli.teardown(run_id))}
+        return await _cleanup_twin_run(cli, run_id)
+
+
+async def _cleanup_twin_run(arga: ArgaCli, run_id: str) -> dict[str, Any]:
+    try:
+        return {"twin_run": dict(await arga.teardown(run_id))}
+    except ArgaCliError as teardown_error:
+        if not _is_already_terminal_teardown_error(teardown_error):
+            raise
+
+        try:
+            run = await arga.status(run_id)
+        except ArgaCliError as status_error:
+            raise ArgaCliError(
+                f"teardown reported twin run {run_id!r} is already terminal, "
+                f"but `arga twin-runs status` could not confirm cleanup: {status_error}"
+            ) from teardown_error
+
+        normalized_status = run.status.strip().lower().replace("-", "_").replace(" ", "_")
+        if normalized_status not in CLEAN_TERMINAL_TWIN_RUN_STATUSES:
+            raise ArgaCliError(
+                f"teardown reported twin run {run_id!r} is already terminal, "
+                f"but `arga twin-runs status` returned unconfirmed cleanup status {run.status!r}"
+            ) from teardown_error
+
+        status_payload = dict(run.raw)
+        status_payload.setdefault("run_id", run.run_id)
+        status_payload.setdefault("status", run.status)
+        return {
+            "twin_run": status_payload,
+            "teardown": {
+                "outcome": "already_clean_terminal",
+                "confirmed_status": run.status,
+            },
+        }
+
+
+def _is_already_terminal_teardown_error(error: ArgaCliError) -> bool:
+    message = str(error).lower()
+    return "cannot teardown" in message and ("status" in message or "terminal" in message)
 
 
 def write_private_json(path: Path, payload: dict[str, Any]) -> None:
