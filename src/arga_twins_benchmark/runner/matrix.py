@@ -155,7 +155,19 @@ _RETRYABLE_INFRASTRUCTURE_ERROR_TYPES = frozenset(
 
 
 def _retryable_infrastructure_result(result: dict[str, Any]) -> bool:
-    if result.get("terminal") is not True or result.get("status") != "runtime_error":
+    if result.get("terminal") is not True:
+        return False
+    if result.get("status") == "api_error":
+        return result.get("stop_reason") in {
+            "http_408",
+            "http_429",
+            "http_500",
+            "http_502",
+            "http_503",
+            "http_504",
+            "http_529",
+        }
+    if result.get("status") != "runtime_error":
         return False
     error_type = result.get("error_type")
     error = str(result.get("error", ""))
@@ -257,8 +269,8 @@ async def _prepare_trial_attempt(
             "runner_commit_source": commit_source,
             "archived_at": _utc_now(),
             "archive_reason": (
-                "runtime_error"
-                if result is not None and result.get("status") == "runtime_error"
+                str(result.get("status"))
+                if result is not None and _retryable_infrastructure_result(result)
                 else "interrupted_nonterminal_attempt"
             ),
             "resume_cleanup": cleanup_payload,

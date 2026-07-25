@@ -189,6 +189,62 @@ def test_resume_archives_tls_transport_failure_for_fresh_twin_retry(tmp_path: Pa
     assert json.loads((archived / "result.json").read_text())["error_type"] == "SSLError"
 
 
+def test_resume_archives_transient_model_api_500_for_fresh_twin_retry(tmp_path: Path) -> None:
+    trial_id = "model-api-500"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    (trial_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "terminal": True,
+                "status": "api_error",
+                "stop_reason": "http_500",
+                "cleanup_succeeded": True,
+                "tool_calls": 0,
+            }
+        )
+    )
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert existing is None
+    assert attempt == 2
+    archived = tmp_path / "attempts" / trial_id / "attempt-0001"
+    assert json.loads((archived / "result.json").read_text())["status"] == "api_error"
+    assert json.loads((archived / "attempt.json").read_text())["archive_reason"] == "api_error"
+
+
+def test_resume_preserves_non_transient_model_api_error(tmp_path: Path) -> None:
+    trial_id = "model-api-400"
+    trial_dir = tmp_path / "trials" / trial_id
+    trial_dir.mkdir(parents=True)
+    api_error = {
+        "terminal": True,
+        "status": "api_error",
+        "stop_reason": "http_400",
+        "cleanup_succeeded": True,
+    }
+    (trial_dir / "result.json").write_text(json.dumps(api_error))
+
+    _, attempt, existing = asyncio.run(
+        _prepare_trial_attempt(
+            output_root=tmp_path,
+            trial_id=trial_id,
+            runner_commit="fixed-commit",
+        )
+    )
+
+    assert existing == api_error
+    assert attempt == 1
+    assert not (tmp_path / "attempts").exists()
+
+
 def test_resume_archives_cancelled_runner_attempt(tmp_path: Path) -> None:
     trial_id = "cancelled-trial"
     trial_dir = tmp_path / "trials" / trial_id
