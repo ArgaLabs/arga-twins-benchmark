@@ -173,9 +173,7 @@ def _github_pull_fields(
         "labels": _stable_string_list(pull.get("labels"), object_key="name"),
         "assignee_login": assignee_dict.get("login") if assignee_dict is not None else None,
         "assignees": sorted(
-            item["login"]
-            for item in assignees
-            if isinstance(item, dict) and isinstance(item.get("login"), str)
+            item["login"] for item in assignees if isinstance(item, dict) and isinstance(item.get("login"), str)
         ),
     }
     return f"{repository}#{number}", fields
@@ -290,9 +288,7 @@ def _github_content_resources(
             "size": item.get("size"),
             "content_hash": _content_hash(item.get("content"), encoding=item.get("encoding")),
         }
-        resources.append(
-            CanonicalResource(capture.provider_role, "file", f"{repository}@{ref}:{path}", fields)
-        )
+        resources.append(CanonicalResource(capture.provider_role, "file", f"{repository}@{ref}:{path}", fields))
         stable.append(fields)
     stable.sort(key=lambda item: cast(str, item["path"]))
     return resources, stable
@@ -450,11 +446,7 @@ def github_review_comments_stable(capture: CapturedQueryState) -> Sequence[Canon
 
 def github_all_pull_review_artifacts(capture: CapturedQueryState) -> Sequence[CanonicalResource]:
     repository, _ = _github_context(capture)
-    raw_pulls = (
-        capture.body.get("pulls")
-        if isinstance(capture.body, dict)
-        else capture.body
-    )
+    raw_pulls = capture.body.get("pulls") if isinstance(capture.body, dict) else capture.body
     values = _array(raw_pulls, capture, "pull artifact response")
     resources, stable_pulls = _github_pulls(values, capture, repository)
     reviews_by_pull: dict[str, list[dict[str, Any]]] = {}
@@ -571,10 +563,7 @@ def _gitlab_merge_request_fields(
         "description": merge_request.get("description"),
         "state": merge_request.get("state"),
         "merged": merge_request.get("state") == "merged" or merge_request.get("merged_at") is not None,
-        "approved": bool(
-            merge_request.get("approved")
-            or (isinstance(approved_by, list) and len(approved_by) > 0)
-        ),
+        "approved": bool(merge_request.get("approved") or (isinstance(approved_by, list) and len(approved_by) > 0)),
         "source_branch": merge_request.get("source_branch"),
         "target_branch": merge_request.get("target_branch"),
         "sha": merge_request.get("sha"),
@@ -736,8 +725,29 @@ def gitlab_discussions_stable(capture: CapturedQueryState) -> Sequence[Canonical
             note_id = note.get("id")
             if not isinstance(note_id, (str, int)) or isinstance(note_id, bool):
                 raise _error(capture, "discussion note id must be a string or integer")
-            position = _object(note.get("position"), capture, f"discussion note {note_id} position")
+            raw_position = note.get("position")
             author = _stable_user(note.get("author"))
+            if raw_position is None:
+                fields = {
+                    "project": project,
+                    "merge_request_iid": merge_request_iid,
+                    "discussion_id": str(discussion_id),
+                    "body": note.get("body"),
+                    "resolved": bool(note.get("resolved", False)),
+                    "author_username": author.get("username") if author is not None else None,
+                    "author": author,
+                }
+                resources.append(
+                    CanonicalResource(
+                        capture.provider_role,
+                        "merge_request_discussion_note",
+                        f"{project}!{merge_request_iid}:discussion:{discussion_id}:note:{note_id}",
+                        fields,
+                    )
+                )
+                stable.append({"id": str(note_id), "kind": "general_note", **fields})
+                continue
+            position = _object(raw_position, capture, f"discussion note {note_id} position")
             fields = {
                 "project": project,
                 "merge_request_iid": merge_request_iid,
@@ -773,7 +783,7 @@ def gitlab_discussions_stable(capture: CapturedQueryState) -> Sequence[Canonical
                     fields,
                 )
             )
-            stable.append({"id": str(note_id), **fields})
+            stable.append({"id": str(note_id), "kind": "diff_note", **fields})
     stable.sort(key=lambda item: cast(str, item["id"]))
     resources.append(
         CanonicalResource(
@@ -922,9 +932,7 @@ def _jira_issue_resources(capture: CapturedQueryState) -> Sequence[CanonicalReso
                         "body": body_text,
                         "author": author,
                         "created_by": (
-                            author.get("account_id") or author.get("display_name")
-                            if author is not None
-                            else None
+                            author.get("account_id") or author.get("display_name") if author is not None else None
                         ),
                     },
                 )
@@ -967,6 +975,26 @@ def _linear_state_type(value: object) -> str | None:
     if normalized in {"backlog", "triage", "unstarted", "started", "open"}:
         return "open"
     return value
+
+
+def _linear_object_id(value: object) -> str | None:
+    if not isinstance(value, dict):
+        return None
+    candidate = cast(dict[str, Any], value).get("id")
+    return candidate if isinstance(candidate, str) else None
+
+
+def _linear_connection_ids(value: object) -> list[str]:
+    if not isinstance(value, dict):
+        return []
+    nodes = cast(dict[str, Any], value).get("nodes")
+    if not isinstance(nodes, list):
+        return []
+    return sorted(
+        cast(str, item["id"])
+        for item in cast(list[object], nodes)
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    )
 
 
 def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource]:
@@ -1014,7 +1042,8 @@ def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource
         identifier = _string(issue.get("identifier"), capture, f"Linear issue {issue_id} identifier")
         team = _object(issue.get("team"), capture, f"Linear issue {identifier} team")
         team_key = _string(team.get("key"), capture, f"Linear issue {identifier} team key")
-        state = _object(issue.get("state"), capture, f"Linear issue {identifier} state")
+        raw_state = issue.get("state")
+        state = None if raw_state is None else _object(raw_state, capture, f"Linear issue {identifier} state")
         project = issue.get("project")
         project_name = project.get("name") if isinstance(project, dict) else None
         if project_name is not None and project_names and project_name not in project_names:
@@ -1022,8 +1051,29 @@ def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource
         title = _string(issue.get("title"), capture, f"Linear issue {identifier} title")
         description = issue.get("description")
         canonical = {
+            "archived_at": issue.get("archivedAt"),
+            "assignee_id": _linear_object_id(issue.get("assignee")),
+            "branch_name": issue.get("branchName"),
+            "canceled_at": issue.get("canceledAt"),
+            "completed_at": issue.get("completedAt"),
+            "created_at": issue.get("createdAt"),
+            "creator_id": _linear_object_id(issue.get("creator")),
+            "cycle_id": _linear_object_id(issue.get("cycle")),
+            "due_date": issue.get("dueDate"),
+            "estimate": issue.get("estimate"),
             "identifier": identifier,
+            "label_ids": _stable_string_list(issue.get("labelIds")),
+            "milestone_id": _linear_object_id(issue.get("projectMilestone")),
             "number": issue.get("number"),
+            "parent_id": _linear_object_id(issue.get("parent")),
+            "project_id": _linear_object_id(project),
+            "sort_order": issue.get("sortOrder"),
+            "started_at": issue.get("startedAt"),
+            "state_id": _linear_object_id(state),
+            "subscriber_ids": _linear_connection_ids(issue.get("subscribers")),
+            "team_id": _linear_object_id(team),
+            "updated_at": issue.get("updatedAt"),
+            "url": issue.get("url"),
             "team_key": team_key,
             "team": {
                 "id": team.get("id"),
@@ -1034,8 +1084,8 @@ def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource
             "description": description,
             "marker": _marker(title, description),
             "priority": issue.get("priority"),
-            "state": state.get("name"),
-            "state_type": _linear_state_type(state.get("type")),
+            "state": state.get("name") if state is not None else None,
+            "state_type": _linear_state_type(state.get("type")) if state is not None else None,
             "project": project_name,
             "archived": issue.get("archivedAt") is not None,
         }
@@ -1064,8 +1114,14 @@ def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource
                     "issue_comment",
                     comment_id,
                     {
+                        "created_at": comment.get("createdAt"),
+                        "edited_at": comment.get("editedAt"),
                         "issue_id": issue_id,
                         "issue_identifier": identifier,
+                        "parent_id": _linear_object_id(comment.get("parent")),
+                        "updated_at": comment.get("updatedAt"),
+                        "url": comment.get("url"),
+                        "user_id": _linear_object_id(comment.get("user")),
                         "body": comment.get("body"),
                         "user": _stable_user(comment.get("user")),
                     },
@@ -1080,11 +1136,7 @@ def _linear_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource
                 {
                     "team_key": team_key,
                     "issues": sorted(issues, key=lambda item: cast(str, item["identifier"])),
-                    "markers": sorted(
-                        marker
-                        for item in issues
-                        if (marker := item.get("marker")) is not None
-                    ),
+                    "markers": sorted(marker for item in issues if (marker := item.get("marker")) is not None),
                 },
             )
         )
@@ -1193,11 +1245,7 @@ def slack_channels_messages_v1(capture: CapturedQueryState) -> Sequence[Canonica
 
 
 def _discord_resources(capture: CapturedQueryState) -> Sequence[CanonicalResource]:
-    raw_guilds = (
-        capture.body.get("guilds")
-        if isinstance(capture.body, dict)
-        else capture.body
-    )
+    raw_guilds = capture.body.get("guilds") if isinstance(capture.body, dict) else capture.body
     guilds = _array(raw_guilds, capture, "Discord guild response")
     resources: list[CanonicalResource] = []
     for raw_guild in guilds:
@@ -1252,9 +1300,7 @@ def _discord_resources(capture: CapturedQueryState) -> Sequence[CanonicalResourc
                     "incident": _marker(content),
                 }
                 resource_id = f"{guild_id}:{channel_id}:{message_id}"
-                resources.append(
-                    CanonicalResource(capture.provider_role, "message", resource_id, fields)
-                )
+                resources.append(CanonicalResource(capture.provider_role, "message", resource_id, fields))
                 resources.append(
                     CanonicalResource(
                         capture.provider_role,

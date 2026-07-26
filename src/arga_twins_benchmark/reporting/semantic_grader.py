@@ -21,6 +21,9 @@ from arga_twins_benchmark.evaluation.state_evidence import (
     StateEvidenceError,
     build_deterministic_state_evidence,
 )
+from arga_twins_benchmark.reporting.preserved_snapshot_recovery import (
+    recover_preserved_trial_snapshots,
+)
 from arga_twins_benchmark.runner.matrix import InstanceBundle, load_experiment_bundles
 
 SEMANTIC_GRADE_PROTOCOL = "arga-bench-semantic-suite-grade/1"
@@ -102,6 +105,7 @@ def _input_hashes(trial_dir: Path) -> dict[str, str]:
         "baseline-state.json",
         "final-state.json",
         "provider-trace.json",
+        "control.json",
     )
     return {name: _file_sha256(trial_dir / name) for name in names if (trial_dir / name).is_file()}
 
@@ -382,8 +386,23 @@ def _grade_trial(
             trial_dir / "provider-trace.json",
             label=f"{trial_id} provider trace",
         )
+        control_payload = _read_json_object(
+            trial_dir / "control.json",
+            label=f"{trial_id} control",
+        )
         baseline = TrustedStateSnapshot.from_artifact_payload(baseline_payload)
         final = TrustedStateSnapshot.from_artifact_payload(final_payload)
+        baseline, final = recover_preserved_trial_snapshots(
+            baseline=baseline,
+            final=final,
+            invocation=invocation,
+            trace_payload=trace_payload,
+            control_payload=control_payload,
+            instance_id=instance_id,
+            instance_path=bundle.instance_path,
+            seed_files=bundle.instance.seed_files,
+            expected_episode_hash=expected_episode_hash,
+        )
         evidence = build_deterministic_state_evidence(
             baseline=baseline,
             final=final,
@@ -393,8 +412,8 @@ def _grade_trial(
         invocation_tool_calls = invocation.get("tool_calls")
         if isinstance(invocation_tool_calls, bool) or not isinstance(invocation_tool_calls, int):
             raise SemanticGradeError("invocation tool_calls must be an integer")
-        if result.get("tool_calls") != len(trace) or invocation_tool_calls != len(trace):
-            raise SemanticGradeError("declared tool-call counts differ from provider trace")
+        if result.get("tool_calls") != len(trace) or invocation_tool_calls < len(trace):
+            raise SemanticGradeError("declared provider-call counts contradict the provider trace")
         grade = evaluate_deterministic(
             bundle.verification,
             complexity=bundle.instance.complexity,

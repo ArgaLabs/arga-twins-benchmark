@@ -6,9 +6,18 @@ from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, cast
 
+from arga_twins_benchmark.evaluation.admin_delta_claims import (
+    claim_provider_admin_deltas,
+)
 from arga_twins_benchmark.evaluation.baseline_semantics import enrich_baseline_semantics
-from arga_twins_benchmark.evaluation.deterministic import CanonicalResource
+from arga_twins_benchmark.evaluation.deterministic import (
+    CanonicalResource,
+    is_create_delete_canonical_context,
+)
 from arga_twins_benchmark.evaluation.protocol import JsonValue, Mutation
+from arga_twins_benchmark.evaluation.snapshot_enrichment import (
+    enrich_snapshot_from_trusted_state,
+)
 from arga_twins_benchmark.evaluation.state_capture import (
     RawStateDelta,
     SnapshotCanonicalizer,
@@ -225,12 +234,14 @@ def build_deterministic_state_evidence(
         coverage=coverage,
     )
     raw_deltas = diff_trusted_states(baseline, final)
+    enriched_baseline = enrich_snapshot_from_trusted_state(baseline)
+    enriched_final = enrich_snapshot_from_trusted_state(final)
     before_resources = canonicalize_query_results(
-        baseline,
+        enriched_baseline,
         canonicalizers=canonicalizers,
     )
     after_resources = canonicalize_query_results(
-        final,
+        enriched_final,
         canonicalizers=canonicalizers,
     )
     all_canonical_mutations = diff_canonical_resources(before_resources, after_resources)
@@ -239,10 +250,11 @@ def build_deterministic_state_evidence(
         after=after_resources,
         verification=verification,
     )
-    _validate_raw_delta_representation(
+    synthetic_mutations = _validate_raw_delta_representation(
         raw_deltas=raw_deltas,
         canonical_mutations=all_canonical_mutations,
     )
+    mutations.extend(synthetic_mutations)
 
     selector_resources = _materialize_selector_proofs(
         before=before_resources,
@@ -372,12 +384,18 @@ def _validate_raw_delta_representation(
     *,
     raw_deltas: Sequence[RawStateDelta],
     canonical_mutations: Sequence[Mutation],
-) -> None:
+) -> list[Mutation]:
     entity_mutations = [
         mutation for mutation in canonical_mutations if mutation.resource_type not in _PROJECTION_RESOURCE_TYPES
     ]
-    for delta in raw_deltas:
+    provider_claims = claim_provider_admin_deltas(
+        raw_deltas=raw_deltas,
+        canonical_mutations=entity_mutations,
+    )
+    for index, delta in enumerate(raw_deltas):
         if delta.scope != "admin":
+            continue
+        if index in provider_claims.claimed_indices:
             continue
         matches = [
             mutation
@@ -390,6 +408,7 @@ def _validate_raw_delta_representation(
                 f"representation: {delta.provider_role}{delta.json_pointer} "
                 f"(matches={len(matches)})"
             )
+    return list(provider_claims.synthetic_mutations)
 
 
 _STABLE_EVIDENCE_FIELDS = frozenset(
@@ -418,6 +437,7 @@ _ADMIN_RESOURCE_COLLECTIONS: Mapping[str, frozenset[str]] = {
     "issue": frozenset({"issues"}),
     "issue_comment": frozenset({"comments"}),
     "merge_request": frozenset({"merge_requests"}),
+    "merge_request_discussion_note": frozenset({"discussions", "notes"}),
     "merge_request_diff_discussion": frozenset({"discussions"}),
     "message": frozenset({"messages"}),
     "page": frozenset({"pages"}),
@@ -635,12 +655,13 @@ def _semantic_mutations(
             mutation,
             matching_rules=matching_rules,
         ):
-            semantic.append(
-                _project_governed_mutation(
-                    mutation,
-                    matching_rules=matching_rules,
-                )
+            projected, residual = _project_governed_mutation(
+                mutation,
+                matching_rules=matching_rules,
             )
+            semantic.append(projected)
+            if residual is not None:
+                semantic.append(residual)
             governed_keys.add(key)
         else:
             semantic.append(mutation)
@@ -705,16 +726,30 @@ def _project_governed_mutation(
     mutation: Mutation,
     *,
     matching_rules: Sequence[MutationMatcherSpec],
-) -> Mutation:
+) -> tuple[Mutation, Mutation | None]:
     selector_fields = {key: value for rule in matching_rules for key, value in rule.selector.items()}
     allowed_fields = {field_name for rule in matching_rules for field_name in rule.fields}
+    unexpected_fields: set[str] = set()
 
     def project(value: JsonValue) -> JsonValue:
         if not isinstance(value, dict):
             return value
         raw = cast(dict[str, JsonValue], value)
         if mutation.operation in {"create", "delete"}:
-            projected = dict(raw)
+            covered_fields = allowed_fields | set(selector_fields)
+            context_fields = {
+                field_name
+                for field_name, field_value in raw.items()
+                if field_name not in covered_fields
+                and is_create_delete_canonical_context(
+                    resource_type=mutation.resource_type,
+                    field_name=field_name,
+                    value=field_value,
+                    covered_fields=frozenset(covered_fields),
+                )
+            }
+            unexpected_fields.update(set(raw) - covered_fields - context_fields)
+            projected = {key: raw[key] for key in sorted(covered_fields | context_fields) if key in raw}
             for key, expected in selector_fields.items():
                 if _selector_operator(key):
                     projected[key] = cast(JsonValue, expected)
@@ -727,7 +762,7 @@ def _project_governed_mutation(
                 projected[key] = raw[key]
         return projected
 
-    return Mutation(
+    projected = Mutation(
         twin=mutation.twin,
         resource_type=mutation.resource_type,
         resource_id=mutation.resource_id,
@@ -735,6 +770,14 @@ def _project_governed_mutation(
         before=project(mutation.before),
         after=project(mutation.after),
     )
+    if not unexpected_fields:
+        return projected, None
+
+    # The projected mutation lets the declared rule count the governed
+    # operation. Retaining the full canonical mutation as a second item makes
+    # every unapproved field fail default-deny; it must never be silently lost
+    # merely because another part of the create/delete was allowed.
+    return projected, mutation
 
 
 def _suppress_entity_projection_echoes(
@@ -947,7 +990,12 @@ def _materialize_relational_proofs(
                     continue
                 if field_name == "attached_to" and expected in assertions_by_id:
                     references = selected(assertions_by_id[expected])
-                    if len(references) != 1:
+                    if not references:
+                        # A missing referenced resource is candidate state, not
+                        # a malformed verifier contract. Leave the provider
+                        # value intact so the assertion fails deterministically.
+                        continue
+                    if len(references) > 1:
                         raise StateEvidenceError(
                             f"assertion {assertion.id!r} cannot resolve {field_name!r} reference {expected!r} uniquely"
                         )
@@ -961,7 +1009,12 @@ def _materialize_relational_proofs(
                     if match is None or match.group("assertion") not in assertions_by_id:
                         raise StateEvidenceError(f"assertion {assertion.id!r} has unsupported relation {expected!r}")
                     references = selected(assertions_by_id[match.group("assertion")])
-                    if len(references) != 1:
+                    if not references:
+                        # Missing candidate state should produce a failed
+                        # relation assertion, while ambiguity remains a grader
+                        # validity error below.
+                        continue
+                    if len(references) > 1:
                         raise StateEvidenceError(
                             f"assertion {assertion.id!r} cannot resolve relation {expected!r} uniquely"
                         )

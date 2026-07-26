@@ -23,11 +23,16 @@ from arga_twins_benchmark.evaluation.state_evidence import (
     STANDARD_CANONICALIZER_COVERAGE,
     CanonicalizerCoverage,
     StateEvidenceError,
+    _materialize_relational_proofs,  # pyright: ignore[reportPrivateUsage]
     _prove_baseline_reference,  # pyright: ignore[reportPrivateUsage]
     _suppress_entity_projection_echoes,  # pyright: ignore[reportPrivateUsage]
     build_deterministic_state_evidence,
 )
-from arga_twins_benchmark.specs.models import ComplexitySpec, VerificationSpec
+from arga_twins_benchmark.specs.models import (
+    ComplexitySpec,
+    StateAssertionSpec,
+    VerificationSpec,
+)
 
 
 def verification(
@@ -256,7 +261,11 @@ def test_create_keeps_unapproved_fields_visible_to_default_deny() -> None:
 
     evidence = build(snapshot([]), final)
 
-    assert cast(dict[str, JsonValue], evidence.mutations[0].after)["notify_external"] is True
+    assert len(evidence.mutations) == 2
+    governed, residual = evidence.mutations
+    assert isinstance(governed.after, dict)
+    assert "notify_external" not in governed.after
+    assert cast(dict[str, JsonValue], residual.after)["notify_external"] is True
     grade = evaluate_deterministic(
         verification(),
         complexity=complexity(),
@@ -265,8 +274,85 @@ def test_create_keeps_unapproved_fields_visible_to_default_deny() -> None:
         trace=[ToolCallRecord("tracker", "GET", "/issues", 200, False) for _ in range(6)],
         output=None,
     )
+    assert grade.assertion_results["mutation.issue"] is True
     assert grade.assertion_results["mutation_policy.default_deny"] is False
     assert grade.task_success is False
+
+
+def test_create_ignores_only_declared_canonical_context() -> None:
+    final = snapshot(
+        [
+            {
+                "id": "issue-generated-1",
+                "identifier": "OPS-1",
+                "marker": "INC-7",
+                "title": "Checkout incident",
+                "description": "Incident: INC-7",
+            }
+        ]
+    )
+
+    evidence = build(snapshot([]), final)
+
+    assert len(evidence.mutations) == 1
+    assert isinstance(evidence.mutations[0].after, dict)
+    assert evidence.mutations[0].after["identifier"] == "OPS-1"
+    grade = evaluate_deterministic(
+        verification(),
+        complexity=complexity(),
+        resources=list(evidence.resources),
+        mutations=list(evidence.mutations),
+        trace=[ToolCallRecord("tracker", "GET", "/issues", 200, False) for _ in range(6)],
+        output=None,
+    )
+    assert grade.assertion_results["mutation.issue"] is True
+    assert grade.assertion_results["mutation_policy.default_deny"] is True
+    assert grade.task_success is True
+
+
+def test_delete_projects_provider_context_but_retains_unapproved_fields() -> None:
+    verifier = verification()
+    required_rule = verifier.deterministic.mutation_policy.required[0].model_copy(
+        update={"operation": "delete"},
+    )
+    mutation_policy = verifier.deterministic.mutation_policy.model_copy(
+        update={"required": [required_rule]},
+    )
+    deterministic = verifier.deterministic.model_copy(
+        update={"mutation_policy": mutation_policy},
+    )
+    verifier = verifier.model_copy(update={"deterministic": deterministic})
+    baseline = snapshot(
+        [
+            {
+                "id": "issue-generated-1",
+                "identifier": "OPS-1",
+                "marker": "INC-7",
+                "title": "Checkout incident",
+                "description": "Incident: INC-7",
+                "notify_external": True,
+            }
+        ]
+    )
+
+    evidence = build(baseline, snapshot([]), verifier=verifier)
+
+    assert len(evidence.mutations) == 2
+    governed, residual = evidence.mutations
+    assert isinstance(governed.before, dict)
+    assert governed.before["identifier"] == "OPS-1"
+    assert "notify_external" not in governed.before
+    assert cast(dict[str, JsonValue], residual.before)["notify_external"] is True
+    grade = evaluate_deterministic(
+        verifier,
+        complexity=complexity(),
+        resources=list(evidence.resources),
+        mutations=list(evidence.mutations),
+        trace=[ToolCallRecord("tracker", "GET", "/issues", 200, False) for _ in range(6)],
+        output=None,
+    )
+    assert grade.assertion_results["mutation.issue"] is True
+    assert grade.assertion_results["mutation_policy.default_deny"] is False
 
 
 def test_unlisted_entity_change_is_preserved_for_default_deny() -> None:
@@ -476,6 +562,152 @@ def test_symbolic_baseline_reference_rejects_missing_or_null_fields() -> None:
                     },
                 )
             ],
+        )
+
+
+def relational_assertions(
+    relation: str,
+) -> tuple[list[StateAssertionSpec], CanonicalResource, list[CanonicalResource]]:
+    if relation == "attached_to":
+        reference = StateAssertionSpec.model_validate(
+            {
+                "id": "sa_reference",
+                "provider_role": "code_host",
+                "resource_type": "pull_request_review",
+                "selector": {
+                    "repository": "acme/service",
+                    "state": "REQUEST_CHANGES",
+                },
+                "expected": {"present": True},
+                "cardinality": 1,
+            }
+        )
+        target = StateAssertionSpec.model_validate(
+            {
+                "id": "sa_target",
+                "provider_role": "code_host",
+                "resource_type": "pull_request_review_comment",
+                "selector": {
+                    "repository": "acme/service",
+                    "path": "src/service.py",
+                },
+                "expected": {"attached_to": "sa_reference"},
+                "cardinality": 1,
+            }
+        )
+        target_resource = CanonicalResource(
+            "code_host",
+            "pull_request_review_comment",
+            "acme/service#7:comment:80",
+            {
+                "repository": "acme/service",
+                "path": "src/service.py",
+                "attached_to": 71,
+            },
+        )
+        references = [
+            CanonicalResource(
+                "code_host",
+                "pull_request_review",
+                f"acme/service#7:review:{review_id}",
+                {
+                    "repository": "acme/service",
+                    "state": "REQUEST_CHANGES",
+                },
+            )
+            for review_id in (71, 72)
+        ]
+        return [reference, target], target_resource, references
+
+    if relation == "tracker_identifier_matches":
+        reference = StateAssertionSpec.model_validate(
+            {
+                "id": "sa_reference",
+                "provider_role": "issue_tracker",
+                "resource_type": "issue",
+                "selector": {"marker": "INC-7"},
+                "expected": {"present": True},
+                "cardinality": 1,
+            }
+        )
+        target = StateAssertionSpec.model_validate(
+            {
+                "id": "sa_target",
+                "provider_role": "messaging",
+                "resource_type": "message",
+                "selector": {"marker": "INC-7"},
+                "expected": {
+                    "tracker_identifier_matches": "sa_reference.identifier",
+                },
+                "cardinality": 1,
+            }
+        )
+        target_resource = CanonicalResource(
+            "messaging",
+            "message",
+            "message-1",
+            {
+                "marker": "INC-7",
+                "text": "Created OPS-1.",
+            },
+        )
+        references = [
+            CanonicalResource(
+                "issue_tracker",
+                "issue",
+                f"issue-{index}",
+                {
+                    "identifier": f"OPS-{index}",
+                    "marker": "INC-7",
+                },
+            )
+            for index in (1, 2)
+        ]
+        return [reference, target], target_resource, references
+
+    raise AssertionError(f"unsupported test relation: {relation}")
+
+
+@pytest.mark.parametrize("relation", ["attached_to", "tracker_identifier_matches"])
+def test_missing_relational_reference_becomes_a_normal_assertion_failure(
+    relation: str,
+) -> None:
+    assertions, target, _ = relational_assertions(relation)
+
+    resources = _materialize_relational_proofs(
+        before=[],
+        after=[target],
+        assertions=assertions,
+    )
+    verifier = verification()
+    deterministic = verifier.deterministic.model_copy(
+        update={"state_assertions": assertions},
+    )
+    verifier = verifier.model_copy(update={"deterministic": deterministic})
+    grade = evaluate_deterministic(
+        verifier,
+        complexity=complexity(),
+        resources=list(resources),
+        mutations=[],
+        trace=[],
+        output=None,
+    )
+
+    assert grade.assertion_results["sa_reference"] is False
+    assert grade.assertion_results["sa_target"] is False
+
+
+@pytest.mark.parametrize("relation", ["attached_to", "tracker_identifier_matches"])
+def test_ambiguous_relational_reference_remains_a_grader_error(
+    relation: str,
+) -> None:
+    assertions, target, references = relational_assertions(relation)
+
+    with pytest.raises(StateEvidenceError, match="uniquely"):
+        _materialize_relational_proofs(
+            before=[],
+            after=[target, *references],
+            assertions=assertions,
         )
 
 

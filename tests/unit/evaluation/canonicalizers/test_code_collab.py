@@ -77,11 +77,7 @@ def resource(
     resource_type: str,
     resource_id: str,
 ) -> Any:
-    return next(
-        item
-        for item in resources
-        if item.resource_type == resource_type and item.resource_id == resource_id
-    )
+    return next(item for item in resources if item.resource_type == resource_type and item.resource_id == resource_id)
 
 
 def test_registry_covers_every_code_and_collaboration_manifest_name() -> None:
@@ -247,9 +243,7 @@ def test_github_projections_merge_without_volatile_fields() -> None:
     assert comment.fields["pull_request_review_id"] == 71
     assert comment.fields["attached_to"] == 71
     file_resource = resource(resources, "file", f"{repository}@main:SECURITY_REVIEW.md")
-    assert file_resource.fields["content_hash"] == (
-        "823412d1eacb67956220e532959f0104603057c88704863ca38e7cd188fda812"
-    )
+    assert file_resource.fields["content_hash"] == ("823412d1eacb67956220e532959f0104603057c88704863ca38e7cd188fda812")
     rendered = json.dumps([item.fields for item in resources], sort_keys=True)
     for volatile in ("updated_at", "submitted_at", "created_at", "node_id", "avatar_url", "html_url"):
         assert volatile not in rendered
@@ -429,6 +423,81 @@ def test_gitlab_discussions_reject_non_expanded_api_shape() -> None:
     )
 
     with pytest.raises(StateCaptureError, match="notes must be a JSON array"):
+        CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query)
+
+
+def test_gitlab_discussions_represent_general_notes_without_positions() -> None:
+    query = capture(
+        "gitlab_discussions_stable",
+        "/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions",
+        [
+            {
+                "id": "discussion-general-missing",
+                "notes": [{"id": 100, "body": "General merge-request note."}],
+            },
+            {
+                "id": "discussion-general-null",
+                "notes": [{"id": 101, "body": "Another general note.", "position": None}],
+            },
+            {
+                "id": "discussion-diff",
+                "notes": [
+                    {
+                        "id": 102,
+                        "body": "BLOCKING: replace eval.",
+                        "position": {
+                            "position_type": "text",
+                            "head_sha": "b" * 40,
+                            "new_path": "src/parser.ts",
+                            "new_line": 1,
+                        },
+                    }
+                ],
+            },
+        ],
+        provider_name="gitlab",
+        provider_role="code_host",
+    )
+
+    resources = list(CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query))
+
+    discussions = [item for item in resources if item.resource_type == "merge_request_diff_discussion"]
+    assert [item.resource_id for item in discussions] == ["acme/web-parser!1:discussion:discussion-diff:note:102"]
+    assert discussions[0].fields["path"] == "src/parser.ts"
+    general_notes = [item for item in resources if item.resource_type == "merge_request_discussion_note"]
+    assert [item.resource_id for item in general_notes] == [
+        "acme/web-parser!1:discussion:discussion-general-missing:note:100",
+        "acme/web-parser!1:discussion:discussion-general-null:note:101",
+    ]
+    assert [item.fields["body"] for item in general_notes] == [
+        "General merge-request note.",
+        "Another general note.",
+    ]
+    project = resource(resources, "project_snapshot", "acme/web-parser")
+    assert [item["id"] for item in project.fields["discussions_by_merge_request"]["1"]] == ["100", "101", "102"]
+    assert [item["kind"] for item in project.fields["discussions_by_merge_request"]["1"]] == [
+        "general_note",
+        "general_note",
+        "diff_note",
+    ]
+
+
+@pytest.mark.parametrize("position", ["not-an-object", [], 42, True])
+def test_gitlab_discussions_reject_malformed_non_null_positions(position: Any) -> None:
+    query = capture(
+        "gitlab_discussions_stable",
+        "/api/v4/projects/acme%2Fweb-parser/merge_requests/1/discussions",
+        [
+            {
+                "id": "discussion-1",
+                "notes": [{"id": 101, "body": "Malformed diff note.", "position": position}],
+            }
+        ],
+        provider_name="gitlab",
+        provider_role="code_host",
+    )
+
+    with pytest.raises(StateCaptureError, match="note 101 position must be a JSON object"):
         CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query)
 
 
@@ -640,6 +709,75 @@ def test_linear_graphql_errors_fail_closed() -> None:
         CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query)
 
 
+@pytest.mark.parametrize("state_fields", [{}, {"state": None}])
+def test_linear_graphql_allows_missing_or_null_issue_state(
+    state_fields: dict[str, Any],
+) -> None:
+    query = capture(
+        "linear_issues_projects_comments_v1",
+        "/graphql",
+        {
+            "data": {
+                "issues": {
+                    "nodes": [
+                        {
+                            "id": "issue-1",
+                            "identifier": "OPS-1",
+                            "number": 1,
+                            "title": "Retry failed deliveries",
+                            "description": "Migration marker: MIG-33",
+                            "team": {"id": "team-1", "key": "OPS", "name": "Operations"},
+                            "comments": {"nodes": []},
+                            **state_fields,
+                        }
+                    ]
+                },
+                "projects": {"nodes": []},
+            }
+        },
+        provider_name="linear",
+        provider_role="target_tracker",
+        method="POST",
+    )
+
+    resources = list(CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query))
+
+    issue = resource(resources, "issue", "issue-1")
+    assert issue.fields["state"] is None
+    assert issue.fields["state_type"] is None
+
+
+@pytest.mark.parametrize("state", ["started", [], 1, True])
+def test_linear_graphql_rejects_malformed_non_null_issue_state(state: Any) -> None:
+    query = capture(
+        "linear_issues_projects_comments_v1",
+        "/graphql",
+        {
+            "data": {
+                "issues": {
+                    "nodes": [
+                        {
+                            "id": "issue-1",
+                            "identifier": "OPS-1",
+                            "title": "Retry failed deliveries",
+                            "team": {"id": "team-1", "key": "OPS"},
+                            "state": state,
+                            "comments": {"nodes": []},
+                        }
+                    ]
+                },
+                "projects": {"nodes": []},
+            }
+        },
+        provider_name="linear",
+        provider_role="target_tracker",
+        method="POST",
+    )
+
+    with pytest.raises(StateCaptureError, match="issue OPS-1 state must be a JSON object"):
+        CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query)
+
+
 @pytest.mark.parametrize(
     ("canonicalizer", "body", "message_field"),
     [
@@ -700,11 +838,7 @@ def test_chat_projections_require_enriched_history(
     message_field: str,
 ) -> None:
     provider_name = "slack" if canonicalizer.startswith("slack") else "discord"
-    path = (
-        "/api/conversations.list"
-        if provider_name == "slack"
-        else "/api/v10/users/@me/guilds"
-    )
+    path = "/api/conversations.list" if provider_name == "slack" else "/api/v10/users/@me/guilds"
     query = capture(
         canonicalizer,
         path,

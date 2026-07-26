@@ -44,10 +44,7 @@ def _objects(value: object, capture: CapturedQueryState, label: str) -> list[dic
         return []
     if not isinstance(value, list):
         raise _error(capture, f"{label} must be a JSON array")
-    return [
-        _object(item, capture, f"{label}[{index}]")
-        for index, item in enumerate(cast(list[object], value))
-    ]
+    return [_object(item, capture, f"{label}[{index}]") for index, item in enumerate(cast(list[object], value))]
 
 
 def _optional_object(value: object) -> dict[str, Any] | None:
@@ -149,8 +146,7 @@ def _notion_property_value(raw: object) -> object:
         return sorted(
             cast(str, relation["id"])
             for item in cast(list[object], relations)
-            if isinstance(item, dict)
-            and isinstance((relation := cast(dict[str, Any], item)).get("id"), str)
+            if isinstance(item, dict) and isinstance((relation := cast(dict[str, Any], item)).get("id"), str)
         )
     if prop_type in {"checkbox", "number", "url", "email", "phone_number"}:
         return value.get(str(prop_type))
@@ -161,8 +157,7 @@ def _notion_property_value(raw: object) -> object:
         return sorted(
             cast(str, person["id"])
             for item in cast(list[object], people)
-            if isinstance(item, dict)
-            and isinstance((person := cast(dict[str, Any], item)).get("id"), str)
+            if isinstance(item, dict) and isinstance((person := cast(dict[str, Any], item)).get("id"), str)
         )
     # KMS/admin projections and older twin snapshots may omit ``type`` while
     # retaining one provider-native property arm.
@@ -314,9 +309,7 @@ def _notion_page_resources(
                         database_fields[f"properties.{raw_name}.{prop_type}.name"] = _notion_property_value(
                             raw_value_dict
                         )
-            resources.append(
-                CanonicalResource(capture.provider_role, "database_page", page_id, database_fields)
-            )
+            resources.append(CanonicalResource(capture.provider_role, "database_page", page_id, database_fields))
 
         stable_pages.append(
             {
@@ -633,25 +626,34 @@ def _gmail_messages(capture: CapturedQueryState) -> list[CanonicalResource]:
     label_names = _gmail_label_map(body, capture)
     resources: list[CanonicalResource] = []
     stable: list[dict[str, Any]] = []
+    invoice_summaries: dict[str, dict[str, Any]] = {}
     for index, (mailbox, message) in enumerate(_gmail_items(capture, "messages")):
         message_id = _required_id(message, capture, f"message[{index}]")
         fields = {"mailbox": mailbox, **_gmail_message_fields(message, label_names=label_names)}
         resources.append(CanonicalResource(capture.provider_role, "message", message_id, fields))
         invoice_id = fields.get("invoice_id")
         if isinstance(invoice_id, str):
-            resources.append(
-                CanonicalResource(
-                    capture.provider_role,
-                    "message_or_draft",
-                    invoice_id,
-                    {
-                        "invoice_id": invoice_id,
-                        "Needs-Finance": fields["Needs-Finance"],
-                        "draft_count": 0,
-                    },
-                )
+            summary = invoice_summaries.setdefault(
+                invoice_id,
+                {
+                    "invoice_id": invoice_id,
+                    "Needs-Finance": False,
+                    "draft_count": 0,
+                },
             )
+            summary["Needs-Finance"] = bool(summary["Needs-Finance"]) or bool(fields["Needs-Finance"])
+            if "DRAFT" in cast(list[str], fields["labelIds"]):
+                summary["draft_count"] = cast(int, summary["draft_count"]) + 1
         stable.append({"id": message_id, **fields})
+    resources.extend(
+        CanonicalResource(
+            capture.provider_role,
+            "message_or_draft",
+            invoice_id,
+            summary,
+        )
+        for invoice_id, summary in sorted(invoice_summaries.items())
+    )
     resources.extend(_gmail_snapshot_resources(capture, kind="messages", stable_items=stable))
     return resources
 

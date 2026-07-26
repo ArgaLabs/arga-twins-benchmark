@@ -40,6 +40,117 @@ class ToolCallRecord:
     destination: Literal["provisioned_provider", "external", "control_plane"] = "provisioned_provider"
 
 
+# Create/delete canonical resources include a small amount of context that the
+# provider, rather than the candidate, supplies. Mutation rules intentionally
+# describe candidate-controlled fields, so these derived aliases and immutable
+# provider facts may be omitted from ``MutationMatcherSpec.fields``. Keep this
+# list explicit: an unknown field must remain visible to default-deny.
+_CREATE_DELETE_CANONICAL_CONTEXT_FIELDS: dict[str, frozenset[str]] = {
+    "draft": frozenset({"mailbox"}),
+    "event": frozenset(
+        {
+            "calendar",
+            "calendar_id",
+            "date",
+        }
+    ),
+    "file_permission": frozenset({"file_id", "present"}),
+    "issue": frozenset(
+        {
+            "branch_name",
+            "created_at",
+            "creator_id",
+            "identifier",
+            "key",
+            "number",
+            "sort_order",
+            "updated_at",
+            "url",
+        }
+    ),
+    "issue_comment": frozenset(
+        {
+            "author",
+            "created_at",
+            "created_by",
+            "edited_at",
+            "issue_id",
+            "updated_at",
+            "url",
+            "user",
+            "user_id",
+        }
+    ),
+    "merge_request_diff_discussion": frozenset(
+        {
+            "author_username",
+            "commit_sha",
+            "discussion_id",
+            "old_line",
+            "path",
+        }
+    ),
+    "message": frozenset(
+        {
+            "author",
+            "channel",
+            "channel_id",
+            "channel_name",
+            "guild_id",
+            "guild_name",
+            "incident",
+        }
+    ),
+    "pull_request_review": frozenset({"author_login"}),
+    "pull_request_review_comment": frozenset({"attached_to", "author_login"}),
+}
+
+
+def is_create_delete_canonical_context(
+    *,
+    resource_type: str,
+    field_name: str,
+    value: object,
+    covered_fields: frozenset[str] = frozenset(),
+) -> bool:
+    if field_name in _CREATE_DELETE_CANONICAL_CONTEXT_FIELDS.get(
+        resource_type,
+        frozenset(),
+    ):
+        return True
+    # Complete provider projections commonly serialize absent optional fields.
+    # These values cannot encode an additional positive side effect.
+    if value is None or value is False or value == [] or value == {}:
+        return True
+    if resource_type == "issue" and isinstance(value, str):
+        # Jira and Linear materialize these defaults even when the create
+        # request omits them. Non-default values remain unapproved evidence.
+        provider_defaults: dict[str, frozenset[str]] = {
+            "issue_type": frozenset({"Task"}),
+            "priority": frozenset({"Medium"}),
+            "state": frozenset({"Backlog"}),
+            "state_id": frozenset({"ws_backlog"}),
+            "state_type": frozenset({"open"}),
+            "status": frozenset({"To Do"}),
+            "status_category": frozenset({"open"}),
+            "status_type": frozenset({"open"}),
+        }
+        if value in provider_defaults.get(field_name, frozenset()):
+            return True
+    if resource_type == "issue":
+        alias_sources: dict[str, frozenset[str]] = {
+            "marker": frozenset({"description", "summary", "title"}),
+            "project_id": frozenset({"project"}),
+            "team_id": frozenset({"team", "team_key"}),
+            "team_key": frozenset({"team"}),
+        }
+        if alias_sources.get(field_name, frozenset()) & covered_fields:
+            return True
+    if resource_type == "event" and field_name == "status":
+        return value == "confirmed"
+    return False
+
+
 def _is_subset(expected: object, actual: object) -> bool:
     if isinstance(expected, dict):
         if not isinstance(actual, dict):
@@ -103,9 +214,19 @@ def _mutation_matches(rule: MutationMatcherSpec, mutation: Mutation) -> bool:
                 return False
         if mutation.operation in {"create", "delete"} and mutation.field is None:
             value = mutation.after if mutation.operation == "create" else mutation.before
-            canonical_fields: set[str] = set(cast(dict[str, Any], value)) if isinstance(value, dict) else set()
+            canonical = cast(dict[str, Any], value) if isinstance(value, dict) else {}
+            canonical_fields = set(canonical)
             contextual_fields = set(rule.selector)
-            if not canonical_fields - contextual_fields <= set(rule.fields):
+            unapproved_fields = canonical_fields - contextual_fields - set(rule.fields)
+            if any(
+                not is_create_delete_canonical_context(
+                    resource_type=mutation.resource_type,
+                    field_name=field_name,
+                    value=canonical[field_name],
+                    covered_fields=frozenset(contextual_fields | set(rule.fields)),
+                )
+                for field_name in unapproved_fields
+            ):
                 return False
     return _is_subset(rule.selector, _mutation_document(mutation))
 
@@ -117,8 +238,7 @@ def trace_call_matches(
     check_status: bool = True,
 ) -> bool:
     path_matches = any(
-        re.fullmatch(rule.path_pattern, path) is not None
-        for path in _trace_path_variants(call.path, rule.path_pattern)
+        re.fullmatch(rule.path_pattern, path) is not None for path in _trace_path_variants(call.path, rule.path_pattern)
     )
     path_matches = (
         call.destination == "provisioned_provider"
@@ -166,11 +286,7 @@ def _trace_path_variants(path: str, pattern: str) -> set[str]:
     if parsed.scheme or parsed.netloc:
         return variants
     pairs = parse_qsl(parsed.query, keep_blank_values=True)
-    without_pagination = [
-        (key, value)
-        for key, value in pairs
-        if key.casefold() not in _BENIGN_TRACE_QUERY_KEYS
-    ]
+    without_pagination = [(key, value) for key, value in pairs if key.casefold() not in _BENIGN_TRACE_QUERY_KEYS]
     if without_pagination != pairs:
         rendered = urlencode(sorted(without_pagination))
         variants.add(f"{parsed.path}?{rendered}" if rendered else parsed.path)
@@ -192,9 +308,7 @@ def _trace_path_variants(path: str, pattern: str) -> set[str]:
             variants.add(f"{trimmed}?{candidate_parts.query}" if candidate_parts.query else trimmed)
         elif not candidate_parts.path.endswith("/"):
             with_slash = (
-                f"{candidate_parts.path}/?{candidate_parts.query}"
-                if candidate_parts.query
-                else f"{candidate}/"
+                f"{candidate_parts.path}/?{candidate_parts.query}" if candidate_parts.query else f"{candidate}/"
             )
             variants.add(with_slash)
     return variants
@@ -273,9 +387,7 @@ def _required_trace_calls_are_distinct_and_causal(
 
     rules_by_id = {rule.id: rule for rule in rules}
     write_interactions = {
-        interaction.id
-        for interaction in complexity.tool_interactions
-        if interaction.kind.value == "write"
+        interaction.id for interaction in complexity.tool_interactions if interaction.kind.value == "write"
     }
     predecessors = {
         rule_id: {

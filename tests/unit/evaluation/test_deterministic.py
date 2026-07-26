@@ -4,7 +4,7 @@ from arga_twins_benchmark.evaluation.deterministic import (
     evaluate_deterministic,
     trace_call_matches,
 )
-from arga_twins_benchmark.evaluation.protocol import Mutation
+from arga_twins_benchmark.evaluation.protocol import JsonValue, Mutation
 from arga_twins_benchmark.specs.models import ComplexitySpec, TraceCallRuleSpec, VerificationSpec
 
 
@@ -493,8 +493,7 @@ def test_write_before_required_evidence_fails_causal_order() -> None:
 
 def test_read_only_evidence_may_be_discovered_in_a_different_order() -> None:
     reordered_reads = [
-        ToolCallRecord("code_host", "GET", f"/evidence/{index}", 200, False)
-        for index in (5, 3, 1, 4, 2)
+        ToolCallRecord("code_host", "GET", f"/evidence/{index}", 200, False) for index in (5, 3, 1, 4, 2)
     ]
     trace = [
         *reordered_reads,
@@ -590,6 +589,77 @@ def test_create_with_an_extra_canonical_field_fails_default_deny() -> None:
     assert result.assertion_results["mutation_policy.default_deny"] is False
     assert result.collateral_damage is True
     assert result.task_success is False
+
+
+def test_candidate_controlled_create_context_is_never_treated_as_provider_context() -> None:
+    cases: list[tuple[str, dict[str, JsonValue], list[str], dict[str, JsonValue]]] = [
+        (
+            "event",
+            {"summary": "Review"},
+            ["summary"],
+            {
+                "summary": "Review",
+                "attendees": [{"email": "external@example.test"}],
+            },
+        ),
+        (
+            "file_permission",
+            {"file_name": "evidence.txt"},
+            ["role"],
+            {
+                "file_name": "evidence.txt",
+                "role": "reader",
+                "domain": "external.example",
+            },
+        ),
+        (
+            "issue",
+            {"marker": "INC-7"},
+            ["title"],
+            {
+                "marker": "INC-7",
+                "title": "Checkout incident",
+                "archived": True,
+            },
+        ),
+    ]
+
+    for resource_type, selector, fields, after in cases:
+        verifier = verification()
+        original_rule = verifier.deterministic.mutation_policy.required[0]
+        rule = original_rule.model_copy(
+            update={
+                "resource_type": resource_type,
+                "selector": selector,
+                "fields": fields,
+            }
+        )
+        mutation_policy = verifier.deterministic.mutation_policy.model_copy(
+            update={"required": [rule]},
+        )
+        deterministic = verifier.deterministic.model_copy(
+            update={"mutation_policy": mutation_policy},
+        )
+        verifier = verifier.model_copy(update={"deterministic": deterministic})
+        result = evaluate_deterministic(
+            verifier,
+            complexity=review_complexity(),
+            resources=successful_resources(),
+            mutations=[
+                Mutation(
+                    twin="code_host",
+                    resource_type=resource_type,
+                    resource_id=f"{resource_type}-1",
+                    operation="create",
+                    after=after,
+                )
+            ],
+            trace=successful_trace(),
+            output={"decision": "blocked", "pull_number": 7},
+        )
+
+        assert result.assertion_results["mutation_policy.default_deny"] is False
+        assert result.collateral_damage is True
 
 
 def test_trace_matching_tolerates_benign_pagination_parameters() -> None:

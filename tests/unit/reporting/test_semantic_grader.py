@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, cast
@@ -56,9 +57,10 @@ def _bundle() -> InstanceBundle:
     return cast(
         InstanceBundle,
         SimpleNamespace(
+            instance_path=Path("instance.yaml"),
             binding=SimpleNamespace(roles={"tracker": "test_tracker"}),
             verification=object(),
-            instance=SimpleNamespace(complexity=object()),
+            instance=SimpleNamespace(complexity=object(), seed_files={}),
         ),
     )
 
@@ -107,6 +109,13 @@ def _suite(tmp_path: Path) -> Path:
             "final_text": final_text,
         },
     )
+    _write_json(
+        trial_dir / "control.json",
+        {
+            "instance_id": "instance-1",
+            "scenario_content_sha256": "episode-hash-1",
+        },
+    )
     _write_json(trial_dir / "baseline-state.json", _snapshot().artifact_payload())
     _write_json(trial_dir / "final-state.json", _snapshot().artifact_payload())
     _write_json(
@@ -142,8 +151,36 @@ def _install_catalog_stubs(monkeypatch: pytest.MonkeyPatch) -> None:
         del catalog_root, instance_id
         return "episode-hash-1"
 
+    def recover_snapshots(
+        *,
+        baseline: TrustedStateSnapshot,
+        final: TrustedStateSnapshot,
+        invocation: Mapping[str, Any],
+        trace_payload: Mapping[str, Any],
+        control_payload: Mapping[str, Any],
+        instance_id: str,
+        instance_path: Path,
+        seed_files: Mapping[str, str],
+        expected_episode_hash: str,
+    ) -> tuple[TrustedStateSnapshot, TrustedStateSnapshot]:
+        del (
+            invocation,
+            trace_payload,
+            control_payload,
+            instance_id,
+            instance_path,
+            seed_files,
+            expected_episode_hash,
+        )
+        return baseline, final
+
     monkeypatch.setattr(semantic_grader, "load_experiment_bundles", load_bundles)
     monkeypatch.setattr(semantic_grader, "fingerprint_instance_bundle", fingerprint)
+    monkeypatch.setattr(
+        semantic_grader,
+        "recover_preserved_trial_snapshots",
+        recover_snapshots,
+    )
     monkeypatch.setattr(
         semantic_grader,
         "_grader_revision",  # pyright: ignore[reportPrivateUsage]
@@ -217,6 +254,7 @@ def test_grade_saved_suite_builds_complete_derived_grade(
         "baseline-state.json",
         "final-state.json",
         "provider-trace.json",
+        "control.json",
     }
 
 

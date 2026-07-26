@@ -552,10 +552,7 @@ async def _request_json_response(
                 ) from error
             await asyncio.sleep(retry_base_delay_seconds * (2 ** (attempt - 1)))
             continue
-        if (
-            response.status_code in _RETRYABLE_STATE_CAPTURE_STATUS_CODES
-            and attempt < max_attempts
-        ):
+        if response.status_code in _RETRYABLE_STATE_CAPTURE_STATUS_CODES and attempt < max_attempts:
             await response.aclose()
             await asyncio.sleep(retry_base_delay_seconds * (2 ** (attempt - 1)))
             continue
@@ -893,8 +890,10 @@ def _diff_json(
 
 
 def _identity_index(items: list[JsonValue]) -> dict[str, JsonValue] | None:
+    if not items:
+        return {}
     identities = [_stable_identity(item) for item in items]
-    if not items or any(identity is None for identity in identities):
+    if any(identity is None for identity in identities):
         return None
     typed_identities = cast(list[str], identities)
     if len(set(typed_identities)) != len(typed_identities):
