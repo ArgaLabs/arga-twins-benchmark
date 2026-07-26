@@ -502,3 +502,77 @@ def test_duplicate_provider_roles_and_mismatched_capture_contracts_fail_closed()
     )
     with pytest.raises(StateCaptureError, match="provider role changed"):
         diff_trusted_states(before, after)
+
+
+def test_trusted_snapshot_artifact_round_trip_is_exact() -> None:
+    original = TrustedStateSnapshot(
+        providers={
+            "github": CapturedProviderState(
+                "github",
+                "code_host",
+                {"pulls": [{"number": 7, "state": "open"}]},
+            )
+        },
+        queries={
+            "pulls": CapturedQueryState(
+                "pulls",
+                "github",
+                "code_host",
+                "GET",
+                "/repos/acme/demo/pulls",
+                "github_pulls_stable",
+                200,
+                [{"number": 7, "state": "open"}],
+            )
+        },
+    )
+
+    restored = TrustedStateSnapshot.from_artifact_payload(original.artifact_payload())
+
+    assert restored == original
+
+
+@pytest.mark.parametrize(
+    ("case", "match"),
+    [
+        ("extra_provider_field", "exactly provider_role and state"),
+        ("boolean_status", "invalid status_code"),
+        ("mismatched_role", "mismatched provider role"),
+        ("unknown_provider", "unknown provider"),
+    ],
+)
+def test_trusted_snapshot_artifact_loader_rejects_ambiguous_evidence(
+    case: str,
+    match: str,
+) -> None:
+    payload = cast(
+        dict[str, Any],
+        TrustedStateSnapshot(
+            providers={"github": CapturedProviderState("github", "code_host", {"pulls": []})},
+            queries={
+                "pulls": CapturedQueryState(
+                    "pulls",
+                    "github",
+                    "code_host",
+                    "GET",
+                    "/repos/acme/demo/pulls",
+                    "github_pulls_stable",
+                    200,
+                    [],
+                )
+            },
+        ).artifact_payload(),
+    )
+    providers = cast(dict[str, dict[str, Any]], payload["providers"])
+    queries = cast(dict[str, dict[str, Any]], payload["queries"])
+    if case == "extra_provider_field":
+        providers["github"]["unexpected"] = True
+    elif case == "boolean_status":
+        queries["pulls"]["status_code"] = True
+    elif case == "mismatched_role":
+        queries["pulls"]["provider_role"] = "other"
+    else:
+        queries["pulls"]["provider_name"] = "gitlab"
+
+    with pytest.raises(StateCaptureError, match=match):
+        TrustedStateSnapshot.from_artifact_payload(payload)

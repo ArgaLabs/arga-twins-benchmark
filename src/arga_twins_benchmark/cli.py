@@ -17,7 +17,9 @@ from arga_twins_benchmark.lifecycle import (
     reset_instance,
     save_experiment_scenarios,
     save_scenario,
+    write_private_json,
 )
+from arga_twins_benchmark.reporting.semantic_grader import SemanticGradeError, grade_saved_suite
 from arga_twins_benchmark.runner import (
     MODEL_PROFILES,
     ModelProfile,
@@ -277,6 +279,52 @@ def run_matrix(
             sort_keys=True,
         )
     )
+
+
+@app.command("grade-suite")
+def grade_suite(
+    suite_dir: Annotated[Path, typer.Argument(help="Saved matrix suite directory")],
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Derived semantic grade JSON; defaults inside the suite"),
+    ] = None,
+    fail_on_incomplete: Annotated[
+        bool,
+        typer.Option("--fail-on-incomplete", help="Exit 1 when any trial cannot be graded safely"),
+    ] = False,
+) -> None:
+    try:
+        report = grade_saved_suite(suite_dir, catalog_root=root)
+    except SemanticGradeError as error:
+        raise typer.BadParameter(str(error)) from error
+    output_path = output or (suite_dir / "semantic-grade.json")
+    write_private_json(output_path, report)
+    typer.echo(
+        json.dumps(
+            {
+                key: report.get(key)
+                for key in (
+                    "suite_run_id",
+                    "scheduled_trials",
+                    "valid_trials",
+                    "invalid_infrastructure_trials",
+                    "invalid_grader_trials",
+                    "passed_trials",
+                    "failed_trials",
+                    "unsafe_trials",
+                    "state_grade_complete",
+                    "scoring_ready",
+                    "by_model",
+                )
+            }
+            | {"artifact": str(output_path)},
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    if fail_on_incomplete and report.get("scoring_ready") is not True:
+        raise typer.Exit(code=1)
 
 
 async def _save_instance_scenario(*, catalog_root: Path, instance_id: str) -> SavedScenario:

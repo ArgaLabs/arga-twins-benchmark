@@ -171,6 +171,102 @@ class TrustedStateSnapshot:
             },
         }
 
+    @classmethod
+    def from_artifact_payload(cls, payload: object) -> TrustedStateSnapshot:
+        """Reconstruct one trusted snapshot from its secret-safe artifact.
+
+        Offline grading must not silently accept a partial or structurally
+        ambiguous snapshot. The loader therefore validates every relationship
+        that the live capturer establishes before returning an equivalent
+        in-memory object.
+        """
+
+        if not isinstance(payload, dict):
+            raise StateCaptureError("trusted state artifact must be a JSON object")
+        artifact = cast(dict[object, object], payload)
+        if set(artifact) != {"providers", "queries"}:
+            raise StateCaptureError("trusted state artifact must contain exactly providers and queries")
+
+        raw_providers = artifact["providers"]
+        if not isinstance(raw_providers, dict) or not raw_providers:
+            raise StateCaptureError("trusted state artifact providers must be a non-empty JSON object")
+        providers: dict[str, CapturedProviderState] = {}
+        for raw_name, raw_capture in cast(dict[object, object], raw_providers).items():
+            if not isinstance(raw_name, str) or not raw_name:
+                raise StateCaptureError("trusted state artifact provider names must be non-empty strings")
+            if not isinstance(raw_capture, dict):
+                raise StateCaptureError(f"trusted state artifact provider {raw_name!r} must be a JSON object")
+            capture = cast(dict[object, object], raw_capture)
+            if set(capture) != {"provider_role", "state"}:
+                raise StateCaptureError(
+                    f"trusted state artifact provider {raw_name!r} must contain exactly provider_role and state"
+                )
+            provider_role = capture["provider_role"]
+            state = capture["state"]
+            if not isinstance(provider_role, str) or not provider_role:
+                raise StateCaptureError(f"trusted state artifact provider {raw_name!r} has an invalid provider_role")
+            if not isinstance(state, dict):
+                raise StateCaptureError(f"trusted state artifact provider {raw_name!r} state must be a JSON object")
+            state_mapping = cast(dict[object, object], state)
+            if not all(isinstance(key, str) for key in state_mapping):
+                raise StateCaptureError(f"trusted state artifact provider {raw_name!r} state must use string keys")
+            providers[raw_name] = CapturedProviderState(
+                provider_name=raw_name,
+                provider_role=provider_role,
+                state=cast(dict[str, JsonValue], state_mapping),
+            )
+
+        raw_queries = artifact["queries"]
+        if not isinstance(raw_queries, dict):
+            raise StateCaptureError("trusted state artifact queries must be a JSON object")
+        queries: dict[str, CapturedQueryState] = {}
+        required_query_fields = {
+            "provider_name",
+            "provider_role",
+            "method",
+            "path",
+            "canonicalizer",
+            "status_code",
+            "body",
+        }
+        for raw_query_id, raw_capture in cast(dict[object, object], raw_queries).items():
+            if not isinstance(raw_query_id, str) or not raw_query_id:
+                raise StateCaptureError("trusted state artifact query IDs must be non-empty strings")
+            if not isinstance(raw_capture, dict):
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} must be a JSON object")
+            capture = cast(dict[object, object], raw_capture)
+            if set(capture) != required_query_fields:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has an invalid field set")
+            provider_name = capture["provider_name"]
+            provider_role = capture["provider_role"]
+            method = capture["method"]
+            path = capture["path"]
+            canonicalizer = capture["canonicalizer"]
+            status_code = capture["status_code"]
+            if not isinstance(provider_name, str) or provider_name not in providers:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} references an unknown provider")
+            if not isinstance(provider_role, str) or provider_role != providers[provider_name].provider_role:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has a mismatched provider role")
+            if not isinstance(method, str) or not method:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has an invalid method")
+            if not isinstance(path, str) or not path:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has an invalid path")
+            if not isinstance(canonicalizer, str) or not canonicalizer:
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has an invalid canonicalizer")
+            if isinstance(status_code, bool) or not isinstance(status_code, int):
+                raise StateCaptureError(f"trusted state artifact query {raw_query_id!r} has an invalid status_code")
+            queries[raw_query_id] = CapturedQueryState(
+                query_id=raw_query_id,
+                provider_name=provider_name,
+                provider_role=provider_role,
+                method=method,
+                path=path,
+                canonicalizer=canonicalizer,
+                status_code=status_code,
+                body=cast(JsonValue, capture["body"]),
+            )
+        return cls(providers=providers, queries=queries)
+
 
 @dataclass(frozen=True)
 class RawStateDelta:

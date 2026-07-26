@@ -74,3 +74,16 @@ The saved Scenario is durable catalog metadata: its `name` is human-readable, it
 See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), and [security model](docs/security-model.md).
 
 Completed suites can be checked offline with `scripts/audit_suite.py`; the audit makes no provider or Arga calls.
+Preserved baseline state, final state, provider traces, and structured model output can be passed through the
+full deterministic grader without reprovisioning twins:
+
+```bash
+uv run arga-bench grade-suite runs/<suite-run-id> \
+  --root benchmark \
+  --output runs/<suite-run-id>/semantic-grade.json
+```
+
+The derived grade is written separately from immutable execution artifacts and records SHA-256 hashes of every
+input it consumed. Unsupported or incomplete canonical evidence is reported as `invalid_grader`, never converted
+into an agent failure or guessed Task Success result. Add `--fail-on-incomplete` when a CI job must require a
+fully gradeable matrix.
