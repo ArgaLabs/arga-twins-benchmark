@@ -11,9 +11,12 @@ import pytest
 from arga_twins_benchmark.evaluation.state_capture import TrustedStateSnapshot
 from arga_twins_benchmark.providers import ProviderInfrastructureError, ProviderTraceRecord
 from arga_twins_benchmark.runner.matrix import (
+    ProvisionedFixtureInvariantError,
     TrialPlan,
+    _gitlab_expected_merge_request_bindings,  # pyright: ignore[reportPrivateUsage]
     _prepare_trial_attempt,  # pyright: ignore[reportPrivateUsage]
     _retryable_infrastructure_result,  # pyright: ignore[reportPrivateUsage]
+    _verify_provisioned_fixture_identity,  # pyright: ignore[reportPrivateUsage]
     load_experiment_bundles,
     run_trial,
 )
@@ -83,6 +86,237 @@ class _StateCapturer:
     ) -> TrustedStateSnapshot:
         del roles, snapshot_queries
         return TrustedStateSnapshot(providers={})
+
+
+@pytest.mark.parametrize(
+    ("instance_id", "expected_count"),
+    [
+        ("blocking_code_review_v1_gitlab_provider_contrast_004", 1),
+        ("incident_triage_v1_discord_gitlab_jira_provider_contrast_004", 1),
+        ("release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004", 2),
+        ("specification_drift_v1_notion_gitlab_linear_provider_contrast_004", 0),
+        ("tracker_migration_v1_linear_jira_gitlab_provider_contrast_004", 1),
+    ],
+)
+def test_checked_in_gitlab_seed_bindings_match_trusted_provisioning_evidence(
+    instance_id: str,
+    expected_count: int,
+) -> None:
+    _, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
+    bundle = bundles[instance_id]
+    expected_bindings = _gitlab_expected_merge_request_bindings(bundle)
+    control_payload = {
+        "twin_run": {
+            "seed_results": {
+                "gitlab": {
+                    "status": "seeded",
+                    "merge_requests_created": len(expected_bindings),
+                    "merge_request_bindings": expected_bindings,
+                }
+            }
+        }
+    }
+
+    evidence = _verify_provisioned_fixture_identity(bundle, control_payload)
+
+    assert len(expected_bindings) == expected_count
+    assert evidence == {
+        "protocol": "arga-bench-provisioned-fixture-identity/1",
+        "passed": True,
+        "checks": [
+            {
+                "provider": "gitlab",
+                "check": "merge_request_bindings",
+                "expected_count": expected_count,
+                "verified_count": expected_count,
+                "projects": sorted({cast(str, binding["project"]) for binding in expected_bindings}),
+                "passed": True,
+            }
+        ],
+    }
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "missing",
+        "wrong_iid",
+        "wrong_title",
+        "duplicate",
+    ],
+)
+def test_gitlab_seed_binding_mismatches_fail_before_candidate_invocation(
+    mutation: str,
+) -> None:
+    instance_id = "blocking_code_review_v1_gitlab_provider_contrast_004"
+    _, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
+    bundle = bundles[instance_id]
+    bindings = [dict(binding) for binding in _gitlab_expected_merge_request_bindings(bundle)]
+    if mutation == "missing":
+        bindings.pop()
+    elif mutation == "wrong_iid":
+        bindings[0]["iid"] = 2
+    elif mutation == "wrong_title":
+        bindings[0]["title"] = "Seed merge request"
+    elif mutation == "duplicate":
+        bindings.append(dict(bindings[0]))
+    else:
+        raise AssertionError(f"unknown test mutation {mutation!r}")
+    control_payload = {
+        "twin_run": {
+            "seed_results": {
+                "gitlab": {
+                    "status": "seeded",
+                    "merge_requests_created": 1,
+                    "merge_request_bindings": bindings,
+                }
+            }
+        }
+    }
+
+    with pytest.raises(ProvisionedFixtureInvariantError):
+        _verify_provisioned_fixture_identity(bundle, control_payload)
+
+
+def test_gitlab_seed_binding_field_is_required_even_when_no_merge_requests_exist() -> None:
+    instance_id = "specification_drift_v1_notion_gitlab_linear_provider_contrast_004"
+    _, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
+    bundle = bundles[instance_id]
+
+    with pytest.raises(
+        ProvisionedFixtureInvariantError,
+        match="missing merge_request_bindings",
+    ):
+        _verify_provisioned_fixture_identity(
+            bundle,
+            {
+                "twin_run": {
+                    "seed_results": {
+                        "gitlab": {
+                            "status": "seeded",
+                            "merge_requests_created": 0,
+                        }
+                    }
+                }
+            },
+        )
+
+
+def test_run_trial_rejects_unbound_gitlab_fixture_before_gateway_or_model(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    instance_id = "blocking_code_review_v1_gitlab_provider_contrast_004"
+    _, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
+    bundle = bundles[instance_id]
+    plan = TrialPlan(
+        suite_run_id="suite-gitlab-invariant",
+        trial_id="trial-gitlab-invariant",
+        repeat=1,
+        instance_id=instance_id,
+        model=MODEL_PROFILES[0],
+    )
+
+    async def fake_provision_instance(
+        *,
+        catalog_root: Path,
+        instance_id: str,
+        control_output: Path,
+        candidate_output: Path,
+        ttl_minutes: int,
+        timeout_seconds: int,
+        arga_candidate_safe_profile: bool,
+    ) -> None:
+        del (
+            catalog_root,
+            instance_id,
+            ttl_minutes,
+            timeout_seconds,
+            arga_candidate_safe_profile,
+        )
+        control_output.write_text(
+            json.dumps(
+                {
+                    "protocol": "arga-bench-control/1",
+                    "scenario_id": "scenario-gitlab",
+                    "run_id": "run-gitlab",
+                    "twin_run": {
+                        "run_id": "run-gitlab",
+                        "status": "ready",
+                        "twins": {},
+                        "seed_results": {
+                            "gitlab": {
+                                "status": "seeded",
+                                "merge_requests_created": 1,
+                            }
+                        },
+                    },
+                }
+            )
+        )
+        candidate_output.write_text(
+            json.dumps(
+                {
+                    "protocol": "arga-bench-candidate-access/1",
+                    "provider_access": {
+                        "gitlab": {
+                            "base_url": "https://pub-run--gitlab.sandbox.argalabs.com",
+                            "env": {},
+                        }
+                    },
+                }
+            )
+        )
+
+    class UnexpectedGateway:
+        def __init__(self, *_args: object, **_kwargs: object) -> None:
+            raise AssertionError("gateway must not be constructed for an invalid fixture")
+
+    async def unexpected_invoke_model(*_args: object, **_kwargs: object) -> object:
+        raise AssertionError("candidate must not be invoked for an invalid fixture")
+
+    async def fake_cleanup_instance(_control_path: Path) -> dict[str, Any]:
+        return {
+            "twin_run": {
+                "run_id": "run-gitlab",
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
+
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.provision_instance",
+        fake_provision_instance,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.ProviderGateway",
+        UnexpectedGateway,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.invoke_model",
+        unexpected_invoke_model,
+    )
+    monkeypatch.setattr(
+        "arga_twins_benchmark.runner.matrix.cleanup_instance",
+        fake_cleanup_instance,
+    )
+
+    result = asyncio.run(
+        run_trial(
+            catalog_root=Path("benchmark"),
+            bundle=bundle,
+            plan=plan,
+            output_root=tmp_path,
+            runner_commit="test-commit",
+        )
+    )
+
+    assert result["status"] == "runtime_error"
+    assert result["error_type"] == "ProvisionedFixtureInvariantError"
+    assert result["invocation_started"] is False
+    assert result["provider_tool_calls"] == 0
+    assert result["official_docs_tool_calls"] == 0
+    assert result["cleanup_succeeded"] is True
 
 
 def test_run_trial_persists_trace_and_marks_provider_circuit_failure_retryable(

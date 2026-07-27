@@ -18,6 +18,7 @@ from dataclasses import asdict, dataclass, is_dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, cast
+from urllib.parse import urlparse
 
 from arga_twins_benchmark.agents import invoke_model
 from arga_twins_benchmark.catalog import fingerprint_instance_bundle, validate_catalog
@@ -70,6 +71,10 @@ class SuiteRunLockedError(RuntimeError):
 
 class DirtyRunnerTreeError(RuntimeError):
     """Raised when benchmark results cannot be attributed to a clean revision."""
+
+
+class ProvisionedFixtureInvariantError(RuntimeError):
+    """Raised before invocation when a provisioned world does not match its checked-in seed identity."""
 
 
 class _SuiteRunLock:
@@ -216,6 +221,197 @@ def _write_official_docs_cache(
 
 def _slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
+
+
+def _gitlab_seed_slug(value: str, fallback: str = "scenario") -> str:
+    return re.sub(r"[^a-zA-Z0-9._-]+", "-", value.strip()).strip("-").lower() or fallback
+
+
+def _gitlab_repo_name_from_url(repo_url: str) -> str:
+    parsed = urlparse(repo_url if "://" in repo_url else f"https://gitlab.com/{repo_url}")
+    return Path(parsed.path.removesuffix(".git")).name or "cloned-project"
+
+
+def _mapping_list(value: object, *, label: str) -> list[Mapping[str, object]]:
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        raise ProvisionedFixtureInvariantError(f"{label} must be an array")
+    mappings: list[Mapping[str, object]] = []
+    for index, item in enumerate(cast(list[object], value)):
+        if not isinstance(item, Mapping):
+            raise ProvisionedFixtureInvariantError(f"{label}[{index}] must be an object")
+        mappings.append(cast(Mapping[str, object], item))
+    return mappings
+
+
+def _gitlab_expected_merge_request_bindings(bundle: InstanceBundle) -> list[dict[str, object]]:
+    relative_seed_path = bundle.instance.seed_files.get("gitlab")
+    if relative_seed_path is None:
+        return []
+    instance_root = bundle.instance_path.parent.resolve()
+    seed_path = (instance_root / relative_seed_path).resolve()
+    if not seed_path.is_relative_to(instance_root):
+        raise ProvisionedFixtureInvariantError("GitLab seed path escapes the instance directory")
+    try:
+        raw_seed: object = json.loads(seed_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ProvisionedFixtureInvariantError("GitLab seed configuration is unreadable") from error
+    if not isinstance(raw_seed, Mapping):
+        raise ProvisionedFixtureInvariantError("GitLab seed configuration must be an object")
+    seed = cast(Mapping[str, object], raw_seed)
+
+    expected: list[dict[str, object]] = []
+    repo_url_fields = ("public_repo_url", "repo_url", "clone_url", "source_repo_url")
+    for project_index, project in enumerate(_mapping_list(seed.get("projects"), label="GitLab seed projects")):
+        source_repo_url = next(
+            (str(project[field]) for field in repo_url_fields if project.get(field)),
+            "",
+        )
+        project_name = str(
+            project.get("name")
+            or (_gitlab_repo_name_from_url(source_repo_url) if source_repo_url else "Scenario Project")
+        )
+        namespace_path = str(project.get("namespace_path") or project.get("namespace") or "root")
+        project_path = str(project.get("path") or _gitlab_seed_slug(project_name, "scenario-project"))
+        default_branch = str(project.get("default_branch") or "main")
+        project_reference = f"{namespace_path}/{project_path}"
+        raw_merge_requests = project.get("merge_requests") if "merge_requests" in project else project.get("mrs")
+        merge_requests = _mapping_list(
+            raw_merge_requests,
+            label=f"GitLab seed projects[{project_index}].merge_requests",
+        )
+        for seed_index, merge_request in enumerate(merge_requests, start=1):
+            title = merge_request.get("title") or "Scenario merge request"
+            description = merge_request.get("description") or merge_request.get("body") or ""
+            source_branch = str(merge_request.get("source_branch") or merge_request.get("head") or "feature/scenario")
+            target_branch = str(merge_request.get("target_branch") or merge_request.get("base") or default_branch)
+            expected.append(
+                {
+                    "project": project_reference,
+                    "seed_index": seed_index,
+                    "iid": seed_index,
+                    "reference": f"!{seed_index}",
+                    "full_reference": f"{project_reference}!{seed_index}",
+                    "title": title,
+                    "description": description,
+                    "source_branch": source_branch,
+                    "target_branch": target_branch,
+                }
+            )
+    return expected
+
+
+def _verify_provisioned_fixture_identity(
+    bundle: InstanceBundle,
+    control_payload: Mapping[str, object],
+) -> dict[str, object]:
+    """Fail closed when trusted Scenario binding evidence disagrees with checked-in seed data."""
+
+    checks: list[dict[str, object]] = []
+    if "gitlab" not in bundle.instance.seed_files:
+        return {
+            "protocol": "arga-bench-provisioned-fixture-identity/1",
+            "passed": True,
+            "checks": checks,
+        }
+
+    expected_bindings = _gitlab_expected_merge_request_bindings(bundle)
+    raw_twin_run = control_payload.get("twin_run")
+    if not isinstance(raw_twin_run, Mapping):
+        raise ProvisionedFixtureInvariantError("trusted control payload is missing the provisioned twin run")
+    twin_run = cast(Mapping[str, object], raw_twin_run)
+    raw_seed_results = twin_run.get("seed_results")
+    if not isinstance(raw_seed_results, Mapping):
+        raise ProvisionedFixtureInvariantError("trusted control payload is missing Scenario seed results")
+    seed_results = cast(Mapping[str, object], raw_seed_results)
+    raw_gitlab_result = seed_results.get("gitlab")
+    if not isinstance(raw_gitlab_result, Mapping):
+        raise ProvisionedFixtureInvariantError("trusted Scenario seed results are missing GitLab evidence")
+    gitlab_result = cast(Mapping[str, object], raw_gitlab_result)
+    if gitlab_result.get("status") != "seeded":
+        raise ProvisionedFixtureInvariantError("trusted GitLab Scenario seed result is not successful")
+    if "merge_request_bindings" not in gitlab_result:
+        raise ProvisionedFixtureInvariantError("trusted GitLab Scenario seed result is missing merge_request_bindings")
+    raw_bindings = gitlab_result.get("merge_request_bindings")
+    actual_bindings = _mapping_list(
+        raw_bindings,
+        label="GitLab merge_request_bindings",
+    )
+    if gitlab_result.get("merge_requests_created") != len(expected_bindings):
+        raise ProvisionedFixtureInvariantError(
+            "GitLab merge-request creation count does not match checked-in seed data"
+        )
+    if len(actual_bindings) != len(expected_bindings):
+        raise ProvisionedFixtureInvariantError("GitLab merge-request binding count does not match checked-in seed data")
+
+    actual_by_identity: dict[tuple[str, int], Mapping[str, object]] = {}
+    for index, binding in enumerate(actual_bindings):
+        project = binding.get("project")
+        seed_index = binding.get("seed_index")
+        iid = binding.get("iid")
+        if (
+            not isinstance(project, str)
+            or not project
+            or isinstance(seed_index, bool)
+            or not isinstance(seed_index, int)
+            or isinstance(iid, bool)
+            or not isinstance(iid, int)
+        ):
+            raise ProvisionedFixtureInvariantError(
+                f"GitLab merge_request_bindings[{index}] has invalid identity fields"
+            )
+        if iid != seed_index:
+            raise ProvisionedFixtureInvariantError(
+                f"GitLab merge_request_bindings[{index}] maps seed index {seed_index} to unexpected !{iid}"
+            )
+        identity = (project, seed_index)
+        if identity in actual_by_identity:
+            raise ProvisionedFixtureInvariantError(
+                f"GitLab merge-request binding identity {project}!{seed_index} is duplicated"
+            )
+        actual_by_identity[identity] = binding
+
+    compared_fields = (
+        "project",
+        "seed_index",
+        "iid",
+        "reference",
+        "full_reference",
+        "title",
+        "description",
+        "source_branch",
+        "target_branch",
+    )
+    for expected in expected_bindings:
+        identity = (cast(str, expected["project"]), cast(int, expected["seed_index"]))
+        actual = actual_by_identity.get(identity)
+        if actual is None:
+            raise ProvisionedFixtureInvariantError(
+                f"GitLab merge-request binding {identity[0]}!{identity[1]} is missing"
+            )
+        mismatched = [field for field in compared_fields if actual.get(field) != expected[field]]
+        if mismatched:
+            raise ProvisionedFixtureInvariantError(
+                f"GitLab merge-request binding {identity[0]}!{identity[1]} conflicts with checked-in "
+                f"seed fields: {', '.join(mismatched)}"
+            )
+
+    checks.append(
+        {
+            "provider": "gitlab",
+            "check": "merge_request_bindings",
+            "expected_count": len(expected_bindings),
+            "verified_count": len(actual_bindings),
+            "projects": sorted({cast(str, binding["project"]) for binding in expected_bindings}),
+            "passed": True,
+        }
+    )
+    return {
+        "protocol": "arga-bench-provisioned-fixture-identity/1",
+        "passed": True,
+        "checks": checks,
+    }
 
 
 def _read_lock_owner(lock_file: Any) -> dict[str, object] | None:
@@ -941,6 +1137,14 @@ async def run_trial(
             raise ValueError("control payload must be an object")
         candidate_mapping = cast(dict[str, object], candidate_payload)
         control_mapping = cast(dict[str, Any], control_payload)
+        fixture_identity = _verify_provisioned_fixture_identity(
+            bundle,
+            cast(Mapping[str, object], control_mapping),
+        )
+        write_private_json(
+            trial_dir / "provisioned-fixture-identity.json",
+            cast(dict[str, Any], fixture_identity),
+        )
         provider_access = candidate_mapping.get("provider_access")
         if not isinstance(provider_access, dict):
             raise ValueError("candidate access is missing provider_access")
