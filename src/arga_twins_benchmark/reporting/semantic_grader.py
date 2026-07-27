@@ -193,7 +193,11 @@ def _event_destination(path: str) -> Literal["provisioned_provider", "external",
     segments = [segment.casefold() for segment in normalized.split("/") if segment]
     candidate_segments = segments[1:] if segments and segments[0] == "api" else segments
     if not candidate_segments:
-        return "control_plane"
+        # A provider-root read is non-business discovery, but it remains on the
+        # provisioned destination and does not itself prove control-plane use or
+        # collateral harm. Secure runs reject it in ProviderGateway before any
+        # network request; historical runs retain it as trajectory evidence.
+        return "provisioned_provider"
     if candidate_segments[0] in _NON_BUSINESS_ROOT_SEGMENTS or (
         len(candidate_segments) >= 2
         and candidate_segments[0] == ".well-known"

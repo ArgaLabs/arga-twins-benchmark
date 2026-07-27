@@ -35,6 +35,14 @@ def _write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload))
 
 
+@pytest.mark.parametrize("path", ["/", "/api", "/api/"])
+def test_provider_root_discovery_is_not_misclassified_as_control_plane(path: str) -> None:
+    assert (
+        semantic_grader._event_destination(path)  # pyright: ignore[reportPrivateUsage]
+        == "provisioned_provider"
+    )
+
+
 def _snapshot() -> TrustedStateSnapshot:
     return TrustedStateSnapshot(
         providers={
