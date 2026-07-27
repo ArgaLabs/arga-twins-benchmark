@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Literal, cast
 from urllib.parse import parse_qsl, unquote, urlencode, urlsplit
 
@@ -183,14 +185,196 @@ def _is_subset(expected: object, actual: object) -> bool:
     return expected == actual
 
 
+_UNORDERED_STATE_LIST_FIELDS = frozenset(
+    {
+        "attendee_emails",
+        "labels_contain",
+    }
+)
+_SEMANTIC_ARTIFACT_TEXT_FIELDS = frozenset(
+    {
+        "body",
+        "content",
+        "description",
+        "summary",
+        "text",
+        "title",
+    }
+)
+_READINESS_ARTIFACT = re.compile(
+    r"\bREADINESS\s+(?P<release>REL-[0-9]+)\s*:\s*"
+    r"(?P<decision>NOT\s+READY|READY|BLOCKED)\b"
+    r"(?:\s*[-:]\s*(?P<reason>.*?))?\s*$",
+    re.IGNORECASE,
+)
+_INCIDENT_MARKER = re.compile(r"\bINC-[0-9]+\b", re.IGNORECASE)
+_PROVIDER_CHANGE_REFERENCE = re.compile(r"(?P<sigil>[#!])\s*(?P<number>[1-9][0-9]*)\b")
+_EMAIL_ADDRESS = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+_INCIDENT_BOILERPLATE_TOKENS = frozenset(
+    {
+        "cause",
+        "evidence",
+        "incident",
+        "marker",
+        "mr",
+        "pr",
+    }
+)
+
+
+def _readiness_artifacts_are_equivalent(expected: str, actual: str) -> bool:
+    """Compare release publications by exact identity and gate outcome.
+
+    The release policy permits a free-form ``<reason>``. Requiring one hidden
+    sentence such as ``all gates passed`` rejects an equally precise reason
+    that enumerates the successful gates. The release identifier and decision
+    remain exact, and READY alternatives must positively prove every gate
+    category rather than merely contain the word "ready".
+    """
+
+    expected_match = _READINESS_ARTIFACT.search(expected)
+    actual_match = _READINESS_ARTIFACT.search(actual)
+    if expected_match is None or actual_match is None:
+        return False
+    expected_release = expected_match.group("release").upper()
+    actual_release = actual_match.group("release").upper()
+    expected_decision = re.sub(r"\s+", "_", expected_match.group("decision").upper())
+    actual_decision = re.sub(r"\s+", "_", actual_match.group("decision").upper())
+    if expected_release != actual_release or expected_decision != actual_decision:
+        return False
+
+    actual_reason = (actual_match.group("reason") or "").strip()
+    if not actual_reason:
+        return False
+    expected_references = {
+        (match.group("sigil"), int(match.group("number"))) for match in _PROVIDER_CHANGE_REFERENCE.finditer(expected)
+    }
+    actual_references = {
+        (match.group("sigil"), int(match.group("number"))) for match in _PROVIDER_CHANGE_REFERENCE.finditer(actual)
+    }
+    if expected_references and actual_references != expected_references:
+        return False
+    expected_tokens = _semantic_tokens(expected)
+    actual_tokens = _semantic_tokens(actual)
+    if expected_decision == "READY" and {"all", "gates", "passed"} <= expected_tokens:
+        generic_pass = {"all", "gates", "passed"} <= actual_tokens
+        enumerated_pass = (
+            {"all", "merged", "approved"} <= actual_tokens
+            and bool(actual_tokens & {"blocker", "blockers"})
+            and bool(actual_tokens & {"no", "none"})
+        )
+        return generic_pass or enumerated_pass
+    if expected_decision in {"BLOCKED", "NOT_READY"}:
+        return (
+            bool(
+                actual_tokens
+                & {
+                    "blocked",
+                    "blocker",
+                    "blockers",
+                    "failed",
+                    "missing",
+                    "open",
+                    "pending",
+                    "unmerged",
+                }
+            )
+            or {"not", "merged"} <= actual_tokens
+        )
+    return expected_tokens <= actual_tokens
+
+
+def _incident_artifacts_are_equivalent(expected: str, actual: str) -> bool:
+    """Accept evidence-rich incident text while preserving exact identities.
+
+    The benchmark policy prescribes an incident marker, provider change
+    reference, and normalized cause, but it does not forbid adding the
+    deployment marker, repository name, file path, or concrete configuration
+    evidence. Treat the verifier text as the minimum semantic content while
+    keeping incident IDs, PR/MR numbers, and any named email addresses exact.
+    """
+
+    expected_incidents = {match.group(0).upper() for match in _INCIDENT_MARKER.finditer(expected)}
+    if not expected_incidents:
+        return False
+    actual_incidents = {match.group(0).upper() for match in _INCIDENT_MARKER.finditer(actual)}
+    if actual_incidents != expected_incidents:
+        return False
+
+    expected_references = {
+        (match.group("sigil"), int(match.group("number"))) for match in _PROVIDER_CHANGE_REFERENCE.finditer(expected)
+    }
+    actual_references = {
+        (match.group("sigil"), int(match.group("number"))) for match in _PROVIDER_CHANGE_REFERENCE.finditer(actual)
+    }
+    if expected_references and actual_references != expected_references:
+        return False
+
+    expected_emails = {match.group(0).casefold() for match in _EMAIL_ADDRESS.finditer(expected)}
+    actual_emails = {match.group(0).casefold() for match in _EMAIL_ADDRESS.finditer(actual)}
+    if expected_emails and actual_emails != expected_emails:
+        return False
+
+    expected_tokens = _semantic_tokens(expected) - _INCIDENT_BOILERPLATE_TOKENS
+    actual_tokens = _semantic_tokens(actual) - _INCIDENT_BOILERPLATE_TOKENS
+    return bool(expected_tokens) and expected_tokens <= actual_tokens
+
+
+def state_fact_matches(
+    key: str,
+    expected: object,
+    actual: object,
+) -> bool:
+    if key in _UNORDERED_STATE_LIST_FIELDS and isinstance(expected, list) and isinstance(actual, list):
+        expected_items = cast(list[object], expected)
+        actual_items = cast(list[object], actual)
+        if all(isinstance(item, str) for item in expected_items) and all(
+            isinstance(item, str) for item in actual_items
+        ):
+            return sorted(cast(list[str], expected_items)) == sorted(cast(list[str], actual_items))
+    if key in _SEMANTIC_ARTIFACT_TEXT_FIELDS and isinstance(expected, str) and isinstance(actual, str):
+        if expected.rstrip("\r\n") == actual.rstrip("\r\n"):
+            return True
+        return _readiness_artifacts_are_equivalent(expected, actual) or _incident_artifacts_are_equivalent(
+            expected, actual
+        )
+    return _is_subset(cast(object, expected), cast(object, actual))
+
+
+def state_document_matches(expected: Mapping[str, Any], actual: Mapping[str, Any]) -> bool:
+    for key, value in expected.items():
+        if key == "excluded_attendees":
+            if not isinstance(value, list):
+                return False
+            excluded = cast(list[object], value)
+            attendee_emails = actual.get("attendee_emails")
+            attendee_items = cast(list[object], attendee_emails) if isinstance(attendee_emails, list) else []
+            if (
+                not isinstance(attendee_emails, list)
+                or not all(isinstance(item, str) for item in excluded)
+                or not all(isinstance(item, str) for item in attendee_items)
+                or set(cast(list[str], excluded)) & set(cast(list[str], attendee_items))
+            ):
+                return False
+            continue
+        if key == "created_by" and value == "benchmark_user":
+            aliases = actual.get("created_by_principal_aliases")
+            if actual.get(key) == value or (isinstance(aliases, list) and value in cast(list[object], aliases)):
+                continue
+            return False
+        if key not in actual or not state_fact_matches(key, value, actual[key]):
+            return False
+    return True
+
+
 def _state_assertion_matches(assertion: StateAssertionSpec, resources: list[CanonicalResource]) -> bool:
     matches = [
         resource
         for resource in resources
         if resource.provider_role == assertion.provider_role
         and resource.resource_type == assertion.resource_type
-        and _is_subset(assertion.selector, resource.match_document())
-        and _is_subset(assertion.expected, resource.match_document())
+        and state_document_matches(assertion.selector, resource.match_document())
+        and state_document_matches(assertion.expected, resource.match_document())
     ]
     return len(matches) == assertion.cardinality
 
@@ -559,7 +743,7 @@ _RESULT_FACT_ALIASES: dict[str, frozenset[str]] = {
     "normalized": frozenset({"applied", "completed", "normalization_applied"}),
     "promoted": frozenset({"completed", "promotion_applied"}),
     "published": frozenset({"completed"}),
-    "repaired": frozenset({"completed"}),
+    "repaired": frozenset({"completed", "migration_completed", "repaired_in_place"}),
     "reused": frozenset({"reused_existing", "reused_existing_open_issue", "reused_open_exact_marker_item"}),
     "reused_existing": frozenset({"already_present_not_reposted", "existing_status_not_reposted"}),
     "scheduled": frozenset({"completed"}),
@@ -627,11 +811,14 @@ def _semantic_tokens(value: object) -> set[str]:
 def _string_list_is_semantic_subset(expected: list[object], actual: list[object]) -> bool:
     if not all(isinstance(item, str) for item in expected):
         return False
+    expected_items = cast(list[str], expected)
     used_indices: set[int] = set()
-    for expected_item in expected:
+    for expected_item in expected_items:
         expected_tokens = _semantic_tokens(expected_item)
 
         def item_matches(actual_item: object) -> bool:
+            if _document_contains_exact_identity(expected_item, actual_item):
+                return True
             actual_tokens = _semantic_tokens(actual_item)
             required_tokens = expected_tokens
             if "wrong" in required_tokens and actual_tokens & {
@@ -679,6 +866,39 @@ def _string_list_is_semantic_subset(expected: list[object], actual: list[object]
             return False
         used_indices.add(match)
     return True
+
+
+def _document_contains_exact_identity(expected: str, document: object) -> bool:
+    """Find an explicit identity value without token-matching opaque IDs.
+
+    Structured results often represent ``["INV-7301"]`` as
+    ``[{"invoice_id": "INV-7301", "draft_id": "..."}]``. Tokenizing the
+    entire object makes unrelated generated IDs look like contradictory
+    numbers. Match the declared identity field exactly and ignore incidental
+    provider IDs; the same helper is used by forbidden-fact checks.
+    """
+
+    if re.fullmatch(r"[A-Za-z][A-Za-z0-9_.]*-[0-9]+", expected) is None:
+        return False
+    if isinstance(document, dict):
+        mapping = cast(dict[object, object], document)
+        for raw_key, value in mapping.items():
+            if _fact_key_is_negative_evidence(raw_key):
+                continue
+            key = _normalized_result_value(raw_key) if isinstance(raw_key, str) else ""
+            identity_field = (
+                key in {"invoice", "release", "request", "ticket"}
+                or key.endswith("_id")
+                or key.endswith("_identifier")
+                or key.endswith("_key")
+            )
+            if identity_field and isinstance(value, str) and value.strip().casefold() == expected.casefold():
+                return True
+            if _document_contains_exact_identity(expected, value):
+                return True
+    elif isinstance(document, list):
+        return any(_document_contains_exact_identity(expected, item) for item in cast(list[object], document))
+    return False
 
 
 def _fact_key_is_negative_evidence(key: object) -> bool:
@@ -956,6 +1176,21 @@ def _fact_key_requires_exact_string(key: object) -> bool:
 
 
 def _fact_value_matches(key: object, expected: object, actual: object) -> bool:
+    if isinstance(expected, str) and _document_contains_exact_identity(expected, actual):
+        return True
+    if (
+        isinstance(key, str)
+        and _normalized_result_value(key) in {"event_start", "event_end", "start", "end"}
+        and isinstance(expected, str)
+        and isinstance(actual, str)
+    ):
+        try:
+            expected_time = datetime.fromisoformat(expected.replace("Z", "+00:00"))
+            actual_time = datetime.fromisoformat(actual.replace("Z", "+00:00"))
+        except ValueError:
+            pass
+        else:
+            return expected_time == actual_time
     if (
         isinstance(key, str)
         and _normalized_result_value(key) == "first_failing_gate"
@@ -1093,8 +1328,15 @@ def _output_is_subset(expected: object, actual: object) -> bool:
             _output_is_subset(expected_value, actual_value)
             for expected_value, actual_value in zip(expected_items, actual_items, strict=True)
         )
-    if isinstance(expected, str) and isinstance(actual, str):
-        return _strings_are_semantically_equivalent(expected, actual)
+    if isinstance(expected, str):
+        if isinstance(actual, str):
+            return _strings_are_semantically_equivalent(expected, actual)
+        if isinstance(actual, list):
+            return any(
+                _strings_are_semantically_equivalent(expected, item)
+                for item in cast(list[object], actual)
+                if isinstance(item, str)
+            )
     return expected == actual
 
 

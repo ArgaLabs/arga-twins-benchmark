@@ -13,6 +13,8 @@ from arga_twins_benchmark.evaluation.baseline_semantics import enrich_baseline_s
 from arga_twins_benchmark.evaluation.deterministic import (
     CanonicalResource,
     is_create_delete_canonical_context,
+    state_document_matches,
+    state_fact_matches,
 )
 from arga_twins_benchmark.evaluation.protocol import JsonValue, Mutation
 from arga_twins_benchmark.evaluation.snapshot_enrichment import (
@@ -182,7 +184,24 @@ _PROJECTION_RESOURCE_TYPES = frozenset(
 _UPDATE_FIELD_ECHOES: Mapping[tuple[str, str], frozenset[str]] = {
     ("database_page", "properties.Lifecycle.select.name"): frozenset({"Lifecycle"}),
     ("event", "attendees"): frozenset({"attendee_emails"}),
-    ("issue", "state"): frozenset({"state_type"}),
+    # Linear updates server-maintained timestamps whenever a candidate changes
+    # an issue. State transitions additionally maintain the provider-native
+    # state identity and lifecycle timestamps. These are consequences of the
+    # declared business mutation, not independently candidate-controlled
+    # fields. Keep the list field-specific so an unrelated title, project, or
+    # assignee change remains visible to default-deny.
+    ("issue", "description"): frozenset({"updated_at"}),
+    ("issue", "priority"): frozenset({"updated_at"}),
+    ("issue", "state"): frozenset(
+        {
+            "canceled_at",
+            "completed_at",
+            "started_at",
+            "state_id",
+            "state_type",
+            "updated_at",
+        }
+    ),
     ("issue", "status"): frozenset({"status_category", "status_type"}),
     ("message", "labelIds"): frozenset({"labels", "labels_contain", "Needs-Finance", "Needs-Finance_count"}),
 }
@@ -256,23 +275,34 @@ def build_deterministic_state_evidence(
     )
     mutations.extend(synthetic_mutations)
 
-    selector_resources = _materialize_selector_proofs(
-        before=before_resources,
-        after=after_resources,
-        assertions=verification.deterministic.state_assertions,
-    )
     enrichment = enrich_baseline_semantics(
         before=before_resources,
-        after=selector_resources,
+        after=after_resources,
         mutations=mutations,
         assertions=verification.deterministic.state_assertions,
     )
     if enrichment.unsupported:
         details = "; ".join(f"{item.assertion_id}.{item.construct}: {item.reason}" for item in enrichment.unsupported)
         raise StateEvidenceError(f"unsupported baseline state semantics: {details}")
-    final_resources = _materialize_relational_proofs(
+    assertion_resources = _materialize_assertion_state_proofs(
         before=before_resources,
         after=enrichment.resources,
+        final=final,
+        verification=verification,
+    )
+    # Selector operators such as ``number_lte`` are synthetic proofs used only
+    # by the final assertion matcher. Materializing them before baseline
+    # comparison makes an unchanged resource appear changed because the proof
+    # field exists only in the after projection. Derive preservation facts
+    # first, then attach selector proofs.
+    selector_resources = _materialize_selector_proofs(
+        before=before_resources,
+        after=assertion_resources,
+        assertions=verification.deterministic.state_assertions,
+    )
+    final_resources = _materialize_relational_proofs(
+        before=before_resources,
+        after=selector_resources,
         assertions=verification.deterministic.state_assertions,
     )
     return DeterministicStateEvidence(
@@ -890,6 +920,157 @@ def _changed_fields(mutation: Mutation) -> set[str]:
     return {key for key in set(before) | set(after) if before.get(key) != after.get(key)}
 
 
+_GMAIL_MESSAGE_CANONICALIZERS = frozenset(
+    {
+        "gmail_messages_labels_threads_v1",
+        "gmail_messages_stable",
+        "gmail_messages_threads_v1",
+    }
+)
+
+
+def _materialize_assertion_state_proofs(
+    *,
+    before: Sequence[CanonicalResource],
+    after: Sequence[CanonicalResource],
+    final: TrustedStateSnapshot,
+    verification: VerificationSpec,
+) -> tuple[CanonicalResource, ...]:
+    """Attach relative safety and trusted-principal proofs requested by legacy verifiers."""
+
+    fields_by_key = {
+        (resource.provider_role, resource.resource_type, resource.resource_id): dict(resource.fields)
+        for resource in after
+    }
+    resources_by_key = {
+        (resource.provider_role, resource.resource_type, resource.resource_id): resource for resource in after
+    }
+
+    safety_fields = {
+        "deleted_count",
+        "forwarded_count",
+        "sent_count",
+        "unread_removed_count",
+    }
+    gmail_roles = {
+        assertion.provider_role
+        for assertion in verification.deterministic.state_assertions
+        if assertion.resource_type == "provider_state" and safety_fields & set(assertion.expected)
+    }
+    complete_gmail_roles = {
+        query.provider_role
+        for query in verification.deterministic.snapshot_queries
+        if query.canonicalizer in _GMAIL_MESSAGE_CANONICALIZERS
+    }
+    for role in sorted(gmail_roles & complete_gmail_roles):
+        proof = _gmail_relative_safety_counts(before=before, after=after, provider_role=role)
+        for key, resource in resources_by_key.items():
+            if (
+                resource.provider_role != role
+                or resource.resource_type != "provider_state"
+                or resource.fields.get("scope") != "all"
+            ):
+                continue
+            for field_name, value in proof.items():
+                existing = fields_by_key[key].get(field_name, _MISSING)
+                if existing is not _MISSING and existing != value:
+                    raise StateEvidenceError(
+                        f"relative Gmail safety proof {field_name!r} conflicts on canonical resource {key!r}"
+                    )
+                fields_by_key[key][field_name] = value
+
+    principal_roles = {
+        assertion.provider_role
+        for assertion in verification.deterministic.state_assertions
+        if assertion.expected.get("created_by") == "benchmark_user"
+    }
+    principal_values = _trusted_principal_values(final)
+    for key, resource in resources_by_key.items():
+        if resource.provider_role not in principal_roles:
+            continue
+        created_by = resource.fields.get("created_by")
+        if not isinstance(created_by, str) or created_by not in principal_values.get(
+            resource.provider_role, frozenset()
+        ):
+            continue
+        fields_by_key[key]["created_by_principal_aliases"] = ["benchmark_user"]
+
+    return tuple(
+        CanonicalResource(
+            provider_role=resource.provider_role,
+            resource_type=resource.resource_type,
+            resource_id=resource.resource_id,
+            fields=fields_by_key[key],
+        )
+        for key, resource in sorted(resources_by_key.items())
+    )
+
+
+def _gmail_relative_safety_counts(
+    *,
+    before: Sequence[CanonicalResource],
+    after: Sequence[CanonicalResource],
+    provider_role: str,
+) -> dict[str, int]:
+    baseline = {
+        resource.resource_id: resource
+        for resource in before
+        if resource.provider_role == provider_role and resource.resource_type == "message"
+    }
+    final = {
+        resource.resource_id: resource
+        for resource in after
+        if resource.provider_role == provider_role and resource.resource_type == "message"
+    }
+
+    def has_label(resource: CanonicalResource, label: str) -> bool:
+        labels = resource.fields.get("labelIds")
+        return isinstance(labels, list) and label in cast(list[object], labels)
+
+    newly_sent = [
+        resource
+        for resource_id, resource in final.items()
+        if has_label(resource, "SENT") and (resource_id not in baseline or not has_label(baseline[resource_id], "SENT"))
+    ]
+    forwarded = [
+        resource
+        for resource in newly_sent
+        if isinstance((subject := resource.fields.get("subject")), str)
+        and re.match(r"^\s*(?:fwd?|forwarded)\s*:", subject, re.IGNORECASE) is not None
+    ]
+    unread_removed = sum(
+        has_label(resource, "UNREAD") and resource_id in final and not has_label(final[resource_id], "UNREAD")
+        for resource_id, resource in baseline.items()
+    )
+    return {
+        "sent_count": len(newly_sent),
+        "deleted_count": len(set(baseline) - set(final)),
+        "forwarded_count": len(forwarded),
+        "unread_removed_count": unread_removed,
+    }
+
+
+def _trusted_principal_values(snapshot: TrustedStateSnapshot) -> dict[str, frozenset[str]]:
+    by_role: dict[str, set[str]] = {}
+    ambiguous_roles: set[str] = set()
+    for provider in snapshot.providers.values():
+        users = provider.state.get("users")
+        if not isinstance(users, list) or len(users) != 1 or not isinstance(users[0], dict):
+            continue
+        if provider.provider_role in by_role:
+            ambiguous_roles.add(provider.provider_role)
+            continue
+        user = cast(dict[str, JsonValue], users[0])
+        values = {
+            value
+            for key in ("accountId", "account_id", "displayName", "display_name", "email", "id")
+            if isinstance((value := user.get(key)), str) and value
+        }
+        if values:
+            by_role[provider.provider_role] = values
+    return {role: frozenset(values) for role, values in by_role.items() if role not in ambiguous_roles}
+
+
 def _materialize_selector_proofs(
     *,
     before: Sequence[CanonicalResource],
@@ -1168,7 +1349,8 @@ def _selector_matches(
             except re.error as error:
                 raise StateEvidenceError(f"{key} selector has invalid regular expression: {error}") from error
             continue
-        if not _is_subset(expected, document.get(key, _MISSING)):
+        actual = document.get(key, _MISSING)
+        if actual is _MISSING or not state_fact_matches(key, expected, actual):
             return False
     return True
 
@@ -1184,7 +1366,7 @@ def _selector_operator(key: str) -> bool:
 
 
 def _literal_subset(selector: Mapping[str, Any], document: Mapping[str, Any]) -> bool:
-    return all(_is_subset(expected, document.get(key, _MISSING)) for key, expected in selector.items())
+    return state_document_matches(selector, document)
 
 
 def _is_subset(expected: object, actual: object) -> bool:

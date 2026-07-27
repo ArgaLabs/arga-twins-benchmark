@@ -6,7 +6,10 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, cast
 
-from arga_twins_benchmark.evaluation.deterministic import CanonicalResource
+from arga_twins_benchmark.evaluation.deterministic import (
+    CanonicalResource,
+    state_fact_matches,
+)
 from arga_twins_benchmark.evaluation.protocol import Mutation
 from arga_twins_benchmark.specs.models import StateAssertionSpec
 
@@ -126,6 +129,20 @@ def enrich_baseline_semantics(
                 continue
 
             if fact_key == "equals_baseline":
+                if assertion.resource_type == "file_collection" and "exclude" in assertion.selector:
+                    equal, error = _drive_equals_baseline_with_exclusion(
+                        assertion,
+                        before=before_index,
+                        after=after_index,
+                        selected_before=selected_before,
+                        selected_after=selected_after,
+                    )
+                    if error is not None:
+                        unsupported.append(UnsupportedBaselineAssertion(assertion.id, fact_key, error))
+                        continue
+                    for key in selected_after:
+                        facts_by_key[key][fact_key] = equal
+                    continue
                 for key in selected_after:
                     old = before_index.get(key)
                     facts_by_key[key][fact_key] = old is not None and old.fields == after_index[key].fields
@@ -364,7 +381,8 @@ def _selector_matches(
             except re.error as error:
                 return _SelectorResult(False, f"{key} is not a valid regular expression: {error}")
             continue
-        if not _is_subset(expected, document.get(key, _MISSING)):
+        actual = document.get(key, _MISSING)
+        if actual is _MISSING or not state_fact_matches(key, expected, actual):
             return _SelectorResult(False)
     return _SelectorResult(True)
 
@@ -696,6 +714,69 @@ def _drive_equals_except(
             }
         )
 
+    return _drive_preserved_excluding_target_permissions(
+        assertion,
+        selectors=selectors,
+        before=before,
+        after=after,
+        selected_before=selected_before,
+        selected_after=selected_after,
+    )
+
+
+def _drive_equals_baseline_with_exclusion(
+    assertion: StateAssertionSpec,
+    *,
+    before: Mapping[tuple[str, str, str], CanonicalResource],
+    after: Mapping[tuple[str, str, str], CanonicalResource],
+    selected_before: Mapping[tuple[str, str, str], CanonicalResource],
+    selected_after: Mapping[tuple[str, str, str], CanonicalResource],
+) -> tuple[bool, str | None]:
+    """Interpret the legacy Drive collection exclusion as a target exception.
+
+    The collection resource is a digest over every file. Its historical
+    ``exclude`` selector therefore cannot literally remove one file from that
+    digest. Resolve the excluded title-and-marker selector to one stable file,
+    ignore only that file's permission projection, and compare every other
+    canonical provider fact. This preserves the original verifier hash while
+    rejecting any collateral file mutation.
+    """
+
+    raw = assertion.selector.get("exclude")
+    if not isinstance(raw, dict):
+        return False, "Drive file_collection exclude selector must be an object"
+    raw_selector = cast(dict[str, Any], raw)
+    aliases = {
+        "file_name": "name",
+        "marker": "content_marker",
+        "title": "name",
+    }
+    selector = {aliases.get(key, key): value for key, value in raw_selector.items()}
+    allowed_fields = {"name", "content_marker"}
+    if not selector or not set(selector) <= allowed_fields:
+        return (
+            False,
+            "Drive file_collection exclude must identify one file by title/name and content marker",
+        )
+    return _drive_preserved_excluding_target_permissions(
+        assertion,
+        selectors=[selector],
+        before=before,
+        after=after,
+        selected_before=selected_before,
+        selected_after=selected_after,
+    )
+
+
+def _drive_preserved_excluding_target_permissions(
+    assertion: StateAssertionSpec,
+    *,
+    selectors: Sequence[Mapping[str, object]],
+    before: Mapping[tuple[str, str, str], CanonicalResource],
+    after: Mapping[tuple[str, str, str], CanonicalResource],
+    selected_before: Mapping[tuple[str, str, str], CanonicalResource],
+    selected_after: Mapping[tuple[str, str, str], CanonicalResource],
+) -> tuple[bool, str | None]:
     old_snapshot, new_snapshot, error = _stable_snapshot_pair(
         selected_before,
         selected_after,

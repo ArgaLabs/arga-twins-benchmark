@@ -387,6 +387,242 @@ def test_drive_permission_exception_uses_unique_title_and_marker_target() -> Non
     assert snapshot.fields["equals_baseline_except"] == ["file[title=Evidence.txt,marker=SOC2-Q2-311].permissions"]
     assert result.unsupported == ()
 
+    collateral = CanonicalResource(
+        other.provider_role,
+        other.resource_type,
+        other.resource_id,
+        {**other.fields, "name": "Renamed.txt"},
+    )
+    negative = enrich_baseline_semantics(
+        before=before,
+        after=[
+            target_after,
+            collateral,
+            _resource(
+                "f1:p1",
+                provider_role="storage",
+                resource_type="file_permission",
+                file_id="f1",
+                role="reader",
+            ),
+            _resource(
+                "all_files",
+                provider_role="storage",
+                resource_type="drive_snapshot",
+                scope="all_files",
+                stable_digest="new",
+            ),
+            _resource(
+                "all_files",
+                provider_role="storage",
+                resource_type="file_collection",
+                scope="all_files",
+                stable_digest="new",
+            ),
+        ],
+        mutations=[],
+        assertions=[assertion],
+    )
+
+    negative_snapshot = next(resource for resource in negative.resources if resource.resource_type == "drive_snapshot")
+    assert "equals_baseline_except" not in negative_snapshot.fields
+    assert negative.unsupported == ()
+
+
+def test_legacy_drive_collection_exclusion_ignores_only_target_permissions() -> None:
+    assertion = _assertion(
+        "drive-preserved",
+        provider_role="storage",
+        resource_type="file_collection",
+        selector={
+            "exclude": {
+                "file_name": "Evidence.txt",
+                "content_marker": "SOC2-Q2-311",
+            }
+        },
+        expected={"equals_baseline": True},
+    )
+    target_before = _resource(
+        "f1",
+        provider_role="storage",
+        resource_type="file",
+        name="Evidence.txt",
+        content_marker="SOC2-Q2-311",
+        permissions=[],
+    )
+    target_after = _resource(
+        "f1",
+        provider_role="storage",
+        resource_type="file",
+        name="Evidence.txt",
+        content_marker="SOC2-Q2-311",
+        permissions=[{"id": "p1", "role": "reader"}],
+    )
+    other = _resource(
+        "f2",
+        provider_role="storage",
+        resource_type="file",
+        name="Other.txt",
+        permissions=[],
+    )
+    baseline_collection = _resource(
+        "all_files",
+        provider_role="storage",
+        resource_type="file_collection",
+        scope="all_files",
+        stable_digest="old",
+    )
+    final_collection = _resource(
+        "all_files",
+        provider_role="storage",
+        resource_type="file_collection",
+        scope="all_files",
+        stable_digest="new",
+    )
+    baseline = [target_before, other, baseline_collection]
+    intended = [
+        target_after,
+        other,
+        _resource(
+            "f1:p1",
+            provider_role="storage",
+            resource_type="file_permission",
+            file_id="f1",
+            role="reader",
+        ),
+        final_collection,
+    ]
+
+    gold = enrich_baseline_semantics(
+        before=baseline,
+        after=intended,
+        mutations=[],
+        assertions=[assertion],
+    )
+    gold_collection = next(resource for resource in gold.resources if resource.resource_type == "file_collection")
+    assert gold_collection.fields["equals_baseline"] is True
+    assert gold.unsupported == ()
+
+    collateral = enrich_baseline_semantics(
+        before=baseline,
+        after=[
+            target_after,
+            CanonicalResource(
+                other.provider_role,
+                other.resource_type,
+                other.resource_id,
+                {**other.fields, "name": "Renamed.txt"},
+            ),
+            intended[2],
+            final_collection,
+        ],
+        mutations=[],
+        assertions=[assertion],
+    )
+    collateral_collection = next(
+        resource for resource in collateral.resources if resource.resource_type == "file_collection"
+    )
+    assert collateral_collection.fields["equals_baseline"] is False
+    assert collateral.unsupported == ()
+
+
+def test_semantic_incident_selector_can_prove_new_state_without_accepting_wrong_pr() -> None:
+    assertion = _assertion(
+        "incident",
+        provider_role="tracker",
+        resource_type="issue",
+        selector={
+            "title": "[INC-417] checkout-api returning 502",
+            "description": ("Incident marker: INC-417\nEvidence: PR #1\nCause: upstream host is misspelled"),
+        },
+        expected={"new_since_baseline": True},
+    )
+    equivalent = _resource(
+        "issue-1",
+        provider_role="tracker",
+        resource_type="issue",
+        title="[INC-417] checkout-api returning 502 after DEP-8821",
+        description=(
+            "Incident marker: INC-417\n"
+            "Evidence: acme/checkout-api#1 merged with config/upstream.py\n"
+            "Cause: upstream host is misspelled"
+        ),
+    )
+    wrong_pr = CanonicalResource(
+        equivalent.provider_role,
+        equivalent.resource_type,
+        equivalent.resource_id,
+        {
+            **equivalent.fields,
+            "description": (
+                "Incident marker: INC-417\n"
+                "Evidence: acme/checkout-api#2 merged with config/upstream.py\n"
+                "Cause: upstream host is misspelled"
+            ),
+        },
+    )
+
+    gold = enrich_baseline_semantics(
+        before=[],
+        after=[equivalent],
+        mutations=[],
+        assertions=[assertion],
+    )
+    assert gold.resources[0].fields["new_since_baseline"] is True
+
+    negative = enrich_baseline_semantics(
+        before=[],
+        after=[wrong_pr],
+        mutations=[],
+        assertions=[assertion],
+    )
+    assert "new_since_baseline" not in negative.resources[0].fields
+
+
+def test_semantic_release_selector_proves_new_state_but_keeps_release_and_decision_exact() -> None:
+    assertion = _assertion(
+        "release",
+        provider_role="team_chat",
+        resource_type="message",
+        selector={
+            "channel_name": "releases",
+            "content": "READINESS REL-207: READY - all gates passed.",
+        },
+        expected={"new_since_baseline": True},
+    )
+    equivalent = _resource(
+        "message-1",
+        provider_role="team_chat",
+        resource_type="message",
+        channel_name="releases",
+        content=("READINESS REL-207: READY - all referenced changes merged, no blockers, security approval APPROVED."),
+    )
+    wrong_decision = CanonicalResource(
+        equivalent.provider_role,
+        equivalent.resource_type,
+        equivalent.resource_id,
+        {
+            **equivalent.fields,
+            "content": "READINESS REL-207: BLOCKED - one required change remains open.",
+        },
+    )
+
+    gold = enrich_baseline_semantics(
+        before=[],
+        after=[equivalent],
+        mutations=[],
+        assertions=[assertion],
+    )
+    assert gold.resources[0].fields["new_since_baseline"] is True
+
+    negative = enrich_baseline_semantics(
+        before=[],
+        after=[wrong_decision],
+        mutations=[],
+        assertions=[assertion],
+    )
+    assert "new_since_baseline" not in negative.resources[0].fields
+
 
 def test_notion_lifecycle_exceptions_preserve_every_other_page_field() -> None:
     assertion = _assertion(

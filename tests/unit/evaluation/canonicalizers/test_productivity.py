@@ -225,7 +225,9 @@ def test_gmail_admin_projects_named_labels_invoice_and_draft() -> None:
                 {"name": "To", "value": "billing@northstar.example"},
                 {"name": "Subject", "value": "Re: Invoice INV-7301"},
             ],
-            "body": {"data": encoded("Received INV-7301; finance review requested.")},
+            # MIME and provider serializers may leave a CRLF terminator. It is
+            # transport formatting, not part of the draft body semantics.
+            "body": {"data": encoded("Received INV-7301; finance review requested.\r\n")},
         },
     }
     body = {
@@ -251,14 +253,8 @@ def test_gmail_admin_projects_named_labels_invoice_and_draft() -> None:
     assert message_resource.fields["invoice_id"] == "INV-7301"
     assert message_resource.fields["labels_contain"] == ["INBOX", "Needs-Finance", "UNREAD"]
 
-    drafts = list(
-        gmail_drafts_v1(
-            capture(body, canonicalizer="gmail_drafts_v1", role="email", path="/inspect")
-        )
-    )
-    assert resource(drafts, "draft", "draft-1").fields["body"] == (
-        "Received INV-7301; finance review requested."
-    )
+    drafts = list(gmail_drafts_v1(capture(body, canonicalizer="gmail_drafts_v1", role="email", path="/inspect")))
+    assert resource(drafts, "draft", "draft-1").fields["body"] == ("Received INV-7301; finance review requested.")
 
 
 def test_calendar_event_projection_handles_list_and_admin_shapes() -> None:

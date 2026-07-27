@@ -527,7 +527,7 @@ def _gmail_body(message: Mapping[str, Any]) -> str:
         encoded = body.get("data") if body is not None else None
         if isinstance(encoded, str):
             try:
-                return _decode_b64url(encoded).decode("utf-8", errors="replace").rstrip("\n")
+                return _decode_b64url(encoded).decode("utf-8", errors="replace").rstrip("\r\n")
             except ValueError:
                 return ""
     raw = message.get("raw")
@@ -538,7 +538,7 @@ def _gmail_body(message: Mapping[str, Any]) -> str:
             return ""
         body_part = parsed.get_body(preferencelist=("plain", "html"))
         if body_part is not None:
-            return str(body_part.get_content()).rstrip("\n")
+            return str(body_part.get_content()).rstrip("\r\n")
     snippet = message.get("snippet")
     return snippet if isinstance(snippet, str) else ""
 
