@@ -1022,7 +1022,10 @@ def _validated_roles(roles: Mapping[str, str], providers: frozenset[str]) -> dic
 
 
 def _optional_string(value: object) -> str | None:
-    return value if isinstance(value, str) else None
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip()
+    return normalized or None
 
 
 def _required_string(value: object, *, field: str) -> str:

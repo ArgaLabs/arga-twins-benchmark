@@ -139,6 +139,28 @@ def test_search_then_fetch_returns_actual_official_content_and_allowlisted_links
     asyncio.run(client.aclose())
 
 
+def test_search_treats_blank_optional_fields_as_omitted() -> None:
+    """Some tool adapters materialize absent optional strings as empty values."""
+
+    gateway = OfficialDocsGateway({"github"})
+
+    result = _run(
+        gateway,
+        {
+            "provider": "github",
+            "action": "search",
+            "query": "  ",
+            "doc_id": "",
+            "url": "",
+        },
+    )
+
+    assert result["ok"] is True
+    assert result["documents"]
+    assert gateway.trace_records[0].error is None
+    asyncio.run(gateway.aclose())
+
+
 def test_fetch_cache_is_keyed_by_provider_and_exact_url_and_traced_separately() -> None:
     calls = 0
     body = b"Official GitHub pull request documentation"
