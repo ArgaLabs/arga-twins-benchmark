@@ -556,7 +556,7 @@ _RESULT_FACT_ALIASES: dict[str, frozenset[str]] = {
     "created": frozenset({"completed", "created_issue", "migrated"}),
     "denied": frozenset({"no_transition"}),
     "no_slot": frozenset({"not_scheduled", "not_scheduled_no_compliant_slot"}),
-    "normalized": frozenset({"completed"}),
+    "normalized": frozenset({"applied", "completed", "normalization_applied"}),
     "promoted": frozenset({"completed", "promotion_applied"}),
     "published": frozenset({"completed"}),
     "repaired": frozenset({"completed"}),
@@ -577,6 +577,14 @@ def _result_fact_alias_matches(expected: str, actual: str, document: dict[object
     if actual_value in _RESULT_FACT_ALIASES.get(expected_value, frozenset()):
         return True
     document_tokens = _positive_semantic_tokens(document)
+    if expected_value == "ambiguous" and actual_value in {
+        "no_change",
+        "no_change_non_unique_match",
+    }:
+        all_document_tokens = _semantic_tokens(document)
+        return "unique" in all_document_tokens and bool(
+            all_document_tokens & {"ambiguous", "multiple", "non", "not"}
+        )
     if expected_value == "corrected" and actual_value == "authorized":
         return bool(document_tokens & {"added", "applied", "changed", "corrected", "patched", "updated"})
     if expected_value == "denied" and actual_value == "no_write":

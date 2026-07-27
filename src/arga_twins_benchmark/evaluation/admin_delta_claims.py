@@ -632,7 +632,6 @@ def _claim_stripe(
     mutations: Sequence[Mutation],
 ) -> AdminDeltaClaims:
     claimed: set[int] = set()
-    synthetic: list[Mutation] = []
     idempotency = [(index, delta) for index, delta in entries if delta.path == ("idempotency", "cached_responses")]
     if idempotency:
         if (
@@ -655,25 +654,31 @@ def _claim_stripe(
     generic_count = [(index, delta) for index, delta in entries if delta.path == ("counts", "generic_resources")]
     if generic or generic_count:
         if (
-            len(generic) != 1
+            not generic
             or len(generic_count) != 1
-            or generic[0][1].operation != "create"
-            or generic[0][1].after != {}
-            or _integer_delta(generic_count[0][1], label="Stripe generic resource count") != 1
+            or any(
+                delta.operation != "create"
+                or len(delta.path) != 2
+                or not delta.path[1].startswith("/v1/")
+                or delta.after != {}
+                for _, delta in generic
+            )
+            or _integer_delta(
+                generic_count[0][1],
+                label="Stripe generic resource count",
+            )
+            != len(generic)
         ):
             raise AdminDeltaClaimError("Stripe generic resource materialization is inconsistent")
-        resource_id = "/".join(generic[0][1].path[1:])
-        synthetic.append(
-            Mutation(
-                twin=generic[0][1].provider_role,
-                resource_type="provider_internal_collection",
-                resource_id=resource_id,
-                operation="create",
-                after=generic[0][1].after,
-            )
-        )
-        claimed.update({generic[0][0], generic_count[0][0]})
-    return AdminDeltaClaims(frozenset(claimed), tuple(synthetic))
+        # The Stripe twin lazily installs an empty backing collection when an
+        # otherwise read-only list route is first observed. The paired empty
+        # object and count increment are provider bookkeeping, not a catalog
+        # object or candidate-visible business-state mutation. A non-empty
+        # generic resource, a missing count delta, or any other shape still
+        # fails closed above.
+        claimed.update({index for index, _ in generic})
+        claimed.add(generic_count[0][0])
+    return AdminDeltaClaims(frozenset(claimed))
 
 
 def _validate_calendar_attendee_delta(

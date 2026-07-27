@@ -1536,6 +1536,93 @@ def test_promotion_result_accepts_a_semantic_action_label() -> None:
     assert result.assertion_results["output.contract"] is True
 
 
+@pytest.mark.parametrize("decision", ["applied", "normalization_applied"])
+def test_normalized_result_accepts_semantic_action_labels(decision: str) -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900",
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "request": "CAT-7900",
+            "decision": decision,
+            "nickname": "pro-monthly-usd-79",
+            "lookup_key": "pro_monthly_usd_7900",
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
+@pytest.mark.parametrize(
+    ("decision", "reason"),
+    [
+        ("no_change", "match_not_unique"),
+        ("no_change_non_unique_match", "two_exact_matches"),
+    ],
+)
+def test_ambiguous_result_accepts_a_semantic_no_write_label(
+    decision: str,
+    reason: str,
+) -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "request": "CAT-7900",
+        "decision": "ambiguous",
+        "exact_match_count": 2,
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "request": "CAT-7900",
+            "decision": decision,
+            "exact_match_count": 2,
+            "reason": reason,
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
+def test_ambiguous_result_rejects_an_unexplained_generic_no_write() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "request": "CAT-7900",
+        "decision": "ambiguous",
+        "exact_match_count": 2,
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "request": "CAT-7900",
+            "decision": "no_change",
+            "exact_match_count": 2,
+            "reason": "window_closed",
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is False
+
+
 def test_first_failing_gate_accepts_a_more_specific_failure_label() -> None:
     verifier = verification()
     verifier.output_contract.required_facts = {

@@ -37,6 +37,7 @@ _NOTION_CANONICALIZERS = frozenset(
         "notion_spec_pages_stable",
     }
 )
+_STRIPE_PRICE_CANONICALIZERS = frozenset({"stripe_prices_stable"})
 
 
 def enrich_snapshot_from_trusted_state(
@@ -85,6 +86,10 @@ def _enriched_body(
         if capture.provider_name != "github":
             raise StateCaptureError("GitHub canonicalizer is not paired with the GitHub trusted state")
         return _enrich_github_pull_artifacts(capture, provider.state, snapshot)
+    if capture.canonicalizer in _STRIPE_PRICE_CANONICALIZERS:
+        if capture.provider_name != "stripe":
+            raise StateCaptureError("Stripe price canonicalizer is not paired with the Stripe trusted state")
+        return _enrich_stripe_prices(capture, provider.state)
     return capture.body
 
 
@@ -257,6 +262,78 @@ def _enrich_notion(
             page["markdown"] = supplemental_markdown
         enriched_pages.append(cast(JsonValue, page))
     return cast(JsonValue, {"pages": enriched_pages})
+
+
+def _enrich_stripe_prices(
+    capture: CapturedQueryState,
+    admin_state: Mapping[str, JsonValue],
+) -> JsonValue:
+    """Join price product IDs to names without requiring an expanded API read.
+
+    Stripe's price-list response returns a product ID by default, while the
+    benchmark selector intentionally identifies the business object by product
+    name, amount, and currency. The trusted products collection supplies that
+    missing relationship after we prove the price query is a complete,
+    identity-equivalent projection of the admin collection.
+    """
+
+    body = _object(capture.body, label="Stripe price-list response")
+    query_prices = _index_by_id(
+        _array(body.get("data"), label="Stripe price-list data"),
+        label="Stripe price-list data",
+    )
+    trusted_prices = _object(admin_state.get("prices"), label="Stripe trusted prices")
+    trusted_products = _object(admin_state.get("products"), label="Stripe trusted products")
+    if set(query_prices) != set(trusted_prices):
+        raise StateCaptureError("Stripe price query and trusted state contain different price IDs")
+
+    enriched_prices: list[JsonValue] = []
+    for price_id, query_price in sorted(query_prices.items()):
+        trusted_price = _object(
+            trusted_prices[price_id],
+            label=f"Stripe trusted price {price_id!r}",
+        )
+        query_product = query_price.get("product")
+        if isinstance(query_product, dict):
+            query_product = _object(
+                cast(object, query_product),
+                label=f"Stripe queried price {price_id!r}.product",
+            ).get("id")
+        trusted_product = trusted_price.get("product")
+        if isinstance(trusted_product, dict):
+            trusted_product = _object(
+                cast(object, trusted_product),
+                label=f"Stripe trusted price {price_id!r}.product",
+            ).get("id")
+        if (
+            not isinstance(query_product, str)
+            or not query_product
+            or query_product != trusted_product
+        ):
+            raise StateCaptureError(
+                f"Stripe queried price {price_id!r} has a product relationship "
+                "that differs from trusted state"
+            )
+        product = _object(
+            trusted_products.get(query_product),
+            label=f"Stripe trusted product {query_product!r}",
+        )
+        product_name = product.get("name")
+        if not isinstance(product_name, str) or not product_name:
+            raise StateCaptureError(
+                f"Stripe trusted product {query_product!r} has no name"
+            )
+        enriched_prices.append(
+            cast(
+                JsonValue,
+                {
+                    **query_price,
+                    "product": query_product,
+                    "product_name": product_name,
+                },
+            )
+        )
+    return cast(JsonValue, {**body, "data": enriched_prices})
 
 
 def _enrich_github_pull_artifacts(

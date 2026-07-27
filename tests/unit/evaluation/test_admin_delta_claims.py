@@ -276,3 +276,75 @@ def test_notion_block_update_rejects_wrong_page_or_operation(
             raw_deltas=[delta],
             canonical_mutations=[mutation],
         )
+
+
+def test_stripe_claims_empty_lazy_generic_collection_as_internal_bookkeeping() -> None:
+    deltas = [
+        _admin_delta(
+            "stripe",
+            "payments",
+            ("counts", "generic_resources"),
+            "update",
+            before=0,
+            after=1,
+        ),
+        _admin_delta(
+            "stripe",
+            "payments",
+            ("generic_resources", "/v1/entitlements/features"),
+            "create",
+            after={},
+        ),
+    ]
+
+    claims = claim_provider_admin_deltas(
+        raw_deltas=deltas,
+        canonical_mutations=[],
+    )
+
+    assert claims.claimed_indices == frozenset({0, 1})
+    assert claims.synthetic_mutations == ()
+
+
+@pytest.mark.parametrize(
+    "deltas",
+    [
+        [
+            _admin_delta(
+                "stripe",
+                "payments",
+                ("generic_resources", "/v1/entitlements/features"),
+                "create",
+                after={"feature": "created"},
+            ),
+            _admin_delta(
+                "stripe",
+                "payments",
+                ("counts", "generic_resources"),
+                "update",
+                before=0,
+                after=1,
+            ),
+        ],
+        [
+            _admin_delta(
+                "stripe",
+                "payments",
+                ("generic_resources", "/v1/entitlements/features"),
+                "create",
+                after={},
+            )
+        ],
+    ],
+)
+def test_stripe_rejects_nonempty_or_unpaired_generic_materialization(
+    deltas: list[RawStateDelta],
+) -> None:
+    with pytest.raises(
+        AdminDeltaClaimError,
+        match="generic resource materialization is inconsistent",
+    ):
+        claim_provider_admin_deltas(
+            raw_deltas=deltas,
+            canonical_mutations=[],
+        )

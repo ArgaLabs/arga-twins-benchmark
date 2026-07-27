@@ -315,6 +315,129 @@ def test_notion_enrichment_rejects_identity_and_markdown_mismatches(
         enrich_snapshot_from_trusted_state(snapshot)
 
 
+def test_stripe_price_enrichment_joins_the_trusted_product_name() -> None:
+    capture = _query(
+        "prices",
+        provider="stripe",
+        role="payments",
+        canonicalizer="stripe_prices_stable",
+        path="/v1/prices?limit=100",
+        body={
+            "object": "list",
+            "data": [
+                {
+                    "id": "price_target",
+                    "product": "prod_target",
+                    "unit_amount": 7900,
+                    "currency": "usd",
+                }
+            ],
+            "has_more": False,
+        },
+    )
+    snapshot = _snapshot(
+        provider="stripe",
+        role="payments",
+        state={
+            "prices": {
+                "price_target": {
+                    "id": "price_target",
+                    "product": "prod_target",
+                    "unit_amount": 7900,
+                    "currency": "usd",
+                }
+            },
+            "products": {
+                "prod_target": {
+                    "id": "prod_target",
+                    "name": "Pro Monthly",
+                }
+            },
+        },
+        queries=[capture],
+    )
+
+    enriched = enrich_snapshot_from_trusted_state(snapshot)
+
+    assert capture.body == {
+        "object": "list",
+        "data": [
+            {
+                "id": "price_target",
+                "product": "prod_target",
+                "unit_amount": 7900,
+                "currency": "usd",
+            }
+        ],
+        "has_more": False,
+    }
+    enriched_body = enriched.queries["prices"].body
+    assert isinstance(enriched_body, dict)
+    assert enriched_body["data"] == [
+        {
+            "id": "price_target",
+            "product": "prod_target",
+            "product_name": "Pro Monthly",
+            "unit_amount": 7900,
+            "currency": "usd",
+        }
+    ]
+
+
+@pytest.mark.parametrize(
+    ("query_price", "trusted_prices", "trusted_products", "error"),
+    [
+        (
+            {"id": "price_query", "product": "prod_target"},
+            {"price_trusted": {"id": "price_trusted", "product": "prod_target"}},
+            {"prod_target": {"id": "prod_target", "name": "Pro Monthly"}},
+            "different price IDs",
+        ),
+        (
+            {"id": "price_target", "product": "prod_query"},
+            {"price_target": {"id": "price_target", "product": "prod_trusted"}},
+            {
+                "prod_query": {"id": "prod_query", "name": "Pro Monthly"},
+                "prod_trusted": {"id": "prod_trusted", "name": "Pro Monthly"},
+            },
+            "product relationship",
+        ),
+        (
+            {"id": "price_target", "product": "prod_target"},
+            {"price_target": {"id": "price_target", "product": "prod_target"}},
+            {"prod_target": {"id": "prod_target", "name": ""}},
+            "has no name",
+        ),
+    ],
+)
+def test_stripe_price_enrichment_rejects_untrusted_or_incomplete_joins(
+    query_price: dict[str, Any],
+    trusted_prices: dict[str, Any],
+    trusted_products: dict[str, Any],
+    error: str,
+) -> None:
+    capture = _query(
+        "prices",
+        provider="stripe",
+        role="payments",
+        canonicalizer="stripe_prices_stable",
+        path="/v1/prices?limit=100",
+        body={"object": "list", "data": [query_price], "has_more": False},
+    )
+    snapshot = _snapshot(
+        provider="stripe",
+        role="payments",
+        state={
+            "prices": trusted_prices,
+            "products": trusted_products,
+        },
+        queries=[capture],
+    )
+
+    with pytest.raises(StateCaptureError, match=error):
+        enrich_snapshot_from_trusted_state(snapshot)
+
+
 def _github_snapshot(
     *,
     trusted_review_count: int = 1,
