@@ -71,6 +71,8 @@ These commands themselves invoke the Arga CLI; they contain no direct Arga HTTP 
 
 `cleanup` tears down the twin run, then polls CLI status until that exact run ID is terminal with zero twins exposed by the status response. It deliberately keeps the saved Scenario. A later provision can reuse the same Scenario while still creating a fresh twin run for trial isolation.
 
+Lifecycle JSON displayed by `reset` and `cleanup` is recursively scrubbed for token, secret, password, API-key, authorization, cookie, private-key, and credential fields, including credential-valued variables nested under provider `seed_results.env_vars`. This affects terminal presentation only. The trusted runner continues to retain the exact raw lifecycle response in its mode-`0600` trial artifacts.
+
 This is control-plane evidence, not proof that Arga's asynchronous VM cleanup worker has finished deleting infrastructure. The current status API does not surface that worker-completion fact. The harness therefore records the evidence precisely as returned, binds it to the expected run ID, and relies on the run TTL as the resource-lifetime backstop.
 
 ## Manual single episode
@@ -191,6 +193,17 @@ uv run arga-bench run-instance \
 ```
 
 Candidate-safe routing and actual official documentation discovery are enabled by default. Use `--legacy-candidate-surface` only for a preregistered historical comparison. If the installed Arga CLI and server deployment both support the separate `twin-runs create --candidate-safe` profile, opt into it with `--arga-candidate-safe-profile`; the runner does not send that external flag by default.
+
+`run-instance` writes a complete one-trial suite under the printed `suite_dir`, rather than a loose trial directory. It includes `suite.json` with the runner commit, execution flags, experiment random seed, and trial-order algorithm; a prompt ledger filtered to the exact instance/model pair; `summary.json`; and the suite-scoped first-fetch official documentation cache. The normal offline grader can therefore consume the canary directly:
+
+```bash
+uv run arga-bench grade-suite \
+  runs/<canary-suite-run-id> \
+  --root benchmark \
+  --fail-on-incomplete
+```
+
+The canary remains a one-repeat diagnostic. It is authoritatively bound and gradeable, but it is not a substitute for the preregistered repeated matrix when comparing models.
 
 ## Run and resume the 48 × 3 matrix
 

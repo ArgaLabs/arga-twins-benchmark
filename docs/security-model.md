@@ -20,6 +20,8 @@ Private grader plane
 
 The runner adapter receives sanitized twin connection details, but the model does not. The model receives only the task prompt, provisioned provider/role names, and schemas for `provider_api` and `provider_docs`. It never receives twin base URLs or credentials, the Arga API key, complete CLI response, `admin_url`, `proxy_token`, `seed_results`, fixture files, verifier configuration, gold solutions, snapshots, or lifecycle controls.
 
+Human-facing benchmark CLI JSON is also recursively redacted before it reaches stdout. Credential-bearing fields, including credential-valued provider seed environment variables, are scrubbed without modifying the underlying response object. Exact lifecycle evidence remains available only in the mode-`0600` trusted artifacts used by the grader.
+
 ## Candidate gateway
 
 The local gateway rejects absolute destinations, host/auth overrides, traversal, root UI/schema/health routes, GraphQL introspection, and root control/admin/seed/reset/inspect/grader surfaces. Official documentation is fetched independently through exact provider host/path allowlists and never through a twin host. Server-side `--candidate-safe` routing remains a separately deployed defense-in-depth profile and is feature-gated until the installed Arga CLI and server both support it.

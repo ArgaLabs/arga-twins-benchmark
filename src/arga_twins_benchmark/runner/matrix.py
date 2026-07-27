@@ -1400,6 +1400,101 @@ def _concurrency_history_entry(
     }
 
 
+def _suite_manifest_payload(
+    *,
+    experiment: ExperimentSpec,
+    experiment_id: str,
+    suite_run_id: str,
+    runner_commit: str,
+    created_at: str,
+    model_profiles: tuple[ModelProfile, ...],
+    plans: list[TrialPlan],
+    repeats: int,
+    concurrency: int,
+    ttl_minutes: int,
+    candidate_safe_surface: bool,
+    arga_candidate_safe_profile: bool,
+) -> dict[str, Any]:
+    return {
+        "protocol": "arga-bench-suite/1",
+        "suite_run_id": suite_run_id,
+        "experiment_id": experiment_id,
+        "runner_commit": runner_commit,
+        "runner_commits": [runner_commit],
+        "created_at": created_at,
+        "repeats": repeats,
+        "concurrency": concurrency,
+        "initial_concurrency": concurrency,
+        "last_execution_concurrency": concurrency,
+        "concurrency_history": [
+            _concurrency_history_entry(
+                event="suite_created",
+                concurrency=concurrency,
+                recorded_at=created_at,
+                runner_commit=runner_commit,
+            )
+        ],
+        "ttl_minutes": ttl_minutes,
+        "candidate_safe_surface": candidate_safe_surface,
+        "arga_candidate_safe_profile": arga_candidate_safe_profile,
+        "official_docs_tool_call_allowance": (
+            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+        ),
+        "random_seed": experiment.random_seed,
+        "trial_order_algorithm": TRIAL_ORDER_ALGORITHM,
+        "orphan_twin_lease_grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
+        "trial_count": len(plans),
+        "models": [asdict(profile) for profile in model_profiles],
+        "trials": [asdict(plan) for plan in plans],
+    }
+
+
+def _suite_summary_payload(
+    *,
+    suite_run_id: str,
+    execution_concurrency: int,
+    manifest: Mapping[str, Any],
+    results: list[dict[str, Any]],
+    candidate_safe_surface: bool,
+    arga_candidate_safe_profile: bool,
+) -> dict[str, Any]:
+    raw_history = manifest.get("concurrency_history")
+    history_entries = len(cast(list[object], raw_history)) if isinstance(raw_history, list) else 0
+    return {
+        "protocol": "arga-bench-suite-summary/1",
+        "suite_run_id": suite_run_id,
+        "trial_count": len(results),
+        "execution_concurrency": execution_concurrency,
+        "concurrency_history_entries": history_entries,
+        "terminal_count": sum(result.get("terminal") is True for result in results),
+        "runtime_error_count": sum(result.get("status") == "runtime_error" for result in results),
+        "cleanup_failure_count": sum(result.get("cleanup_succeeded") is not True for result in results),
+        "trace_output_pass_count": sum(
+            isinstance(result.get("preliminary_grade"), dict)
+            and cast(dict[str, Any], result["preliminary_grade"]).get("trace_and_output_passed") is True
+            for result in results
+        ),
+        "state_grade_complete": False,
+        "candidate_safe_surface": candidate_safe_surface,
+        "arga_candidate_safe_profile": arga_candidate_safe_profile,
+        "official_docs_tool_call_allowance": (
+            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+        ),
+        "completed_at": _utc_now(),
+        "results": results,
+    }
+
+
+def _new_official_docs_snapshot_cache(
+    root: Path,
+) -> OfficialDocsSnapshotCache:
+    catalog = load_official_docs_catalog()
+    cache = OfficialDocsSnapshotCache()
+    cache.load_artifacts(root, catalog=catalog)
+    cache.write_artifacts(root, catalog=catalog)
+    return cache
+
+
 def _existing_concurrency_history(
     manifest: Mapping[str, Any],
     *,
@@ -1646,38 +1741,20 @@ async def _run_experiment_matrix_locked(
     )
     current_runner_commit = runner_commit or _runner_commit()
     created_at = _utc_now()
-    manifest: dict[str, Any] = {
-        "protocol": "arga-bench-suite/1",
-        "suite_run_id": suite_run_id,
-        "experiment_id": experiment_id,
-        "runner_commit": current_runner_commit,
-        "runner_commits": [current_runner_commit],
-        "created_at": created_at,
-        "repeats": repeats,
-        "concurrency": concurrency,
-        "initial_concurrency": concurrency,
-        "last_execution_concurrency": concurrency,
-        "concurrency_history": [
-            _concurrency_history_entry(
-                event="suite_created",
-                concurrency=concurrency,
-                recorded_at=created_at,
-                runner_commit=current_runner_commit,
-            )
-        ],
-        "ttl_minutes": ttl_minutes,
-        "candidate_safe_surface": candidate_safe_surface,
-        "arga_candidate_safe_profile": arga_candidate_safe_profile,
-        "official_docs_tool_call_allowance": (
-            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
-        ),
-        "random_seed": experiment.random_seed,
-        "trial_order_algorithm": TRIAL_ORDER_ALGORITHM,
-        "orphan_twin_lease_grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
-        "trial_count": len(plans),
-        "models": [asdict(profile) for profile in model_profiles],
-        "trials": [asdict(plan) for plan in plans],
-    }
+    manifest = _suite_manifest_payload(
+        experiment=experiment,
+        experiment_id=experiment_id,
+        suite_run_id=suite_run_id,
+        runner_commit=current_runner_commit,
+        created_at=created_at,
+        model_profiles=model_profiles,
+        plans=plans,
+        repeats=repeats,
+        concurrency=concurrency,
+        ttl_minutes=ttl_minutes,
+        candidate_safe_surface=candidate_safe_surface,
+        arga_candidate_safe_profile=arga_candidate_safe_profile,
+    )
     manifest_path = suite_dir / "suite.json"
     if manifest_path.is_file():
         existing_manifest: object = json.loads(manifest_path.read_text())
@@ -1710,10 +1787,8 @@ async def _run_experiment_matrix_locked(
     semaphore = asyncio.Semaphore(concurrency)
     official_docs_snapshot_cache: OfficialDocsSnapshotCache | None = None
     if candidate_safe_surface:
-        official_docs_snapshot_cache = OfficialDocsSnapshotCache()
-        official_docs_snapshot_cache.load_artifacts(
-            suite_dir / "official-docs-cache",
-            catalog=load_official_docs_catalog(),
+        official_docs_snapshot_cache = _new_official_docs_snapshot_cache(
+            suite_dir / "official-docs-cache"
         )
 
     async def bounded(plan: TrialPlan) -> dict[str, Any]:
@@ -1763,31 +1838,120 @@ async def _run_experiment_matrix_locked(
             return result
 
     results = await asyncio.gather(*(bounded(plan) for plan in plans))
-    summary = {
-        "protocol": "arga-bench-suite-summary/1",
-        "suite_run_id": suite_run_id,
-        "trial_count": len(results),
-        "execution_concurrency": concurrency,
-        "concurrency_history_entries": len(cast(list[object], manifest["concurrency_history"])),
-        "terminal_count": sum(result.get("terminal") is True for result in results),
-        "runtime_error_count": sum(result.get("status") == "runtime_error" for result in results),
-        "cleanup_failure_count": sum(result.get("cleanup_succeeded") is not True for result in results),
-        "trace_output_pass_count": sum(
-            isinstance(result.get("preliminary_grade"), dict)
-            and cast(dict[str, Any], result["preliminary_grade"]).get("trace_and_output_passed") is True
-            for result in results
-        ),
-        "state_grade_complete": False,
-        "candidate_safe_surface": candidate_safe_surface,
-        "arga_candidate_safe_profile": arga_candidate_safe_profile,
-        "official_docs_tool_call_allowance": (
-            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
-        ),
-        "completed_at": _utc_now(),
-        "results": results,
-    }
+    summary = _suite_summary_payload(
+        suite_run_id=suite_run_id,
+        execution_concurrency=concurrency,
+        manifest=manifest,
+        results=results,
+        candidate_safe_surface=candidate_safe_surface,
+        arga_candidate_safe_profile=arga_candidate_safe_profile,
+    )
     write_private_json(suite_dir / "summary.json", summary)
     return summary
+
+
+async def run_instance_suite(
+    *,
+    catalog_root: Path,
+    experiment_id: str,
+    instance_id: str,
+    output_root: Path,
+    model_profile: ModelProfile,
+    ttl_minutes: int = 60,
+    suite_run_id: str | None = None,
+    candidate_safe_surface: bool = True,
+    arga_candidate_safe_profile: bool = False,
+) -> dict[str, Any]:
+    """Run one instance as a complete, independently gradeable one-trial suite."""
+
+    current_runner_commit = _runner_commit()
+    experiment, bundles = load_experiment_bundles(catalog_root, experiment_id)
+    if instance_id not in bundles:
+        raise ValueError(f"{instance_id!r} is not in experiment {experiment_id!r}")
+    resolved_suite_run_id = suite_run_id or (
+        f"canary-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+    )
+    suite_dir = output_root / resolved_suite_run_id
+    suite_dir.mkdir(parents=True, exist_ok=True)
+
+    with _SuiteRunLock(suite_dir / ".matrix.lock"):
+        manifest_path = suite_dir / "suite.json"
+        ledger_path = suite_dir / "prompt-ledger.json"
+        if manifest_path.exists() or ledger_path.exists():
+            raise ValueError(
+                f"single-instance suite {resolved_suite_run_id!r} already exists; choose a fresh suite run ID"
+            )
+
+        model_profiles = (model_profile,)
+        plans = [
+            plan
+            for plan in build_trial_plans(
+                experiment,
+                suite_run_id=resolved_suite_run_id,
+                model_profiles=model_profiles,
+                repeats=1,
+            )
+            if plan.instance_id == instance_id
+        ]
+        if len(plans) != 1:
+            raise AssertionError("single-instance suite must resolve exactly one trial plan")
+        plan = plans[0]
+        system_prompt = SYSTEM_PROMPT if candidate_safe_surface else LEGACY_SYSTEM_PROMPT
+        ledger = prompt_ledger_payload(
+            catalog_root,
+            experiment_id,
+            model_profiles=model_profiles,
+            system_prompt=system_prompt,
+            instance_ids=(instance_id,),
+        )
+        created_at = _utc_now()
+        manifest = _suite_manifest_payload(
+            experiment=experiment,
+            experiment_id=experiment_id,
+            suite_run_id=resolved_suite_run_id,
+            runner_commit=current_runner_commit,
+            created_at=created_at,
+            model_profiles=model_profiles,
+            plans=plans,
+            repeats=1,
+            concurrency=1,
+            ttl_minutes=ttl_minutes,
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
+        )
+        write_private_json(ledger_path, ledger)
+        markdown_path = suite_dir / "prompt-ledger.md"
+        markdown_path.write_text(render_prompt_ledger_markdown(ledger))
+        markdown_path.chmod(0o600)
+        write_private_json(manifest_path, manifest)
+
+        official_docs_snapshot_cache: OfficialDocsSnapshotCache | None = None
+        if candidate_safe_surface:
+            official_docs_snapshot_cache = _new_official_docs_snapshot_cache(
+                suite_dir / "official-docs-cache"
+            )
+        result = await run_trial(
+            catalog_root=catalog_root,
+            bundle=bundles[instance_id],
+            plan=plan,
+            output_root=suite_dir,
+            ttl_minutes=ttl_minutes,
+            runner_commit=current_runner_commit,
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
+            official_docs_snapshot_cache=official_docs_snapshot_cache,
+            official_docs_cache_root=suite_dir / "official-docs-cache",
+        )
+        summary = _suite_summary_payload(
+            suite_run_id=resolved_suite_run_id,
+            execution_concurrency=1,
+            manifest=manifest,
+            results=[result],
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
+        )
+        write_private_json(suite_dir / "summary.json", summary)
+        return summary
 
 
 async def run_experiment_matrix(

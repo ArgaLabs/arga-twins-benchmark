@@ -3,11 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from arga_twins_benchmark.runner.prompting import (
     MODEL_PROFILES,
     SYSTEM_PROMPT,
     compose_user_prompt,
     experiment_prompts,
+    prompt_ledger_payload,
     render_prompt_ledger_markdown,
     write_prompt_ledger,
 )
@@ -46,6 +49,44 @@ def test_write_prompt_ledger_is_private_and_markdown_lists_each_prompt(tmp_path:
     assert "claude-fable-5" in rendered
     assert "gpt-5.6-sol" in rendered
     assert ledger_path.stat().st_mode & 0o077 == 0
+
+
+def test_prompt_ledger_can_be_filtered_to_one_exact_instance_and_model() -> None:
+    instance_id = "blocking_code_review_v1_github_clean_001"
+    profile = MODEL_PROFILES[0]
+
+    payload = prompt_ledger_payload(
+        CATALOG_ROOT,
+        EXPERIMENT_ID,
+        model_profiles=(profile,),
+        instance_ids=(instance_id,),
+    )
+    rendered = render_prompt_ledger_markdown(payload)
+
+    assert payload["models"] == [
+        {
+            "label": profile.label,
+            "model_id": profile.model_id,
+            "provider": profile.provider,
+            "effort": profile.effort,
+            "thinking": profile.thinking,
+            "fallback": profile.fallback,
+        }
+    ]
+    assert payload["entry_count"] == 1
+    assert payload["entries"][0]["instance_id"] == instance_id
+    assert payload["entries"][0]["model_id"] == profile.model_id
+    assert rendered.count("\n### ") == 1
+    assert "Every listed model receives the same system and user text" in rendered
+
+
+def test_prompt_ledger_filter_rejects_instance_outside_experiment() -> None:
+    with pytest.raises(ValueError, match="not in experiment"):
+        prompt_ledger_payload(
+            CATALOG_ROOT,
+            EXPERIMENT_ID,
+            instance_ids=("not-a-real-instance",),
+        )
 
 
 def test_structured_output_instruction_exposes_shape_but_not_expected_values() -> None:

@@ -5,12 +5,14 @@ import json
 import os
 import subprocess
 import sys
+from dataclasses import asdict
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, cast
 
 import pytest
 
+from arga_twins_benchmark.reporting.suite_audit import audit_suite
 from arga_twins_benchmark.runner.matrix import (
     DirtyRunnerTreeError,
     _merge_resumed_suite_manifest,  # pyright: ignore[reportPrivateUsage]
@@ -24,8 +26,9 @@ from arga_twins_benchmark.runner.matrix import (
     load_env_file,
     load_experiment_bundles,
     run_experiment_matrix,
+    run_instance_suite,
 )
-from arga_twins_benchmark.runner.prompting import MODEL_PROFILES
+from arga_twins_benchmark.runner.prompting import MODEL_PROFILES, SYSTEM_PROMPT
 
 
 def _write_confirmed_cleanup(trial_dir: Path, *, run_id: str = "run-1") -> None:
@@ -81,6 +84,201 @@ def test_build_trial_plans_uses_reproducible_seeded_order() -> None:
     assert plans != different_seed
     assert {plan.trial_id for plan in plans} == {plan.trial_id for plan in different_seed}
     assert len({plan.trial_id for plan in plans}) == 432
+
+
+def test_run_instance_writes_an_authoritative_one_trial_suite(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    instance_id = "blocking_code_review_v1_github_clean_001"
+    profile = MODEL_PROFILES[0]
+    captured: dict[str, Any] = {}
+    run_id = "11111111-2222-3333-4444-555555555555"
+
+    async def fake_run_trial(**kwargs: Any) -> dict[str, Any]:
+        captured.update(kwargs)
+        plan = kwargs["plan"]
+        bundle = kwargs["bundle"]
+        output_root = cast(Path, kwargs["output_root"])
+        trial_dir = output_root / "trials" / plan.trial_id
+        trial_dir.mkdir(parents=True)
+        cleanup: dict[str, Any] = {
+            "twin_run": {
+                "run_id": run_id,
+                "status": "cancelled",
+                "twins": {},
+            }
+        }
+        (trial_dir / "control.json").write_text(
+            json.dumps({"run_id": run_id, "scenario_id": "scenario-1"})
+        )
+        (trial_dir / "cleanup.json").write_text(json.dumps(cleanup))
+        (trial_dir / "state.json").write_text(json.dumps({"cleanup": cleanup}))
+        (trial_dir / "candidate-access.json").write_text(
+            json.dumps(
+                {
+                    "provider_access": {
+                        "github": {
+                            "base_url": (
+                                "https://pub-r11111111222233334444555555555555"
+                                "--github.sandbox.argalabs.com"
+                            ),
+                            "env": {},
+                        }
+                    }
+                }
+            )
+        )
+        (trial_dir / "prompt.json").write_text(
+            json.dumps(
+                {
+                    "model": asdict(plan.model),
+                    "system_prompt": SYSTEM_PROMPT,
+                    "user_prompt": bundle.prompt,
+                }
+            )
+        )
+        trace_events = [
+            {
+                "sequence": sequence,
+                "requested_provider": "code_host",
+                "provider": "github",
+                "method": "GET",
+                "path": f"/repos/acme/demo/issues/{sequence}",
+                "status_code": 200,
+            }
+            for sequence in range(1, 7)
+        ]
+        (trial_dir / "provider-trace.json").write_text(
+            json.dumps(
+                {
+                    "protocol": "arga-bench-provider-trace/1",
+                    "events": trace_events,
+                }
+            )
+        )
+        (trial_dir / "official-docs-trace.json").write_text(
+            json.dumps(
+                {
+                    "protocol": "arga-bench-official-docs-trace/1",
+                    "events": [],
+                }
+            )
+        )
+        (trial_dir / "invocation.json").write_text(
+            json.dumps(
+                {
+                    "config": {"model": profile.model_id, "fallback": None},
+                    "events": [
+                        {
+                            "type": "assistant_response",
+                            "response_model": profile.model_id,
+                        }
+                    ],
+                }
+            )
+        )
+        result: dict[str, Any] = {
+            "protocol": "arga-bench-trial-result/1",
+            "terminal": True,
+            "trial_id": plan.trial_id,
+            "suite_run_id": plan.suite_run_id,
+            "instance_id": plan.instance_id,
+            "model": asdict(plan.model),
+            "response_model": profile.model_id,
+            "status": "completed",
+            "tool_calls": len(trace_events),
+            "provider_tool_calls": len(trace_events),
+            "official_docs_tool_calls": 0,
+            "candidate_safe_surface": True,
+            "arga_candidate_safe_profile": False,
+            "cleanup": cleanup,
+            "cleanup_succeeded": True,
+            "invocation_started": True,
+            "state_grade_complete": False,
+        }
+        (trial_dir / "result.json").write_text(json.dumps(result))
+        return result
+
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix._runner_commit", lambda: "clean-commit")
+    monkeypatch.setattr("arga_twins_benchmark.runner.matrix.run_trial", fake_run_trial)
+
+    summary = asyncio.run(
+        run_instance_suite(
+            catalog_root=Path("benchmark"),
+            experiment_id="development_pilot_48_v1",
+            instance_id=instance_id,
+            output_root=tmp_path,
+            model_profile=profile,
+            ttl_minutes=45,
+            suite_run_id="canary-suite-1",
+            candidate_safe_surface=True,
+            arga_candidate_safe_profile=False,
+        )
+    )
+
+    suite_dir = tmp_path / "canary-suite-1"
+    manifest = json.loads((suite_dir / "suite.json").read_text())
+    ledger = json.loads((suite_dir / "prompt-ledger.json").read_text())
+    docs_cache = json.loads((suite_dir / "official-docs-cache" / "manifest.json").read_text())
+    trial = manifest["trials"][0]
+
+    assert manifest["protocol"] == "arga-bench-suite/1"
+    assert manifest["suite_run_id"] == "canary-suite-1"
+    assert manifest["experiment_id"] == "development_pilot_48_v1"
+    assert manifest["runner_commit"] == "clean-commit"
+    assert manifest["runner_commits"] == ["clean-commit"]
+    assert manifest["repeats"] == 1
+    assert manifest["concurrency"] == 1
+    assert manifest["initial_concurrency"] == 1
+    assert manifest["last_execution_concurrency"] == 1
+    assert manifest["concurrency_history"] == [
+        {
+            "event": "suite_created",
+            "concurrency": 1,
+            "recorded_at": manifest["created_at"],
+            "runner_commit": "clean-commit",
+        }
+    ]
+    assert manifest["ttl_minutes"] == 45
+    assert manifest["candidate_safe_surface"] is True
+    assert manifest["arga_candidate_safe_profile"] is False
+    assert manifest["official_docs_tool_call_allowance"] == 8
+    assert manifest["random_seed"] == 20260719
+    assert manifest["trial_order_algorithm"] == "sha256-random-seed-v1"
+    assert manifest["orphan_twin_lease_grace_seconds"] == 300
+    assert manifest["trial_count"] == 1
+    assert manifest["models"] == [asdict(profile)]
+    assert trial["suite_run_id"] == "canary-suite-1"
+    assert trial["trial_id"].startswith(f"canary-suite-1--r1--{instance_id}--")
+    assert trial["instance_id"] == instance_id
+    assert trial["repeat"] == 1
+    assert trial["model"] == asdict(profile)
+    assert ledger["entry_count"] == 1
+    assert ledger["models"] == [asdict(profile)]
+    assert [(entry["instance_id"], entry["model_id"]) for entry in ledger["entries"]] == [
+        (instance_id, profile.model_id)
+    ]
+    assert docs_cache["protocol"] == "arga-bench-official-docs-cache/1"
+    assert docs_cache["scope"] == "suite_first_fetch_snapshot"
+    assert docs_cache["entry_count"] == 0
+    assert captured["runner_commit"] == "clean-commit"
+    assert captured["official_docs_snapshot_cache"] is not None
+    assert captured["official_docs_cache_root"] == suite_dir / "official-docs-cache"
+    assert summary["trial_count"] == 1
+    assert summary["execution_concurrency"] == 1
+    assert summary["results"][0]["trial_id"] == trial["trial_id"]
+    assert (suite_dir / "summary.json").is_file()
+    assert (suite_dir / "prompt-ledger.md").is_file()
+    assert (suite_dir / "suite.json").stat().st_mode & 0o077 == 0
+    assert (suite_dir / "prompt-ledger.json").stat().st_mode & 0o077 == 0
+
+    audit = audit_suite(suite_dir)
+    assert audit["expected_trials"] == 1
+    assert audit["observed_results"] == 1
+    assert audit["matrix_fully_evaluable"] is True
+    assert audit["integrity_passed"] is True
+    assert audit["checks"]["prompt_hash"]["passed"] is True
 
 
 def _suite_manifest(*, concurrency: int = 4) -> dict[str, Any]:

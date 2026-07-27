@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, Any, cast
 
@@ -10,6 +9,7 @@ import typer
 
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli
 from arga_twins_benchmark.catalog import fingerprint_instance_bundle, validate_catalog, write_compiled_scenario
+from arga_twins_benchmark.cli_redaction import redact_cli_payload
 from arga_twins_benchmark.lifecycle import (
     SavedScenario,
     cleanup_instance,
@@ -30,12 +30,10 @@ from arga_twins_benchmark.reporting.semantic_grader import SemanticGradeError, g
 from arga_twins_benchmark.runner import (
     MODEL_PROFILES,
     ModelProfile,
-    TrialPlan,
     load_env_file,
-    load_experiment_bundles,
     render_prompt_ledger_markdown,
     run_experiment_matrix,
-    run_trial,
+    run_instance_suite,
     write_prompt_ledger,
 )
 
@@ -44,6 +42,10 @@ catalog_app = typer.Typer(no_args_is_help=True, help="Validate and inspect bench
 scenarios_app = typer.Typer(no_args_is_help=True, help="Save reusable benchmark Scenarios through the Arga CLI")
 app.add_typer(catalog_app, name="catalog")
 app.add_typer(scenarios_app, name="scenarios")
+
+
+def _echo_json(payload: object) -> None:
+    typer.echo(json.dumps(redact_cli_payload(payload), indent=2, sort_keys=True))
 
 
 @catalog_app.command("validate")
@@ -80,7 +82,7 @@ def save_instance_scenario(
     root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
 ) -> None:
     saved = asyncio.run(_save_instance_scenario(catalog_root=root, instance_id=instance_id))
-    typer.echo(json.dumps(saved.as_dict(), indent=2, sort_keys=True))
+    _echo_json(saved.as_dict())
 
 
 @scenarios_app.command("save-experiment")
@@ -93,7 +95,7 @@ def save_experiment(
         "experiment_id": experiment_id,
         "scenarios": [scenario.as_dict() for scenario in saved],
     }
-    typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    _echo_json(payload)
 
 
 @app.command("provision")
@@ -137,14 +139,14 @@ def provision(
 def reset(
     control_file: Annotated[Path, typer.Argument(help="Private control record from provision")],
 ) -> None:
-    typer.echo(json.dumps(asyncio.run(reset_instance(control_file)), indent=2, sort_keys=True))
+    _echo_json(asyncio.run(reset_instance(control_file)))
 
 
 @app.command("cleanup")
 def cleanup(
     control_file: Annotated[Path, typer.Argument(help="Private control record from provision")],
 ) -> None:
-    typer.echo(json.dumps(asyncio.run(cleanup_instance(control_file)), indent=2, sort_keys=True))
+    _echo_json(asyncio.run(cleanup_instance(control_file)))
 
 
 @app.command("prompts")
@@ -166,17 +168,13 @@ def prompts(
         markdown_output.parent.mkdir(parents=True, exist_ok=True)
         markdown_output.write_text(render_prompt_ledger_markdown(prompt_payload))
         markdown_output.chmod(0o600)
-    typer.echo(
-        json.dumps(
-            {
-                "experiment_id": experiment_id,
-                "entries": prompt_payload.get("entry_count"),
-                "json": str(output),
-                "markdown": str(markdown_output) if markdown_output is not None else None,
-            },
-            indent=2,
-            sort_keys=True,
-        )
+    _echo_json(
+        {
+            "experiment_id": experiment_id,
+            "entries": prompt_payload.get("entry_count"),
+            "json": str(output),
+            "markdown": str(markdown_output) if markdown_output is not None else None,
+        }
     )
 
 
@@ -214,48 +212,52 @@ def run_instance(
     profiles = _select_model_profiles(model)
     if len(profiles) != 1:
         raise typer.BadParameter("run-instance requires exactly one model")
-    _, bundles = load_experiment_bundles(root, experiment_id)
-    if instance_id not in bundles:
-        raise typer.BadParameter(f"{instance_id!r} is not in experiment {experiment_id!r}")
-    suite_run_id = f"canary-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}"
-    plan = TrialPlan(
-        suite_run_id=suite_run_id,
-        trial_id=f"{suite_run_id}--{instance_id}--{profiles[0].model_id}",
-        repeat=1,
-        instance_id=instance_id,
-        model=profiles[0],
-    )
-    result = asyncio.run(
-        run_trial(
-            catalog_root=root,
-            bundle=bundles[instance_id],
-            plan=plan,
-            output_root=output_root / suite_run_id,
-            ttl_minutes=ttl_minutes,
-            candidate_safe_surface=candidate_safe_surface,
-            arga_candidate_safe_profile=arga_candidate_safe_profile,
+    try:
+        summary = asyncio.run(
+            run_instance_suite(
+                catalog_root=root,
+                experiment_id=experiment_id,
+                instance_id=instance_id,
+                output_root=output_root,
+                model_profile=profiles[0],
+                ttl_minutes=ttl_minutes,
+                candidate_safe_surface=candidate_safe_surface,
+                arga_candidate_safe_profile=arga_candidate_safe_profile,
+            )
         )
-    )
-    typer.echo(
-        json.dumps(
-            {
-                "trial_id": result.get("trial_id"),
-                "instance_id": result.get("instance_id"),
-                "model": result.get("model"),
-                "response_model": result.get("response_model"),
-                "status": result.get("status"),
-                "stop_reason": result.get("stop_reason"),
-                "tool_calls": result.get("tool_calls"),
-                "provider_tool_calls": result.get("provider_tool_calls"),
-                "official_docs_tool_calls": result.get("official_docs_tool_calls"),
-                "candidate_safe_surface": result.get("candidate_safe_surface"),
-                "arga_candidate_safe_profile": result.get("arga_candidate_safe_profile"),
-                "cleanup_succeeded": result.get("cleanup_succeeded"),
-                "artifact_dir": str(output_root / suite_run_id / "trials" / plan.trial_id),
-            },
-            indent=2,
-            sort_keys=True,
-        )
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
+    results = summary.get("results")
+    if not isinstance(results, list):
+        raise RuntimeError("single-instance suite did not return exactly one trial result")
+    result_items = cast(list[object], results)
+    if len(result_items) != 1 or not isinstance(result_items[0], dict):
+        raise RuntimeError("single-instance suite did not return exactly one trial result")
+    result = cast(dict[str, Any], result_items[0])
+    suite_run_id = summary.get("suite_run_id")
+    trial_id = result.get("trial_id")
+    suite_dir = output_root / str(suite_run_id)
+    _echo_json(
+        {
+            "suite_run_id": suite_run_id,
+            "trial_id": trial_id,
+            "instance_id": result.get("instance_id"),
+            "model": result.get("model"),
+            "response_model": result.get("response_model"),
+            "status": result.get("status"),
+            "stop_reason": result.get("stop_reason"),
+            "tool_calls": result.get("tool_calls"),
+            "provider_tool_calls": result.get("provider_tool_calls"),
+            "official_docs_tool_calls": result.get("official_docs_tool_calls"),
+            "candidate_safe_surface": result.get("candidate_safe_surface"),
+            "arga_candidate_safe_profile": result.get("arga_candidate_safe_profile"),
+            "cleanup_succeeded": result.get("cleanup_succeeded"),
+            "suite_dir": str(suite_dir),
+            "suite_manifest": str(suite_dir / "suite.json"),
+            "prompt_ledger": str(suite_dir / "prompt-ledger.json"),
+            "official_docs_cache": str(suite_dir / "official-docs-cache"),
+            "artifact_dir": str(suite_dir / "trials" / str(trial_id)),
+        }
     )
 
 
@@ -311,27 +313,23 @@ def run_matrix(
             arga_candidate_safe_profile=arga_candidate_safe_profile,
         )
     )
-    typer.echo(
-        json.dumps(
-            {
-                key: summary.get(key)
-                for key in (
-                    "suite_run_id",
-                    "trial_count",
-                    "terminal_count",
-                    "runtime_error_count",
-                    "cleanup_failure_count",
-                    "trace_output_pass_count",
-                    "state_grade_complete",
-                    "candidate_safe_surface",
-                    "arga_candidate_safe_profile",
-                    "official_docs_tool_call_allowance",
-                    "completed_at",
-                )
-            },
-            indent=2,
-            sort_keys=True,
-        )
+    _echo_json(
+        {
+            key: summary.get(key)
+            for key in (
+                "suite_run_id",
+                "trial_count",
+                "terminal_count",
+                "runtime_error_count",
+                "cleanup_failure_count",
+                "trace_output_pass_count",
+                "state_grade_complete",
+                "candidate_safe_surface",
+                "arga_candidate_safe_profile",
+                "official_docs_tool_call_allowance",
+                "completed_at",
+            )
+        }
     )
 
 
@@ -354,38 +352,34 @@ def grade_suite(
         raise typer.BadParameter(str(error)) from error
     output_path = output or (suite_dir / "semantic-grade.json")
     write_private_json(output_path, report)
-    typer.echo(
-        json.dumps(
-            {
-                key: report.get(key)
-                for key in (
-                    "grading_policy",
-                    "suite_run_id",
-                    "scheduled_trials",
-                    "valid_trials",
-                    "invalid_infrastructure_trials",
-                    "invalid_grader_trials",
-                    "passed_trials",
-                    "failed_trials",
-                    "unsafe_trials",
-                    "trials_with_trace_policy_failures",
-                    "trials_with_output_diagnostic_failures",
-                    "trials_with_redundant_calls",
-                    "trials_with_partial_efficiency_analysis",
-                    "redundant_call_groups",
-                    "flagged_repeat_attempts",
-                    "state_grade_complete",
-                    "semantic_grade_ready",
-                    "suite_integrity_passed",
-                    "matrix_fully_evaluable",
-                    "scoring_ready",
-                    "by_model",
-                )
-            }
-            | {"artifact": str(output_path)},
-            indent=2,
-            sort_keys=True,
-        )
+    _echo_json(
+        {
+            key: report.get(key)
+            for key in (
+                "grading_policy",
+                "suite_run_id",
+                "scheduled_trials",
+                "valid_trials",
+                "invalid_infrastructure_trials",
+                "invalid_grader_trials",
+                "passed_trials",
+                "failed_trials",
+                "unsafe_trials",
+                "trials_with_trace_policy_failures",
+                "trials_with_output_diagnostic_failures",
+                "trials_with_redundant_calls",
+                "trials_with_partial_efficiency_analysis",
+                "redundant_call_groups",
+                "flagged_repeat_attempts",
+                "state_grade_complete",
+                "semantic_grade_ready",
+                "suite_integrity_passed",
+                "matrix_fully_evaluable",
+                "scoring_ready",
+                "by_model",
+            )
+        }
+        | {"artifact": str(output_path)}
     )
     if fail_on_incomplete and report.get("scoring_ready") is not True:
         raise typer.Exit(code=1)
@@ -441,19 +435,15 @@ def analyze_suite(
         encoding="utf-8",
     )
     resolved_markdown_output.chmod(0o600)
-    typer.echo(
-        json.dumps(
-            {
-                "suite_run_id": report.get("suite_run_id"),
-                "scheduled_trials": cast(dict[str, Any], report["design"]).get("scheduled_trials"),
-                "models": cast(dict[str, Any], report["design"]).get("models"),
-                "declared_repeats": cast(dict[str, Any], report["design"]).get("declared_repeats"),
-                "json": str(resolved_json_output),
-                "markdown": str(resolved_markdown_output),
-            },
-            indent=2,
-            sort_keys=True,
-        )
+    _echo_json(
+        {
+            "suite_run_id": report.get("suite_run_id"),
+            "scheduled_trials": cast(dict[str, Any], report["design"]).get("scheduled_trials"),
+            "models": cast(dict[str, Any], report["design"]).get("models"),
+            "declared_repeats": cast(dict[str, Any], report["design"]).get("declared_repeats"),
+            "json": str(resolved_json_output),
+            "markdown": str(resolved_markdown_output),
+        }
     )
 
 

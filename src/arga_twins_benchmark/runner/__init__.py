@@ -5,6 +5,7 @@ from arga_twins_benchmark.runner.matrix import (
     load_env_file,
     load_experiment_bundles,
     run_experiment_matrix,
+    run_instance_suite,
     run_trial,
 )
 from arga_twins_benchmark.runner.prompting import (
@@ -34,6 +35,7 @@ __all__ = [
     "prompt_ledger_payload",
     "render_prompt_ledger_markdown",
     "run_experiment_matrix",
+    "run_instance_suite",
     "run_trial",
     "write_prompt_ledger",
 ]

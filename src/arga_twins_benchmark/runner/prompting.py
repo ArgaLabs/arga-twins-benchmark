@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Collection
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -126,6 +127,7 @@ def experiment_prompts(
     *,
     model_profiles: tuple[ModelProfile, ...] = MODEL_PROFILES,
     system_prompt: str = SYSTEM_PROMPT,
+    instance_ids: Collection[str] | None = None,
 ) -> list[PromptLedgerEntry]:
     documents = validate_catalog(catalog_root)
     experiment = next(
@@ -138,6 +140,12 @@ def experiment_prompts(
     )
     if experiment is None:
         raise ValueError(f"unknown experiment {experiment_id!r}")
+    selected_instance_ids = set(experiment.instances) if instance_ids is None else set(instance_ids)
+    unknown_instance_ids = selected_instance_ids - set(experiment.instances)
+    if unknown_instance_ids:
+        raise ValueError(
+            f"instances are not in experiment {experiment_id!r}: {', '.join(sorted(unknown_instance_ids))}"
+        )
     instances = {
         document.model.instance_id: (document.path, document.model)
         for document in documents
@@ -150,6 +158,8 @@ def experiment_prompts(
     }
     entries: list[PromptLedgerEntry] = []
     for instance_id in experiment.instances:
+        if instance_id not in selected_instance_ids:
+            continue
         instance_path, instance = instances[instance_id]
         task_prompt = (instance_path.parent / instance.prompt_file).read_text().strip()
         verification_path = (instance_path.parent / instance.verification_file).resolve()
@@ -175,12 +185,14 @@ def prompt_ledger_payload(
     *,
     model_profiles: tuple[ModelProfile, ...] = MODEL_PROFILES,
     system_prompt: str = SYSTEM_PROMPT,
+    instance_ids: Collection[str] | None = None,
 ) -> dict[str, Any]:
     entries = experiment_prompts(
         catalog_root,
         experiment_id,
         model_profiles=model_profiles,
         system_prompt=system_prompt,
+        instance_ids=instance_ids,
     )
     return {
         "protocol": "arga-bench-prompt-ledger/1",
@@ -223,7 +235,7 @@ def render_prompt_ledger_markdown(payload: dict[str, Any]) -> str:
     lines = [
         f"# Exact prompts for `{payload.get('experiment_id')}`",
         "",
-        "All three models receive the same system and user text for a given instance. "
+        "Every listed model receives the same system and user text for a given instance. "
         "Only the model/API thinking controls differ.",
         "",
         "## System prompt",
