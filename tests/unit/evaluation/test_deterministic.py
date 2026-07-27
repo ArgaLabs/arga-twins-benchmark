@@ -322,6 +322,43 @@ def test_release_publication_accepts_equivalent_gate_evidence_with_exact_identit
     assert wrong_decision.assertion_results["state.review"] is False
 
 
+@pytest.mark.parametrize(
+    "reason",
+    [
+        "required change PR #3 merged, blocker REL-2 Done, Security approval APPROVED.",
+        "referenced changes are merged, blocker REL-2 closed, security approval approved.",
+        "all referenced changes merged; blockers resolved; Security is APPROVED.",
+    ],
+)
+def test_ready_release_accepts_structured_proof_of_completed_named_blockers(
+    reason: str,
+) -> None:
+    result = grade_state_fields(
+        expected={"body": "READINESS REL-205: READY - all gates passed."},
+        fields={"body": f"READINESS REL-205: READY - {reason}"},
+    )
+
+    assert result.assertion_results["state.review"] is True
+
+
+@pytest.mark.parametrize(
+    "reason",
+    [
+        "required PR #3 merged, blocker REL-2 open, Security approval APPROVED.",
+        "required PR #3 not merged, blocker REL-2 Done, Security approval APPROVED.",
+        "required PR #3 merged, blocker REL-2 Done, Security approval pending.",
+        "required PR #3 merged, blocker REL-2 is not resolved, Security approval APPROVED.",
+    ],
+)
+def test_ready_release_rejects_an_unproved_or_failed_gate(reason: str) -> None:
+    result = grade_state_fields(
+        expected={"body": "READINESS REL-205: READY - all gates passed."},
+        fields={"body": f"READINESS REL-205: READY - {reason}"},
+    )
+
+    assert result.assertion_results["state.review"] is False
+
+
 def test_blocked_release_publication_accepts_an_equivalent_reason() -> None:
     expected: dict[str, JsonValue] = {
         "text": "READINESS REL-206: BLOCKED - change #2 is not merged.",
@@ -342,6 +379,46 @@ def test_blocked_release_publication_accepts_an_equivalent_reason() -> None:
     assert semantic_gold.assertion_results["state.review"] is True
     assert wrong_decision.assertion_results["state.review"] is False
     assert wrong_change.assertion_results["state.review"] is False
+
+
+def test_artifact_text_accepts_whitespace_and_terminal_period_after_exact_identities() -> None:
+    result = grade_state_fields(
+        expected={
+            "description": (
+                "Spec marker: SPEC-91:R1\nGap: Command runner enables shell execution\nCode evidence: runner.py."
+            )
+        },
+        fields={
+            "description": (
+                "Spec marker: SPEC-91:R1  Gap: Command runner enables shell execution Code evidence: runner.py"
+            )
+        },
+    )
+
+    assert result.assertion_results["state.review"] is True
+
+
+@pytest.mark.parametrize(
+    "actual",
+    [
+        "Spec marker: SPEC-92:R1 Gap: Command runner enables shell execution Code evidence: runner.py",
+        "Spec marker: SPEC-91:R1 Gap: Command runner allows shell execution Code evidence: runner.py",
+        "Spec marker: SPEC-91:R1 Gap: Command runner enables shell execution Code evidence: runner.py?",
+    ],
+)
+def test_artifact_text_formatting_equivalence_rejects_identity_content_or_question_changes(
+    actual: str,
+) -> None:
+    result = grade_state_fields(
+        expected={
+            "description": (
+                "Spec marker: SPEC-91:R1\nGap: Command runner enables shell execution\nCode evidence: runner.py."
+            )
+        },
+        fields={"description": actual},
+    )
+
+    assert result.assertion_results["state.review"] is False
 
 
 def test_incident_issue_text_accepts_evidence_expansion_but_keeps_id_and_pr_exact() -> None:
@@ -2092,6 +2169,56 @@ def test_identity_bearing_result_facts_allow_bounded_descriptions_or_native_refe
     )
 
     assert result.assertion_results["output.contract"] is True
+
+
+def test_correlated_change_ignores_unrelated_evidence_digits() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "correlated_change": "GitHub PR #1",
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "correlated_change": (
+                "acme/worker-api pull request #1 (marker DEP-771, changed config/worker.py: WORKERS = 0)"
+            )
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
+@pytest.mark.parametrize(
+    "actual",
+    [
+        "acme/worker-api!1",
+        "acme/worker-api#1 and acme/worker-api#2",
+        "acme/worker-api pull request 1",
+    ],
+)
+def test_correlated_change_rejects_wrong_extra_or_missing_provider_references(
+    actual: str,
+) -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "correlated_change": "GitHub PR #1",
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={"correlated_change": actual},
+    )
+
+    assert result.assertion_results["output.contract"] is False
 
 
 def test_wrong_provider_path_is_not_rescued_by_unrelated_provider_fields() -> None:

@@ -259,11 +259,28 @@ def _readiness_artifacts_are_equivalent(expected: str, actual: str) -> bool:
     actual_tokens = _semantic_tokens(actual)
     if expected_decision == "READY" and {"all", "gates", "passed"} <= expected_tokens:
         generic_pass = {"all", "gates", "passed"} <= actual_tokens
-        enumerated_pass = (
-            {"all", "merged", "approved"} <= actual_tokens
-            and bool(actual_tokens & {"blocker", "blockers"})
-            and bool(actual_tokens & {"no", "none"})
+        normalized_reason = re.sub(r"\s+", " ", actual_reason.casefold())
+        change_gate = (
+            "merged" in actual_tokens
+            and bool(actual_tokens & {"change", "changes", "mr", "pr", "referenced", "required"})
+            and "unmerged" not in actual_tokens
+            and re.search(r"\bnot\s+(?:yet\s+)?merged\b", normalized_reason) is None
         )
+        blocker_gate = (
+            bool(actual_tokens & {"blocker", "blockers"})
+            and not bool(actual_tokens & {"open", "pending", "unresolved"})
+            and re.search(
+                r"\b(?:is\s+)?not\s+(?:done|closed|resolved)\b",
+                normalized_reason,
+            )
+            is None
+            and bool(actual_tokens & {"no", "none", "done", "closed", "resolved"})
+        )
+        security_gate = {"security", "approved"} <= actual_tokens and re.search(
+            r"\b(?:is\s+)?not\s+approved\b",
+            normalized_reason,
+        ) is None
+        enumerated_pass = change_gate and blocker_gate and security_gate
         return generic_pass or enumerated_pass
     if expected_decision in {"BLOCKED", "NOT_READY"}:
         return (
@@ -336,10 +353,26 @@ def state_fact_matches(
     if key in _SEMANTIC_ARTIFACT_TEXT_FIELDS and isinstance(expected, str) and isinstance(actual, str):
         if expected.rstrip("\r\n") == actual.rstrip("\r\n"):
             return True
+        if _artifact_texts_are_conservatively_equal(expected, actual):
+            return True
         return _readiness_artifacts_are_equivalent(expected, actual) or _incident_artifacts_are_equivalent(
             expected, actual
         )
     return _is_subset(cast(object, expected), cast(object, actual))
+
+
+def _artifact_texts_are_conservatively_equal(expected: str, actual: str) -> bool:
+    """Allow formatting-only artifact differences after exact identity checks."""
+
+    if _identity_tokens(expected) != _identity_tokens(actual):
+        return False
+    expected_text = re.sub(r"\s+", " ", expected).strip()
+    actual_text = re.sub(r"\s+", " ", actual).strip()
+    if expected_text == actual_text:
+        return True
+    # A final period, comma, semicolon, or colon is presentation rather than
+    # business content. Question and exclamation marks remain significant.
+    return bool(expected_text.rstrip(".,;:")) and expected_text.rstrip(".,;:") == actual_text.rstrip(".,;:")
 
 
 def state_document_matches(expected: Mapping[str, Any], actual: Mapping[str, Any]) -> bool:
@@ -1377,19 +1410,15 @@ def _fact_value_matches(key: object, expected: object, actual: object) -> bool:
         and isinstance(expected, str)
         and isinstance(actual, str)
     ):
-        expected_tokens = _semantic_tokens(expected)
         actual_tokens = _semantic_tokens(actual)
-        expected_numbers = {token for token in expected_tokens if token.isdigit()}
-        actual_numbers = {token for token in actual_tokens if token.isdigit()}
-        if not expected_numbers or expected_numbers != actual_numbers or "wrong" in actual_tokens:
-            return False
-        identity_pattern = re.compile(
-            rf"^\s*\[?{re.escape(expected.strip())}\]?(?:$|[\s:()—–])",
-            flags=re.IGNORECASE,
-        )
-        if identity_pattern.search(actual) is not None:
-            return True
-        return re.search(r"(?:#|!)\d+(?:\b|$)", actual) is not None
+        expected_references = {
+            (match.group("sigil"), int(match.group("number")))
+            for match in _PROVIDER_CHANGE_REFERENCE.finditer(expected)
+        }
+        actual_references = {
+            (match.group("sigil"), int(match.group("number"))) for match in _PROVIDER_CHANGE_REFERENCE.finditer(actual)
+        }
+        return bool(expected_references) and actual_references == expected_references and "wrong" not in actual_tokens
     if (
         isinstance(key, str)
         and _normalized_result_value(key) in _NORMALIZED_EXACT_FACT_KEYS

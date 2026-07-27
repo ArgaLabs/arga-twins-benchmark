@@ -24,6 +24,7 @@ from arga_twins_benchmark.evaluation.state_evidence import (
     CanonicalizerCoverage,
     StateEvidenceError,
     _gmail_relative_safety_counts,  # pyright: ignore[reportPrivateUsage]
+    _materialize_issue_collection_member_projections,  # pyright: ignore[reportPrivateUsage]
     _materialize_relational_proofs,  # pyright: ignore[reportPrivateUsage]
     _prove_baseline_reference,  # pyright: ignore[reportPrivateUsage]
     _suppress_entity_projection_echoes,  # pyright: ignore[reportPrivateUsage]
@@ -179,6 +180,31 @@ def build(
     )
 
 
+def issue_collection_verification(
+    *,
+    selector: dict[str, JsonValue],
+    expected: dict[str, JsonValue],
+    cardinality: int,
+) -> VerificationSpec:
+    payload = verification().model_dump(mode="json")
+    payload["deterministic"]["state_assertions"] = [
+        {
+            "id": "state.collection",
+            "provider_role": "tracker",
+            "resource_type": "issue_collection",
+            "selector": selector,
+            "expected": expected,
+            "cardinality": cardinality,
+        }
+    ]
+    payload["deterministic"]["mutation_policy"] = {
+        "default": "deny",
+        "required": [],
+        "allowed": [],
+    }
+    return VerificationSpec.model_validate(payload)
+
+
 def update_verification(
     *,
     allowed_fields: list[str],
@@ -279,6 +305,154 @@ def test_builds_rule_projected_mutation_and_baseline_fact() -> None:
         output=None,
     )
     assert grade.task_success is True
+
+
+def test_issue_collection_member_delta_pairs_a_linear_issue_by_identifier() -> None:
+    verifier = issue_collection_verification(
+        selector={"team_key": "OPS", "marker": "INC-419"},
+        expected={"delta_from_baseline": 0},
+        cardinality=1,
+    )
+    issue: dict[str, JsonValue] = {
+        "id": "linear-generated-id",
+        "identifier": "OPS-1",
+        "team_key": "OPS",
+        "marker": "INC-419",
+        "title": "[INC-419] Checkout retries",
+    }
+
+    evidence = build(snapshot([issue]), snapshot([issue]), verifier=verifier)
+
+    selected = [
+        resource
+        for resource in evidence.resources
+        if resource.resource_type == "issue_collection" and resource.fields.get("marker") == "INC-419"
+    ]
+    assert [resource.resource_id for resource in selected] == ["member:identifier:OPS-1"]
+    assert selected[0].fields["delta_from_baseline"] == 0
+    grade = evaluate_deterministic(
+        verifier,
+        complexity=complexity(),
+        resources=list(evidence.resources),
+        mutations=list(evidence.mutations),
+        trace=[ToolCallRecord("tracker", "GET", "/issues", 200, False) for _ in range(6)],
+        output=None,
+    )
+    assert grade.assertion_results["state.collection"] is True
+
+
+def test_issue_collection_preservation_pairs_jira_members_by_key() -> None:
+    verifier = issue_collection_verification(
+        selector={"summary_contains": "REL-250"},
+        expected={"equals_baseline": True},
+        cardinality=2,
+    )
+    issues: list[dict[str, JsonValue]] = [
+        {
+            "id": "jira-id-1",
+            "key": "REL-10",
+            "project_key": "REL",
+            "summary": "[REL-250] Future release gate A",
+            "status": "To Do",
+        },
+        {
+            "id": "jira-id-2",
+            "key": "REL-11",
+            "project_key": "REL",
+            "summary": "[REL-250] Future release gate B",
+            "status": "To Do",
+        },
+    ]
+
+    evidence = build(snapshot(issues), snapshot(issues), verifier=verifier)
+
+    selected = [
+        resource
+        for resource in evidence.resources
+        if resource.resource_type == "issue_collection" and "REL-250" in str(resource.fields.get("summary", ""))
+    ]
+    assert [resource.resource_id for resource in selected] == [
+        "member:key:REL-10",
+        "member:key:REL-11",
+    ]
+    assert all(resource.fields["equals_baseline"] is True for resource in selected)
+
+
+@pytest.mark.parametrize("change", ["deleted", "field", "identity"])
+def test_issue_collection_preservation_rejects_deleted_changed_or_reidentified_member(
+    change: str,
+) -> None:
+    verifier = issue_collection_verification(
+        selector={"summary_contains": "REL-250"},
+        expected={"equals_baseline": True},
+        cardinality=1,
+    )
+    baseline_issue: dict[str, JsonValue] = {
+        "id": "jira-id-1",
+        "key": "REL-10",
+        "project_key": "REL",
+        "summary": "[REL-250] Future release gate",
+        "status": "To Do",
+    }
+    final_issue = dict(baseline_issue)
+    if change == "field":
+        final_issue["status"] = "Done"
+    elif change == "identity":
+        final_issue["key"] = "REL-12"
+    final_issues = [] if change == "deleted" else [final_issue]
+
+    evidence = build(
+        snapshot([baseline_issue]),
+        snapshot(final_issues),
+        verifier=verifier,
+    )
+    grade = evaluate_deterministic(
+        verifier,
+        complexity=complexity(),
+        resources=list(evidence.resources),
+        mutations=list(evidence.mutations),
+        trace=[ToolCallRecord("tracker", "GET", "/issues", 200, False) for _ in range(6)],
+        output=None,
+    )
+
+    assert grade.assertion_results["state.collection"] is False
+
+
+@pytest.mark.parametrize(
+    "issues",
+    [
+        [{"summary": "[REL-250] Missing identity"}],
+        [
+            {"key": "REL-10", "summary": "[REL-250] First"},
+            {"key": "REL-10", "summary": "[REL-250] Duplicate"},
+        ],
+    ],
+)
+def test_issue_collection_member_projection_fails_closed_on_unpairable_members(
+    issues: list[dict[str, JsonValue]],
+) -> None:
+    assertion = StateAssertionSpec.model_validate(
+        {
+            "id": "state.collection",
+            "provider_role": "tracker",
+            "resource_type": "issue_collection",
+            "selector": {"summary_contains": "REL-250"},
+            "expected": {"equals_baseline": True},
+            "cardinality": len(issues),
+        }
+    )
+    collection = CanonicalResource(
+        "tracker",
+        "issue_collection",
+        "project:REL",
+        {"project_key": "REL", "issues": issues},
+    )
+
+    with pytest.raises(StateEvidenceError, match="stable identity|requires one of"):
+        _materialize_issue_collection_member_projections(
+            [collection],
+            assertions=[assertion],
+        )
 
 
 def test_create_keeps_unapproved_fields_visible_to_default_deny() -> None:

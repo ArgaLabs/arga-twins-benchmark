@@ -831,6 +831,10 @@ def gitlab_merge_request_and_tree_v1(capture: CapturedQueryState) -> Sequence[Ca
 
 
 def _adf_text(value: object, capture: CapturedQueryState, label: str) -> str:
+    return _render_adf_node(value, capture, label).strip()
+
+
+def _render_adf_node(value: object, capture: CapturedQueryState, label: str) -> str:
     if value is None:
         return ""
     if isinstance(value, str):
@@ -842,11 +846,25 @@ def _adf_text(value: object, capture: CapturedQueryState, label: str) -> str:
         if not isinstance(text, str):
             raise _error(capture, f"{label} text node has no text")
         return text
+    if node_type == "hardBreak":
+        return "\n"
     content = node.get("content", [])
     children = _array(content, capture, f"{label} content")
-    rendered = [_adf_text(child, capture, f"{label} child") for child in children]
-    separator = "\n" if node_type in {"doc", "paragraph", "heading", "blockquote", "listItem"} else ""
-    return separator.join(part for part in rendered if part).strip()
+    rendered = [_render_adf_node(child, capture, f"{label} child") for child in children]
+    if node_type in {
+        "blockquote",
+        "bulletList",
+        "doc",
+        "listItem",
+        "orderedList",
+    }:
+        # Do not filter empty block nodes. An empty paragraph between two
+        # populated paragraphs is the ADF representation of a deliberate
+        # blank line and is part of the artifact's semantic layout.
+        return "\n".join(rendered)
+    # Paragraph and heading content is inline. Explicit hardBreak nodes above,
+    # rather than adjacency of text nodes, create line boundaries.
+    return "".join(rendered)
 
 
 def _jira_project(capture: CapturedQueryState) -> str | None:

@@ -220,6 +220,17 @@ _HELPER_EXPECTED_KEYS = frozenset(
         "new_since_baseline",
     }
 )
+_ISSUE_COLLECTION_AGGREGATE_SELECTOR_FIELDS = frozenset(
+    {
+        "issues",
+        "markers",
+        "project_key",
+        "resource_id",
+        "scope",
+        "team_key",
+    }
+)
+_ISSUE_COLLECTION_MEMBER_IDENTITY_FIELDS = ("identifier", "key", "id")
 
 
 def build_deterministic_state_evidence(
@@ -263,6 +274,15 @@ def build_deterministic_state_evidence(
         enriched_final,
         canonicalizers=canonicalizers,
     )
+    assertions = verification.deterministic.state_assertions
+    before_resources = _materialize_issue_collection_member_projections(
+        before_resources,
+        assertions=assertions,
+    )
+    after_resources = _materialize_issue_collection_member_projections(
+        after_resources,
+        assertions=assertions,
+    )
     all_canonical_mutations = diff_canonical_resources(before_resources, after_resources)
     mutations, projection_count = _semantic_mutations(
         before=before_resources,
@@ -279,7 +299,7 @@ def build_deterministic_state_evidence(
         before=before_resources,
         after=after_resources,
         mutations=mutations,
-        assertions=verification.deterministic.state_assertions,
+        assertions=assertions,
     )
     if enrichment.unsupported:
         details = "; ".join(f"{item.assertion_id}.{item.construct}: {item.reason}" for item in enrichment.unsupported)
@@ -298,12 +318,12 @@ def build_deterministic_state_evidence(
     selector_resources = _materialize_selector_proofs(
         before=before_resources,
         after=assertion_resources,
-        assertions=verification.deterministic.state_assertions,
+        assertions=assertions,
     )
     final_resources = _materialize_relational_proofs(
         before=before_resources,
         after=selector_resources,
-        assertions=verification.deterministic.state_assertions,
+        assertions=assertions,
     )
     return DeterministicStateEvidence(
         baseline_resources=tuple(before_resources),
@@ -314,6 +334,127 @@ def build_deterministic_state_evidence(
         projection_delta_count=projection_count,
         derived_facts=enrichment.derived_facts,
     )
+
+
+def _materialize_issue_collection_member_projections(
+    resources: Sequence[CanonicalResource],
+    *,
+    assertions: Sequence[StateAssertionSpec],
+) -> list[CanonicalResource]:
+    """Project stable issue members when a collection assertion selects them.
+
+    Jira and Linear canonicalizers expose one authoritative aggregate per
+    project or team. Selectors such as ``summary_contains: REL-250`` and
+    ``team_key: OPS, marker: INC-419`` describe members of those aggregates,
+    not the aggregate object. Synthetic members retain the
+    ``issue_collection`` type so collection count and baseline semantics can
+    operate without turning projection changes into candidate mutations.
+
+    Pairing is deliberately fail-closed: every member needs a stable provider
+    identity and that identity may occur only once in the applicable
+    collection surface.
+    """
+
+    member_roles = {
+        assertion.provider_role
+        for assertion in assertions
+        if assertion.resource_type == "issue_collection"
+        and _issue_collection_selector_targets_members(assertion.selector)
+    }
+    if not member_roles:
+        return list(resources)
+
+    projected: list[CanonicalResource] = []
+    seen: dict[tuple[str, str, str], str] = {}
+    for collection in resources:
+        if collection.provider_role not in member_roles or collection.resource_type != "issue_collection":
+            continue
+        issues = collection.fields.get("issues")
+        if not isinstance(issues, list):
+            raise StateEvidenceError(
+                "issue_collection member projection requires an authoritative "
+                f"issues list for {collection.provider_role}/{collection.resource_id}"
+            )
+        for index, raw_issue in enumerate(cast(list[object], issues)):
+            if not isinstance(raw_issue, dict):
+                raise StateEvidenceError(
+                    "issue_collection member projection found a non-object issue "
+                    f"at {collection.provider_role}/{collection.resource_id}[{index}]"
+                )
+            issue = cast(dict[str, Any], raw_issue)
+            identity = next(
+                (
+                    (field_name, str(value))
+                    for field_name in _ISSUE_COLLECTION_MEMBER_IDENTITY_FIELDS
+                    if (
+                        (value := issue.get(field_name)) is not None
+                        and isinstance(value, str | int)
+                        and not isinstance(value, bool)
+                        and str(value)
+                    )
+                ),
+                None,
+            )
+            if identity is None:
+                raise StateEvidenceError(
+                    "issue_collection member projection requires one of "
+                    f"{_ISSUE_COLLECTION_MEMBER_IDENTITY_FIELDS!r} at "
+                    f"{collection.provider_role}/{collection.resource_id}[{index}]"
+                )
+            identity_field, identity_value = identity
+            identity_key = (collection.provider_role, identity_field, identity_value)
+            prior_collection = seen.get(identity_key)
+            if prior_collection is not None:
+                raise StateEvidenceError(
+                    "issue_collection member projection has duplicate stable identity "
+                    f"{identity_field}={identity_value!r} in "
+                    f"{prior_collection!r} and {collection.resource_id!r}"
+                )
+            seen[identity_key] = collection.resource_id
+
+            fields = dict(issue)
+            for scope_field in ("project_key", "scope", "team_key"):
+                if scope_field in collection.fields:
+                    fields.setdefault(scope_field, collection.fields[scope_field])
+            fields["collection_id"] = collection.resource_id
+            fields["collection_member"] = True
+            projected.append(
+                CanonicalResource(
+                    provider_role=collection.provider_role,
+                    resource_type="issue_collection",
+                    resource_id=f"member:{identity_field}:{identity_value}",
+                    fields=fields,
+                )
+            )
+    return [
+        *resources,
+        *sorted(
+            projected,
+            key=lambda resource: (
+                resource.provider_role,
+                resource.resource_id,
+            ),
+        ),
+    ]
+
+
+def _issue_collection_selector_targets_members(selector: Mapping[str, Any]) -> bool:
+    for key, value in selector.items():
+        if key in {"baseline_only", "exclude_exact_target"}:
+            continue
+        if key == "exclude":
+            if isinstance(value, dict) and _issue_collection_selector_targets_members(cast(dict[str, Any], value)):
+                return True
+            continue
+        if key in {"exclude_number", "number_lte"}:
+            field_name = "number"
+        elif key.endswith(("_contains", "_in", "_pattern")):
+            field_name = key.rsplit("_", maxsplit=1)[0]
+        else:
+            field_name = key
+        if field_name not in _ISSUE_COLLECTION_AGGREGATE_SELECTOR_FIELDS:
+            return True
+    return False
 
 
 def _validate_snapshot_contracts(

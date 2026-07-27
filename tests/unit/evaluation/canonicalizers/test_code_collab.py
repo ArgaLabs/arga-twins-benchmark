@@ -593,6 +593,70 @@ def test_jira_search_projects_issues_comments_and_adf() -> None:
         assert volatile not in rendered
 
 
+def test_jira_adf_preserves_hard_breaks_empty_paragraphs_and_inline_adjacency() -> None:
+    query = capture(
+        "jira_issues_and_comments_v1",
+        "/rest/api/3/search?jql=project%3DMIG",
+        {
+            "issues": [
+                {
+                    "key": "MIG-1",
+                    "fields": {
+                        "summary": "Remove legacy deployment lock",
+                        "description": {
+                            "type": "doc",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {"type": "text", "text": "Migration marker: "},
+                                        {"type": "text", "text": "MIG-34"},
+                                        {"type": "hardBreak"},
+                                        {"type": "text", "text": "Code reference: acme/platform!1"},
+                                        {"type": "hardBreak"},
+                                        {"type": "text", "text": "Remove legacy deployment lock."},
+                                    ],
+                                },
+                                {"type": "paragraph", "content": []},
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {"type": "text", "text": "Migration source: ENG-1"},
+                                    ],
+                                },
+                            ],
+                        },
+                        "project": {"key": "MIG"},
+                        "status": {
+                            "name": "To Do",
+                            "statusCategory": {"key": "new"},
+                        },
+                        "comment": {"comments": []},
+                    },
+                }
+            ]
+        },
+        provider_name="jira",
+        provider_role="target_tracker",
+    )
+
+    resources = list(CODE_COLLAB_CANONICALIZERS[query.canonicalizer](query))
+    description = resource(resources, "issue", "MIG-1").fields["description"]
+
+    assert description == (
+        "Migration marker: MIG-34\n"
+        "Code reference: acme/platform!1\n"
+        "Remove legacy deployment lock.\n\n"
+        "Migration source: ENG-1"
+    )
+    assert description != (
+        "Migration marker: MIG-34\n"
+        "Code reference: acme/platform!1\n"
+        "Remove legacy deployment lock.\n"
+        "Migration source: ENG-1"
+    )
+
+
 def test_jira_search_fails_closed_on_cross_project_results() -> None:
     query = capture(
         "jira_SEC_issues_stable",
