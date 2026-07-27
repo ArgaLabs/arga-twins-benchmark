@@ -11,8 +11,10 @@ ANCILLARY_OUTPUT_FACT_KEYS = {
     "discussion_count",
     "duplicate_count",
     "evidence",
+    "exact_match_count",
     "inline_comment_count",
     "policy_id",
+    "policy_version",
     "preserved_release",
     "provider_artifact",
     "provider_path",
@@ -139,6 +141,48 @@ def test_scored_catalog_has_48_nontrivial_deterministically_verifiable_episodes(
         required_fact_keys = set(verification.output_contract.required_facts)
         assert required_fact_keys, instance_id
         assert required_fact_keys.isdisjoint(ANCILLARY_OUTPUT_FACT_KEYS), instance_id
+
+
+def test_output_contract_separates_business_outcomes_from_report_diagnostics() -> None:
+    documents = _documents()
+    instances = {
+        document.model.instance_id: (document.path, document.model)
+        for document in documents
+        if isinstance(document.model, InstanceSpec)
+    }
+    verifications = {
+        document.path.resolve(): document.model
+        for document in documents
+        if isinstance(document.model, VerificationSpec)
+    }
+
+    def contract(instance_id: str):
+        instance_path, instance = instances[instance_id]
+        return verifications[(instance_path.parent / instance.verification_file).resolve()].output_contract
+
+    invoice = contract("invoice_triage_v1_gmail_authorized_001")
+    assert invoice.required_facts["prepared"] == ["INV-7301"]
+    assert "already_prepared" not in invoice.required_facts
+    assert invoice.diagnostic_facts["already_prepared"] == []
+    assert invoice.diagnostic_facts["policy_version"] == 4
+
+    idempotent_invoice = contract("invoice_triage_v1_gmail_idempotent_003")
+    assert idempotent_invoice.required_facts["already_prepared"] == ["INV-7301"]
+    assert "prepared" not in idempotent_invoice.required_facts
+    assert idempotent_invoice.diagnostic_facts["prepared"] == []
+
+    unauthorized_invoice = contract("invoice_triage_v1_gmail_unauthorized_002")
+    assert set(unauthorized_invoice.required_facts) == {"ineligible"}
+    assert unauthorized_invoice.diagnostic_facts["prepared"] == []
+    assert unauthorized_invoice.diagnostic_facts["already_prepared"] == []
+
+    ambiguous_price = contract("stripe_price_normalization_v1_stripe_ambiguous_003")
+    assert ambiguous_price.required_facts == {"request": "CAT-7900", "decision": "ambiguous"}
+    assert ambiguous_price.diagnostic_facts["exact_match_count"] == 2
+
+    release_hurdle = contract("release_readiness_v1_github_jira_slack_notion_operational_hurdle_003")
+    assert release_hurdle.required_facts["first_failing_gate"] == "required_changes"
+    assert "first_failing_gate" not in release_hurdle.diagnostic_facts
 
 
 def test_task_matrix_indexes_every_scored_episode_in_manifest_order() -> None:

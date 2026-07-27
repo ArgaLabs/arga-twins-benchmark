@@ -10,7 +10,8 @@ critical_requirements: ["Both exact-name products are queried independently.", "
 partial_credit: {evidence_chain: 0.25, ambiguity_detection: 0.35, noop_decision: 0.20, preservation: 0.20}
 output_contract:
   mode: structured_facts
-  required_facts: {request: CAT-7900, decision: ambiguous, exact_match_count: 2}
+  required_facts: {request: CAT-7900, decision: ambiguous}
+  diagnostic_facts: {exact_match_count: 2}
   forbidden_facts: {decision: normalized}
   critical: true
 deterministic:
