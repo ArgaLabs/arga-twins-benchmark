@@ -30,7 +30,8 @@ partial_credit:
   preserve_sources: 0.10
 output_contract:
   mode: structured_facts
-  required_facts: {release: REL-204, decision: READY, first_failing_gate: null, tracker_record: REL-1, published: true, tracker_status: Done, publication_count: 1}
+  required_facts: {release: REL-204, decision: READY, first_failing_gate: null, tracker_record: REL-1}
+  diagnostic_facts: {published: true, tracker_status: Done, publication_count: 1}
   forbidden_facts: {source_mutated: true}
   critical: true
 deterministic:

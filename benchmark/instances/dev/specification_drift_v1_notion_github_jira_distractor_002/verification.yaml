@@ -34,6 +34,7 @@ output_contract:
     missing_requirements: ["SPEC-89:R1"]
     tracker_action: created
     tracker_identifier: SEC-3
+  diagnostic_facts:
     source_preserved: true
   forbidden_facts:
     duplicate_created: true

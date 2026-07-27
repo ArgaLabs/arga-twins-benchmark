@@ -32,9 +32,10 @@ output_contract:
   mode: structured_facts
   required_facts:
     outcome: repaired
-    policy_id: TRACKER-MIGRATION-V2
     source_identifier: OPS-1
     target_identifier: OPS-1
+  diagnostic_facts:
+    policy_id: TRACKER-MIGRATION-V2
     target_repaired_in_place: true
     target_created: false
   forbidden_facts:

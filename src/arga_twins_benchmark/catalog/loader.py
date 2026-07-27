@@ -36,7 +36,33 @@ class CatalogDocument:
 
 
 def fingerprint_model(model: BaseModel) -> str:
-    return _fingerprint_payload(model.model_dump(mode="json"))
+    return _fingerprint_payload(_fingerprint_model_payload(model))
+
+
+def _fingerprint_model_payload(model: BaseModel) -> dict[str, object]:
+    """Serialize catalog identity independently of grader-only fact severity.
+
+    Moving an already-requested structured result field between hard and
+    diagnostic grading does not change the twin, seed, prompt shape, or observed
+    episode. The grader revision records that policy change. New or changed
+    report fields still change the fingerprint because both fact maps are merged
+    into the identity projection.
+    """
+
+    payload = cast(dict[str, object], model.model_dump(mode="json"))
+    if not isinstance(model, VerificationSpec):
+        return payload
+    raw_contract = payload.get("output_contract")
+    if not isinstance(raw_contract, dict):
+        return payload
+    contract = cast(dict[str, object], raw_contract)
+    required = contract.get("required_facts")
+    diagnostic = contract.get("diagnostic_facts")
+    required_mapping = cast(dict[str, object], required) if isinstance(required, dict) else {}
+    diagnostic_mapping = cast(dict[str, object], diagnostic) if isinstance(diagnostic, dict) else {}
+    contract["required_facts"] = {**required_mapping, **diagnostic_mapping}
+    contract.pop("diagnostic_facts", None)
+    return payload
 
 
 def _fingerprint_payload(payload: object) -> str:
@@ -122,7 +148,7 @@ def fingerprint_instance_bundle(catalog_root: Path, instance_id: str) -> str:
         "binding": binding.model_dump(mode="json"),
         "prompt": (instance_document.path.parent / instance.prompt_file).read_text(),
         "seeds": seeds,
-        "verification": verification.model_dump(mode="json"),
+        "verification": _fingerprint_model_payload(verification),
     }
     return _fingerprint_payload(payload)
 

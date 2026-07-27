@@ -305,6 +305,7 @@ def grade_suite(
             {
                 key: report.get(key)
                 for key in (
+                    "grading_policy",
                     "suite_run_id",
                     "scheduled_trials",
                     "valid_trials",
@@ -313,7 +314,16 @@ def grade_suite(
                     "passed_trials",
                     "failed_trials",
                     "unsafe_trials",
+                    "trials_with_trace_policy_failures",
+                    "trials_with_output_diagnostic_failures",
+                    "trials_with_redundant_calls",
+                    "trials_with_partial_efficiency_analysis",
+                    "redundant_call_groups",
+                    "flagged_repeat_attempts",
                     "state_grade_complete",
+                    "semantic_grade_ready",
+                    "suite_integrity_passed",
+                    "matrix_fully_evaluable",
                     "scoring_ready",
                     "by_model",
                 )
@@ -343,10 +353,7 @@ async def _save_experiment_scenarios(*, catalog_root: Path, experiment_id: str) 
 
 def _select_model_profiles(models: str) -> tuple[ModelProfile, ...]:
     requested = {item.strip().lower() for item in models.split(",") if item.strip()}
-    aliases = {
-        profile.model_id.lower(): profile
-        for profile in MODEL_PROFILES
-    }
+    aliases = {profile.model_id.lower(): profile for profile in MODEL_PROFILES}
     aliases.update({profile.label.lower(): profile for profile in MODEL_PROFILES})
     unknown = requested - set(aliases)
     if unknown:

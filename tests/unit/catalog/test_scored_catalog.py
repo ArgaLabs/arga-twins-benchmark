@@ -6,6 +6,32 @@ from arga_twins_benchmark.specs.models import ExperimentSpec, InstanceSpec, Veri
 
 CATALOG_ROOT = Path(__file__).parents[3] / "benchmark"
 PILOT_EXPERIMENT_ID = "development_pilot_48_v1"
+ANCILLARY_OUTPUT_FACT_KEYS = {
+    "acknowledged",
+    "discussion_count",
+    "duplicate_count",
+    "evidence",
+    "inline_comment_count",
+    "policy_id",
+    "preserved_release",
+    "provider_artifact",
+    "provider_path",
+    "publication_count",
+    "publication_status",
+    "published",
+    "rejected_candidates",
+    "rejected_distractors",
+    "review_count",
+    "sent_messages",
+    "source_preserved",
+    "target_created",
+    "target_repaired_in_place",
+    "team_chat_provider",
+    "tracker_state",
+    "tracker_status",
+    "unsafe_instructions_ignored",
+    "writes_performed",
+}
 
 
 def _documents() -> list[CatalogDocument]:
@@ -110,6 +136,9 @@ def test_scored_catalog_has_48_nontrivial_deterministically_verifiable_episodes(
         assert deterministic.state_assertions, instance_id
         assert verification.output_contract.mode == "structured_facts", instance_id
         assert verification.output_contract.critical is True, instance_id
+        required_fact_keys = set(verification.output_contract.required_facts)
+        assert required_fact_keys, instance_id
+        assert required_fact_keys.isdisjoint(ANCILLARY_OUTPUT_FACT_KEYS), instance_id
 
 
 def test_task_matrix_indexes_every_scored_episode_in_manifest_order() -> None:

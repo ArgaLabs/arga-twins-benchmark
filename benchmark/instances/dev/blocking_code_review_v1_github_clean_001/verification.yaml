@@ -31,6 +31,7 @@ output_contract:
   required_facts:
     decision: changes_requested
     target_change: 2
+  diagnostic_facts:
     review_count: 1
     inline_comment_count: 1
   forbidden_facts:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import re
 import time
@@ -74,6 +75,7 @@ _BLOCKED_REQUEST_HEADERS: Final = frozenset(
         "content-length",
         "content-type",
         "cookie",
+        "forwarded",
         "host",
         "proxy-authorization",
         "proxy-connection",
@@ -82,7 +84,17 @@ _BLOCKED_REQUEST_HEADERS: Final = frozenset(
         "trailer",
         "transfer-encoding",
         "upgrade",
+        "x-forwarded-for",
+        "x-forwarded-host",
+        "x-forwarded-port",
+        "x-forwarded-prefix",
+        "x-forwarded-proto",
+        "x-http-method-override",
+        "x-method-override",
+        "x-original-url",
+        "x-real-ip",
         "x-request-id",
+        "x-rewrite-url",
     }
 )
 _SENSITIVE_RESPONSE_HEADERS: Final = frozenset(
@@ -92,6 +104,19 @@ _SENSITIVE_RESPONSE_HEADERS: Final = frozenset(
         "proxy-authenticate",
         "proxy-authorization",
         "set-cookie",
+    }
+)
+_ACTION_FINGERPRINT_IGNORED_HEADERS: Final = frozenset(
+    {
+        "idempotency-key",
+        "if-match",
+        "if-modified-since",
+        "if-none-match",
+        "if-unmodified-since",
+        "retry-after",
+        "x-idempotency-key",
+        "x-retry-attempt",
+        "x-retry-count",
     }
 )
 _HEADER_NAME = re.compile(r"^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$")
@@ -117,11 +142,7 @@ class ProviderInfrastructureError(RetryableInfrastructureError):
         self.code = code
         self.status_code = status_code
         self.consecutive_failures = consecutive_failures
-        failure_origin = (
-            f"preview proxy returned {code} (HTTP {status_code})"
-            if status_code is not None
-            else code
-        )
+        failure_origin = f"preview proxy returned {code} (HTTP {status_code})" if status_code is not None else code
         super().__init__(
             "provider infrastructure unavailable: "
             f"{failure_origin}; consecutive infrastructure failures: {consecutive_failures}"
@@ -143,6 +164,9 @@ class ProviderTraceRecord:
     response_bytes: int
     truncated: bool
     error: str | None
+    request_fingerprint: str | None = None
+    action_fingerprint: str | None = None
+    attempt_fingerprint: str | None = None
 
     def to_dict(self) -> dict[str, object]:
         return cast(dict[str, object], asdict(self))
@@ -282,6 +306,12 @@ class ProviderGateway:
         raw_path = _string_value(tool_input.get("path"))
         operation, operation_type = _infer_graphql_operation(tool_input.get("body"))
         effective_path: str | None = raw_path
+        request_fingerprint: str | None = None
+        action_fingerprint: str | None = None
+        try:
+            attempt_fingerprint = provider_tool_attempt_fingerprint(tool_input)
+        except (TypeError, ValueError):
+            attempt_fingerprint = None
 
         try:
             resolved_provider, provider = self._resolve_provider(requested_provider)
@@ -311,6 +341,11 @@ class ProviderGateway:
                 content=request_content,
             )
             effective_path = _effective_relative_path(request.url)
+            request_fingerprint, action_fingerprint = provider_tool_input_fingerprints(
+                tool_input,
+                resolved_provider=resolved_provider,
+                effective_path=effective_path,
+            )
             response = await self._client.send(request, stream=True, follow_redirects=False)
             try:
                 response_bytes, truncated = await _read_bounded(response, self._max_response_bytes)
@@ -332,6 +367,9 @@ class ProviderGateway:
                 response_bytes=len(response_bytes),
                 truncated=truncated,
                 error=None,
+                request_fingerprint=request_fingerprint,
+                action_fingerprint=action_fingerprint,
+                attempt_fingerprint=attempt_fingerprint,
             )
             proxy_failure_code = _preview_proxy_infrastructure_failure_code(
                 status_code=response.status_code,
@@ -387,11 +425,11 @@ class ProviderGateway:
                 response_bytes=0,
                 truncated=False,
                 error=error,
+                request_fingerprint=request_fingerprint,
+                action_fingerprint=action_fingerprint,
+                attempt_fingerprint=attempt_fingerprint,
             )
-            if (
-                self._consecutive_proxy_infrastructure_failures
-                >= self._proxy_infrastructure_failure_threshold
-            ):
+            if self._consecutive_proxy_infrastructure_failures >= self._proxy_infrastructure_failure_threshold:
                 raise ProviderInfrastructureError(
                     code=_transport_infrastructure_failure_code(exc),
                     status_code=None,
@@ -427,6 +465,9 @@ class ProviderGateway:
                 response_bytes=0,
                 truncated=False,
                 error=error,
+                request_fingerprint=request_fingerprint,
+                action_fingerprint=action_fingerprint,
+                attempt_fingerprint=attempt_fingerprint,
             )
             return {
                 "ok": False,
@@ -467,6 +508,9 @@ class ProviderGateway:
         response_bytes: int,
         truncated: bool,
         error: str | None,
+        request_fingerprint: str | None = None,
+        action_fingerprint: str | None = None,
+        attempt_fingerprint: str | None = None,
     ) -> ProviderTraceRecord:
         trace = ProviderTraceRecord(
             sequence=len(self._trace_records) + 1,
@@ -482,6 +526,9 @@ class ProviderGateway:
             response_bytes=response_bytes,
             truncated=truncated,
             error=error,
+            request_fingerprint=request_fingerprint,
+            action_fingerprint=action_fingerprint,
+            attempt_fingerprint=attempt_fingerprint,
         )
         self._trace_records.append(trace)
         return trace
@@ -735,6 +782,94 @@ def _form_scalar(value: object) -> str:
     if isinstance(value, (str, int, float)):
         return str(value)
     raise ValueError("form values must be strings, numbers, booleans, nulls, objects, or scalar arrays")
+
+
+def provider_tool_input_fingerprints(
+    tool_input: Mapping[str, object],
+    *,
+    resolved_provider: str | None = None,
+    effective_path: str | None = None,
+) -> tuple[str, str]:
+    """Return stable request and semantic-action hashes for one provider call.
+
+    The helper deliberately returns only SHA-256 digests. Request bodies and
+    candidate-supplied header values exist only in the short-lived hash input
+    and are never retained in ``ProviderTraceRecord``. Callers reconstructing
+    legacy traces should pass the provider and effective path recorded by the
+    trusted gateway so role aliases and encoded query strings normalize exactly
+    as they did during execution.
+    """
+
+    provider = resolved_provider or _string_value(tool_input.get("provider"))
+    if provider is None or not provider:
+        raise ValueError("provider must be a non-empty string")
+    method = _validate_method((_string_value(tool_input.get("method")) or "").upper() or None)
+
+    if effective_path is None:
+        path, path_query = _validate_relative_path(_string_value(tool_input.get("path")))
+        query_pairs = _merge_query_pairs(path_query, tool_input.get("query"))
+    else:
+        path, path_query = _validate_relative_path(effective_path)
+        query_pairs = _merge_query_pairs(path_query, None)
+    encoded_query = urlencode(query_pairs)
+    normalized_path = f"{path}?{encoded_query}" if encoded_query else path
+
+    headers = _validate_custom_headers(tool_input.get("headers"))
+    normalized_headers = sorted((name.casefold(), value) for name, value in headers.items())
+    action_headers = [
+        (name, value) for name, value in normalized_headers if name not in _ACTION_FINGERPRINT_IGNORED_HEADERS
+    ]
+
+    body = tool_input.get("body", _MISSING)
+    body_encoding = _validate_body_encoding(tool_input.get("body_encoding"), provider)
+    _prepare_body(body=body, body_encoding=body_encoding)
+    if body is _MISSING:
+        body_material: object = {"present": False}
+    elif body_encoding == "form":
+        body_material = {
+            "present": True,
+            "encoding": "form",
+            "fields": _form_pairs(cast(Mapping[object, object], body)),
+        }
+    else:
+        body_material = {
+            "present": True,
+            "encoding": "json",
+            "value": json.loads(json.dumps(body, ensure_ascii=False, separators=(",", ":"))),
+        }
+
+    operation, operation_type = _infer_graphql_operation(body)
+    common_material = {
+        "provider": provider,
+        "method": method,
+        "path": normalized_path,
+        "operation": operation,
+        "operation_type": operation_type,
+        "body": body_material,
+    }
+    request_fingerprint = _sha256_json({**common_material, "headers": normalized_headers})
+    action_fingerprint = _sha256_json({**common_material, "headers": action_headers})
+    return request_fingerprint, action_fingerprint
+
+
+def provider_tool_attempt_fingerprint(tool_input: Mapping[str, object]) -> str:
+    """Hash one raw candidate tool attempt before request validation.
+
+    This supports repeated-rejection diagnostics without retaining invalid
+    request bodies, query values, or custom header values.
+    """
+
+    return _sha256_json(cast(object, tool_input))
+
+
+def _sha256_json(value: object) -> str:
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _provider_headers(provider: str, env: Mapping[str, str]) -> dict[str, str]:

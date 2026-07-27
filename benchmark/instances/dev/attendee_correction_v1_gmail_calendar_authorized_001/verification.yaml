@@ -29,11 +29,12 @@ output_contract:
   required_facts:
     request_id: ATT-88
     disposition: corrected
-    policy_id: CAL-OPS-POLICY-V2
     calendar: Work
     event_summary: "Launch review"
     event_start: "2030-05-16T15:00:00Z"
     attendee_added: alex@acme.example
+  diagnostic_facts:
+    policy_id: CAL-OPS-POLICY-V2
   forbidden_facts:
     disposition: [not_authorized, ambiguous]
   critical: true

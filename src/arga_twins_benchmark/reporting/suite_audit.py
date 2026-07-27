@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections import Counter, defaultdict
 from collections.abc import Mapping
 from datetime import datetime
@@ -44,6 +45,7 @@ _TRIAL_CHECK_NAMES = (
     "no_fallback",
     "tool_call_minimum",
     "tool_call_count_consistency",
+    "provider_trace_integrity",
     "provider_trace_destination",
     "provider_trace_control_plane",
     "cleanup_identity",
@@ -91,11 +93,7 @@ def _manifest_concurrency_audit(manifest: Mapping[str, Any]) -> dict[str, Any]:
         issues.append("concurrency and initial_concurrency must be integers between 1 and 16")
     elif original != initial:
         issues.append("initial_concurrency does not match the preserved concurrency")
-    if (
-        isinstance(last_execution, bool)
-        or not isinstance(last_execution, int)
-        or not 1 <= last_execution <= 16
-    ):
+    if isinstance(last_execution, bool) or not isinstance(last_execution, int) or not 1 <= last_execution <= 16:
         issues.append("last_execution_concurrency must be an integer between 1 and 16")
 
     runner_commit = manifest.get("runner_commit")
@@ -170,11 +168,7 @@ def _manifest_concurrency_audit(manifest: Mapping[str, Any]) -> dict[str, Any]:
                 continue
             entry = cast(dict[str, Any], raw_entry)
             concurrency = entry.get("concurrency")
-            if (
-                isinstance(concurrency, bool)
-                or not isinstance(concurrency, int)
-                or not 1 <= concurrency <= 16
-            ):
+            if isinstance(concurrency, bool) or not isinstance(concurrency, int) or not 1 <= concurrency <= 16:
                 issues.append(f"concurrency_history[{index}].concurrency is invalid")
             expected_event = "suite_created" if index == 0 else "suite_resumed"
             if entry.get("event") != expected_event:
@@ -608,7 +602,7 @@ def _trace_events(
         _record_violation(
             checks,
             violation_trials,
-            check="provider_trace_destination",
+            check="provider_trace_integrity",
             trial_id=trial_id,
             detail=f"provider-trace.json is invalid: {error}",
         )
@@ -618,17 +612,26 @@ def _trace_events(
             _record_violation(
                 checks,
                 violation_trials,
-                check="provider_trace_destination",
+                check="provider_trace_integrity",
                 trial_id=trial_id,
                 detail="provider-trace.json is missing for a completed invocation",
             )
+        return None
+    if trace.get("protocol") not in (None, "arga-bench-provider-trace/1"):
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="provider-trace.json has an unsupported protocol",
+        )
         return None
     raw_events = trace.get("events")
     if not isinstance(raw_events, list):
         _record_violation(
             checks,
             violation_trials,
-            check="provider_trace_destination",
+            check="provider_trace_integrity",
             trial_id=trial_id,
             detail="provider-trace.json events must be an array of objects",
         )
@@ -638,12 +641,57 @@ def _trace_events(
         _record_violation(
             checks,
             violation_trials,
-            check="provider_trace_destination",
+            check="provider_trace_integrity",
             trial_id=trial_id,
             detail="provider-trace.json events must be an array of objects",
         )
         return None
-    return [cast(dict[str, Any], event) for event in events]
+    typed_events = [cast(dict[str, Any], event) for event in events]
+    issues: list[str] = []
+    for index, event in enumerate(typed_events, start=1):
+        sequence = event.get("sequence")
+        if isinstance(sequence, bool) or sequence != index:
+            issues.append(f"event {index} sequence is not contiguous and one-based")
+        requested = event.get("requested_provider")
+        provider = event.get("provider")
+        method = event.get("method")
+        path = event.get("path")
+        operation = event.get("operation")
+        operation_type = event.get("operation_type")
+        status_code = event.get("status_code")
+        error_value = event.get("error")
+        if not isinstance(requested, str):
+            issues.append(f"event {index} requested_provider is not a string")
+        if provider is not None and (not isinstance(provider, str) or not provider):
+            issues.append(f"event {index} provider is invalid")
+        for field_name, value in (
+            ("method", method),
+            ("path", path),
+            ("operation", operation),
+            ("operation_type", operation_type),
+        ):
+            if value is not None and not isinstance(value, str):
+                issues.append(f"event {index} {field_name} is not a string or null")
+        if status_code is not None and (isinstance(status_code, bool) or not isinstance(status_code, int)):
+            issues.append(f"event {index} status_code is not an integer or null")
+        if error_value is not None and not isinstance(error_value, str):
+            issues.append(f"event {index} error is not a string or null")
+        if provider is None and (status_code is not None or not isinstance(error_value, str) or not error_value):
+            issues.append(f"event {index} claims an unresolved provider was executed")
+        for field_name in ("request_fingerprint", "action_fingerprint", "attempt_fingerprint"):
+            value = event.get(field_name)
+            if value is not None and (not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None):
+                issues.append(f"event {index} {field_name} is invalid")
+    if issues:
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="; ".join(issues),
+        )
+        return None
+    return typed_events
 
 
 def _check_trace(
@@ -675,6 +723,7 @@ def _check_trace(
                 _record_skip(checks, check)
         if not completed and "provider_trace_destination" not in violation_trials[trial_id]:
             _record_skip(checks, "provider_trace_destination")
+        _record_skip(checks, "provider_trace_integrity")
         return
 
     if completed:
@@ -705,24 +754,36 @@ def _check_trace(
 
     access, access_error = _optional_json_object(trial_dir / "candidate-access.json")
     allowed_providers: set[str] = set()
-    if access_error is None and access is not None and isinstance(access.get("provider_access"), dict):
+    access_valid = access_error is None and access is not None and isinstance(access.get("provider_access"), dict)
+    if access_valid:
+        assert access is not None
         allowed_providers = set(cast(dict[str, Any], access["provider_access"]))
+        _record_pass(checks, "provider_trace_integrity")
+    else:
+        detail = (
+            f"candidate-access.json is invalid: {access_error}"
+            if access_error is not None
+            else "candidate-access.json is missing or has invalid provider_access"
+        )
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail=detail,
+        )
     destination_details: list[str] = []
     control_details: list[str] = []
     for index, event in enumerate(events, start=1):
         provider = event.get("provider")
         path = event.get("path")
-        if provider not in allowed_providers:
+        rejected_before_resolution = provider is None and event.get("status_code") is None
+        if access_valid and not rejected_before_resolution and provider not in allowed_providers:
             destination_details.append(f"event {index} resolved provider {provider!r} is not provisioned")
         if _path_is_external_or_unsafe(path):
             destination_details.append(f"event {index} uses an external or unsafe path")
         if _path_is_control_plane(path):
-            control_details.append(f"event {index} uses control-plane path {path!r}")
-    if access_error is not None:
-        destination_details.append(f"candidate-access.json is invalid: {access_error}")
-    elif access is None:
-        destination_details.append("candidate-access.json is missing")
-
+            control_details.append(f"event {index} uses a control-plane path")
     if destination_details:
         _record_violation(
             checks,
@@ -1063,13 +1124,18 @@ def audit_suite(
         "prompt_hash",
         "no_fallback",
         "tool_call_count_consistency",
-        "provider_trace_destination",
-        "provider_trace_control_plane",
+        "provider_trace_integrity",
         "cleanup_identity",
         "cleanup_inert",
     )
     integrity_passed = suite_complete and all(bool(checks[name]["passed"]) for name in integrity_check_names)
-    benchmark_contract_passed = integrity_passed and bool(checks["tool_call_minimum"]["passed"])
+    benchmark_contract_passed = integrity_passed
+    trajectory_diagnostics_passed = bool(checks["tool_call_minimum"]["passed"])
+    destination_safety_passed = bool(
+        checks["provider_trace_integrity"]["passed"]
+        and checks["provider_trace_destination"]["passed"]
+        and checks["provider_trace_control_plane"]["passed"]
+    )
     scoring_ready = (
         benchmark_contract_passed and matrix_fully_evaluable and bool(checks["state_grade_completeness"]["passed"])
     )
@@ -1090,6 +1156,8 @@ def audit_suite(
         "matrix_fully_evaluable": matrix_fully_evaluable,
         "integrity_passed": integrity_passed,
         "benchmark_contract_passed": benchmark_contract_passed,
+        "trajectory_diagnostics_passed": trajectory_diagnostics_passed,
+        "destination_safety_passed": destination_safety_passed,
         "scoring_ready": scoring_ready,
         "by_model": by_model,
         "checks": checks,

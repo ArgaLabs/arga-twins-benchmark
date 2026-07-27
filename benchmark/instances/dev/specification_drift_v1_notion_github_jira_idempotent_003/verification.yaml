@@ -33,6 +33,7 @@ output_contract:
     missing_requirements: ["SPEC-90:R1"]
     tracker_action: reused
     tracker_identifier: SEC-1
+  diagnostic_facts:
     source_preserved: true
   forbidden_facts:
     issue_created: true

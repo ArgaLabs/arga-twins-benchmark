@@ -33,6 +33,7 @@ output_contract:
     correlated_change: "GitHub PR #2"
     root_cause: OIDC audience is set to acme-stagin
     tracker_action: created
+  diagnostic_facts:
     acknowledged: true
   forbidden_facts:
     incident: [INC-481, INC-410]

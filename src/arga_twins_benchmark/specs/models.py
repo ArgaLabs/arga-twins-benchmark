@@ -9,6 +9,19 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+_RESERVED_DETERMINISTIC_ASSERTION_IDS = frozenset(
+    {
+        "mutation_policy.default_deny",
+        "output.contract",
+        "output.diagnostic_facts",
+        "trace.allowed_mutations",
+        "trace.distinct_and_causal_required_calls",
+        "trace.forbidden_paths",
+        "trace.minimum_tool_calls",
+        "trace.provisioned_destinations_only",
+    }
+)
+
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -340,21 +353,30 @@ class DeterministicVerificationSpec(StrictModel):
         identifiers.extend(rule.id for rule in self.trace_policy.allowed_mutating_calls)
         if len(identifiers) != len(set(identifiers)):
             raise ValueError("deterministic verification IDs must be unique")
+        reserved = sorted(set(identifiers) & _RESERVED_DETERMINISTIC_ASSERTION_IDS)
+        if reserved:
+            raise ValueError(f"deterministic verification IDs use reserved grader assertions: {', '.join(reserved)}")
         return self
 
 
 class OutputContractSpec(StrictModel):
     mode: Literal["none", "structured_facts"] = "none"
     required_facts: dict[str, Any] = Field(default_factory=dict)
+    diagnostic_facts: dict[str, Any] = Field(default_factory=dict)
     forbidden_facts: dict[str, Any] = Field(default_factory=dict)
     critical: bool = False
 
     @model_validator(mode="after")
     def validate_mode(self) -> OutputContractSpec:
-        if self.mode == "none" and (self.required_facts or self.forbidden_facts or self.critical):
+        if self.mode == "none" and (
+            self.required_facts or self.diagnostic_facts or self.forbidden_facts or self.critical
+        ):
             raise ValueError("output mode 'none' cannot declare facts or be critical")
         if self.mode == "structured_facts" and not self.required_facts:
             raise ValueError("structured output contracts must declare at least one required fact")
+        overlap = sorted(set(self.required_facts) & set(self.diagnostic_facts))
+        if overlap:
+            raise ValueError(f"output facts cannot be both required and diagnostic: {', '.join(overlap)}")
         return self
 
 

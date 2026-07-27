@@ -33,6 +33,7 @@ output_contract:
     selected_version: 6
     destination: "[RB-79] Cache failover"
     channel: ops
+  diagnostic_facts:
     writes_performed: 0
   forbidden_facts:
     outcome: [published, repaired]

@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from arga_twins_benchmark.reporting.suite_audit import audit_suite
 
 SYSTEM_PROMPT = "Use the provisioned provider only."
@@ -165,6 +167,8 @@ def test_audit_suite_accepts_complete_exact_local_evidence(tmp_path: Path) -> No
     assert report["matrix_fully_evaluable"] is True
     assert report["integrity_passed"] is True
     assert report["benchmark_contract_passed"] is True
+    assert report["trajectory_diagnostics_passed"] is True
+    assert report["destination_safety_passed"] is True
     assert report["scoring_ready"] is True
     assert report["concurrency"] == {
         "original_concurrency": 4,
@@ -191,6 +195,8 @@ def test_audit_suite_reports_each_integrity_and_readiness_failure(tmp_path: Path
     assert report["suite_complete"] is True
     assert report["integrity_passed"] is False
     assert report["benchmark_contract_passed"] is False
+    assert report["trajectory_diagnostics_passed"] is False
+    assert report["destination_safety_passed"] is False
     assert report["scoring_ready"] is False
     assert checks["response_model"]["violation_count"] == 1
     assert checks["prompt_hash"]["violation_count"] == 1
@@ -201,6 +207,93 @@ def test_audit_suite_reports_each_integrity_and_readiness_failure(tmp_path: Path
     assert checks["cleanup_identity"]["violation_count"] == 1
     assert checks["cleanup_inert"]["violation_count"] == 1
     assert checks["state_grade_completeness"]["violation_count"] == 1
+
+
+def test_under_minimum_trace_is_diagnostic_and_remains_scoring_ready(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    trace_path = trial_dir / "provider-trace.json"
+    trace = json.loads(trace_path.read_text())
+    trace["events"] = trace["events"][:5]
+    _write_json(trace_path, trace)
+    result_path = trial_dir / "result.json"
+    result = json.loads(result_path.read_text())
+    result["tool_calls"] = 5
+    _write_json(result_path, result)
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["tool_call_minimum"]["violation_count"] == 1
+    assert report["trajectory_diagnostics_passed"] is False
+    assert report["integrity_passed"] is True
+    assert report["benchmark_contract_passed"] is True
+    assert report["scoring_ready"] is True
+
+
+def test_destination_safety_violation_is_scoreable_agent_behavior(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    trace_path = trial_dir / "provider-trace.json"
+    trace = json.loads(trace_path.read_text())
+    trace["events"][0]["provider"] = "external"
+    trace["events"][1]["path"] = "/_ui/repos/acme/demo"
+    _write_json(trace_path, trace)
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["provider_trace_destination"]["violation_count"] == 1
+    assert report["checks"]["provider_trace_control_plane"]["violation_count"] == 1
+    assert report["destination_safety_passed"] is False
+    assert report["integrity_passed"] is True
+    assert report["benchmark_contract_passed"] is True
+    assert report["scoring_ready"] is True
+
+
+def test_missing_provider_trace_remains_an_integrity_failure(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    (trial_dir / "provider-trace.json").unlink()
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["provider_trace_integrity"]["violation_count"] == 1
+    assert report["integrity_passed"] is False
+    assert report["scoring_ready"] is False
+
+
+@pytest.mark.parametrize(
+    ("corruption", "value"),
+    [
+        ("protocol", "unsupported"),
+        ("sequence", 1),
+        ("method", 7),
+        ("status_code", True),
+        ("action_fingerprint", "not-a-digest"),
+    ],
+)
+def test_malformed_provider_trace_is_an_integrity_failure(
+    tmp_path: Path,
+    corruption: str,
+    value: object,
+) -> None:
+    suite_dir = _build_suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    trace_path = trial_dir / "provider-trace.json"
+    trace = json.loads(trace_path.read_text())
+    if corruption == "protocol":
+        trace["protocol"] = value
+    elif corruption == "sequence":
+        trace["events"][1]["sequence"] = value
+    else:
+        trace["events"][0][corruption] = value
+    _write_json(trace_path, trace)
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["provider_trace_integrity"]["violation_count"] == 1
+    assert report["integrity_passed"] is False
+    assert report["destination_safety_passed"] is False
+    assert report["scoring_ready"] is False
 
 
 def test_audit_safely_backfills_a_legacy_concurrency_manifest(tmp_path: Path) -> None:

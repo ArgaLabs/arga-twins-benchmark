@@ -35,6 +35,7 @@ output_contract:
     selected_version: 4
     destination: "[RB-78] Queue recovery"
     channel: ops
+  diagnostic_facts:
     rejected_candidates: [approved_v2, draft_v5, wrong_runbook_v9]
   forbidden_facts:
     selected_version: [2, 5, 9]

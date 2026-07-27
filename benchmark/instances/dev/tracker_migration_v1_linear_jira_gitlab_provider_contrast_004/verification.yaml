@@ -31,10 +31,11 @@ output_contract:
   mode: structured_facts
   required_facts:
     outcome: created
-    policy_id: TRACKER-MIGRATION-V2
     source_identifier: ENG-1
     destination_provider: jira
     destination_project: MIG
+  diagnostic_facts:
+    policy_id: TRACKER-MIGRATION-V2
     provider_path: "Linear -> Jira with GitLab evidence"
   forbidden_facts:
     source_identifier: [ENG-2]

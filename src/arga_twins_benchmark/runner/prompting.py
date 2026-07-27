@@ -91,7 +91,8 @@ def _json_type(value: object) -> str:
 def structured_output_instruction(contract: OutputContractSpec) -> str:
     if contract.mode == "none":
         return ""
-    fields = ", ".join(f"`{name}` ({_json_type(value)})" for name, value in contract.required_facts.items())
+    report_facts = {**contract.required_facts, **contract.diagnostic_facts}
+    fields = ", ".join(f"`{name}` ({_json_type(value)})" for name, value in report_facts.items())
     return (
         "Final response contract: respond with only one valid JSON object, with no Markdown fence or "
         "surrounding prose. "

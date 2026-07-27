@@ -57,6 +57,9 @@ def test_structured_output_instruction_exposes_shape_but_not_expected_values() -
                 "target_change": 2,
                 "acknowledged": True,
             },
+            "diagnostic_facts": {
+                "review_count": 1,
+            },
             "critical": True,
         }
     )
@@ -66,4 +69,6 @@ def test_structured_output_instruction_exposes_shape_but_not_expected_values() -
     assert "`decision` (string)" in prompt
     assert "`target_change` (integer)" in prompt
     assert "`acknowledged` (boolean)" in prompt
+    assert "`review_count` (integer)" in prompt
     assert "changes_requested" not in prompt
+    assert 'review_count": 1' not in prompt

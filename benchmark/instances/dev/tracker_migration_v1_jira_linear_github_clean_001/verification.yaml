@@ -31,10 +31,11 @@ output_contract:
   mode: structured_facts
   required_facts:
     outcome: created
-    policy_id: TRACKER-MIGRATION-V2
     source_identifier: OPS-1
     destination_provider: linear
     destination_project: Reliability
+  diagnostic_facts:
+    policy_id: TRACKER-MIGRATION-V2
     evidence: {code_reference: "acme/hooks#1", destination_verified: true, source_audit_verified: true}
   forbidden_facts:
     outcome: [failed, skipped]

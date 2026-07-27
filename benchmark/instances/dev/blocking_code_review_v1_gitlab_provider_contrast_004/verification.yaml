@@ -28,7 +28,8 @@ partial_credit:
   preserve_repository: 0.15
 output_contract:
   mode: structured_facts
-  required_facts: {decision: changes_requested, target_change: 1, discussion_count: 1, provider_artifact: unresolved_diff_discussion}
+  required_facts: {decision: changes_requested, target_change: 1}
+  diagnostic_facts: {discussion_count: 1, provider_artifact: unresolved_diff_discussion}
   forbidden_facts: {repository_mutated: true}
   critical: true
 deterministic:

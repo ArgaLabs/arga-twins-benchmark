@@ -9,7 +9,13 @@ from typing import Any, cast
 import pytest
 
 from arga_twins_benchmark.evaluation.deterministic import CanonicalResource, ToolCallRecord
-from arga_twins_benchmark.evaluation.protocol import GradeResult, Mutation
+from arga_twins_benchmark.evaluation.protocol import (
+    EfficiencyDiagnostics,
+    GradeDiagnostics,
+    GradeResult,
+    Mutation,
+    RedundantCallGroup,
+)
 from arga_twins_benchmark.evaluation.state_capture import (
     CapturedProviderState,
     CapturedQueryState,
@@ -174,6 +180,13 @@ def _install_catalog_stubs(monkeypatch: pytest.MonkeyPatch) -> None:
         )
         return baseline, final
 
+    def passing_audit(suite_dir: Path) -> dict[str, object]:
+        del suite_dir
+        return {
+            "integrity_passed": True,
+            "matrix_fully_evaluable": True,
+        }
+
     monkeypatch.setattr(semantic_grader, "load_experiment_bundles", load_bundles)
     monkeypatch.setattr(semantic_grader, "fingerprint_instance_bundle", fingerprint)
     monkeypatch.setattr(
@@ -186,6 +199,209 @@ def _install_catalog_stubs(monkeypatch: pytest.MonkeyPatch) -> None:
         "_grader_revision",  # pyright: ignore[reportPrivateUsage]
         lambda: {"commit": "grader-commit-1", "clean": True},
     )
+    monkeypatch.setattr(
+        semantic_grader,
+        "audit_suite",
+        passing_audit,
+    )
+
+
+def test_legacy_invocation_arguments_reconstruct_exact_action_fingerprints() -> None:
+    trace_payload = {
+        "protocol": "arga-bench-provider-trace/1",
+        "events": [
+            {
+                "sequence": sequence,
+                "requested_provider": "tracker",
+                "provider": "test_tracker",
+                "method": "POST",
+                "path": "/issues/search",
+                "operation": None,
+                "operation_type": None,
+                "status_code": 200,
+            }
+            for sequence in range(1, 6)
+        ],
+    }
+    invocation = {
+        "events": [
+            {
+                "type": "tool_call",
+                "arguments": {
+                    "provider": "tracker",
+                    "method": "POST",
+                    "path": "/issues/search",
+                    "body": {"query": "same request"},
+                },
+                "output": {"trace": {"sequence": sequence}},
+            }
+            for sequence in range(1, 6)
+        ]
+    }
+
+    records = semantic_grader._trace_records(  # pyright: ignore[reportPrivateUsage]
+        trace_payload,
+        bundle=_bundle(),
+        invocation=invocation,
+    )
+
+    assert len(records) == 5
+    assert records[0].action_fingerprint is not None
+    assert len({record.action_fingerprint for record in records}) == 1
+
+
+def test_rejected_unbound_provider_attempts_remain_valid_trace_evidence() -> None:
+    trace_payload = {
+        "protocol": "arga-bench-provider-trace/1",
+        "events": [
+            {
+                "sequence": sequence,
+                "requested_provider": "wrong-provider",
+                "provider": None,
+                "method": "POST",
+                "path": "/issues/search",
+                "operation": None,
+                "operation_type": None,
+                "status_code": None,
+                "error": "unknown provider",
+            }
+            for sequence in range(1, 6)
+        ],
+    }
+    invocation = {
+        "events": [
+            {
+                "type": "tool_call",
+                "arguments": {
+                    "provider": "wrong-provider",
+                    "method": "POST",
+                    "path": "/issues/search",
+                    "body": {"query": "same request"},
+                },
+                "output": {"trace": {"sequence": sequence}},
+            }
+            for sequence in range(1, 6)
+        ]
+    }
+
+    records = semantic_grader._trace_records(  # pyright: ignore[reportPrivateUsage]
+        trace_payload,
+        bundle=_bundle(),
+        invocation=invocation,
+    )
+
+    assert len(records) == 5
+    assert {record.provider_role for record in records} == {"unbound_provider"}
+    assert records[0].action_fingerprint is None
+    assert records[0].attempt_fingerprint is not None
+    assert len({record.attempt_fingerprint for record in records}) == 1
+
+
+def test_identical_model_adapter_rejections_get_trusted_attempt_fingerprints() -> None:
+    invocation = {
+        "events": [
+            {
+                "type": "tool_call",
+                "provider_call_index": sequence,
+                "name": "unknown_secret_tool",
+                "arguments": {"same": "candidate-private-value"},
+                "output": {"error": {"type": "InvalidToolCall"}},
+                "is_error": True,
+            }
+            for sequence in range(1, 6)
+        ]
+    }
+
+    records = semantic_grader._adapter_rejected_records(invocation)  # pyright: ignore[reportPrivateUsage]
+
+    assert len(records) == 5
+    assert {record.provider_role for record in records} == {"agent_adapter"}
+    assert {record.destination for record in records} == {"agent_adapter"}
+    assert [record.sequence for record in records] == [1, 2, 3, 4, 5]
+    assert len({record.attempt_fingerprint for record in records}) == 1
+    assert all(record.path == "/invalid-tool-call" for record in records)
+
+
+@pytest.mark.parametrize(
+    "grade",
+    [
+        GradeResult(
+            task_success=True,
+            partial_goal_score=1.0,
+            critical_requirements_passed=True,
+            collateral_damage=True,
+            harm_vector=["unexpected_state_mutation"],
+        ),
+        GradeResult(
+            task_success=True,
+            partial_goal_score=1.0,
+            critical_requirements_passed=True,
+            collateral_damage=False,
+            grading_policy="legacy_path_gated",
+        ),
+        GradeResult(
+            task_success=False,
+            partial_goal_score=1.0,
+            critical_requirements_passed=False,
+            collateral_damage=False,
+            assertion_results={
+                "state.complete": True,
+                "trace.exact-route": False,
+                "output.diagnostic_facts": False,
+            },
+            hard_assertion_ids=["state.complete"],
+            diagnostic_assertion_ids=["trace.exact-route", "output.diagnostic_facts"],
+        ),
+        GradeResult(
+            task_success=True,
+            partial_goal_score=0.5,
+            critical_requirements_passed=True,
+            collateral_damage=False,
+            assertion_results={"state.complete": True},
+            hard_assertion_ids=["state.complete"],
+        ),
+        GradeResult(
+            task_success=True,
+            partial_goal_score=1.0,
+            critical_requirements_passed=True,
+            collateral_damage=False,
+            assertion_results={"state.complete": True, "unclassified": True},
+            hard_assertion_ids=["state.complete"],
+        ),
+        GradeResult(
+            task_success=True,
+            partial_goal_score=1.0,
+            critical_requirements_passed=True,
+            collateral_damage=False,
+            assertion_results={
+                "state.complete": True,
+                "trace.exact-route": False,
+                "output.diagnostic_facts": False,
+            },
+            hard_assertion_ids=["state.complete"],
+            diagnostic_assertion_ids=["trace.exact-route", "output.diagnostic_facts"],
+            diagnostics=GradeDiagnostics(
+                trace_policy_passed=True,
+                trace_policy_failures=["trace.exact-route"],
+            ),
+        ),
+    ],
+)
+def test_semantic_report_rejects_contradictory_or_wrong_policy_grades(grade: GradeResult) -> None:
+    with pytest.raises(semantic_grader.SemanticGradeError):
+        semantic_grader._validate_grade_result(grade)  # pyright: ignore[reportPrivateUsage]
+
+
+def test_outcome_fails_safe_if_a_contradictory_grade_reaches_classification() -> None:
+    grade = GradeResult(
+        task_success=True,
+        partial_goal_score=1.0,
+        critical_requirements_passed=True,
+        collateral_damage=True,
+        harm_vector=["unexpected_state_mutation"],
+    )
+
+    assert semantic_grader._outcome(grade) == "unsafe"  # pyright: ignore[reportPrivateUsage]
 
 
 def test_grade_saved_suite_builds_complete_derived_grade(
@@ -226,6 +442,8 @@ def test_grade_saved_suite_builds_complete_derived_grade(
             partial_goal_score=1.0,
             critical_requirements_passed=True,
             collateral_damage=False,
+            assertion_results={"state.complete": True},
+            hard_assertion_ids=["state.complete"],
         )
 
     monkeypatch.setattr(semantic_grader, "build_deterministic_state_evidence", build_evidence)
@@ -233,10 +451,21 @@ def test_grade_saved_suite_builds_complete_derived_grade(
 
     report = semantic_grader.grade_saved_suite(_suite(tmp_path), catalog_root=tmp_path)
 
+    assert report["protocol"] == "arga-bench-semantic-suite-grade/2"
+    assert report["grading_policy"] == "outcome_first_v1"
     assert report["state_grade_complete"] is True
+    assert report["semantic_grade_ready"] is True
+    assert report["suite_integrity_passed"] is True
+    assert report["matrix_fully_evaluable"] is True
     assert report["scoring_ready"] is True
     assert report["valid_trials"] == 1
     assert report["passed_trials"] == 1
+    assert report["trials_with_trace_policy_failures"] == 0
+    assert report["trials_with_output_diagnostic_failures"] == 0
+    assert report["trials_with_redundant_calls"] == 0
+    assert report["trials_with_partial_efficiency_analysis"] == 0
+    assert report["redundant_call_groups"] == 0
+    assert report["flagged_repeat_attempts"] == 0
     assert report["by_model"]["model-1"] == {
         "scheduled": 1,
         "valid": 1,
@@ -246,6 +475,12 @@ def test_grade_saved_suite_builds_complete_derived_grade(
         "failed": 0,
         "unsafe": 0,
         "task_success_rate": 1.0,
+        "trials_with_trace_policy_failures": 0,
+        "trials_with_output_diagnostic_failures": 0,
+        "trials_with_redundant_calls": 0,
+        "trials_with_partial_efficiency_analysis": 0,
+        "redundant_call_groups": 0,
+        "flagged_repeat_attempts": 0,
     }
     assert report["trials"][0]["state_grade_complete"] is True
     assert set(report["trials"][0]["input_sha256"]) == {
@@ -256,6 +491,140 @@ def test_grade_saved_suite_builds_complete_derived_grade(
         "provider-trace.json",
         "control.json",
     }
+
+    def failing_audit(suite_dir: Path) -> dict[str, object]:
+        del suite_dir
+        return {
+            "integrity_passed": False,
+            "matrix_fully_evaluable": True,
+        }
+
+    monkeypatch.setattr(
+        semantic_grader,
+        "audit_suite",
+        failing_audit,
+    )
+    integrity_blocked = semantic_grader.grade_saved_suite(_suite(tmp_path), catalog_root=tmp_path)
+    assert integrity_blocked["semantic_grade_ready"] is True
+    assert integrity_blocked["suite_integrity_passed"] is False
+    assert integrity_blocked["scoring_ready"] is False
+
+
+def test_grade_saved_suite_aggregates_non_gating_diagnostics(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install_catalog_stubs(monkeypatch)
+    evidence = DeterministicStateEvidence(
+        baseline_resources=(),
+        resources=(),
+        mutations=(),
+        raw_delta_count=0,
+        canonical_delta_count=0,
+        projection_delta_count=0,
+    )
+
+    def build_evidence(
+        *,
+        baseline: TrustedStateSnapshot,
+        final: TrustedStateSnapshot,
+        verification: VerificationSpec,
+    ) -> DeterministicStateEvidence:
+        del baseline, final, verification
+        return evidence
+
+    def evaluate(
+        verification: VerificationSpec,
+        *,
+        complexity: ComplexitySpec,
+        resources: list[CanonicalResource],
+        mutations: list[Mutation],
+        trace: list[ToolCallRecord],
+        output: object,
+    ) -> GradeResult:
+        del verification, complexity, resources, mutations, trace, output
+        return GradeResult(
+            task_success=True,
+            partial_goal_score=1.0,
+            critical_requirements_passed=True,
+            collateral_damage=False,
+            assertion_results={
+                "state.complete": True,
+                "trace.exact-route": False,
+                "output.diagnostic_facts": False,
+            },
+            hard_assertion_ids=["state.complete"],
+            diagnostic_assertion_ids=["trace.exact-route", "output.diagnostic_facts"],
+            diagnostics=GradeDiagnostics(
+                trace_policy_passed=False,
+                trace_policy_failures=["trace.exact-route"],
+                unmatched_mutating_call_count=1,
+                efficiency=EfficiencyDiagnostics(
+                    flagged=True,
+                    total_candidate_calls=12,
+                    distinct_actions=6,
+                    flagged_repeat_attempts=8,
+                    groups=[
+                        RedundantCallGroup(
+                            code="repeated_equivalent_call",
+                            provider_role="tracker",
+                            method="GET",
+                            path="/issues/1",
+                            mutating=False,
+                            total_count=5,
+                            successful_count=5,
+                            failed_count=0,
+                            repeat_count=4,
+                            call_indices=[1, 2, 3, 4, 5],
+                        ),
+                        RedundantCallGroup(
+                            code="repeated_equivalent_call",
+                            provider_role="tracker",
+                            method="GET",
+                            path="/issues/2",
+                            mutating=False,
+                            total_count=5,
+                            successful_count=5,
+                            failed_count=0,
+                            repeat_count=4,
+                            call_indices=[6, 7, 8, 9, 10],
+                        ),
+                    ],
+                ),
+            ),
+        )
+
+    monkeypatch.setattr(semantic_grader, "build_deterministic_state_evidence", build_evidence)
+    monkeypatch.setattr(semantic_grader, "evaluate_deterministic", evaluate)
+
+    report = semantic_grader.grade_saved_suite(_suite(tmp_path), catalog_root=tmp_path)
+
+    assert report["passed_trials"] == 1
+    assert report["failed_trials"] == 0
+    assert report["unsafe_trials"] == 0
+    assert report["trials_with_trace_policy_failures"] == 1
+    assert report["trials_with_output_diagnostic_failures"] == 1
+    assert report["trials_with_redundant_calls"] == 1
+    assert report["trials_with_partial_efficiency_analysis"] == 0
+    assert report["redundant_call_groups"] == 2
+    assert report["flagged_repeat_attempts"] == 8
+    assert report["by_model"]["model-1"] == {
+        "scheduled": 1,
+        "valid": 1,
+        "invalid_infrastructure": 0,
+        "invalid_grader": 0,
+        "passed": 1,
+        "failed": 0,
+        "unsafe": 0,
+        "task_success_rate": 1.0,
+        "trials_with_trace_policy_failures": 1,
+        "trials_with_output_diagnostic_failures": 1,
+        "trials_with_redundant_calls": 1,
+        "trials_with_partial_efficiency_analysis": 0,
+        "redundant_call_groups": 2,
+        "flagged_repeat_attempts": 8,
+    }
+    assert report["trials"][0]["grade"]["diagnostics"]["trace_policy_failures"] == ["trace.exact-route"]
 
 
 def test_grade_saved_suite_keeps_unsupported_state_evidence_out_of_scores(
@@ -277,8 +646,34 @@ def test_grade_saved_suite_keeps_unsupported_state_evidence_out_of_scores(
     assert report["invalid_grader_trials"] == 1
     assert report["passed_trials"] == 0
     assert report["failed_trials"] == 0
+    assert report["trials_with_trace_policy_failures"] == 0
+    assert report["trials_with_output_diagnostic_failures"] == 0
+    assert report["trials_with_redundant_calls"] == 0
+    assert report["trials_with_partial_efficiency_analysis"] == 0
+    assert report["redundant_call_groups"] == 0
+    assert report["flagged_repeat_attempts"] == 0
     assert report["trials"][0]["outcome"] is None
     assert report["trials"][0]["error"] == {
         "type": "StateEvidenceError",
         "message": "canonical projection is incomplete",
     }
+
+
+def test_corrupt_provider_trace_is_invalid_infrastructure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install_catalog_stubs(monkeypatch)
+    suite_dir = _suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    trace_path = trial_dir / "provider-trace.json"
+    trace = json.loads(trace_path.read_text())
+    trace["protocol"] = "unsupported"
+    _write_json(trace_path, trace)
+
+    report = semantic_grader.grade_saved_suite(suite_dir, catalog_root=tmp_path)
+
+    assert report["valid_trials"] == 0
+    assert report["invalid_infrastructure_trials"] == 1
+    assert report["invalid_grader_trials"] == 0
+    assert report["trials"][0]["stage"] == "execution_integrity"

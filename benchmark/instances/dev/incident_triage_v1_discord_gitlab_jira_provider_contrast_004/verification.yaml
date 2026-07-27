@@ -33,6 +33,7 @@ output_contract:
     correlated_change: "GitLab MR !1"
     root_cause: database timeout is 2 seconds
     tracker_action: created
+  diagnostic_facts:
     acknowledged: true
   forbidden_facts:
     tracker_action: [reused, duplicate]

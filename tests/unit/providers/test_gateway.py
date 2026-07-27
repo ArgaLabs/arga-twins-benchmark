@@ -11,7 +11,9 @@ from arga_twins_benchmark.providers import (
     ProviderGateway,
     ProviderGatewayConfigurationError,
     ProviderInfrastructureError,
+    ProviderTraceRecord,
 )
+from arga_twins_benchmark.providers.gateway import provider_tool_input_fingerprints
 
 
 def _access(*providers: str) -> dict[str, dict[str, object]]:
@@ -148,16 +150,15 @@ def test_resolves_role_records_graphql_operation_and_stable_effective_query() ->
         "variables": {"input": {"title": "One"}},
     }
 
-    result = _run(
-        gateway,
-        {
-            "provider": "issue_tracker",
-            "method": "POST",
-            "path": "/graphql?z=9",
-            "query": {"z": ["2", "1"], "a": "hello world"},
-            "body": body,
-        },
-    )
+    tool_input: dict[str, object] = {
+        "provider": "issue_tracker",
+        "method": "POST",
+        "path": "/graphql?z=9",
+        "query": {"z": ["2", "1"], "a": "hello world"},
+        "body": body,
+        "headers": {"X-Private-Marker": "private-fingerprint-value"},
+    }
+    result = _run(gateway, tool_input)
 
     assert observed["url"] == "https://pub-run--linear.sandbox.argalabs.com/graphql?a=hello+world&z=1&z=2&z=9"
     assert observed["authorization"] == "lin_api_twin_owner_personal_key_0001"
@@ -175,7 +176,120 @@ def test_resolves_role_records_graphql_operation_and_stable_effective_query() ->
     assert trace.operation == "issueCreate"
     assert trace.operation_type == "mutation"
     assert trace.status_code == 201
+    expected_fingerprints = provider_tool_input_fingerprints(
+        tool_input,
+        resolved_provider="linear",
+        effective_path="/graphql?a=hello+world&z=1&z=2&z=9",
+    )
+    assert (trace.request_fingerprint, trace.action_fingerprint) == expected_fingerprints
+    assert trace.request_fingerprint is not None and len(trace.request_fingerprint) == 64
+    assert trace.action_fingerprint is not None and len(trace.action_fingerprint) == 64
+    assert trace.attempt_fingerprint is not None and len(trace.attempt_fingerprint) == 64
+    assert "private-fingerprint-value" not in repr(trace)
     asyncio.run(client.aclose())
+
+
+def test_fingerprints_are_stable_across_mapping_order_and_distinguish_arguments() -> None:
+    first: dict[str, object] = {
+        "provider": "issue_tracker",
+        "method": "POST",
+        "path": "/graphql?z=9",
+        "query": {"z": ["2", "1"], "a": "hello world"},
+        "body": {
+            "operationName": "CreateIssue",
+            "query": "mutation CreateIssue($input: IssueCreateInput!) { issueCreate(input: $input) { success } }",
+            "variables": {"input": {"title": "One", "priority": 1}},
+        },
+    }
+    reordered: dict[str, object] = {
+        "body": {
+            "variables": {"input": {"priority": 1, "title": "One"}},
+            "query": "mutation CreateIssue($input: IssueCreateInput!) { issueCreate(input: $input) { success } }",
+            "operationName": "CreateIssue",
+        },
+        "query": {"a": "hello world", "z": ["1", "2"]},
+        "path": "/graphql?z=9",
+        "method": "POST",
+        "provider": "issue_tracker",
+    }
+    changed_variables = {
+        **first,
+        "body": {
+            **cast(dict[str, object], first["body"]),
+            "variables": {"input": {"title": "Two", "priority": 1}},
+        },
+    }
+    changed_query = {**first, "query": {"z": ["2", "1"], "a": "different"}}
+
+    first_fingerprints = provider_tool_input_fingerprints(first, resolved_provider="linear")
+
+    assert provider_tool_input_fingerprints(reordered, resolved_provider="linear") == first_fingerprints
+    assert provider_tool_input_fingerprints(changed_variables, resolved_provider="linear") != first_fingerprints
+    assert provider_tool_input_fingerprints(changed_query, resolved_provider="linear") != first_fingerprints
+
+
+def test_action_fingerprint_ignores_retry_and_idempotency_headers_only() -> None:
+    base: dict[str, object] = {
+        "provider": "stripe",
+        "method": "POST",
+        "path": "/v1/prices/price_1",
+        "body": {"nickname": "Pro Monthly", "lookup_key": "pro_monthly_usd"},
+    }
+    first = {
+        **base,
+        "headers": {
+            "Idempotency-Key": "attempt-one",
+            "If-Match": '"revision-one"',
+            "X-Retry-Count": "1",
+            "X-Workflow": "catalog-normalization",
+        },
+    }
+    retried = {
+        **base,
+        "headers": {
+            "Idempotency-Key": "attempt-two",
+            "If-Match": '"revision-two"',
+            "X-Retry-Count": "2",
+            "X-Workflow": "catalog-normalization",
+        },
+    }
+    different_action_header = {
+        **retried,
+        "headers": {
+            **cast(dict[str, str], retried["headers"]),
+            "X-Workflow": "different-workflow",
+        },
+    }
+
+    first_request, first_action = provider_tool_input_fingerprints(first, resolved_provider="stripe")
+    retry_request, retry_action = provider_tool_input_fingerprints(retried, resolved_provider="stripe")
+    _, different_action = provider_tool_input_fingerprints(different_action_header, resolved_provider="stripe")
+
+    assert first_request != retry_request
+    assert first_action == retry_action
+    assert different_action != first_action
+
+
+def test_provider_trace_fingerprint_fields_are_backward_compatible() -> None:
+    trace = ProviderTraceRecord(
+        sequence=1,
+        started_at="2030-01-01T00:00:00+00:00",
+        requested_provider="code_host",
+        provider="github",
+        method="GET",
+        path="/repos/acme/app",
+        operation=None,
+        operation_type=None,
+        status_code=200,
+        latency_ms=1,
+        response_bytes=2,
+        truncated=False,
+        error=None,
+    )
+
+    assert trace.request_fingerprint is None
+    assert trace.action_fingerprint is None
+    assert trace.attempt_fingerprint is None
 
 
 @pytest.mark.parametrize(
@@ -218,6 +332,8 @@ def test_rejects_external_traversal_and_control_plane_paths_without_network(path
     assert trace.requested_provider == "code_host"
     assert trace.provider == "github"
     assert trace.error
+    assert trace.attempt_fingerprint is not None
+    assert len(trace.attempt_fingerprint) == 64
     asyncio.run(client.aclose())
 
 
@@ -232,6 +348,18 @@ def test_rejects_external_traversal_and_control_plane_paths_without_network(path
             "method": "GET",
             "path": "/repos/acme/app",
             "headers": {"Authorization": "Bearer external"},
+        },
+        {
+            "provider": "github",
+            "method": "GET",
+            "path": "/repos/acme/app",
+            "headers": {"X-Original-URL": "/_admin/state"},
+        },
+        {
+            "provider": "github",
+            "method": "GET",
+            "path": "/repos/acme/app",
+            "headers": {"X-Forwarded-Host": "api.github.com"},
         },
         {
             "provider": "github",
@@ -414,14 +542,10 @@ def test_repeated_connect_errors_trip_at_conservative_threshold() -> None:
 
     async def exercise() -> None:
         for _ in range(2):
-            result = await gateway.execute(
-                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
-            )
+            result = await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
             assert result["error"] == "provider request failed: ConnectError"
         with pytest.raises(ProviderInfrastructureError) as exc_info:
-            await gateway.execute(
-                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
-            )
+            await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
         assert exc_info.value.code == "transport_connect_error"
         assert exc_info.value.status_code is None
         assert exc_info.value.consecutive_failures == 3
@@ -446,14 +570,10 @@ def test_repeated_timeouts_trip_at_conservative_threshold() -> None:
 
     async def exercise() -> None:
         for _ in range(2):
-            result = await gateway.execute(
-                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
-            )
+            result = await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
             assert result["error"] == "provider request timed out"
         with pytest.raises(ProviderInfrastructureError) as exc_info:
-            await gateway.execute(
-                {"provider": "github", "method": "GET", "path": "/repos/acme/app"}
-            )
+            await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
         assert exc_info.value.code == "transport_timeout"
         assert exc_info.value.status_code is None
         assert exc_info.value.consecutive_failures == 3
@@ -478,8 +598,7 @@ def test_repeated_local_protocol_errors_remain_tool_visible_and_do_not_trip_circ
 
     async def exercise() -> list[dict[str, object]]:
         return [
-            await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"})
-            for _ in range(4)
+            await gateway.execute({"provider": "github", "method": "GET", "path": "/repos/acme/app"}) for _ in range(4)
         ]
 
     results = asyncio.run(exercise())
@@ -516,9 +635,7 @@ def test_all_proxy_owned_unavailability_envelopes_trip_the_configured_circuit(
     code: str,
 ) -> None:
     client = httpx.AsyncClient(
-        transport=httpx.MockTransport(
-            lambda _request: _preview_proxy_failure_response(status_code, code)
-        )
+        transport=httpx.MockTransport(lambda _request: _preview_proxy_failure_response(status_code, code))
     )
     gateway = ProviderGateway(
         _access("gmail"),
@@ -536,9 +653,7 @@ def test_all_proxy_owned_unavailability_envelopes_trip_the_configured_circuit(
 
 def test_environment_destroyed_preview_proxy_failure_trips_immediately_after_tracing() -> None:
     client = httpx.AsyncClient(
-        transport=httpx.MockTransport(
-            lambda _request: _preview_proxy_failure_response(410, "environment_destroyed")
-        )
+        transport=httpx.MockTransport(lambda _request: _preview_proxy_failure_response(410, "environment_destroyed"))
     )
     gateway = ProviderGateway(_access("gmail"), client=client)
 

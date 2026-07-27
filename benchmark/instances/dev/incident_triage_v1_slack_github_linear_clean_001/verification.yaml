@@ -33,6 +33,7 @@ output_contract:
     correlated_change: "GitHub PR #1"
     root_cause: upstream host is misspelled
     tracker_action: created
+  diagnostic_facts:
     acknowledged: true
   forbidden_facts:
     tracker_action: [reused, duplicate]

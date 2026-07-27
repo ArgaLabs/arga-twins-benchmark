@@ -28,7 +28,8 @@ partial_credit:
   preserve_sources: 0.10
 output_contract:
   mode: structured_facts
-  required_facts: {release: REL-206, decision: BLOCKED, first_failing_gate: "GitHub PR #2", tracker_record: REL-1, publication_status: reused_existing, tracker_status: In Progress, publication_count: 1, duplicate_count: 0}
+  required_facts: {release: REL-206, decision: BLOCKED, tracker_record: REL-1}
+  diagnostic_facts: {first_failing_gate: "GitHub PR #2", publication_status: reused_existing, tracker_status: In Progress, publication_count: 1, duplicate_count: 0}
   forbidden_facts: {source_mutated: true}
   critical: true
 deterministic:

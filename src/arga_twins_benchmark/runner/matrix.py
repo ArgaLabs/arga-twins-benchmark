@@ -734,6 +734,10 @@ def _trace_call_records(gateway: ProviderGateway, bundle: InstanceBundle) -> lis
                 status_code=cast(int | None, getattr(raw, "status_code", None)),
                 mutating=_trace_call_is_mutating(raw),
                 operation=cast(str | None, getattr(raw, "operation", None)),
+                sequence=cast(int | None, getattr(raw, "sequence", None)),
+                request_fingerprint=cast(str | None, getattr(raw, "request_fingerprint", None)),
+                action_fingerprint=cast(str | None, getattr(raw, "action_fingerprint", None)),
+                attempt_fingerprint=cast(str | None, getattr(raw, "attempt_fingerprint", None)),
             )
         )
     return records
@@ -1140,9 +1144,7 @@ def _existing_concurrency_history(
         )
         expected_event = "suite_created" if index == 0 else "suite_resumed"
         if entry.get("event") != expected_event:
-            raise ValueError(
-                f"suite manifest concurrency_history[{index}].event must be {expected_event!r}"
-            )
+            raise ValueError(f"suite manifest concurrency_history[{index}].event must be {expected_event!r}")
         recorded_at = _parse_utc_timestamp(entry.get("recorded_at"))
         if recorded_at is None:
             raise ValueError(f"suite manifest concurrency_history[{index}].recorded_at must be an aware timestamp")

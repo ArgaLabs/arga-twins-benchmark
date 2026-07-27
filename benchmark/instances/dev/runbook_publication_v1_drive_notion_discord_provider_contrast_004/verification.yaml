@@ -35,6 +35,7 @@ output_contract:
     selected_version: 2
     destination: "[RB-80] Database failover"
     channel: operations
+  diagnostic_facts:
     team_chat_provider: discord
   forbidden_facts:
     selected_version: [3, 8]

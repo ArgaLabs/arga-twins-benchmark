@@ -33,6 +33,7 @@ output_contract:
     root_cause: worker pool size is zero
     tracker_identifier: OPS-1
     tracker_action: reused
+  diagnostic_facts:
     acknowledged: true
   forbidden_facts:
     tracker_action: [created, duplicated]

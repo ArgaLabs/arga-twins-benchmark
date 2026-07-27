@@ -23,7 +23,7 @@ def _parser() -> argparse.ArgumentParser:
         "--minimum-tool-calls",
         type=int,
         default=6,
-        help="Minimum provider calls required for every completed trial (default: 6)",
+        help="Diagnostic provider-call floor for every completed trial (default: 6)",
     )
     parser.add_argument(
         "--compact",

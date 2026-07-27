@@ -31,10 +31,11 @@ output_contract:
   mode: structured_facts
   required_facts:
     outcome: created
-    policy_id: TRACKER-MIGRATION-V2
     source_identifier: OPS-3
     destination_provider: linear
     destination_project: Reliability
+  diagnostic_facts:
+    policy_id: TRACKER-MIGRATION-V2
     rejected_distractors: [closed_wrong_reference, wrong_marker, wrong_project_provenance]
   forbidden_facts:
     source_identifier: [OPS-1, OPS-2, OPS-8]

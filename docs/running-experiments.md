@@ -219,7 +219,7 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
 
 Resume preserves completed or substantive terminal outcomes, confirms prior cleanup through the Arga CLI, archives retryable or interrupted attempts, and provisions a fresh twin before replaying an infrastructure-invalid trial. Cleanup evidence must name the exact persisted run ID. When a create may have succeeded but its response was interrupted before the ID became durable, the attempt is quarantined until its configured TTL plus five minutes; the resulting lease-expiry evidence is recorded with the archived attempt. It never retries mutations in place.
 
-Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, and immutable archived attempts. Candidate traces contain only calls routed to the provisioned provider endpoints.
+Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, and immutable archived attempts. Candidate traces contain every gateway attempt, including calls rejected before provider resolution; only accepted network traffic is routed to provisioned provider endpoints.
 
 Audit the saved evidence without making any network calls:
 
@@ -230,7 +230,7 @@ uv run python scripts/audit_suite.py \
   --minimum-tool-calls 6
 ```
 
-The audit checks exact response-model identity, prompt hashes, disabled fallback, provider destinations, control-plane avoidance, call counts, cleanup run-ID identity, and state-grade completeness. Add `--fail-unless-scoring-ready` in CI when an incomplete matrix or incomplete semantic state grade must fail the job.
+The audit checks exact response-model identity, prompt hashes, disabled fallback, trace/count integrity, cleanup run-ID identity, and state-grade completeness. It also reports the minimum-call comparison and destination/control-plane safety separately. A short but otherwise valid trajectory remains scoring-ready; a destination breach remains a scoreable unsafe agent outcome rather than invalid evidence. Add `--fail-unless-scoring-ready` in CI when an incomplete matrix, broken evidence association, or incomplete semantic state grade must fail the job.
 
 ## Batch protocol
 
@@ -249,7 +249,7 @@ Save the experiment's Scenario set before a run:
 uv run arga-bench scenarios save-experiment development_pilot_48_v1
 ```
 
-`run-instance`, `run-matrix`, exact prompt ledgers, candidate invocation, trusted raw baseline/final capture, trace/output grading, cleanup, attempt archival, and safe resume are implemented. Full semantic state grading is still fail-closed: current results report `state_grade_complete: false` until every declared snapshot is hydrated into complete canonical resources and semantic mutations. Do not publish the preliminary trace/output result as final Task Success.
+`run-instance`, `run-matrix`, exact prompt ledgers, candidate invocation, trusted raw baseline/final capture, trace/output grading, cleanup, attempt archival, and safe resume are implemented. Completed preserved suites can be regraded offline with `arga-bench grade-suite`; the derived semantic report requires complete canonical state evidence and records any unsupported evidence as `invalid_grader` rather than guessing an agent result. Publish Task Success from that outcome-first semantic report, not from a preliminary trace-conformance result.
 
 ## Current CLI gaps
 

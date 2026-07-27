@@ -140,6 +140,11 @@
           "title": "Critical",
           "type": "boolean"
         },
+        "diagnostic_facts": {
+          "additionalProperties": true,
+          "title": "Diagnostic Facts",
+          "type": "object"
+        },
         "forbidden_facts": {
           "additionalProperties": true,
           "title": "Forbidden Facts",

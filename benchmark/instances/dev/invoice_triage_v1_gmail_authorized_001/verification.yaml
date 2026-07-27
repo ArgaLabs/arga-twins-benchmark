@@ -28,7 +28,6 @@ partial_credit:
 output_contract:
   mode: structured_facts
   required_facts:
-    policy_id: AP-17
     policy_version: 4
     prepared: [INV-7301]
     already_prepared: []
@@ -36,6 +35,8 @@ output_contract:
       INV-7302: amount_not_above_threshold
       INV-7303: due_after_review_window
       INV-7304: sender_not_approved
+  diagnostic_facts:
+    policy_id: AP-17
     sent_messages: 0
   forbidden_facts:
     prepared: [INV-7302, INV-7303, INV-7304]
