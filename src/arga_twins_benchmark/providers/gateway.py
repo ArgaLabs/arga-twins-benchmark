@@ -58,15 +58,46 @@ _CONTROL_PLANE_PREFIXES: Final = frozenset(
     {
         "_admin",
         "_control",
+        "_grader",
+        "_grading",
+        "_inspect",
+        "_reset",
+        "_seed",
         "_twin",
         "_ui",
         "admin",
         "control",
         "control-plane",
         "control_plane",
+        "grade",
+        "grader",
+        "grading",
         "inspect",
         "reset",
+        "seed",
     }
+)
+_SCHEMA_DISCOVERY_SEGMENTS: Final = frozenset(
+    {
+        "api-docs",
+        "docs",
+        "openapi",
+        "openapi.json",
+        "openapi.yaml",
+        "openapi.yml",
+        "redoc",
+        "schema",
+        "schemas",
+        "swagger",
+        "swagger.json",
+        "swagger.yaml",
+        "swagger.yml",
+        "ui",
+    }
+)
+_API_SURFACE_PREFIXES: Final = frozenset({"api"})
+_OPERATIONAL_DISCOVERY_SEGMENTS: Final = frozenset(
+    {"health", "healthz", "metrics", "readiness", "ready"}
 )
 _BLOCKED_REQUEST_HEADERS: Final = frozenset(
     {
@@ -194,7 +225,9 @@ class ProviderGateway:
         timeout_seconds: float = 30.0,
         max_response_bytes: int = 262_144,
         max_request_bytes: int = 262_144,
+        max_calls: int | None = None,
         proxy_infrastructure_failure_threshold: int = _DEFAULT_PROXY_INFRASTRUCTURE_FAILURE_THRESHOLD,
+        candidate_safe_surface: bool = True,
         client: httpx.AsyncClient | None = None,
     ) -> None:
         if timeout_seconds <= 0:
@@ -203,15 +236,18 @@ class ProviderGateway:
             raise ProviderGatewayConfigurationError("max_response_bytes must be positive")
         if max_request_bytes < 1:
             raise ProviderGatewayConfigurationError("max_request_bytes must be positive")
+        if max_calls is not None and (isinstance(max_calls, bool) or max_calls < 1):
+            raise ProviderGatewayConfigurationError("max_calls must be a positive integer or None")
         if proxy_infrastructure_failure_threshold < 1:
             raise ProviderGatewayConfigurationError("proxy infrastructure failure threshold must be positive")
-
         self._providers = _validate_provider_access(provider_access)
         self._roles = _validate_provider_roles(provider_roles or {}, self._providers)
         self._timeout_seconds = timeout_seconds
         self._max_response_bytes = max_response_bytes
         self._max_request_bytes = max_request_bytes
+        self._max_calls = max_calls
         self._proxy_infrastructure_failure_threshold = proxy_infrastructure_failure_threshold
+        self._candidate_safe_surface = candidate_safe_surface
         self._consecutive_proxy_infrastructure_failures = 0
         self._client = client or httpx.AsyncClient(timeout=timeout_seconds, follow_redirects=False)
         self._owns_client = client is None
@@ -223,8 +259,10 @@ class ProviderGateway:
             "description": (
                 "Call an API on one of this task's provisioned service twins. Use only a provider or provider role "
                 "listed in the schema and a relative path beginning with '/'. Absolute URLs and twin control-plane "
-                "paths are blocked. Authentication is supplied automatically. JSON bodies are the default; Stripe "
-                "form bodies are selected automatically, or body_encoding can be set explicitly."
+                "paths are blocked. Provider roots, UI routes, and API-schema discovery routes are also blocked; use "
+                "the provider_docs tool for official API documentation. Authentication is supplied automatically. "
+                "JSON bodies are the default; Stripe form bodies are selected automatically, or body_encoding can "
+                "be set explicitly."
             ),
             "input_schema": {
                 "type": "object",
@@ -314,10 +352,18 @@ class ProviderGateway:
             attempt_fingerprint = None
 
         try:
+            if self._max_calls is not None and len(self._trace_records) >= self._max_calls:
+                raise ValueError(f"provider_api call limit of {self._max_calls} has been reached")
             resolved_provider, provider = self._resolve_provider(requested_provider)
             checked_method = _validate_method(method)
             path, path_query = _validate_relative_path(raw_path)
             query_pairs = _merge_query_pairs(path_query, tool_input.get("query"))
+            if self._candidate_safe_surface:
+                _validate_candidate_safe_request(
+                    path,
+                    query_pairs=query_pairs,
+                    body=tool_input.get("body", _MISSING),
+                )
             safe_headers = _validate_custom_headers(tool_input.get("headers"))
             body_encoding = _validate_body_encoding(tool_input.get("body_encoding"), resolved_provider)
             request_content, body_headers, request_size = _prepare_body(
@@ -674,8 +720,82 @@ def _validate_relative_path(raw_path: str | None) -> tuple[str, list[tuple[str, 
     if any(segment in {".", ".."} for segment in segments):
         raise ValueError("path traversal is forbidden")
     if segments and segments[0] in _CONTROL_PLANE_PREFIXES:
-        raise ValueError(f"provider control-plane path '/{segments[0]}' is forbidden")
+        raise ValueError(f"provider control-plane segment {segments[0]!r} is forbidden")
     return parsed.path, parse_qsl(parsed.query, keep_blank_values=True)
+
+
+def _validate_candidate_safe_request(
+    path: str,
+    *,
+    query_pairs: Sequence[tuple[str, str]],
+    body: object,
+) -> None:
+    decoded_path = path
+    for _ in range(5):
+        next_path = unquote(decoded_path)
+        if next_path == decoded_path:
+            break
+        decoded_path = next_path
+    segments = [segment.casefold() for segment in decoded_path.replace("\\", "/").split("/") if segment]
+    if not segments:
+        raise ValueError("provider root and UI discovery are forbidden; use provider_docs")
+    candidate_surface_segments = segments
+    if segments[0] in _API_SURFACE_PREFIXES:
+        candidate_surface_segments = segments[1:]
+    if not candidate_surface_segments:
+        raise ValueError("provider API root discovery is forbidden; use provider_docs")
+    if candidate_surface_segments and candidate_surface_segments[0] in _CONTROL_PLANE_PREFIXES:
+        raise ValueError(
+            f"provider control-plane segment {candidate_surface_segments[0]!r} is forbidden"
+        )
+    if (
+        candidate_surface_segments
+        and candidate_surface_segments[0] in _OPERATIONAL_DISCOVERY_SEGMENTS
+    ):
+        raise ValueError(
+            f"provider operational-discovery path {candidate_surface_segments[0]!r} is forbidden"
+        )
+    if (
+        len(candidate_surface_segments) >= 2
+        and candidate_surface_segments[0] == ".well-known"
+        and candidate_surface_segments[1] in _SCHEMA_DISCOVERY_SEGMENTS
+    ):
+        raise ValueError(
+            "provider UI or schema-discovery .well-known path is forbidden; use provider_docs"
+        )
+    forbidden_schema_segment = (
+        candidate_surface_segments[0]
+        if candidate_surface_segments and candidate_surface_segments[0] in _SCHEMA_DISCOVERY_SEGMENTS
+        else None
+    )
+    if forbidden_schema_segment is not None:
+        raise ValueError(
+            f"provider UI or schema-discovery segment {forbidden_schema_segment!r} is forbidden; use provider_docs"
+        )
+    if isinstance(body, Mapping):
+        query = cast(Mapping[object, object], body).get("query")
+        if isinstance(query, str) and _graphql_introspection_present(query):
+            raise ValueError("provider GraphQL schema introspection is forbidden; use provider_docs")
+    for key, value in query_pairs:
+        if key.casefold() == "query" and _graphql_introspection_present(_repeated_unquote(value)):
+            raise ValueError("provider GraphQL schema introspection is forbidden; use provider_docs")
+
+
+def _graphql_introspection_present(query: str) -> bool:
+    return re.search(
+        r"(?<![_0-9A-Za-z])(?:__schema(?![_0-9A-Za-z])|__type\s*\()",
+        query,
+    ) is not None
+
+
+def _repeated_unquote(value: str) -> str:
+    decoded = value
+    for _ in range(5):
+        next_value = unquote(decoded)
+        if next_value == decoded:
+            break
+        decoded = next_value
+    return decoded
 
 
 def _merge_query_pairs(path_query: list[tuple[str, str]], raw_query: object) -> list[tuple[str, str]]:

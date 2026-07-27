@@ -126,6 +126,37 @@ print(json.dumps({"run_id": "run-1"}))
     assert run.status == "queued"
 
 
+def test_create_twin_run_adds_candidate_safe_only_when_feature_gate_is_enabled(
+    tmp_path: Path,
+) -> None:
+    executable = tmp_path / "fake_arga.py"
+    executable.write_text(
+        """\
+import json
+import sys
+
+if "--candidate-safe" not in sys.argv[1:]:
+    raise SystemExit(f"missing candidate-safe flag: {sys.argv[1:]!r}")
+print(json.dumps({"run_id": "run-safe"}))
+"""
+    )
+    client = SubprocessArgaCli(
+        executable=(sys.executable, str(executable)),
+        api_url="https://arga.example",
+    )
+
+    run = asyncio.run(
+        client.create_twin_run(
+            twins=["github"],
+            scenario_id="scenario-1",
+            ttl_minutes=60,
+            candidate_safe=True,
+        )
+    )
+
+    assert run.run_id == "run-safe"
+
+
 def test_supplied_api_key_is_scoped_to_temporary_cli_home() -> None:
     client = SubprocessArgaCli(executable=("arga",), api_key="secret-test-key")
     temporary_home = client.credential_home

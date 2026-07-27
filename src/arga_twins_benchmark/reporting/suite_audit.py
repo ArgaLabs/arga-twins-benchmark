@@ -16,14 +16,46 @@ _CONTROL_PLANE_FIRST_SEGMENTS = frozenset(
     {
         "_admin",
         "_control",
+        "_grader",
+        "_grading",
+        "_inspect",
+        "_reset",
+        "_seed",
         "_twin",
         "_ui",
         "admin",
         "control",
         "control-plane",
         "control_plane",
+        "grade",
+        "grader",
+        "grading",
         "inspect",
         "reset",
+        "seed",
+    }
+)
+_NON_BUSINESS_ROOT_SEGMENTS = _CONTROL_PLANE_FIRST_SEGMENTS | frozenset(
+    {
+        "api-docs",
+        "docs",
+        "health",
+        "healthz",
+        "metrics",
+        "openapi",
+        "openapi.json",
+        "openapi.yaml",
+        "openapi.yml",
+        "readiness",
+        "ready",
+        "redoc",
+        "schema",
+        "schemas",
+        "swagger",
+        "swagger.json",
+        "swagger.yaml",
+        "swagger.yml",
+        "ui",
     }
 )
 _CLEAN_TERMINAL_STATUSES = frozenset(
@@ -289,7 +321,7 @@ def _cleanup_is_inert(payload: Mapping[str, Any] | None, *, expected_run_id: str
     return status in _CLEAN_TERMINAL_STATUSES and isinstance(twins, dict) and not twins
 
 
-def _decoded_first_segment(path: str) -> str | None:
+def _decoded_path_segments(path: str) -> list[str]:
     parsed = urlsplit(path)
     decoded_path = parsed.path
     for _ in range(5):
@@ -299,7 +331,7 @@ def _decoded_first_segment(path: str) -> str | None:
         decoded_path = next_path
     normalized = decoded_path.replace("\\", "/")
     segments = [segment.casefold() for segment in normalized.split("/") if segment]
-    return segments[0] if segments else None
+    return segments
 
 
 def _path_is_external_or_unsafe(path: object) -> bool:
@@ -319,7 +351,19 @@ def _path_is_external_or_unsafe(path: object) -> bool:
 
 
 def _path_is_control_plane(path: object) -> bool:
-    return isinstance(path, str) and _decoded_first_segment(path) in _CONTROL_PLANE_FIRST_SEGMENTS
+    if not isinstance(path, str):
+        return False
+    segments = _decoded_path_segments(path)
+    if not segments:
+        return True
+    candidate_segments = segments[1:] if segments[0] == "api" else segments
+    if not candidate_segments:
+        return True
+    return candidate_segments[0] in _NON_BUSINESS_ROOT_SEGMENTS or (
+        len(candidate_segments) >= 2
+        and candidate_segments[0] == ".well-known"
+        and candidate_segments[1] in _NON_BUSINESS_ROOT_SEGMENTS
+    )
 
 
 def _ledger_index(
@@ -694,12 +738,191 @@ def _trace_events(
     return typed_events
 
 
+def _official_docs_trace_events(
+    *,
+    suite_dir: Path,
+    trial_id: str,
+    trial_dir: Path,
+    result: Mapping[str, Any],
+    checks: dict[str, dict[str, Any]],
+    violation_trials: dict[str, set[str]],
+) -> list[dict[str, Any]] | None:
+    trace, error = _optional_json_object(trial_dir / "official-docs-trace.json")
+    declared_count = result.get("official_docs_tool_calls")
+    if error is not None:
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail=f"official-docs-trace.json is invalid: {error}",
+        )
+        return None
+    if trace is None:
+        if declared_count not in (None, 0):
+            _record_violation(
+                checks,
+                violation_trials,
+                check="provider_trace_integrity",
+                trial_id=trial_id,
+                detail="official-docs-trace.json is missing despite declared docs calls",
+            )
+            return None
+        return []
+    if trace.get("protocol") != "arga-bench-official-docs-trace/1":
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="official-docs-trace.json has an unsupported protocol",
+        )
+        return None
+    raw_events = trace.get("events")
+    if not isinstance(raw_events, list):
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="official-docs-trace.json events must be an array of objects",
+        )
+        return None
+    raw_event_items = cast(list[object], raw_events)
+    if not all(isinstance(event, dict) for event in raw_event_items):
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="official-docs-trace.json events must be an array of objects",
+        )
+        return None
+    events = [cast(dict[str, Any], event) for event in raw_event_items]
+    issues: list[str] = []
+    successful_fetches: list[dict[str, Any]] = []
+    for index, event in enumerate(events, start=1):
+        if event.get("sequence") != index or isinstance(event.get("sequence"), bool):
+            issues.append(f"docs event {index} sequence is not contiguous and one-based")
+        requested_provider = event.get("requested_provider")
+        provider = event.get("provider")
+        action = event.get("action")
+        error_value = event.get("error")
+        status_code = event.get("status_code")
+        response_bytes = event.get("response_bytes")
+        digest = event.get("content_sha256")
+        if not isinstance(requested_provider, str):
+            issues.append(f"docs event {index} requested_provider is not a string")
+        if provider is not None and (not isinstance(provider, str) or not provider):
+            issues.append(f"docs event {index} provider is invalid")
+        if action not in {"search", "fetch", None}:
+            issues.append(f"docs event {index} action is invalid")
+        if error_value is not None and not isinstance(error_value, str):
+            issues.append(f"docs event {index} error is not a string or null")
+        if status_code is not None and (
+            isinstance(status_code, bool) or not isinstance(status_code, int)
+        ):
+            issues.append(f"docs event {index} status_code is not an integer or null")
+        if isinstance(response_bytes, bool) or not isinstance(response_bytes, int) or response_bytes < 0:
+            issues.append(f"docs event {index} response_bytes is invalid")
+        if digest is not None and (
+            not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+        ):
+            issues.append(f"docs event {index} content_sha256 is invalid")
+        if action == "fetch" and error_value is None:
+            if (
+                not isinstance(provider, str)
+                or not isinstance(event.get("source_url"), str)
+                or not isinstance(digest, str)
+                or not isinstance(status_code, int)
+                or not 200 <= status_code < 300
+            ):
+                issues.append(f"docs event {index} successful fetch provenance is incomplete")
+            else:
+                successful_fetches.append(event)
+    if successful_fetches:
+        issues.extend(
+            _official_docs_cache_issues(
+                suite_dir=suite_dir,
+                successful_fetches=successful_fetches,
+            )
+        )
+    if issues:
+        _record_violation(
+            checks,
+            violation_trials,
+            check="provider_trace_integrity",
+            trial_id=trial_id,
+            detail="; ".join(issues),
+        )
+        return None
+    return events
+
+
+def _official_docs_cache_issues(
+    *,
+    suite_dir: Path,
+    successful_fetches: list[dict[str, Any]],
+) -> list[str]:
+    manifest, error = _optional_json_object(suite_dir / "official-docs-cache" / "manifest.json")
+    if error is not None:
+        return [f"official docs cache manifest is invalid: {error}"]
+    if manifest is None:
+        return ["official docs cache manifest is missing for successful docs fetches"]
+    if manifest.get("protocol") != "arga-bench-official-docs-cache/1":
+        return ["official docs cache manifest has an unsupported protocol"]
+    raw_entries = manifest.get("entries")
+    if not isinstance(raw_entries, list):
+        return ["official docs cache entries must be an array of objects"]
+    raw_entry_items = cast(list[object], raw_entries)
+    if not all(isinstance(entry, dict) for entry in raw_entry_items):
+        return ["official docs cache entries must be an array of objects"]
+    entries = [cast(dict[str, Any], entry) for entry in raw_entry_items]
+    issues: list[str] = []
+    validated_bodies: set[str] = set()
+    for event in successful_fetches:
+        matches = [
+            entry
+            for entry in entries
+            if entry.get("provider") == event.get("provider")
+            and entry.get("requested_url") == event.get("source_url")
+            and entry.get("content_sha256") == event.get("content_sha256")
+            and entry.get("http_status") == event.get("status_code")
+            and entry.get("response_bytes") == event.get("response_bytes")
+        ]
+        if len(matches) != 1:
+            issues.append(
+                "successful docs fetch has no unique matching suite-cache provenance entry"
+            )
+            continue
+        entry = matches[0]
+        digest = cast(str, event["content_sha256"])
+        expected_body_file = f"responses/{digest}.body"
+        if entry.get("body_file") != expected_body_file:
+            issues.append(f"official docs cache body path is invalid for digest {digest}")
+            continue
+        if digest in validated_bodies:
+            continue
+        body_path = suite_dir / "official-docs-cache" / expected_body_file
+        try:
+            body = body_path.read_bytes()
+        except OSError as body_error:
+            issues.append(f"official docs cache body {digest} is unreadable: {body_error}")
+            continue
+        if hashlib.sha256(body).hexdigest() != digest or len(body) != event.get("response_bytes"):
+            issues.append(f"official docs cache body {digest} failed hash or length validation")
+            continue
+        validated_bodies.add(digest)
+    return issues
+
+
 def _check_trace(
     *,
     trial_id: str,
     trial_dir: Path,
     result: Mapping[str, Any],
     events: list[dict[str, Any]] | None,
+    docs_events: list[dict[str, Any]] | None,
     minimum_tool_calls: int,
     checks: dict[str, dict[str, Any]],
     violation_trials: dict[str, set[str]],
@@ -737,14 +960,33 @@ def _check_trace(
             )
         else:
             _record_pass(checks, "tool_call_minimum")
-        declared_count = result.get("tool_calls")
-        if declared_count != len(events):
+        declared_provider_count = result.get("provider_tool_calls")
+        if declared_provider_count is None and result.get("official_docs_tool_calls") is None:
+            declared_provider_count = result.get("tool_calls")
+        declared_docs_count = result.get("official_docs_tool_calls", 0)
+        declared_total_count = result.get("tool_calls")
+        expected_docs_count = len(docs_events) if docs_events is not None else None
+        expected_total_count = (
+            len(events) + expected_docs_count
+            if expected_docs_count is not None
+            else None
+        )
+        if (
+            declared_provider_count != len(events)
+            or declared_docs_count != expected_docs_count
+            or declared_total_count != expected_total_count
+        ):
             _record_violation(
                 checks,
                 violation_trials,
                 check="tool_call_count_consistency",
                 trial_id=trial_id,
-                detail=f"result declares {declared_count!r} calls but trace contains {len(events)}",
+                detail=(
+                    "result/trace call counts disagree: "
+                    f"provider={declared_provider_count!r}/{len(events)}, "
+                    f"docs={declared_docs_count!r}/{expected_docs_count!r}, "
+                    f"total={declared_total_count!r}/{expected_total_count!r}"
+                ),
             )
         else:
             _record_pass(checks, "tool_call_count_consistency")
@@ -1056,11 +1298,20 @@ def audit_suite(
             checks=checks,
             violation_trials=violation_trials,
         )
+        docs_events = _official_docs_trace_events(
+            suite_dir=suite_dir,
+            trial_id=trial_id,
+            trial_dir=trial_dir,
+            result=result,
+            checks=checks,
+            violation_trials=violation_trials,
+        )
         _check_trace(
             trial_id=trial_id,
             trial_dir=trial_dir,
             result=result,
             events=events,
+            docs_events=docs_events,
             minimum_tool_calls=minimum_tool_calls,
             checks=checks,
             violation_trials=violation_trials,

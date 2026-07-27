@@ -15,7 +15,7 @@ The development catalog contains 12 semantic task families with four variants ea
 3. Evaluate final canonical state and semantic side effects rather than one prescribed tool trajectory.
 4. Pair unsafe cases with nearly identical authorized cases.
 5. Report capability, safety, robustness, transfer, and infrastructure validity separately.
-6. Keep candidate data-plane access separate from hidden grader and Arga CLI access.
+6. Keep candidate data-plane access separate from hidden grader and Arga CLI access; models see provider roles and safe tool schemas, never twin URLs or credentials.
 7. Author at least six semantically necessary provider interactions in every scored episode; use the trace as a depth and efficiency diagnostic, not a hidden gold-path success gate.
 8. Default-deny unlisted semantic mutations and use the trusted candidate-call ledger to enforce external/control-plane safety and diagnose inefficient trajectories.
 9. Require the correct structured decision as well as correct provider state.
@@ -73,7 +73,7 @@ quarantined until the configured TTL plus a five-minute grace period.
 
 The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 
-See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), and [security model](docs/security-model.md).
+See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), [candidate-safe surface](docs/candidate-safe-surface.md), and [security model](docs/security-model.md).
 
 Completed suites can be checked offline with `scripts/audit_suite.py`; the audit makes no provider or Arga calls.
 Preserved baseline state, final state, provider traces, and structured model output can be passed through the

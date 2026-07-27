@@ -1,0 +1,306 @@
+schema_version: 1
+catalog_reviewed_at: "2026-07-27"
+retrieval_policy: strictly_allowlisted_live_official_docs
+providers:
+  notion:
+    owner: Notion
+    api_version: "2026-03-11"
+    allowed_hosts: [developers.notion.com]
+    allowed_paths:
+      developers.notion.com: [/llms.txt, /reference/]
+    documents:
+      - id: documentation-index
+        title: Notion API documentation index
+        url: https://developers.notion.com/llms.txt
+        operations: [discover_reference, authentication, pagination]
+      - id: search
+        title: Search by title
+        url: https://developers.notion.com/reference/post-search
+        operations: [POST /v1/search]
+      - id: data-source-query
+        title: Query a data source
+        url: https://developers.notion.com/reference/query-a-data-source
+        operations: ["POST /v1/data_sources/{data_source_id}/query"]
+      - id: page-retrieve-update
+        title: Retrieve and update a page
+        url: https://developers.notion.com/reference/retrieve-a-page
+        operations: ["GET /v1/pages/{page_id}", "PATCH /v1/pages/{page_id}"]
+      - id: block-children
+        title: Retrieve and append block children
+        url: https://developers.notion.com/reference/get-block-children
+        operations: ["GET /v1/blocks/{block_id}/children", "PATCH /v1/blocks/{block_id}/children"]
+      - id: block-delete
+        title: Delete a block
+        url: https://developers.notion.com/reference/delete-a-block
+        operations: ["DELETE /v1/blocks/{block_id}"]
+
+  google_drive:
+    owner: Google
+    api_version: v3
+    allowed_hosts: [developers.google.com]
+    allowed_paths:
+      developers.google.com: [/workspace/drive/api/]
+    documents:
+      - id: rest-reference
+        title: Google Drive API v3 REST reference
+        url: https://developers.google.com/workspace/drive/api/reference/rest/v3
+        operations: [GET /drive/v3/files, "GET /drive/v3/files/{file_id}"]
+      - id: files-resource
+        title: Google Drive files resource
+        url: https://developers.google.com/workspace/drive/api/reference/rest/v3/files
+        operations: [files.list, files.get]
+      - id: permissions-resource
+        title: Google Drive permissions resource
+        url: https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions
+        operations:
+          - GET /drive/v3/files/{file_id}/permissions
+          - POST /drive/v3/files/{file_id}/permissions
+
+  gmail:
+    owner: Google
+    api_version: v1
+    allowed_hosts: [developers.google.com]
+    allowed_paths:
+      developers.google.com: [/workspace/gmail/api/]
+    documents:
+      - id: rest-reference
+        title: Gmail API v1 REST reference
+        url: https://developers.google.com/workspace/gmail/api/reference/rest
+        operations:
+          - GET /gmail/v1/users/{user_id}/messages
+          - GET /gmail/v1/users/{user_id}/messages/{message_id}
+          - POST /gmail/v1/users/{user_id}/messages/{message_id}/modify
+          - GET /gmail/v1/users/{user_id}/drafts
+          - POST /gmail/v1/users/{user_id}/drafts
+      - id: messages-resource
+        title: Gmail messages resource
+        url: https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages
+        operations: [messages.list, messages.get, messages.modify]
+      - id: drafts-resource
+        title: Gmail drafts resource
+        url: https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts
+        operations: [drafts.list, drafts.get, drafts.create, drafts.update]
+
+  google_calendar:
+    owner: Google
+    api_version: v3
+    allowed_hosts: [developers.google.com]
+    allowed_paths:
+      developers.google.com: [/workspace/calendar/api/]
+    documents:
+      - id: api-reference
+        title: Google Calendar API v3 reference
+        url: https://developers.google.com/workspace/calendar/api/v3/reference
+        operations: [calendarList.list, events.list, events.get, events.insert, events.patch]
+      - id: events-resource
+        title: Google Calendar events resource
+        url: https://developers.google.com/workspace/calendar/api/v3/reference/events
+        operations:
+          - GET /calendar/v3/calendars/{calendar_id}/events
+          - POST /calendar/v3/calendars/{calendar_id}/events
+          - PATCH /calendar/v3/calendars/{calendar_id}/events/{event_id}
+      - id: calendar-list-resource
+        title: Google Calendar calendarList resource
+        url: https://developers.google.com/workspace/calendar/api/v3/reference/calendarList
+        operations: ["GET /calendar/v3/users/{user_id}/calendarList"]
+
+  github:
+    owner: GitHub
+    api_version: "2022-11-28"
+    allowed_hosts: [docs.github.com]
+    allowed_paths:
+      docs.github.com: [/en/rest, /en/enterprise-cloud@latest/rest/]
+    documents:
+      - id: rest-reference
+        title: GitHub REST API reference
+        url: https://docs.github.com/en/rest?apiVersion=2022-11-28
+        operations: [repositories, contents, pull_requests, reviews, search]
+      - id: pull-requests
+        title: REST API endpoints for pull requests
+        url: https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28
+        operations: ["GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/{pull_number}"]
+      - id: pull-request-reviews
+        title: REST API endpoints for pull request reviews
+        url: https://docs.github.com/en/rest/pulls/reviews?apiVersion=2022-11-28
+        operations:
+          - GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+          - POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+      - id: repository-contents
+        title: REST API endpoints for repository contents
+        url: https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
+        operations: ["GET /repos/{owner}/{repo}/contents/{path}"]
+      - id: search
+        title: REST API endpoints for search
+        url: https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28
+        operations: [GET /search/issues, GET /search/code]
+
+  gitlab:
+    owner: GitLab
+    api_version: v4
+    allowed_hosts: [docs.gitlab.com]
+    allowed_paths:
+      docs.gitlab.com: [/api/]
+    documents:
+      - id: rest-reference
+        title: GitLab REST API reference
+        url: https://docs.gitlab.com/api/rest/
+        operations: [projects, repository_files, merge_requests, discussions]
+      - id: projects
+        title: GitLab Projects API
+        url: https://docs.gitlab.com/api/projects/
+        operations: [GET /api/v4/projects, "GET /api/v4/projects/{project_id}"]
+      - id: repository-files
+        title: GitLab Repository files API
+        url: https://docs.gitlab.com/api/repository_files/
+        operations:
+          - GET /api/v4/projects/{project_id}/repository/tree
+          - GET /api/v4/projects/{project_id}/repository/files/{file_path}/raw
+      - id: merge-requests
+        title: GitLab Merge requests API
+        url: https://docs.gitlab.com/api/merge_requests/
+        operations: ["GET /api/v4/projects/{project_id}/merge_requests/{merge_request_iid}"]
+      - id: discussions
+        title: GitLab Discussions API
+        url: https://docs.gitlab.com/api/discussions/
+        operations:
+          - GET /api/v4/projects/{project_id}/merge_requests/{merge_request_iid}/discussions
+          - POST /api/v4/projects/{project_id}/merge_requests/{merge_request_iid}/discussions
+
+  discord:
+    owner: Discord
+    api_version: v10
+    allowed_hosts: [docs.discord.com]
+    allowed_paths:
+      docs.discord.com: [/developers/]
+    documents:
+      - id: api-reference
+        title: Discord HTTP API reference
+        url: https://docs.discord.com/developers/reference
+        operations: [guilds, channels, messages]
+      - id: guild-resource
+        title: Discord Guild resource
+        url: https://docs.discord.com/developers/resources/guild
+        operations: [GET /api/v10/users/@me/guilds, "GET /api/v10/guilds/{guild_id}/channels"]
+      - id: channel-resource
+        title: Discord Channel resource
+        url: https://docs.discord.com/developers/resources/channel
+        operations: [channels, channel_messages]
+      - id: message-resource
+        title: Discord Message resource
+        url: https://docs.discord.com/developers/resources/message
+        operations:
+          - GET /api/v10/channels/{channel_id}/messages
+          - POST /api/v10/channels/{channel_id}/messages
+
+  jira:
+    owner: Atlassian
+    api_version: Cloud REST v3
+    allowed_hosts: [developer.atlassian.com]
+    allowed_paths:
+      developer.atlassian.com: [/cloud/jira/platform/rest/v3/]
+    documents:
+      - id: rest-introduction
+        title: Jira Cloud platform REST API v3 introduction
+        url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/
+        operations: [authentication, pagination, status_codes]
+      - id: issue-search
+        title: Jira Cloud issue search API
+        url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/
+        operations: [GET /rest/api/3/search, GET /rest/api/3/search/jql]
+      - id: issues
+        title: Jira Cloud issues API
+        url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/
+        operations: ["GET /rest/api/3/issue/{issue_id_or_key}", POST /rest/api/3/issue]
+      - id: issue-comments
+        title: Jira Cloud issue comments API
+        url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/
+        operations:
+          - GET /rest/api/3/issue/{issue_id_or_key}/comment
+          - POST /rest/api/3/issue/{issue_id_or_key}/comment
+      - id: issue-transitions
+        title: Jira Cloud issue transitions API
+        url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-transitions/
+        operations:
+          - GET /rest/api/3/issue/{issue_id_or_key}/transitions
+          - POST /rest/api/3/issue/{issue_id_or_key}/transitions
+
+  linear:
+    owner: Linear
+    api_version: rolling GraphQL schema
+    allowed_hosts: [linear.app]
+    allowed_paths:
+      linear.app: [/developers/]
+    documents:
+      - id: graphql-getting-started
+        title: Linear GraphQL API getting started
+        url: https://linear.app/developers/graphql?noRedirect=1
+        operations: [POST /graphql, teams, issues, issueCreate, issueUpdate, commentCreate]
+      - id: graphql-filtering
+        title: Linear GraphQL API filtering
+        url: https://linear.app/developers/filtering
+        operations: [issues, filter]
+      - id: graphql-pagination
+        title: Linear GraphQL API pagination
+        url: https://linear.app/developers/pagination
+        operations: [connections, nodes, pageInfo]
+      - id: graphql-deprecations
+        title: Linear GraphQL API deprecations
+        url: https://linear.app/developers/deprecations
+        operations: [schema_versioning, deprecations]
+
+  slack:
+    owner: Slack
+    api_version: rolling Web API
+    allowed_hosts: [api.slack.com, docs.slack.dev]
+    allowed_paths:
+      api.slack.com: [/methods/]
+      docs.slack.dev: [/reference/methods]
+    documents:
+      - id: web-api-methods
+        title: Slack Web API methods
+        url: https://docs.slack.dev/reference/methods
+        operations: [conversations.list, conversations.history, search.messages, chat.postMessage]
+      - id: conversations-list
+        title: Slack conversations.list method
+        url: https://docs.slack.dev/reference/methods/conversations.list
+        operations: [GET /api/conversations.list]
+      - id: conversations-history
+        title: Slack conversations.history method
+        url: https://docs.slack.dev/reference/methods/conversations.history
+        operations: [GET /api/conversations.history]
+      - id: search-messages
+        title: Slack search.messages method
+        url: https://docs.slack.dev/reference/methods/search.messages
+        operations: [GET /api/search.messages]
+      - id: chat-post-message
+        title: Slack chat.postMessage method
+        url: https://docs.slack.dev/reference/methods/chat.postmessage
+        operations: [POST /api/chat.postMessage]
+
+  stripe:
+    owner: Stripe
+    api_version: rolling API reference
+    allowed_hosts: [docs.stripe.com]
+    allowed_paths:
+      docs.stripe.com: [/api]
+    documents:
+      - id: api-reference
+        title: Stripe API reference
+        url: https://docs.stripe.com/api
+        operations: [prices, products, customers, coupons]
+      - id: prices
+        title: Stripe Prices API
+        url: https://docs.stripe.com/api/prices
+        operations: [GET /v1/prices, "GET /v1/prices/{price_id}", "POST /v1/prices/{price_id}"]
+      - id: products
+        title: Stripe Products API
+        url: https://docs.stripe.com/api/products
+        operations: [GET /v1/products, "GET /v1/products/{product_id}"]
+      - id: customers
+        title: Stripe Customers API
+        url: https://docs.stripe.com/api/customers
+        operations: [GET /v1/customers, "GET /v1/customers/{customer_id}"]
+      - id: coupons
+        title: Stripe Coupons API
+        url: https://docs.stripe.com/api/coupons
+        operations: [GET /v1/coupons]

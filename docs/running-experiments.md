@@ -2,7 +2,7 @@
 
 ## What runs where
 
-Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga CLI to create the fixture, then launches or calls the candidate through an independent adapter. The candidate can use any provider REST, GraphQL, SDK, or advertised MCP interface needed to complete the task.
+Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga CLI to create the fixture, then launches or calls the candidate through an independent adapter. In secure-default scored runs, the model uses the typed `provider_api` and `provider_docs` tools; the adapter retains twin addresses and credentials.
 
 ## Prerequisites
 
@@ -60,7 +60,7 @@ uv run arga-bench provision \
   --candidate-output runs/manual/candidate-access.json
 ```
 
-Give the agent the instance's `prompt.txt` and only `candidate-access.json`. Keep `control.json` in the trusted runner; both files are written mode `0600`. During development, reset or clean up through the wrapper:
+Keep both `candidate-access.json` and `control.json` in the trusted runner; both files are written mode `0600`. The adapter gives the model the instance prompt plus tool schemas, not the contents of either connection file. During development, reset or clean up through the wrapper:
 
 ```bash
 uv run arga-bench reset runs/manual/control.json
@@ -134,9 +134,9 @@ arga twin-runs status --api-url "$ARGA_API_URL" "$RUN_ID" --json
 
 Use a fresh twin run for each scored repetition so agent memory, caches, and failed cleanup cannot cross trials. Reusing a saved Scenario is safe because each new twin run is seeded from the same immutable `seed_config`; never reuse a mutated twin run as a scored repetition.
 
-## Candidate adapter contract
+## Candidate adapter boundary
 
-The runner passes a typed request, not a mandated HTTP endpoint:
+Provisioning produces this private typed adapter input, not a model-visible prompt or mandated HTTP endpoint:
 
 ```json
 {
@@ -154,7 +154,7 @@ The runner passes a typed request, not a mandated HTTP endpoint:
 }
 ```
 
-Adapters may translate this into a local process environment, container config, SDK call, or hosted `/invoke` request. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
+The current scored runner consumes this input inside its gateway and exposes only provider names/roles and the `provider_api`/`provider_docs` schemas. It never serializes base URLs or credentials into model messages. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
 
 ## Exact prompt ledger
 
@@ -190,6 +190,8 @@ uv run arga-bench run-instance \
   --ttl 60
 ```
 
+Candidate-safe routing and actual official documentation discovery are enabled by default. Use `--legacy-candidate-surface` only for a preregistered historical comparison. If the installed Arga CLI and server deployment both support the separate `twin-runs create --candidate-safe` profile, opt into it with `--arga-candidate-safe-profile`; the runner does not send that external flag by default.
+
 ## Run and resume the 48 × 3 matrix
 
 ```bash
@@ -219,7 +221,7 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
 
 Resume preserves completed or substantive terminal outcomes, confirms prior cleanup through the Arga CLI, archives retryable or interrupted attempts, and provisions a fresh twin before replaying an infrastructure-invalid trial. Cleanup evidence must name the exact persisted run ID. When a create may have succeeded but its response was interrupted before the ID became durable, the attempt is quarantined until its configured TTL plus five minutes; the resulting lease-expiry evidence is recorded with the archived attempt. It never retries mutations in place.
 
-Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, and immutable archived attempts. Candidate traces contain every gateway attempt, including calls rejected before provider resolution; only accepted network traffic is routed to provisioned provider endpoints.
+Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, immutable archived attempts, and a first-fetch snapshot of any official documentation used. `provider-trace.json` contains business provider attempts. `official-docs-trace.json` separately records official-doc discovery, and `official-docs-cache/` stores the exact bounded body with provenance and SHA-256 for fair replay across models and resumes. Documentation calls have their own eight-call allowance and do not count toward provider-call floors or mutation/redundancy grading. See [candidate-safe surface](candidate-safe-surface.md).
 
 Audit the saved evidence without making any network calls:
 

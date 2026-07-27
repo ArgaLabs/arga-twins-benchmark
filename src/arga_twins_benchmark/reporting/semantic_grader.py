@@ -46,14 +46,46 @@ _CONTROL_PLANE_FIRST_SEGMENTS = frozenset(
     {
         "_admin",
         "_control",
+        "_grader",
+        "_grading",
+        "_inspect",
+        "_reset",
+        "_seed",
         "_twin",
         "_ui",
         "admin",
         "control",
         "control-plane",
         "control_plane",
+        "grade",
+        "grader",
+        "grading",
         "inspect",
         "reset",
+        "seed",
+    }
+)
+_NON_BUSINESS_ROOT_SEGMENTS = _CONTROL_PLANE_FIRST_SEGMENTS | frozenset(
+    {
+        "api-docs",
+        "docs",
+        "health",
+        "healthz",
+        "metrics",
+        "openapi",
+        "openapi.json",
+        "openapi.yaml",
+        "openapi.yml",
+        "readiness",
+        "ready",
+        "redoc",
+        "schema",
+        "schemas",
+        "swagger",
+        "swagger.json",
+        "swagger.yaml",
+        "swagger.yml",
+        "ui",
     }
 )
 type TrialValidity = Literal["valid", "invalid_infrastructure", "invalid_grader"]
@@ -111,6 +143,8 @@ def _input_hashes(trial_dir: Path) -> dict[str, str]:
         "baseline-state.json",
         "final-state.json",
         "provider-trace.json",
+        "official-docs-trace.json",
+        "official-docs-cache-ref.json",
         "control.json",
     )
     return {name: _file_sha256(trial_dir / name) for name in names if (trial_dir / name).is_file()}
@@ -156,8 +190,15 @@ def _event_destination(path: str) -> Literal["provisioned_provider", "external",
     normalized = decoded.replace("\\", "/")
     if normalized.startswith("//") or any(segment in {".", ".."} for segment in normalized.split("/")):
         return "external"
-    first_segment = next((segment.casefold() for segment in normalized.split("/") if segment), None)
-    if first_segment in _CONTROL_PLANE_FIRST_SEGMENTS:
+    segments = [segment.casefold() for segment in normalized.split("/") if segment]
+    candidate_segments = segments[1:] if segments and segments[0] == "api" else segments
+    if not candidate_segments:
+        return "control_plane"
+    if candidate_segments[0] in _NON_BUSINESS_ROOT_SEGMENTS or (
+        len(candidate_segments) >= 2
+        and candidate_segments[0] == ".well-known"
+        and candidate_segments[1] in _NON_BUSINESS_ROOT_SEGMENTS
+    ):
         return "control_plane"
     return "provisioned_provider"
 
@@ -406,6 +447,40 @@ def _trace_records(
             )
         )
     return records
+
+
+def _official_docs_trace_count(
+    trial_dir: Path,
+    *,
+    declared_count: object,
+) -> int:
+    path = trial_dir / "official-docs-trace.json"
+    if not path.is_file():
+        if declared_count in (None, 0):
+            return 0
+        raise SemanticGradeError("official docs trace is missing despite declared docs calls")
+    payload = _read_json_object(path, label="official docs trace")
+    if payload.get("protocol") != "arga-bench-official-docs-trace/1":
+        raise SemanticGradeError("official docs trace artifact has an unsupported protocol")
+    raw_events = payload.get("events")
+    if not isinstance(raw_events, list):
+        raise SemanticGradeError("official docs trace events must be a JSON array")
+    events = cast(list[object], raw_events)
+    for expected_sequence, raw_event in enumerate(events, start=1):
+        if not isinstance(raw_event, dict):
+            raise SemanticGradeError("official docs trace events must be JSON objects")
+        event = cast(dict[str, Any], raw_event)
+        sequence = event.get("sequence")
+        if isinstance(sequence, bool) or sequence != expected_sequence:
+            raise SemanticGradeError("official docs trace sequences must be contiguous and one-based")
+        digest = event.get("content_sha256")
+        if digest is not None and (
+            not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+        ):
+            raise SemanticGradeError(
+                f"official docs trace event {expected_sequence} has an invalid content_sha256"
+            )
+    return len(events)
 
 
 def _grade_payload(grade: GradeResult) -> dict[str, Any]:
@@ -659,11 +734,26 @@ def _grade_trial(
             label=f"{trial_id} provider trace",
         )
         provider_trace = _trace_records(trace_payload, bundle=bundle, invocation=invocation)
+        declared_docs_calls = result.get("official_docs_tool_calls")
+        official_docs_trace_count = _official_docs_trace_count(
+            trial_dir,
+            declared_count=declared_docs_calls,
+        )
         invocation_tool_calls = invocation.get("tool_calls")
         if isinstance(invocation_tool_calls, bool) or not isinstance(invocation_tool_calls, int):
             raise SemanticGradeError("invocation tool_calls must be an integer")
-        if result.get("tool_calls") != len(provider_trace) or invocation_tool_calls < len(provider_trace):
-            raise SemanticGradeError("declared provider-call counts contradict the provider trace")
+        declared_provider_calls = result.get("provider_tool_calls")
+        if declared_provider_calls is None and declared_docs_calls is None:
+            declared_provider_calls = result.get("tool_calls")
+        declared_docs_calls = 0 if declared_docs_calls is None else declared_docs_calls
+        expected_total_calls = len(provider_trace) + official_docs_trace_count
+        if (
+            declared_provider_calls != len(provider_trace)
+            or declared_docs_calls != official_docs_trace_count
+            or result.get("tool_calls") != expected_total_calls
+            or invocation_tool_calls < expected_total_calls
+        ):
+            raise SemanticGradeError("declared provider/docs call counts contradict their traces")
         trace = [*provider_trace, *_adapter_rejected_records(invocation)]
     except (OSError, UnicodeError, json.JSONDecodeError, SemanticGradeError) as error:
         return _invalid_trial(

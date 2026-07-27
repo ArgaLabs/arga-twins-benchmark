@@ -150,6 +150,7 @@ async def provision_instance(
     candidate_output: Path,
     ttl_minutes: int,
     timeout_seconds: int,
+    arga_candidate_safe_profile: bool = False,
 ) -> None:
     scenario = compile_scenario(catalog_root, instance_id)
     twins_value = scenario.get("twins")
@@ -173,6 +174,7 @@ async def provision_instance(
                 twins=twins,
                 scenario_id=saved_scenario.scenario_id,
                 ttl_minutes=ttl_minutes,
+                candidate_safe=arga_candidate_safe_profile,
             )
             write_private_json(
                 control_output,

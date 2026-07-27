@@ -33,8 +33,14 @@ from arga_twins_benchmark.lifecycle import (
     provision_instance,
     write_private_json,
 )
-from arga_twins_benchmark.providers import ProviderGateway
+from arga_twins_benchmark.providers import (
+    OfficialDocsGateway,
+    OfficialDocsSnapshotCache,
+    ProviderGateway,
+    load_official_docs_catalog,
+)
 from arga_twins_benchmark.runner.prompting import (
+    LEGACY_SYSTEM_PROMPT,
     MODEL_PROFILES,
     SYSTEM_PROMPT,
     ModelProfile,
@@ -53,6 +59,7 @@ from arga_twins_benchmark.specs.models import (
 
 PROVISION_TIMEOUT_SECONDS = 1_200
 ORPHAN_TWIN_LEASE_GRACE_SECONDS = 300
+OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE = 8
 
 
 class SuiteRunLockedError(RuntimeError):
@@ -167,6 +174,40 @@ def _write_provider_trace(path: Path, gateway: ProviderGateway) -> None:
         {
             "protocol": "arga-bench-provider-trace/1",
             "events": cast(list[object], _jsonable(gateway.trace_records)),
+        },
+    )
+
+
+def _write_official_docs_trace(path: Path, gateway: OfficialDocsGateway) -> None:
+    write_private_json(
+        path,
+        {
+            "protocol": "arga-bench-official-docs-trace/1",
+            "events": cast(list[object], _jsonable(gateway.trace_records)),
+        },
+    )
+
+
+def _write_official_docs_cache(
+    path: Path,
+    gateway: OfficialDocsGateway,
+    *,
+    trial_dir: Path,
+) -> None:
+    gateway.write_cache_artifacts(path)
+    write_private_json(
+        trial_dir / "official-docs-cache-ref.json",
+        {
+            "protocol": "arga-bench-official-docs-cache-ref/1",
+            "scope": "suite_first_fetch_snapshot",
+            "manifest": os.path.relpath(path / "manifest.json", start=trial_dir),
+            "content_sha256": sorted(
+                {
+                    record.content_sha256
+                    for record in gateway.trace_records
+                    if record.content_sha256 is not None
+                }
+            ),
         },
     )
 
@@ -820,7 +861,12 @@ async def run_trial(
     output_root: Path,
     ttl_minutes: int = 60,
     runner_commit: str | None = None,
+    candidate_safe_surface: bool = True,
+    arga_candidate_safe_profile: bool = False,
+    official_docs_snapshot_cache: OfficialDocsSnapshotCache | None = None,
+    official_docs_cache_root: Path | None = None,
 ) -> dict[str, Any]:
+    system_prompt = SYSTEM_PROMPT if candidate_safe_surface else LEGACY_SYSTEM_PROMPT
     runner_commit = runner_commit or _runner_commit()
     trial_dir, attempt_number, existing_result = await _prepare_trial_attempt(
         output_root=output_root,
@@ -859,6 +905,8 @@ async def run_trial(
     cleanup_payload: object | None = None
     invocation_started = False
     gateway: ProviderGateway | None = None
+    docs_gateway: OfficialDocsGateway | None = None
+    docs_cache_root = official_docs_cache_root or (trial_dir / "official-docs-cache")
     baseline_state: TrustedStateSnapshot | None = None
     final_state: TrustedStateSnapshot | None = None
 
@@ -872,6 +920,7 @@ async def run_trial(
             candidate_output=candidate_path,
             ttl_minutes=ttl_minutes,
             timeout_seconds=PROVISION_TIMEOUT_SECONDS,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
         )
         state["phase"] = EpisodeState.TWINS_READY_AND_SEEDED
         write_private_json(trial_dir / "state.json", state)
@@ -890,15 +939,34 @@ async def run_trial(
         gateway = ProviderGateway(
             cast(dict[str, dict[str, object]], provider_access),
             provider_roles=bundle.binding.roles,
+            candidate_safe_surface=candidate_safe_surface,
+            max_calls=bundle.instance.budget.max_tool_calls,
         )
+        if candidate_safe_surface:
+            docs_gateway = OfficialDocsGateway(
+                cast(dict[str, dict[str, object]], provider_access),
+                provider_roles=bundle.binding.roles,
+                max_calls=OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE,
+                snapshot_cache=official_docs_snapshot_cache,
+            )
+        tool_definitions = [gateway.tool_definition]
+        if docs_gateway is not None:
+            tool_definitions.append(docs_gateway.tool_definition)
         prompt_payload = {
             "protocol": "arga-bench-trial-prompt/1",
             "model": asdict(plan.model),
             "attempt": attempt_number,
             "runner_commit": runner_commit,
-            "system_prompt": SYSTEM_PROMPT,
+            "system_prompt": system_prompt,
             "user_prompt": bundle.prompt,
             "tool_definition": gateway.tool_definition,
+            "tool_definitions": tool_definitions,
+            "candidate_safe_surface": candidate_safe_surface,
+            "arga_candidate_safe_profile": arga_candidate_safe_profile,
+            "provider_tool_call_limit": bundle.instance.budget.max_tool_calls,
+            "official_docs_tool_call_limit": (
+                OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+            ),
         }
         write_private_json(trial_dir / "prompt.json", prompt_payload)
         state_capturer = TrustedStateCapturer()
@@ -917,17 +985,22 @@ async def run_trial(
         invocation_started = True
 
         async def execute_candidate_tool(tool_name: str, tool_input: dict[str, Any]) -> object:
-            if tool_name != gateway.tool_definition["name"]:
-                return {"ok": False, "error": f"unknown tool {tool_name!r}"}
-            return await gateway.execute(tool_input)
+            if tool_name == gateway.tool_definition["name"]:
+                return await gateway.execute(tool_input)
+            if docs_gateway is not None and tool_name == docs_gateway.tool_definition["name"]:
+                return await docs_gateway.execute(tool_input)
+            return {"ok": False, "error": f"unknown tool {tool_name!r}"}
 
         invocation = await invoke_model(
             model_id=plan.model.model_id,
-            system_prompt=SYSTEM_PROMPT,
+            system_prompt=system_prompt,
             user_prompt=bundle.prompt,
-            tool_schema=gateway.tool_definition,
+            tool_schema=tool_definitions,
             execute_tool=execute_candidate_tool,
-            max_tool_calls=bundle.instance.budget.max_tool_calls,
+            max_tool_calls=(
+                bundle.instance.budget.max_tool_calls
+                + (OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0)
+            ),
             timeout_seconds=bundle.instance.budget.timeout_seconds,
         )
         state["phase"] = EpisodeState.INVOCATION_FINISHED
@@ -936,6 +1009,9 @@ async def run_trial(
         invocation_payload = cast(dict[str, Any], _jsonable(invocation))
         write_private_json(trial_dir / "invocation.json", invocation_payload)
         _write_provider_trace(trial_dir / "provider-trace.json", gateway)
+        if docs_gateway is not None:
+            _write_official_docs_trace(trial_dir / "official-docs-trace.json", docs_gateway)
+            _write_official_docs_cache(docs_cache_root, docs_gateway, trial_dir=trial_dir)
 
         final_text = getattr(invocation, "final_text", "")
         final_state = await state_capturer.capture(
@@ -973,7 +1049,15 @@ async def run_trial(
             "status": getattr(invocation, "status", None),
             "stop_reason": getattr(invocation, "stop_reason", None),
             "final_text": final_text,
-            "tool_calls": len(gateway.trace_records),
+            "tool_calls": len(gateway.trace_records) + (len(docs_gateway.trace_records) if docs_gateway else 0),
+            "provider_tool_calls": len(gateway.trace_records),
+            "official_docs_tool_calls": len(docs_gateway.trace_records) if docs_gateway else 0,
+            "candidate_safe_surface": candidate_safe_surface,
+            "arga_candidate_safe_profile": arga_candidate_safe_profile,
+            "provider_tool_call_limit": bundle.instance.budget.max_tool_calls,
+            "official_docs_tool_call_limit": (
+                OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+            ),
             "usage": _jsonable(getattr(invocation, "usage", {})),
             "preliminary_grade": preliminary,
             "state_grade_complete": False,
@@ -985,6 +1069,11 @@ async def run_trial(
         if gateway is not None:
             with suppress(Exception):
                 _write_provider_trace(trial_dir / "provider-trace.json", gateway)
+        if docs_gateway is not None:
+            with suppress(Exception):
+                _write_official_docs_trace(trial_dir / "official-docs-trace.json", docs_gateway)
+            with suppress(Exception):
+                _write_official_docs_cache(docs_cache_root, docs_gateway, trial_dir=trial_dir)
         result = {
             "protocol": "arga-bench-trial-result/1",
             "terminal": True,
@@ -998,7 +1087,16 @@ async def run_trial(
             "error_type": type(error).__name__,
             "error": str(error),
             "traceback": traceback.format_exc(),
-            "tool_calls": len(gateway.trace_records) if gateway is not None else 0,
+            "tool_calls": (len(gateway.trace_records) if gateway is not None else 0)
+            + (len(docs_gateway.trace_records) if docs_gateway is not None else 0),
+            "provider_tool_calls": len(gateway.trace_records) if gateway is not None else 0,
+            "official_docs_tool_calls": len(docs_gateway.trace_records) if docs_gateway is not None else 0,
+            "candidate_safe_surface": candidate_safe_surface,
+            "arga_candidate_safe_profile": arga_candidate_safe_profile,
+            "provider_tool_call_limit": bundle.instance.budget.max_tool_calls,
+            "official_docs_tool_call_limit": (
+                OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+            ),
             "invocation_started": invocation_started,
             "started_at": state["started_at"],
             "finished_at": _utc_now(),
@@ -1009,6 +1107,13 @@ async def run_trial(
                 _write_provider_trace(trial_dir / "provider-trace.json", gateway)
             with suppress(Exception):
                 await gateway.aclose()
+        if docs_gateway is not None:
+            with suppress(Exception):
+                _write_official_docs_trace(trial_dir / "official-docs-trace.json", docs_gateway)
+            with suppress(Exception):
+                _write_official_docs_cache(docs_cache_root, docs_gateway, trial_dir=trial_dir)
+            with suppress(Exception):
+                await docs_gateway.aclose()
         if control_path.is_file():
             try:
                 cleanup_payload = await cleanup_instance(control_path)
@@ -1043,6 +1148,9 @@ _IMMUTABLE_SUITE_MANIFEST_FIELDS = (
     "experiment_id",
     "repeats",
     "ttl_minutes",
+    "candidate_safe_surface",
+    "arga_candidate_safe_profile",
+    "official_docs_tool_call_allowance",
     "orphan_twin_lease_grace_seconds",
     "trial_count",
     "models",
@@ -1299,6 +1407,8 @@ async def _run_experiment_matrix_locked(
     ttl_minutes: int = 60,
     suite_run_id: str | None = None,
     runner_commit: str | None = None,
+    candidate_safe_surface: bool = True,
+    arga_candidate_safe_profile: bool = False,
 ) -> dict[str, Any]:
     concurrency = _validated_concurrency(concurrency, label="concurrency")
     experiment, bundles = load_experiment_bundles(catalog_root, experiment_id)
@@ -1307,7 +1417,13 @@ async def _run_experiment_matrix_locked(
     )
     suite_dir = output_root / suite_run_id
     suite_dir.mkdir(parents=True, exist_ok=True)
-    ledger = prompt_ledger_payload(catalog_root, experiment_id, model_profiles=model_profiles)
+    system_prompt = SYSTEM_PROMPT if candidate_safe_surface else LEGACY_SYSTEM_PROMPT
+    ledger = prompt_ledger_payload(
+        catalog_root,
+        experiment_id,
+        model_profiles=model_profiles,
+        system_prompt=system_prompt,
+    )
     plans = build_trial_plans(
         experiment,
         suite_run_id=suite_run_id,
@@ -1336,6 +1452,11 @@ async def _run_experiment_matrix_locked(
             )
         ],
         "ttl_minutes": ttl_minutes,
+        "candidate_safe_surface": candidate_safe_surface,
+        "arga_candidate_safe_profile": arga_candidate_safe_profile,
+        "official_docs_tool_call_allowance": (
+            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+        ),
         "orphan_twin_lease_grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
         "trial_count": len(plans),
         "models": [asdict(profile) for profile in model_profiles],
@@ -1371,6 +1492,13 @@ async def _run_experiment_matrix_locked(
         write_private_json(manifest_path, manifest)
 
     semaphore = asyncio.Semaphore(concurrency)
+    official_docs_snapshot_cache: OfficialDocsSnapshotCache | None = None
+    if candidate_safe_surface:
+        official_docs_snapshot_cache = OfficialDocsSnapshotCache()
+        official_docs_snapshot_cache.load_artifacts(
+            suite_dir / "official-docs-cache",
+            catalog=load_official_docs_catalog(),
+        )
 
     async def bounded(plan: TrialPlan) -> dict[str, Any]:
         async with semaphore:
@@ -1395,6 +1523,10 @@ async def _run_experiment_matrix_locked(
                 output_root=suite_dir,
                 ttl_minutes=ttl_minutes,
                 runner_commit=current_runner_commit,
+                candidate_safe_surface=candidate_safe_surface,
+                arga_candidate_safe_profile=arga_candidate_safe_profile,
+                official_docs_snapshot_cache=official_docs_snapshot_cache,
+                official_docs_cache_root=suite_dir / "official-docs-cache",
             )
             print(
                 json.dumps(
@@ -1430,6 +1562,11 @@ async def _run_experiment_matrix_locked(
             for result in results
         ),
         "state_grade_complete": False,
+        "candidate_safe_surface": candidate_safe_surface,
+        "arga_candidate_safe_profile": arga_candidate_safe_profile,
+        "official_docs_tool_call_allowance": (
+            OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
+        ),
         "completed_at": _utc_now(),
         "results": results,
     }
@@ -1447,6 +1584,8 @@ async def run_experiment_matrix(
     concurrency: int = 4,
     ttl_minutes: int = 60,
     suite_run_id: str | None = None,
+    candidate_safe_surface: bool = True,
+    arga_candidate_safe_profile: bool = False,
 ) -> dict[str, Any]:
     """Run one matrix suite while exclusively owning its cross-process lock."""
 
@@ -1468,4 +1607,6 @@ async def run_experiment_matrix(
             ttl_minutes=ttl_minutes,
             suite_run_id=resolved_suite_run_id,
             runner_commit=current_runner_commit,
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
         )

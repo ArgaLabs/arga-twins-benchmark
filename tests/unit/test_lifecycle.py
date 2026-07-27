@@ -55,6 +55,7 @@ class FakeArgaCli:
         twins: Sequence[str],
         scenario_id: str,
         ttl_minutes: int,
+        candidate_safe: bool = False,
     ) -> TwinRun:
         raise AssertionError("create_twin_run is not expected in these tests")
 
@@ -140,12 +141,14 @@ class ProvisioningArgaCli(FakeArgaCli):
         twins: Sequence[str],
         scenario_id: str,
         ttl_minutes: int,
+        candidate_safe: bool = False,
     ) -> TwinRun:
         self.created_runs.append(
             {
                 "twins": list(twins),
                 "scenario_id": scenario_id,
                 "ttl_minutes": ttl_minutes,
+                "candidate_safe": candidate_safe,
             }
         )
         return TwinRun.from_payload(
@@ -420,6 +423,7 @@ def test_provision_persists_run_id_before_polling_and_exports_only_ready_access(
             candidate_output=candidate,
             ttl_minutes=60,
             timeout_seconds=10,
+            arga_candidate_safe_profile=True,
         )
     )
 
@@ -428,6 +432,7 @@ def test_provision_persists_run_id_before_polling_and_exports_only_ready_access(
             "twins": ["github"],
             "scenario_id": "scenario-existing",
             "ttl_minutes": 60,
+            "candidate_safe": True,
         }
     ]
     assert json.loads(control.read_text())["run_id"] == "run-queued"

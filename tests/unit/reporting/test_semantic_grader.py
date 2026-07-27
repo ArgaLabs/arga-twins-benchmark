@@ -449,7 +449,33 @@ def test_grade_saved_suite_builds_complete_derived_grade(
     monkeypatch.setattr(semantic_grader, "build_deterministic_state_evidence", build_evidence)
     monkeypatch.setattr(semantic_grader, "evaluate_deterministic", evaluate)
 
-    report = semantic_grader.grade_saved_suite(_suite(tmp_path), catalog_root=tmp_path)
+    suite_dir = _suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    _write_json(
+        trial_dir / "official-docs-trace.json",
+        {
+            "protocol": "arga-bench-official-docs-trace/1",
+            "events": [
+                {
+                    "sequence": 1,
+                    "action": "search",
+                    "content_sha256": None,
+                }
+            ],
+        },
+    )
+    result_path = trial_dir / "result.json"
+    result = json.loads(result_path.read_text())
+    result["provider_tool_calls"] = 6
+    result["official_docs_tool_calls"] = 1
+    result["tool_calls"] = 7
+    _write_json(result_path, result)
+    invocation_path = trial_dir / "invocation.json"
+    invocation = json.loads(invocation_path.read_text())
+    invocation["tool_calls"] = 7
+    _write_json(invocation_path, invocation)
+
+    report = semantic_grader.grade_saved_suite(suite_dir, catalog_root=tmp_path)
 
     assert report["protocol"] == "arga-bench-semantic-suite-grade/2"
     assert report["grading_policy"] == "outcome_first_v1"
@@ -489,6 +515,7 @@ def test_grade_saved_suite_builds_complete_derived_grade(
         "baseline-state.json",
         "final-state.json",
         "provider-trace.json",
+        "official-docs-trace.json",
         "control.json",
     }
 
@@ -504,7 +531,10 @@ def test_grade_saved_suite_builds_complete_derived_grade(
         "audit_suite",
         failing_audit,
     )
-    integrity_blocked = semantic_grader.grade_saved_suite(_suite(tmp_path), catalog_root=tmp_path)
+    integrity_blocked = semantic_grader.grade_saved_suite(
+        _suite(tmp_path / "second"),
+        catalog_root=tmp_path,
+    )
     assert integrity_blocked["semantic_grade_ready"] is True
     assert integrity_blocked["suite_integrity_passed"] is False
     assert integrity_blocked["scoring_ready"] is False

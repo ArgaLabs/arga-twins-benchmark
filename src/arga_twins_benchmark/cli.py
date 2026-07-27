@@ -103,6 +103,13 @@ def provision(
     root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
     ttl_minutes: Annotated[int, typer.Option("--ttl", min=1, max=480)] = 60,
     timeout_seconds: Annotated[int, typer.Option("--timeout", min=1)] = 600,
+    arga_candidate_safe_profile: Annotated[
+        bool,
+        typer.Option(
+            "--arga-candidate-safe-profile/--no-arga-candidate-safe-profile",
+            help="Opt into the separately deployed Arga CLI/server --candidate-safe profile.",
+        ),
+    ] = False,
 ) -> None:
     asyncio.run(
         provision_instance(
@@ -112,6 +119,7 @@ def provision(
             candidate_output=candidate_output,
             ttl_minutes=ttl_minutes,
             timeout_seconds=timeout_seconds,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
         )
     )
     typer.echo(f"control: {control_output}")
@@ -179,6 +187,20 @@ def run_instance(
         ".env"
     ),
     ttl_minutes: Annotated[int, typer.Option("--ttl", min=1, max=480)] = 60,
+    candidate_safe_surface: Annotated[
+        bool,
+        typer.Option(
+            "--candidate-safe-surface/--legacy-candidate-surface",
+            help="Use the restricted twin API plus official provider_docs surface (secure default).",
+        ),
+    ] = True,
+    arga_candidate_safe_profile: Annotated[
+        bool,
+        typer.Option(
+            "--arga-candidate-safe-profile/--no-arga-candidate-safe-profile",
+            help="Opt into the separately deployed Arga CLI/server --candidate-safe profile.",
+        ),
+    ] = False,
 ) -> None:
     if env_file is not None:
         load_env_file(env_file)
@@ -203,6 +225,8 @@ def run_instance(
             plan=plan,
             output_root=output_root / suite_run_id,
             ttl_minutes=ttl_minutes,
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
         )
     )
     typer.echo(
@@ -215,6 +239,10 @@ def run_instance(
                 "status": result.get("status"),
                 "stop_reason": result.get("stop_reason"),
                 "tool_calls": result.get("tool_calls"),
+                "provider_tool_calls": result.get("provider_tool_calls"),
+                "official_docs_tool_calls": result.get("official_docs_tool_calls"),
+                "candidate_safe_surface": result.get("candidate_safe_surface"),
+                "arga_candidate_safe_profile": result.get("arga_candidate_safe_profile"),
                 "cleanup_succeeded": result.get("cleanup_succeeded"),
                 "artifact_dir": str(output_root / suite_run_id / "trials" / plan.trial_id),
             },
@@ -243,6 +271,20 @@ def run_matrix(
         str | None,
         typer.Option("--suite-run-id", help="Resume an existing suite directory with the same manifest"),
     ] = None,
+    candidate_safe_surface: Annotated[
+        bool,
+        typer.Option(
+            "--candidate-safe-surface/--legacy-candidate-surface",
+            help="Use the restricted twin API plus official provider_docs surface (secure default).",
+        ),
+    ] = True,
+    arga_candidate_safe_profile: Annotated[
+        bool,
+        typer.Option(
+            "--arga-candidate-safe-profile/--no-arga-candidate-safe-profile",
+            help="Opt into the separately deployed Arga CLI/server --candidate-safe profile.",
+        ),
+    ] = False,
 ) -> None:
     if env_file is not None:
         loaded = load_env_file(env_file)
@@ -258,6 +300,8 @@ def run_matrix(
             concurrency=concurrency,
             ttl_minutes=ttl_minutes,
             suite_run_id=suite_run_id,
+            candidate_safe_surface=candidate_safe_surface,
+            arga_candidate_safe_profile=arga_candidate_safe_profile,
         )
     )
     typer.echo(
@@ -272,6 +316,9 @@ def run_matrix(
                     "cleanup_failure_count",
                     "trace_output_pass_count",
                     "state_grade_complete",
+                    "candidate_safe_surface",
+                    "arga_candidate_safe_profile",
+                    "official_docs_tool_call_allowance",
                     "completed_at",
                 )
             },

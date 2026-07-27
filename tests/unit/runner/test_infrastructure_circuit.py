@@ -26,8 +26,10 @@ class _FailingGateway:
         _provider_access: Mapping[str, Mapping[str, object]],
         *,
         provider_roles: Mapping[str, str],
+        candidate_safe_surface: bool,
+        max_calls: int,
     ) -> None:
-        del provider_roles
+        del provider_roles, candidate_safe_surface, max_calls
         self._trace_records: list[ProviderTraceRecord] = []
         self.tool_definition: dict[str, object] = {
             "name": "provider_api",
@@ -106,8 +108,10 @@ def test_run_trial_persists_trace_and_marks_provider_circuit_failure_retryable(
         candidate_output: Path,
         ttl_minutes: int,
         timeout_seconds: int,
+        arga_candidate_safe_profile: bool,
     ) -> None:
         del catalog_root, instance_id, ttl_minutes, timeout_seconds
+        assert arga_candidate_safe_profile is False
         control_output.write_text(
             json.dumps(
                 {
@@ -137,6 +141,9 @@ def test_run_trial_persists_trace_and_marks_provider_circuit_failure_retryable(
         )
 
     async def fake_invoke_model(*_args: object, **kwargs: object) -> object:
+        tool_schema = cast(list[dict[str, object]], kwargs["tool_schema"])
+        assert [tool["name"] for tool in tool_schema] == ["provider_api", "provider_docs"]
+        assert kwargs["max_tool_calls"] == bundle.instance.budget.max_tool_calls + 8
         executor = cast(
             Callable[[str, dict[str, Any]], Awaitable[object]],
             kwargs["execute_tool"],
@@ -178,12 +185,19 @@ def test_run_trial_persists_trace_and_marks_provider_circuit_failure_retryable(
     assert result["status"] == "runtime_error"
     assert result["error_type"] == "ProviderInfrastructureError"
     assert result["tool_calls"] == 1
+    assert result["provider_tool_calls"] == 1
+    assert result["official_docs_tool_calls"] == 0
     assert result["cleanup_succeeded"] is True
     assert _retryable_infrastructure_result(result) is True
     trace = json.loads((tmp_path / "trials" / "trial-1" / "provider-trace.json").read_text())
     assert trace["protocol"] == "arga-bench-provider-trace/1"
     assert len(trace["events"]) == 1
     assert trace["events"][0]["status_code"] == 410
+    docs_trace = json.loads((tmp_path / "trials" / "trial-1" / "official-docs-trace.json").read_text())
+    assert docs_trace == {
+        "protocol": "arga-bench-official-docs-trace/1",
+        "events": [],
+    }
 
     prepared_dir, attempt, existing = asyncio.run(
         _prepare_trial_attempt(

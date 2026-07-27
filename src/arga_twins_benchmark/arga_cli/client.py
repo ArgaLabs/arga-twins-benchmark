@@ -71,6 +71,7 @@ class ArgaCli(Protocol):
         twins: Sequence[str],
         scenario_id: str,
         ttl_minutes: int,
+        candidate_safe: bool = False,
     ) -> TwinRun: ...
 
     async def status(self, run_id: str) -> TwinRun: ...
@@ -170,12 +171,13 @@ class SubprocessArgaCli:
         twins: Sequence[str],
         scenario_id: str,
         ttl_minutes: int = 60,
+        candidate_safe: bool = False,
     ) -> TwinRun:
         """Create a run and return its ID immediately without hiding it in a wait subprocess."""
 
         if not twins:
             raise ValueError("at least one twin is required")
-        payload = await self._run_json(
+        arguments = [
             "twin-runs",
             "create",
             "--api-url",
@@ -186,8 +188,11 @@ class SubprocessArgaCli:
             scenario_id,
             "--ttl",
             str(ttl_minutes),
-            "--json",
-        )
+        ]
+        if candidate_safe:
+            arguments.append("--candidate-safe")
+        arguments.append("--json")
+        payload = await self._run_json(*arguments)
         payload.setdefault("status", "queued")
         payload.setdefault("twins", {})
         run = _parse_twin_run(payload)

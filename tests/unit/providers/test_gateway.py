@@ -338,6 +338,193 @@ def test_rejects_external_traversal_and_control_plane_paths_without_network(path
 
 
 @pytest.mark.parametrize(
+    "path",
+    [
+        "/",
+        "/api",
+        "/docs",
+        "/openapi.json",
+        "/swagger",
+        "/api/docs",
+        "/api/openapi.yaml",
+        "/health",
+        "/api/healthz",
+        "/metrics",
+        "/api/readiness",
+        "/.well-known/openapi",
+        "/.%77ell-known/schema",
+        "/api/.well-known/openapi",
+        "/api/_admin/state",
+        "/api/grader/result",
+    ],
+)
+def test_candidate_safe_surface_rejects_twin_ui_schema_and_control_roots(path: str) -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    result = _run(gateway, {"provider": "github", "method": "GET", "path": path})
+
+    assert result["ok"] is False
+    assert result["error"]
+    assert calls == 0
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/repos/acme/app/contents/openapi.json",
+        "/repos/acme/app/contents/docs",
+        "/repos/acme/admin/issues/schema",
+        "/repos/acme/app/contents/health",
+        "/api/v4/projects/acme/repository/files/openapi.json",
+    ],
+)
+def test_candidate_safe_surface_allows_schema_like_names_in_provider_data_paths(path: str) -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200, json={"path": path})
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), client=client)
+
+    result = _run(gateway, {"provider": "github", "method": "GET", "path": path})
+
+    assert result["ok"] is True
+    assert calls == 1
+    asyncio.run(client.aclose())
+
+
+def test_candidate_safe_surface_rejects_graphql_introspection_without_network() -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("linear"), client=client)
+
+    result = _run(
+        gateway,
+        {
+            "provider": "linear",
+            "method": "POST",
+            "path": "/graphql",
+            "body": {"query": "query Introspection { __schema { types { name } } }"},
+        },
+    )
+
+    assert result["ok"] is False
+    assert "introspection" in str(result["error"])
+    assert calls == 0
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/graphql?query=query%20Introspection%20%7B%20__schema%20%7B%20types%20%7B%20name%20%7D%20%7D%20%7D",
+        "/graphql?query=query%20Introspection%20%7B%20%255F%255Ftype(name%3A%22Issue%22)%20%7Bname%7D%20%7D",
+    ],
+)
+def test_candidate_safe_surface_rejects_encoded_graphql_query_introspection(path: str) -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("linear"), client=client)
+
+    result = _run(gateway, {"provider": "linear", "method": "GET", "path": path})
+
+    assert result["ok"] is False
+    assert "introspection" in str(result["error"])
+    assert calls == 0
+    asyncio.run(client.aclose())
+
+
+def test_candidate_safe_surface_allows_graphql_typename() -> None:
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(lambda _request: httpx.Response(200, json={"data": {}}))
+    )
+    gateway = ProviderGateway(_access("linear"), client=client)
+
+    result = _run(
+        gateway,
+        {
+            "provider": "linear",
+            "method": "POST",
+            "path": "/graphql",
+            "body": {"query": "query { issues { nodes { __typename id } } }"},
+        },
+    )
+
+    assert result["ok"] is True
+    asyncio.run(client.aclose())
+
+
+def test_legacy_surface_allows_root_schema_but_still_blocks_control_plane() -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200, json={"ok": True})
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(
+        _access("github"),
+        candidate_safe_surface=False,
+        client=client,
+    )
+
+    assert _run(gateway, {"provider": "github", "method": "GET", "path": "/"})["ok"] is True
+    assert _run(gateway, {"provider": "github", "method": "GET", "path": "/openapi.json"})["ok"] is True
+    blocked = _run(gateway, {"provider": "github", "method": "GET", "path": "/_admin/state"})
+
+    assert blocked["ok"] is False
+    assert calls == 2
+    asyncio.run(client.aclose())
+
+
+def test_provider_call_limit_is_separate_and_rejects_excess_network_calls() -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(_access("github"), max_calls=1, client=client)
+
+    first = _run(gateway, {"provider": "github", "method": "GET", "path": "/repos/acme/app"})
+    second = _run(gateway, {"provider": "github", "method": "GET", "path": "/repos/acme/app"})
+
+    assert first["ok"] is True
+    assert second["ok"] is False
+    assert second["error"] == "provider_api call limit of 1 has been reached"
+    assert calls == 1
+    assert len(gateway.trace_records) == 2
+    asyncio.run(client.aclose())
+
+
+@pytest.mark.parametrize(
     "tool_input",
     [
         {"provider": "github", "method": "HEAD", "path": "/repos/acme/app"},
@@ -836,6 +1023,7 @@ def test_arbitrary_http_statuses_and_provider_errors_do_not_trip_circuit(
         lambda: ProviderGateway({"github": {"base_url": "https://user:secret@example.test"}}),
         lambda: ProviderGateway({"github": {"base_url": "https://example.test/api"}}),
         lambda: ProviderGateway(_access("github"), {"code_host": "gitlab"}),
+        lambda: ProviderGateway(_access("github"), max_calls=0),
     ],
 )
 def test_rejects_unsafe_gateway_configuration(factory: Callable[[], ProviderGateway]) -> None:

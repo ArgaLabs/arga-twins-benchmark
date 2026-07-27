@@ -360,3 +360,82 @@ def test_missing_trial_does_not_reduce_suite_level_concurrency_audit_coverage(tm
         "passed": True,
         "coverage_complete": True,
     }
+
+
+def test_audit_validates_split_docs_counts_and_suite_cache_body(tmp_path: Path) -> None:
+    suite_dir = _build_suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    body = b"Official GitHub REST documentation bytes"
+    digest = __import__("hashlib").sha256(body).hexdigest()
+    source_url = "https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28"
+    _write_json(
+        trial_dir / "official-docs-trace.json",
+        {
+            "protocol": "arga-bench-official-docs-trace/1",
+            "events": [
+                {
+                    "sequence": 1,
+                    "started_at": "2030-01-01T00:00:00+00:00",
+                    "requested_provider": "github",
+                    "provider": "github",
+                    "action": "fetch",
+                    "doc_id": "pull-requests",
+                    "source_url": source_url,
+                    "final_url": source_url,
+                    "status_code": 200,
+                    "latency_ms": 1,
+                    "response_bytes": len(body),
+                    "content_sha256": digest,
+                    "truncated": False,
+                    "cache_hit": False,
+                    "query_present": False,
+                    "error": None,
+                }
+            ],
+        },
+    )
+    cache_root = suite_dir / "official-docs-cache"
+    body_path = cache_root / "responses" / f"{digest}.body"
+    body_path.parent.mkdir(parents=True)
+    body_path.write_bytes(body)
+    _write_json(
+        cache_root / "manifest.json",
+        {
+            "protocol": "arga-bench-official-docs-cache/1",
+            "entry_count": 1,
+            "entries": [
+                {
+                    "provider": "github",
+                    "requested_url": source_url,
+                    "http_status": 200,
+                    "response_bytes": len(body),
+                    "content_sha256": digest,
+                    "body_file": f"responses/{digest}.body",
+                }
+            ],
+        },
+    )
+    result_path = trial_dir / "result.json"
+    result = json.loads(result_path.read_text())
+    result["provider_tool_calls"] = 6
+    result["official_docs_tool_calls"] = 1
+    result["tool_calls"] = 7
+    _write_json(result_path, result)
+
+    report = audit_suite(suite_dir)
+
+    assert report["checks"]["tool_call_count_consistency"]["violation_count"] == 0
+    assert report["checks"]["provider_trace_integrity"]["violation_count"] == 0
+    assert report["integrity_passed"] is True
+
+    body_path.write_bytes(b"tampered")
+    corrupted = audit_suite(suite_dir)
+    assert corrupted["checks"]["provider_trace_integrity"]["violation_count"] == 1
+    assert corrupted["integrity_passed"] is False
+
+
+def test_audit_accepts_legacy_suite_without_docs_trace_or_split_counts(tmp_path: Path) -> None:
+    report = audit_suite(_build_suite(tmp_path))
+
+    assert report["checks"]["tool_call_count_consistency"]["violation_count"] == 0
+    assert report["checks"]["provider_trace_integrity"]["violation_count"] == 0
