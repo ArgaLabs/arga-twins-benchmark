@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from collections.abc import Mapping
@@ -766,9 +767,7 @@ def _result_fact_alias_matches(expected: str, actual: str, document: dict[object
         "no_change_non_unique_match",
     }:
         all_document_tokens = _semantic_tokens(document)
-        return "unique" in all_document_tokens and bool(
-            all_document_tokens & {"ambiguous", "multiple", "non", "not"}
-        )
+        return "unique" in all_document_tokens and bool(all_document_tokens & {"ambiguous", "multiple", "non", "not"})
     if expected_value == "corrected" and actual_value == "authorized":
         return bool(document_tokens & {"added", "applied", "changed", "corrected", "patched", "updated"})
     if expected_value == "denied" and actual_value == "no_write":
@@ -808,6 +807,155 @@ def _semantic_tokens(value: object) -> set[str]:
     return _semantic_tokens(str(value))
 
 
+_EMAIL_IDENTITY_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?![A-Za-z0-9._%+-])",
+)
+_SCOPED_REFERENCE_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_.-])[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+[#!][0-9]+(?![A-Za-z0-9_])",
+)
+_NATIVE_REFERENCE_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_])(?:GitHub\s+PR|GitLab\s+MR)\s*[#!][0-9]+(?![A-Za-z0-9_])",
+    flags=re.IGNORECASE,
+)
+_MARKER_IDENTITY_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_.-])[A-Za-z][A-Za-z0-9_.]*-[0-9][A-Za-z0-9_.]*"
+    r"(?:-[A-Za-z0-9_.]+)*(?::[A-Za-z0-9_.-]+)?(?![A-Za-z0-9_.-])",
+)
+
+
+def _identity_tokens(value: str) -> set[tuple[str, str]]:
+    tokens: set[tuple[str, str]] = set()
+    for match in _EMAIL_IDENTITY_PATTERN.finditer(value):
+        normalized = match.group(0).casefold()
+        tokens.add((f"email:{normalized}", normalized))
+    for match in _SCOPED_REFERENCE_PATTERN.finditer(value):
+        normalized = re.sub(r"\s+", "", match.group(0).casefold())
+        namespace = re.split(r"[#!]", normalized, maxsplit=1)[0]
+        tokens.add((f"scoped:{namespace}", normalized))
+    for match in _NATIVE_REFERENCE_PATTERN.finditer(value):
+        normalized = re.sub(r"\s+", " ", match.group(0).casefold()).strip()
+        namespace = re.sub(r"\s*[#!][0-9]+$", "", normalized).replace(" ", "_")
+        tokens.add((f"native:{namespace}", normalized))
+    for match in _MARKER_IDENTITY_PATTERN.finditer(value):
+        normalized = match.group(0).casefold()
+        namespace = normalized.split("-", maxsplit=1)[0]
+        tokens.add((f"marker:{namespace}", normalized))
+    return tokens
+
+
+def _identity_sets_are_consistent(
+    expected_tokens: set[tuple[str, str]],
+    actual_tokens: set[tuple[str, str]],
+) -> bool:
+    if not expected_tokens or not expected_tokens <= actual_tokens:
+        return False
+    expected_namespaces = {namespace for namespace, _ in expected_tokens}
+    return all(
+        namespace not in expected_namespaces or (namespace, value) in expected_tokens
+        for namespace, value in actual_tokens
+    )
+
+
+def _identity_string_matches(expected: str, actual: str) -> bool:
+    return _identity_sets_are_consistent(_identity_tokens(expected), _identity_tokens(actual))
+
+
+def _fact_key_carries_identity(key: object) -> bool:
+    if not isinstance(key, str):
+        return False
+    normalized = _normalized_result_value(key)
+    return (
+        normalized
+        in {
+            "change",
+            "code_reference",
+            "incident",
+            "invoice",
+            "marker",
+            "reference",
+            "release",
+            "request",
+            "specification",
+            "ticket",
+        }
+        or normalized.endswith("_email")
+        or normalized.endswith("_id")
+        or normalized.endswith("_identifier")
+        or normalized.endswith("_key")
+        or normalized.endswith("_marker")
+        or normalized.endswith("_reference")
+    )
+
+
+def _identity_tokens_in_document(value: object, *, identity_context: bool = False) -> set[tuple[str, str]]:
+    if isinstance(value, str):
+        return _identity_tokens(value) if identity_context else set()
+    if isinstance(value, list):
+        tokens: set[tuple[str, str]] = set()
+        for item in cast(list[object], value):
+            tokens.update(_identity_tokens_in_document(item, identity_context=True))
+        return tokens
+    if not isinstance(value, dict):
+        return set()
+    tokens = set()
+    for key, item in cast(dict[object, object], value).items():
+        if _fact_key_is_negative_evidence(key):
+            continue
+        tokens.update(
+            _identity_tokens_in_document(
+                item,
+                identity_context=identity_context or _fact_key_carries_identity(key),
+            )
+        )
+    return tokens
+
+
+def _identity_value_matches(expected: str, actual: object) -> bool:
+    expected_tokens = _identity_tokens(expected)
+    if not expected_tokens:
+        return False
+    if isinstance(actual, str):
+        return _identity_string_matches(expected, actual)
+    return _identity_sets_are_consistent(
+        expected_tokens,
+        _identity_tokens_in_document(actual, identity_context=isinstance(actual, list)),
+    )
+
+
+def _mapping_identity_is_consistent(
+    key: object,
+    expected: object,
+    actual: dict[object, object],
+) -> bool:
+    if not isinstance(expected, str):
+        return True
+    expected_tokens = _identity_tokens(expected)
+    if not expected_tokens:
+        return True
+    normalized_key = _normalized_result_value(key) if isinstance(key, str) else ""
+    related_keys = {
+        normalized_key,
+        f"{normalized_key}_id",
+        f"{normalized_key}_identifier",
+        f"{normalized_key}_key",
+        f"{normalized_key}_marker",
+        f"{normalized_key}_reference",
+    }
+    relevant_tokens: set[tuple[str, str]] = set()
+    for observed_key, observed_value in _iter_mapping_items(actual):
+        normalized_observed_key = _normalized_result_value(observed_key) if isinstance(observed_key, str) else ""
+        if observed_key == key or (normalized_key and normalized_observed_key in related_keys):
+            if isinstance(observed_value, str):
+                relevant_tokens.update(_identity_tokens(observed_value))
+    if not relevant_tokens:
+        return True
+    expected_namespaces = {namespace for namespace, _ in expected_tokens}
+    return all(
+        namespace not in expected_namespaces or (namespace, value) in expected_tokens
+        for namespace, value in relevant_tokens
+    )
+
+
 def _string_list_is_semantic_subset(expected: list[object], actual: list[object]) -> bool:
     if not all(isinstance(item, str) for item in expected):
         return False
@@ -817,8 +965,8 @@ def _string_list_is_semantic_subset(expected: list[object], actual: list[object]
         expected_tokens = _semantic_tokens(expected_item)
 
         def item_matches(actual_item: object) -> bool:
-            if _document_contains_exact_identity(expected_item, actual_item):
-                return True
+            if _identity_tokens(expected_item):
+                return _identity_value_matches(expected_item, actual_item)
             actual_tokens = _semantic_tokens(actual_item)
             required_tokens = expected_tokens
             if "wrong" in required_tokens and actual_tokens & {
@@ -865,40 +1013,16 @@ def _string_list_is_semantic_subset(expected: list[object], actual: list[object]
         if match is None:
             return False
         used_indices.add(match)
+    expected_identities = {identity for expected_item in expected_items for identity in _identity_tokens(expected_item)}
+    if expected_identities:
+        actual_identities = _identity_tokens_in_document(actual, identity_context=True)
+        expected_namespaces = {namespace for namespace, _ in expected_identities}
+        if any(
+            namespace in expected_namespaces and (namespace, value) not in expected_identities
+            for namespace, value in actual_identities
+        ):
+            return False
     return True
-
-
-def _document_contains_exact_identity(expected: str, document: object) -> bool:
-    """Find an explicit identity value without token-matching opaque IDs.
-
-    Structured results often represent ``["INV-7301"]`` as
-    ``[{"invoice_id": "INV-7301", "draft_id": "..."}]``. Tokenizing the
-    entire object makes unrelated generated IDs look like contradictory
-    numbers. Match the declared identity field exactly and ignore incidental
-    provider IDs; the same helper is used by forbidden-fact checks.
-    """
-
-    if re.fullmatch(r"[A-Za-z][A-Za-z0-9_.]*-[0-9]+", expected) is None:
-        return False
-    if isinstance(document, dict):
-        mapping = cast(dict[object, object], document)
-        for raw_key, value in mapping.items():
-            if _fact_key_is_negative_evidence(raw_key):
-                continue
-            key = _normalized_result_value(raw_key) if isinstance(raw_key, str) else ""
-            identity_field = (
-                key in {"invoice", "release", "request", "ticket"}
-                or key.endswith("_id")
-                or key.endswith("_identifier")
-                or key.endswith("_key")
-            )
-            if identity_field and isinstance(value, str) and value.strip().casefold() == expected.casefold():
-                return True
-            if _document_contains_exact_identity(expected, value):
-                return True
-    elif isinstance(document, list):
-        return any(_document_contains_exact_identity(expected, item) for item in cast(list[object], document))
-    return False
 
 
 def _fact_key_is_negative_evidence(key: object) -> bool:
@@ -1046,10 +1170,49 @@ def _verified_requirement_matches(key: str, expected: object, actual: dict[objec
         return False
     covered_tokens: set[str] = set()
     for observed_key, observed_value in _iter_mapping_items(actual):
+        normalized_observed_key = _normalized_result_value(observed_key) if isinstance(observed_key, str) else ""
+        if normalized_observed_key == normalized_key:
+            if _value_is_substantive_verification_evidence(observed_value):
+                covered_tokens.update(required_tokens)
+            continue
         overlap = required_tokens & _semantic_tokens(observed_key)
-        if overlap and not _value_is_explicitly_unverified(observed_value):
+        if overlap and _value_is_substantive_verification_evidence(observed_value):
             covered_tokens.update(overlap)
     return required_tokens <= covered_tokens
+
+
+def _value_is_substantive_verification_evidence(value: object) -> bool:
+    if value is None or isinstance(value, bool):
+        return False
+    if isinstance(value, str):
+        if _value_is_explicitly_unverified(value):
+            return False
+        normalized = _normalized_result_value(value)
+        return normalized not in {
+            "complete",
+            "completed",
+            "confirmed",
+            "ok",
+            "passed",
+            "success",
+            "successful",
+            "true",
+            "verified",
+            "yes",
+        }
+    if isinstance(value, dict):
+        mapping = cast(dict[object, object], value)
+        if not mapping or _value_is_explicitly_unverified(mapping):
+            return False
+        return any(
+            not (_semantic_tokens(key) & {"result", "status", "verification", "verified"})
+            and _value_is_substantive_verification_evidence(item)
+            for key, item in mapping.items()
+            if not _fact_key_is_negative_evidence(key)
+        )
+    if isinstance(value, list):
+        return any(_value_is_substantive_verification_evidence(item) for item in cast(list[object], value))
+    return False
 
 
 def _value_is_explicitly_unverified(value: object) -> bool:
@@ -1065,18 +1228,27 @@ def _value_is_explicitly_unverified(value: object) -> bool:
                 "denied",
                 "failed",
                 "false",
+                "indeterminate",
+                "maybe",
                 "missing",
                 "pending",
+                "unclear",
                 "uncertain",
                 "unknown",
+                "unsure",
                 "unverified",
             }
         ) or _normalized_result_value(value) in {
             "denied",
             "failed",
             "false",
+            "indeterminate",
+            "maybe",
             "missing",
             "not_found",
+            "unclear",
+            "unknown",
+            "unsure",
             "unverified",
         }
     if isinstance(value, dict):
@@ -1154,13 +1326,6 @@ _NORMALIZED_EXACT_FACT_KEYS = frozenset(
     }
 )
 
-_IDENTIFIER_PREFIX_FACT_KEYS = frozenset(
-    {
-        "incident",
-        "specification",
-    }
-)
-
 
 def _fact_key_requires_exact_string(key: object) -> bool:
     if not isinstance(key, str):
@@ -1176,8 +1341,6 @@ def _fact_key_requires_exact_string(key: object) -> bool:
 
 
 def _fact_value_matches(key: object, expected: object, actual: object) -> bool:
-    if isinstance(expected, str) and _document_contains_exact_identity(expected, actual):
-        return True
     if (
         isinstance(key, str)
         and _normalized_result_value(key) in {"event_start", "event_end", "start", "end"}
@@ -1229,26 +1392,17 @@ def _fact_value_matches(key: object, expected: object, actual: object) -> bool:
         return re.search(r"(?:#|!)\d+(?:\b|$)", actual) is not None
     if (
         isinstance(key, str)
-        and _normalized_result_value(key) in _IDENTIFIER_PREFIX_FACT_KEYS
-        and isinstance(expected, str)
-        and isinstance(actual, str)
-    ):
-        expected_numbers = {token for token in _semantic_tokens(expected) if token.isdigit()}
-        actual_numbers = {token for token in _semantic_tokens(actual) if token.isdigit()}
-        identity_pattern = re.compile(
-            rf"^\s*\[?{re.escape(expected.strip())}\]?(?:$|[\s:()—–])",
-            flags=re.IGNORECASE,
-        )
-        return expected_numbers == actual_numbers and identity_pattern.search(actual) is not None
-    if (
-        isinstance(key, str)
         and _normalized_result_value(key) in _NORMALIZED_EXACT_FACT_KEYS
         and isinstance(expected, str)
         and isinstance(actual, str)
     ):
         return _normalized_result_value(expected) == _normalized_result_value(actual)
-    if _fact_key_requires_exact_string(key) and isinstance(expected, str) and isinstance(actual, str):
-        return expected.strip().casefold() == actual.strip().casefold()
+    if _fact_key_requires_exact_string(key) and isinstance(expected, str):
+        if isinstance(actual, str):
+            return expected.strip().casefold() == actual.strip().casefold()
+        return _identity_value_matches(expected, actual)
+    if isinstance(expected, str) and _identity_tokens(expected):
+        return _identity_value_matches(expected, actual)
     return _output_is_subset(expected, actual)
 
 
@@ -1258,10 +1412,13 @@ def _mapping_requirement_matches(
     actual: dict[object, object],
 ) -> bool:
     direct_key_present = key in actual
+    normalized_key = _normalized_result_value(key) if isinstance(key, str) else ""
+    if isinstance(key, str) and expected is True and normalized_key.endswith("_verified"):
+        return _verified_requirement_matches(key, expected, actual)
     if direct_key_present:
         direct_actual = actual[key]
         if _fact_value_matches(key, expected, direct_actual):
-            return True
+            return _mapping_identity_is_consistent(key, expected, actual)
         if (
             isinstance(key, str)
             and isinstance(expected, str)
@@ -1269,7 +1426,6 @@ def _mapping_requirement_matches(
             and _result_fact_alias_matches(expected, direct_actual, actual)
         ):
             return True
-        normalized_key = _normalized_result_value(key) if isinstance(key, str) else ""
         if (
             normalized_key == "first_failing_gate"
             and isinstance(expected, str)
@@ -1293,18 +1449,15 @@ def _mapping_requirement_matches(
 
     for observed_key, observed_value in _iter_mapping_items(actual):
         if observed_key == key and _fact_value_matches(key, expected, observed_value):
-            return True
+            return _mapping_identity_is_consistent(key, expected, actual)
         if (
             isinstance(key, str)
             and isinstance(observed_key, str)
             and _semantic_tokens(key) <= _semantic_tokens(observed_key)
             and _fact_value_matches(key, expected, observed_value)
         ):
-            return True
+            return _mapping_identity_is_consistent(key, expected, actual)
     if isinstance(key, str):
-        normalized_key = _normalized_result_value(key)
-        if not direct_key_present and _verified_requirement_matches(key, expected, actual):
-            return True
         if normalized_key == "provider_path" and _provider_path_requirement_matches(expected, actual):
             return True
     return False
@@ -1342,8 +1495,10 @@ def _output_is_subset(expected: object, actual: object) -> bool:
 
 @dataclass
 class _EquivalentCallBucket:
-    representative: ToolCallRecord
-    action_fingerprint: str
+    provider_role: str
+    method: str
+    path: str
+    mutating: bool
     fingerprint_scope: str
     epoch: int | None
     call_indices: list[int] = field(default_factory=lambda: list[int]())
@@ -1364,6 +1519,14 @@ def _diagnostic_action_path(path: str) -> str:
     path_template = "/" + "/".join("{segment}" for _ in range(segment_count))
     query_key_count = len({key for key, _ in parse_qsl(parsed.query, keep_blank_values=True)})
     return f"{path_template}?{{query-key}}x{query_key_count}" if query_key_count else path_template
+
+
+def _private_operation_fingerprint(operation: str | None) -> bytes | None:
+    """Keep candidate-supplied GraphQL text out of diagnostic state."""
+
+    if operation is None:
+        return None
+    return hashlib.sha256(operation.encode()).digest()
 
 
 def _efficiency_diagnostics(trace: list[ToolCallRecord]) -> EfficiencyDiagnostics:
@@ -1391,15 +1554,17 @@ def _efficiency_diagnostics(trace: list[ToolCallRecord]) -> EfficiencyDiagnostic
                 call.provider_role,
                 call.method.upper(),
                 canonical_path,
-                call.operation,
+                _private_operation_fingerprint(call.operation),
                 call.mutating,
                 fingerprint,
             )
             bucket = buckets.get(key)
             if bucket is None:
                 bucket = _EquivalentCallBucket(
-                    representative=call,
-                    action_fingerprint=fingerprint,
+                    provider_role=call.provider_role,
+                    method=call.method.upper(),
+                    path=call.path,
+                    mutating=call.mutating,
                     fingerprint_scope=fingerprint_scope,
                     epoch=epoch,
                 )
@@ -1425,17 +1590,17 @@ def _efficiency_diagnostics(trace: list[ToolCallRecord]) -> EfficiencyDiagnostic
             code = "repeated_failed_attempt"
         elif failed_count:
             code = "excessive_retry"
-        elif bucket.representative.mutating:
+        elif bucket.mutating:
             code = "repeated_equivalent_write"
         else:
             code = "repeated_equivalent_read"
         groups.append(
             RedundantCallGroup(
                 code=code,
-                provider_role=bucket.representative.provider_role,
-                method=bucket.representative.method.upper(),
-                path=_diagnostic_action_path(bucket.representative.path),
-                mutating=bucket.representative.mutating,
+                provider_role=bucket.provider_role,
+                method=bucket.method,
+                path=_diagnostic_action_path(bucket.path),
+                mutating=bucket.mutating,
                 total_count=total_count,
                 successful_count=successful_count,
                 failed_count=failed_count,

@@ -104,7 +104,13 @@ def _build_suite(tmp_path: Path, *, broken: bool = False) -> Path:
         }
         for index in range(1, 7 if not broken else 6)
     ]
-    _write_json(trial_dir / "provider-trace.json", {"events": trace_events})
+    _write_json(
+        trial_dir / "provider-trace.json",
+        {
+            "protocol": "arga-bench-provider-trace/1",
+            "events": trace_events,
+        },
+    )
     _write_json(
         trial_dir / "candidate-access.json",
         {
@@ -257,6 +263,7 @@ def test_missing_provider_trace_remains_an_integrity_failure(tmp_path: Path) -> 
     report = audit_suite(suite_dir)
 
     assert report["checks"]["provider_trace_integrity"]["violation_count"] == 1
+    assert report["checks"]["provider_trace_integrity"]["not_applicable"] == 0
     assert report["integrity_passed"] is False
     assert report["scoring_ready"] is False
 
@@ -265,7 +272,10 @@ def test_missing_provider_trace_remains_an_integrity_failure(tmp_path: Path) -> 
     ("corruption", "value"),
     [
         ("protocol", "unsupported"),
+        ("protocol", None),
         ("sequence", 1),
+        ("sequence", 3),
+        ("sequence", 2.0),
         ("method", 7),
         ("status_code", True),
         ("action_fingerprint", "not-a-digest"),
@@ -281,7 +291,10 @@ def test_malformed_provider_trace_is_an_integrity_failure(
     trace_path = trial_dir / "provider-trace.json"
     trace = json.loads(trace_path.read_text())
     if corruption == "protocol":
-        trace["protocol"] = value
+        if value is None:
+            del trace["protocol"]
+        else:
+            trace["protocol"] = value
     elif corruption == "sequence":
         trace["events"][1]["sequence"] = value
     else:
@@ -291,6 +304,7 @@ def test_malformed_provider_trace_is_an_integrity_failure(
     report = audit_suite(suite_dir)
 
     assert report["checks"]["provider_trace_integrity"]["violation_count"] == 1
+    assert report["checks"]["provider_trace_integrity"]["not_applicable"] == 0
     assert report["integrity_passed"] is False
     assert report["destination_safety_passed"] is False
     assert report["scoring_ready"] is False

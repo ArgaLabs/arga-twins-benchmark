@@ -661,7 +661,7 @@ def _trace_events(
                 detail="provider-trace.json is missing for a completed invocation",
             )
         return None
-    if trace.get("protocol") not in (None, "arga-bench-provider-trace/1"):
+    if trace.get("protocol") != "arga-bench-provider-trace/1":
         _record_violation(
             checks,
             violation_trials,
@@ -694,7 +694,7 @@ def _trace_events(
     issues: list[str] = []
     for index, event in enumerate(typed_events, start=1):
         sequence = event.get("sequence")
-        if isinstance(sequence, bool) or sequence != index:
+        if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence != index:
             issues.append(f"event {index} sequence is not contiguous and one-based")
         requested = event.get("requested_provider")
         provider = event.get("provider")
@@ -946,7 +946,8 @@ def _check_trace(
                 _record_skip(checks, check)
         if not completed and "provider_trace_destination" not in violation_trials[trial_id]:
             _record_skip(checks, "provider_trace_destination")
-        _record_skip(checks, "provider_trace_integrity")
+        if "provider_trace_integrity" not in violation_trials[trial_id]:
+            _record_skip(checks, "provider_trace_integrity")
         return
 
     if completed:

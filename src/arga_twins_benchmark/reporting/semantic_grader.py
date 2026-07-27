@@ -340,7 +340,7 @@ def _trace_records(
     if not isinstance(payload, dict):
         raise SemanticGradeError("provider trace artifact must be a JSON object")
     trace = cast(dict[object, object], payload)
-    if trace.get("protocol") not in (None, "arga-bench-provider-trace/1"):
+    if trace.get("protocol") != "arga-bench-provider-trace/1":
         raise SemanticGradeError("provider trace artifact has an unsupported protocol")
     raw_events = trace.get("events")
     if not isinstance(raw_events, list):
@@ -355,7 +355,7 @@ def _trace_records(
             raise SemanticGradeError(f"provider trace event {expected_sequence} must be a JSON object")
         event = cast(dict[str, Any], raw_event)
         sequence = event.get("sequence")
-        if isinstance(sequence, bool) or sequence != expected_sequence:
+        if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence != expected_sequence:
             raise SemanticGradeError("provider trace event sequences must be contiguous and one-based")
         sequence_number = cast(int, sequence)
         expected_sequence += 1

@@ -641,6 +641,7 @@ def test_redundancy_report_redacts_query_values_and_fingerprints() -> None:
 
 
 def test_redundancy_report_does_not_expose_graphql_operation_names() -> None:
+    private_operation = 'mutation customer_Secret_123 { updateCustomer(input: "private@example.com") }'
     repeated_reads = [
         ToolCallRecord(
             "code_host",
@@ -648,7 +649,7 @@ def test_redundancy_report_does_not_expose_graphql_operation_names() -> None:
             "/graphql",
             200,
             False,
-            operation="customer_Secret_123",
+            operation=private_operation,
             action_fingerprint="same-graphql-read",
         )
         for _ in range(5)
@@ -665,7 +666,9 @@ def test_redundancy_report_does_not_expose_graphql_operation_names() -> None:
 
     rendered = json.dumps(asdict(result))
     assert result.diagnostics.efficiency.flagged is True
+    assert private_operation not in rendered
     assert "customer_Secret_123" not in rendered
+    assert "private@example.com" not in rendered
 
 
 def test_same_post_route_with_different_request_fingerprints_is_not_redundant() -> None:
@@ -1652,12 +1655,37 @@ def test_verified_fact_accepts_substantive_structured_evidence() -> None:
     assert result.assertion_results["output.contract"] is True
 
 
+def test_verified_fact_accepts_substantive_evidence_inside_the_verified_field() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {
+        "destination_verified": True,
+        "source_audit_verified": True,
+    }
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "destination_verified": {"provider": "linear", "identifier": "OPS-1"},
+            "source_audit_verified": {"comment": "Migrated to OPS-1."},
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
 @pytest.mark.parametrize(
     "output",
     [
         {"destination": {}, "source": {}, "audit": {}},
         {"destination": "unknown", "source_audit": "maybe"},
         {"destination": [], "source_audit": ""},
+        {"destination": "maybe", "source_audit": "maybe"},
+        {"destination_verified": True, "source_audit_verified": True},
+        {"destination_verified": {"status": "unknown"}, "source_audit_verified": {"status": "maybe"}},
     ],
 )
 def test_verified_fact_rejects_empty_or_uncertain_evidence(output: object) -> None:
@@ -1954,6 +1982,57 @@ def test_identity_bearing_result_facts_reject_semantic_supersets(
     assert result.assertion_results["output.contract"] is False
 
 
+def test_generic_identity_fact_rejects_a_token_superset() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {"target": "INC-420"}
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={"target": "INC-420-wrong"},
+    )
+
+    assert result.assertion_results["output.contract"] is False
+
+
+def test_identity_fact_rejects_a_contradictory_sibling_identifier() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {"incident": "INC-420"}
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={"incident": "INC-420", "incident_id": "INC-421"},
+    )
+
+    assert result.assertion_results["output.contract"] is False
+
+
+def test_identity_fact_ignores_explicitly_rejected_distractor_identifiers() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {"incident": "INC-420"}
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={
+            "incident": "INC-420",
+            "rejected_distractors": [{"incident_id": "INC-421"}],
+        },
+    )
+
+    assert result.assertion_results["output.contract"] is True
+
+
 def test_identity_bearing_list_fact_rejects_an_extra_identifier() -> None:
     verifier = verification()
     verifier.output_contract.required_facts = {"missing_requirements": ["SPEC-91:R1"]}
@@ -1965,6 +2044,22 @@ def test_identity_bearing_list_fact_rejects_an_extra_identifier() -> None:
         mutations=successful_mutations(),
         trace=successful_trace(),
         output={"missing_requirements": ["SPEC-91:R1 and SPEC-92:R1"]},
+    )
+
+    assert result.assertion_results["output.contract"] is False
+
+
+def test_identity_bearing_list_fact_rejects_a_separate_extra_identifier() -> None:
+    verifier = verification()
+    verifier.output_contract.required_facts = {"missing_requirements": ["SPEC-91:R1"]}
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=successful_resources(),
+        mutations=successful_mutations(),
+        trace=successful_trace(),
+        output={"missing_requirements": ["SPEC-91:R1", "SPEC-92:R1"]},
     )
 
     assert result.assertion_results["output.contract"] is False

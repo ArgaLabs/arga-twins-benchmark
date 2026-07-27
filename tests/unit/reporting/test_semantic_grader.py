@@ -715,3 +715,35 @@ def test_corrupt_provider_trace_is_invalid_infrastructure(
     assert report["invalid_infrastructure_trials"] == 1
     assert report["invalid_grader_trials"] == 0
     assert report["trials"][0]["stage"] == "execution_integrity"
+
+
+@pytest.mark.parametrize(
+    ("corruption", "value"),
+    [
+        ("missing_protocol", None),
+        ("duplicate_sequence", 1),
+        ("non_integer_sequence", 2.0),
+    ],
+)
+def test_malformed_provider_trace_blocks_suite_scoring(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    corruption: str,
+    value: object,
+) -> None:
+    _install_catalog_stubs(monkeypatch)
+    suite_dir = _suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    trace_path = trial_dir / "provider-trace.json"
+    trace = json.loads(trace_path.read_text())
+    if corruption == "missing_protocol":
+        del trace["protocol"]
+    else:
+        trace["events"][1]["sequence"] = value
+    _write_json(trace_path, trace)
+
+    report = semantic_grader.grade_saved_suite(suite_dir, catalog_root=tmp_path)
+
+    assert report["valid_trials"] == 0
+    assert report["invalid_infrastructure_trials"] == 1
+    assert report["scoring_ready"] is False
