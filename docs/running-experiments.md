@@ -258,6 +258,19 @@ uv run arga-bench scenarios save-experiment development_pilot_48_v1
 
 `run-instance`, `run-matrix`, exact prompt ledgers, candidate invocation, trusted raw baseline/final capture, trace/output grading, cleanup, attempt archival, and safe resume are implemented. Completed preserved suites can be regraded offline with `arga-bench grade-suite`; the derived semantic report requires complete canonical state evidence and records any unsupported evidence as `invalid_grader` rather than guessing an agent result. Publish Task Success from that outcome-first semantic report, not from a preliminary trace-conformance result.
 
+After grading, create aggregate repeated-run JSON and Markdown without making network calls:
+
+```bash
+uv run arga-bench analyze-suite \
+  runs/<suite-run-id>/semantic-grade.json \
+  --suite-dir runs/<suite-run-id> \
+  --root benchmark \
+  --json-output runs/<suite-run-id>/repeated-analysis.json \
+  --markdown-output runs/<suite-run-id>/repeated-analysis.md
+```
+
+The analyzer binds the grade to the exact suite manifest and hashed traces before calculating model/task/family/variant/provider-role outcomes, repeat consistency and variance, fixed-seed task-cluster bootstrap intervals, paired model differences, official-doc use, call/error rates, endpoint-discovery and possible probing indicators, and redundant-call diagnostics. Its outputs are aggregate-only and omit request paths/bodies, non-official URLs, credentials, raw GraphQL, trace errors, and fingerprints. See [analyzing repeated runs](analyzing-repeated-runs.md).
+
 ## Current CLI gaps
 
 Uniform hidden grading still needs `arga twin-runs diagnostics <run-id> --json` and a stable twin-run logs command. Until those exist, a task pack must capture baseline/final state through ordinary provider APIs with trusted credentials. Public twin hosts also need an admin-path denylist before adversarial public scoring. These are release gates, not reasons to weaken verifier ground truth.

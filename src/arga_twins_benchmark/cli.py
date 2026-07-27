@@ -19,6 +19,13 @@ from arga_twins_benchmark.lifecycle import (
     save_scenario,
     write_private_json,
 )
+from arga_twins_benchmark.reporting.repeated_analysis import (
+    DEFAULT_BOOTSTRAP_RESAMPLES,
+    DEFAULT_BOOTSTRAP_SEED,
+    RepeatedAnalysisError,
+    analyze_repeated_suite,
+    render_repeated_analysis_markdown,
+)
 from arga_twins_benchmark.reporting.semantic_grader import SemanticGradeError, grade_saved_suite
 from arga_twins_benchmark.runner import (
     MODEL_PROFILES,
@@ -382,6 +389,72 @@ def grade_suite(
     )
     if fail_on_incomplete and report.get("scoring_ready") is not True:
         raise typer.Exit(code=1)
+
+
+@app.command("analyze-suite")
+def analyze_suite(
+    semantic_grade: Annotated[
+        Path,
+        typer.Argument(help="Completed semantic-grade JSON"),
+    ],
+    suite_dir: Annotated[
+        Path | None,
+        typer.Option("--suite-dir", help="Preserved suite directory; defaults to the grade file's parent"),
+    ] = None,
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    json_output: Annotated[
+        Path | None,
+        typer.Option("--json-output", help="Aggregate machine-readable JSON output"),
+    ] = None,
+    markdown_output: Annotated[
+        Path | None,
+        typer.Option("--markdown-output", help="Aggregate reader-facing Markdown output"),
+    ] = None,
+    bootstrap_seed: Annotated[
+        int,
+        typer.Option("--bootstrap-seed", help="Fixed task-cluster bootstrap seed"),
+    ] = DEFAULT_BOOTSTRAP_SEED,
+    bootstrap_resamples: Annotated[
+        int,
+        typer.Option("--bootstrap-resamples", min=100, max=1_000_000),
+    ] = DEFAULT_BOOTSTRAP_RESAMPLES,
+) -> None:
+    resolved_suite_dir = suite_dir or semantic_grade.parent
+    resolved_json_output = json_output or (resolved_suite_dir / "repeated-analysis.json")
+    resolved_markdown_output = markdown_output or (resolved_suite_dir / "repeated-analysis.md")
+    if resolved_json_output.resolve() == resolved_markdown_output.resolve():
+        raise typer.BadParameter("JSON and Markdown outputs must be different files")
+    try:
+        report = analyze_repeated_suite(
+            semantic_grade,
+            suite_dir=resolved_suite_dir,
+            catalog_root=root,
+            bootstrap_seed=bootstrap_seed,
+            bootstrap_resamples=bootstrap_resamples,
+        )
+    except RepeatedAnalysisError as error:
+        raise typer.BadParameter(str(error)) from error
+    write_private_json(resolved_json_output, report)
+    resolved_markdown_output.parent.mkdir(parents=True, exist_ok=True)
+    resolved_markdown_output.write_text(
+        render_repeated_analysis_markdown(report),
+        encoding="utf-8",
+    )
+    resolved_markdown_output.chmod(0o600)
+    typer.echo(
+        json.dumps(
+            {
+                "suite_run_id": report.get("suite_run_id"),
+                "scheduled_trials": cast(dict[str, Any], report["design"]).get("scheduled_trials"),
+                "models": cast(dict[str, Any], report["design"]).get("models"),
+                "declared_repeats": cast(dict[str, Any], report["design"]).get("declared_repeats"),
+                "json": str(resolved_json_output),
+                "markdown": str(resolved_markdown_output),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
 
 
 async def _save_instance_scenario(*, catalog_root: Path, instance_id: str) -> SavedScenario:

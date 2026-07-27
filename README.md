@@ -73,7 +73,7 @@ quarantined until the configured TTL plus a five-minute grace period.
 
 The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 
-See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), [candidate-safe surface](docs/candidate-safe-surface.md), and [security model](docs/security-model.md).
+See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), [repeated-run analysis](docs/analyzing-repeated-runs.md), [candidate-safe surface](docs/candidate-safe-surface.md), and [security model](docs/security-model.md).
 
 Completed suites can be checked offline with `scripts/audit_suite.py`; the audit makes no provider or Arga calls.
 Preserved baseline state, final state, provider traces, and structured model output can be passed through the
@@ -89,3 +89,16 @@ The derived grade is written separately from immutable execution artifacts and r
 input it consumed. Unsupported or incomplete canonical evidence is reported as `invalid_grader`, never converted
 into an agent failure or guessed Task Success result. Add `--fail-on-incomplete` when a CI job must require a
 fully gradeable matrix.
+
+Analyze a completed semantic grade and its preserved traces without network access:
+
+```bash
+uv run arga-bench analyze-suite \
+  runs/<suite-run-id>/semantic-grade.json \
+  --suite-dir runs/<suite-run-id> \
+  --root benchmark \
+  --json-output runs/<suite-run-id>/repeated-analysis.json \
+  --markdown-output runs/<suite-run-id>/repeated-analysis.md
+```
+
+The aggregate JSON and Markdown include model/task/family/variant/provider-role outcomes, repeat stability, fixed-seed task-cluster bootstrap intervals, paired model differences, official-doc use, call-error counts, endpoint-discovery/probing indicators, and redundant-call diagnostics. They omit trace bodies, request paths, non-official URLs, credentials, raw GraphQL, trace-error text, and fingerprints. See [repeated-run analysis](docs/analyzing-repeated-runs.md) for metric definitions.
