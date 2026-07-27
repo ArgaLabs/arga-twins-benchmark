@@ -154,7 +154,7 @@ The automated family results cluster sharply:
 
 This pattern is too aligned across models to attribute primarily to intelligence differences. It indicates a mixture of real shared failure modes, provider-interface familiarity, and family-specific verification defects.
 
-Provider contrast is the hardest meaningful variant in the automated results. Across six provider-contrast tasks, Opus passed 3, Fable 2, and GPT 1. The GitLab/Linear/Discord substitutions require different API conventions even though the business operation is analogous. The result suggests provider-transfer ability may discriminate agents, but six tasks and one repeat are insufficient for a stable ranking.
+Provider contrast is the hardest meaningful variant in the automated results. Across six provider-contrast tasks, Opus passed 3, Fable 2, and GPT 1. In these variants, one or more services are replaced **within the same functional role** while the business objective stays analogous: GitHub may be replaced by GitLab as the code host, Jira by Linear (or vice versa) as the issue tracker, and Slack by Discord as the team-chat service. GitLab, Linear, and Discord are not substitutes for one another. The result suggests that transferring a workflow to alternate provider APIs may discriminate agents, but six tasks and one repeat are insufficient for a stable ranking.
 
 ### Real shared failure: models embellish exact operational artifacts
 
@@ -394,17 +394,18 @@ The manual safety adjudication reads both the intended verification rule and the
 1. **Fix the evaluator before ranking models.** Prioritize Stripe price selection/mutation mapping, Gmail label ID-to-name resolution, Calendar attendee selection, Drive target-exclusion canonicalization, GitHub stable snapshot IDs, and Jira actor identity.
 2. **Conformance-test every verifier.** Run a gold agent, each declared negative control, reset/isolation checks, and at least one semantically equivalent non-reference trajectory. A gold final state must pass without requiring one exact hidden API sequence.
 3. **Make exact text requirements prompt-visible or semantic.** If the specific artifact text matters, the provider policy must state it exactly. Otherwise grade normalized meaning plus identity-bearing tokens.
-4. **Decide what endpoint discovery is meant to test.** If the target is business-task capability, supply a uniform provider API catalog or OpenAPI tool. If route discovery is intentional, score it separately from task success.
+4. **Supply official provider documentation.** Give the candidate a logged, provider-scoped, read-only documentation tool backed by the actual official docs for each provisioned provider. Route memory is not a separate score: if an agent cannot use the available docs well enough to complete the business operation, that failure is already reflected in task success.
 5. **Remove control-plane links from candidate-visible root HTML.** Continue enforcing gateway blocks as defense in depth.
 6. **Run at least three repeats per model.** Report confidence intervals or bootstrap uncertainty and task-level variance, not only one aggregate percentage.
 7. **Retain two efficiency views.** Keep the five-equivalent-call runaway-loop flag, and also report call volume, non-2xx rate, and below-threshold repeated actions.
 8. **Add a separate web-research track if needed.** Use a logged, allowlisted search tool so web use, source selection, and egress safety become observable.
 9. **Keep manual safety adjudication until mutation mapping is trusted.** The current automated unsafe count overstates confirmed harm by more than 3×.
 
-## Further questions
+## Benchmark decisions and open experiments
 
-- Does the benchmark intend to reward provider API memory, endpoint discovery, or only successful business operations?
-- Which fields require exact byte-level output, and which should accept semantic equivalence?
-- Should a candidate-visible twin UI exist at all, or should agents receive only an API discovery surface?
-- How stable are model differences across repeats, model versions, and different scenario seeds?
-- Which currently unanimous-pass families need harder variants to become discriminating without adding verifier brittleness?
+- **Scored objective:** only successful business operations. Provider-route memory and endpoint discovery are not separately rewarded. Failure to find or use a documented API still appears naturally as failure to complete the operation.
+- **Documentation:** candidates should be able to discover and read the actual official documentation for each provisioned provider through a provider-scoped, read-only, separately logged docs surface.
+- **Exactness:** IDs, names, and email addresses explicitly stated in the task prompt are exact. Other result wording and symbolic labels are graded by normalized semantic equivalence.
+- **Candidate surface:** candidates receive callable provider APIs and official provider docs, but no twin root/UI, twin-hosted OpenAPI or GraphQL-schema discovery, credentials, base URLs, or control-plane routes.
+- **Repeatability experiment:** rerun each model at least three times, resetting the same deterministic Scenario seed before every trial, then report within-model variance and uncertainty.
+- **Open authoring question:** determine which unanimous-pass families need harder variants only after the repaired evaluators and repeated matrix show which tasks remain non-discriminating.
