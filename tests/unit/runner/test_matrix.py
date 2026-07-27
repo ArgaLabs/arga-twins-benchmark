@@ -54,19 +54,33 @@ def test_load_experiment_bundles_resolves_prompts_bindings_and_verifiers() -> No
     assert bundle.verification.output_contract.required_facts["decision"] == "changes_requested"
 
 
-def test_build_trial_plans_interleaves_models_per_instance() -> None:
+def test_build_trial_plans_uses_reproducible_seeded_order() -> None:
     experiment, _ = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
 
     plans = build_trial_plans(
         experiment,
         suite_run_id="suite-1",
         model_profiles=MODEL_PROFILES,
-        repeats=1,
+        repeats=3,
+    )
+    repeated = build_trial_plans(
+        experiment,
+        suite_run_id="suite-1",
+        model_profiles=MODEL_PROFILES,
+        repeats=3,
+    )
+    different_seed = build_trial_plans(
+        experiment.model_copy(update={"random_seed": experiment.random_seed + 1}),
+        suite_run_id="suite-1",
+        model_profiles=MODEL_PROFILES,
+        repeats=3,
     )
 
-    assert len(plans) == 144
-    assert [plan.model.model_id for plan in plans[:3]] == [profile.model_id for profile in MODEL_PROFILES]
-    assert len({plan.trial_id for plan in plans}) == 144
+    assert len(plans) == 432
+    assert plans == repeated
+    assert plans != different_seed
+    assert {plan.trial_id for plan in plans} == {plan.trial_id for plan in different_seed}
+    assert len({plan.trial_id for plan in plans}) == 432
 
 
 def _suite_manifest(*, concurrency: int = 4) -> dict[str, Any]:
@@ -83,6 +97,8 @@ def _suite_manifest(*, concurrency: int = 4) -> dict[str, Any]:
         "candidate_safe_surface": True,
         "arga_candidate_safe_profile": False,
         "official_docs_tool_call_allowance": 8,
+        "random_seed": 20260719,
+        "trial_order_algorithm": "sha256-random-seed-v1",
         "orphan_twin_lease_grace_seconds": 300,
         "trial_count": 1,
         "models": [{"model_id": "model-1", "fallback": False}],
@@ -195,6 +211,8 @@ def test_resume_rejects_inconsistent_concurrency_history(
         ("candidate_safe_surface", False),
         ("arga_candidate_safe_profile", True),
         ("official_docs_tool_call_allowance", 4),
+        ("random_seed", 1234),
+        ("trial_order_algorithm", "different"),
         ("orphan_twin_lease_grace_seconds", 600),
         ("trial_count", 2),
         ("models", [{"model_id": "different-model", "fallback": False}]),
@@ -290,7 +308,7 @@ def test_run_matrix_resume_uses_new_concurrency_without_rewriting_identity_artif
     }
 
     def fake_load_experiment(*_args: object) -> tuple[Any, dict[str, Any]]:
-        return SimpleNamespace(), {}
+        return SimpleNamespace(random_seed=20260719), {}
 
     def fake_prompt_ledger(*_args: object, **_kwargs: object) -> dict[str, Any]:
         return regenerated_ledger

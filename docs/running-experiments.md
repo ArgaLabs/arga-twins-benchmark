@@ -223,6 +223,11 @@ Resume preserves completed or substantive terminal outcomes, confirms prior clea
 
 Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, immutable archived attempts, and a first-fetch snapshot of any official documentation used. `provider-trace.json` contains business provider attempts. `official-docs-trace.json` separately records official-doc discovery, and `official-docs-cache/` stores the exact bounded body with provenance and SHA-256 for fair replay across models and resumes. Documentation calls have their own eight-call allowance and do not count toward provider-call floors or mutation/redundancy grading. See [candidate-safe surface](candidate-safe-surface.md).
 
+Trial order is deterministically shuffled from the experiment's `random_seed`
+using the `sha256-random-seed-v1` algorithm recorded in the suite manifest.
+Resuming preserves that exact order; changing the seed changes the order without
+changing the set of model-instance-repeat trials.
+
 Audit the saved evidence without making any network calls:
 
 ```bash

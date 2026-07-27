@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import errno
 import fcntl
+import hashlib
 import json
 import os
 import re
@@ -60,6 +61,7 @@ from arga_twins_benchmark.specs.models import (
 PROVISION_TIMEOUT_SECONDS = 1_200
 ORPHAN_TWIN_LEASE_GRACE_SECONDS = 300
 OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE = 8
+TRIAL_ORDER_ALGORITHM = "sha256-random-seed-v1"
 
 
 class SuiteRunLockedError(RuntimeError):
@@ -739,7 +741,7 @@ def build_trial_plans(
     model_profiles: tuple[ModelProfile, ...],
     repeats: int,
 ) -> list[TrialPlan]:
-    return [
+    plans = [
         TrialPlan(
             suite_run_id=suite_run_id,
             trial_id=f"{suite_run_id}--r{repeat}--{instance_id}--{_slug(model.model_id)}",
@@ -751,6 +753,12 @@ def build_trial_plans(
         for instance_id in experiment.instances
         for model in model_profiles
     ]
+    return sorted(
+        plans,
+        key=lambda plan: hashlib.sha256(
+            f"{experiment.random_seed}\0{plan.trial_id}".encode()
+        ).digest(),
+    )
 
 
 def _trace_call_records(gateway: ProviderGateway, bundle: InstanceBundle) -> list[ToolCallRecord]:
@@ -1151,6 +1159,8 @@ _IMMUTABLE_SUITE_MANIFEST_FIELDS = (
     "candidate_safe_surface",
     "arga_candidate_safe_profile",
     "official_docs_tool_call_allowance",
+    "random_seed",
+    "trial_order_algorithm",
     "orphan_twin_lease_grace_seconds",
     "trial_count",
     "models",
@@ -1457,6 +1467,8 @@ async def _run_experiment_matrix_locked(
         "official_docs_tool_call_allowance": (
             OFFICIAL_DOCS_TOOL_CALL_ALLOWANCE if candidate_safe_surface else 0
         ),
+        "random_seed": experiment.random_seed,
+        "trial_order_algorithm": TRIAL_ORDER_ALGORITHM,
         "orphan_twin_lease_grace_seconds": ORPHAN_TWIN_LEASE_GRACE_SECONDS,
         "trial_count": len(plans),
         "models": [asdict(profile) for profile in model_profiles],
