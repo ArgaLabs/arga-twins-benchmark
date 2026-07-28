@@ -140,6 +140,17 @@ _SENSITIVE_RESPONSE_HEADERS: Final = frozenset(
         "set-cookie",
     }
 )
+_CREDENTIAL_RESPONSE_HEADERS: Final = frozenset(
+    {
+        "authorization",
+        "private-token",
+        "proxy-authorization",
+        "x-api-key",
+        "x-auth-token",
+    }
+)
+_REDACTED_RESPONSE_VALUE: Final = "[redacted]"
+_REDACTED_PROVIDER_HOST: Final = "[provider-host]"
 _ACTION_FINGERPRINT_IGNORED_HEADERS: Final = frozenset(
     {
         "idempotency-key",
@@ -212,6 +223,13 @@ class _ProviderAccess:
     env: Mapping[str, str]
 
 
+@dataclass(frozen=True, slots=True)
+class _CandidateResponsePolicy:
+    provider_url_patterns: tuple[re.Pattern[str], ...]
+    provider_host_patterns: tuple[re.Pattern[str], ...]
+    secrets: tuple[str, ...]
+
+
 class ProviderGateway:
     """A narrow candidate-facing gateway to provisioned provider data planes.
 
@@ -255,6 +273,7 @@ class ProviderGateway:
         self._client = client or httpx.AsyncClient(timeout=timeout_seconds, follow_redirects=False)
         self._owns_client = client is None
         self._trace_records: list[ProviderTraceRecord] = []
+        self._candidate_response_policy = _candidate_response_policy(self._providers)
 
         provider_tokens = sorted(set(self._providers) | set(self._roles))
         self._tool_definition: dict[str, object] = {
@@ -439,6 +458,10 @@ class ProviderGateway:
                         status_code=response.status_code,
                         consecutive_failures=self._consecutive_proxy_infrastructure_failures,
                     )
+            candidate_body = _sanitize_candidate_response_value(
+                response_body,
+                policy=self._candidate_response_policy,
+            )
             return {
                 "ok": response.is_success,
                 "requested_provider": requested_provider,
@@ -446,8 +469,11 @@ class ProviderGateway:
                 "method": checked_method,
                 "path": effective_path,
                 "status_code": response.status_code,
-                "headers": _safe_response_headers(response.headers),
-                "body": response_body,
+                "headers": _safe_response_headers(
+                    response.headers,
+                    policy=self._candidate_response_policy,
+                ),
+                "body": candidate_body,
                 "truncated": truncated,
                 "error": None,
                 "trace": trace.to_dict(),
@@ -1092,7 +1118,90 @@ def _decode_body(content: bytes, content_type: str | None, *, truncated: bool) -
     return {"encoding": "base64", "data": base64.b64encode(content).decode("ascii")}
 
 
-def _safe_response_headers(headers: httpx.Headers) -> dict[str, str]:
+def _candidate_response_policy(
+    providers: Mapping[str, _ProviderAccess],
+) -> _CandidateResponsePolicy:
+    hosts: set[str] = set()
+    secrets: set[str] = set()
+    for provider, access in providers.items():
+        parsed = urlsplit(access.base_url)
+        if parsed.netloc:
+            hosts.add(parsed.netloc.casefold())
+        if parsed.hostname:
+            hosts.add(parsed.hostname.casefold())
+        for name, value in _provider_headers(provider, access.env).items():
+            if name.casefold() not in _CREDENTIAL_RESPONSE_HEADERS:
+                continue
+            normalized = value.strip()
+            if len(normalized) >= 8:
+                secrets.add(normalized)
+            scheme, separator, credential = normalized.partition(" ")
+            if separator and scheme.casefold() in {"basic", "bearer", "bot", "token"} and len(credential) >= 8:
+                secrets.add(credential)
+    sorted_hosts = tuple(sorted(hosts, key=lambda value: (-len(value), value)))
+    return _CandidateResponsePolicy(
+        provider_url_patterns=tuple(
+            re.compile(rf"(?i)(?:https?:)?//{re.escape(host)}(?=[/?#]|$)") for host in sorted_hosts
+        ),
+        provider_host_patterns=tuple(
+            re.compile(
+                rf"(?i)(?<![0-9a-z_.-]){re.escape(host)}(?=[:/?#\s<>'\",;)]|$)",
+            )
+            for host in sorted_hosts
+        ),
+        secrets=tuple(sorted(secrets, key=lambda value: (-len(value), value))),
+    )
+
+
+def _sanitize_candidate_response_string(
+    value: str,
+    *,
+    policy: _CandidateResponsePolicy,
+) -> str:
+    sanitized = value
+    for secret in policy.secrets:
+        sanitized = sanitized.replace(secret, _REDACTED_RESPONSE_VALUE)
+    contained_provider_url = False
+    for provider_url in policy.provider_url_patterns:
+        if provider_url.search(sanitized):
+            contained_provider_url = True
+            sanitized = provider_url.sub("", sanitized)
+    for provider_host in policy.provider_host_patterns:
+        sanitized = provider_host.sub(_REDACTED_PROVIDER_HOST, sanitized)
+    if contained_provider_url and not sanitized:
+        return "/"
+    return sanitized
+
+
+def _sanitize_candidate_response_value(
+    value: object,
+    *,
+    policy: _CandidateResponsePolicy,
+) -> object:
+    if isinstance(value, str):
+        return _sanitize_candidate_response_string(value, policy=policy)
+    if isinstance(value, list):
+        return [_sanitize_candidate_response_value(item, policy=policy) for item in cast(list[object], value)]
+    if isinstance(value, Mapping):
+        sanitized: dict[str, object] = {}
+        for raw_key, item in cast(Mapping[object, object], value).items():
+            key = (
+                _sanitize_candidate_response_string(raw_key, policy=policy)
+                if isinstance(raw_key, str)
+                else str(raw_key)
+            )
+            while key in sanitized:
+                key = f"{key}_"
+            sanitized[key] = _sanitize_candidate_response_value(item, policy=policy)
+        return sanitized
+    return value
+
+
+def _safe_response_headers(
+    headers: httpx.Headers,
+    *,
+    policy: _CandidateResponsePolicy,
+) -> dict[str, str]:
     safe: dict[str, str] = {}
     for name, value in sorted(headers.multi_items()):
         lowered = name.casefold()
@@ -1100,7 +1209,10 @@ def _safe_response_headers(headers: httpx.Headers) -> dict[str, str]:
             continue
         if len(safe) >= 50:
             break
-        safe[lowered] = value[:4096]
+        safe[lowered] = _sanitize_candidate_response_string(
+            value[:4096],
+            policy=policy,
+        )
     return safe
 
 

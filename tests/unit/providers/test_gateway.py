@@ -710,6 +710,87 @@ def test_candidate_env_overrides_twin_default_without_leaking_into_trace() -> No
     asyncio.run(client.aclose())
 
 
+def test_candidate_response_scrubs_twin_hosts_and_credentials_but_keeps_business_data() -> None:
+    base_url = "https://pub-run--google-drive.sandbox.argalabs.com"
+    twin_host = "pub-run--google-drive.sandbox.argalabs.com"
+    provider_token = "candidate-provider-token"
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={
+                "Location": f"{base_url}/drive/v3/files/file-1",
+                "Link": (
+                    f'<{base_url}/drive/v3/files?pageToken=next>; rel="next", '
+                    '<https://api.github.com/repos/acme/app>; rel="canonical"'
+                ),
+                "Refresh": f"0; url=//{twin_host}/drive/v3/files/file-1",
+                "X-Origin": twin_host,
+                "X-Token-Echo": f"Bearer {provider_token}",
+            },
+            json={
+                "id": "file-1",
+                "name": "Quarterly plan",
+                "iconLink": f"{base_url}/drive/v3/files/file-1/icon",
+                "webViewLink": f"//{twin_host}/drive/v3/files/file-1/view",
+                "canonicalProviderUrl": "https://api.github.com/repos/acme/app",
+                "relativeResource": "/drive/v3/files/file-1",
+                "nested": [
+                    {"origin": f"served by {twin_host}", "credential": provider_token},
+                    "ordinary business data",
+                ],
+                f"{base_url}/response-key": "preserved value",
+            },
+        )
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    gateway = ProviderGateway(
+        {
+            "google_drive": {
+                "base_url": base_url,
+                "env": {"GOOGLE_DRIVE_TOKEN": provider_token},
+            }
+        },
+        client=client,
+    )
+
+    result = _run(
+        gateway,
+        {
+            "provider": "google_drive",
+            "method": "GET",
+            "path": "/drive/v3/files/file-1",
+        },
+    )
+
+    rendered = repr(result)
+    assert base_url not in rendered
+    assert twin_host not in rendered
+    assert provider_token not in rendered
+    result_headers = cast(dict[str, str], result["headers"])
+    assert result_headers["location"] == "/drive/v3/files/file-1"
+    assert result_headers["link"] == (
+        '</drive/v3/files?pageToken=next>; rel="next", <https://api.github.com/repos/acme/app>; rel="canonical"'
+    )
+    assert result_headers["refresh"] == "0; url=/drive/v3/files/file-1"
+    assert result_headers["x-origin"] == "[provider-host]"
+    assert result_headers["x-token-echo"] == "[redacted]"
+    assert result["body"] == {
+        "id": "file-1",
+        "name": "Quarterly plan",
+        "iconLink": "/drive/v3/files/file-1/icon",
+        "webViewLink": "/drive/v3/files/file-1/view",
+        "canonicalProviderUrl": "https://api.github.com/repos/acme/app",
+        "relativeResource": "/drive/v3/files/file-1",
+        "nested": [
+            {"origin": "served by [provider-host]", "credential": "[redacted]"},
+            "ordinary business data",
+        ],
+        "/response-key": "preserved value",
+    }
+    asyncio.run(client.aclose())
+
+
 def test_does_not_follow_provider_redirects() -> None:
     calls = 0
 
