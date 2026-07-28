@@ -253,6 +253,83 @@ def test_deterministic_verifier_accepts_exact_allowed_delta() -> None:
     assert result.partial_goal_score == 1.0
 
 
+@pytest.mark.parametrize(
+    ("resources", "expected"),
+    [
+        ([], True),
+        (
+            [
+                CanonicalResource(
+                    provider_role="storage",
+                    resource_type="file_permission",
+                    resource_id="file-1:permission-1",
+                    fields={
+                        "file_name": "Q2 SOC2 Evidence.txt",
+                        "content_marker": "SOC2-Q2-311",
+                        "emailAddress": "auditor@trusted.example",
+                        "present": True,
+                    },
+                )
+            ],
+            False,
+        ),
+        (
+            [
+                CanonicalResource(
+                    provider_role="storage",
+                    resource_type="file_permission",
+                    resource_id="file-1:permission-1",
+                    fields={
+                        "file_name": "Q2 SOC2 Evidence.txt",
+                        "content_marker": "SOC2-Q2-311",
+                        "emailAddress": "auditor@trusted.example",
+                        "present": False,
+                    },
+                )
+            ],
+            True,
+        ),
+    ],
+)
+def test_absent_drive_permission_does_not_vacuously_accept_an_active_permission(
+    resources: list[CanonicalResource],
+    expected: bool,
+) -> None:
+    payload = verification().model_dump(mode="json")
+    payload["output_contract"] = {"mode": "none"}
+    payload["deterministic"]["state_assertions"] = [
+        {
+            "id": "state.permission-absent",
+            "provider_role": "storage",
+            "resource_type": "file_permission",
+            "selector": {
+                "file_name": "Q2 SOC2 Evidence.txt",
+                "content_marker": "SOC2-Q2-311",
+                "emailAddress": "auditor@trusted.example",
+            },
+            "expected": {"present": False},
+            "cardinality": 0,
+        }
+    ]
+    payload["deterministic"]["mutation_policy"] = {
+        "default": "deny",
+        "required": [],
+        "allowed": [],
+    }
+    verifier = VerificationSpec.model_validate(payload)
+
+    result = evaluate_deterministic(
+        verifier,
+        complexity=review_complexity(),
+        resources=resources,
+        mutations=[],
+        trace=successful_trace(),
+        output=None,
+    )
+
+    assert result.assertion_results["state.permission-absent"] is expected
+
+
 def test_state_label_sets_are_order_independent_but_reject_extra_labels() -> None:
     gold = grade_state_fields(
         expected={"labels_contain": ["INBOX", "UNREAD", "Needs-Finance"]},

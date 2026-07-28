@@ -402,13 +402,24 @@ def state_document_matches(expected: Mapping[str, Any], actual: Mapping[str, Any
 
 
 def _state_assertion_matches(assertion: StateAssertionSpec, resources: list[CanonicalResource]) -> bool:
-    matches = [
+    selected = [
         resource
         for resource in resources
         if resource.provider_role == assertion.provider_role
         and resource.resource_type == assertion.resource_type
         and state_document_matches(assertion.selector, resource.match_document())
-        and state_document_matches(assertion.expected, resource.match_document())
+    ]
+    # A zero-cardinality assertion proves that no resource matching the
+    # selector exists. Filtering the selected resources through the expected
+    # document first made ``expected: {present: false}, cardinality: 0``
+    # vacuously pass when an active resource with ``present: true`` existed.
+    # Explicit tombstones remain absent for this purpose.
+    if assertion.cardinality == 0:
+        if assertion.expected.get("present") is False:
+            return not any(resource.fields.get("present") is not False for resource in selected)
+        return not selected
+    matches = [
+        resource for resource in selected if state_document_matches(assertion.expected, resource.match_document())
     ]
     return len(matches) == assertion.cardinality
 
@@ -773,6 +784,17 @@ _RESULT_FACT_ALIASES: dict[str, frozenset[str]] = {
     "corrected": frozenset({"authorized_and_applied", "authorized_applied", "completed"}),
     "created": frozenset({"completed", "created_issue", "migrated"}),
     "denied": frozenset({"no_transition"}),
+    "migrated": frozenset(
+        {
+            "completed",
+            "created",
+            "migration_complete",
+            "migration_completed",
+            "reconciled",
+            "repaired",
+            "reused",
+        }
+    ),
     "no_slot": frozenset({"not_scheduled", "not_scheduled_no_compliant_slot"}),
     "normalized": frozenset({"applied", "completed", "normalization_applied"}),
     "promoted": frozenset({"completed", "promotion_applied"}),
