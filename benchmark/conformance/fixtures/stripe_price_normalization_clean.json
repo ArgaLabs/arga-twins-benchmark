@@ -1,0 +1,687 @@
+{
+  "kind": "evaluator_conformance_fixture",
+  "protocol": "arga-bench-evaluator-conformance-fixture/1",
+  "schema_version": "0.1",
+  "instance_id": "stripe_price_normalization_v1_stripe_clean_001",
+  "source": "synthetic_state_evidence",
+  "source_note": "Minimal deterministic Stripe state shaped like the trusted admin and list snapshots. This fixture proves canonicalization, state-evidence construction, outcome-first evaluation, negative-control rejection, and trajectory equivalence. It is not live twin conformance and cannot satisfy the benchmark release gate by itself.",
+  "baseline_state": {
+    "providers": {
+      "stripe": {
+        "provider_role": "payments",
+        "state": {
+          "customers": {},
+          "products": {
+            "prod_pro": {
+              "id": "prod_pro",
+              "name": "Pro Monthly",
+              "active": true,
+              "description": "Monthly plan",
+              "default_price": "price_target",
+              "metadata": {}
+            },
+            "prod_other": {
+              "id": "prod_other",
+              "name": "Enterprise Annual",
+              "active": true,
+              "description": "Annual plan",
+              "default_price": "price_other",
+              "metadata": {}
+            }
+          },
+          "prices": {
+            "price_target": {
+              "id": "price_target",
+              "product": "prod_pro",
+              "unit_amount": 7900,
+              "currency": "usd",
+              "nickname": null,
+              "lookup_key": null,
+              "active": true,
+              "recurring": {
+                "interval": "month"
+              },
+              "metadata": {}
+            },
+            "price_other": {
+              "id": "price_other",
+              "product": "prod_other",
+              "unit_amount": 79000,
+              "currency": "usd",
+              "nickname": null,
+              "lookup_key": null,
+              "active": true,
+              "recurring": {
+                "interval": "year"
+              },
+              "metadata": {}
+            }
+          }
+        }
+      }
+    },
+    "queries": {
+      "snapshot_customers": {
+        "provider_name": "stripe",
+        "provider_role": "payments",
+        "method": "GET",
+        "path": "/v1/customers?limit=100",
+        "canonicalizer": "stripe_customers_stable",
+        "status_code": 200,
+        "body": {
+          "object": "list",
+          "data": [],
+          "has_more": false
+        }
+      },
+      "snapshot_products": {
+        "provider_name": "stripe",
+        "provider_role": "payments",
+        "method": "GET",
+        "path": "/v1/products?limit=100",
+        "canonicalizer": "stripe_products_stable",
+        "status_code": 200,
+        "body": {
+          "object": "list",
+          "data": [
+            {
+              "id": "prod_pro",
+              "name": "Pro Monthly",
+              "active": true,
+              "description": "Monthly plan",
+              "default_price": "price_target",
+              "metadata": {}
+            },
+            {
+              "id": "prod_other",
+              "name": "Enterprise Annual",
+              "active": true,
+              "description": "Annual plan",
+              "default_price": "price_other",
+              "metadata": {}
+            }
+          ],
+          "has_more": false
+        }
+      },
+      "snapshot_prices": {
+        "provider_name": "stripe",
+        "provider_role": "payments",
+        "method": "GET",
+        "path": "/v1/prices?limit=100",
+        "canonicalizer": "stripe_prices_stable",
+        "status_code": 200,
+        "body": {
+          "object": "list",
+          "data": [
+            {
+              "id": "price_target",
+              "product": "prod_pro",
+              "unit_amount": 7900,
+              "currency": "usd",
+              "nickname": null,
+              "lookup_key": null,
+              "active": true,
+              "recurring": {
+                "interval": "month"
+              },
+              "metadata": {}
+            },
+            {
+              "id": "price_other",
+              "product": "prod_other",
+              "unit_amount": 79000,
+              "currency": "usd",
+              "nickname": null,
+              "lookup_key": null,
+              "active": true,
+              "recurring": {
+                "interval": "year"
+              },
+              "metadata": {}
+            }
+          ],
+          "has_more": false
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "stripe_price_normalization_v1.clean.gold",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=price_policy_v2",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=pro-monthly-usd-79",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=billing-ops",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=cat-window-20300514",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/products/search?query=monthly",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?product=prod_pro",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "POST",
+          "path": "/v1/prices/price_target",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900"
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": true,
+        "required_passed_assertion_ids": [
+          "state_target_price",
+          "state_catalog_preserved",
+          "mutation_target_price",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "stripe_price_normalization_v1.clean.gold.semantic_equivalent",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?lookup_keys[]=policy",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?lookup_keys[]=request",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?lookup_keys[]=confirmation",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?lookup_keys[]=window",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/products?active=true",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?product=prod_pro&active=true",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "POST",
+          "path": "/v1/prices/price_target",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900"
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": false,
+        "required_passed_assertion_ids": [
+          "state_target_price",
+          "state_catalog_preserved",
+          "mutation_target_price",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ],
+        "required_failed_assertion_ids": [
+          "search_policy_record",
+          "search_request_record",
+          "search_confirmation_record",
+          "search_window_record",
+          "search_products"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "canonical_projection",
+      "case_id": "stripe_price_normalization_v1.clean.create_replacement",
+      "resources": [
+        {
+          "provider_role": "payments",
+          "resource_type": "price",
+          "resource_id": "price_target",
+          "fields": {
+            "product_id": "prod_pro",
+            "product_name": "Pro Monthly",
+            "unit_amount": 7900,
+            "currency": "usd",
+            "nickname": null,
+            "lookup_key": null,
+            "active": true,
+            "recurring": {
+              "interval": "month"
+            },
+            "metadata": {}
+          }
+        },
+        {
+          "provider_role": "payments",
+          "resource_type": "price",
+          "resource_id": "price_replacement",
+          "fields": {
+            "product_id": "prod_pro",
+            "product_name": "Pro Monthly",
+            "unit_amount": 7900,
+            "currency": "usd",
+            "nickname": "pro-monthly-usd-79",
+            "lookup_key": "pro_monthly_usd_7900",
+            "active": true,
+            "recurring": {
+              "interval": "month"
+            },
+            "metadata": {}
+          }
+        },
+        {
+          "provider_role": "payments",
+          "resource_type": "stripe_snapshot",
+          "resource_id": "catalog_and_customers",
+          "fields": {
+            "scope": "catalog_and_customers"
+          }
+        }
+      ],
+      "mutations": [
+        {
+          "twin": "payments",
+          "resource_type": "price",
+          "resource_id": "price_replacement",
+          "operation": "create",
+          "after": {
+            "product_id": "prod_pro",
+            "product_name": "Pro Monthly",
+            "unit_amount": 7900,
+            "currency": "usd",
+            "nickname": "pro-monthly-usd-79",
+            "lookup_key": "pro_monthly_usd_7900",
+            "active": true,
+            "recurring": {
+              "interval": "month"
+            },
+            "metadata": {}
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=price_policy_v2",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=pro-monthly-usd-79",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=billing-ops",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=cat-window-20300514",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/products/search?query=monthly",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?product=prod_pro",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "POST",
+          "path": "/v1/prices/price_target",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900"
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": true,
+        "trace_policy_passed": true,
+        "required_failed_assertion_ids": [
+          "state_catalog_preserved",
+          "mutation_target_price",
+          "mutation_policy.default_deny"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "stripe_price_normalization_v1.clean.wrong_price",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_other/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_other/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/1/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/1/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=price_policy_v2",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=pro-monthly-usd-79",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=billing-ops",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=cat-window-20300514",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/products/search?query=monthly",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?product=prod_pro",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "POST",
+          "path": "/v1/prices/price_target",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900"
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": true,
+        "trace_policy_passed": true,
+        "required_failed_assertion_ids": [
+          "state_target_price",
+          "state_catalog_preserved",
+          "mutation_target_price",
+          "mutation_policy.default_deny"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "stripe_price_normalization_v1.clean.collateral_mutation",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_target/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/nickname",
+          "value": "pro-monthly-usd-79"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/0/lookup_key",
+          "value": "pro_monthly_usd_7900"
+        },
+        {
+          "op": "replace",
+          "path": "/providers/stripe/state/prices/price_other/nickname",
+          "value": "do-not-touch"
+        },
+        {
+          "op": "replace",
+          "path": "/queries/snapshot_prices/body/data/1/nickname",
+          "value": "do-not-touch"
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=price_policy_v2",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=pro-monthly-usd-79",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=billing-ops",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/customers/search?query=cat-window-20300514",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/products/search?query=monthly",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "GET",
+          "path": "/v1/prices?product=prod_pro",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "payments",
+          "method": "POST",
+          "path": "/v1/prices/price_target",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "request": "CAT-7900",
+        "decision": "normalized",
+        "nickname": "pro-monthly-usd-79",
+        "lookup_key": "pro_monthly_usd_7900"
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": true,
+        "trace_policy_passed": true,
+        "required_passed_assertion_ids": [
+          "state_target_price",
+          "mutation_target_price",
+          "output.contract"
+        ],
+        "required_failed_assertion_ids": [
+          "state_catalog_preserved",
+          "mutation_policy.default_deny"
+        ]
+      }
+    }
+  ]
+}

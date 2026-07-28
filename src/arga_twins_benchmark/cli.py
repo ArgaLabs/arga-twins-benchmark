@@ -10,6 +10,11 @@ import typer
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli
 from arga_twins_benchmark.catalog import fingerprint_instance_bundle, validate_catalog, write_compiled_scenario
 from arga_twins_benchmark.cli_redaction import redact_cli_payload
+from arga_twins_benchmark.conformance import (
+    ConformanceError,
+    audit_conformance,
+    run_live_reset_isolation,
+)
 from arga_twins_benchmark.lifecycle import (
     SavedScenario,
     cleanup_instance,
@@ -40,8 +45,13 @@ from arga_twins_benchmark.runner import (
 app = typer.Typer(no_args_is_help=True, help="Arga Twins Benchmark tools")
 catalog_app = typer.Typer(no_args_is_help=True, help="Validate and inspect benchmark catalog files")
 scenarios_app = typer.Typer(no_args_is_help=True, help="Save reusable benchmark Scenarios through the Arga CLI")
+conformance_app = typer.Typer(
+    no_args_is_help=True,
+    help="Fail-closed verifier conformance coverage, fixtures, and live lifecycle checks",
+)
 app.add_typer(catalog_app, name="catalog")
 app.add_typer(scenarios_app, name="scenarios")
+app.add_typer(conformance_app, name="conformance")
 
 
 def _echo_json(payload: object) -> None:
@@ -64,6 +74,114 @@ def catalog_fingerprint(
     root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
 ) -> None:
     typer.echo(fingerprint_instance_bundle(root, instance_id))
+
+
+@conformance_app.command("audit")
+def conformance_audit(
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    registry: Annotated[
+        Path,
+        typer.Option(help="Checked-in conformance registry"),
+    ] = Path("benchmark/conformance/registry.json"),
+    fixtures: Annotated[
+        Path,
+        typer.Option(help="Checked-in evaluator fixture directory"),
+    ] = Path("benchmark/conformance/fixtures"),
+    live_evidence: Annotated[
+        Path | None,
+        typer.Option(help="Optional directory of live case and lifecycle evidence"),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Optional private machine-readable audit report"),
+    ] = None,
+    allow_pending: Annotated[
+        bool,
+        typer.Option(
+            "--allow-pending",
+            help="Return zero for a structurally valid but not leaderboard-ready registry.",
+        ),
+    ] = False,
+) -> None:
+    try:
+        report = audit_conformance(
+            catalog_root=root,
+            registry_path=registry,
+            fixture_root=fixtures,
+            live_evidence_root=live_evidence,
+        )
+    except ConformanceError as error:
+        raise typer.BadParameter(str(error)) from error
+    if output is not None:
+        write_private_json(output, report)
+    counts = cast(dict[str, object], report["counts"])
+    blockers = cast(list[str], report["blockers"])
+    _echo_json(
+        {
+            "coverage_valid": report["coverage_valid"],
+            "leaderboard_ready": report["leaderboard_ready"],
+            "counts": counts,
+            "blocker_count": len(blockers),
+            "blocker_preview": blockers[:5],
+            "artifact": str(output) if output is not None else None,
+        }
+    )
+    if not allow_pending and report["leaderboard_ready"] is not True:
+        raise typer.Exit(code=1)
+
+
+@conformance_app.command("live-reset-isolation")
+def conformance_live_reset_isolation(
+    instance_id: Annotated[str, typer.Argument(help="Benchmark instance identifier")],
+    output: Annotated[
+        Path,
+        typer.Option("--output", "-o", help="Private secret-safe lifecycle evidence JSON"),
+    ],
+    root: Annotated[Path, typer.Option(help="Catalog root")] = Path("benchmark"),
+    resets: Annotated[int, typer.Option("--resets", min=10, max=100)] = 10,
+    ttl_minutes: Annotated[int, typer.Option("--ttl", min=1, max=480)] = 60,
+    timeout_seconds: Annotated[int, typer.Option("--timeout", min=1)] = 600,
+    arga_candidate_safe_profile: Annotated[
+        bool,
+        typer.Option(
+            "--arga-candidate-safe-profile/--no-arga-candidate-safe-profile",
+            help="Opt into the separately deployed Arga CLI/server --candidate-safe profile.",
+        ),
+    ] = False,
+) -> None:
+    try:
+        evidence = asyncio.run(
+            run_live_reset_isolation(
+                catalog_root=root,
+                instance_id=instance_id,
+                output=output,
+                reset_count=resets,
+                ttl_minutes=ttl_minutes,
+                timeout_seconds=timeout_seconds,
+                arga_candidate_safe_profile=arga_candidate_safe_profile,
+            )
+        )
+    except ConformanceError as error:
+        raise typer.BadParameter(str(error)) from error
+    _echo_json(
+        {
+            "instance_id": evidence.instance_id,
+            "reset_count": evidence.required_reset_count,
+            "all_reset_hashes_match": all(
+                item == evidence.baseline_state_sha256 for item in evidence.reset_state_sha256
+            ),
+            "independent_run_proved": evidence.independent_run_proved,
+            "mutation_visibility_proved": evidence.mutation_visibility_proved,
+            "cleanup_confirmed": evidence.cleanup_confirmed,
+            "release_complete": (
+                all(item == evidence.baseline_state_sha256 for item in evidence.reset_state_sha256)
+                and evidence.independent_run_proved
+                and evidence.mutation_visibility_proved
+                and evidence.cleanup_confirmed
+            ),
+            "artifact": str(output),
+        }
+    )
 
 
 @app.command("compile")

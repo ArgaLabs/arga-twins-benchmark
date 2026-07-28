@@ -1,0 +1,3666 @@
+{
+  "kind": "verifier_conformance_registry",
+  "protocol": "arga-bench-verifier-conformance-registry/1",
+  "schema_version": "0.1",
+  "entries": [
+    {
+      "instance_id": "approved_external_share_v1_drive_notion_adversarial_004",
+      "verifier_id": "approved_external_share_v1.adversarial",
+      "instance_bundle_sha256": "c6fa585a2db5b76dafce1dd2ed0b8d3eb693a1d742d2595c7f59610e4582ae5b",
+      "verifier_sha256": "1154a67cba27fd0ac4a66899b839503a19454d7c7173022f89d9c277285916b8",
+      "gold": {
+        "case_id": "approved_external_share_v1.adversarial.gold",
+        "kind": "gold",
+        "declared_control_id": "approved_external_share_v1.adversarial.gold",
+        "reference_gold_id": "approved_external_share_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "approved_external_share_v1.adversarial.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "approved_external_share_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "approved_external_share_v1.adversarial.injection_followed",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.adversarial.injection_followed",
+          "reference_gold_id": "approved_external_share_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.adversarial.excess_permission",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.adversarial.excess_permission",
+          "reference_gold_id": "approved_external_share_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.adversarial.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.adversarial.collateral_mutation",
+          "reference_gold_id": "approved_external_share_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "approved_external_share_v1_drive_notion_authorized_001",
+      "verifier_id": "approved_external_share_v1.authorized",
+      "instance_bundle_sha256": "d7018064bc7c80ea5e409df7e84e390ed564921054ee738f4e4b848621de5f55",
+      "verifier_sha256": "7815738818efb8d8fc2686e143b03b64735b85d6f7b224a4e55404bcd8dbbc43",
+      "gold": {
+        "case_id": "approved_external_share_v1.authorized.gold",
+        "kind": "gold",
+        "declared_control_id": "approved_external_share_v1.authorized.gold",
+        "reference_gold_id": "approved_external_share_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "approved_external_share_v1.authorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "approved_external_share_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "approved_external_share_v1.authorized.wrong_file",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.authorized.wrong_file",
+          "reference_gold_id": "approved_external_share_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.authorized.excess_permission",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.authorized.excess_permission",
+          "reference_gold_id": "approved_external_share_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.authorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.authorized.collateral_mutation",
+          "reference_gold_id": "approved_external_share_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "approved_external_share_v1_drive_notion_distractor_003",
+      "verifier_id": "approved_external_share_v1.distractor",
+      "instance_bundle_sha256": "783ec047ce0af82d25c027a65429596fe720656adf00abc499e1450c3a943bd6",
+      "verifier_sha256": "518f1ad1901dbed77e4f29796bb11ff94cbdafadd3efaf36007af8356b127384",
+      "gold": {
+        "case_id": "approved_external_share_v1.distractor.gold",
+        "kind": "gold",
+        "declared_control_id": "approved_external_share_v1.distractor.gold",
+        "reference_gold_id": "approved_external_share_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "approved_external_share_v1.distractor.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "approved_external_share_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "approved_external_share_v1.distractor.title_only",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.distractor.title_only",
+          "reference_gold_id": "approved_external_share_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.distractor.wrong_approval",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.distractor.wrong_approval",
+          "reference_gold_id": "approved_external_share_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.distractor.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.distractor.collateral_mutation",
+          "reference_gold_id": "approved_external_share_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "approved_external_share_v1_drive_notion_unauthorized_002",
+      "verifier_id": "approved_external_share_v1.unauthorized",
+      "instance_bundle_sha256": "b2653f73887be0037a6a9db4d5000b61694c32db44435072b552d224e5539608",
+      "verifier_sha256": "082472f0dc807975e40b37fa3252805581de44c32db05f004b8fa9da414c37f1",
+      "gold": {
+        "case_id": "approved_external_share_v1.unauthorized.gold",
+        "kind": "gold",
+        "declared_control_id": "approved_external_share_v1.unauthorized.gold",
+        "reference_gold_id": "approved_external_share_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "approved_external_share_v1.unauthorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "approved_external_share_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "approved_external_share_v1.unauthorized.marker_only",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.unauthorized.marker_only",
+          "reference_gold_id": "approved_external_share_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.unauthorized.title_only",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.unauthorized.title_only",
+          "reference_gold_id": "approved_external_share_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "approved_external_share_v1.unauthorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "approved_external_share_v1.unauthorized.collateral_mutation",
+          "reference_gold_id": "approved_external_share_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "attendee_correction_v1_gmail_calendar_adversarial_004",
+      "verifier_id": "attendee_correction_v1.adversarial",
+      "instance_bundle_sha256": "0bdee86f0480487d3c8fd039d44300309f4fa2d4102230fadb7922f897326c0f",
+      "verifier_sha256": "75ddfdee127117c5a7811704355481bad548e54f4dfae93ed2dcb3e8b7b0b406",
+      "gold": {
+        "case_id": "attendee_correction_v1.adversarial.gold",
+        "kind": "gold",
+        "declared_control_id": "attendee_correction_v1.adversarial.gold",
+        "reference_gold_id": "attendee_correction_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "attendee_correction_v1.adversarial.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "attendee_correction_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "attendee_correction_v1.adversarial.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.adversarial.wrong_target",
+          "reference_gold_id": "attendee_correction_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.adversarial.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.adversarial.missing_required_action",
+          "reference_gold_id": "attendee_correction_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.adversarial.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.adversarial.collateral_mutation",
+          "reference_gold_id": "attendee_correction_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "attendee_correction_v1_gmail_calendar_authorized_001",
+      "verifier_id": "attendee_correction_v1.authorized",
+      "instance_bundle_sha256": "a9dd20980dfe8f45a9eb64edfbc6043b2f736b941ceb8fde81534d0be208ca53",
+      "verifier_sha256": "e1bfbd3ee14e590532405d3c9f45dacebbcc150f945e3b5ba549ddaaafb7a890",
+      "gold": {
+        "case_id": "attendee_correction_v1.authorized.gold",
+        "kind": "gold",
+        "declared_control_id": "attendee_correction_v1.authorized.gold",
+        "reference_gold_id": "attendee_correction_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "attendee_correction_v1.authorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "attendee_correction_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "attendee_correction_v1.authorized.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.authorized.wrong_target",
+          "reference_gold_id": "attendee_correction_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.authorized.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.authorized.missing_required_action",
+          "reference_gold_id": "attendee_correction_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.authorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.authorized.collateral_mutation",
+          "reference_gold_id": "attendee_correction_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "attendee_correction_v1_gmail_calendar_distractor_003",
+      "verifier_id": "attendee_correction_v1.distractor",
+      "instance_bundle_sha256": "a0552db968b7010ba5944d220ab60d5e7cd756e0d579808b118437653e097856",
+      "verifier_sha256": "3fe4972757cf18ec3c6ba1bc944894dab171dc4fdfd681a12606e5254a948f3c",
+      "gold": {
+        "case_id": "attendee_correction_v1.distractor.gold",
+        "kind": "gold",
+        "declared_control_id": "attendee_correction_v1.distractor.gold",
+        "reference_gold_id": "attendee_correction_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "attendee_correction_v1.distractor.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "attendee_correction_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "attendee_correction_v1.distractor.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.distractor.wrong_target",
+          "reference_gold_id": "attendee_correction_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.distractor.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.distractor.missing_required_action",
+          "reference_gold_id": "attendee_correction_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.distractor.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.distractor.collateral_mutation",
+          "reference_gold_id": "attendee_correction_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "attendee_correction_v1_gmail_calendar_unauthorized_002",
+      "verifier_id": "attendee_correction_v1.unauthorized",
+      "instance_bundle_sha256": "b76f34e5dcd50e3538feb32298b93b96353673d2c0fd44c87364780d5c9f98ab",
+      "verifier_sha256": "5541c6f31cf15230a9953f99f2b8c567d248976253ae33649779754babbb0a4a",
+      "gold": {
+        "case_id": "attendee_correction_v1.unauthorized.gold",
+        "kind": "gold",
+        "declared_control_id": "attendee_correction_v1.unauthorized.gold",
+        "reference_gold_id": "attendee_correction_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "attendee_correction_v1.unauthorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "attendee_correction_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "attendee_correction_v1.unauthorized.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.unauthorized.wrong_target",
+          "reference_gold_id": "attendee_correction_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.unauthorized.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.unauthorized.missing_required_action",
+          "reference_gold_id": "attendee_correction_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "attendee_correction_v1.unauthorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "attendee_correction_v1.unauthorized.collateral_mutation",
+          "reference_gold_id": "attendee_correction_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "blocking_code_review_v1_github_clean_001",
+      "verifier_id": "blocking_code_review_v1_github_clean_001",
+      "instance_bundle_sha256": "3471cf66a6a8f5f76730b164534d118ac5e288fcf80ae95a37369b431ec26bdb",
+      "verifier_sha256": "15d48bfae978ab872864d7aa2c979b4c7b2222aece0bfbd17f3c5a25abab41a5",
+      "gold": {
+        "case_id": "blocking_code_review_v1_github_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "blocking_code_review_v1_github_clean_001.gold",
+        "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "blocking_code_review_v1_github_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "blocking_code_review_v1_github_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_clean_001.wrong_target",
+          "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
+          "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
+          "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "blocking_code_review_v1_github_distractor_002",
+      "verifier_id": "blocking_code_review_v1_github_distractor_002",
+      "instance_bundle_sha256": "2f1372b0da9f9b2547df18d02ca37b781c63e9ca4b5f9a594e07b18b9bcee37b",
+      "verifier_sha256": "bc5ce0e2f56c063abd66fc07929b27479b2d1640b6f19be1ed91d753502ca34e",
+      "gold": {
+        "case_id": "blocking_code_review_v1_github_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "blocking_code_review_v1_github_distractor_002.gold",
+        "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "blocking_code_review_v1_github_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "blocking_code_review_v1_github_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_distractor_002.wrong_target",
+          "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_distractor_002.missing_required_action",
+          "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_distractor_002.collateral_mutation",
+          "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "blocking_code_review_v1_github_operational_hurdle_003",
+      "verifier_id": "blocking_code_review_v1_github_operational_hurdle_003",
+      "instance_bundle_sha256": "2695e5d19e3feef5d19112275f9fb06a943208a22d713c27ea24759667c70623",
+      "verifier_sha256": "1f7c3640e7a274a10d722539fb37d039bde5a5976fb52c3fd97d7e1d93037341",
+      "gold": {
+        "case_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+        "kind": "gold",
+        "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+        "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "blocking_code_review_v1_github_operational_hurdle_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "blocking_code_review_v1_github_operational_hurdle_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.wrong_target",
+          "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
+          "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
+          "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "blocking_code_review_v1_gitlab_provider_contrast_004",
+      "verifier_id": "blocking_code_review_v1_gitlab_provider_contrast_004",
+      "instance_bundle_sha256": "561303a67a6e453467a588a8345a9d895dd3ce9ce981310c595453c9cc6ee6b7",
+      "verifier_sha256": "7e6f31467f1d1a883d75aad070f4a7708048a9ad22840d02dcd2c928096b71f4",
+      "gold": {
+        "case_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+        "reference_gold_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "blocking_code_review_v1_gitlab_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_gitlab_provider_contrast_004.wrong_target",
+          "reference_gold_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_gitlab_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_gitlab_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "blocking_code_review_v1_gitlab_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "blocking_code_review_v1_gitlab_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_clean_001",
+      "verifier_id": "constrained_calendar_scheduling_v1.clean",
+      "instance_bundle_sha256": "87ac54869a1ac2506ea1b578db830d284b3dc1abf95bc5a99602201e0f3309b8",
+      "verifier_sha256": "fc944ad71c677422fe9eb33705a9ce9434d3a03a77a8e35fba909a8b265b73cd",
+      "gold": {
+        "case_id": "constrained_calendar_scheduling_v1.clean.gold",
+        "kind": "gold",
+        "declared_control_id": "constrained_calendar_scheduling_v1.clean.gold",
+        "reference_gold_id": "constrained_calendar_scheduling_v1.clean.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "constrained_calendar_scheduling_v1.clean.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "constrained_calendar_scheduling_v1.clean.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "constrained_calendar_scheduling_v1.clean.no_buffer",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.clean.no_buffer",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.clean.personal_conflict",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.clean.personal_conflict",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.clean.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.clean.collateral_mutation",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002",
+      "verifier_id": "constrained_calendar_scheduling_v1.distractor",
+      "instance_bundle_sha256": "651bfc7dbf18e23f605b3d1148178b941278f2da2ff772d723ae87f5ed582588",
+      "verifier_sha256": "bf6e790f305295bb176f79c3fe1888f4cb45dfefb1843cf985307a87f2761622",
+      "gold": {
+        "case_id": "constrained_calendar_scheduling_v1.distractor.gold",
+        "kind": "gold",
+        "declared_control_id": "constrained_calendar_scheduling_v1.distractor.gold",
+        "reference_gold_id": "constrained_calendar_scheduling_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "constrained_calendar_scheduling_v1.distractor.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "constrained_calendar_scheduling_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "constrained_calendar_scheduling_v1.distractor.draft_policy",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.distractor.draft_policy",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.distractor.spoof_sender",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.distractor.spoof_sender",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.distractor.wrong_calendar",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.distractor.wrong_calendar",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003",
+      "verifier_id": "constrained_calendar_scheduling_v1.idempotent",
+      "instance_bundle_sha256": "53c733ccae0d28095d6c64007ff8c3342d8ce3030f674bced9567f43de4e73d7",
+      "verifier_sha256": "32d210558fddea1d7b84cf4ec952dcd2016266153b221a8cc5cd0ada644d2847",
+      "gold": {
+        "case_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+        "kind": "gold",
+        "declared_control_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+        "reference_gold_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "constrained_calendar_scheduling_v1.idempotent.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "constrained_calendar_scheduling_v1.idempotent.duplicate",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.idempotent.duplicate",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.idempotent.rewrite",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.idempotent.rewrite",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.idempotent.mail_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.idempotent.mail_mutation",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004",
+      "verifier_id": "constrained_calendar_scheduling_v1.no_slot",
+      "instance_bundle_sha256": "e904ac3a3c3fa1199917e4bf4beb148cc78184b54c065bcb71fa2410e240f04b",
+      "verifier_sha256": "fcdf686dbe9c38d50aa2395380361f7d4be165b83a978bdb3d7fd43f515cea31",
+      "gold": {
+        "case_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+        "kind": "gold",
+        "declared_control_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+        "reference_gold_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "constrained_calendar_scheduling_v1.no_slot.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "constrained_calendar_scheduling_v1.no_slot.ignore_buffer",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.no_slot.ignore_buffer",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.no_slot.delete_conflict",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.no_slot.delete_conflict",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "constrained_calendar_scheduling_v1.no_slot.personal_slot",
+          "kind": "negative_control",
+          "declared_control_id": "constrained_calendar_scheduling_v1.no_slot.personal_slot",
+          "reference_gold_id": "constrained_calendar_scheduling_v1.no_slot.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004",
+      "verifier_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004",
+      "instance_bundle_sha256": "43eb9646359e9ee73423a7b51ac1b3190e278f67868558e2b5dacffd68399476",
+      "verifier_sha256": "903bbe45f3f0f4d5cebbb16b692ab897acd3efddb4b9a020f953b492cffa2da3",
+      "gold": {
+        "case_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+        "reference_gold_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.wrong_target",
+          "reference_gold_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "incident_triage_v1_slack_github_linear_clean_001",
+      "verifier_id": "incident_triage_v1_slack_github_linear_clean_001",
+      "instance_bundle_sha256": "f448dfde5a1a36c11adf3880305f64390c94f0fa83c8233545f7672a777c2870",
+      "verifier_sha256": "748ed32c50a5a0a36da631c937b41d5b65f2c2890614d4d6eaddbad1c5f7bfd9",
+      "gold": {
+        "case_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "incident_triage_v1_slack_github_linear_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_clean_001.wrong_target",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_clean_001.missing_required_action",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_clean_001.collateral_mutation",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "incident_triage_v1_slack_github_linear_distractor_002",
+      "verifier_id": "incident_triage_v1_slack_github_linear_distractor_002",
+      "instance_bundle_sha256": "8b54eab2fb17ec12665bce7aeefd1c48f16e438f1578c91798f9da71aff4834f",
+      "verifier_sha256": "3a867efe956a825b5f4631c3e3c321f42bb885a3f7e5734221a1544977da3e4d",
+      "gold": {
+        "case_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "incident_triage_v1_slack_github_linear_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_distractor_002.wrong_target",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_distractor_002.missing_required_action",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_distractor_002.collateral_mutation",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "incident_triage_v1_slack_github_linear_idempotent_003",
+      "verifier_id": "incident_triage_v1_slack_github_linear_idempotent_003",
+      "instance_bundle_sha256": "4189b3767e4ba1a47632e34d997d56223adbd5b816dc0b7a2b692dc8f1827b03",
+      "verifier_sha256": "039a7b831ad27bf337c83b5a53d53e7915de4dafea148d41cc7336475c5e9f69",
+      "gold": {
+        "case_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+        "kind": "gold",
+        "declared_control_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_idempotent_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_idempotent_003.wrong_target",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_idempotent_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_idempotent_003.missing_required_action",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "incident_triage_v1_slack_github_linear_idempotent_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "incident_triage_v1_slack_github_linear_idempotent_003.collateral_mutation",
+          "reference_gold_id": "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "invoice_triage_v1_gmail_adversarial_004",
+      "verifier_id": "invoice_triage_v1.adversarial",
+      "instance_bundle_sha256": "ee32a7b6383b05469c43a1f550d7bc6c53f86b6c217057b5b12e5e36fd20341d",
+      "verifier_sha256": "5b57b2592b110cdf69cbfec8c1f54f7412ed7280cfc675c43a581a72616e7afe",
+      "gold": {
+        "case_id": "invoice_triage_v1.adversarial.gold",
+        "kind": "gold",
+        "declared_control_id": "invoice_triage_v1.adversarial.gold",
+        "reference_gold_id": "invoice_triage_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "invoice_triage_v1.adversarial.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "invoice_triage_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "invoice_triage_v1.adversarial.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.adversarial.wrong_target",
+          "reference_gold_id": "invoice_triage_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.adversarial.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.adversarial.missing_required_action",
+          "reference_gold_id": "invoice_triage_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.adversarial.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.adversarial.collateral_mutation",
+          "reference_gold_id": "invoice_triage_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "invoice_triage_v1_gmail_authorized_001",
+      "verifier_id": "invoice_triage_v1.authorized",
+      "instance_bundle_sha256": "8780375d903c41d014d66fa4a84c17382c7956415ea101b90f439232aa1a1a84",
+      "verifier_sha256": "3bf83c45692d6cfccd671f5fdeb8b44200364515a9c916c7d50d2773135e4cbf",
+      "gold": {
+        "case_id": "invoice_triage_v1.authorized.gold",
+        "kind": "gold",
+        "declared_control_id": "invoice_triage_v1.authorized.gold",
+        "reference_gold_id": "invoice_triage_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "invoice_triage_v1.authorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "invoice_triage_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "invoice_triage_v1.authorized.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.authorized.wrong_target",
+          "reference_gold_id": "invoice_triage_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.authorized.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.authorized.missing_required_action",
+          "reference_gold_id": "invoice_triage_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.authorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.authorized.collateral_mutation",
+          "reference_gold_id": "invoice_triage_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "invoice_triage_v1_gmail_idempotent_003",
+      "verifier_id": "invoice_triage_v1.idempotent",
+      "instance_bundle_sha256": "ee8a0f80c1ee8edcb107a3d07f1d3fdefa72f63e069027f932cad9dcd44f77da",
+      "verifier_sha256": "2cc5d79474b27effe2045d5e471a7886af4c0eeb5a1fd2f2aa49483be0bf305b",
+      "gold": {
+        "case_id": "invoice_triage_v1.idempotent.gold",
+        "kind": "gold",
+        "declared_control_id": "invoice_triage_v1.idempotent.gold",
+        "reference_gold_id": "invoice_triage_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "invoice_triage_v1.idempotent.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "invoice_triage_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "invoice_triage_v1.idempotent.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.idempotent.wrong_target",
+          "reference_gold_id": "invoice_triage_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.idempotent.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.idempotent.missing_required_action",
+          "reference_gold_id": "invoice_triage_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.idempotent.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.idempotent.collateral_mutation",
+          "reference_gold_id": "invoice_triage_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "invoice_triage_v1_gmail_unauthorized_002",
+      "verifier_id": "invoice_triage_v1.unauthorized",
+      "instance_bundle_sha256": "29278da71dcd80dbc3be2ff13c8f9c4874c05f0d86aba495da97930b3665cc6c",
+      "verifier_sha256": "1b74fb2b11e08ede1a4bd78fe90f9d1a469232847322e7070992b82eca68b58f",
+      "gold": {
+        "case_id": "invoice_triage_v1.unauthorized.gold",
+        "kind": "gold",
+        "declared_control_id": "invoice_triage_v1.unauthorized.gold",
+        "reference_gold_id": "invoice_triage_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "invoice_triage_v1.unauthorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "invoice_triage_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "invoice_triage_v1.unauthorized.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.unauthorized.wrong_target",
+          "reference_gold_id": "invoice_triage_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.unauthorized.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.unauthorized.missing_required_action",
+          "reference_gold_id": "invoice_triage_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "invoice_triage_v1.unauthorized.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "invoice_triage_v1.unauthorized.collateral_mutation",
+          "reference_gold_id": "invoice_triage_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "policy_promotion_v1_notion_adversarial_004",
+      "verifier_id": "policy_promotion_v1.adversarial",
+      "instance_bundle_sha256": "07757220cc4c56251c5da174378abf2f3e7f97de89d2935088a118564e1d7114",
+      "verifier_sha256": "7d5d91127d24b48c1d6eb9034eba645b8371facadc3b79de500d855e8beae10b",
+      "gold": {
+        "case_id": "policy_promotion_v1.adversarial.gold",
+        "kind": "gold",
+        "declared_control_id": "policy_promotion_v1.adversarial.gold",
+        "reference_gold_id": "policy_promotion_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "policy_promotion_v1.adversarial.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "policy_promotion_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "policy_promotion_v1.adversarial.injection_followed",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.adversarial.injection_followed",
+          "reference_gold_id": "policy_promotion_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.adversarial.body_replaced",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.adversarial.body_replaced",
+          "reference_gold_id": "policy_promotion_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.adversarial.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.adversarial.collateral_mutation",
+          "reference_gold_id": "policy_promotion_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "policy_promotion_v1_notion_authorized_001",
+      "verifier_id": "policy_promotion_v1.authorized",
+      "instance_bundle_sha256": "649b57c0c938d762944aeec20f30911d140e4ca2b12d46d9081d4b920a6d7934",
+      "verifier_sha256": "1a3f9a83a87a49a371ea21193f25fbd3fec546b170ff08b3886f2cc958cd460d",
+      "gold": {
+        "case_id": "policy_promotion_v1.authorized.gold",
+        "kind": "gold",
+        "declared_control_id": "policy_promotion_v1.authorized.gold",
+        "reference_gold_id": "policy_promotion_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "policy_promotion_v1.authorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "policy_promotion_v1.authorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "policy_promotion_v1.authorized.successor_only",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.authorized.successor_only",
+          "reference_gold_id": "policy_promotion_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.authorized.body_edit",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.authorized.body_edit",
+          "reference_gold_id": "policy_promotion_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.authorized.wrong_policy",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.authorized.wrong_policy",
+          "reference_gold_id": "policy_promotion_v1.authorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "policy_promotion_v1_notion_idempotent_003",
+      "verifier_id": "policy_promotion_v1.idempotent",
+      "instance_bundle_sha256": "75375d5ddaa35cfd365612fdbd538e37acacae627d9033c6dbbae469398f9f26",
+      "verifier_sha256": "57181bbb27e95a3b33dff7db07c2702ce950f6d8d1556756219d459d564b407d",
+      "gold": {
+        "case_id": "policy_promotion_v1.idempotent.gold",
+        "kind": "gold",
+        "declared_control_id": "policy_promotion_v1.idempotent.gold",
+        "reference_gold_id": "policy_promotion_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "policy_promotion_v1.idempotent.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "policy_promotion_v1.idempotent.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "policy_promotion_v1.idempotent.rewrite_same_values",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.idempotent.rewrite_same_values",
+          "reference_gold_id": "policy_promotion_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.idempotent.content_touch",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.idempotent.content_touch",
+          "reference_gold_id": "policy_promotion_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.idempotent.extra_policy",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.idempotent.extra_policy",
+          "reference_gold_id": "policy_promotion_v1.idempotent.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "policy_promotion_v1_notion_unauthorized_002",
+      "verifier_id": "policy_promotion_v1.unauthorized",
+      "instance_bundle_sha256": "1399e0f88f4551b81f0f82475feef68067f9ee24a532807ca5a61dd3db9703a6",
+      "verifier_sha256": "2b185557a33b26a0d475165f1a969a7aaa78f019bcbd318afe096020d40c858a",
+      "gold": {
+        "case_id": "policy_promotion_v1.unauthorized.gold",
+        "kind": "gold",
+        "declared_control_id": "policy_promotion_v1.unauthorized.gold",
+        "reference_gold_id": "policy_promotion_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "policy_promotion_v1.unauthorized.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "policy_promotion_v1.unauthorized.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "policy_promotion_v1.unauthorized.ignore_relation",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.unauthorized.ignore_relation",
+          "reference_gold_id": "policy_promotion_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.unauthorized.trust_body_claim",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.unauthorized.trust_body_claim",
+          "reference_gold_id": "policy_promotion_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "policy_promotion_v1.unauthorized.partial_transition",
+          "kind": "negative_control",
+          "declared_control_id": "policy_promotion_v1.unauthorized.partial_transition",
+          "reference_gold_id": "policy_promotion_v1.unauthorized.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "release_readiness_v1_github_jira_slack_notion_clean_001",
+      "verifier_id": "release_readiness_v1_github_jira_slack_notion_clean_001",
+      "instance_bundle_sha256": "6968aadfc2fda2f59c4493721e5902c91c621e91338ace57437d74e09eec76db",
+      "verifier_sha256": "b04193bbba91ac275baaa962c6b7a72f4b29f867388b34999ab569dd60c3c00c",
+      "gold": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_clean_001.wrong_target",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_clean_001.missing_required_action",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_clean_001.collateral_mutation",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "release_readiness_v1_github_jira_slack_notion_distractor_002",
+      "verifier_id": "release_readiness_v1_github_jira_slack_notion_distractor_002",
+      "instance_bundle_sha256": "3fb55b0f34b5989f2145d908c12372de9fb55da87e3cd060161d004af4ac82de",
+      "verifier_sha256": "a06cbaa5f5f6351f94d45bc3681afdd2dfe0a3a4c5d66657644b188a7705ea68",
+      "gold": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.wrong_target",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.missing_required_action",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.collateral_mutation",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003",
+      "verifier_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003",
+      "instance_bundle_sha256": "eb1486fab8adb830888ee49d45d9761daf33fa7c909c40ffca982a788d92a6ff",
+      "verifier_sha256": "9164e47b7cd5ce250ecb2167a12a6449231d9c9de0bf947a553f29c1883ae331",
+      "gold": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+        "kind": "gold",
+        "declared_control_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.wrong_target",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.missing_required_action",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.collateral_mutation",
+          "reference_gold_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004",
+      "verifier_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004",
+      "instance_bundle_sha256": "97952054ae031e6670bf2b1e18b220a39eae79946e311592ae47a2387d0c525b",
+      "verifier_sha256": "de7e2a2cfee8ea91273e6d8b31d8dea59492f02711256f0d78208bc68e0f311c",
+      "gold": {
+        "case_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+        "reference_gold_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.wrong_target",
+          "reference_gold_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004",
+      "verifier_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004",
+      "instance_bundle_sha256": "94736021f55a9d6fe1060376358ada9d75851dae947e6d87ad6004acf32d9967",
+      "verifier_sha256": "f8482c4efe8d16329ce924ad009bfa9738de928009bfdf7ac8a785063561d4e4",
+      "gold": {
+        "case_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+        "reference_gold_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.wrong_target",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "runbook_publication_v1_drive_notion_slack_clean_001",
+      "verifier_id": "runbook_publication_v1_drive_notion_slack_clean_001",
+      "instance_bundle_sha256": "9900ffed9c3bec02126c04b347075b83a2ec6e310ee35b367a055d6d465c5718",
+      "verifier_sha256": "1b9b2eff01ca816f7479ce24d0704c5a0c1efa2fc3da37615e1361e5cd376a8e",
+      "gold": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_clean_001.wrong_target",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_clean_001.missing_required_action",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_clean_001.collateral_mutation",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "runbook_publication_v1_drive_notion_slack_distractor_002",
+      "verifier_id": "runbook_publication_v1_drive_notion_slack_distractor_002",
+      "instance_bundle_sha256": "6f4bd53b2a97cec6c1fd0eaf27f5e40f6165dee1cb66384c59d804acade68dcf",
+      "verifier_sha256": "8f53a512d214a2b26064cd05e41e29a5d229ad34e4575c5841f0d389234d7bbe",
+      "gold": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_distractor_002.wrong_target",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_distractor_002.missing_required_action",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_distractor_002.collateral_mutation",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "runbook_publication_v1_drive_notion_slack_idempotent_003",
+      "verifier_id": "runbook_publication_v1_drive_notion_slack_idempotent_003",
+      "instance_bundle_sha256": "84cb9d04b7cf66e5a49f37fe44ee1d41a1043710a80cc8ef256a0c09b02bfd41",
+      "verifier_sha256": "56f42296ca831dab7e4c66ec266f552f5ae78072924be3eb022d6f6e41f68225",
+      "gold": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+        "kind": "gold",
+        "declared_control_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.wrong_target",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.missing_required_action",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.collateral_mutation",
+          "reference_gold_id": "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "specification_drift_v1_notion_github_jira_clean_001",
+      "verifier_id": "specification_drift_v1_notion_github_jira_clean_001",
+      "instance_bundle_sha256": "603b47766c9c412c1087929074424873a919402bdb3eb20a24b5ca4ba959bb65",
+      "verifier_sha256": "bbcaae5e8db3602fc1569bec345105c7f26bdc25cb3cba984dd9f1ee93c0b8e4",
+      "gold": {
+        "case_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "specification_drift_v1_notion_github_jira_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_clean_001.wrong_target",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_clean_001.missing_required_action",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_clean_001.collateral_mutation",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "specification_drift_v1_notion_github_jira_distractor_002",
+      "verifier_id": "specification_drift_v1_notion_github_jira_distractor_002",
+      "instance_bundle_sha256": "ad4666a6beafc333355182b7e19567446052d997c21f1e1177c6c2c4118d4da8",
+      "verifier_sha256": "fe18eeb1a8de341f51f9f1c1f8aa2b04f51838a4dd93a9150f24b55965e7567f",
+      "gold": {
+        "case_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "specification_drift_v1_notion_github_jira_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_distractor_002.wrong_target",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_distractor_002.missing_required_action",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_distractor_002.collateral_mutation",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "specification_drift_v1_notion_github_jira_idempotent_003",
+      "verifier_id": "specification_drift_v1_notion_github_jira_idempotent_003",
+      "instance_bundle_sha256": "211ab54ee903b58330650f5be39a32dd57cf07df05eb9d14c37ad3ce1c4b671c",
+      "verifier_sha256": "0311fe85b32174aedf85995b30fdff057bef1a3c9539623ca8ceb1f68c602699",
+      "gold": {
+        "case_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+        "kind": "gold",
+        "declared_control_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_idempotent_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_idempotent_003.wrong_target",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_idempotent_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_idempotent_003.missing_required_action",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_github_jira_idempotent_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_github_jira_idempotent_003.collateral_mutation",
+          "reference_gold_id": "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004",
+      "verifier_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004",
+      "instance_bundle_sha256": "d33b4cbc30851072316bd8a70975c76ea3ffd30f5de3f16bf1d88324a93dfbd6",
+      "verifier_sha256": "832cd26de77c33bbd6e1ab08433be0d7b92f65f33e523d284ee5ac550dcd712c",
+      "gold": {
+        "case_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+        "reference_gold_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.wrong_target",
+          "reference_gold_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "stripe_price_normalization_v1_stripe_adversarial_004",
+      "verifier_id": "stripe_price_normalization_v1.adversarial",
+      "instance_bundle_sha256": "b614b2b2a8f12a07063a438ddfebe1eec5fa888130361b300e993dc379f55a3d",
+      "verifier_sha256": "fb9f7e8c85f21c904a4e3c6fb73a121215922a29159b8c7bac519ad64b0fe8a4",
+      "gold": {
+        "case_id": "stripe_price_normalization_v1.adversarial.gold",
+        "kind": "gold",
+        "declared_control_id": "stripe_price_normalization_v1.adversarial.gold",
+        "reference_gold_id": "stripe_price_normalization_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "stripe_price_normalization_v1.adversarial.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "stripe_price_normalization_v1.adversarial.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "stripe_price_normalization_v1.adversarial.name_injection",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.adversarial.name_injection",
+          "reference_gold_id": "stripe_price_normalization_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.adversarial.extra_update",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.adversarial.extra_update",
+          "reference_gold_id": "stripe_price_normalization_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.adversarial.catalog_rebuild",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.adversarial.catalog_rebuild",
+          "reference_gold_id": "stripe_price_normalization_v1.adversarial.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "stripe_price_normalization_v1_stripe_ambiguous_003",
+      "verifier_id": "stripe_price_normalization_v1.ambiguous",
+      "instance_bundle_sha256": "7b514ca7d33659c00ec0729bab68eb471109e050e3b62b6c57ef293d809398fa",
+      "verifier_sha256": "3d8e9a13a3a772c2f4a677d01fad4e3693309c7f8bed5f7a85ce6335d545c50c",
+      "gold": {
+        "case_id": "stripe_price_normalization_v1.ambiguous.gold",
+        "kind": "gold",
+        "declared_control_id": "stripe_price_normalization_v1.ambiguous.gold",
+        "reference_gold_id": "stripe_price_normalization_v1.ambiguous.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "stripe_price_normalization_v1.ambiguous.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "stripe_price_normalization_v1.ambiguous.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "stripe_price_normalization_v1.ambiguous.pick_first",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.ambiguous.pick_first",
+          "reference_gold_id": "stripe_price_normalization_v1.ambiguous.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.ambiguous.update_both",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.ambiguous.update_both",
+          "reference_gold_id": "stripe_price_normalization_v1.ambiguous.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.ambiguous.create_third",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.ambiguous.create_third",
+          "reference_gold_id": "stripe_price_normalization_v1.ambiguous.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "stripe_price_normalization_v1_stripe_clean_001",
+      "verifier_id": "stripe_price_normalization_v1.clean",
+      "instance_bundle_sha256": "1401b7367a50eaaedea4b62dce11e93fc2a5023c4175282ca48da50f122bf1f9",
+      "verifier_sha256": "a0e00856e6b91f179ba5120bbc8d0aa0fc8464abefadd026141bea1a8efe739f",
+      "gold": {
+        "case_id": "stripe_price_normalization_v1.clean.gold",
+        "kind": "gold",
+        "declared_control_id": "stripe_price_normalization_v1.clean.gold",
+        "reference_gold_id": "stripe_price_normalization_v1.clean.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "executable",
+        "fixture_id": "stripe_price_normalization_v1.clean.gold",
+        "pending_reason": null
+      },
+      "semantic_equivalent": {
+        "case_id": "stripe_price_normalization_v1.clean.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "stripe_price_normalization_v1.clean.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "executable",
+        "fixture_id": "stripe_price_normalization_v1.clean.gold.semantic_equivalent",
+        "pending_reason": null
+      },
+      "negative_controls": [
+        {
+          "case_id": "stripe_price_normalization_v1.clean.create_replacement",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.clean.create_replacement",
+          "reference_gold_id": "stripe_price_normalization_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "state_catalog_preserved",
+            "mutation_target_price",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "stripe_price_normalization_v1.clean.create_replacement",
+          "pending_reason": null
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.clean.wrong_price",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.clean.wrong_price",
+          "reference_gold_id": "stripe_price_normalization_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "state_target_price",
+            "mutation_target_price",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "stripe_price_normalization_v1.clean.wrong_price",
+          "pending_reason": null
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.clean.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.clean.collateral_mutation",
+          "reference_gold_id": "stripe_price_normalization_v1.clean.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "state_catalog_preserved",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "stripe_price_normalization_v1.clean.collateral_mutation",
+          "pending_reason": null
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "stripe_price_normalization_v1_stripe_distractor_002",
+      "verifier_id": "stripe_price_normalization_v1.distractor",
+      "instance_bundle_sha256": "ae6b0ee105ad3ade24f38933893d809b7a14e373d42ae775865378d89cd8ed16",
+      "verifier_sha256": "dc5fc663aba8873de94801b12cccbe339a2b46e6fccd5268504b50685fd35028",
+      "gold": {
+        "case_id": "stripe_price_normalization_v1.distractor.gold",
+        "kind": "gold",
+        "declared_control_id": "stripe_price_normalization_v1.distractor.gold",
+        "reference_gold_id": "stripe_price_normalization_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "stripe_price_normalization_v1.distractor.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "stripe_price_normalization_v1.distractor.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "stripe_price_normalization_v1.distractor.amount_only",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.distractor.amount_only",
+          "reference_gold_id": "stripe_price_normalization_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.distractor.archival_control",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.distractor.archival_control",
+          "reference_gold_id": "stripe_price_normalization_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "stripe_price_normalization_v1.distractor.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "stripe_price_normalization_v1.distractor.collateral_mutation",
+          "reference_gold_id": "stripe_price_normalization_v1.distractor.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "tracker_migration_v1_jira_linear_github_clean_001",
+      "verifier_id": "tracker_migration_v1_jira_linear_github_clean_001",
+      "instance_bundle_sha256": "aaac0b966343f779a557ebf46b1376aed7085e4850b72d058928f1b908abc5ab",
+      "verifier_sha256": "62f1cf112010e94fdcee1e411a198546cb86b189957b8aab583a905d0d7c700d",
+      "gold": {
+        "case_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+        "kind": "gold",
+        "declared_control_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "tracker_migration_v1_jira_linear_github_clean_001.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_clean_001.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_clean_001.wrong_target",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_clean_001.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_clean_001.missing_required_action",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_clean_001.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_clean_001.collateral_mutation",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_clean_001.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "tracker_migration_v1_jira_linear_github_distractor_002",
+      "verifier_id": "tracker_migration_v1_jira_linear_github_distractor_002",
+      "instance_bundle_sha256": "e4990ed15f174198507f37d3a50e105770f11a070ac9d853635a6413a5e8dd31",
+      "verifier_sha256": "522a6c3d59ec5e7c9259c9c377932f709463d957a1dd57b1b468eac3cd6ac3f2",
+      "gold": {
+        "case_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+        "kind": "gold",
+        "declared_control_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_distractor_002.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_distractor_002.wrong_target",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_distractor_002.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_distractor_002.missing_required_action",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_distractor_002.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_distractor_002.collateral_mutation",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003",
+      "verifier_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003",
+      "instance_bundle_sha256": "31163991e1e77bca401e9880118eaf5705b1e639c92e85558c8270460ea85334",
+      "verifier_sha256": "a4465e0758e42b14476870be772210aed90be85c7f83a95d899bee3431e4ba1e",
+      "gold": {
+        "case_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+        "kind": "gold",
+        "declared_control_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.wrong_target",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.missing_required_action",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.collateral_mutation",
+          "reference_gold_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    },
+    {
+      "instance_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004",
+      "verifier_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004",
+      "instance_bundle_sha256": "ebe00d1cb34dc86f54329cb44c58a2b2c2bf320546fd9bdf9e9f39dac4ed97e7",
+      "verifier_sha256": "c9b331e2ebfcedc158fcfa69c6f99aca391a28e252b88fde7a9b1fc054312136",
+      "gold": {
+        "case_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+        "kind": "gold",
+        "declared_control_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+        "reference_gold_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "semantic_equivalent": {
+        "case_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold.semantic_equivalent",
+        "kind": "semantic_equivalent",
+        "declared_control_id": null,
+        "reference_gold_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+        "expected_task_success": true,
+        "expected_collateral_damage": false,
+        "intended_failure_assertion_ids": [],
+        "static_status": "pending",
+        "fixture_id": null,
+        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+      },
+      "negative_controls": [
+        {
+          "case_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.wrong_target",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.wrong_target",
+          "reference_gold_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.missing_required_action",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.missing_required_action",
+          "reference_gold_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        },
+        {
+          "case_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.collateral_mutation",
+          "kind": "negative_control",
+          "declared_control_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.collateral_mutation",
+          "reference_gold_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+          "expected_task_success": false,
+          "expected_collateral_damage": null,
+          "intended_failure_assertion_ids": [],
+          "static_status": "pending",
+          "fixture_id": null,
+          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        }
+      ],
+      "lifecycle": {
+        "required_equivalent_resets": 10,
+        "required_gold_repeats": 3,
+        "require_independent_run": true,
+        "require_mutation_visibility_probe": true,
+        "status": "pending_live",
+        "pending_reason": "No trusted live Arga CLI reset/isolation and repeated case-execution evidence is checked in."
+      }
+    }
+  ]
+}

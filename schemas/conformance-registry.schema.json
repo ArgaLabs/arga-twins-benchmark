@@ -1,0 +1,241 @@
+{
+  "$defs": {
+    "ConformanceCaseKind": {
+      "enum": [
+        "gold",
+        "negative_control",
+        "semantic_equivalent"
+      ],
+      "title": "ConformanceCaseKind",
+      "type": "string"
+    },
+    "ConformanceCaseSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "declared_control_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Declared Control Id"
+        },
+        "expected_collateral_damage": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Collateral Damage"
+        },
+        "expected_task_success": {
+          "title": "Expected Task Success",
+          "type": "boolean"
+        },
+        "fixture_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixture Id"
+        },
+        "intended_failure_assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Intended Failure Assertion Ids",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/ConformanceCaseKind"
+        },
+        "pending_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pending Reason"
+        },
+        "reference_gold_id": {
+          "minLength": 1,
+          "title": "Reference Gold Id",
+          "type": "string"
+        },
+        "static_status": {
+          "$ref": "#/$defs/StaticCaseStatus"
+        }
+      },
+      "required": [
+        "case_id",
+        "kind",
+        "reference_gold_id",
+        "expected_task_success",
+        "static_status"
+      ],
+      "title": "ConformanceCaseSpec",
+      "type": "object"
+    },
+    "ResetIsolationRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "pending_reason": {
+          "minLength": 1,
+          "title": "Pending Reason",
+          "type": "string"
+        },
+        "require_independent_run": {
+          "default": true,
+          "title": "Require Independent Run",
+          "type": "boolean"
+        },
+        "require_mutation_visibility_probe": {
+          "default": true,
+          "title": "Require Mutation Visibility Probe",
+          "type": "boolean"
+        },
+        "required_equivalent_resets": {
+          "default": 10,
+          "minimum": 10,
+          "title": "Required Equivalent Resets",
+          "type": "integer"
+        },
+        "required_gold_repeats": {
+          "default": 3,
+          "minimum": 3,
+          "title": "Required Gold Repeats",
+          "type": "integer"
+        },
+        "status": {
+          "const": "pending_live",
+          "default": "pending_live",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pending_reason"
+      ],
+      "title": "ResetIsolationRequirement",
+      "type": "object"
+    },
+    "StaticCaseStatus": {
+      "enum": [
+        "pending",
+        "executable"
+      ],
+      "title": "StaticCaseStatus",
+      "type": "string"
+    },
+    "VerifierConformanceEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "gold": {
+          "$ref": "#/$defs/ConformanceCaseSpec"
+        },
+        "instance_bundle_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Instance Bundle Sha256",
+          "type": "string"
+        },
+        "instance_id": {
+          "minLength": 1,
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/ResetIsolationRequirement"
+        },
+        "negative_controls": {
+          "items": {
+            "$ref": "#/$defs/ConformanceCaseSpec"
+          },
+          "minItems": 1,
+          "title": "Negative Controls",
+          "type": "array"
+        },
+        "semantic_equivalent": {
+          "$ref": "#/$defs/ConformanceCaseSpec"
+        },
+        "verifier_id": {
+          "minLength": 1,
+          "title": "Verifier Id",
+          "type": "string"
+        },
+        "verifier_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Verifier Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "instance_id",
+        "verifier_id",
+        "instance_bundle_sha256",
+        "verifier_sha256",
+        "gold",
+        "semantic_equivalent",
+        "negative_controls",
+        "lifecycle"
+      ],
+      "title": "VerifierConformanceEntry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/VerifierConformanceEntry"
+      },
+      "minItems": 1,
+      "title": "Entries",
+      "type": "array"
+    },
+    "kind": {
+      "const": "verifier_conformance_registry",
+      "title": "Kind",
+      "type": "string"
+    },
+    "protocol": {
+      "const": "arga-bench-verifier-conformance-registry/1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "protocol",
+    "entries"
+  ],
+  "title": "ConformanceRegistry",
+  "type": "object"
+}

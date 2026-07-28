@@ -1,0 +1,114 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "baseline_state_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Baseline State Sha256",
+      "type": "string"
+    },
+    "cleanup_confirmed": {
+      "title": "Cleanup Confirmed",
+      "type": "boolean"
+    },
+    "independent_run_proved": {
+      "default": false,
+      "title": "Independent Run Proved",
+      "type": "boolean"
+    },
+    "independent_run_state_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Independent Run State Sha256"
+    },
+    "instance_bundle_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Instance Bundle Sha256",
+      "type": "string"
+    },
+    "instance_id": {
+      "minLength": 1,
+      "title": "Instance Id",
+      "type": "string"
+    },
+    "mutation_probe_state_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Mutation Probe State Sha256"
+    },
+    "mutation_visibility_proved": {
+      "default": false,
+      "title": "Mutation Visibility Proved",
+      "type": "boolean"
+    },
+    "post_probe_reset_state_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Post Probe Reset State Sha256"
+    },
+    "protocol": {
+      "const": "arga-bench-live-lifecycle-conformance/1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "required_reset_count": {
+      "minimum": 10,
+      "title": "Required Reset Count",
+      "type": "integer"
+    },
+    "reset_state_sha256": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 10,
+      "title": "Reset State Sha256",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "verifier_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Verifier Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "protocol",
+    "instance_id",
+    "instance_bundle_sha256",
+    "verifier_sha256",
+    "required_reset_count",
+    "baseline_state_sha256",
+    "reset_state_sha256",
+    "cleanup_confirmed"
+  ],
+  "title": "LiveLifecycleEvidence",
+  "type": "object"
+}

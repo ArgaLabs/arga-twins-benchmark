@@ -86,8 +86,13 @@ def fingerprint_document(path: Path) -> str:
     return load_document(path).fingerprint
 
 
-def fingerprint_instance_bundle(catalog_root: Path, instance_id: str) -> str:
-    documents = validate_catalog(catalog_root)
+def fingerprint_instance_bundle(
+    catalog_root: Path,
+    instance_id: str,
+    *,
+    documents: list[CatalogDocument] | None = None,
+) -> str:
+    documents = documents if documents is not None else validate_catalog(catalog_root)
     instance_document = next(
         (
             document
