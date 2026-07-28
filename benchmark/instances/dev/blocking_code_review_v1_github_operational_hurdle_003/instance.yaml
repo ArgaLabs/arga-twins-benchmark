@@ -20,11 +20,88 @@ authorization:
   constraints:
     change_marker: "SEC-205"
     target_change: "#31"
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 8
+  agent_steps:
+    - id: discover_policy_and_queue
+      kind: discover
+      description: Read the policy and enumerate the unusually large open-change queue.
+      tool_interactions: [read_review_policy, list_open_changes]
+    - id: retrieve_target_context
+      kind: retrieve
+      description: Retrieve changed-file evidence for the relevant SEC candidate found in the queue.
+      depends_on: [discover_policy_and_queue]
+      tool_interactions: [read_target_diff]
+    - id: correlate_policy_to_code
+      kind: correlate
+      description: Distinguish the vulnerable queued change from thirty safe changes.
+      depends_on: [retrieve_target_context]
+    - id: check_existing_artifacts
+      kind: retrieve
+      description: Confirm the target has no existing blocking artifacts.
+      depends_on: [correlate_policy_to_code]
+      tool_interactions: [list_target_reviews, list_target_comments]
+    - id: decide_review_action
+      kind: decide
+      description: Select exactly one target after evaluating the large candidate queue.
+      depends_on: [check_existing_artifacts]
+    - id: submit_blocking_artifacts
+      kind: mutate
+      description: Submit the policy-required blocking review and inline comment.
+      depends_on: [decide_review_action]
+      tool_interactions: [create_target_review]
+    - id: confirm_review_state
+      kind: confirm
+      description: Confirm exact final review and comment cardinality.
+      depends_on: [submit_blocking_artifacts]
+      tool_interactions: [confirm_target_reviews, confirm_target_comments]
+  tool_interactions:
+    - id: read_review_policy
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main
+      purpose: Retrieve authoritative criteria.
+    - id: list_open_changes
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls?state=open
+      purpose: Enumerate all thirty-one open candidates in the queue and locate the SEC marker.
+    - id: read_target_diff
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/31/files
+      purpose: Locate request-controlled evaluation and its line.
+    - id: list_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/31/reviews
+      purpose: Prevent a duplicate blocking review.
+    - id: list_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/31/comments
+      purpose: Prevent a duplicate inline comment.
+    - id: create_target_review
+      provider_role: code_host
+      kind: write
+      target: POST /repos/acme/web-parser/pulls/31/reviews
+      purpose: Create the sole authorized review mutation.
+    - id: confirm_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/31/reviews
+      purpose: Confirm the blocking review.
+    - id: confirm_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/31/comments
+      purpose: Confirm the attached inline comment.
 budget:
   timeout_seconds: 300
   max_tool_calls: 80
 setup_patches:
-  - seed_target_beyond_default_pull_request_page
+  - seed_large_candidate_queue
 failure_schedule: []
 metadata:
   service_count: 1

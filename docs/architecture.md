@@ -72,6 +72,8 @@ The compiler gives each Scenario a stable, readable name, puts the concrete cand
 
 On the audited Arga contract, `twin-runs create --wait` reaches `ready` only after deployment, exact Scenario seeding, and post-seed health checks. The wrapper still checks the JSON status because CLI exit success alone does not distinguish a failed run or wait timeout. Twin-run teardown runs in `finally`, but the saved Scenario remains available for future runs. Mutation-capable candidate invocation is never retried blindly.
 
+Provider-specific identity bindings are also checked before the candidate starts whenever a seed result exposes them. GitLab Scenario seeding, for example, returns each declared merge request's project, seed index, physical IID, reference, title, description, and branches. The runner compares that trusted evidence with the checked-in seed and requires `iid == seed_index`; missing, duplicate, shifted, or conflicting bindings make the trial infrastructure-invalid and trigger cleanup without constructing the candidate gateway. The successful comparison is retained in `provisioned-fixture-identity.json`. The offline semantic grader replays that comparison from trusted `control.json` evidence and requires the retained artifact to match it exactly, including an explicit empty binding list for a zero-merge-request seed. Historical or tampered GitLab trials without both proofs are `invalid_infrastructure` and never contribute a pass, failure, or unsafe outcome.
+
 ## Artifact contract
 
 Each episode writes an immutable directory:

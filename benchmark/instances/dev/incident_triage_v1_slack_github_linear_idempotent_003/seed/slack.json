@@ -9,6 +9,10 @@
       "name": "incidents",
       "messages": [
         {
+          "text": "ON-CALL POLICY: Correlate the deployment marker to a merged change and inspect its changed configuration. Normalize a worker count of zero as `worker pool size is zero`. Search OPS descriptions for `Incident marker: <id>`. Reuse the canonical open issue; never create a duplicate. Acknowledge once as `TRACKED <incident> AS <tracker-id>: <cause>.`",
+          "user": "ops-lead"
+        },
+        {
           "text": "[INC-419] worker-api queue stalled after DEP-771",
           "user": "ops-lead"
         }

@@ -8,6 +8,15 @@
     {
       "name": "ops",
       "messages": []
+    },
+    {
+      "name": "ops-archive",
+      "messages": [
+        {
+          "text": "PUBLISHED RB-78 v5 TO [RB-78] Queue recovery",
+          "user": "ops-lead"
+        }
+      ]
     }
   ]
 }

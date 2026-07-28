@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import yaml
+
 from arga_twins_benchmark.catalog import fingerprint_document, fingerprint_instance_bundle, validate_catalog
 from arga_twins_benchmark.specs.models import ExperimentSpec, InstanceSpec, TemplateSpec
 
@@ -46,3 +48,19 @@ def test_episode_bundle_fingerprint_includes_referenced_artifacts(tmp_path: Path
     prompt.write_text(prompt.read_text() + "\nAdditional constraint.")
 
     assert fingerprint_instance_bundle(catalog, instance_id) != original
+
+
+def test_episode_bundle_fingerprint_ignores_only_output_fact_severity(tmp_path: Path) -> None:
+    import shutil
+
+    catalog = tmp_path / "benchmark"
+    shutil.copytree("benchmark", catalog)
+    instance_id = "blocking_code_review_v1_github_clean_001"
+    original = fingerprint_instance_bundle(catalog, instance_id)
+    verification_path = catalog / "instances/dev/blocking_code_review_v1_github_clean_001/verification.yaml"
+    payload = yaml.safe_load(verification_path.read_text())
+    contract = payload["output_contract"]
+    contract["diagnostic_facts"]["target_change"] = contract["required_facts"].pop("target_change")
+    verification_path.write_text(yaml.safe_dump(payload, sort_keys=False))
+
+    assert fingerprint_instance_bundle(catalog, instance_id) == original

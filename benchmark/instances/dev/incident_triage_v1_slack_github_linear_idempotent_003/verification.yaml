@@ -26,4 +26,45 @@ partial_credit:
   chat_ack: 0.25
   preserve_unrelated: 0.15
 output_contract:
-  exact_pattern: "TRACKED INC-419 AS OPS-1: worker pool size is zero."
+  mode: structured_facts
+  required_facts:
+    incident: INC-419
+    correlated_change: "GitHub PR #1"
+    root_cause: worker pool size is zero
+    tracker_identifier: OPS-1
+    tracker_action: reused
+  diagnostic_facts:
+    acknowledged: true
+  forbidden_facts:
+    tracker_action: [created, duplicated]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_chat, provider_role: team_chat, method: POST, path: /api/conversations.list, canonicalizer: slack_channels_messages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/worker-api/pulls?state=all", canonicalizer: github_repository_and_pulls_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: POST, path: /graphql, canonicalizer: linear_team_OPS_issues_stable}
+  state_assertions:
+    - {id: sa_existing_issue, provider_role: issue_tracker, resource_type: issue, selector: {identifier: OPS-1, marker: INC-419}, expected: {equals_baseline: true, priority: 1, state_type: open}, cardinality: 1}
+    - {id: sa_issue_count, provider_role: issue_tracker, resource_type: issue_collection, selector: {team_key: OPS, marker: INC-419}, expected: {delta_from_baseline: 0}, cardinality: 1}
+    - {id: sa_acknowledgment, provider_role: team_chat, resource_type: message, selector: {channel_name: incidents, text: "TRACKED INC-419 AS OPS-1: worker pool size is zero."}, expected: {new_since_baseline: true}, cardinality: 1}
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: repository_snapshot, selector: {repository: acme/worker-api}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_prior_messages_preserved, provider_role: team_chat, resource_type: message_collection, selector: {channel_name: incidents, baseline_only: true}, expected: {equals_baseline: true}, cardinality: 2}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_ack, provider_role: team_chat, resource_type: message, operation: create, selector: {channel_name: incidents, incident: INC-419}, fields: [text, author], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 8
+    required_calls:
+      - {id: list_incident_channels, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.list$", min_count: 1}
+      - {id: read_incident_channel, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+      - {id: list_merged_changes, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/worker-api/pulls\\?state=closed$", min_count: 1}
+      - {id: read_correlated_diff, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/worker-api/pulls/1/files$", min_count: 1}
+      - {id: search_incident_tracker, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueSearch$", min_count: 1}
+      - {id: read_existing_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue$", min_count: 1}
+      - {id: publish_acknowledgment, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+      - {id: confirm_acknowledgment, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_create_ack, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

@@ -7,7 +7,12 @@
   "channels": [
     {
       "name": "releases",
-      "messages": []
+      "messages": [
+        {
+          "text": "READINESS REL-206: BLOCKED - change #2 is not merged.",
+          "user": "ops-lead"
+        }
+      ]
     }
   ]
 }

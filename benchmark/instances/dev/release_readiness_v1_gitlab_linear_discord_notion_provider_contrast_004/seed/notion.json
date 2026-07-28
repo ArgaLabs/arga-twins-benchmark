@@ -1,6 +1,10 @@
 {
   "pages": [
     {
+      "title": "[POLICY] Release readiness operations",
+      "content": "# Release readiness operations\n\nEvaluate required changes first, then blocking items, then security approval. READY requires all referenced changes merged, all blockers completed or none, and approval APPROVED. Comment once on the marked release record, complete it only when READY, and publish once in #releases as `READINESS <release>: <decision> - <reason>.`\n"
+    },
+    {
       "title": "[REL-207] Release checklist",
       "content": "# REL-207 release checklist\n\n## Required changes\n- GitLab MR !1\n- GitLab MR !2\n\n## Blocking items\n- none\n\nSecurity approval: APPROVED\n"
     }

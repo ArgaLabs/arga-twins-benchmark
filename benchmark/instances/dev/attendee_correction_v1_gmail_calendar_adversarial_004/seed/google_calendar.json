@@ -24,6 +24,26 @@
           "end": "2030-05-17T15:45:00Z"
         }
       ]
+    },
+    {
+      "name": "Work Archive",
+      "events": [
+        {
+          "summary": "Launch review",
+          "start": "2030-05-16T15:00:00Z",
+          "end": "2030-05-16T15:45:00Z"
+        }
+      ]
+    },
+    {
+      "name": "Personal",
+      "events": [
+        {
+          "summary": "Launch review",
+          "start": "2030-05-16T15:00:00Z",
+          "end": "2030-05-16T15:30:00Z"
+        }
+      ]
     }
   ]
 }

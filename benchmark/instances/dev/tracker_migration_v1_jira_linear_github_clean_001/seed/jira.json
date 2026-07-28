@@ -9,6 +9,12 @@
           "description": "Migration marker: MIG-31\nCode reference: acme/hooks#1\nRetry DLQ webhooks with exponential backoff.",
           "priority": "High",
           "status": "In Progress"
+        },
+        {
+          "summary": "Review webhook dashboard colors",
+          "description": "No migration request. Code reference: acme/hooks#1",
+          "priority": "Medium",
+          "status": "To Do"
         }
       ]
     }

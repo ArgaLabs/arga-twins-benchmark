@@ -26,7 +26,7 @@
       "prs": [
         {
           "title": "Deploy worker pool",
-          "body": "Deployment: DEP-771\nCause: worker pool size is zero",
+          "body": "Deployment: DEP-771",
           "head": "deploy/771",
           "base": "main",
           "state": "merged",

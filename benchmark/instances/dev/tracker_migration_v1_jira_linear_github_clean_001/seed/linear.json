@@ -3,14 +3,30 @@
     {
       "key": "OPS",
       "name": "Operations"
+    },
+    {
+      "key": "ENG",
+      "name": "Engineering"
     }
   ],
   "projects": [
     {
       "name": "Reliability",
       "team_key": "OPS"
+    },
+    {
+      "name": "Platform",
+      "team_key": "ENG"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "team_key": "ENG",
+      "title": "Unrelated migration planning",
+      "description": "Migration source: OPS-99",
+      "priority": 3,
+      "project": "Platform"
+    }
+  ],
   "comments": []
 }

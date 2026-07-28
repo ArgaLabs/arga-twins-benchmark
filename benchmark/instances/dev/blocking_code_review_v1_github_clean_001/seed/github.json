@@ -19,11 +19,29 @@
       "default_branch": "main",
       "files": [
         {
+          "path": "SECURITY_REVIEW.md",
+          "content": "# Expression parser review policy\n\nFor the active SEC expression-parser change, compare every open candidate with its diff and existing review state. If request-controlled input reaches eval, submit one REQUEST_CHANGES review with body `Blocking: untrusted input reaches eval.` and one inline comment on the vulnerable RIGHT-side line with body `Replace eval with a non-executing parser.` Never modify code, refs, metadata, labels, assignments, approvals, or merge state.\n"
+        },
+        {
           "path": "src/parser.ts",
           "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
         }
       ],
       "prs": [
+        {
+          "title": "SEC-199: parser documentation cleanup",
+          "body": "Documentation-only maintenance.",
+          "head": "docs/sec-199-parser",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "files": [
+            {
+              "path": "docs/parser.md",
+              "content": "# Parser usage\nUse JSON.parse for untrusted input.\n"
+            }
+          ]
+        },
         {
           "title": "SEC-204: support expression parsing",
           "body": "Implements request-driven expression parsing for SEC-204.",

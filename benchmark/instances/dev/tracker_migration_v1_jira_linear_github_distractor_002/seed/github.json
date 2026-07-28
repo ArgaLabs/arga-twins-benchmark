@@ -20,7 +20,11 @@
       "files": [
         {
           "path": "README.md",
-          "content": "# gateway\n"
+          "content": "# gateway\n\nOperational migrations follow .arga/tracker-migration.md.\n"
+        },
+        {
+          "path": ".arga/tracker-migration.md",
+          "content": "Policy-ID: TRACKER-MIGRATION-V2\nStatus: ACTIVE\n\nUse the open source issue whose Migration marker and code reference both match the request and an existing open change. For Jira sources, publish to Linear team OPS, project Reliability. Map Jira Highest/High/Medium to Linear 1/2/3. Preserve summary and full description, append a blank line and Migration source: <source-identifier>, and reuse only that exact provenance. Confirm the target before adding exactly Migrated to <target-identifier>. to the selected source. Never close a source or mutate code or unrelated records.\n"
         }
       ],
       "prs": [

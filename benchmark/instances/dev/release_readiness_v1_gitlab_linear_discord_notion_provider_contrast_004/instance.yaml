@@ -25,6 +25,64 @@ authorization:
     release_marker: "REL-207"
     release_record: "REL-1"
     status_channel: "releases"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 15
+  agent_steps:
+    - id: discover_release_sources
+      kind: discover
+      description: Find release policy and target checklist in the knowledge base.
+      tool_interactions: [search_release_pages]
+    - id: retrieve_release_rules
+      kind: retrieve
+      description: Read both pages and extract GitLab, Linear, and Discord references.
+      depends_on: [discover_release_sources]
+      tool_interactions: [read_release_policy, read_release_checklist]
+    - id: verify_code_gates
+      kind: retrieve
+      description: Resolve both required merge requests and verify merged state.
+      depends_on: [retrieve_release_rules]
+      tool_interactions: [read_required_change_one, read_required_change_two]
+    - id: verify_tracker_gates
+      kind: correlate
+      description: Resolve the authoritative Linear release record and the team's completed workflow state.
+      depends_on: [verify_code_gates]
+      tool_interactions: [read_tracker_gates, read_release_workflow]
+    - id: preflight_publication
+      kind: retrieve
+      description: Resolve the Discord guild/channel and inspect existing release history.
+      depends_on: [verify_tracker_gates]
+      tool_interactions: [list_current_guilds, list_release_channels, read_release_channel]
+    - id: decide_readiness
+      kind: decide
+      description: Apply the provider-neutral gate policy and derive READY.
+      depends_on: [preflight_publication]
+    - id: record_and_publish
+      kind: mutate
+      description: Comment on and complete the Linear record, then publish one Discord status.
+      depends_on: [decide_readiness]
+      tool_interactions: [comment_release_record, transition_release_record, publish_release_status]
+    - id: confirm_release_outcome
+      kind: confirm
+      description: Confirm final record state and exactly one channel publication.
+      depends_on: [record_and_publish]
+      tool_interactions: [confirm_release_record, confirm_release_channel]
+  tool_interactions:
+    - {id: search_release_pages, provider_role: knowledge_base, kind: read, target: POST /v1/search, purpose: Locate policy and REL-207 checklist.}
+    - {id: read_release_policy, provider_role: knowledge_base, kind: read, target: GET /v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3, purpose: Retrieve authoritative gate order and update rules.}
+    - {id: read_release_checklist, provider_role: knowledge_base, kind: read, target: GET /v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f, purpose: Retrieve REL-207 references and expected gates.}
+    - {id: read_required_change_one, provider_role: code_host, kind: read, target: GET /api/v4/projects/acme%2Fpayments/merge_requests/1, purpose: Verify the first checklist-referenced merge request.}
+    - {id: read_required_change_two, provider_role: code_host, kind: read, target: GET /api/v4/projects/acme%2Fpayments/merge_requests/2, purpose: Verify the second checklist-referenced merge request.}
+    - {id: read_tracker_gates, provider_role: issue_tracker, kind: read, target: POST /graphql issueSearch query for REL-1, purpose: Resolve the marked release record.}
+    - {id: read_release_workflow, provider_role: issue_tracker, kind: read, target: POST /graphql workflowStates query for team REL, purpose: Resolve the completed state identifier required by issueUpdate.}
+    - {id: list_current_guilds, provider_role: team_chat, kind: read, target: GET /api/v10/users/@me/guilds, purpose: Resolve the Acme Ops guild identifier.}
+    - {id: list_release_channels, provider_role: team_chat, kind: read, target: GET /api/v10/guilds/000000000000000100/channels, purpose: Resolve the releases channel within Acme Ops.}
+    - {id: read_release_channel, provider_role: team_chat, kind: read, target: GET /api/v10/channels/856171103353375329/messages, purpose: Prevent duplicate target publication.}
+    - {id: comment_release_record, provider_role: issue_tracker, kind: write, target: POST /graphql commentCreate, purpose: Record the READY decision on REL-1.}
+    - {id: transition_release_record, provider_role: issue_tracker, kind: write, target: POST /graphql issueUpdate, purpose: Complete only the ready REL-1 record.}
+    - {id: publish_release_status, provider_role: team_chat, kind: write, target: POST /api/v10/channels/856171103353375329/messages, purpose: Publish the sole release status.}
+    - {id: confirm_release_record, provider_role: issue_tracker, kind: read, target: POST /graphql issue query for REL-1, purpose: Confirm completion and one comment.}
+    - {id: confirm_release_channel, provider_role: team_chat, kind: read, target: GET /api/v10/channels/856171103353375329/messages, purpose: Confirm one target publication.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 70

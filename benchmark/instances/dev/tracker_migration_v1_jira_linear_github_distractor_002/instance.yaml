@@ -23,6 +23,28 @@ authorization:
     migration_marker: "MIG-32"
     source_issue: "OPS-3"
     code_reference: "acme/gateway#4"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 9
+  agent_steps:
+    - {id: discover_source, kind: discover, description: "Search MIG-32 candidates across source states.", tool_interactions: [source_search]}
+    - {id: retrieve_source, kind: retrieve, description: "Inspect comments for the selected full search result.", depends_on: [discover_source], tool_interactions: [source_comments]}
+    - {id: validate_policy, kind: correlate, description: "Read the repository policy and validate the exact referenced change.", depends_on: [retrieve_source], tool_interactions: [policy_read, code_reference_read]}
+    - {id: inspect_destination, kind: retrieve, description: "Resolve destination scope and the unique exact-provenance match.", depends_on: [validate_policy], tool_interactions: [target_scope_read, target_search]}
+    - {id: reject_distractors, kind: decide, description: "Reject closed, wrong-reference, and wrong-source-provenance records, then choose safe creation or reconciliation for the exact OPS-3 provenance.", depends_on: [inspect_destination], tool_interactions: []}
+    - {id: reconcile_destination, kind: mutate, description: "Create a target only when no exact-provenance target exists; otherwise safely reconcile that unique target in place.", depends_on: [reject_distractors], tool_interactions: [target_reconcile]}
+    - {id: record_audit, kind: mutate, description: "Add the required comment only to the selected source.", depends_on: [reconcile_destination], tool_interactions: [source_comment_write]}
+    - {id: confirm_state, kind: confirm, description: "Confirm the destination and untouched distractors.", depends_on: [record_audit], tool_interactions: [target_confirm]}
+  tool_interactions:
+    - {id: source_search, provider_role: source_tracker, kind: read, target: "Jira issue search", purpose: "Enumerate all MIG-32 candidates."}
+    - {id: source_comments, provider_role: source_tracker, kind: read, target: "Jira candidate comments", purpose: "Check audit state."}
+    - {id: policy_read, provider_role: code_host, kind: read, target: "acme/gateway .arga/tracker-migration.md", purpose: "Discover migration rules."}
+    - {id: code_reference_read, provider_role: code_host, kind: read, target: "acme/gateway pull request 4", purpose: "Validate the exact referenced change."}
+    - {id: target_scope_read, provider_role: target_tracker, kind: read, target: "Linear OPS team and Reliability project", purpose: "Resolve destination identifiers."}
+    - {id: target_search, provider_role: target_tracker, kind: read, target: "Linear issues", purpose: "Reject the OPS-8 provenance decoy and identify the unique OPS-3 provenance record."}
+    - {id: target_reconcile, provider_role: target_tracker, kind: write, target: "Linear issue", purpose: "Create or reconcile exactly one destination for the correct provenance."}
+    - {id: source_comment_write, provider_role: source_tracker, kind: write, target: "Jira OPS-3 comments", purpose: "Record destination provenance."}
+    - {id: target_confirm, provider_role: target_tracker, kind: read, target: "Linear migrated issue", purpose: "Confirm exact final state."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 65
@@ -31,3 +53,6 @@ setup_patches:
 failure_schedule: []
 metadata:
   service_count: 3
+  fixture_revision: 2
+  fixture_revision_reason: "Align deterministic grading with the prompt, provider policy, and create_or_update_migration_target authorization."
+  historical_compatibility: "Revision-1 grades may be reinterpreted only as a manual audit; scoreable comparisons require reprovisioning under revision 2."

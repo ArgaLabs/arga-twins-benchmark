@@ -3,31 +3,23 @@
     {
       "name": "Work",
       "events": [
-        {
-          "summary": "Quarterly planning",
-          "start": "2030-05-16T13:00:00Z",
-          "end": "2030-05-16T13:30:00Z"
-        },
-        {
-          "summary": "Operations review",
-          "start": "2030-05-16T14:15:00Z",
-          "end": "2030-05-16T15:00:00Z"
-        }
+        {"summary": "Quarterly planning", "start": "2030-05-16T13:00:00Z", "end": "2030-05-16T13:30:00Z"},
+        {"summary": "Operations review", "start": "2030-05-16T14:45:00Z", "end": "2030-05-16T15:15:00Z"},
+        {"summary": "Budget review preparation draft", "start": "2030-05-16T15:30:00Z", "end": "2030-05-16T16:15:00Z"},
+        {"summary": "Budget review preparation", "start": "2030-05-17T13:45:00Z", "end": "2030-05-17T14:30:00Z"}
       ]
     },
     {
       "name": "Personal",
       "events": [
-        {
-          "summary": "Personal appointment",
-          "start": "2030-05-16T13:30:00Z",
-          "end": "2030-05-16T14:15:00Z"
-        },
-        {
-          "summary": "Budget review preparation",
-          "start": "2030-05-16T15:00:00Z",
-          "end": "2030-05-16T15:45:00Z"
-        }
+        {"summary": "Budget review preparation", "start": "2030-05-16T13:45:00Z", "end": "2030-05-16T14:30:00Z"},
+        {"summary": "Dentist", "start": "2030-05-16T15:30:00Z", "end": "2030-05-16T16:30:00Z"}
+      ]
+    },
+    {
+      "name": "Archive",
+      "events": [
+        {"summary": "Quarterly planning", "start": "2030-05-16T13:30:00Z", "end": "2030-05-16T16:00:00Z"}
       ]
     }
   ]

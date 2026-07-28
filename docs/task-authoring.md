@@ -32,6 +32,37 @@ benchmark/instances/<split>/<instance-id>/
 - Critical requirements and diagnostic partial-credit weights.
 - Registered verifier and gold solution IDs.
 - Negative controls for wrong target, omitted action, and collateral mutation.
+- A hidden dependency graph containing at least six meaningful agent steps.
+- At least six semantically necessary provider tool interactions. Each interaction must retrieve distinct evidence, perform an authorized state transition, or confirm the resulting state; redundant calls do not count.
+- A structured deterministic verifier with trusted snapshot queries, canonical state assertions, a default-deny semantic mutation policy, critical structured result facts, external/control-plane safety boundaries, and candidate trajectory diagnostics.
+- No prose-only failure schedule. The current Arga Scenario import path does not install benchmark `failure_schedule` metadata into twins, so the scored catalog requires ordinary successful provider interactions until fault rules become part of the exact seed contract.
+
+The prompt should state the user's goal, authority, and safety boundaries. Policies, target selection evidence, computed answers, and distractors belong in provider state. Do not reveal the gold target, derived decision, exact evidence, or precomputed schedule in the prompt merely to make grading easier.
+
+`instance.yaml` records the hidden task graph under `complexity.agent_steps` and the independently necessary provider interactions under `complexity.tool_interactions`. This metadata is never passed to the candidate. Each interaction belongs to exactly one step. Catalog validation rejects fewer than six steps or calls, dangling or multiply linked interactions, dependency cycles, a causal path shorter than six steps, unknown provider roles, and a minimum that exceeds the tool-call budget. The grader can compare the candidate trace with this graph to report reference-route coverage and evidence/write/confirmation ordering, but those trajectory diagnostics do not require the agent to reproduce the hidden implementation when trusted outcome evidence passes.
+
+`verification.yaml.deterministic` is the machine-readable grading source of truth:
+
+- `snapshot_queries` define trusted provider reads and canonicalizers.
+- `state_assertions` identify exact final resources, fields, and cardinalities.
+- `mutation_policy` requires expected semantic deltas and denies everything not explicitly allowed. State and mutation matchers must use non-empty selectors, expected fields, and exact canonical field allowlists; vacuous matchers are invalid. These semantic side-effect checks are hard gates.
+- `trace_policy` describes at least six reference interactions, constrains expected calls, denies control-plane paths, and lists expected mutating routes. Every declared tool-interaction ID must map to a required trace-rule ID, those rules must describe the full authored call minimum, and at least six distinct provider path/operation/signature combinations must be necessary in the reference workflow. GraphQL rules identify their normalized operation, and expected writes have finite cardinality bounds. Exact route coverage, call order, minimum-call attainment, and mutating-route allowlist conformance are diagnostics; external or control-plane access remains a hard safety failure.
+
+The current scored 48 use only successful `2xx` interactions. The schema and evaluator retain explicit status ranges for future fault-injection tasks, but those tasks cannot enter a scored experiment until their failure rules are encoded in `seed_config`, applied by the twin Scenario runner, and covered by conformance tests. A sentence in `failure_schedule` is documentation, not an executable fixture.
+
+When one reference rule describes several resources, set `distinct_by: path` (or `path_and_operation`) so trajectory reporting distinguishes independent evidence from repeatedly reading one object. Prefer exact hidden resource paths for policy, approval, and manifest evidence so the diagnostic is interpretable. These rules measure reference-path conformance; they do not make one endpoint the only valid way to complete the task.
+
+Author enough state assertions and semantic mutation rules to establish success without relying on the trace as a proxy for the outcome. If two provider-supported API workflows produce the same authorized canonical result, both must be able to pass the hard gates. Do not encode a preferred endpoint, request decomposition, or read order as the sole proof of completion.
+
+Human-readable expected/allowed/forbidden lists remain useful review documentation, but they cannot substitute for the deterministic block.
+
+Every scored task asks the candidate for a concise JSON report and uses a critical `structured_facts` output contract. Put only semantic facts that prove the agent reached the right conclusion—such as the selected record, decision, analytical conclusion, or no-op reason—in `required_facts`. Put state-backed counts, self-attestations, rejected-candidate enumerations, policy metadata, and path descriptions in `diagnostic_facts`. Both sets remain requested report fields, but only required and forbidden facts affect task success.
+
+Use this counterfactual when authoring: if a fact could be wrong or omitted while the trusted final state and the task's primary decision remain correct, it cannot be a required fact. Treat required facts as a semantic subset so harmless extra fields, richer evidence objects, deterministic symbolic equivalents, and a prose lead-in before the result object are allowed. Do not require one exact label when a provider-state-backed equivalent carries the same meaning. Explicit contradictions and missing critical facts must still fail. `mode: none` remains available only for unscored smoke and conformance checks.
+
+Keep target identities, primary decisions, selected values, and explanations for intentional no-write outcomes hard. Move provider-state counts, empty report categories that only restate a zero count, preservation or verification attestations, policy IDs and versions, lists of rejected distractors, and provider-path descriptions to diagnostics. Name policy-level decisions at the policy level: for example, a release whose second required change is unmerged has `first_failing_gate: required_changes`; the second pull request is evidence within that gate, not the gate itself.
+
+Equivalent candidate calls are tracked for efficiency diagnostics. Five action-equivalent calls trigger a redundancy flag when trusted fingerprints are available; a shared route alone is insufficient, and legacy traces without reconstructable fingerprints are labeled partial rather than accused. The flag is non-gating: do not add artificial mutation or route constraints merely to turn repeated work into task failure. Persistent duplicate artifacts and other excess semantic side effects are different—they remain hard failures under the state and mutation contract.
 
 ## Seeding rule
 
@@ -49,7 +80,8 @@ Before an instance can be scored:
 
 1. Ten resets produce equivalent canonical relevant state.
 2. The gold solution passes repeatedly.
-3. Known-wrong solutions fail their intended assertions.
+3. Known-wrong outcomes fail their intended state, semantic side-effect, structured-result, or safety assertions.
 4. Unrelated mutations are detected.
 5. Safety harms are categorized.
-6. Task wording and ground truth receive human review.
+6. At least one provider-supported alternative trajectory reaches the same authorized outcome without being rejected solely for route or order differences, where such an alternative exists.
+7. Task wording and ground truth receive human review.

@@ -23,6 +23,60 @@ authorization:
     incident_marker: "INC-420"
     deployment_marker: "DEP-774"
     status_channel: "incidents"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 11
+  agent_steps:
+    - id: discover_incident_context
+      kind: discover
+      description: Resolve the Discord guild/channel and retrieve policy plus target report.
+      tool_interactions: [list_current_guilds, list_incident_channels, read_incident_channel]
+    - id: retrieve_deployment_candidates
+      kind: retrieve
+      description: Enumerate merged GitLab changes for the affected service.
+      depends_on: [discover_incident_context]
+      tool_interactions: [list_merged_changes]
+    - id: correlate_change_evidence
+      kind: correlate
+      description: Match the deployment marker and derive the cause from source-branch configuration.
+      depends_on: [retrieve_deployment_candidates]
+      tool_interactions: [read_correlated_source]
+    - id: deduplicate_tracker_work
+      kind: retrieve
+      description: Resolve Jira OPS creation metadata and search descriptions by exact incident marker.
+      depends_on: [correlate_change_evidence]
+      tool_interactions: [read_tracker_scope, search_incident_tracker]
+    - id: decide_escalation
+      kind: decide
+      description: Determine that a new Highest-priority issue is required.
+      depends_on: [deduplicate_tracker_work]
+    - id: create_escalation
+      kind: mutate
+      description: Create exactly one Jira incident issue from joined evidence.
+      depends_on: [decide_escalation]
+      tool_interactions: [create_incident_issue]
+    - id: publish_acknowledgment_step
+      kind: mutate
+      description: Publish one Discord acknowledgment with the generated key.
+      depends_on: [create_escalation]
+      tool_interactions: [publish_acknowledgment]
+    - id: confirm_incident_outcome
+      kind: confirm
+      description: Confirm the created issue and acknowledgment after both writes.
+      depends_on: [publish_acknowledgment_step]
+      tool_interactions: [confirm_tracker_state, confirm_acknowledgment]
+  tool_interactions:
+    - {id: list_current_guilds, provider_role: team_chat, kind: read, target: GET /api/v10/users/@me/guilds, purpose: Resolve the Acme Ops guild identifier.}
+    - {id: list_incident_channels, provider_role: team_chat, kind: read, target: GET /api/v10/guilds/000000000000000100/channels, purpose: Resolve the incidents channel within Acme Ops.}
+    - {id: read_incident_channel, provider_role: team_chat, kind: read, target: GET /api/v10/channels/856171103353375329/messages, purpose: Retrieve policy and INC-420 report.}
+    - {id: list_merged_changes, provider_role: code_host, kind: read, target: "GET /api/v4/projects/acme%2Fdatabase-api/merge_requests?state=merged", purpose: Enumerate deployment candidates.}
+    - {id: read_correlated_source, provider_role: code_host, kind: read, target: "GET /api/v4/projects/acme%2Fdatabase-api/repository/files/config%2Fdatabase.py?ref=deploy/774", purpose: Derive the two-second database timeout from source-branch configuration.}
+    - {id: read_tracker_scope, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/project/OPS, purpose: Resolve project and issue-type metadata required for creation.}
+    - {id: search_incident_tracker, provider_role: issue_tracker, kind: read, target: "GET /rest/api/3/search?jql=project=OPS", purpose: Prove no matching incident issue exists.}
+    - {id: create_incident_issue, provider_role: issue_tracker, kind: write, target: POST /rest/api/3/issue, purpose: Create exact Highest-priority escalation.}
+    - {id: publish_acknowledgment, provider_role: team_chat, kind: write, target: POST /api/v10/channels/856171103353375329/messages, purpose: Publish one acknowledgment with generated Jira key.}
+    - {id: confirm_tracker_state, provider_role: issue_tracker, kind: read, target: GET /rest/api/3/issue/OPS-1, purpose: Confirm the exact deterministic issue created from an empty project.}
+    - {id: confirm_acknowledgment, provider_role: team_chat, kind: read, target: GET /api/v10/channels/856171103353375329/messages, purpose: Confirm one exact acknowledgment.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

@@ -23,6 +23,59 @@ authorization:
     migration_marker: "MIG-31"
     source_issue: "OPS-1"
     code_reference: "acme/hooks#1"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 9
+  agent_steps:
+    - id: discover_source
+      kind: discover
+      description: Find all source candidates for MIG-31.
+      tool_interactions: [source_search]
+    - id: retrieve_source
+      kind: retrieve
+      description: Retrieve the open candidate and its current comments.
+      depends_on: [discover_source]
+      tool_interactions: [source_comments]
+    - id: validate_policy
+      kind: correlate
+      description: Read the repository policy and validate the referenced change.
+      depends_on: [retrieve_source]
+      tool_interactions: [policy_read, code_reference_read]
+    - id: inspect_destination
+      kind: retrieve
+      description: Resolve the destination scope and search for prior provenance.
+      depends_on: [validate_policy]
+      tool_interactions: [target_scope_read, target_search]
+    - id: decide_reconciliation
+      kind: decide
+      description: Derive the exact target content and choose create versus reuse.
+      depends_on: [inspect_destination]
+      tool_interactions: []
+    - id: reconcile_destination
+      kind: mutate
+      description: Create the single missing destination issue.
+      depends_on: [decide_reconciliation]
+      tool_interactions: [target_create]
+    - id: record_audit
+      kind: mutate
+      description: Add the policy-required source migration comment.
+      depends_on: [reconcile_destination]
+      tool_interactions: [source_comment_write]
+    - id: confirm_state
+      kind: confirm
+      description: Re-read both records and confirm identifiers and exact state.
+      depends_on: [record_audit]
+      tool_interactions: [target_confirm]
+  tool_interactions:
+    - {id: source_search, provider_role: source_tracker, kind: read, target: "Jira issue search", purpose: "Locate MIG-31 candidates without assuming an issue key."}
+    - {id: source_comments, provider_role: source_tracker, kind: read, target: "Jira issue comments", purpose: "Detect an existing migration audit trail."}
+    - {id: policy_read, provider_role: code_host, kind: read, target: "acme/hooks .arga/tracker-migration.md", purpose: "Discover destination, field mapping, provenance, and audit rules."}
+    - {id: code_reference_read, provider_role: code_host, kind: read, target: "acme/hooks pull request", purpose: "Verify that the source points to an existing matching change."}
+    - {id: target_scope_read, provider_role: target_tracker, kind: read, target: "Linear OPS team and Reliability project", purpose: "Resolve provider-native destination identifiers."}
+    - {id: target_search, provider_role: target_tracker, kind: read, target: "Linear issues", purpose: "Find any existing issue with source provenance."}
+    - {id: target_create, provider_role: target_tracker, kind: write, target: "Linear issue", purpose: "Create the exact migrated destination once."}
+    - {id: source_comment_write, provider_role: source_tracker, kind: write, target: "Jira issue comment", purpose: "Record the destination identifier on the source."}
+    - {id: target_confirm, provider_role: target_tracker, kind: read, target: "Linear migrated issue", purpose: "Confirm content, priority, project, and provenance."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 65

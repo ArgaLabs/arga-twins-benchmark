@@ -28,4 +28,50 @@ partial_credit:
   idempotency: 0.10
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "PUBLISHED RB-80 v2 TO [RB-80] Database failover"
+  mode: structured_facts
+  required_facts:
+    outcome: published
+    runbook_id: RB-80
+    selected_version: 2
+    destination: "[RB-80] Database failover"
+    channel: operations
+  diagnostic_facts:
+    team_chat_provider: discord
+  forbidden_facts:
+    selected_version: [3, 8]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_drive, provider_role: file_storage, method: GET, path: "/drive/v3/files", canonicalizer: drive_files_content_hash_v1}
+    - {id: snap_notion, provider_role: knowledge_base, method: POST, path: "/v1/search", canonicalizer: notion_pages_markdown_v1}
+    - {id: snap_chat, provider_role: team_chat, method: GET, path: "/api/v10/users/@me/guilds", canonicalizer: discord_guild_channels_messages_v1}
+  state_assertions:
+    - {id: assert_destination, provider_role: knowledge_base, resource_type: page, selector: {title: "[RB-80] Database failover"}, expected: {markdown: "# Database failover\n\n1. Freeze writes.\n1. Promote the standby.\n1. Verify replication health.\n"}, cardinality: 1, critical: true}
+    - {id: assert_announcement, provider_role: team_chat, resource_type: message, selector: {channel: operations, content: "PUBLISHED RB-80 v2 TO [RB-80] Database failover"}, expected: {count: 1}, cardinality: 1, critical: true}
+    - {id: assert_sources_preserved, provider_role: file_storage, resource_type: folder, selector: {name: "Approved Runbooks"}, expected: {mutation_count: 0}, cardinality: 1, critical: true}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mut_notion_update, provider_role: knowledge_base, resource_type: page_markdown, operation: update, selector: {title: "[RB-80] Database failover"}, fields: [markdown], min_count: 1, max_count: 1, critical: true}
+      - {id: mut_chat_create, provider_role: team_chat, resource_type: message, operation: create, selector: {channel: operations, content: "PUBLISHED RB-80 v2 TO [RB-80] Database failover"}, fields: [channel_id, content], min_count: 1, max_count: 1, critical: true}
+    allowed:
+      - {id: allow_notion_update, provider_role: knowledge_base, resource_type: page_markdown, operation: update, selector: {title: "[RB-80] Database failover"}, fields: [markdown], min_count: 0, max_count: 1, critical: true}
+      - {id: allow_chat_create, provider_role: team_chat, resource_type: message, operation: create, selector: {channel: operations}, fields: [channel_id, content], min_count: 0, max_count: 1, critical: true}
+  trace_policy:
+    min_tool_calls: 12
+    required_calls:
+      - {id: drive_list, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files(?:\\?.*)?$", min_count: 1}
+      - {id: manifest_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/RbFzM19Zhv78TH0WlylTNT99q8I\\?alt=media$", min_count: 1}
+      - {id: candidate_current_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU\\?alt=media$", min_count: 1}
+      - {id: candidate_decoy_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/sJVX_zxC7-QlzjwT9ysvf8LVNy4\\?alt=media$", min_count: 1}
+      - {id: candidate_wrong_runbook_read, provider_role: file_storage, methods: [GET], path_pattern: "^/drive/v3/files/TccfP1ynil97lJ9xudgcAye-tk8\\?alt=media$", min_count: 1}
+      - {id: notion_search, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: notion_read, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown(?:\\?.*)?$", min_count: 1}
+      - {id: chat_guilds, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/users/@me/guilds(?:\\?.*)?$", min_count: 1}
+      - {id: chat_channels, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/guilds/000000000000000100/channels(?:\\?.*)?$", min_count: 1}
+      - {id: chat_history, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/channels/856171103353375329/messages(?:\\?.*)?$", min_count: 1}
+      - {id: notion_write, provider_role: knowledge_base, methods: [PATCH], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown$", status_min: 200, status_max: 299, min_count: 1, max_count: 1}
+      - {id: chat_write, provider_role: team_chat, methods: [POST], path_pattern: "^/api/v10/channels/856171103353375329/messages$", status_min: 200, status_max: 299, min_count: 1, max_count: 1}
+    allowed_mutating_calls:
+      - {id: trace_allow_notion_write, provider_role: knowledge_base, methods: [PATCH], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown$", min_count: 0, max_count: 1}
+      - {id: trace_allow_chat_write, provider_role: team_chat, methods: [POST], path_pattern: "^/api/v10/channels/856171103353375329/messages$", min_count: 0, max_count: 1}

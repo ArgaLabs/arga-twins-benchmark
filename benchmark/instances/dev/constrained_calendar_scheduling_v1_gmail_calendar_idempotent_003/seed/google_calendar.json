@@ -3,21 +3,16 @@
     {
       "name": "Work",
       "events": [
-        {
-          "summary": "Quarterly planning",
-          "start": "2030-05-16T13:00:00Z",
-          "end": "2030-05-16T13:30:00Z"
-        },
-        {
-          "summary": "Operations review",
-          "start": "2030-05-16T14:15:00Z",
-          "end": "2030-05-16T15:00:00Z"
-        },
-        {
-          "summary": "Budget review preparation",
-          "start": "2030-05-16T13:30:00Z",
-          "end": "2030-05-16T14:15:00Z"
-        }
+        {"summary": "Quarterly planning", "start": "2030-05-16T13:00:00Z", "end": "2030-05-16T13:30:00Z"},
+        {"summary": "Budget review preparation", "start": "2030-05-16T13:45:00Z", "end": "2030-05-16T14:30:00Z", "description": "Created for CAL-330"},
+        {"summary": "Operations review", "start": "2030-05-16T14:45:00Z", "end": "2030-05-16T15:15:00Z"},
+        {"summary": "Customer follow-up", "start": "2030-05-16T16:30:00Z", "end": "2030-05-16T17:00:00Z"}
+      ]
+    },
+    {
+      "name": "Personal",
+      "events": [
+        {"summary": "Budget review preparation", "start": "2030-05-16T13:45:00Z", "end": "2030-05-16T14:30:00Z"}
       ]
     }
   ]

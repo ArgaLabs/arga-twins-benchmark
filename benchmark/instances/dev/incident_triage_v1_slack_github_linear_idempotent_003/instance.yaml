@@ -23,6 +23,57 @@ authorization:
     incident_marker: "INC-419"
     deployment_marker: "DEP-771"
     existing_issue: "OPS-1"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 8
+  agent_steps:
+    - id: discover_incident_context
+      kind: discover
+      description: Resolve incidents channel and retrieve policy plus target report.
+      tool_interactions: [list_incident_channels, read_incident_channel]
+    - id: retrieve_deployment_candidates
+      kind: retrieve
+      description: Enumerate merged deployment changes for the affected service.
+      depends_on: [discover_incident_context]
+      tool_interactions: [list_merged_changes]
+    - id: correlate_change_evidence
+      kind: correlate
+      description: Match the deployment marker and derive authoritative cause evidence from changed configuration.
+      depends_on: [retrieve_deployment_candidates]
+      tool_interactions: [read_correlated_diff]
+    - id: locate_existing_escalation
+      kind: retrieve
+      description: Search the tracker by canonical marker and locate the existing issue.
+      depends_on: [correlate_change_evidence]
+      tool_interactions: [search_incident_tracker]
+    - id: verify_existing_escalation
+      kind: correlate
+      description: Confirm the existing issue fields match the incident rather than creating a duplicate.
+      depends_on: [locate_existing_escalation]
+      tool_interactions: [read_existing_issue]
+    - id: decide_reuse
+      kind: decide
+      description: Select reuse and prohibit any tracker mutation.
+      depends_on: [verify_existing_escalation]
+    - id: publish_acknowledgment_step
+      kind: mutate
+      description: Publish one acknowledgment naming the reused identifier.
+      depends_on: [decide_reuse]
+      tool_interactions: [publish_acknowledgment]
+    - id: confirm_incident_outcome
+      kind: confirm
+      description: Confirm exactly one acknowledgment after reusing the existing issue.
+      depends_on: [publish_acknowledgment_step]
+      tool_interactions: [confirm_acknowledgment]
+  tool_interactions:
+    - {id: list_incident_channels, provider_role: team_chat, kind: read, target: POST /api/conversations.list, purpose: Resolve incidents channel.}
+    - {id: read_incident_channel, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Retrieve policy and INC-419 report.}
+    - {id: list_merged_changes, provider_role: code_host, kind: read, target: "GET /repos/acme/worker-api/pulls?state=closed", purpose: Find deployment candidates.}
+    - {id: read_correlated_diff, provider_role: code_host, kind: read, target: GET /repos/acme/worker-api/pulls/1/files, purpose: Derive the zero worker-pool setting from changed configuration.}
+    - {id: search_incident_tracker, provider_role: issue_tracker, kind: read, target: POST /graphql issueSearch query for INC-419, purpose: Locate canonical work before deciding whether to create.}
+    - {id: read_existing_issue, provider_role: issue_tracker, kind: read, target: POST /graphql issue query for OPS-1, purpose: "Validate exact marker, evidence, cause, priority, and open state."}
+    - {id: publish_acknowledgment, provider_role: team_chat, kind: write, target: POST /api/chat.postMessage, purpose: Publish one acknowledgment using OPS-1.}
+    - {id: confirm_acknowledgment, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Confirm one acknowledgment.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

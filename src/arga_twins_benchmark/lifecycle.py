@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 import json
+import os
 import tempfile
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,6 +15,20 @@ from arga_twins_benchmark.catalog import compile_scenario, validate_catalog
 from arga_twins_benchmark.specs.models import ExperimentSpec
 
 CONTENT_HASH_TAG_PREFIX = "content-sha256:"
+CLEAN_TERMINAL_TWIN_RUN_STATUSES = frozenset(
+    {
+        "cancelled",
+        "canceled",
+        "expired",
+        "torn_down",
+        "terminated",
+        "deleted",
+        "cleaned_up",
+    }
+)
+STOP_WAITING_TWIN_RUN_STATUSES = CLEAN_TERMINAL_TWIN_RUN_STATUSES | {"failed", "error"}
+TWIN_RUN_POLL_INTERVAL_SECONDS = 2.0
+CLEANUP_CONFIRM_TIMEOUT_SECONDS = 120
 
 
 @dataclass(frozen=True)
@@ -134,6 +150,7 @@ async def provision_instance(
     candidate_output: Path,
     ttl_minutes: int,
     timeout_seconds: int,
+    arga_candidate_safe_profile: bool = False,
 ) -> None:
     scenario = compile_scenario(catalog_root, instance_id)
     twins_value = scenario.get("twins")
@@ -157,29 +174,87 @@ async def provision_instance(
                 twins=twins,
                 scenario_id=saved_scenario.scenario_id,
                 ttl_minutes=ttl_minutes,
-                timeout_seconds=timeout_seconds,
+                candidate_safe=arga_candidate_safe_profile,
             )
+            write_private_json(
+                control_output,
+                _control_payload(
+                    instance_id=instance_id,
+                    saved_scenario=saved_scenario,
+                    run=run,
+                ),
+            )
+            run = await _wait_for_twin_run(
+                arga=arga,
+                run=run,
+                timeout_seconds=timeout_seconds,
+                on_status=lambda latest: write_private_json(
+                    control_output,
+                    _control_payload(
+                        instance_id=instance_id,
+                        saved_scenario=saved_scenario,
+                        run=latest,
+                    ),
+                ),
+            )
+            if run.status != "ready":
+                error = run.raw.get("error")
+                detail = f": {error}" if error else ""
+                raise ArgaCliError(f"twin run {run.run_id} ended in status {run.status!r}{detail}")
+
             candidate_access = run.candidate_access()
-            control_payload: dict[str, Any] = {
-                "protocol": "arga-bench-control/1",
-                "instance_id": instance_id,
-                "scenario_id": saved_scenario.scenario_id,
-                "scenario_created": saved_scenario.created,
-                "scenario_content_sha256": saved_scenario.content_sha256,
-                "run_id": run.run_id,
-                "twin_run": dict(run.raw),
-            }
             candidate_payload: dict[str, Any] = {
                 "protocol": "arga-bench-candidate-access/1",
                 "provider_access": candidate_access,
             }
-            write_private_json(control_output, control_payload)
             write_private_json(candidate_output, candidate_payload)
         except BaseException:
             if run is not None:
                 with suppress(Exception):
-                    await arga.teardown(run.run_id)
+                    await _cleanup_twin_run(arga, run.run_id)
             raise
+
+
+def _control_payload(
+    *,
+    instance_id: str,
+    saved_scenario: SavedScenario,
+    run: TwinRun,
+) -> dict[str, Any]:
+    return {
+        "protocol": "arga-bench-control/1",
+        "instance_id": instance_id,
+        "scenario_id": saved_scenario.scenario_id,
+        "scenario_created": saved_scenario.created,
+        "scenario_content_sha256": saved_scenario.content_sha256,
+        "run_id": run.run_id,
+        "twin_run": dict(run.raw),
+    }
+
+
+async def _wait_for_twin_run(
+    *,
+    arga: ArgaCli,
+    run: TwinRun,
+    timeout_seconds: int,
+    on_status: Callable[[TwinRun], None],
+) -> TwinRun:
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be positive")
+
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + timeout_seconds
+    latest = run
+    while latest.status != "ready" and _normalized_status(latest.status) not in STOP_WAITING_TWIN_RUN_STATUSES:
+        remaining = deadline - loop.time()
+        if remaining <= 0:
+            raise ArgaCliError(
+                f"timed out waiting for twin run {latest.run_id} to become ready; last status was {latest.status!r}"
+            )
+        await asyncio.sleep(min(TWIN_RUN_POLL_INTERVAL_SECONDS, remaining))
+        latest = await arga.status(latest.run_id)
+        on_status(latest)
+    return latest
 
 
 async def reset_instance(control_file: Path) -> dict[str, Any]:
@@ -190,16 +265,156 @@ async def reset_instance(control_file: Path) -> dict[str, Any]:
 
 async def cleanup_instance(control_file: Path, *, arga: ArgaCli | None = None) -> dict[str, Any]:
     _, run_id = read_control_ids(control_file)
+    return await cleanup_twin_run(run_id, arga=arga)
+
+
+async def cleanup_twin_run(run_id: str, *, arga: ArgaCli | None = None) -> dict[str, Any]:
+    """Tear down one exact run through the Arga CLI and confirm terminal outcomes."""
+
     if arga is not None:
-        return {"twin_run": dict(await arga.teardown(run_id))}
+        return await _cleanup_twin_run(arga, run_id)
     async with SubprocessArgaCli() as cli:
-        return {"twin_run": dict(await cli.teardown(run_id))}
+        return await _cleanup_twin_run(cli, run_id)
+
+
+async def _cleanup_twin_run(arga: ArgaCli, run_id: str) -> dict[str, Any]:
+    teardown_payload: dict[str, Any] | None = None
+    teardown_outcome = "accepted"
+    try:
+        teardown_payload = dict(await arga.teardown(run_id))
+    except ArgaCliError as teardown_error:
+        if not _is_already_terminal_teardown_error(teardown_error):
+            raise
+        teardown_outcome = "already_terminal"
+
+    run = await _wait_for_inert_twin_run(
+        arga=arga,
+        run_id=run_id,
+        timeout_seconds=CLEANUP_CONFIRM_TIMEOUT_SECONDS,
+    )
+    return {
+        "twin_run": _status_payload(run),
+        "teardown": {
+            "outcome": teardown_outcome,
+            "response": teardown_payload,
+        },
+        "confirmation": {
+            "outcome": "terminal_without_twins",
+            "confirmed_status": run.status,
+        },
+    }
+
+
+async def _wait_for_inert_twin_run(
+    *,
+    arga: ArgaCli,
+    run_id: str,
+    timeout_seconds: int,
+) -> TwinRun:
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be positive")
+
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + timeout_seconds
+    last_status: str | None = None
+    while True:
+        try:
+            run = await arga.status(run_id)
+        except ArgaCliError as status_error:
+            raise ArgaCliError(
+                f"`arga twin-runs status` could not confirm cleanup for {run_id!r}: {status_error}"
+            ) from status_error
+
+        if run.run_id != run_id:
+            raise ArgaCliError(
+                f"`arga twin-runs status` returned run {run.run_id!r} while confirming cleanup for {run_id!r}"
+            )
+        last_status = run.status
+        if _twin_run_is_confirmed_inert(run):
+            return run
+
+        remaining = deadline - loop.time()
+        if remaining <= 0:
+            raise ArgaCliError(f"timed out confirming cleanup for twin run {run_id!r}; last status was {last_status!r}")
+        await asyncio.sleep(min(TWIN_RUN_POLL_INTERVAL_SECONDS, remaining))
+
+
+def cleanup_payload_proves_inert(
+    payload: Mapping[str, Any] | None,
+    *,
+    expected_run_id: str | None = None,
+) -> bool:
+    if payload is None or "error" in payload:
+        return False
+    raw_run = payload.get("twin_run")
+    if not isinstance(raw_run, dict):
+        return False
+    try:
+        run = TwinRun.from_payload(cast(dict[str, Any], raw_run))
+    except ArgaCliError:
+        return False
+    return (expected_run_id is None or run.run_id == expected_run_id) and (_twin_run_is_confirmed_inert(run))
+
+
+def _twin_run_is_confirmed_inert(run: TwinRun) -> bool:
+    normalized_status = _normalized_status(run.status)
+    raw_twins = run.raw.get("twins")
+    explicit_no_twins = isinstance(raw_twins, dict) and not raw_twins
+    return explicit_no_twins and (
+        normalized_status in CLEAN_TERMINAL_TWIN_RUN_STATUSES or normalized_status == "failed"
+    )
+
+
+def _status_payload(run: TwinRun) -> dict[str, Any]:
+    payload = dict(run.raw)
+    payload.setdefault("run_id", run.run_id)
+    payload.setdefault("status", run.status)
+    payload.setdefault("twins", {})
+    return payload
+
+
+def _is_already_terminal_teardown_error(error: ArgaCliError) -> bool:
+    message = str(error).lower()
+    return "cannot teardown" in message and ("status" in message or "terminal" in message)
+
+
+def _normalized_status(status: str) -> str:
+    return status.strip().lower().replace("-", "_").replace(" ", "_")
 
 
 def write_private_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-    path.chmod(0o600)
+    encoded_payload = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    file_descriptor, temporary_name = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary_path = Path(temporary_name)
+
+    try:
+        os.fchmod(file_descriptor, 0o600)
+        temporary_file = os.fdopen(file_descriptor, "wb")
+        file_descriptor = -1
+        with temporary_file:
+            temporary_file.write(encoded_payload)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+
+        os.replace(temporary_path, path)
+
+        directory_descriptor = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory_descriptor)
+        finally:
+            os.close(directory_descriptor)
+    except BaseException:
+        if file_descriptor >= 0:
+            with suppress(OSError):
+                os.close(file_descriptor)
+        with suppress(OSError):
+            temporary_path.unlink()
+        raise
 
 
 def read_control_ids(path: Path) -> tuple[str, str]:

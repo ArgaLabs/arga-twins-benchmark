@@ -1,6 +1,10 @@
 {
   "pages": [
     {
+      "title": "[POLICY] Release readiness operations",
+      "content": "# Release readiness operations\n\nEvaluate required changes first, then blocking items, then security approval. READY requires every referenced change merged, every blocker Done or closed (or none), and Security approval APPROVED. Comment once on the marked release record and publish once in #releases as `READINESS <release>: <decision> - <reason>.` Move only a READY release record to Done and never touch another release's resources.\n"
+    },
+    {
       "title": "[REL-205] Release checklist",
       "content": "# REL-205 release checklist\n\n## Required changes\n- GitHub PR #3\n\n## Blocking items\n- Jira REL-2\n\nSecurity approval: APPROVED\n"
     },

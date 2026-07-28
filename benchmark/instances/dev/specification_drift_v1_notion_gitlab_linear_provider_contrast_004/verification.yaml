@@ -27,4 +27,49 @@ partial_credit:
   issue_state: 0.25
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "CREATED <tracker-identifier>"
+  mode: structured_facts
+  required_facts:
+    specification: SPEC-91
+    evaluated_requirements: ["SPEC-91:R1"]
+    missing_requirements: ["SPEC-91:R1"]
+    tracker_action: created
+    tracker_identifier: ENG-1
+  diagnostic_facts:
+    source_preserved: true
+  forbidden_facts:
+    duplicate_created: true
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_knowledge, provider_role: knowledge_base, method: POST, path: /v1/search, canonicalizer: notion_spec_pages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/api/v4/projects/acme%2Fjob-runner/repository/files/runner.py?ref=main", canonicalizer: gitlab_file_and_branch_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: POST, path: /graphql, canonicalizer: linear_team_ENG_issues_stable}
+  state_assertions:
+    - id: sa_missing_issue
+      provider_role: issue_tracker
+      resource_type: issue
+      selector: {team_key: ENG, title: "[SPEC-91:R1] Remove shell execution", description: "Spec marker: SPEC-91:R1\nGap: Command runner enables shell execution\nCode evidence: runner.py."}
+      expected: {identifier: ENG-1, new_since_baseline: true, state_type: open}
+      cardinality: 1
+    - {id: sa_spec_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[SPEC-91] Command execution"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_policy_preserved, provider_role: knowledge_base, resource_type: page, selector: {title: "[POLICY] Specification drift audits"}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: file, selector: {repository: acme/job-runner, path: runner.py, ref: main}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_missing_issue, provider_role: issue_tracker, resource_type: issue, operation: create, selector: {team_key: ENG, marker: "SPEC-91:R1"}, fields: [title, description, priority, team], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 8
+    required_calls:
+      - {id: search_spec_pages, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_audit_policy, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3$", min_count: 1, max_count: 1}
+      - {id: read_target_spec, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f$", min_count: 1, max_count: 1}
+      - {id: read_requirement_code, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fjob-runner/repository/files/runner\\.py\\?ref=main$", min_count: 1}
+      - {id: resolve_tracker_team, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^team$", min_count: 1}
+      - {id: search_tracker_markers, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueSearch$", min_count: 1}
+      - {id: create_missing_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 1, max_count: 1}
+      - {id: confirm_tracker_state, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_create_missing_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issueCreate$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

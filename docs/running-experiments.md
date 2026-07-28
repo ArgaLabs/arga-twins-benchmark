@@ -2,7 +2,7 @@
 
 ## What runs where
 
-Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga CLI to create the fixture, then launches or calls the candidate through an independent adapter. The candidate can use any provider REST, GraphQL, SDK, or advertised MCP interface needed to complete the task.
+Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga CLI to create the fixture, then launches or calls the candidate through an independent adapter. In secure-default scored runs, the model uses the typed `provider_api` and `provider_docs` tools; the adapter retains twin addresses and credentials.
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ Serialized invocations are idempotent, and `save-experiment` saves its instances
 
 ## Benchmark provisioning command
 
-The implemented wrapper compiles, saves or reuses the Scenario, provisions, checks `status == ready`, and splits control data from agent data. Saving first is optional because `provision` invokes the same content-hash lookup:
+The implemented wrapper compiles, saves or reuses the Scenario, starts the run, persists its returned ID before waiting, polls `arga twin-runs status` until `status == ready`, and splits control data from agent data. Saving first is optional because `provision` invokes the same content-hash lookup:
 
 ```bash
 export ARGA_API_KEY='<supplied-key>'
@@ -60,7 +60,7 @@ uv run arga-bench provision \
   --candidate-output runs/manual/candidate-access.json
 ```
 
-Give the agent the instance's `prompt.txt` and only `candidate-access.json`. Keep `control.json` in the trusted runner; both files are written mode `0600`. During development, reset or clean up through the wrapper:
+Keep both `candidate-access.json` and `control.json` in the trusted runner; both files are written mode `0600`. The adapter gives the model the instance prompt plus tool schemas, not the contents of either connection file. During development, reset or clean up through the wrapper:
 
 ```bash
 uv run arga-bench reset runs/manual/control.json
@@ -69,7 +69,11 @@ uv run arga-bench cleanup runs/manual/control.json
 
 These commands themselves invoke the Arga CLI; they contain no direct Arga HTTP client.
 
-`cleanup` tears down the twin run but deliberately keeps the saved Scenario. A later provision can reuse the same Scenario while still creating a fresh twin run for trial isolation.
+`cleanup` tears down the twin run, then polls CLI status until that exact run ID is terminal with zero twins exposed by the status response. It deliberately keeps the saved Scenario. A later provision can reuse the same Scenario while still creating a fresh twin run for trial isolation.
+
+Lifecycle JSON displayed by `reset` and `cleanup` is recursively scrubbed for token, secret, password, API-key, authorization, cookie, private-key, and credential fields, including credential-valued variables nested under provider `seed_results.env_vars`. This affects terminal presentation only. The trusted runner continues to retain the exact raw lifecycle response in its mode-`0600` trial artifacts.
+
+This is control-plane evidence, not proof that Arga's asynchronous VM cleanup worker has finished deleting infrastructure. The current status API does not surface that worker-completion fact. The harness therefore records the evidence precisely as returned, binds it to the expected run ID, and relies on the run TTL as the resource-lifetime backstop.
 
 ## Manual single episode
 
@@ -97,21 +101,31 @@ arga twin-runs create \
   --twins github \
   --scenario-id "$SCENARIO_ID" \
   --ttl 60 \
-  --wait \
-  --timeout 600 \
+  --json > /tmp/arga-bench-run-start.json
+
+RUN_ID=$(jq -er '.run_id' /tmp/arga-bench-run-start.json)
+
+# Poll with `arga twin-runs status --json` until the run is ready or terminal.
+arga twin-runs status \
+  --api-url "$ARGA_API_URL" \
+  "$RUN_ID" \
   --json > /tmp/arga-bench-run.json
 
-RUN_ID=$(jq -er '.run_id' /tmp/arga-bench-run.json)
 jq -e '.status == "ready" and .is_public == true' /tmp/arga-bench-run.json
 ```
 
-The harness transforms the full run response into a candidate-access document containing only public provider base URLs, ordinary twin-native environment values, and optional MCP URLs. It then sends that document plus `prompt.txt` to the chosen agent adapter. Do not pass the raw run JSON to the agent.
+Do not hide run creation inside a long `--wait` subprocess: a cancellation can otherwise occur after server creation but before the runner durably records the run ID. The wrapper handles the start/status loop and timeout automatically.
+
+The harness transforms the full ready response into a candidate-access document containing only public provider base URLs, ordinary twin-native environment values, and optional MCP URLs. It then sends that document plus `prompt.txt` to the chosen agent adapter. Do not pass the raw run JSON to the agent.
 
 After candidate completion, trusted provider readers capture final state and execute the instance's registered verifier. Tear down the ephemeral twin run in a `finally` block; do not delete the saved Scenario:
 
 ```bash
 arga twin-runs teardown --api-url "$ARGA_API_URL" "$RUN_ID" --json
+arga twin-runs status --api-url "$ARGA_API_URL" "$RUN_ID" --json
 ```
+
+The teardown response may initially say `cleaning_up`. Do not treat that as complete; require a later CLI status for the same run ID of `cancelled`, `expired`, `torn_down`, or another clean terminal status with `twins: {}`. This confirms the public control-plane contract only; it does not claim asynchronous VM deletion has completed.
 
 For local iteration only, restore the captured seed baseline with:
 
@@ -122,9 +136,9 @@ arga twin-runs status --api-url "$ARGA_API_URL" "$RUN_ID" --json
 
 Use a fresh twin run for each scored repetition so agent memory, caches, and failed cleanup cannot cross trials. Reusing a saved Scenario is safe because each new twin run is seeded from the same immutable `seed_config`; never reuse a mutated twin run as a scored repetition.
 
-## Candidate adapter contract
+## Candidate adapter boundary
 
-The runner passes a typed request, not a mandated HTTP endpoint:
+Provisioning produces this private typed adapter input, not a model-visible prompt or mandated HTTP endpoint:
 
 ```json
 {
@@ -142,7 +156,101 @@ The runner passes a typed request, not a mandated HTTP endpoint:
 }
 ```
 
-Adapters may translate this into a local process environment, container config, SDK call, or hosted `/invoke` request. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
+The current scored runner consumes this input inside its gateway and exposes only provider names/roles and the `provider_api`/`provider_docs` schemas. It never serializes base URLs or credentials into model messages. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
+
+## Exact prompt ledger
+
+Generate the exact system and user text sent to every model before launching the matrix:
+
+```bash
+uv run arga-bench prompts development_pilot_48_v1 \
+  --output runs/prompt-ledger-48x3.json \
+  --markdown-output runs/prompt-ledger-48x3.md
+```
+
+The ledger has 144 entries: 48 instances for each of `claude-opus-4-8`, `claude-fable-5`, and `gpt-5.6-sol`. All three receive identical text for a given instance; only the model/API thinking configuration differs.
+
+## Run one canary
+
+Put credentials in an ignored mode-`0600` `.env`:
+
+```dotenv
+ARGA_API_KEY=<arga-key>
+ANTHROPIC_API_KEY=<anthropic-key>
+OPENAI_API_KEY=<openai-key>
+```
+
+Then run one exact model against a fresh twin:
+
+```bash
+chmod 600 .env
+
+uv run arga-bench run-instance \
+  blocking_code_review_v1_github_clean_001 \
+  --model claude-opus-4-8 \
+  --env-file .env \
+  --ttl 60
+```
+
+Candidate-safe routing and actual official documentation discovery are enabled by default. Use `--legacy-candidate-surface` only for a preregistered historical comparison. If the installed Arga CLI and server deployment both support the separate `twin-runs create --candidate-safe` profile, opt into it with `--arga-candidate-safe-profile`; the runner does not send that external flag by default.
+
+`run-instance` writes a complete one-trial suite under the printed `suite_dir`, rather than a loose trial directory. It includes `suite.json` with the runner commit, execution flags, experiment random seed, and trial-order algorithm; a prompt ledger filtered to the exact instance/model pair; `summary.json`; and the suite-scoped first-fetch official documentation cache. The normal offline grader can therefore consume the canary directly:
+
+```bash
+uv run arga-bench grade-suite \
+  runs/<canary-suite-run-id> \
+  --root benchmark \
+  --fail-on-incomplete
+```
+
+The canary remains a one-repeat diagnostic. It is authoritatively bound and gradeable, but it is not a substitute for the preregistered repeated matrix when comparing models.
+
+## Run and resume the 48 × 3 matrix
+
+```bash
+uv run arga-bench run-matrix development_pilot_48_v1 \
+  --models claude-opus-4-8,claude-fable-5,gpt-5.6-sol \
+  --root benchmark \
+  --output-root runs \
+  --env-file .env \
+  --repeats 1 \
+  --concurrency 4 \
+  --ttl 60
+```
+
+The command prints a `suite_run_id`. Resume that exact suite after interruption or a transient Arga/model-provider error:
+
+```bash
+uv run arga-bench run-matrix development_pilot_48_v1 \
+  --models claude-opus-4-8,claude-fable-5,gpt-5.6-sol \
+  --root benchmark \
+  --output-root runs \
+  --env-file .env \
+  --repeats 1 \
+  --concurrency 4 \
+  --ttl 60 \
+  --suite-run-id <suite-run-id>
+```
+
+Resume preserves completed or substantive terminal outcomes, confirms prior cleanup through the Arga CLI, archives retryable or interrupted attempts, and provisions a fresh twin before replaying an infrastructure-invalid trial. Cleanup evidence must name the exact persisted run ID. When a create may have succeeded but its response was interrupted before the ID became durable, the attempt is quarantined until its configured TTL plus five minutes; the resulting lease-expiry evidence is recorded with the archived attempt. It never retries mutations in place.
+
+Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, immutable archived attempts, and a first-fetch snapshot of any official documentation used. `provider-trace.json` contains business provider attempts. `official-docs-trace.json` separately records official-doc discovery, and `official-docs-cache/` stores the exact bounded body with provenance and SHA-256 for fair replay across models and resumes. Documentation calls have their own eight-call allowance and do not count toward provider-call floors or mutation/redundancy grading. See [candidate-safe surface](candidate-safe-surface.md).
+
+Trial order is deterministically shuffled from the experiment's `random_seed`
+using the `sha256-random-seed-v1` algorithm recorded in the suite manifest.
+Resuming preserves that exact order; changing the seed changes the order without
+changing the set of model-instance-repeat trials.
+
+Audit the saved evidence without making any network calls:
+
+```bash
+uv run python scripts/audit_suite.py \
+  runs/<suite-run-id> \
+  --prompt-ledger runs/prompt-ledger-48x3.json \
+  --minimum-tool-calls 6
+```
+
+The audit checks exact response-model identity, prompt hashes, disabled fallback, trace/count integrity, cleanup run-ID identity, and state-grade completeness. It also reports the minimum-call comparison and destination/control-plane safety separately. A short but otherwise valid trajectory remains scoring-ready; a destination breach remains a scoreable unsafe agent outcome rather than invalid evidence. Add `--fail-unless-scoring-ready` in CI when an incomplete matrix, broken evidence association, or incomplete semantic state grade must fail the job.
 
 ## Batch protocol
 
@@ -161,17 +269,20 @@ Save the experiment's Scenario set before a run:
 uv run arga-bench scenarios save-experiment development_pilot_48_v1
 ```
 
-The intended end-to-end batch command surface is:
+`run-instance`, `run-matrix`, exact prompt ledgers, candidate invocation, trusted raw baseline/final capture, trace/output grading, cleanup, attempt archival, and safe resume are implemented. Completed preserved suites can be regraded offline with `arga-bench grade-suite`; the derived semantic report requires complete canonical state evidence and records any unsupported evidence as `invalid_grader` rather than guessing an agent result. Publish Task Success from that outcome-first semantic report, not from a preliminary trace-conformance result.
 
-```text
-arga-bench run <experiment> --agent <adapter-config>
-arga-bench resume <suite-run-id>
-arga-bench grade <trial-id>
-arga-bench report <suite-run-id>
-arga-bench conformance
+After grading, create aggregate repeated-run JSON and Markdown without making network calls:
+
+```bash
+uv run arga-bench analyze-suite \
+  runs/<suite-run-id>/semantic-grade.json \
+  --suite-dir runs/<suite-run-id> \
+  --root benchmark \
+  --json-output runs/<suite-run-id>/repeated-analysis.json \
+  --markdown-output runs/<suite-run-id>/repeated-analysis.md
 ```
 
-Catalog validation, fingerprinting, Scenario compilation, durable Scenario saving, and single-instance provisioning/reset/cleanup are implemented today. Until `arga-bench run` lands, execute experiments by provisioning each selected instance, invoking the candidate with `prompt.txt` plus `candidate-access.json`, recording the result, and tearing down the run with `arga-bench cleanup`. End-to-end candidate invocation, grading, and batch orchestration remain Milestone 1 deliverables.
+The analyzer binds the grade to the exact suite manifest and hashed traces before calculating model/task/family/variant/provider-role outcomes, repeat consistency and variance, fixed-seed task-cluster bootstrap intervals, paired model differences, official-doc use, call/error rates, endpoint-discovery and possible probing indicators, and redundant-call diagnostics. Its outputs are aggregate-only and omit request paths/bodies, non-official URLs, credentials, raw GraphQL, trace errors, and fingerprints. See [analyzing repeated runs](analyzing-repeated-runs.md).
 
 ## Current CLI gaps
 

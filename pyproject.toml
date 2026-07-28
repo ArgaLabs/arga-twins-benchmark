@@ -28,6 +28,9 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"arga_twins_benchmark.providers" = ["official_api_docs.yaml"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 

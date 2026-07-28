@@ -20,6 +20,28 @@ authorization:
   constraints:
     request_marker: "ATT-88"
     authorized_sender: "calendar-admin@acme.example"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 9
+  agent_steps:
+    - {id: enumerate_mailbox, kind: discover, description: "Enumerate the mailbox evidence once.", tool_interactions: [evidence_list]}
+    - {id: retrieve_bundle, kind: retrieve, description: "Read the active bundle index and resolve its exact evidence set.", depends_on: [enumerate_mailbox], tool_interactions: [index_detail]}
+    - {id: retrieve_policy, kind: retrieve, description: "Read the indexed attendee-correction policy.", depends_on: [retrieve_bundle], tool_interactions: [policy_detail]}
+    - {id: validate_request, kind: correlate, description: "Check the sender against the indexed roster and revocations, then read ATT-88.", depends_on: [retrieve_policy], tool_interactions: [roster_detail, revocations_detail, request_detail]}
+    - {id: discover_calendar, kind: discover, description: "Resolve the requested Work calendar.", depends_on: [validate_request], tool_interactions: [calendar_list]}
+    - {id: locate_event, kind: retrieve, description: "Select the unique exact event from complete Work event records.", depends_on: [discover_calendar], tool_interactions: [events_search]}
+    - {id: decide_patch, kind: decide, description: "Construct an attendee-only patch that preserves event identity and timing.", depends_on: [locate_event], tool_interactions: []}
+    - {id: apply_correction, kind: mutate, description: "Add only the requested attendee.", depends_on: [decide_patch], tool_interactions: [event_patch]}
+  tool_interactions:
+    - {id: evidence_list, provider_role: email, kind: read, target: "Calendar Operations mailbox index", purpose: "Discover all bundle and request message IDs in one listing."}
+    - {id: index_detail, provider_role: email, kind: read, target: "CAL-OPS-INDEX message", purpose: "Resolve the current policy, roster, and revocations artifacts."}
+    - {id: policy_detail, provider_role: email, kind: read, target: "CAL-OPS-POLICY-V2 message", purpose: "Read authorization, matching, and mutation constraints."}
+    - {id: roster_detail, provider_role: email, kind: read, target: "CAL-OPS-SENDERS-V3 message", purpose: "Read the exact authorized sender roster."}
+    - {id: revocations_detail, provider_role: email, kind: read, target: "CAL-OPS-REVOCATIONS-V1 message", purpose: "Ensure the sender is not revoked."}
+    - {id: request_detail, provider_role: email, kind: read, target: "ATT-88 message", purpose: "Read exact sender and requested correction."}
+    - {id: calendar_list, provider_role: calendar, kind: read, target: "Calendar list", purpose: "Resolve Work calendar identity."}
+    - {id: events_search, provider_role: calendar, kind: read, target: "Work event collection", purpose: "Find exact summary and start candidates."}
+    - {id: event_patch, provider_role: calendar, kind: write, target: "Target event attendees", purpose: "Add alex and preserve all other fields."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 30

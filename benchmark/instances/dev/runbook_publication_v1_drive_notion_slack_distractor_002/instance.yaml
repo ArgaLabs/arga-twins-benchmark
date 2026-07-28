@@ -23,6 +23,33 @@ authorization:
     runbook_marker: "RB-78"
     selected_version: "4"
     status_channel: "ops"
+complexity:
+  minimum_agent_steps: 10
+  minimum_tool_calls: 12
+  agent_steps:
+    - {id: discover_sources, kind: discover, description: "List every candidate in Approved Runbooks.", tool_interactions: [drive_list]}
+    - {id: retrieve_policy, kind: retrieve, description: "Read the authoritative publication manifest.", depends_on: [discover_sources], tool_interactions: [manifest_read]}
+    - {id: inspect_candidates, kind: correlate, description: "Compare approved, draft, older, and wrong-runbook files.", depends_on: [retrieve_policy], tool_interactions: [approved_v2_read, approved_v4_read, draft_v5_read, wrong_runbook_read]}
+    - {id: resolve_destination, kind: discover, description: "Find the exact existing RB-78 destination rather than the RB-87 decoy.", depends_on: [inspect_candidates], tool_interactions: [notion_search]}
+    - {id: inspect_destination, kind: retrieve, description: "Read the resolved RB-78 destination body.", depends_on: [resolve_destination], tool_interactions: [notion_read]}
+    - {id: resolve_announcement_channel, kind: discover, description: "Resolve the exact ops channel rather than the ops-archive decoy.", depends_on: [inspect_destination], tool_interactions: [chat_channels]}
+    - {id: inspect_announcement, kind: retrieve, description: "Search the resolved ops channel for a prior publication.", depends_on: [resolve_announcement_channel], tool_interactions: [chat_history]}
+    - {id: decide_publication, kind: decide, description: "Reject distractors and derive the exact publication.", depends_on: [inspect_destination, inspect_announcement], tool_interactions: []}
+    - {id: update_destination, kind: mutate, description: "Update only the resolved RB-78 page with approved v4.", depends_on: [decide_publication], tool_interactions: [notion_write]}
+    - {id: announce_publication, kind: mutate, description: "Announce approved v4 once in ops after the page update succeeds.", depends_on: [update_destination], tool_interactions: [chat_write]}
+  tool_interactions:
+    - {id: drive_list, provider_role: file_storage, kind: read, target: "Drive Approved Runbooks folder", purpose: "Enumerate all candidates."}
+    - {id: manifest_read, provider_role: file_storage, kind: read, target: "publication-manifest.md", purpose: "Discover publication rules."}
+    - {id: approved_v2_read, provider_role: file_storage, kind: read, target: "RB-78 v2", purpose: "Evaluate an older approved revision."}
+    - {id: approved_v4_read, provider_role: file_storage, kind: read, target: "RB-78 v4", purpose: "Read the winning approved body."}
+    - {id: draft_v5_read, provider_role: file_storage, kind: read, target: "RB-78 v5 draft", purpose: "Reject a numerically higher unapproved revision."}
+    - {id: wrong_runbook_read, provider_role: file_storage, kind: read, target: "RB-87 v9", purpose: "Reject a high-version file for a different Runbook-ID."}
+    - {id: notion_search, provider_role: knowledge_base, kind: read, target: "Notion page search", purpose: "Disambiguate RB-78 from RB-87."}
+    - {id: notion_read, provider_role: knowledge_base, kind: read, target: "RB-78 markdown", purpose: "Compare current destination."}
+    - {id: chat_channels, provider_role: team_chat, kind: read, target: "Slack channel list", purpose: "Resolve ops."}
+    - {id: chat_history, provider_role: team_chat, kind: read, target: "Slack ops history", purpose: "Check for prior publication."}
+    - {id: notion_write, provider_role: knowledge_base, kind: write, target: "RB-78 markdown", purpose: "Publish v4 in place."}
+    - {id: chat_write, provider_role: team_chat, kind: write, target: "Slack ops message", purpose: "Announce v4 once."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 55

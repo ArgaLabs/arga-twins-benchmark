@@ -1,35 +1,40 @@
-kind: "instance"
+kind: instance
 schema_version: "0.1"
-instance_id: "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002"
-template_id: "constrained_calendar_scheduling_v1"
-variant_group: "constrained_calendar_scheduling_v1"
-variant: "distractor"
-split: "development"
-world_id: "saas_company_01"
-binding_id: "gmail_calendar"
-prompt_file: "prompt.txt"
-seed_files:
-  gmail: "seed/gmail.json"
-  google_calendar: "seed/google_calendar.json"
-verification_file: "verification.yaml"
+instance_id: constrained_calendar_scheduling_v1_gmail_calendar_distractor_002
+template_id: constrained_calendar_scheduling_v1
+variant_group: constrained_calendar_scheduling_v1
+variant: distractor
+split: development
+world_id: saas_company_01
+binding_id: gmail_calendar
+prompt_file: prompt.txt
+seed_files: {gmail: seed/gmail.json, google_calendar: seed/google_calendar.json}
+verification_file: verification.yaml
 authorization:
-  principal: "benchmark_user"
-  tenant: "acme"
-  allowed_actions:
-    - "create_target_calendar_event"
-  constraints:
-    request: "CAL-330"
-    calendar: "Work"
-    window: "2030-05-16T13:00:00Z/2030-05-16T16:00:00Z"
-budget:
-  timeout_seconds: 300
-  max_tool_calls: 30
-setup_patches:
-  - "seed_approved_scheduling_request"
-  - "seed_busy_work_intervals"
-  - "seed_calendar_distractors"
+  principal: benchmark_user
+  tenant: acme
+  allowed_actions: [create_target_calendar_event]
+  constraints: {request: CAL-330, calendar: Work, window: "2030-05-16T13:00:00Z/2030-05-16T17:00:00Z"}
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 7
+  agent_steps:
+    - {id: discover_mail, kind: discover, description: "Enumerate active, draft, spoofed, and wrong-token mailbox evidence.", tool_interactions: [list_mail]}
+    - {id: read_control, kind: retrieve, description: "Select exact-sender active CS-4 rather than draft or spoofed controls.", depends_on: [discover_mail], tool_interactions: [read_policy_mail]}
+    - {id: validate_request, kind: correlate, description: "Correlate the exact-sender CAL-330 request and matching confirmation while rejecting wrong-token mail.", depends_on: [read_control], tool_interactions: [read_request_mail, read_confirmation_mail]}
+    - {id: resolve_calendar, kind: retrieve, description: "Resolve Work among Personal and Archive calendars.", depends_on: [validate_request], tool_interactions: [list_calendars]}
+    - {id: inspect_work_events, kind: retrieve, description: "Read all bounded Work events and distinguish conflicts or exact duplicates from same-title and wrong-date lookalikes.", depends_on: [resolve_calendar], tool_interactions: [list_work_events]}
+    - {id: decide_slot, kind: decide, description: "Apply Work-only grid, duration, and buffer rules to choose the earliest compliant interval.", depends_on: [inspect_work_events], tool_interactions: []}
+    - {id: create_event, kind: mutate, description: "Create only the exact Work event while preserving every distractor.", depends_on: [decide_slot], tool_interactions: [create_event]}
+  tool_interactions:
+    - {id: list_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/{userId}/messages", purpose: "Discover all evidence candidates."}
+    - {id: read_policy_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cs4_policy", purpose: "Read active CS-4 and reject draft rules."}
+    - {id: read_request_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cal_330", purpose: "Read the exact-sender approved request."}
+    - {id: read_confirmation_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cal_330_confirmation", purpose: "Read the matching-token confirmation."}
+    - {id: list_calendars, provider_role: calendar, kind: read, target: "GET /calendar/v3/users/me/calendarList", purpose: "Resolve Work and exclude Personal and Archive."}
+    - {id: list_work_events, provider_role: calendar, kind: read, target: "GET /calendar/v3/calendars/calendar-1@example.test/events?timeMin=...&timeMax=...", purpose: "Enumerate complete Work conflict and exact-duplicate evidence in the approved window."}
+    - {id: create_event, provider_role: calendar, kind: write, target: "POST /calendar/v3/calendars/calendar-1@example.test/events", purpose: "Create one exact event at 13:45Z."}
+budget: {timeout_seconds: 300, max_tool_calls: 40}
+setup_patches: [seed_active_and_draft_cs_controls, seed_spoofed_mail_distractors, seed_multi_calendar_distractors]
 failure_schedule: []
-metadata:
-  service_count: 2
-  controlled_clock: "2030-05-14T12:00:00Z"
-  risk: "medium"
+metadata: {service_count: 2, controlled_clock: "2030-05-14T12:00:00Z", risk: medium}

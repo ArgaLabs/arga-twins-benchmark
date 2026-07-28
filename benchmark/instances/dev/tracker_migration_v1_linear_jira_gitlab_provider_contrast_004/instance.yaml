@@ -23,6 +23,28 @@ authorization:
     migration_marker: "MIG-34"
     source_issue: "ENG-1"
     code_reference: "acme/platform!1"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 9
+  agent_steps:
+    - {id: discover_source, kind: discover, description: "Search Linear for MIG-34.", tool_interactions: [source_search]}
+    - {id: retrieve_source, kind: retrieve, description: "Retrieve source fields and its nested comments in one canonical issue query.", depends_on: [discover_source], tool_interactions: [source_detail]}
+    - {id: validate_policy, kind: correlate, description: "Read GitLab policy and validate the merge request.", depends_on: [retrieve_source], tool_interactions: [policy_read, code_reference_read]}
+    - {id: inspect_destination, kind: retrieve, description: "Resolve the policy-specified Jira project and search it for existing provenance.", depends_on: [validate_policy], tool_interactions: [target_scope_read, target_search]}
+    - {id: decide_reconciliation, kind: decide, description: "Map provider-native fields and choose create versus reuse.", depends_on: [inspect_destination], tool_interactions: []}
+    - {id: reconcile_destination, kind: mutate, description: "Create the exact Jira destination.", depends_on: [decide_reconciliation], tool_interactions: [target_create]}
+    - {id: record_audit, kind: mutate, description: "Comment on the Linear source with the Jira key.", depends_on: [reconcile_destination], tool_interactions: [source_comment_write]}
+    - {id: confirm_state, kind: confirm, description: "Confirm both provider-native records.", depends_on: [record_audit], tool_interactions: [target_confirm]}
+  tool_interactions:
+    - {id: source_search, provider_role: source_tracker, kind: read, target: "Linear issues query", purpose: "Locate MIG-34."}
+    - {id: source_detail, provider_role: source_tracker, kind: read, target: "Linear ENG-1", purpose: "Read canonical source fields."}
+    - {id: policy_read, provider_role: code_host, kind: read, target: "acme/platform .arga/tracker-migration.md", purpose: "Discover provider-neutral policy."}
+    - {id: code_reference_read, provider_role: code_host, kind: read, target: "GitLab merge request 1", purpose: "Validate the exact code reference."}
+    - {id: target_scope_read, provider_role: target_tracker, kind: read, target: "GET /rest/api/3/project/MIG", purpose: "Resolve the allowed Jira project and its native issue types before mapping fields."}
+    - {id: target_search, provider_role: target_tracker, kind: read, target: "Jira MIG issues", purpose: "Prevent duplicate provenance within the resolved project."}
+    - {id: target_create, provider_role: target_tracker, kind: write, target: "Jira issue", purpose: "Create the migrated target once."}
+    - {id: source_comment_write, provider_role: source_tracker, kind: write, target: "Linear ENG-1 comment", purpose: "Record destination key."}
+    - {id: target_confirm, provider_role: target_tracker, kind: read, target: "Jira migrated issue", purpose: "Confirm exact final state."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 65

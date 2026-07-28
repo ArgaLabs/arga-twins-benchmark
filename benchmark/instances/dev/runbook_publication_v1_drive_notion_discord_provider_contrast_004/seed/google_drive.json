@@ -4,8 +4,23 @@
       "name": "Approved Runbooks",
       "files": [
         {
+          "name": "publication-manifest.md",
+          "content": "Policy-ID: RUNBOOK-PUBLISH-V3\nStatus: ACTIVE\nRunbook: RB-80\nDestination: [RB-80] Database failover\nAnnouncement-Channel: operations\n\nChoose the highest integer Version whose Runbook-ID matches and Status is APPROVED. Replace only the existing destination markdown with content beginning at the first # heading; omit metadata. Announce exactly PUBLISHED <runbook> v<version> TO <destination> once using the available team chat. If page and announcement are both exact, make no writes. Never mutate Drive or unrelated resources.\n",
+          "mime_type": "text/markdown"
+        },
+        {
           "name": "database-failover-v2.md",
           "content": "Runbook-ID: RB-80\nStatus: APPROVED\nVersion: 2\n\n# Database failover\n\n1. Freeze writes.\n1. Promote the standby.\n1. Verify replication health.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "database-failover-v3-draft.md",
+          "content": "Runbook-ID: RB-80\nStatus: DRAFT\nVersion: 3\n\n# Database failover\n\nUnapproved promotion sequence.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "database-backup-v8.md",
+          "content": "Runbook-ID: RB-08\nStatus: APPROVED\nVersion: 8\n\n# Database backup\n\nUnrelated process.\n",
           "mime_type": "text/markdown"
         }
       ]

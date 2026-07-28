@@ -1,0 +1,465 @@
+{
+  "$defs": {
+    "CanonicalEvidenceFixtureCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "canonical_projection",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "expected": {
+          "$ref": "#/$defs/GradeExpectation"
+        },
+        "mutations": {
+          "items": {
+            "$ref": "#/$defs/MutationFixture"
+          },
+          "title": "Mutations",
+          "type": "array"
+        },
+        "output": {
+          "title": "Output"
+        },
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/CanonicalResourceFixture"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/ToolCallFixture"
+          },
+          "title": "Trace",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "case_id",
+        "resources",
+        "mutations",
+        "trace",
+        "output",
+        "expected"
+      ],
+      "title": "CanonicalEvidenceFixtureCase",
+      "type": "object"
+    },
+    "CanonicalResourceFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "additionalProperties": true,
+          "title": "Fields",
+          "type": "object"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider_role",
+        "resource_type",
+        "resource_id"
+      ],
+      "title": "CanonicalResourceFixture",
+      "type": "object"
+    },
+    "EvaluatorFixtureCase": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StateEvidenceFixtureCase"
+        },
+        {
+          "$ref": "#/$defs/CanonicalEvidenceFixtureCase"
+        }
+      ]
+    },
+    "GradeExpectation": {
+      "additionalProperties": false,
+      "properties": {
+        "collateral_damage": {
+          "title": "Collateral Damage",
+          "type": "boolean"
+        },
+        "required_failed_assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Failed Assertion Ids",
+          "type": "array"
+        },
+        "required_passed_assertion_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Passed Assertion Ids",
+          "type": "array"
+        },
+        "task_success": {
+          "title": "Task Success",
+          "type": "boolean"
+        },
+        "trace_policy_passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Policy Passed"
+        }
+      },
+      "required": [
+        "task_success",
+        "collateral_damage"
+      ],
+      "title": "GradeExpectation",
+      "type": "object"
+    },
+    "JsonPatchOperation": {
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "enum": [
+            "add",
+            "replace",
+            "remove"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^/(?:[^/]*)?(?:/[^/]*)*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "op",
+        "path"
+      ],
+      "title": "JsonPatchOperation",
+      "type": "object"
+    },
+    "MutationFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "default": null,
+          "title": "After"
+        },
+        "before": {
+          "default": null,
+          "title": "Before"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "operation": {
+          "minLength": 1,
+          "title": "Operation",
+          "type": "string"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        },
+        "twin": {
+          "minLength": 1,
+          "title": "Twin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "twin",
+        "resource_type",
+        "resource_id",
+        "operation"
+      ],
+      "title": "MutationFixture",
+      "type": "object"
+    },
+    "StateEvidenceFixtureCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "trusted_state_patch",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "expected": {
+          "$ref": "#/$defs/GradeExpectation"
+        },
+        "final_patch": {
+          "items": {
+            "$ref": "#/$defs/JsonPatchOperation"
+          },
+          "title": "Final Patch",
+          "type": "array"
+        },
+        "output": {
+          "title": "Output"
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/ToolCallFixture"
+          },
+          "title": "Trace",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "case_id",
+        "final_patch",
+        "trace",
+        "output",
+        "expected"
+      ],
+      "title": "StateEvidenceFixtureCase",
+      "type": "object"
+    },
+    "ToolCallFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "action_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action Fingerprint"
+        },
+        "attempt_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attempt Fingerprint"
+        },
+        "destination": {
+          "default": "provisioned_provider",
+          "enum": [
+            "provisioned_provider",
+            "external",
+            "control_plane",
+            "agent_adapter"
+          ],
+          "title": "Destination",
+          "type": "string"
+        },
+        "method": {
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "mutating": {
+          "title": "Mutating",
+          "type": "boolean"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Operation"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "provider_role": {
+          "minLength": 1,
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "request_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Fingerprint"
+        },
+        "sequence": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence"
+        },
+        "source": {
+          "default": "candidate",
+          "enum": [
+            "candidate",
+            "verifier",
+            "seed"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "status_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status Code"
+        }
+      },
+      "required": [
+        "provider_role",
+        "method",
+        "path",
+        "mutating"
+      ],
+      "title": "ToolCallFixture",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "baseline_state": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Baseline State"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/EvaluatorFixtureCase"
+      },
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    },
+    "instance_id": {
+      "minLength": 1,
+      "title": "Instance Id",
+      "type": "string"
+    },
+    "kind": {
+      "const": "evaluator_conformance_fixture",
+      "title": "Kind",
+      "type": "string"
+    },
+    "protocol": {
+      "const": "arga-bench-evaluator-conformance-fixture/1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "synthetic_state_evidence",
+        "preserved_trusted_evidence"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "source_note": {
+      "minLength": 1,
+      "title": "Source Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "protocol",
+    "instance_id",
+    "source",
+    "source_note",
+    "cases"
+  ],
+  "title": "EvaluatorFixtureBundle",
+  "type": "object"
+}

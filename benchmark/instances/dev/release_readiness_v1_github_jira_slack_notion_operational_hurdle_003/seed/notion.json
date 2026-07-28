@@ -1,6 +1,10 @@
 {
   "pages": [
     {
+      "title": "[POLICY] Release readiness operations",
+      "content": "# Release readiness operations\n\nEvaluate required changes first, then blockers, then security approval. Publish the first failed gate as `READINESS <release>: BLOCKED - <reason>.` Comment once on the marked release record but do not transition a BLOCKED record. Before writing, reconcile tracker and channel state independently: if the exact status already exists, do not repost it; add only a missing tracker comment. Never duplicate a status.\n"
+    },
+    {
       "title": "[REL-206] Release checklist",
       "content": "# REL-206 release checklist\n\n## Required changes\n- GitHub PR #1\n- GitHub PR #2\n\n## Blocking items\n- Jira REL-2\n\nSecurity approval: APPROVED\n"
     }

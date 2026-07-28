@@ -19,6 +19,10 @@
       "default_branch": "main",
       "files": [
         {
+          "path": "SECURITY_REVIEW.md",
+          "content": "# Expression parser review policy\n\nReview all plausible SEC expression-parser changes and their existing review state. When request-controlled input reaches eval, create exactly one REQUEST_CHANGES review with body `Blocking: untrusted input reaches eval.` and exactly one RIGHT-side inline comment on the vulnerable line with body `Replace eval with a non-executing parser.` Preserve every other repository resource.\n"
+        },
+        {
           "path": "src/parser.ts",
           "content": "export function parse(input: string) {\n  return JSON.parse(input);\n}\n"
         }

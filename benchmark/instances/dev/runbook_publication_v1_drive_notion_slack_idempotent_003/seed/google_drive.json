@@ -4,8 +4,28 @@
       "name": "Approved Runbooks",
       "files": [
         {
+          "name": "publication-manifest.md",
+          "content": "Policy-ID: RUNBOOK-PUBLISH-V3\nStatus: ACTIVE\nRunbook: RB-79\nDestination: [RB-79] Cache failover\nAnnouncement-Channel: ops\n\nChoose the highest integer Version whose Runbook-ID matches and Status is APPROVED. Replace only the existing destination markdown with content beginning at the first # heading; omit metadata. Announce exactly PUBLISHED <runbook> v<version> TO <destination> once. If page and announcement are both exact, make no writes. Never mutate Drive or unrelated resources.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "cache-failover-v5.md",
+          "content": "Runbook-ID: RB-79\nStatus: APPROVED\nVersion: 5\n\n# Cache failover\n\nOlder approved process.\n",
+          "mime_type": "text/markdown"
+        },
+        {
           "name": "cache-failover-v6.md",
           "content": "Runbook-ID: RB-79\nStatus: APPROVED\nVersion: 6\n\n# Cache failover\n\n1. Disable cache writes.\n1. Promote the replica.\n1. Re-enable writes.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "cache-failover-v7-draft.md",
+          "content": "Runbook-ID: RB-79\nStatus: DRAFT\nVersion: 7\n\n# Cache failover\n\nUnreviewed future process.\n",
+          "mime_type": "text/markdown"
+        },
+        {
+          "name": "cache-warming-v9.md",
+          "content": "Runbook-ID: RB-97\nStatus: APPROVED\nVersion: 9\n\n# Cache warming\n\nUnrelated runbook.\n",
           "mime_type": "text/markdown"
         }
       ]

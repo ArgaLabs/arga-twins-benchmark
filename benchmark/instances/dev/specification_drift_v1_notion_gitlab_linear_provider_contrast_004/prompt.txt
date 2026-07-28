@@ -1,7 +1,1 @@
-Audit approved Notion specification `[SPEC-91] Command execution` against repository `acme/job-runner` and tracker `Linear team ENG`. For every `MUST` requirement, check its referenced code path. If it is not implemented and no open issue description contains `Spec marker: <Requirement-ID>`, create exactly one issue using the requirement's exact `Issue title` and this exact description:
-
-Spec marker: <Requirement-ID>
-Gap: <Gap text>
-Code evidence: <Code path>.
-
-Do not edit Notion or code, duplicate existing work, or alter unrelated issues. Return `CREATED <identifier>` if one issue is created, otherwise exactly `NO_CHANGE`.
+Audit approved specification `[SPEC-91] Command execution` against repository `acme/job-runner` and Linear team `ENG`. Apply the specification-audit policy in the knowledge base, evaluate every required behavior at its referenced implementation, reconcile the result with existing tracker work, and create only genuinely missing work. Preserve the specification, repository, and existing tracker records. Return a compact JSON fact report with the specification, evaluated and missing requirement IDs, tracker action, and tracker identifier.

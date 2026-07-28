@@ -27,4 +27,64 @@ partial_credit:
   inline_evidence: 0.20
   preserve_repository: 0.15
 output_contract:
-  exact_pattern: "REVIEWED #2"
+  mode: structured_facts
+  required_facts: {decision: changes_requested, target_change: 2}
+  diagnostic_facts: {review_count: 1, inline_comment_count: 1}
+  forbidden_facts: {non_target_mutated: true}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_repository, provider_role: code_host, method: GET, path: /repos/acme/web-parser, canonicalizer: github_repository_stable}
+    - {id: sq_refs, provider_role: code_host, method: GET, path: /repos/acme/web-parser/git/matching-refs/heads/, canonicalizer: github_refs_stable}
+    - {id: sq_pulls, provider_role: code_host, method: GET, path: "/repos/acme/web-parser/pulls?state=all", canonicalizer: github_pulls_stable}
+    - {id: sq_contents, provider_role: code_host, method: GET, path: "/repos/acme/web-parser/contents/?ref=main", canonicalizer: github_contents_recursive_hashes}
+    - {id: sq_target_reviews, provider_role: code_host, method: GET, path: /repos/acme/web-parser/pulls/2/reviews, canonicalizer: github_reviews_stable}
+    - {id: sq_target_comments, provider_role: code_host, method: GET, path: /repos/acme/web-parser/pulls/2/comments, canonicalizer: github_review_comments_stable}
+    - {id: sq_non_target_artifacts, provider_role: code_host, method: GET, path: /repos/acme/web-parser/pulls, canonicalizer: github_all_pull_review_artifacts}
+  state_assertions:
+    - id: sa_blocking_review
+      provider_role: code_host
+      resource_type: pull_request_review
+      selector: {repository: acme/web-parser, pull_number: 2, state: REQUEST_CHANGES, body: "Blocking: untrusted input reaches eval."}
+      expected: {author_login: benchmark-reviewer, commit_id: "baseline.pull[2].head.sha"}
+      cardinality: 1
+    - id: sa_inline_comment
+      provider_role: code_host
+      resource_type: pull_request_review_comment
+      selector: {repository: acme/web-parser, pull_number: 2, path: src/parser.ts, line: 1, side: RIGHT, body: "Replace eval with a non-executing parser."}
+      expected: {author_login: benchmark-reviewer, attached_to: sa_blocking_review}
+      cardinality: 1
+    - id: sa_non_targets_unchanged
+      provider_role: code_host
+      resource_type: pull_request_collection
+      selector: {repository: acme/web-parser, exclude_number: 2}
+      expected: {equals_baseline: true}
+      cardinality: 2
+    - id: sa_repository_preserved
+      provider_role: code_host
+      resource_type: repository_snapshot
+      selector: {repository: acme/web-parser}
+      expected: {equals_baseline_except: [pull_request.2.reviews, pull_request.2.review_comments]}
+      cardinality: 1
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_review, provider_role: code_host, resource_type: pull_request_review, operation: create, selector: {repository: acme/web-parser, pull_number: 2, state: REQUEST_CHANGES}, fields: [body, state, commit_id, user], min_count: 1, max_count: 1}
+      - {id: mr_create_comment, provider_role: code_host, resource_type: pull_request_review_comment, operation: create, selector: {repository: acme/web-parser, pull_number: 2, path: src/parser.ts, line: 1, side: RIGHT}, fields: [body, path, line, side, pull_request_review_id, commit_id, user], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 10
+    required_calls:
+      - {id: read_review_policy, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/contents/SECURITY_REVIEW\\.md\\?ref=main$", min_count: 1, max_count: 1}
+      - {id: list_open_changes, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls\\?state=open$", min_count: 1}
+      - {id: read_candidate_1_diff, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/1/files$", min_count: 1}
+      - {id: read_candidate_2_diff, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/2/files$", min_count: 1}
+      - {id: read_candidate_3_diff, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/3/files$", min_count: 1}
+      - {id: list_target_reviews, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/2/reviews$", min_count: 1}
+      - {id: list_target_comments, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/2/comments$", min_count: 1}
+      - {id: create_target_review, provider_role: code_host, methods: [POST], path_pattern: "^/repos/acme/web-parser/pulls/2/reviews$", min_count: 1, max_count: 1}
+      - {id: confirm_target_reviews, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/2/reviews$", min_count: 1}
+      - {id: confirm_target_comments, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/web-parser/pulls/2/comments$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_review, provider_role: code_host, methods: [POST], path_pattern: "^/repos/acme/web-parser/pulls/2/reviews$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

@@ -20,6 +20,93 @@ authorization:
   constraints:
     change_marker: "SEC-204"
     target_change: "#2"
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 10
+  agent_steps:
+    - id: discover_policy_and_candidates
+      kind: discover
+      description: Locate the review policy and enumerate all open parser-related changes.
+      tool_interactions: [read_review_policy, list_open_changes]
+    - id: retrieve_candidate_context
+      kind: retrieve
+      description: Inspect the changed-file evidence for every plausible open candidate.
+      depends_on: [discover_policy_and_candidates]
+      tool_interactions: [read_candidate_1_diff, read_candidate_2_diff, read_candidate_3_diff]
+    - id: correlate_policy_to_code
+      kind: correlate
+      description: Separate safe maintenance and documentation from the unsafe implementation.
+      depends_on: [retrieve_candidate_context]
+    - id: check_existing_artifacts
+      kind: retrieve
+      description: Check existing reviews and comments before selecting any write.
+      depends_on: [correlate_policy_to_code]
+      tool_interactions: [list_target_reviews, list_target_comments]
+    - id: decide_review_action
+      kind: decide
+      description: Select exactly the unsafe target and the artifacts required by policy.
+      depends_on: [check_existing_artifacts]
+    - id: submit_blocking_artifacts
+      kind: mutate
+      description: Submit one blocking review with its inline comment.
+      depends_on: [decide_review_action]
+      tool_interactions: [create_target_review]
+    - id: confirm_review_state
+      kind: confirm
+      description: Confirm the final target artifacts and absence of duplicates.
+      depends_on: [submit_blocking_artifacts]
+      tool_interactions: [confirm_target_reviews, confirm_target_comments]
+  tool_interactions:
+    - id: read_review_policy
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main
+      purpose: Retrieve authoritative review criteria.
+    - id: list_open_changes
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls?state=open
+      purpose: Enumerate target and distractor changes.
+    - id: read_candidate_1_diff
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/1/files
+      purpose: Rule out the safe parser-normalization candidate from code evidence.
+    - id: read_candidate_2_diff
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/files
+      purpose: Establish the request-to-eval flow and vulnerable line from code evidence.
+    - id: read_candidate_3_diff
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/3/files
+      purpose: Rule out the documentation-only candidate from changed-file evidence.
+    - id: list_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/reviews
+      purpose: Avoid duplicate reviews.
+    - id: list_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/comments
+      purpose: Avoid duplicate inline comments.
+    - id: create_target_review
+      provider_role: code_host
+      kind: write
+      target: POST /repos/acme/web-parser/pulls/2/reviews
+      purpose: Create the sole blocking artifact on the unsafe change.
+    - id: confirm_target_reviews
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/reviews
+      purpose: Verify exact final review cardinality.
+    - id: confirm_target_comments
+      provider_role: code_host
+      kind: read
+      target: GET /repos/acme/web-parser/pulls/2/comments
+      purpose: Verify exact final inline-comment cardinality.
 budget:
   timeout_seconds: 300
   max_tool_calls: 50

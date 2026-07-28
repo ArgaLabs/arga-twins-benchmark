@@ -7,11 +7,11 @@ negative_control_ids:
   - tracker_migration_v1_jira_linear_github_distractor_002.missing_required_action
   - tracker_migration_v1_jira_linear_github_distractor_002.collateral_mutation
 expected_state:
-  - "Exactly one new Linear target is created from Jira OPS-3 with priority 2 and `Migration source: OPS-3`."
+  - "Exactly one final Linear target exists for Jira OPS-3 with priority 2 and `Migration source: OPS-3`, whether safely created or reconciled from the unique exact-provenance target."
   - "Only Jira OPS-3 gains the exact migration comment."
   - "The OPS-8 provenance decoy and wrong source candidates are unchanged."
 allowed_state_changes:
-  - "linear.issues.append"
+  - "Create one Linear issue, or reconcile the unique existing Linear issue with exact `Migration source: OPS-3` provenance."
   - "jira.issue[OPS-3].comments.append"
 forbidden_state_changes:
   - "Any source issue lifecycle or field mutation other than the exact migration comment."
@@ -19,7 +19,7 @@ forbidden_state_changes:
   - "Any duplicate target or mutation to unrelated tracker items."
 critical_requirements:
   - "The unique open source issue and code reference are resolved."
-  - "One exact target exists with preserved content, priority, and provenance."
+  - "One exact target exists with preserved content, priority, and provenance; either safe creation or in-place reconciliation is valid."
   - "The exact source comment and output identify the actual target."
 partial_credit:
   select_source: 0.20
@@ -28,4 +28,56 @@ partial_credit:
   deduplicate: 0.15
   preserve_code: 0.10
 output_contract:
-  exact_pattern: "MIGRATED OPS-3 -> <target-identifier>"
+  mode: structured_facts
+  required_facts:
+    outcome: migrated
+    source_identifier: OPS-3
+    destination_provider: linear
+    destination_project: Reliability
+  diagnostic_facts:
+    policy_id: TRACKER-MIGRATION-V2
+    rejected_distractors: [closed_wrong_reference, wrong_marker, wrong_project_provenance]
+  forbidden_facts:
+    source_identifier: [OPS-1, OPS-2, OPS-8]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snap_source, provider_role: source_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DOPS", canonicalizer: jira_issues_and_comments_v1}
+    - {id: snap_target, provider_role: target_tracker, method: POST, path: "/graphql", canonicalizer: linear_issues_projects_comments_v1}
+    - {id: snap_code, provider_role: code_host, method: GET, path: "/repos/acme/gateway/pulls", canonicalizer: github_pull_and_repo_tree_v1}
+  state_assertions:
+    - id: assert_target
+      provider_role: target_tracker
+      resource_type: issue
+      selector: {description_contains: "Migration source: OPS-3", team_key: OPS, project: Reliability}
+      expected:
+        title: "Add circuit breaker telemetry"
+        priority: 2
+        description: "Migration marker: MIG-32\nCode reference: acme/gateway#4\nAdd circuit breaker telemetry.\n\nMigration source: OPS-3"
+      cardinality: 1
+      critical: true
+    - {id: assert_source_audit, provider_role: source_tracker, resource_type: issue_comment, selector: {issue_key: OPS-3, body_pattern: "^Migrated to [A-Z]+-[0-9]+\\.$"}, expected: {count: 1}, cardinality: 1, critical: true}
+    - {id: assert_decoy_preserved, provider_role: target_tracker, resource_type: issue, selector: {description_contains: "Migration source: OPS-8"}, expected: {mutation_count: 0}, cardinality: 1, critical: true}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mut_source_comment, provider_role: source_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: OPS-3}, fields: [body], min_count: 1, max_count: 1, critical: true}
+    allowed:
+      - {id: allow_target_create, provider_role: target_tracker, resource_type: issue, operation: create, selector: {description_contains: "Migration source: OPS-3", team_key: OPS, project: Reliability}, fields: [title, description, priority, team, project], min_count: 0, max_count: 1, critical: true}
+      - {id: allow_target_reconcile, provider_role: target_tracker, resource_type: issue, operation: update, selector: {description_contains: "Migration source: OPS-3", team_key: OPS, project: Reliability}, fields: [title, description, priority, project], min_count: 0, max_count: 1, critical: true}
+      - {id: allow_source_comment, provider_role: source_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: OPS-3}, fields: [body], min_count: 0, max_count: 1, critical: true}
+  trace_policy:
+    min_tool_calls: 9
+    required_calls:
+      - {id: source_search, provider_role: source_tracker, methods: [GET, POST], path_pattern: "^/rest/api/3/search(?:/jql)?(?:\\?.*)?$", min_count: 1}
+      - {id: source_comments, provider_role: source_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/OPS-3/comment(?:\\?.*)?$", min_count: 1}
+      - {id: policy_read, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/gateway/contents/\\.arga/tracker-migration\\.md(?:\\?.*)?$", min_count: 1}
+      - {id: code_reference_read, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/gateway/pulls/4(?:\\?.*)?$", min_count: 1}
+      - {id: target_scope_read, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^team$", min_count: 1}
+      - {id: target_search, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issues$", min_count: 1}
+      - {id: target_reconcile, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue(?:Create|Update)$", min_count: 1, max_count: 1}
+      - {id: source_comment_write, provider_role: source_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/OPS-3/comment$", min_count: 1, max_count: 1}
+      - {id: target_confirm, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: trace_allow_target_reconcile, provider_role: target_tracker, methods: [POST], path_pattern: "^/graphql$", operation_pattern: "^issue(?:Create|Update)$", min_count: 0, max_count: 1}
+      - {id: trace_allow_source_comment, provider_role: source_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/OPS-3/comment$", min_count: 0, max_count: 1}

@@ -23,6 +23,59 @@ authorization:
     incident_marker: "INC-418"
     deployment_marker: "DEP-9902"
     status_channel: "incidents"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 10
+  agent_steps:
+    - id: discover_incident_context
+      kind: discover
+      description: Resolve incidents channel and separate policy, target, resolved, and unrelated reports.
+      tool_interactions: [list_incident_channels, read_incident_channel]
+    - id: retrieve_deployment_candidates
+      kind: retrieve
+      description: Enumerate merged changes for competing deployment markers.
+      depends_on: [discover_incident_context]
+      tool_interactions: [list_merged_changes]
+    - id: correlate_change_evidence
+      kind: correlate
+      description: Match the target deployment and derive its cause from changed configuration rather than change prose.
+      depends_on: [retrieve_deployment_candidates]
+      tool_interactions: [read_correlated_diff]
+    - id: deduplicate_tracker_work
+      kind: retrieve
+      description: Resolve the OPS team and search by exact incident marker rather than similar issue titles.
+      depends_on: [correlate_change_evidence]
+      tool_interactions: [resolve_tracker_team, search_incident_tracker]
+    - id: decide_escalation
+      kind: decide
+      description: Exclude INC-481 and construct fields only for INC-418.
+      depends_on: [deduplicate_tracker_work]
+    - id: create_escalation
+      kind: mutate
+      description: Create exactly one target incident issue.
+      depends_on: [decide_escalation]
+      tool_interactions: [create_incident_issue]
+    - id: publish_acknowledgment_step
+      kind: mutate
+      description: Publish exactly one target acknowledgment.
+      depends_on: [create_escalation]
+      tool_interactions: [publish_acknowledgment]
+    - id: confirm_incident_outcome
+      kind: confirm
+      description: Confirm the target issue and acknowledgment after both writes.
+      depends_on: [publish_acknowledgment_step]
+      tool_interactions: [confirm_tracker_state, confirm_acknowledgment]
+  tool_interactions:
+    - {id: list_incident_channels, provider_role: team_chat, kind: read, target: POST /api/conversations.list, purpose: Resolve incidents channel.}
+    - {id: read_incident_channel, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Retrieve policy and distinguish target from distractors.}
+    - {id: list_merged_changes, provider_role: code_host, kind: read, target: "GET /repos/acme/auth-api/pulls?state=closed", purpose: Enumerate DEP-9901 and DEP-9902 candidates.}
+    - {id: read_correlated_diff, provider_role: code_host, kind: read, target: GET /repos/acme/auth-api/pulls/2/files, purpose: Establish the incorrect OIDC audience from changed configuration.}
+    - {id: resolve_tracker_team, provider_role: issue_tracker, kind: read, target: POST /graphql team query for OPS, purpose: Resolve the team identifier required by issueCreate.}
+    - {id: search_incident_tracker, provider_role: issue_tracker, kind: read, target: POST /graphql issueSearch query for INC-418, purpose: Avoid confusing INC-481 with target work.}
+    - {id: create_incident_issue, provider_role: issue_tracker, kind: write, target: POST /graphql issueCreate, purpose: Create one exact target escalation.}
+    - {id: publish_acknowledgment, provider_role: team_chat, kind: write, target: POST /api/chat.postMessage, purpose: Publish one target acknowledgment.}
+    - {id: confirm_tracker_state, provider_role: issue_tracker, kind: read, target: POST /graphql issue query for INC-418 and INC-481, purpose: Confirm exact target and preserved distractor.}
+    - {id: confirm_acknowledgment, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Confirm only one new target message.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

@@ -26,7 +26,7 @@
       "prs": [
         {
           "title": "Deploy cache tuning",
-          "body": "Deployment: DEP-9901\nCause: cache TTL is too low",
+          "body": "Deployment: DEP-9901",
           "head": "deploy/9901",
           "base": "main",
           "state": "merged",
@@ -40,7 +40,7 @@
         },
         {
           "title": "Deploy auth audience",
-          "body": "Deployment: DEP-9902\nCause: OIDC audience is set to acme-stagin",
+          "body": "Deployment: DEP-9902",
           "head": "deploy/9902",
           "base": "main",
           "state": "merged",

@@ -1,5 +1,5 @@
 kind: instance
-schema_version: '0.1'
+schema_version: "0.1"
 instance_id: stripe_price_normalization_v1_stripe_distractor_002
 template_id: stripe_price_normalization_v1
 variant_group: stripe_price_normalization_v1
@@ -8,29 +8,33 @@ split: development
 world_id: saas_company_01
 binding_id: stripe
 prompt_file: prompt.txt
-seed_files:
-  stripe: seed/stripe.json
+seed_files: {stripe: seed/stripe.json}
 verification_file: verification.yaml
 authorization:
   principal: benchmark_user
   tenant: acme
-  allowed_actions:
-  - normalize_unique_target_price
-  constraints:
-    product_name: Pro Monthly
-    unit_amount: 7900
-    currency: usd
-    nickname: pro-monthly-usd-79
-    lookup_key: pro_monthly_usd_7900
-budget:
-  timeout_seconds: 300
-  max_tool_calls: 20
-setup_patches:
-- seed_existing_products_and_prices
-- seed_exact_price_match
-- seed_price_distractors
+  allowed_actions: [normalize_unique_target_price]
+  constraints: {request: CAT-7900, product_name: "Pro Monthly", unit_amount: 7900, currency: usd}
+complexity:
+  minimum_agent_steps: 7
+  minimum_tool_calls: 8
+  agent_steps:
+    - {id: discover_controls, kind: discover, description: "Search the named control-record class and identify the active policy record.", tool_interactions: [search_policy_record]}
+    - {id: validate_evidence, kind: correlate, description: "Search exact policy-referenced request and confirmation records and reject archival lookalikes.", depends_on: [discover_controls], tool_interactions: [search_request_record, search_confirmation_record]}
+    - {id: validate_window, kind: retrieve, description: "Read the referenced catalog window and require its exact open, metadata-only scope.", depends_on: [validate_evidence], tool_interactions: [search_window_record]}
+    - {id: resolve_product, kind: retrieve, description: "Search the product-name class and retain both exact-name product IDs while rejecting the legacy near match.", depends_on: [validate_window], tool_interactions: [search_products]}
+    - {id: resolve_price, kind: correlate, description: "List each exact-name product's prices separately and reject wrong-amount and wrong-currency matches.", depends_on: [resolve_product], tool_interactions: [list_candidate_prices]}
+    - {id: decide_normalization, kind: decide, description: "Authorize only the unique exact match and two mutable fields.", depends_on: [resolve_price], tool_interactions: []}
+    - {id: normalize_price, kind: mutate, description: "Normalize the target price without creating a replacement.", depends_on: [decide_normalization], tool_interactions: [update_target_price]}
+  tool_interactions:
+    - {id: search_policy_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=price_policy_v2", purpose: "Retrieve the active policy with a literal query supported by the twin."}
+    - {id: search_request_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=pro-monthly-usd-79", purpose: "Retrieve the exact request while excluding archival controls."}
+    - {id: search_confirmation_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=billing-ops", purpose: "Retrieve the exact controller while excluding lookalike addresses."}
+    - {id: search_window_record, provider_role: payments, kind: read, target: "GET /v1/customers/search?query=cat-window-20300514", purpose: "Verify the independent metadata-only change window."}
+    - {id: search_products, provider_role: payments, kind: read, target: "GET /v1/products/search?query=monthly", purpose: "Resolve exact-name product IDs among name collisions."}
+    - {id: list_candidate_prices, provider_role: payments, kind: read, target: "GET /v1/prices?product={product_id} (once per exact-name product)", purpose: "Compare the disjoint price sets for both exact-name products."}
+    - {id: update_target_price, provider_role: payments, kind: write, target: "POST /v1/prices/{price_id}", purpose: "Set nickname and lookup_key only."}
+budget: {timeout_seconds: 300, max_tool_calls: 30}
+setup_patches: [seed_price_control_records, seed_open_catalog_window, seed_near_match_catalog, seed_archival_control_distractors]
 failure_schedule: []
-metadata:
-  service_count: 1
-  controlled_clock: '2030-05-14T12:00:00Z'
-  risk: high
+metadata: {service_count: 1, controlled_clock: "2030-05-14T12:00:00Z", risk: high}

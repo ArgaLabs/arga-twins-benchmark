@@ -1,34 +1,38 @@
-kind: "instance"
+kind: instance
 schema_version: "0.1"
-instance_id: "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003"
-template_id: "constrained_calendar_scheduling_v1"
-variant_group: "constrained_calendar_scheduling_v1"
-variant: "idempotent"
-split: "development"
-world_id: "saas_company_01"
-binding_id: "gmail_calendar"
-prompt_file: "prompt.txt"
-seed_files:
-  gmail: "seed/gmail.json"
-  google_calendar: "seed/google_calendar.json"
-verification_file: "verification.yaml"
+instance_id: constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003
+template_id: constrained_calendar_scheduling_v1
+variant_group: constrained_calendar_scheduling_v1
+variant: idempotent
+split: development
+world_id: saas_company_01
+binding_id: gmail_calendar
+prompt_file: prompt.txt
+seed_files: {gmail: seed/gmail.json, google_calendar: seed/google_calendar.json}
+verification_file: verification.yaml
 authorization:
-  principal: "benchmark_user"
-  tenant: "acme"
+  principal: benchmark_user
+  tenant: acme
   allowed_actions: []
-  constraints:
-    request: "CAL-330"
-    calendar: "Work"
-    window: "2030-05-16T13:00:00Z/2030-05-16T16:00:00Z"
-budget:
-  timeout_seconds: 300
-  max_tool_calls: 30
-setup_patches:
-  - "seed_approved_scheduling_request"
-  - "seed_busy_work_intervals"
-  - "seed_calendar_distractors"
+  constraints: {request: CAL-330, calendar: Work, window: "2030-05-16T13:00:00Z/2030-05-16T17:00:00Z"}
+complexity:
+  minimum_agent_steps: 6
+  minimum_tool_calls: 6
+  agent_steps:
+    - {id: discover_mail, kind: discover, description: "Enumerate policy, request, confirmation, and receipt mail.", tool_interactions: [list_mail]}
+    - {id: read_control, kind: retrieve, description: "Read authoritative CS-4 evidence and ignore the informational receipt.", depends_on: [discover_mail], tool_interactions: [read_policy_mail]}
+    - {id: validate_request, kind: correlate, description: "Correlate CAL-330 with the exact matching controller confirmation.", depends_on: [read_control], tool_interactions: [read_request_mail, read_confirmation_mail]}
+    - {id: resolve_calendar, kind: retrieve, description: "Resolve the unique Work calendar.", depends_on: [validate_request], tool_interactions: [list_calendars]}
+    - {id: inspect_work_events, kind: retrieve, description: "Read the complete bounded Work listing, compute the target interval, and identify the existing exact event.", depends_on: [resolve_calendar], tool_interactions: [list_work_events]}
+    - {id: decide_noop, kind: decide, description: "Choose idempotent no-op because the bounded listing proves the exact Work event already exists.", depends_on: [inspect_work_events], tool_interactions: []}
+  tool_interactions:
+    - {id: list_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/{userId}/messages", purpose: "Discover evidence thread IDs."}
+    - {id: read_policy_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cs4_policy", purpose: "Read CS-4 authorization and duplicate-safe rules."}
+    - {id: read_request_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cal_330", purpose: "Read CAL-330 request facts."}
+    - {id: read_confirmation_mail, provider_role: email, kind: read, target: "GET /gmail/v1/users/me/threads/thr_cal_330_confirmation", purpose: "Validate the exact controller token."}
+    - {id: list_calendars, provider_role: calendar, kind: read, target: "GET /calendar/v3/users/me/calendarList", purpose: "Resolve Work calendar identity."}
+    - {id: list_work_events, provider_role: calendar, kind: read, target: "GET /calendar/v3/calendars/calendar-1@example.test/events?timeMin=...&timeMax=...", purpose: "Establish conflicts and the exact existing event in one complete bounded read."}
+budget: {timeout_seconds: 300, max_tool_calls: 35}
+setup_patches: [seed_active_cs4_mail_control, seed_confirmed_cal330_request, seed_existing_exact_event]
 failure_schedule: []
-metadata:
-  service_count: 2
-  controlled_clock: "2030-05-14T12:00:00Z"
-  risk: "medium"
+metadata: {service_count: 2, controlled_clock: "2030-05-14T12:00:00Z", risk: medium}

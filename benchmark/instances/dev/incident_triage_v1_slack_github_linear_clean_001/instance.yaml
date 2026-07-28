@@ -23,6 +23,59 @@ authorization:
     incident_marker: "INC-417"
     deployment_marker: "DEP-8821"
     status_channel: "incidents"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 10
+  agent_steps:
+    - id: discover_incident_context
+      kind: discover
+      description: Resolve the incident channel and retrieve both policy and target report.
+      tool_interactions: [list_incident_channels, read_incident_channel]
+    - id: retrieve_deployment_candidates
+      kind: retrieve
+      description: Enumerate merged changes that could correspond to the report's deployment marker.
+      depends_on: [discover_incident_context]
+      tool_interactions: [list_merged_changes]
+    - id: correlate_change_evidence
+      kind: correlate
+      description: Inspect the matched change's files and derive the evidence reference and root cause from source configuration.
+      depends_on: [retrieve_deployment_candidates]
+      tool_interactions: [read_correlated_diff]
+    - id: deduplicate_tracker_work
+      kind: retrieve
+      description: Resolve the OPS team identifier and search by canonical incident marker before creating work.
+      depends_on: [correlate_change_evidence]
+      tool_interactions: [resolve_tracker_team, search_incident_tracker]
+    - id: decide_escalation
+      kind: decide
+      description: Determine that no canonical issue exists and construct policy-compliant fields.
+      depends_on: [deduplicate_tracker_work]
+    - id: create_escalation
+      kind: mutate
+      description: Create exactly one priority-one incident issue.
+      depends_on: [decide_escalation]
+      tool_interactions: [create_incident_issue]
+    - id: publish_acknowledgment_step
+      kind: mutate
+      description: Publish one acknowledgment using the generated tracker identifier.
+      depends_on: [create_escalation]
+      tool_interactions: [publish_acknowledgment]
+    - id: confirm_incident_outcome
+      kind: confirm
+      description: Confirm the created issue and acknowledgment after both writes.
+      depends_on: [publish_acknowledgment_step]
+      tool_interactions: [confirm_tracker_state, confirm_acknowledgment]
+  tool_interactions:
+    - {id: list_incident_channels, provider_role: team_chat, kind: read, target: POST /api/conversations.list, purpose: Resolve incidents channel.}
+    - {id: read_incident_channel, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Retrieve on-call policy and INC-417 report.}
+    - {id: list_merged_changes, provider_role: code_host, kind: read, target: "GET /repos/acme/checkout-api/pulls?state=closed", purpose: Find merged deployment candidates.}
+    - {id: read_correlated_diff, provider_role: code_host, kind: read, target: GET /repos/acme/checkout-api/pulls/1/files, purpose: Derive the misspelled upstream host from changed configuration.}
+    - {id: resolve_tracker_team, provider_role: issue_tracker, kind: read, target: POST /graphql team query for OPS, purpose: Resolve the team identifier required by issueCreate.}
+    - {id: search_incident_tracker, provider_role: issue_tracker, kind: read, target: POST /graphql issueSearch query for INC-417, purpose: Prove no canonical escalation exists.}
+    - {id: create_incident_issue, provider_role: issue_tracker, kind: write, target: POST /graphql issueCreate, purpose: Create exact priority-one escalation from joined evidence.}
+    - {id: publish_acknowledgment, provider_role: team_chat, kind: write, target: POST /api/chat.postMessage, purpose: Publish one acknowledgment with generated identifier.}
+    - {id: confirm_tracker_state, provider_role: issue_tracker, kind: read, target: POST /graphql issue query for INC-417, purpose: Confirm one exact canonical issue.}
+    - {id: confirm_acknowledgment, provider_role: team_chat, kind: read, target: POST /api/conversations.history, purpose: Confirm one exact acknowledgment.}
 budget:
   timeout_seconds: 300
   max_tool_calls: 60

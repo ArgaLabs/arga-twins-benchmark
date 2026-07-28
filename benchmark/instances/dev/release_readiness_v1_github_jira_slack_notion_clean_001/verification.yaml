@@ -29,4 +29,49 @@ partial_credit:
   chat_update: 0.20
   preserve_sources: 0.10
 output_contract:
-  exact_pattern: "READINESS REL-204: READY - all gates passed."
+  mode: structured_facts
+  required_facts: {release: REL-204, decision: READY, first_failing_gate: null, tracker_record: REL-1}
+  diagnostic_facts: {published: true, tracker_status: Done, publication_count: 1}
+  forbidden_facts: {source_mutated: true}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_notion, provider_role: knowledge_base, method: POST, path: /v1/search, canonicalizer: notion_pages_complete}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/repos/acme/payments/pulls?state=all", canonicalizer: github_repository_and_pulls_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DREL", canonicalizer: jira_issues_comments_stable}
+    - {id: sq_chat, provider_role: team_chat, method: POST, path: /api/conversations.list, canonicalizer: slack_channels_messages_stable}
+  state_assertions:
+    - {id: sa_record_done, provider_role: issue_tracker, resource_type: issue, selector: {key: REL-1}, expected: {status: Done}, cardinality: 1}
+    - {id: sa_record_comment, provider_role: issue_tracker, resource_type: issue_comment, selector: {issue_key: REL-1, body: "READINESS REL-204: READY - all gates passed."}, expected: {created_by: benchmark_user}, cardinality: 1}
+    - {id: sa_release_message, provider_role: team_chat, resource_type: message, selector: {channel_name: releases, text: "READINESS REL-204: READY - all gates passed."}, expected: {new_since_baseline: true}, cardinality: 1}
+    - {id: sa_sources_preserved, provider_role: code_host, resource_type: repository_snapshot, selector: {repository: acme/payments}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_knowledge_preserved, provider_role: knowledge_base, resource_type: page_collection, selector: {workspace: default}, expected: {equals_baseline: true}, cardinality: 2}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_comment_record, provider_role: issue_tracker, resource_type: issue_comment, operation: create, selector: {issue_key: REL-1}, fields: [body, author], min_count: 1, max_count: 1}
+      - {id: mr_complete_record, provider_role: issue_tracker, resource_type: issue, operation: update, selector: {key: REL-1}, fields: [status], min_count: 1, max_count: 1}
+      - {id: mr_publish_status, provider_role: team_chat, resource_type: message, operation: create, selector: {channel_name: releases}, fields: [text, author], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 14
+    required_calls:
+      - {id: search_release_pages, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_release_policy, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3$", min_count: 1, max_count: 1}
+      - {id: read_release_checklist, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/569ac0fe-f39a-5497-e088-65dead32bf2f$", min_count: 1, max_count: 1}
+      - {id: read_required_change_one, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/payments/pulls/1$", min_count: 1}
+      - {id: read_required_change_two, provider_role: code_host, methods: [GET], path_pattern: "^/repos/acme/payments/pulls/2$", min_count: 1}
+      - {id: read_tracker_gates, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/search\\?jql=project(?:=|%3D)REL$", min_count: 1}
+      - {id: read_release_transitions, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/REL-1/transitions$", min_count: 1}
+      - {id: list_release_channels, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.list$", min_count: 1}
+      - {id: read_release_channel, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+      - {id: comment_release_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/comment$", min_count: 1, max_count: 1}
+      - {id: transition_release_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/transitions$", min_count: 1, max_count: 1}
+      - {id: publish_release_status, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+      - {id: confirm_release_record, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/REL-1$", min_count: 1}
+      - {id: confirm_release_channel, provider_role: team_chat, methods: [POST], path_pattern: "^/api/conversations\\.history$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_comment_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/comment$", min_count: 1, max_count: 1}
+      - {id: tm_complete_record, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue/REL-1/transitions$", min_count: 1, max_count: 1}
+      - {id: tm_publish_status, provider_role: team_chat, methods: [POST], path_pattern: "^/api/chat\\.postMessage$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

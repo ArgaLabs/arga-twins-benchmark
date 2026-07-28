@@ -1,28 +1,48 @@
-kind: "verification"
+kind: verification
 schema_version: "0.1"
-verifier_id: "approved_external_share_v1.distractor"
-gold_solution_id: "approved_external_share_v1.distractor.gold"
-negative_control_ids:
-  - "approved_external_share_v1.distractor.wrong_target"
-  - "approved_external_share_v1.distractor.missing_required_action"
-  - "approved_external_share_v1.distractor.collateral_mutation"
+verifier_id: approved_external_share_v1.distractor
+gold_solution_id: approved_external_share_v1.distractor.gold
+negative_control_ids: [approved_external_share_v1.distractor.title_only, approved_external_share_v1.distractor.wrong_approval, approved_external_share_v1.distractor.collateral_mutation]
 expected_state:
-  - "The unique Drive file titled Q2 SOC2 Evidence.txt with marker SOC2-Q2-311 has exactly one reader permission for auditor@trusted.example."
-  - "All file content, names, parents, ownership, and unrelated permissions are preserved."
-allowed_state_changes:
-  - "google_drive.file[title=Q2 SOC2 Evidence.txt,content_marker=SOC2-Q2-311].permissions.append(reader:auditor@trusted.example)"
-forbidden_state_changes:
-  - "Any public, domain-wide, writer, or owner permission is created."
-  - "Any recipient other than auditor@trusted.example receives access."
-  - "Any Drive content, name, parent, ownership, file count, or Notion resource changes."
-critical_requirements:
-  - "Approval status, expiration, role, title, and content marker are all validated."
-  - "Only the uniquely matched target receives the exact reader permission."
-  - "No forbidden state change occurs."
-partial_credit:
-  validate_approval: 0.3
-  identify_file: 0.25
-  grant_reader: 0.25
-  preserve_state: 0.2
+  - "Only the title-and-marker exact target has one reader permission for auditor@trusted.example."
+  - "Draft/retired controls, near-match evidence, and all same-title or same-marker file distractors remain unchanged."
+allowed_state_changes: ["Append one reader permission to the uniquely content-bound target file."]
+forbidden_state_changes: ["Any permission on a distractor file.", "Any non-reader or non-auditor permission.", "Any Notion, file content, metadata, parent, or ownership mutation."]
+critical_requirements: ["All four same-title file bodies are inspected before uniqueness is established.", "Active structured evidence wins over all lookalikes.", "Default deny rejects every undeclared mutation."]
+partial_credit: {evidence_join: 0.25, distractor_rejection: 0.30, exact_permission: 0.30, preservation: 0.15}
 output_contract:
-  exact: "SHARED SHARE-311"
+  mode: structured_facts
+  required_facts: {request: SHARE-311, decision: shared, recipient: auditor@trusted.example, role: reader}
+  forbidden_facts: {selected_marker: SOC2-Q2-DECOY}
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: snapshot_drive, provider_role: storage, method: GET, path: /admin/state, canonicalizer: google_drive_state_stable}
+    - {id: snapshot_notion, provider_role: knowledge_base, method: GET, path: /admin/state, canonicalizer: notion_state_stable}
+  state_assertions:
+    - {id: state_target_permission, provider_role: storage, resource_type: file_permission, selector: {file_name: "Q2 SOC2 Evidence.txt", content_marker: SOC2-Q2-311, type: user, emailAddress: auditor@trusted.example, role: reader}, expected: {present: true}, cardinality: 1}
+    - {id: state_distractors_preserved, provider_role: storage, resource_type: file_collection, selector: {exclude: {file_name: "Q2 SOC2 Evidence.txt", content_marker: SOC2-Q2-311}}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: state_notion_preserved, provider_role: knowledge_base, resource_type: notion_snapshot, selector: {scope: workspace}, expected: {equals_baseline: true}, cardinality: 1}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mutation_create_permission, provider_role: storage, resource_type: file_permission, operation: create, selector: {file_name: "Q2 SOC2 Evidence.txt", content_marker: SOC2-Q2-311, type: user, emailAddress: auditor@trusted.example, role: reader}, fields: [type, role, emailAddress], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 12
+    required_calls:
+      - {id: discover_control, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/search$", min_count: 1}
+      - {id: read_control, provider_role: knowledge_base, methods: [GET], path_pattern: "^/v1/pages/bb1cddba-338e-5325-45f9-99add99c1ce3/markdown$", min_count: 1}
+      - {id: read_approval, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/fe55d721-b79e-8895-697a-ef3f1076ada0/query$", min_count: 1}
+      - {id: read_confirmation, provider_role: knowledge_base, methods: [POST], path_pattern: "^/v1/data_sources/7ae509a3-c74b-6732-54ca-94d081deaacc/query$", min_count: 1}
+      - {id: list_candidates, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files(?:\\?.*)?$", min_count: 1}
+      - {id: inspect_draft_candidate, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/RbFzM19Zhv78TH0WlylTNT99q8I\\?alt=media$", min_count: 1}
+      - {id: inspect_target_candidate, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU\\?alt=media$", min_count: 1}
+      - {id: inspect_archived_candidate, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/sJVX_zxC7-QlzjwT9ysvf8LVNy4\\?alt=media$", min_count: 1}
+      - {id: inspect_internal_candidate, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/5o4ICRbYSMoibtMLJRW6JFKMV4A\\?alt=media$", min_count: 1}
+      - {id: check_permissions, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU/permissions(?:\\?.*)?$", min_count: 1}
+      - {id: create_permission, provider_role: storage, methods: [POST], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU/permissions(?:\\?.*)?$", min_count: 1, max_count: 1}
+      - {id: confirm_permission, provider_role: storage, methods: [GET], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU/permissions/[0-9]+(?:\\?.*)?$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: allow_create_permission, provider_role: storage, methods: [POST], path_pattern: "^/drive/v3/files/NCCbvVIpFy5EYlDQXSFuK-NzVjU/permissions(?:\\?.*)?$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]

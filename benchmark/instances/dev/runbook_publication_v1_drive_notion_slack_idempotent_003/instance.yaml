@@ -23,6 +23,29 @@ authorization:
     runbook_marker: "RB-79"
     selected_version: "6"
     status_channel: "ops"
+complexity:
+  minimum_agent_steps: 8
+  minimum_tool_calls: 10
+  agent_steps:
+    - {id: discover_sources, kind: discover, description: "List manifest and candidate files.", tool_interactions: [drive_list]}
+    - {id: retrieve_policy, kind: retrieve, description: "Read the publication manifest.", depends_on: [discover_sources], tool_interactions: [manifest_read]}
+    - {id: inspect_candidates, kind: correlate, description: "Compare the approved revision with older, draft, and wrong-runbook candidates.", depends_on: [retrieve_policy], tool_interactions: [candidate_current_read, candidate_older_read, candidate_draft_read, candidate_wrong_runbook_read]}
+    - {id: resolve_destination, kind: discover, description: "Resolve the exact existing RB-79 destination page.", depends_on: [inspect_candidates], tool_interactions: [notion_search]}
+    - {id: inspect_destination, kind: retrieve, description: "Read the resolved page and compare it with approved v6.", depends_on: [resolve_destination], tool_interactions: [notion_read]}
+    - {id: resolve_announcement_channel, kind: discover, description: "Resolve the manifest's ops channel.", depends_on: [inspect_destination], tool_interactions: [chat_channels]}
+    - {id: inspect_announcement, kind: retrieve, description: "Read ops history and verify the exact publication is already present once.", depends_on: [resolve_announcement_channel], tool_interactions: [chat_history]}
+    - {id: decide_noop, kind: decide, description: "Prove both artifacts are already exact and perform no provider writes.", depends_on: [inspect_destination, inspect_announcement], tool_interactions: []}
+  tool_interactions:
+    - {id: drive_list, provider_role: file_storage, kind: read, target: "Drive Approved Runbooks folder", purpose: "Enumerate candidates."}
+    - {id: manifest_read, provider_role: file_storage, kind: read, target: "publication-manifest.md", purpose: "Discover publication rules."}
+    - {id: candidate_current_read, provider_role: file_storage, kind: read, target: "RB-79 v6 approved", purpose: "Read authoritative body."}
+    - {id: candidate_older_read, provider_role: file_storage, kind: read, target: "RB-79 v5 approved", purpose: "Verify v6 wins."}
+    - {id: candidate_draft_read, provider_role: file_storage, kind: read, target: "RB-79 v7 draft", purpose: "Reject an unapproved higher revision."}
+    - {id: candidate_wrong_runbook_read, provider_role: file_storage, kind: read, target: "RB-97 v9", purpose: "Reject a higher revision belonging to another runbook."}
+    - {id: notion_search, provider_role: knowledge_base, kind: read, target: "Notion page search", purpose: "Resolve destination."}
+    - {id: notion_read, provider_role: knowledge_base, kind: read, target: "RB-79 markdown", purpose: "Compare content."}
+    - {id: chat_channels, provider_role: team_chat, kind: read, target: "Slack channel list", purpose: "Resolve ops."}
+    - {id: chat_history, provider_role: team_chat, kind: read, target: "Slack ops history", purpose: "Verify exact existing announcement."}
 budget:
   timeout_seconds: 300
   max_tool_calls: 55

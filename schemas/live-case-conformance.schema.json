@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "LiveCaseObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "assertion_results": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "title": "Assertion Results",
+          "type": "object"
+        },
+        "baseline_state_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Baseline State Sha256",
+          "type": "string"
+        },
+        "case_id": {
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "collateral_damage": {
+          "title": "Collateral Damage",
+          "type": "boolean"
+        },
+        "final_state_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Final State Sha256",
+          "type": "string"
+        },
+        "provider_trace_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Provider Trace Sha256",
+          "type": "string"
+        },
+        "repeat": {
+          "minimum": 1,
+          "title": "Repeat",
+          "type": "integer"
+        },
+        "task_success": {
+          "title": "Task Success",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "case_id",
+        "repeat",
+        "task_success",
+        "collateral_damage",
+        "assertion_results",
+        "baseline_state_sha256",
+        "final_state_sha256",
+        "provider_trace_sha256"
+      ],
+      "title": "LiveCaseObservation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "instance_bundle_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Instance Bundle Sha256",
+      "type": "string"
+    },
+    "instance_id": {
+      "minLength": 1,
+      "title": "Instance Id",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/LiveCaseObservation"
+      },
+      "minItems": 1,
+      "title": "Observations",
+      "type": "array"
+    },
+    "protocol": {
+      "const": "arga-bench-live-case-conformance/1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "verifier_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Verifier Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "protocol",
+    "instance_id",
+    "instance_bundle_sha256",
+    "verifier_sha256",
+    "observations"
+  ],
+  "title": "LiveCaseEvidence",
+  "type": "object"
+}

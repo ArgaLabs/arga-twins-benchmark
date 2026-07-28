@@ -27,4 +27,58 @@ partial_credit:
   chat_ack: 0.25
   preserve_unrelated: 0.15
 output_contract:
-  exact_pattern: "TRACKED INC-420 AS <tracker-identifier>: database timeout is 2 seconds."
+  mode: structured_facts
+  required_facts:
+    incident: INC-420
+    correlated_change: "GitLab MR !1"
+    root_cause: database timeout is 2 seconds
+    tracker_action: created
+  diagnostic_facts:
+    acknowledged: true
+  forbidden_facts:
+    tracker_action: [reused, duplicate]
+  critical: true
+deterministic:
+  snapshot_queries:
+    - {id: sq_chat, provider_role: team_chat, method: GET, path: /api/v10/users/@me/guilds, canonicalizer: discord_guild_channels_messages_stable}
+    - {id: sq_code, provider_role: code_host, method: GET, path: "/api/v4/projects/acme%2Fdatabase-api/merge_requests?state=all", canonicalizer: gitlab_project_and_merge_requests_stable}
+    - {id: sq_tracker, provider_role: issue_tracker, method: GET, path: "/rest/api/3/search?jql=project%3DOPS", canonicalizer: jira_issues_comments_stable}
+  state_assertions:
+    - id: sa_incident_issue
+      provider_role: issue_tracker
+      resource_type: issue
+      selector: {project_key: OPS, summary: "[INC-420] database-api requests timing out", description: "Incident marker: INC-420\nEvidence: MR !1\nCause: database timeout is 2 seconds", priority: Highest}
+      expected: {new_since_baseline: true, status_category: open}
+      cardinality: 1
+    - id: sa_acknowledgment
+      provider_role: team_chat
+      resource_type: message
+      selector: {guild_name: Acme Ops, channel_name: incidents, content_pattern: "^TRACKED INC-420 AS OPS-[0-9]+: database timeout is 2 seconds\\.$"}
+      expected: {tracker_identifier_matches: sa_incident_issue.key, new_since_baseline: true}
+      cardinality: 1
+    - {id: sa_code_preserved, provider_role: code_host, resource_type: project_snapshot, selector: {project: acme/database-api}, expected: {equals_baseline: true}, cardinality: 1}
+    - {id: sa_prior_messages_preserved, provider_role: team_chat, resource_type: message_collection, selector: {guild_name: Acme Ops, channel_name: incidents, baseline_only: true}, expected: {equals_baseline: true}, cardinality: 2}
+  mutation_policy:
+    default: deny
+    required:
+      - {id: mr_create_issue, provider_role: issue_tracker, resource_type: issue, operation: create, selector: {project_key: OPS, marker: INC-420}, fields: [summary, description, priority, issue_type], min_count: 1, max_count: 1}
+      - {id: mr_create_ack, provider_role: team_chat, resource_type: message, operation: create, selector: {guild_name: Acme Ops, channel_name: incidents, incident: INC-420}, fields: [content, author], min_count: 1, max_count: 1}
+    allowed: []
+  trace_policy:
+    min_tool_calls: 11
+    required_calls:
+      - {id: list_current_guilds, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/users/@me/guilds$", min_count: 1}
+      - {id: list_incident_channels, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/guilds/000000000000000100/channels$", min_count: 1}
+      - {id: read_incident_channel, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/channels/856171103353375329/messages$", min_count: 1}
+      - {id: list_merged_changes, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fdatabase-api/merge_requests\\?state=merged$", min_count: 1}
+      - {id: read_correlated_source, provider_role: code_host, methods: [GET], path_pattern: "^/api/v4/projects/acme%2Fdatabase-api/repository/files/config%2Fdatabase\\.py\\?ref=deploy(?:/|%2F)774$", min_count: 1}
+      - {id: read_tracker_scope, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/project/OPS$", min_count: 1}
+      - {id: search_incident_tracker, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/search\\?jql=project(?:=|%3D)OPS$", min_count: 1}
+      - {id: create_incident_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue$", min_count: 1, max_count: 1}
+      - {id: publish_acknowledgment, provider_role: team_chat, methods: [POST], path_pattern: "^/api/v10/channels/856171103353375329/messages$", min_count: 1, max_count: 1}
+      - {id: confirm_tracker_state, provider_role: issue_tracker, methods: [GET], path_pattern: "^/rest/api/3/issue/OPS-1$", min_count: 1}
+      - {id: confirm_acknowledgment, provider_role: team_chat, methods: [GET], path_pattern: "^/api/v10/channels/856171103353375329/messages$", min_count: 1}
+    allowed_mutating_calls:
+      - {id: tm_create_issue, provider_role: issue_tracker, methods: [POST], path_pattern: "^/rest/api/3/issue$", min_count: 1, max_count: 1}
+      - {id: tm_create_ack, provider_role: team_chat, methods: [POST], path_pattern: "^/api/v10/channels/856171103353375329/messages$", min_count: 1, max_count: 1}
+    forbidden_path_prefixes: [/admin, /_admin, /_twin, /_ui, /inspect, /reset]
