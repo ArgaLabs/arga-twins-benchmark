@@ -26,7 +26,12 @@ from arga_twins_benchmark.evaluation.state_evidence import (
     StateEvidenceError,
 )
 from arga_twins_benchmark.reporting import semantic_grader
-from arga_twins_benchmark.runner.matrix import InstanceBundle
+from arga_twins_benchmark.runner.matrix import (
+    InstanceBundle,
+    _gitlab_expected_merge_request_bindings,  # pyright: ignore[reportPrivateUsage]
+    load_experiment_bundles,
+    verify_provisioned_fixture_identity,
+)
 from arga_twins_benchmark.specs.models import ComplexitySpec, VerificationSpec
 
 
@@ -212,6 +217,178 @@ def _install_catalog_stubs(monkeypatch: pytest.MonkeyPatch) -> None:
         "audit_suite",
         passing_audit,
     )
+
+
+def _gitlab_bundle(instance_id: str) -> InstanceBundle:
+    _, bundles = load_experiment_bundles(Path("benchmark"), "development_pilot_48_v1")
+    return bundles[instance_id]
+
+
+def _gitlab_control_payload(bundle: InstanceBundle) -> dict[str, object]:
+    bindings = _gitlab_expected_merge_request_bindings(bundle)
+    return {
+        "twin_run": {
+            "seed_results": {
+                "gitlab": {
+                    "status": "seeded",
+                    "merge_requests_created": len(bindings),
+                    "merge_request_bindings": bindings,
+                }
+            }
+        }
+    }
+
+
+def _write_gitlab_fixture_identity(
+    trial_dir: Path,
+    *,
+    bundle: InstanceBundle,
+    control_payload: Mapping[str, object],
+) -> None:
+    _write_json(
+        trial_dir / "provisioned-fixture-identity.json",
+        verify_provisioned_fixture_identity(bundle, control_payload),
+    )
+
+
+def test_gitlab_grading_accepts_valid_new_fixture_identity_evidence(tmp_path: Path) -> None:
+    bundle = _gitlab_bundle("blocking_code_review_v1_gitlab_provider_contrast_004")
+    control_payload = _gitlab_control_payload(bundle)
+    _write_gitlab_fixture_identity(
+        tmp_path,
+        bundle=bundle,
+        control_payload=control_payload,
+    )
+
+    semantic_grader._validate_provisioned_fixture_identity_artifact(  # pyright: ignore[reportPrivateUsage]
+        trial_dir=tmp_path,
+        bundle=bundle,
+        control_payload=control_payload,
+    )
+
+
+def test_gitlab_grading_accepts_explicit_empty_bindings_for_zero_mr_seed(tmp_path: Path) -> None:
+    bundle = _gitlab_bundle("specification_drift_v1_notion_gitlab_linear_provider_contrast_004")
+    control_payload = _gitlab_control_payload(bundle)
+    gitlab_result = cast(
+        dict[str, object],
+        cast(dict[str, object], cast(dict[str, object], control_payload["twin_run"])["seed_results"])["gitlab"],
+    )
+    assert gitlab_result["merge_requests_created"] == 0
+    assert gitlab_result["merge_request_bindings"] == []
+    _write_gitlab_fixture_identity(
+        tmp_path,
+        bundle=bundle,
+        control_payload=control_payload,
+    )
+
+    semantic_grader._validate_provisioned_fixture_identity_artifact(  # pyright: ignore[reportPrivateUsage]
+        trial_dir=tmp_path,
+        bundle=bundle,
+        control_payload=control_payload,
+    )
+
+
+@pytest.mark.parametrize(
+    "corruption",
+    [
+        "missing_bindings",
+        "tampered_bindings",
+        "missing_artifact",
+        "tampered_artifact",
+    ],
+)
+def test_gitlab_grading_rejects_missing_or_tampered_identity_evidence(
+    tmp_path: Path,
+    corruption: str,
+) -> None:
+    bundle = _gitlab_bundle("blocking_code_review_v1_gitlab_provider_contrast_004")
+    control_payload = _gitlab_control_payload(bundle)
+    _write_gitlab_fixture_identity(
+        tmp_path,
+        bundle=bundle,
+        control_payload=control_payload,
+    )
+    gitlab_result = cast(
+        dict[str, object],
+        cast(dict[str, object], cast(dict[str, object], control_payload["twin_run"])["seed_results"])["gitlab"],
+    )
+    artifact_path = tmp_path / "provisioned-fixture-identity.json"
+    if corruption == "missing_bindings":
+        del gitlab_result["merge_request_bindings"]
+    elif corruption == "tampered_bindings":
+        binding = cast(list[dict[str, object]], gitlab_result["merge_request_bindings"])[0]
+        binding["iid"] = 2
+    elif corruption == "missing_artifact":
+        artifact_path.unlink()
+    elif corruption == "tampered_artifact":
+        artifact = json.loads(artifact_path.read_text())
+        artifact["checks"][0]["verified_count"] = 99
+        _write_json(artifact_path, artifact)
+    else:
+        raise AssertionError(f"unknown corruption {corruption!r}")
+
+    with pytest.raises(semantic_grader.SemanticGradeError):
+        semantic_grader._validate_provisioned_fixture_identity_artifact(  # pyright: ignore[reportPrivateUsage]
+            trial_dir=tmp_path,
+            bundle=bundle,
+            control_payload=control_payload,
+        )
+
+
+@pytest.mark.parametrize(
+    ("instance_id", "merge_request_count"),
+    [
+        ("blocking_code_review_v1_gitlab_provider_contrast_004", 1),
+        ("specification_drift_v1_notion_gitlab_linear_provider_contrast_004", 0),
+    ],
+)
+def test_historical_gitlab_trial_without_binding_artifact_is_invalid_infrastructure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    instance_id: str,
+    merge_request_count: int,
+) -> None:
+    _install_catalog_stubs(monkeypatch)
+    bundle = _gitlab_bundle(instance_id)
+
+    def load_gitlab_bundle(
+        _catalog_root: Path,
+        _experiment_id: str,
+    ) -> tuple[object, dict[str, InstanceBundle]]:
+        return object(), {"instance-1": bundle}
+
+    monkeypatch.setattr(
+        semantic_grader,
+        "load_experiment_bundles",
+        load_gitlab_bundle,
+    )
+    suite_dir = _suite(tmp_path)
+    trial_dir = next((suite_dir / "trials").iterdir())
+    _write_json(
+        trial_dir / "control.json",
+        {
+            "instance_id": "instance-1",
+            "scenario_content_sha256": "episode-hash-1",
+            "twin_run": {
+                "seed_results": {
+                    "gitlab": {
+                        "status": "seeded",
+                        "merge_requests_created": merge_request_count,
+                    }
+                }
+            },
+        },
+    )
+
+    report = semantic_grader.grade_saved_suite(suite_dir, catalog_root=tmp_path)
+
+    assert report["valid_trials"] == 0
+    assert report["invalid_infrastructure_trials"] == 1
+    assert report["passed_trials"] == 0
+    assert report["failed_trials"] == 0
+    assert report["unsafe_trials"] == 0
+    assert report["trials"][0]["stage"] == "provisioned_fixture_identity"
 
 
 def test_legacy_invocation_arguments_reconstruct_exact_action_fingerprints() -> None:

@@ -414,6 +414,15 @@ def _verify_provisioned_fixture_identity(
     }
 
 
+def verify_provisioned_fixture_identity(
+    bundle: InstanceBundle,
+    control_payload: Mapping[str, object],
+) -> dict[str, object]:
+    """Replay the runner's trusted fixture-identity checks for preserved evidence."""
+
+    return _verify_provisioned_fixture_identity(bundle, control_payload)
+
+
 def _read_lock_owner(lock_file: Any) -> dict[str, object] | None:
     try:
         lock_file.seek(0)

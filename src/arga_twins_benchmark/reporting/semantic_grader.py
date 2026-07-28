@@ -30,7 +30,12 @@ from arga_twins_benchmark.reporting.preserved_snapshot_recovery import (
     recover_preserved_trial_snapshots,
 )
 from arga_twins_benchmark.reporting.suite_audit import SuiteAuditError, audit_suite
-from arga_twins_benchmark.runner.matrix import InstanceBundle, load_experiment_bundles
+from arga_twins_benchmark.runner.matrix import (
+    InstanceBundle,
+    ProvisionedFixtureInvariantError,
+    load_experiment_bundles,
+    verify_provisioned_fixture_identity,
+)
 
 SEMANTIC_GRADE_PROTOCOL = "arga-bench-semantic-suite-grade/2"
 
@@ -146,6 +151,7 @@ def _input_hashes(trial_dir: Path) -> dict[str, str]:
         "official-docs-trace.json",
         "official-docs-cache-ref.json",
         "control.json",
+        "provisioned-fixture-identity.json",
     )
     return {name: _file_sha256(trial_dir / name) for name in names if (trial_dir / name).is_file()}
 
@@ -160,6 +166,36 @@ def _read_json_object(path: Path, *, label: str) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise SemanticGradeError(f"{label} must be a JSON object: {path}")
     return cast(dict[str, Any], payload)
+
+
+def _validate_provisioned_fixture_identity_artifact(
+    *,
+    trial_dir: Path,
+    bundle: InstanceBundle,
+    control_payload: Mapping[str, object],
+) -> None:
+    """Require trusted, replayable identity proof for every scored GitLab fixture."""
+
+    if "gitlab" not in bundle.instance.seed_files:
+        return
+
+    try:
+        expected = verify_provisioned_fixture_identity(bundle, control_payload)
+    except ProvisionedFixtureInvariantError as error:
+        raise SemanticGradeError(f"GitLab provisioned fixture identity is invalid: {error}") from error
+
+    artifact = _read_json_object(
+        trial_dir / "provisioned-fixture-identity.json",
+        label="provisioned fixture identity",
+    )
+    if artifact.get("protocol") != "arga-bench-provisioned-fixture-identity/1":
+        raise SemanticGradeError("provisioned fixture identity has an unsupported protocol")
+    if artifact.get("passed") is not True:
+        raise SemanticGradeError("provisioned fixture identity does not record a successful check")
+    if artifact != expected:
+        raise SemanticGradeError(
+            "provisioned fixture identity conflicts with trusted Scenario seed results or checked-in GitLab seed data"
+        )
 
 
 def _trial_dir(suite_dir: Path, trial_id: object) -> Path:
@@ -732,6 +768,30 @@ def _grade_trial(
             input_hashes=input_hashes,
         )
 
+    control_payload: dict[str, Any] | None = None
+    if "gitlab" in bundle.instance.seed_files:
+        try:
+            control_payload = _read_json_object(
+                trial_dir / "control.json",
+                label=f"{trial_id} control",
+            )
+            _validate_provisioned_fixture_identity_artifact(
+                trial_dir=trial_dir,
+                bundle=bundle,
+                control_payload=control_payload,
+            )
+        except (OSError, UnicodeError, json.JSONDecodeError, SemanticGradeError) as error:
+            return _invalid_trial(
+                trial_id=trial_id,
+                instance_id=instance_id,
+                model_id=model_id,
+                validity="invalid_infrastructure",
+                stage="provisioned_fixture_identity",
+                error=error,
+                episode_hash=expected_episode_hash,
+                input_hashes=input_hashes,
+            )
+
     try:
         trace_payload = _read_json_object(
             trial_dir / "provider-trace.json",
@@ -780,10 +840,11 @@ def _grade_trial(
             trial_dir / "final-state.json",
             label=f"{trial_id} final state",
         )
-        control_payload = _read_json_object(
-            trial_dir / "control.json",
-            label=f"{trial_id} control",
-        )
+        if control_payload is None:
+            control_payload = _read_json_object(
+                trial_dir / "control.json",
+                label=f"{trial_id} control",
+            )
         baseline = TrustedStateSnapshot.from_artifact_payload(baseline_payload)
         final = TrustedStateSnapshot.from_artifact_payload(final_payload)
         baseline, final = recover_preserved_trial_snapshots(
