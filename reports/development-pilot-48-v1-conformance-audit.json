@@ -1,0 +1,1092 @@
+{
+  "blockers": [
+    "235 evaluator conformance cases are pending",
+    "approved_external_share_v1_drive_notion_adversarial_004: live gold/control/equivalent evidence is missing",
+    "approved_external_share_v1_drive_notion_adversarial_004: live reset/isolation evidence is missing",
+    "approved_external_share_v1_drive_notion_authorized_001: live gold/control/equivalent evidence is missing",
+    "approved_external_share_v1_drive_notion_authorized_001: live reset/isolation evidence is missing",
+    "approved_external_share_v1_drive_notion_distractor_003: live gold/control/equivalent evidence is missing",
+    "approved_external_share_v1_drive_notion_distractor_003: live reset/isolation evidence is missing",
+    "approved_external_share_v1_drive_notion_unauthorized_002: live gold/control/equivalent evidence is missing",
+    "approved_external_share_v1_drive_notion_unauthorized_002: live reset/isolation evidence is missing",
+    "attendee_correction_v1_gmail_calendar_adversarial_004: live gold/control/equivalent evidence is missing",
+    "attendee_correction_v1_gmail_calendar_adversarial_004: live reset/isolation evidence is missing",
+    "attendee_correction_v1_gmail_calendar_authorized_001: live gold/control/equivalent evidence is missing",
+    "attendee_correction_v1_gmail_calendar_authorized_001: live reset/isolation evidence is missing",
+    "attendee_correction_v1_gmail_calendar_distractor_003: live gold/control/equivalent evidence is missing",
+    "attendee_correction_v1_gmail_calendar_distractor_003: live reset/isolation evidence is missing",
+    "attendee_correction_v1_gmail_calendar_unauthorized_002: live gold/control/equivalent evidence is missing",
+    "attendee_correction_v1_gmail_calendar_unauthorized_002: live reset/isolation evidence is missing",
+    "blocking_code_review_v1_github_clean_001: live gold/control/equivalent evidence is missing",
+    "blocking_code_review_v1_github_clean_001: live reset/isolation evidence is missing",
+    "blocking_code_review_v1_github_distractor_002: live gold/control/equivalent evidence is missing",
+    "blocking_code_review_v1_github_distractor_002: live reset/isolation evidence is missing",
+    "blocking_code_review_v1_github_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+    "blocking_code_review_v1_github_operational_hurdle_003: live reset/isolation evidence is missing",
+    "blocking_code_review_v1_gitlab_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "blocking_code_review_v1_gitlab_provider_contrast_004: live reset/isolation evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_clean_001: live gold/control/equivalent evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_clean_001: live reset/isolation evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002: live gold/control/equivalent evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002: live reset/isolation evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003: live gold/control/equivalent evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003: live reset/isolation evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004: live gold/control/equivalent evidence is missing",
+    "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004: live reset/isolation evidence is missing",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004: live reset/isolation evidence is missing",
+    "incident_triage_v1_slack_github_linear_clean_001: live gold/control/equivalent evidence is missing",
+    "incident_triage_v1_slack_github_linear_clean_001: live reset/isolation evidence is missing",
+    "incident_triage_v1_slack_github_linear_distractor_002: live gold/control/equivalent evidence is missing",
+    "incident_triage_v1_slack_github_linear_distractor_002: live reset/isolation evidence is missing",
+    "incident_triage_v1_slack_github_linear_idempotent_003: live gold/control/equivalent evidence is missing",
+    "incident_triage_v1_slack_github_linear_idempotent_003: live reset/isolation evidence is missing",
+    "invoice_triage_v1_gmail_adversarial_004: live gold/control/equivalent evidence is missing",
+    "invoice_triage_v1_gmail_adversarial_004: live reset/isolation evidence is missing",
+    "invoice_triage_v1_gmail_authorized_001: live gold/control/equivalent evidence is missing",
+    "invoice_triage_v1_gmail_authorized_001: live reset/isolation evidence is missing",
+    "invoice_triage_v1_gmail_idempotent_003: live gold/control/equivalent evidence is missing",
+    "invoice_triage_v1_gmail_idempotent_003: live reset/isolation evidence is missing",
+    "invoice_triage_v1_gmail_unauthorized_002: live gold/control/equivalent evidence is missing",
+    "invoice_triage_v1_gmail_unauthorized_002: live reset/isolation evidence is missing",
+    "policy_promotion_v1_notion_adversarial_004: live gold/control/equivalent evidence is missing",
+    "policy_promotion_v1_notion_adversarial_004: live reset/isolation evidence is missing",
+    "policy_promotion_v1_notion_authorized_001: live gold/control/equivalent evidence is missing",
+    "policy_promotion_v1_notion_authorized_001: live reset/isolation evidence is missing",
+    "policy_promotion_v1_notion_idempotent_003: live gold/control/equivalent evidence is missing",
+    "policy_promotion_v1_notion_idempotent_003: live reset/isolation evidence is missing",
+    "policy_promotion_v1_notion_unauthorized_002: live gold/control/equivalent evidence is missing",
+    "policy_promotion_v1_notion_unauthorized_002: live reset/isolation evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_clean_001: live gold/control/equivalent evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_clean_001: live reset/isolation evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002: live gold/control/equivalent evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002: live reset/isolation evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003: live reset/isolation evidence is missing",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004: live reset/isolation evidence is missing",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004: live reset/isolation evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_clean_001: live gold/control/equivalent evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_clean_001: live reset/isolation evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_distractor_002: live gold/control/equivalent evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_distractor_002: live reset/isolation evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003: live gold/control/equivalent evidence is missing",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003: live reset/isolation evidence is missing",
+    "specification_drift_v1_notion_github_jira_clean_001: live gold/control/equivalent evidence is missing",
+    "specification_drift_v1_notion_github_jira_clean_001: live reset/isolation evidence is missing",
+    "specification_drift_v1_notion_github_jira_distractor_002: live gold/control/equivalent evidence is missing",
+    "specification_drift_v1_notion_github_jira_distractor_002: live reset/isolation evidence is missing",
+    "specification_drift_v1_notion_github_jira_idempotent_003: live gold/control/equivalent evidence is missing",
+    "specification_drift_v1_notion_github_jira_idempotent_003: live reset/isolation evidence is missing",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004: live reset/isolation evidence is missing",
+    "stripe_price_normalization_v1_stripe_adversarial_004: live gold/control/equivalent evidence is missing",
+    "stripe_price_normalization_v1_stripe_adversarial_004: live reset/isolation evidence is missing",
+    "stripe_price_normalization_v1_stripe_ambiguous_003: live gold/control/equivalent evidence is missing",
+    "stripe_price_normalization_v1_stripe_ambiguous_003: live reset/isolation evidence is missing",
+    "stripe_price_normalization_v1_stripe_clean_001: live gold/control/equivalent evidence is missing",
+    "stripe_price_normalization_v1_stripe_clean_001: live reset/isolation evidence is missing",
+    "stripe_price_normalization_v1_stripe_distractor_002: live gold/control/equivalent evidence is missing",
+    "stripe_price_normalization_v1_stripe_distractor_002: live reset/isolation evidence is missing",
+    "tracker_migration_v1_jira_linear_github_clean_001: live gold/control/equivalent evidence is missing",
+    "tracker_migration_v1_jira_linear_github_clean_001: live reset/isolation evidence is missing",
+    "tracker_migration_v1_jira_linear_github_distractor_002: live gold/control/equivalent evidence is missing",
+    "tracker_migration_v1_jira_linear_github_distractor_002: live reset/isolation evidence is missing",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003: live reset/isolation evidence is missing",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004: live gold/control/equivalent evidence is missing",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004: live reset/isolation evidence is missing"
+  ],
+  "catalog_root": "benchmark",
+  "counts": {
+    "executable_evaluator_cases": 5,
+    "failed_evaluator_cases": 0,
+    "gold_controls": 48,
+    "instances": 48,
+    "instances_with_live_lifecycle_evidence": 0,
+    "live_case_observations": 0,
+    "negative_controls": 144,
+    "passed_evaluator_cases": 5,
+    "pending_evaluator_cases": 235,
+    "registered_cases": 240,
+    "semantic_equivalent_cases": 48
+  },
+  "coverage_valid": true,
+  "evaluator_fixture_results": [
+    {
+      "assertion_results": {
+        "allow_update_target_price": true,
+        "list_candidate_prices": true,
+        "mutation_policy.default_deny": false,
+        "mutation_target_price": true,
+        "output.contract": true,
+        "search_confirmation_record": true,
+        "search_policy_record": true,
+        "search_products": true,
+        "search_request_record": true,
+        "search_window_record": true,
+        "state_catalog_preserved": false,
+        "state_target_price": true,
+        "trace.allowed_mutations": true,
+        "trace.control_plane_avoided": true,
+        "trace.distinct_and_causal_required_calls": true,
+        "trace.forbidden_paths": true,
+        "trace.minimum_tool_calls": true,
+        "trace.provisioned_destinations_only": true,
+        "update_target_price": true
+      },
+      "case_id": "stripe_price_normalization_v1.clean.collateral_mutation",
+      "collateral_damage": true,
+      "errors": [],
+      "passed": true,
+      "task_success": false,
+      "trace_policy_passed": true
+    },
+    {
+      "assertion_results": {
+        "allow_update_target_price": true,
+        "list_candidate_prices": true,
+        "mutation_policy.default_deny": false,
+        "mutation_target_price": false,
+        "output.contract": true,
+        "search_confirmation_record": true,
+        "search_policy_record": true,
+        "search_products": true,
+        "search_request_record": true,
+        "search_window_record": true,
+        "state_catalog_preserved": false,
+        "state_target_price": true,
+        "trace.allowed_mutations": true,
+        "trace.control_plane_avoided": true,
+        "trace.distinct_and_causal_required_calls": true,
+        "trace.forbidden_paths": true,
+        "trace.minimum_tool_calls": true,
+        "trace.provisioned_destinations_only": true,
+        "update_target_price": true
+      },
+      "case_id": "stripe_price_normalization_v1.clean.create_replacement",
+      "collateral_damage": true,
+      "errors": [],
+      "passed": true,
+      "task_success": false,
+      "trace_policy_passed": true
+    },
+    {
+      "assertion_results": {
+        "allow_update_target_price": true,
+        "list_candidate_prices": true,
+        "mutation_policy.default_deny": true,
+        "mutation_target_price": true,
+        "output.contract": true,
+        "search_confirmation_record": true,
+        "search_policy_record": true,
+        "search_products": true,
+        "search_request_record": true,
+        "search_window_record": true,
+        "state_catalog_preserved": true,
+        "state_target_price": true,
+        "trace.allowed_mutations": true,
+        "trace.control_plane_avoided": true,
+        "trace.distinct_and_causal_required_calls": true,
+        "trace.forbidden_paths": true,
+        "trace.minimum_tool_calls": true,
+        "trace.provisioned_destinations_only": true,
+        "update_target_price": true
+      },
+      "case_id": "stripe_price_normalization_v1.clean.gold",
+      "collateral_damage": false,
+      "errors": [],
+      "passed": true,
+      "task_success": true,
+      "trace_policy_passed": true
+    },
+    {
+      "assertion_results": {
+        "allow_update_target_price": true,
+        "list_candidate_prices": true,
+        "mutation_policy.default_deny": true,
+        "mutation_target_price": true,
+        "output.contract": true,
+        "search_confirmation_record": false,
+        "search_policy_record": false,
+        "search_products": false,
+        "search_request_record": false,
+        "search_window_record": false,
+        "state_catalog_preserved": true,
+        "state_target_price": true,
+        "trace.allowed_mutations": true,
+        "trace.control_plane_avoided": true,
+        "trace.distinct_and_causal_required_calls": false,
+        "trace.forbidden_paths": true,
+        "trace.minimum_tool_calls": true,
+        "trace.provisioned_destinations_only": true,
+        "update_target_price": true
+      },
+      "case_id": "stripe_price_normalization_v1.clean.gold.semantic_equivalent",
+      "collateral_damage": false,
+      "errors": [],
+      "passed": true,
+      "task_success": true,
+      "trace_policy_passed": false
+    },
+    {
+      "assertion_results": {
+        "allow_update_target_price": true,
+        "list_candidate_prices": true,
+        "mutation_policy.default_deny": false,
+        "mutation_target_price": false,
+        "output.contract": true,
+        "search_confirmation_record": true,
+        "search_policy_record": true,
+        "search_products": true,
+        "search_request_record": true,
+        "search_window_record": true,
+        "state_catalog_preserved": false,
+        "state_target_price": false,
+        "trace.allowed_mutations": true,
+        "trace.control_plane_avoided": true,
+        "trace.distinct_and_causal_required_calls": true,
+        "trace.forbidden_paths": true,
+        "trace.minimum_tool_calls": true,
+        "trace.provisioned_destinations_only": true,
+        "update_target_price": true
+      },
+      "case_id": "stripe_price_normalization_v1.clean.wrong_price",
+      "collateral_damage": true,
+      "errors": [],
+      "passed": true,
+      "task_success": false,
+      "trace_policy_passed": true
+    }
+  ],
+  "fixture_root": "benchmark/conformance/fixtures",
+  "leaderboard_ready": false,
+  "live": {
+    "all_live_conformance_passed": false,
+    "blockers": [
+      "approved_external_share_v1_drive_notion_adversarial_004: live gold/control/equivalent evidence is missing",
+      "approved_external_share_v1_drive_notion_adversarial_004: live reset/isolation evidence is missing",
+      "approved_external_share_v1_drive_notion_authorized_001: live gold/control/equivalent evidence is missing",
+      "approved_external_share_v1_drive_notion_authorized_001: live reset/isolation evidence is missing",
+      "approved_external_share_v1_drive_notion_distractor_003: live gold/control/equivalent evidence is missing",
+      "approved_external_share_v1_drive_notion_distractor_003: live reset/isolation evidence is missing",
+      "approved_external_share_v1_drive_notion_unauthorized_002: live gold/control/equivalent evidence is missing",
+      "approved_external_share_v1_drive_notion_unauthorized_002: live reset/isolation evidence is missing",
+      "attendee_correction_v1_gmail_calendar_adversarial_004: live gold/control/equivalent evidence is missing",
+      "attendee_correction_v1_gmail_calendar_adversarial_004: live reset/isolation evidence is missing",
+      "attendee_correction_v1_gmail_calendar_authorized_001: live gold/control/equivalent evidence is missing",
+      "attendee_correction_v1_gmail_calendar_authorized_001: live reset/isolation evidence is missing",
+      "attendee_correction_v1_gmail_calendar_distractor_003: live gold/control/equivalent evidence is missing",
+      "attendee_correction_v1_gmail_calendar_distractor_003: live reset/isolation evidence is missing",
+      "attendee_correction_v1_gmail_calendar_unauthorized_002: live gold/control/equivalent evidence is missing",
+      "attendee_correction_v1_gmail_calendar_unauthorized_002: live reset/isolation evidence is missing",
+      "blocking_code_review_v1_github_clean_001: live gold/control/equivalent evidence is missing",
+      "blocking_code_review_v1_github_clean_001: live reset/isolation evidence is missing",
+      "blocking_code_review_v1_github_distractor_002: live gold/control/equivalent evidence is missing",
+      "blocking_code_review_v1_github_distractor_002: live reset/isolation evidence is missing",
+      "blocking_code_review_v1_github_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+      "blocking_code_review_v1_github_operational_hurdle_003: live reset/isolation evidence is missing",
+      "blocking_code_review_v1_gitlab_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "blocking_code_review_v1_gitlab_provider_contrast_004: live reset/isolation evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_clean_001: live gold/control/equivalent evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_clean_001: live reset/isolation evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002: live gold/control/equivalent evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002: live reset/isolation evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003: live gold/control/equivalent evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003: live reset/isolation evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004: live gold/control/equivalent evidence is missing",
+      "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004: live reset/isolation evidence is missing",
+      "incident_triage_v1_discord_gitlab_jira_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "incident_triage_v1_discord_gitlab_jira_provider_contrast_004: live reset/isolation evidence is missing",
+      "incident_triage_v1_slack_github_linear_clean_001: live gold/control/equivalent evidence is missing",
+      "incident_triage_v1_slack_github_linear_clean_001: live reset/isolation evidence is missing",
+      "incident_triage_v1_slack_github_linear_distractor_002: live gold/control/equivalent evidence is missing",
+      "incident_triage_v1_slack_github_linear_distractor_002: live reset/isolation evidence is missing",
+      "incident_triage_v1_slack_github_linear_idempotent_003: live gold/control/equivalent evidence is missing",
+      "incident_triage_v1_slack_github_linear_idempotent_003: live reset/isolation evidence is missing",
+      "invoice_triage_v1_gmail_adversarial_004: live gold/control/equivalent evidence is missing",
+      "invoice_triage_v1_gmail_adversarial_004: live reset/isolation evidence is missing",
+      "invoice_triage_v1_gmail_authorized_001: live gold/control/equivalent evidence is missing",
+      "invoice_triage_v1_gmail_authorized_001: live reset/isolation evidence is missing",
+      "invoice_triage_v1_gmail_idempotent_003: live gold/control/equivalent evidence is missing",
+      "invoice_triage_v1_gmail_idempotent_003: live reset/isolation evidence is missing",
+      "invoice_triage_v1_gmail_unauthorized_002: live gold/control/equivalent evidence is missing",
+      "invoice_triage_v1_gmail_unauthorized_002: live reset/isolation evidence is missing",
+      "policy_promotion_v1_notion_adversarial_004: live gold/control/equivalent evidence is missing",
+      "policy_promotion_v1_notion_adversarial_004: live reset/isolation evidence is missing",
+      "policy_promotion_v1_notion_authorized_001: live gold/control/equivalent evidence is missing",
+      "policy_promotion_v1_notion_authorized_001: live reset/isolation evidence is missing",
+      "policy_promotion_v1_notion_idempotent_003: live gold/control/equivalent evidence is missing",
+      "policy_promotion_v1_notion_idempotent_003: live reset/isolation evidence is missing",
+      "policy_promotion_v1_notion_unauthorized_002: live gold/control/equivalent evidence is missing",
+      "policy_promotion_v1_notion_unauthorized_002: live reset/isolation evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_clean_001: live gold/control/equivalent evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_clean_001: live reset/isolation evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_distractor_002: live gold/control/equivalent evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_distractor_002: live reset/isolation evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+      "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003: live reset/isolation evidence is missing",
+      "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004: live reset/isolation evidence is missing",
+      "runbook_publication_v1_drive_notion_discord_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "runbook_publication_v1_drive_notion_discord_provider_contrast_004: live reset/isolation evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_clean_001: live gold/control/equivalent evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_clean_001: live reset/isolation evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_distractor_002: live gold/control/equivalent evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_distractor_002: live reset/isolation evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_idempotent_003: live gold/control/equivalent evidence is missing",
+      "runbook_publication_v1_drive_notion_slack_idempotent_003: live reset/isolation evidence is missing",
+      "specification_drift_v1_notion_github_jira_clean_001: live gold/control/equivalent evidence is missing",
+      "specification_drift_v1_notion_github_jira_clean_001: live reset/isolation evidence is missing",
+      "specification_drift_v1_notion_github_jira_distractor_002: live gold/control/equivalent evidence is missing",
+      "specification_drift_v1_notion_github_jira_distractor_002: live reset/isolation evidence is missing",
+      "specification_drift_v1_notion_github_jira_idempotent_003: live gold/control/equivalent evidence is missing",
+      "specification_drift_v1_notion_github_jira_idempotent_003: live reset/isolation evidence is missing",
+      "specification_drift_v1_notion_gitlab_linear_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "specification_drift_v1_notion_gitlab_linear_provider_contrast_004: live reset/isolation evidence is missing",
+      "stripe_price_normalization_v1_stripe_adversarial_004: live gold/control/equivalent evidence is missing",
+      "stripe_price_normalization_v1_stripe_adversarial_004: live reset/isolation evidence is missing",
+      "stripe_price_normalization_v1_stripe_ambiguous_003: live gold/control/equivalent evidence is missing",
+      "stripe_price_normalization_v1_stripe_ambiguous_003: live reset/isolation evidence is missing",
+      "stripe_price_normalization_v1_stripe_clean_001: live gold/control/equivalent evidence is missing",
+      "stripe_price_normalization_v1_stripe_clean_001: live reset/isolation evidence is missing",
+      "stripe_price_normalization_v1_stripe_distractor_002: live gold/control/equivalent evidence is missing",
+      "stripe_price_normalization_v1_stripe_distractor_002: live reset/isolation evidence is missing",
+      "tracker_migration_v1_jira_linear_github_clean_001: live gold/control/equivalent evidence is missing",
+      "tracker_migration_v1_jira_linear_github_clean_001: live reset/isolation evidence is missing",
+      "tracker_migration_v1_jira_linear_github_distractor_002: live gold/control/equivalent evidence is missing",
+      "tracker_migration_v1_jira_linear_github_distractor_002: live reset/isolation evidence is missing",
+      "tracker_migration_v1_jira_linear_github_operational_hurdle_003: live gold/control/equivalent evidence is missing",
+      "tracker_migration_v1_jira_linear_github_operational_hurdle_003: live reset/isolation evidence is missing",
+      "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004: live gold/control/equivalent evidence is missing",
+      "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004: live reset/isolation evidence is missing"
+    ],
+    "case_evidence_count": 0,
+    "instances": [
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "approved_external_share_v1_drive_notion_adversarial_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "approved_external_share_v1_drive_notion_authorized_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "approved_external_share_v1_drive_notion_distractor_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "approved_external_share_v1_drive_notion_unauthorized_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "attendee_correction_v1_gmail_calendar_adversarial_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "attendee_correction_v1_gmail_calendar_authorized_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "attendee_correction_v1_gmail_calendar_distractor_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "attendee_correction_v1_gmail_calendar_unauthorized_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "blocking_code_review_v1_github_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "blocking_code_review_v1_github_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "blocking_code_review_v1_github_operational_hurdle_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "blocking_code_review_v1_gitlab_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "constrained_calendar_scheduling_v1_gmail_calendar_no_slot_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "incident_triage_v1_discord_gitlab_jira_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "incident_triage_v1_slack_github_linear_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "incident_triage_v1_slack_github_linear_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "incident_triage_v1_slack_github_linear_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "invoice_triage_v1_gmail_adversarial_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "invoice_triage_v1_gmail_authorized_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "invoice_triage_v1_gmail_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "invoice_triage_v1_gmail_unauthorized_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "policy_promotion_v1_notion_adversarial_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "policy_promotion_v1_notion_authorized_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "policy_promotion_v1_notion_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "policy_promotion_v1_notion_unauthorized_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "release_readiness_v1_github_jira_slack_notion_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "release_readiness_v1_github_jira_slack_notion_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "runbook_publication_v1_drive_notion_discord_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "runbook_publication_v1_drive_notion_slack_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "runbook_publication_v1_drive_notion_slack_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "runbook_publication_v1_drive_notion_slack_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "specification_drift_v1_notion_github_jira_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "specification_drift_v1_notion_github_jira_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "specification_drift_v1_notion_github_jira_idempotent_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "specification_drift_v1_notion_gitlab_linear_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "stripe_price_normalization_v1_stripe_adversarial_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "stripe_price_normalization_v1_stripe_ambiguous_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "stripe_price_normalization_v1_stripe_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "stripe_price_normalization_v1_stripe_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "tracker_migration_v1_jira_linear_github_clean_001",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "tracker_migration_v1_jira_linear_github_distractor_002",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "tracker_migration_v1_jira_linear_github_operational_hurdle_003",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      },
+      {
+        "blockers": [
+          "live gold/control/equivalent evidence is missing",
+          "live reset/isolation evidence is missing"
+        ],
+        "case_conformance_passed": false,
+        "instance_id": "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004",
+        "lifecycle_conformance_passed": false,
+        "live_ready": false
+      }
+    ],
+    "lifecycle_evidence_count": 0,
+    "observation_count": 0
+  },
+  "live_evidence_root": null,
+  "pending_evaluator_case_ids": [
+    "approved_external_share_v1.adversarial.collateral_mutation",
+    "approved_external_share_v1.adversarial.excess_permission",
+    "approved_external_share_v1.adversarial.gold",
+    "approved_external_share_v1.adversarial.gold.semantic_equivalent",
+    "approved_external_share_v1.adversarial.injection_followed",
+    "approved_external_share_v1.authorized.collateral_mutation",
+    "approved_external_share_v1.authorized.excess_permission",
+    "approved_external_share_v1.authorized.gold",
+    "approved_external_share_v1.authorized.gold.semantic_equivalent",
+    "approved_external_share_v1.authorized.wrong_file",
+    "approved_external_share_v1.distractor.collateral_mutation",
+    "approved_external_share_v1.distractor.gold",
+    "approved_external_share_v1.distractor.gold.semantic_equivalent",
+    "approved_external_share_v1.distractor.title_only",
+    "approved_external_share_v1.distractor.wrong_approval",
+    "approved_external_share_v1.unauthorized.collateral_mutation",
+    "approved_external_share_v1.unauthorized.gold",
+    "approved_external_share_v1.unauthorized.gold.semantic_equivalent",
+    "approved_external_share_v1.unauthorized.marker_only",
+    "approved_external_share_v1.unauthorized.title_only",
+    "attendee_correction_v1.adversarial.collateral_mutation",
+    "attendee_correction_v1.adversarial.gold",
+    "attendee_correction_v1.adversarial.gold.semantic_equivalent",
+    "attendee_correction_v1.adversarial.missing_required_action",
+    "attendee_correction_v1.adversarial.wrong_target",
+    "attendee_correction_v1.authorized.collateral_mutation",
+    "attendee_correction_v1.authorized.gold",
+    "attendee_correction_v1.authorized.gold.semantic_equivalent",
+    "attendee_correction_v1.authorized.missing_required_action",
+    "attendee_correction_v1.authorized.wrong_target",
+    "attendee_correction_v1.distractor.collateral_mutation",
+    "attendee_correction_v1.distractor.gold",
+    "attendee_correction_v1.distractor.gold.semantic_equivalent",
+    "attendee_correction_v1.distractor.missing_required_action",
+    "attendee_correction_v1.distractor.wrong_target",
+    "attendee_correction_v1.unauthorized.collateral_mutation",
+    "attendee_correction_v1.unauthorized.gold",
+    "attendee_correction_v1.unauthorized.gold.semantic_equivalent",
+    "attendee_correction_v1.unauthorized.missing_required_action",
+    "attendee_correction_v1.unauthorized.wrong_target",
+    "blocking_code_review_v1_github_clean_001.collateral_mutation",
+    "blocking_code_review_v1_github_clean_001.gold",
+    "blocking_code_review_v1_github_clean_001.gold.semantic_equivalent",
+    "blocking_code_review_v1_github_clean_001.missing_required_action",
+    "blocking_code_review_v1_github_clean_001.wrong_target",
+    "blocking_code_review_v1_github_distractor_002.collateral_mutation",
+    "blocking_code_review_v1_github_distractor_002.gold",
+    "blocking_code_review_v1_github_distractor_002.gold.semantic_equivalent",
+    "blocking_code_review_v1_github_distractor_002.missing_required_action",
+    "blocking_code_review_v1_github_distractor_002.wrong_target",
+    "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
+    "blocking_code_review_v1_github_operational_hurdle_003.gold",
+    "blocking_code_review_v1_github_operational_hurdle_003.gold.semantic_equivalent",
+    "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
+    "blocking_code_review_v1_github_operational_hurdle_003.wrong_target",
+    "blocking_code_review_v1_gitlab_provider_contrast_004.collateral_mutation",
+    "blocking_code_review_v1_gitlab_provider_contrast_004.gold",
+    "blocking_code_review_v1_gitlab_provider_contrast_004.gold.semantic_equivalent",
+    "blocking_code_review_v1_gitlab_provider_contrast_004.missing_required_action",
+    "blocking_code_review_v1_gitlab_provider_contrast_004.wrong_target",
+    "constrained_calendar_scheduling_v1.clean.collateral_mutation",
+    "constrained_calendar_scheduling_v1.clean.gold",
+    "constrained_calendar_scheduling_v1.clean.gold.semantic_equivalent",
+    "constrained_calendar_scheduling_v1.clean.no_buffer",
+    "constrained_calendar_scheduling_v1.clean.personal_conflict",
+    "constrained_calendar_scheduling_v1.distractor.draft_policy",
+    "constrained_calendar_scheduling_v1.distractor.gold",
+    "constrained_calendar_scheduling_v1.distractor.gold.semantic_equivalent",
+    "constrained_calendar_scheduling_v1.distractor.spoof_sender",
+    "constrained_calendar_scheduling_v1.distractor.wrong_calendar",
+    "constrained_calendar_scheduling_v1.idempotent.duplicate",
+    "constrained_calendar_scheduling_v1.idempotent.gold",
+    "constrained_calendar_scheduling_v1.idempotent.gold.semantic_equivalent",
+    "constrained_calendar_scheduling_v1.idempotent.mail_mutation",
+    "constrained_calendar_scheduling_v1.idempotent.rewrite",
+    "constrained_calendar_scheduling_v1.no_slot.delete_conflict",
+    "constrained_calendar_scheduling_v1.no_slot.gold",
+    "constrained_calendar_scheduling_v1.no_slot.gold.semantic_equivalent",
+    "constrained_calendar_scheduling_v1.no_slot.ignore_buffer",
+    "constrained_calendar_scheduling_v1.no_slot.personal_slot",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.collateral_mutation",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.gold.semantic_equivalent",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.missing_required_action",
+    "incident_triage_v1_discord_gitlab_jira_provider_contrast_004.wrong_target",
+    "incident_triage_v1_slack_github_linear_clean_001.collateral_mutation",
+    "incident_triage_v1_slack_github_linear_clean_001.gold",
+    "incident_triage_v1_slack_github_linear_clean_001.gold.semantic_equivalent",
+    "incident_triage_v1_slack_github_linear_clean_001.missing_required_action",
+    "incident_triage_v1_slack_github_linear_clean_001.wrong_target",
+    "incident_triage_v1_slack_github_linear_distractor_002.collateral_mutation",
+    "incident_triage_v1_slack_github_linear_distractor_002.gold",
+    "incident_triage_v1_slack_github_linear_distractor_002.gold.semantic_equivalent",
+    "incident_triage_v1_slack_github_linear_distractor_002.missing_required_action",
+    "incident_triage_v1_slack_github_linear_distractor_002.wrong_target",
+    "incident_triage_v1_slack_github_linear_idempotent_003.collateral_mutation",
+    "incident_triage_v1_slack_github_linear_idempotent_003.gold",
+    "incident_triage_v1_slack_github_linear_idempotent_003.gold.semantic_equivalent",
+    "incident_triage_v1_slack_github_linear_idempotent_003.missing_required_action",
+    "incident_triage_v1_slack_github_linear_idempotent_003.wrong_target",
+    "invoice_triage_v1.adversarial.collateral_mutation",
+    "invoice_triage_v1.adversarial.gold",
+    "invoice_triage_v1.adversarial.gold.semantic_equivalent",
+    "invoice_triage_v1.adversarial.missing_required_action",
+    "invoice_triage_v1.adversarial.wrong_target",
+    "invoice_triage_v1.authorized.collateral_mutation",
+    "invoice_triage_v1.authorized.gold",
+    "invoice_triage_v1.authorized.gold.semantic_equivalent",
+    "invoice_triage_v1.authorized.missing_required_action",
+    "invoice_triage_v1.authorized.wrong_target",
+    "invoice_triage_v1.idempotent.collateral_mutation",
+    "invoice_triage_v1.idempotent.gold",
+    "invoice_triage_v1.idempotent.gold.semantic_equivalent",
+    "invoice_triage_v1.idempotent.missing_required_action",
+    "invoice_triage_v1.idempotent.wrong_target",
+    "invoice_triage_v1.unauthorized.collateral_mutation",
+    "invoice_triage_v1.unauthorized.gold",
+    "invoice_triage_v1.unauthorized.gold.semantic_equivalent",
+    "invoice_triage_v1.unauthorized.missing_required_action",
+    "invoice_triage_v1.unauthorized.wrong_target",
+    "policy_promotion_v1.adversarial.body_replaced",
+    "policy_promotion_v1.adversarial.collateral_mutation",
+    "policy_promotion_v1.adversarial.gold",
+    "policy_promotion_v1.adversarial.gold.semantic_equivalent",
+    "policy_promotion_v1.adversarial.injection_followed",
+    "policy_promotion_v1.authorized.body_edit",
+    "policy_promotion_v1.authorized.gold",
+    "policy_promotion_v1.authorized.gold.semantic_equivalent",
+    "policy_promotion_v1.authorized.successor_only",
+    "policy_promotion_v1.authorized.wrong_policy",
+    "policy_promotion_v1.idempotent.content_touch",
+    "policy_promotion_v1.idempotent.extra_policy",
+    "policy_promotion_v1.idempotent.gold",
+    "policy_promotion_v1.idempotent.gold.semantic_equivalent",
+    "policy_promotion_v1.idempotent.rewrite_same_values",
+    "policy_promotion_v1.unauthorized.gold",
+    "policy_promotion_v1.unauthorized.gold.semantic_equivalent",
+    "policy_promotion_v1.unauthorized.ignore_relation",
+    "policy_promotion_v1.unauthorized.partial_transition",
+    "policy_promotion_v1.unauthorized.trust_body_claim",
+    "release_readiness_v1_github_jira_slack_notion_clean_001.collateral_mutation",
+    "release_readiness_v1_github_jira_slack_notion_clean_001.gold",
+    "release_readiness_v1_github_jira_slack_notion_clean_001.gold.semantic_equivalent",
+    "release_readiness_v1_github_jira_slack_notion_clean_001.missing_required_action",
+    "release_readiness_v1_github_jira_slack_notion_clean_001.wrong_target",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002.collateral_mutation",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002.gold",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002.gold.semantic_equivalent",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002.missing_required_action",
+    "release_readiness_v1_github_jira_slack_notion_distractor_002.wrong_target",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.collateral_mutation",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.gold.semantic_equivalent",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.missing_required_action",
+    "release_readiness_v1_github_jira_slack_notion_operational_hurdle_003.wrong_target",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.collateral_mutation",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.gold.semantic_equivalent",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.missing_required_action",
+    "release_readiness_v1_gitlab_linear_discord_notion_provider_contrast_004.wrong_target",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004.collateral_mutation",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004.gold.semantic_equivalent",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004.missing_required_action",
+    "runbook_publication_v1_drive_notion_discord_provider_contrast_004.wrong_target",
+    "runbook_publication_v1_drive_notion_slack_clean_001.collateral_mutation",
+    "runbook_publication_v1_drive_notion_slack_clean_001.gold",
+    "runbook_publication_v1_drive_notion_slack_clean_001.gold.semantic_equivalent",
+    "runbook_publication_v1_drive_notion_slack_clean_001.missing_required_action",
+    "runbook_publication_v1_drive_notion_slack_clean_001.wrong_target",
+    "runbook_publication_v1_drive_notion_slack_distractor_002.collateral_mutation",
+    "runbook_publication_v1_drive_notion_slack_distractor_002.gold",
+    "runbook_publication_v1_drive_notion_slack_distractor_002.gold.semantic_equivalent",
+    "runbook_publication_v1_drive_notion_slack_distractor_002.missing_required_action",
+    "runbook_publication_v1_drive_notion_slack_distractor_002.wrong_target",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003.collateral_mutation",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003.gold",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003.gold.semantic_equivalent",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003.missing_required_action",
+    "runbook_publication_v1_drive_notion_slack_idempotent_003.wrong_target",
+    "specification_drift_v1_notion_github_jira_clean_001.collateral_mutation",
+    "specification_drift_v1_notion_github_jira_clean_001.gold",
+    "specification_drift_v1_notion_github_jira_clean_001.gold.semantic_equivalent",
+    "specification_drift_v1_notion_github_jira_clean_001.missing_required_action",
+    "specification_drift_v1_notion_github_jira_clean_001.wrong_target",
+    "specification_drift_v1_notion_github_jira_distractor_002.collateral_mutation",
+    "specification_drift_v1_notion_github_jira_distractor_002.gold",
+    "specification_drift_v1_notion_github_jira_distractor_002.gold.semantic_equivalent",
+    "specification_drift_v1_notion_github_jira_distractor_002.missing_required_action",
+    "specification_drift_v1_notion_github_jira_distractor_002.wrong_target",
+    "specification_drift_v1_notion_github_jira_idempotent_003.collateral_mutation",
+    "specification_drift_v1_notion_github_jira_idempotent_003.gold",
+    "specification_drift_v1_notion_github_jira_idempotent_003.gold.semantic_equivalent",
+    "specification_drift_v1_notion_github_jira_idempotent_003.missing_required_action",
+    "specification_drift_v1_notion_github_jira_idempotent_003.wrong_target",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.collateral_mutation",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.gold.semantic_equivalent",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.missing_required_action",
+    "specification_drift_v1_notion_gitlab_linear_provider_contrast_004.wrong_target",
+    "stripe_price_normalization_v1.adversarial.catalog_rebuild",
+    "stripe_price_normalization_v1.adversarial.extra_update",
+    "stripe_price_normalization_v1.adversarial.gold",
+    "stripe_price_normalization_v1.adversarial.gold.semantic_equivalent",
+    "stripe_price_normalization_v1.adversarial.name_injection",
+    "stripe_price_normalization_v1.ambiguous.create_third",
+    "stripe_price_normalization_v1.ambiguous.gold",
+    "stripe_price_normalization_v1.ambiguous.gold.semantic_equivalent",
+    "stripe_price_normalization_v1.ambiguous.pick_first",
+    "stripe_price_normalization_v1.ambiguous.update_both",
+    "stripe_price_normalization_v1.distractor.amount_only",
+    "stripe_price_normalization_v1.distractor.archival_control",
+    "stripe_price_normalization_v1.distractor.collateral_mutation",
+    "stripe_price_normalization_v1.distractor.gold",
+    "stripe_price_normalization_v1.distractor.gold.semantic_equivalent",
+    "tracker_migration_v1_jira_linear_github_clean_001.collateral_mutation",
+    "tracker_migration_v1_jira_linear_github_clean_001.gold",
+    "tracker_migration_v1_jira_linear_github_clean_001.gold.semantic_equivalent",
+    "tracker_migration_v1_jira_linear_github_clean_001.missing_required_action",
+    "tracker_migration_v1_jira_linear_github_clean_001.wrong_target",
+    "tracker_migration_v1_jira_linear_github_distractor_002.collateral_mutation",
+    "tracker_migration_v1_jira_linear_github_distractor_002.gold",
+    "tracker_migration_v1_jira_linear_github_distractor_002.gold.semantic_equivalent",
+    "tracker_migration_v1_jira_linear_github_distractor_002.missing_required_action",
+    "tracker_migration_v1_jira_linear_github_distractor_002.wrong_target",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003.collateral_mutation",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003.gold.semantic_equivalent",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003.missing_required_action",
+    "tracker_migration_v1_jira_linear_github_operational_hurdle_003.wrong_target",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.collateral_mutation",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.gold.semantic_equivalent",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.missing_required_action",
+    "tracker_migration_v1_linear_jira_gitlab_provider_contrast_004.wrong_target"
+  ],
+  "protocol": "arga-bench-verifier-conformance-audit/1",
+  "registry": "benchmark/conformance/registry.json",
+  "schema_version": "0.1"
+}
