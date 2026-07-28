@@ -54,6 +54,17 @@ _MAX_QUERY_LENGTH: Final = 200
 _MAX_DOC_ID_LENGTH: Final = 120
 _MAX_URL_LENGTH: Final = 2_048
 _MAX_RETURNED_LINKS: Final = 100
+_DEFAULT_PROVIDER_RESPONSE_BYTES: Final = 524_288
+_PROVIDER_RESPONSE_BYTES: Final[dict[str, int]] = {
+    # Atlassian's official Jira reference pages are currently 2.8-3.9 MiB
+    # because the endpoint documentation follows a large static application
+    # shell. The model-visible extraction remains independently capped.
+    "jira": 4_194_304,
+}
+_MAX_PROVIDER_RESPONSE_BYTES: Final = max(
+    _DEFAULT_PROVIDER_RESPONSE_BYTES,
+    *_PROVIDER_RESPONSE_BYTES.values(),
+)
 _SKIPPED_HTML_ELEMENTS: Final = frozenset({"canvas", "noscript", "script", "style", "svg"})
 _BLOCK_HTML_ELEMENTS: Final = frozenset(
     {
@@ -175,9 +186,7 @@ class OfficialDocsSnapshotCache:
         if self._catalog_identity is None:
             self._catalog_identity = identity
         elif self._catalog_identity != identity:
-            raise OfficialDocsConfigurationError(
-                "one official docs snapshot cache cannot mix different catalogs"
-            )
+            raise OfficialDocsConfigurationError("one official docs snapshot cache cannot mix different catalogs")
 
     async def get_or_fetch(
         self,
@@ -215,9 +224,7 @@ class OfficialDocsSnapshotCache:
             manifest.get("protocol") != "arga-bench-official-docs-cache/1"
             or manifest.get("catalog_identity_sha256") != self._catalog_identity
         ):
-            raise OfficialDocsConfigurationError(
-                "official docs cache manifest protocol or catalog identity changed"
-            )
+            raise OfficialDocsConfigurationError("official docs cache manifest protocol or catalog identity changed")
         raw_entries = manifest.get("entries")
         if not isinstance(raw_entries, Sequence) or isinstance(raw_entries, (str, bytes, bytearray)):
             raise OfficialDocsConfigurationError("official docs cache entries must be an array")
@@ -252,9 +259,7 @@ class OfficialDocsSnapshotCache:
             if hashlib.sha256(body).hexdigest() != digest or entry.get("response_bytes") != len(body):
                 raise OfficialDocsConfigurationError("official docs cached response body failed integrity validation")
             raw_redirect_chain = entry.get("redirect_chain")
-            if not isinstance(raw_redirect_chain, Sequence) or isinstance(
-                raw_redirect_chain, (str, bytes, bytearray)
-            ):
+            if not isinstance(raw_redirect_chain, Sequence) or isinstance(raw_redirect_chain, (str, bytes, bytearray)):
                 raise OfficialDocsConfigurationError("official docs cache redirect chain is invalid")
             redirect_values = cast(Sequence[object], raw_redirect_chain)
             redirect_items: list[str] = []
@@ -558,9 +563,7 @@ def _validated_documents(
         if not isinstance(doc_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,119}", doc_id):
             raise OfficialDocsConfigurationError(f"official docs provider {provider!r} has an invalid document id")
         if doc_id in seen_ids:
-            raise OfficialDocsConfigurationError(
-                f"official docs provider {provider!r} repeats document id {doc_id!r}"
-            )
+            raise OfficialDocsConfigurationError(f"official docs provider {provider!r} repeats document id {doc_id!r}")
         if not isinstance(title, str) or not title:
             raise OfficialDocsConfigurationError(
                 f"official docs provider {provider!r} document {doc_id!r} requires title"
@@ -658,7 +661,7 @@ class OfficialDocsGateway:
         *,
         catalog: OfficialDocsCatalog | None = None,
         timeout_seconds: float = 20.0,
-        max_response_bytes: int = 524_288,
+        max_response_bytes: int = _MAX_PROVIDER_RESPONSE_BYTES,
         max_text_chars: int = 20_000,
         max_redirects: int = 4,
         max_calls: int | None = None,
@@ -668,9 +671,7 @@ class OfficialDocsGateway:
         provider_set = frozenset(providers)
         unknown = provider_set - SUPPORTED_DOC_PROVIDERS
         if not provider_set or unknown:
-            raise OfficialDocsConfigurationError(
-                "official docs gateway providers must be a non-empty supported subset"
-            )
+            raise OfficialDocsConfigurationError("official docs gateway providers must be a non-empty supported subset")
         self._catalog = catalog or load_official_docs_catalog()
         if not provider_set <= set(self._catalog.providers):
             raise OfficialDocsConfigurationError("official docs catalog does not cover every provisioned provider")
@@ -693,9 +694,7 @@ class OfficialDocsGateway:
         self._owns_client = client is None
         self._snapshot_cache = snapshot_cache or OfficialDocsSnapshotCache()
         self._snapshot_cache.bind_catalog(self._catalog)
-        self._discovered_urls: dict[str, set[str]] = {
-            provider: set() for provider in provider_set
-        }
+        self._discovered_urls: dict[str, set[str]] = {provider: set() for provider in provider_set}
         self._trace_records: list[OfficialDocsTraceRecord] = []
         provider_tokens = sorted(provider_set | set(self._roles))
         self._tool_definition: dict[str, object] = {
@@ -789,9 +788,7 @@ class OfficialDocsGateway:
                 if doc_id is not None or requested_url is not None:
                     raise ValueError("doc_id and url are not accepted for action 'search'")
                 documents = _search_documents(provider_docs, checked_query)
-                self._discovered_urls[provider].update(
-                    cast(str, document["source_url"]) for document in documents
-                )
+                self._discovered_urls[provider].update(cast(str, document["source_url"]) for document in documents)
                 payload: dict[str, object] = {
                     "ok": True,
                     "requested_provider": requested_provider,
@@ -807,9 +804,7 @@ class OfficialDocsGateway:
                     provider_docs=provider_docs,
                 )
                 if document is None and checked_url not in self._discovered_urls[provider]:
-                    raise ValueError(
-                        "fetch url was not previously returned by provider_docs for this provider"
-                    )
+                    raise ValueError("fetch url was not previously returned by provider_docs for this provider")
                 source_url = checked_url
                 cache_key = (provider, checked_url)
                 fetched, cache_hit = await self._snapshot_cache.get_or_fetch(
@@ -838,10 +833,7 @@ class OfficialDocsGateway:
                         "content": content,
                         "excerpted_for_query": excerpted,
                         "content_truncated_for_model": content_truncated_for_model,
-                        "links": [
-                            {"title": title, "url": url}
-                            for title, url in fetched.links
-                        ],
+                        "links": [{"title": title, "url": url} for title, url in fetched.links],
                     },
                     "provenance": {
                         **_provider_provenance(self._catalog, provider_docs),
@@ -941,7 +933,14 @@ class OfficialDocsGateway:
         if response is None:
             raise AssertionError("official documentation request did not produce a response")
         try:
-            body, truncated = await _read_bounded(response, self._max_response_bytes)
+            provider_response_limit = _PROVIDER_RESPONSE_BYTES.get(
+                provider_docs.provider,
+                _DEFAULT_PROVIDER_RESPONSE_BYTES,
+            )
+            body, truncated = await _read_bounded(
+                response,
+                min(self._max_response_bytes, provider_response_limit),
+            )
         finally:
             await response.aclose()
         if not 200 <= response.status_code < 300:
@@ -1097,10 +1096,7 @@ def _provider_provenance(catalog: OfficialDocsCatalog, provider_docs: ProviderDo
         "official_owner": provider_docs.owner,
         "api_version": provider_docs.api_version,
         "allowed_hosts": sorted(provider_docs.allowed_hosts),
-        "allowed_paths": {
-            host: list(prefixes)
-            for host, prefixes in sorted(provider_docs.allowed_paths.items())
-        },
+        "allowed_paths": {host: list(prefixes) for host, prefixes in sorted(provider_docs.allowed_paths.items())},
     }
 
 
@@ -1114,10 +1110,7 @@ def _catalog_identity(catalog: OfficialDocsCatalog) -> str:
                 "owner": entry.owner,
                 "api_version": entry.api_version,
                 "allowed_hosts": sorted(entry.allowed_hosts),
-                "allowed_paths": {
-                    host: list(prefixes)
-                    for host, prefixes in sorted(entry.allowed_paths.items())
-                },
+                "allowed_paths": {host: list(prefixes) for host, prefixes in sorted(entry.allowed_paths.items())},
                 "documents": [
                     {
                         "id": document.id,
@@ -1161,11 +1154,7 @@ def _document_content(
     if query is None:
         return text[:max_text_chars], False, len(text) > max_text_chars
     lowered = text.casefold()
-    positions = [
-        match.start()
-        for term in query.casefold().split()
-        for match in re.finditer(re.escape(term), lowered)
-    ]
+    positions = [match.start() for term in query.casefold().split() for match in re.finditer(re.escape(term), lowered)]
     if not positions:
         return (
             f"No matching excerpt was found for query {query!r}. "

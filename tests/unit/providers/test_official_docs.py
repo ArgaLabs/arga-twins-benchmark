@@ -139,6 +139,52 @@ def test_search_then_fetch_returns_actual_official_content_and_allowlisted_links
     asyncio.run(client.aclose())
 
 
+def test_jira_uses_bounded_provider_specific_retrieval_for_late_official_content() -> None:
+    body = (
+        b"<html><body><script>"
+        + (b"x" * 600_000)
+        + b"</script><h1>Add comment</h1>"
+        + b"<p>POST /rest/api/3/issue/{issueIdOrKey}/comment adds a comment to an issue.</p>"
+        + b"</body></html>"
+    )
+    client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _request: httpx.Response(
+                200,
+                headers={"Content-Type": "text/html"},
+                content=body,
+            )
+        )
+    )
+    gateway = OfficialDocsGateway({"jira"}, client=client)
+
+    fetched = _run(
+        gateway,
+        {
+            "provider": "jira",
+            "action": "fetch",
+            "doc_id": "issue-comments",
+            "query": "POST /rest/api/3/issue comment",
+        },
+    )
+
+    assert fetched["ok"] is True
+    document = cast(dict[str, object], fetched["document"])
+    assert "POST /rest/api/3/issue/{issueIdOrKey}/comment" in cast(
+        str,
+        document["content"],
+    )
+    provenance = cast(dict[str, object], fetched["provenance"])
+    assert provenance["official_owner"] == "Atlassian"
+    assert provenance["source_url"] == (
+        "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/"
+    )
+    assert provenance["retrieved_bytes"] == len(body)
+    assert provenance["retrieved_content_sha256"] == hashlib.sha256(body).hexdigest()
+    assert provenance["retrieval_truncated"] is False
+    asyncio.run(client.aclose())
+
+
 def test_search_treats_blank_optional_fields_as_omitted() -> None:
     """Some tool adapters materialize absent optional strings as empty values."""
 
