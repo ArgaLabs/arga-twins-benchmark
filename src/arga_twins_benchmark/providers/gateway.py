@@ -79,8 +79,11 @@ _CONTROL_PLANE_PREFIXES: Final = frozenset(
 )
 _SCHEMA_DISCOVERY_SEGMENTS: Final = frozenset(
     {
+        "$discovery",
         "api-docs",
+        "discovery",
         "docs",
+        "mcp",
         "openapi",
         "openapi.json",
         "openapi.yaml",
@@ -89,6 +92,7 @@ _SCHEMA_DISCOVERY_SEGMENTS: Final = frozenset(
         "schema",
         "schemas",
         "swagger",
+        "swagger_doc",
         "swagger.json",
         "swagger.yaml",
         "swagger.yml",
@@ -96,9 +100,8 @@ _SCHEMA_DISCOVERY_SEGMENTS: Final = frozenset(
     }
 )
 _API_SURFACE_PREFIXES: Final = frozenset({"api"})
-_OPERATIONAL_DISCOVERY_SEGMENTS: Final = frozenset(
-    {"health", "healthz", "metrics", "readiness", "ready"}
-)
+_API_VERSION_SEGMENT: Final = re.compile(r"^v[0-9]+(?:\.[0-9]+)*$")
+_OPERATIONAL_DISCOVERY_SEGMENTS: Final = frozenset({"health", "healthz", "metrics", "readiness", "ready"})
 _BLOCKED_REQUEST_HEADERS: Final = frozenset(
     {
         "authorization",
@@ -707,12 +710,7 @@ def _validate_relative_path(raw_path: str | None) -> tuple[str, list[tuple[str, 
     if not parsed.path.startswith("/") or parsed.path.startswith("//"):
         raise ValueError("path must be relative to the provisioned provider and begin with exactly one '/'")
 
-    decoded_path = parsed.path
-    for _ in range(5):
-        next_path = unquote(decoded_path)
-        if next_path == decoded_path:
-            break
-        decoded_path = next_path
+    decoded_path = _repeated_unquote(parsed.path)
     normalized_for_checks = decoded_path.replace("\\", "/")
     if normalized_for_checks.startswith("//"):
         raise ValueError("network-path URLs are forbidden")
@@ -730,12 +728,7 @@ def _validate_candidate_safe_request(
     query_pairs: Sequence[tuple[str, str]],
     body: object,
 ) -> None:
-    decoded_path = path
-    for _ in range(5):
-        next_path = unquote(decoded_path)
-        if next_path == decoded_path:
-            break
-        decoded_path = next_path
+    decoded_path = _repeated_unquote(path)
     segments = [segment.casefold() for segment in decoded_path.replace("\\", "/").split("/") if segment]
     if not segments:
         raise ValueError("provider root and UI discovery are forbidden; use provider_docs")
@@ -744,28 +737,20 @@ def _validate_candidate_safe_request(
         candidate_surface_segments = segments[1:]
     if not candidate_surface_segments:
         raise ValueError("provider API root discovery is forbidden; use provider_docs")
-    if candidate_surface_segments and candidate_surface_segments[0] in _CONTROL_PLANE_PREFIXES:
-        raise ValueError(
-            f"provider control-plane segment {candidate_surface_segments[0]!r} is forbidden"
-        )
-    if (
-        candidate_surface_segments
-        and candidate_surface_segments[0] in _OPERATIONAL_DISCOVERY_SEGMENTS
-    ):
-        raise ValueError(
-            f"provider operational-discovery path {candidate_surface_segments[0]!r} is forbidden"
-        )
-    if (
-        len(candidate_surface_segments) >= 2
-        and candidate_surface_segments[0] == ".well-known"
-        and candidate_surface_segments[1] in _SCHEMA_DISCOVERY_SEGMENTS
-    ):
-        raise ValueError(
-            "provider UI or schema-discovery .well-known path is forbidden; use provider_docs"
-        )
+    service_route_segments = candidate_surface_segments
+    if service_route_segments and _API_VERSION_SEGMENT.fullmatch(service_route_segments[0]) is not None:
+        service_route_segments = service_route_segments[1:]
+    if not service_route_segments:
+        raise ValueError("provider API version root discovery is forbidden; use provider_docs")
+    if service_route_segments and service_route_segments[0] in _CONTROL_PLANE_PREFIXES:
+        raise ValueError(f"provider control-plane segment {service_route_segments[0]!r} is forbidden")
+    if service_route_segments and service_route_segments[0] in _OPERATIONAL_DISCOVERY_SEGMENTS:
+        raise ValueError(f"provider operational-discovery path {service_route_segments[0]!r} is forbidden")
+    if service_route_segments and service_route_segments[0] == ".well-known":
+        raise ValueError("provider OAuth, MCP, or schema-discovery .well-known path is forbidden; use provider_docs")
     forbidden_schema_segment = (
-        candidate_surface_segments[0]
-        if candidate_surface_segments and candidate_surface_segments[0] in _SCHEMA_DISCOVERY_SEGMENTS
+        service_route_segments[0]
+        if service_route_segments and service_route_segments[0] in _SCHEMA_DISCOVERY_SEGMENTS
         else None
     )
     if forbidden_schema_segment is not None:
@@ -782,19 +767,24 @@ def _validate_candidate_safe_request(
 
 
 def _graphql_introspection_present(query: str) -> bool:
-    return re.search(
-        r"(?<![_0-9A-Za-z])(?:__schema(?![_0-9A-Za-z])|__type\s*\()",
-        query,
-    ) is not None
+    return (
+        re.search(
+            r"(?<![_0-9A-Za-z])(?:__schema(?![_0-9A-Za-z])|__type\s*\()",
+            query,
+        )
+        is not None
+    )
 
 
 def _repeated_unquote(value: str) -> str:
     decoded = value
-    for _ in range(5):
+    for _ in range(32):
         next_value = unquote(decoded)
         if next_value == decoded:
-            break
+            return decoded
         decoded = next_value
+    if unquote(decoded) != decoded:
+        raise ValueError("URL value is excessively encoded")
     return decoded
 
 

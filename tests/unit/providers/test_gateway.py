@@ -354,8 +354,26 @@ def test_rejects_external_traversal_and_control_plane_paths_without_network(path
         "/.well-known/openapi",
         "/.%77ell-known/schema",
         "/api/.well-known/openapi",
+        "/.well-known/oauth-protected-resource/mcp",
+        "/.well-known/oauth-authorization-server",
+        "/api/.well-known/oauth-protected-resource/mcp",
+        "/api/v4/.well-known/oauth-protected-resource/mcp",
         "/api/_admin/state",
+        "/api/v4/_admin/state",
         "/api/grader/result",
+        "/discovery/v1/apis/drive/v3/rest",
+        "/discovery/v1/apis/drive/v3/rest?preferred=true",
+        "/%24discovery/rest?version=v3",
+        "/%2524discovery/rest",
+        "/api/discovery/v1/apis",
+        "/mcp",
+        "/mcp/v1",
+        "/%256dcp/tools/list",
+        "/api/mcp",
+        "/api/v4/mcp",
+        "/api/v4/mcp/tools/list",
+        "/api/%25764/%256dcp?transport=sse",
+        "/api/v4/swagger_doc",
     ],
 )
 def test_candidate_safe_surface_rejects_twin_ui_schema_and_control_roots(path: str) -> None:
@@ -384,7 +402,14 @@ def test_candidate_safe_surface_rejects_twin_ui_schema_and_control_roots(path: s
         "/repos/acme/app/contents/docs",
         "/repos/acme/admin/issues/schema",
         "/repos/acme/app/contents/health",
+        "/repos/acme/app/contents/mcp",
+        "/repos/acme/app/contents/discovery",
+        "/repos/acme/app/contents/.well-known/oauth-protected-resource",
         "/api/v4/projects/acme/repository/files/openapi.json",
+        "/api/v4/projects/acme/repository/files/mcp",
+        "/api/v4/projects/acme/repository/files/discovery",
+        "/api/v4/projects/acme/repository/files/swagger_doc",
+        "/drive/v3/files/discovery",
     ],
 )
 def test_candidate_safe_surface_allows_schema_like_names_in_provider_data_paths(path: str) -> None:
@@ -459,9 +484,7 @@ def test_candidate_safe_surface_rejects_encoded_graphql_query_introspection(path
 
 
 def test_candidate_safe_surface_allows_graphql_typename() -> None:
-    client = httpx.AsyncClient(
-        transport=httpx.MockTransport(lambda _request: httpx.Response(200, json={"data": {}}))
-    )
+    client = httpx.AsyncClient(transport=httpx.MockTransport(lambda _request: httpx.Response(200, json={"data": {}})))
     gateway = ProviderGateway(_access("linear"), client=client)
 
     result = _run(
