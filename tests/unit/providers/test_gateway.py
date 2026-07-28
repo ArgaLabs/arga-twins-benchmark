@@ -726,6 +726,7 @@ def test_candidate_response_scrubs_twin_hosts_and_credentials_but_keeps_business
                 ),
                 "Refresh": f"0; url=//{twin_host}/drive/v3/files/file-1",
                 "X-Origin": twin_host,
+                "X-Encoded-Origin": f"https%3A%2F%2F{twin_host}%2Fdrive%2Fv3%2Ffiles",
                 "X-Token-Echo": f"Bearer {provider_token}",
             },
             json={
@@ -735,6 +736,7 @@ def test_candidate_response_scrubs_twin_hosts_and_credentials_but_keeps_business
                 "webViewLink": f"//{twin_host}/drive/v3/files/file-1/view",
                 "canonicalProviderUrl": "https://api.github.com/repos/acme/app",
                 "relativeResource": "/drive/v3/files/file-1",
+                "encodedTwinUrl": f"https%3A%2F%2F{twin_host}%2Fdrive%2Fv3%2Ffiles%2Ffile-1",
                 "nested": [
                     {"origin": f"served by {twin_host}", "credential": provider_token},
                     "ordinary business data",
@@ -774,6 +776,7 @@ def test_candidate_response_scrubs_twin_hosts_and_credentials_but_keeps_business
     )
     assert result_headers["refresh"] == "0; url=/drive/v3/files/file-1"
     assert result_headers["x-origin"] == "[provider-host]"
+    assert result_headers["x-encoded-origin"] == ("https%3A%2F%2F[provider-host]%2Fdrive%2Fv3%2Ffiles")
     assert result_headers["x-token-echo"] == "[redacted]"
     assert result["body"] == {
         "id": "file-1",
@@ -782,6 +785,7 @@ def test_candidate_response_scrubs_twin_hosts_and_credentials_but_keeps_business
         "webViewLink": "/drive/v3/files/file-1/view",
         "canonicalProviderUrl": "https://api.github.com/repos/acme/app",
         "relativeResource": "/drive/v3/files/file-1",
+        "encodedTwinUrl": ("https%3A%2F%2F[provider-host]%2Fdrive%2Fv3%2Ffiles%2Ffile-1"),
         "nested": [
             {"origin": "served by [provider-host]", "credential": "[redacted]"},
             "ordinary business data",

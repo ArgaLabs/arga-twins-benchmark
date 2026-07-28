@@ -1143,12 +1143,7 @@ def _candidate_response_policy(
         provider_url_patterns=tuple(
             re.compile(rf"(?i)(?:https?:)?//{re.escape(host)}(?=[/?#]|$)") for host in sorted_hosts
         ),
-        provider_host_patterns=tuple(
-            re.compile(
-                rf"(?i)(?<![0-9a-z_.-]){re.escape(host)}(?=[:/?#\s<>'\",;)]|$)",
-            )
-            for host in sorted_hosts
-        ),
+        provider_host_patterns=tuple(re.compile(rf"(?i){re.escape(host)}") for host in sorted_hosts),
         secrets=tuple(sorted(secrets, key=lambda value: (-len(value), value))),
     )
 
