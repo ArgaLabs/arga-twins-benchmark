@@ -57,4 +57,3 @@ async def invoke_model(
         max_tool_calls=max_tool_calls,
         timeout_seconds=timeout_seconds,
     )
-
