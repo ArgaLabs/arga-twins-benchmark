@@ -328,7 +328,7 @@ Documentation access is read-only, restricted by provider-specific HTTPS host an
 
 This design rewards only successful business operations. Remembering a provider route and looking it up in official docs are not separate scores; inability to find and use the provider API is reflected naturally in failure to complete the operation.
 
-Live retrieval validation now covers Slack, GitHub, and all five Jira catalog documents through the exact candidate docs gateway. Every Jira page returned nonblank provider-owned content without truncation; the checked query excerpt contains the official issue-comment operation and description. Slack returned the `conversations.list` method plus cursor guidance, and GitHub returned pull-request creation documentation. Source and final URLs, HTTP metadata, byte counts, timestamps, and SHA-256 hashes are recorded in [`official-docs-live-validation.md`](../docs/official-docs-live-validation.md).
+Live retrieval validation now covers the starting document for all 11 providers, plus every Jira catalog document, through the exact candidate docs gateway. All starting-document fetches returned HTTP 200 and nonempty provider-owned content. Every Jira page returned usable content without truncation; the checked query excerpt contains the official issue-comment operation and description. Slack returned the `conversations.list` method plus cursor guidance, and GitHub returned pull-request creation documentation. Source and final URLs, HTTP metadata, byte counts, timestamps, and SHA-256 hashes are recorded in [`official-docs-live-validation.md`](../docs/official-docs-live-validation.md).
 
 ## Candidate-only API surface
 
