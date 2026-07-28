@@ -5,7 +5,7 @@
 **Experiment:** `development_pilot_48_v1`<br>
 **Preserved source suite:** `development_pilot_48_v1-20260725T194438Z-8511f471`<br>
 **Execution window:** 2026-07-25 through 2026-07-26 UTC<br>
-**Current derived regrade:** 2026-07-28T00:15:50Z<br>
+**Current derived regrade:** 2026-07-28T00:40:04Z, clean grader commit `565b0cc2b8aa77d74be6fa165222ce4d1422dee2`<br>
 **Models:** Opus 4.8, Fable 5, GPT-5.6 Sol; high reasoning effort, no fallback<br>
 **Scheduled evidence:** 48 tasks × 3 models × 1 repeat = 144 trials<br>
 **Current validity:** 120 valid trials and 24 `invalid_infrastructure` trials<br>
@@ -374,6 +374,7 @@ The source suite remains:
 
 The derived artifact records:
 
+- clean grader revision `565b0cc2b8aa77d74be6fa165222ce4d1422dee2`;
 - `suite_integrity_passed=true`;
 - 144 scheduled trials;
 - 120 valid trials;
