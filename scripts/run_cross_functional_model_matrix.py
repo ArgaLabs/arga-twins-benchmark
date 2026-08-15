@@ -64,6 +64,7 @@ async def run_profile(
     profile_id = str(profile["id"])
     output = output_root / "profiles" / profile_id
     log_path = log_root / f"{profile_id}.log"
+    effective_task_concurrency = 1 if profile["provider"] == "google" else tasks_per_profile
     async with semaphore:
         await asyncio.sleep(launch_index * launch_interval_seconds)
         started_at = utc_now()
@@ -75,7 +76,7 @@ async def run_profile(
             "--output",
             str(output),
             "--concurrency",
-            str(tasks_per_profile),
+            str(effective_task_concurrency),
             "--lifecycle-concurrency",
             str(lifecycle_concurrency),
             "--cleanup-concurrency",
@@ -111,6 +112,7 @@ async def run_profile(
             "model_id": profile["model_id"],
             "requested_effort": profile["requested_effort"],
             "api_effort": profile["api_effort"],
+            "task_concurrency": effective_task_concurrency,
             "resumed": resume,
             "started_at": started_at,
             "finished_at": utc_now(),
