@@ -508,6 +508,7 @@ async def run_task(
     output_root: Path,
     semaphore: asyncio.Semaphore,
     lifecycle_semaphore: asyncio.Semaphore,
+    cleanup_semaphore: asyncio.Semaphore,
     docs_cache: OfficialDocsSnapshotCache,
     profile: dict[str, Any],
     attempt_number: int = 1,
@@ -645,19 +646,17 @@ async def run_task(
                 await gateway.aclose()
             if docs is not None:
                 await docs.aclose()
+            if lifecycle_acquired:
+                lifecycle_semaphore.release()
+                lifecycle_acquired = False
             if run is not None:
                 try:
-                    if not lifecycle_acquired:
-                        await lifecycle_semaphore.acquire()
-                        lifecycle_acquired = True
-                    cleanup = await wait_cleanup(arga, run.run_id)
+                    async with cleanup_semaphore:
+                        cleanup = await wait_cleanup(arga, run.run_id)
                 except BaseException as cleanup_error:
                     cleanup = {"error_type": type(cleanup_error).__name__, "error": str(cleanup_error)}
                 write_private_json(task_dir / "cleanup.json", cleanup)
             arga.close()
-            if lifecycle_acquired:
-                lifecycle_semaphore.release()
-                lifecycle_acquired = False
 
         usage = invocation.usage if invocation is not None else {}
         trace_steps = []
@@ -881,6 +880,7 @@ async def async_main(args: argparse.Namespace) -> int:
 
     semaphore = asyncio.Semaphore(args.concurrency)
     lifecycle_semaphore = asyncio.Semaphore(args.lifecycle_concurrency)
+    cleanup_semaphore = asyncio.Semaphore(args.cleanup_concurrency)
     docs_cache = OfficialDocsSnapshotCache()
     await asyncio.gather(
         *(
@@ -890,6 +890,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 output_root=output_root,
                 semaphore=semaphore,
                 lifecycle_semaphore=lifecycle_semaphore,
+                cleanup_semaphore=cleanup_semaphore,
                 docs_cache=docs_cache,
                 profile=profile,
                 attempt_number=plan.attempt_number,
@@ -939,6 +940,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--profile", required=True)
     parser.add_argument("--concurrency", type=int, choices=range(1, 41), default=40)
     parser.add_argument("--lifecycle-concurrency", type=int, choices=range(1, 11), default=3)
+    parser.add_argument("--cleanup-concurrency", type=int, choices=range(1, 11), default=3)
     parser.add_argument(
         "--resume",
         action="store_true",

@@ -59,6 +59,7 @@ async def run_profile(
     resume: bool,
     tasks_per_profile: int = 40,
     lifecycle_concurrency: int = 3,
+    cleanup_concurrency: int = 3,
 ) -> dict[str, Any]:
     profile_id = str(profile["id"])
     output = output_root / "profiles" / profile_id
@@ -77,6 +78,8 @@ async def run_profile(
             str(tasks_per_profile),
             "--lifecycle-concurrency",
             str(lifecycle_concurrency),
+            "--cleanup-concurrency",
+            str(cleanup_concurrency),
         ]
         if resume:
             command.append("--resume")
@@ -156,6 +159,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 "global_trial_concurrency": args.concurrency,
                 "per_profile_trial_concurrency": args.tasks_per_profile,
                 "per_profile_lifecycle_concurrency": args.lifecycle_concurrency,
+                "per_profile_cleanup_concurrency": args.cleanup_concurrency,
                 "profile_launch_interval_seconds": args.launch_interval_seconds,
                 "attempts_per_model_scenario_pair": 1,
                 "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
@@ -175,6 +179,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 resume=args.resume,
                 tasks_per_profile=args.tasks_per_profile,
                 lifecycle_concurrency=args.lifecycle_concurrency,
+                cleanup_concurrency=args.cleanup_concurrency,
             )
             for launch_index, profile in enumerate(profiles)
         )
@@ -217,6 +222,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--launch-interval-seconds", type=float, default=0.5)
     parser.add_argument("--tasks-per-profile", type=int, choices=range(1, 41), default=40)
     parser.add_argument("--lifecycle-concurrency", type=int, choices=range(1, 11), default=3)
+    parser.add_argument("--cleanup-concurrency", type=int, choices=range(1, 11), default=3)
     parser.add_argument(
         "--resume",
         action="store_true",
