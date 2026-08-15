@@ -419,7 +419,11 @@ async def run_task(
             "requested_effort": profile["requested_effort"],
             "api_effort": profile["api_effort"],
             "thinking": profile["thinking"],
-            "attempt_status": "candidate_complete" if invocation is not None else "infrastructure_invalid",
+            "attempt_status": (
+                "candidate_complete"
+                if invocation is not None and invocation.status != "api_error"
+                else "infrastructure_invalid"
+            ),
             "model_status": invocation.status if invocation is not None else None,
             "response_model": invocation.response_model if invocation is not None else None,
             "stop_reason": invocation.stop_reason if invocation is not None else None,

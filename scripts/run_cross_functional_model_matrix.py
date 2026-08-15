@@ -75,7 +75,16 @@ async def run_profile(
                 stdout=log_file,
                 stderr=asyncio.subprocess.STDOUT,
             )
-            returncode = await process.wait()
+            try:
+                returncode = await process.wait()
+            except asyncio.CancelledError:
+                process.terminate()
+                try:
+                    await asyncio.wait_for(process.wait(), timeout=10)
+                except TimeoutError:
+                    process.kill()
+                    await process.wait()
+                raise
         summary_path = output / "run-summary.json"
         summary: object = None
         if summary_path.is_file():
@@ -159,7 +168,7 @@ async def async_main(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--concurrency", type=int, choices=range(1, 21), default=20)
+    parser.add_argument("--concurrency", type=int, choices=range(1, 31), default=30)
     return parser.parse_args()
 
 
