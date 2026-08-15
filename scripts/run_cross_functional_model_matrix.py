@@ -51,6 +51,8 @@ def provider_round_robin(profiles: list[dict[str, Any]]) -> list[dict[str, Any]]
 async def run_profile(
     profile: dict[str, Any],
     *,
+    launch_index: int,
+    launch_interval_seconds: float,
     output_root: Path,
     log_root: Path,
     semaphore: asyncio.Semaphore,
@@ -59,6 +61,7 @@ async def run_profile(
     output = output_root / "profiles" / profile_id
     log_path = log_root / f"{profile_id}.log"
     async with semaphore:
+        await asyncio.sleep(launch_index * launch_interval_seconds)
         started_at = utc_now()
         with log_path.open("wb") as log_file:
             process = await asyncio.create_subprocess_exec(
@@ -123,6 +126,7 @@ async def async_main(args: argparse.Namespace) -> int:
             "total_trials": len(profiles) * 40,
             "global_trial_concurrency": args.concurrency,
             "per_profile_trial_concurrency": 1,
+            "profile_launch_interval_seconds": args.launch_interval_seconds,
             "attempts_per_model_scenario_pair": 1,
             "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
             "started_at": utc_now(),
@@ -133,11 +137,13 @@ async def async_main(args: argparse.Namespace) -> int:
         *(
             run_profile(
                 profile,
+                launch_index=launch_index,
+                launch_interval_seconds=args.launch_interval_seconds,
                 output_root=output_root,
                 log_root=log_root,
                 semaphore=semaphore,
             )
-            for profile in profiles
+            for launch_index, profile in enumerate(profiles)
         )
     )
     summaries = [item["summary"] for item in outcomes if isinstance(item.get("summary"), dict)]
@@ -169,6 +175,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--concurrency", type=int, choices=range(1, 31), default=30)
+    parser.add_argument("--launch-interval-seconds", type=float, default=0.5)
     return parser.parse_args()
 
 

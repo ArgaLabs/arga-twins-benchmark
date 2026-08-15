@@ -157,6 +157,65 @@ print(json.dumps({"run_id": "run-safe"}))
     assert run.run_id == "run-safe"
 
 
+def test_transient_control_plane_read_failure_is_retried(tmp_path: Path) -> None:
+    executable = tmp_path / "fake_arga.py"
+    marker = tmp_path / "attempts"
+    executable.write_text(
+        f"""\
+import json
+import pathlib
+import sys
+
+marker = pathlib.Path({str(marker)!r})
+attempt = int(marker.read_text()) + 1 if marker.exists() else 1
+marker.write_text(str(attempt))
+if attempt == 1:
+    print("Failed to load twin provision status", file=sys.stderr)
+    raise SystemExit(1)
+print(json.dumps({{"run_id": "run-1", "status": "ready", "twins": {{}}}}))
+"""
+    )
+    client = SubprocessArgaCli(
+        executable=(sys.executable, str(executable)),
+        api_url="https://arga.example",
+        transient_retry_base_seconds=0,
+    )
+
+    run = asyncio.run(client.status("run-1"))
+
+    assert run.status == "ready"
+    assert marker.read_text() == "2"
+
+
+def test_non_retryable_control_plane_failure_is_not_retried(tmp_path: Path) -> None:
+    executable = tmp_path / "fake_arga.py"
+    marker = tmp_path / "attempts"
+    executable.write_text(
+        f"""\
+import pathlib
+import sys
+
+marker = pathlib.Path({str(marker)!r})
+attempt = int(marker.read_text()) + 1 if marker.exists() else 1
+marker.write_text(str(attempt))
+print("Failed to provision twins", file=sys.stderr)
+raise SystemExit(1)
+"""
+    )
+    client = SubprocessArgaCli(
+        executable=(sys.executable, str(executable)),
+        api_url="https://arga.example",
+        transient_retry_base_seconds=0,
+    )
+
+    with pytest.raises(ArgaCliError, match="Failed to provision twins"):
+        asyncio.run(
+            client.create_twin_run(twins=["slack"], scenario_id="scenario-1", ttl_minutes=60)
+        )
+
+    assert marker.read_text() == "1"
+
+
 def test_supplied_api_key_is_scoped_to_temporary_cli_home() -> None:
     client = SubprocessArgaCli(executable=("arga",), api_key="secret-test-key")
     temporary_home = client.credential_home

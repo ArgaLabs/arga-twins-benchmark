@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import random
 import shlex
 import tempfile
 from collections.abc import Mapping, Sequence
@@ -94,12 +95,16 @@ class SubprocessArgaCli:
         executable: Sequence[str] | None = None,
         api_url: str | None = None,
         api_key: str | None = None,
+        transient_retry_attempts: int = 7,
+        transient_retry_base_seconds: float = 0.5,
     ) -> None:
         configured = os.environ.get("ARGA_CLI_BIN", "arga")
         self.executable = tuple(executable or shlex.split(configured))
         if not self.executable:
             raise ValueError("Arga CLI executable cannot be empty")
         self.api_url = api_url or os.environ.get("ARGA_API_URL", "https://api.argalabs.com")
+        self.transient_retry_attempts = transient_retry_attempts
+        self.transient_retry_base_seconds = transient_retry_base_seconds
         self._credential_home: tempfile.TemporaryDirectory[str] | None = None
         self._subprocess_env = os.environ.copy()
         supplied_key = api_key or os.environ.get("ARGA_API_KEY")
@@ -233,16 +238,31 @@ class SubprocessArgaCli:
         )
 
     async def _run_json_value(self, *arguments: str) -> object:
-        process = await asyncio.create_subprocess_exec(
-            *self.command(*arguments),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            env=self._subprocess_env,
-        )
-        stdout, stderr = await process.communicate()
-        if process.returncode != 0:
+        for attempt in range(self.transient_retry_attempts):
+            process = await asyncio.create_subprocess_exec(
+                *self.command(*arguments),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                env=self._subprocess_env,
+            )
+            stdout, stderr = await process.communicate()
+            if process.returncode == 0:
+                break
             message = stderr.decode(errors="replace").strip() or stdout.decode(errors="replace").strip()
-            raise ArgaCliError(f"Arga CLI exited with {process.returncode}: {message}")
+            retryable = any(
+                marker in message
+                for marker in (
+                    "Failed to load current user",
+                    "Failed to load twin provision status",
+                    "Failed to tear down twins",
+                )
+            )
+            if not retryable or attempt + 1 >= self.transient_retry_attempts:
+                raise ArgaCliError(f"Arga CLI exited with {process.returncode}: {message}")
+            delay = self.transient_retry_base_seconds * (2**attempt)
+            await asyncio.sleep(delay + random.uniform(0, delay))
+        else:  # pragma: no cover - the loop either breaks or raises
+            raise AssertionError("Arga CLI retry loop exhausted without an outcome")
         try:
             payload: object = json.loads(stdout)
         except json.JSONDecodeError as error:
