@@ -10,7 +10,7 @@ import json
 import os
 import traceback
 from collections import Counter
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from time import monotonic
@@ -19,7 +19,11 @@ from typing import Any, cast
 from arga_twins_benchmark.agents import invoke_model
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli, TwinRun
 from arga_twins_benchmark.evaluation.state_capture import TrustedStateCapturer, diff_trusted_states
-from arga_twins_benchmark.lifecycle import cleanup_payload_proves_inert, write_private_json
+from arga_twins_benchmark.lifecycle import (
+    cleanup_instance,
+    cleanup_payload_proves_inert,
+    write_private_json,
+)
 from arga_twins_benchmark.providers import OfficialDocsGateway, OfficialDocsSnapshotCache, ProviderGateway
 from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
@@ -32,6 +36,8 @@ OFFICIAL_DOCS_TOOL_LIMIT = 8
 MODEL_TIMEOUT_SECONDS = 600
 PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
+INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
+RETRY_ARCHIVE_DIR = "retry-archive"
 
 PROVIDER_ROLES = {
     "github": "code_host",
@@ -47,6 +53,20 @@ PROVIDER_ROLES = {
     "slack": "team_chat",
     "stripe": "payments",
 }
+
+
+@dataclass(frozen=True)
+class ResumeDecision:
+    action: str
+    reason: str
+    attempt: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True)
+class TaskRunPlan:
+    task: dict[str, Any]
+    attempt_number: int
+    archive_path: str | None = None
 
 
 def utc_now() -> str:
@@ -96,11 +116,238 @@ def load_profile(profile_id: str) -> dict[str, Any]:
         raise ValueError("model matrix profiles must be an array")
     matches = [profile for profile in profiles if isinstance(profile, dict) and profile.get("id") == profile_id]
     if len(matches) != 1:
-        available = ", ".join(
-            sorted(str(profile.get("id")) for profile in profiles if isinstance(profile, dict))
-        )
+        available = ", ".join(sorted(str(profile.get("id")) for profile in profiles if isinstance(profile, dict)))
         raise ValueError(f"unknown profile {profile_id!r}; expected one of: {available}")
     return cast(dict[str, Any], matches[0])
+
+
+def read_json_object(path: Path, *, required: bool = False) -> dict[str, Any] | None:
+    if not path.is_file():
+        if required:
+            raise ValueError(f"required JSON artifact is missing: {path}")
+        return None
+    try:
+        payload: object = json.loads(path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"JSON artifact is unreadable: {path}") from error
+    if not isinstance(payload, dict):
+        raise ValueError(f"JSON artifact must contain an object: {path}")
+    return cast(dict[str, Any], payload)
+
+
+def _trace_artifact_has_events(path: Path, key: str) -> bool:
+    if not path.exists():
+        return False
+    try:
+        payload = read_json_object(path, required=True)
+    except ValueError:
+        # An unreadable trace cannot prove that no model/tool activity occurred.
+        return True
+    assert payload is not None
+    events = payload.get(key)
+    return not isinstance(events, list) or bool(events)
+
+
+def _attempt_has_invocation_evidence(attempt: dict[str, Any]) -> bool:
+    if any(attempt.get(key) is not None for key in ("model_status", "response_model", "stop_reason")):
+        return True
+    if attempt.get("final_text") not in (None, ""):
+        return True
+    usage = attempt.get("usage")
+    if isinstance(usage, dict) and usage:
+        return True
+    for key in ("output_tokens", "tool_calls", "provider_tool_calls", "official_docs_tool_calls"):
+        value = attempt.get(key)
+        if isinstance(value, (int, float)) and value != 0:
+            return True
+    return False
+
+
+def _task_has_invocation_evidence(task_dir: Path, attempt: dict[str, Any] | None) -> bool:
+    # invocation.json is an absolute no-retry boundary, even when malformed.
+    if (task_dir / "invocation.json").exists():
+        return True
+    # New attempts persist this marker immediately before entering invoke_model,
+    # closing the crash window between request dispatch and invocation.json.
+    if (task_dir / INVOCATION_STARTED_ARTIFACT).exists():
+        return True
+    if attempt is not None and _attempt_has_invocation_evidence(attempt):
+        return True
+    if _trace_artifact_has_events(task_dir / "provider-trace.json", "events"):
+        return True
+    if _trace_artifact_has_events(task_dir / "official-docs-trace.json", "events"):
+        return True
+    if _trace_artifact_has_events(task_dir / "tool-steps.json", "steps"):
+        return True
+    # Older attempts predate the durable invocation marker. Once baseline capture
+    # completed they may have entered the model call before being interrupted, so
+    # absence of invocation.json alone is not sufficient proof for those attempts.
+    return (task_dir / "baseline-state.json").exists()
+
+
+def classify_resume_task(task_dir: Path, *, task_id: str, profile_id: str) -> ResumeDecision:
+    if not task_dir.exists():
+        return ResumeDecision("run", "task_not_started")
+    if not task_dir.is_dir():
+        return ResumeDecision("blocked", "task_path_is_not_directory")
+
+    attempt_path = task_dir / "attempt.json"
+    try:
+        attempt = read_json_object(attempt_path) if attempt_path.exists() else None
+    except ValueError:
+        return ResumeDecision("blocked", "attempt_artifact_unreadable")
+
+    if attempt is not None:
+        if attempt.get("task_id") != task_id:
+            return ResumeDecision("blocked", "attempt_task_mismatch", attempt)
+        if attempt.get("profile_id") != profile_id:
+            return ResumeDecision("blocked", "attempt_profile_mismatch", attempt)
+
+    if _task_has_invocation_evidence(task_dir, attempt):
+        return ResumeDecision("skip", "model_invocation_protected", attempt)
+    if attempt is None:
+        return ResumeDecision("run", "interrupted_before_attempt", None)
+    if attempt.get("attempt_status") == "infrastructure_invalid":
+        return ResumeDecision("run", "zero_invocation_infrastructure_invalid", attempt)
+    return ResumeDecision("skip", "terminal_attempt_preserved", attempt)
+
+
+def _control_run_id(task_dir: Path) -> str | None:
+    control = read_json_object(task_dir / "control.json")
+    if control is None:
+        return None
+    run_id = control.get("run_id")
+    if not isinstance(run_id, str) or not run_id:
+        raise ValueError(f"control artifact has no run_id: {task_dir / 'control.json'}")
+    return run_id
+
+
+async def prove_prior_twin_inert(task_dir: Path) -> tuple[bool, dict[str, Any] | None]:
+    try:
+        run_id = _control_run_id(task_dir)
+    except ValueError as error:
+        return False, {"error_type": type(error).__name__, "error": str(error)}
+    if run_id is None:
+        attempt = read_json_object(task_dir / "attempt.json")
+        if attempt is not None and attempt.get("run_id") is None:
+            return True, {
+                "outcome": "no_run_allocated",
+                "reason": "infrastructure-invalid attempt recorded no twin run identity",
+            }
+        if not any(task_dir.iterdir()):
+            return True, {"outcome": "interrupted_before_control_persisted"}
+        return False, {
+            "error_type": "UnsafeResumeBlocked",
+            "error": "partial task artifacts have no control.json; prior twin identity is unknown",
+        }
+
+    try:
+        existing_cleanup = read_json_object(task_dir / "cleanup.json")
+    except ValueError:
+        existing_cleanup = None
+    if cleanup_payload_proves_inert(existing_cleanup, expected_run_id=run_id):
+        return True, existing_cleanup
+
+    try:
+        cleanup = await cleanup_instance(task_dir / "control.json")
+    except BaseException as error:
+        cleanup = {"error_type": type(error).__name__, "error": str(error)}
+    write_private_json(task_dir / "resume-cleanup.json", cleanup)
+    return cleanup_payload_proves_inert(cleanup, expected_run_id=run_id), cleanup
+
+
+def _next_archive_number(output_root: Path, task_id: str) -> int:
+    task_archive = output_root / RETRY_ARCHIVE_DIR / task_id
+    numbers = []
+    for path in task_archive.glob("attempt-*"):
+        suffix = path.name.removeprefix("attempt-")
+        if suffix.isdigit():
+            numbers.append(int(suffix))
+    return max(numbers, default=0) + 1
+
+
+def archive_retryable_task(
+    *,
+    output_root: Path,
+    task_id: str,
+    profile_id: str,
+    decision: ResumeDecision,
+    cleanup: dict[str, Any] | None,
+) -> tuple[Path, int]:
+    task_dir = output_root / "tasks" / task_id
+    rechecked = classify_resume_task(task_dir, task_id=task_id, profile_id=profile_id)
+    if rechecked.action != "run" or rechecked.reason != decision.reason:
+        raise RuntimeError(
+            f"resume eligibility changed for {profile_id}/{task_id}: "
+            f"{decision.action}:{decision.reason} -> {rechecked.action}:{rechecked.reason}"
+        )
+    if not task_dir.exists():
+        return task_dir, 1
+
+    archive_number = _next_archive_number(output_root, task_id)
+    archive_dir = output_root / RETRY_ARCHIVE_DIR / task_id / f"attempt-{archive_number:04d}"
+    archive_dir.parent.mkdir(parents=True, exist_ok=True)
+    if archive_dir.exists():
+        raise RuntimeError(f"retry archive already exists: {archive_dir}")
+    task_dir.rename(archive_dir)
+    write_private_json(
+        archive_dir / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "task_id": task_id,
+            "profile_id": profile_id,
+            "archive_number": archive_number,
+            "archive_reason": decision.reason,
+            "archived_at": utc_now(),
+            "cleanup": cleanup,
+        },
+    )
+    return task_dir, archive_number + 1
+
+
+async def prepare_resume_task(
+    *,
+    output_root: Path,
+    task: dict[str, Any],
+    profile_id: str,
+    semaphore: asyncio.Semaphore,
+) -> tuple[TaskRunPlan | None, ResumeDecision, dict[str, Any] | None]:
+    async with semaphore:
+        task_id = str(task["id"])
+        task_dir = output_root / "tasks" / task_id
+        decision = classify_resume_task(task_dir, task_id=task_id, profile_id=profile_id)
+        if decision.action != "run":
+            return None, decision, None
+        cleanup: dict[str, Any] | None = None
+        if task_dir.exists():
+            cleanup_ok, cleanup = await prove_prior_twin_inert(task_dir)
+            if not cleanup_ok:
+                blocked = ResumeDecision("blocked", "prior_twin_not_proven_inert", decision.attempt)
+                write_private_json(
+                    task_dir / "resume-blocked.json",
+                    {
+                        "protocol": "arga-bench-cross-functional-resume-blocked/1",
+                        "task_id": task_id,
+                        "profile_id": profile_id,
+                        "reason": blocked.reason,
+                        "cleanup": cleanup,
+                        "recorded_at": utc_now(),
+                    },
+                )
+                return None, blocked, cleanup
+        _, attempt_number = archive_retryable_task(
+            output_root=output_root,
+            task_id=task_id,
+            profile_id=profile_id,
+            decision=decision,
+            cleanup=cleanup,
+        )
+        archive_path = None
+        if task_dir.exists():
+            raise AssertionError(f"retry preparation did not clear active task directory: {task_dir}")
+        if attempt_number > 1:
+            archive_path = str(output_root / RETRY_ARCHIVE_DIR / task_id / f"attempt-{attempt_number - 1:04d}")
+        return TaskRunPlan(task, attempt_number, archive_path), decision, cleanup
 
 
 def estimated_cost(usage: dict[str, Any], profile: dict[str, Any]) -> dict[str, Any]:
@@ -262,6 +509,7 @@ async def run_task(
     semaphore: asyncio.Semaphore,
     docs_cache: OfficialDocsSnapshotCache,
     profile: dict[str, Any],
+    attempt_number: int = 1,
 ) -> dict[str, Any]:
     async with semaphore:
         task_id = task["id"]
@@ -338,6 +586,16 @@ async def run_task(
                     return await docs.execute(tool_input)
                 return {"ok": False, "error": f"unknown tool {tool_name!r}"}
 
+            write_private_json(
+                task_dir / INVOCATION_STARTED_ARTIFACT,
+                {
+                    "protocol": "arga-bench-model-invocation-started/1",
+                    "task_id": task_id,
+                    "profile_id": profile["id"],
+                    "attempt_number": attempt_number,
+                    "started_at": utc_now(),
+                },
+            )
             invocation = await invoke_model(
                 model_id=profile["model_id"],
                 system_prompt=SYSTEM_PROMPT,
@@ -401,12 +659,11 @@ async def run_task(
                 for event in invocation.events
             )
         cleanup_ok = (
-            run is not None
-            and bool(cleanup)
-            and cleanup_payload_proves_inert(cleanup, expected_run_id=run.run_id)
+            run is not None and bool(cleanup) and cleanup_payload_proves_inert(cleanup, expected_run_id=run.run_id)
         )
         attempt = {
             "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_number": attempt_number,
             "task_id": task_id,
             "title": task["title"],
             "domain": task["domain"],
@@ -470,6 +727,84 @@ async def run_task(
         return attempt
 
 
+def _run_config_payload(
+    *,
+    suite: dict[str, Any],
+    profile: dict[str, Any],
+    concurrency: int,
+) -> dict[str, Any]:
+    return {
+        "protocol": "arga-bench-cross-functional-run/2",
+        "suite_id": suite["suite_id"],
+        "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
+        "profile": profile,
+        "concurrency": concurrency,
+        "attempts_per_scenario": 1,
+        "started_at": utc_now(),
+    }
+
+
+def validate_resume_run_config(
+    output_root: Path,
+    *,
+    suite: dict[str, Any],
+    profile: dict[str, Any],
+) -> dict[str, Any]:
+    config = read_json_object(output_root / "run-config.json", required=True)
+    assert config is not None
+    if config.get("protocol") != "arga-bench-cross-functional-run/2":
+        raise ValueError("cannot resume: run-config protocol does not match Cross-Functional 40")
+    if config.get("suite_id") != suite.get("suite_id"):
+        raise ValueError("cannot resume: run-config suite identity changed")
+    existing_profile = config.get("profile")
+    if not isinstance(existing_profile, dict) or existing_profile.get("id") != profile.get("id"):
+        raise ValueError("cannot resume: run-config profile identity changed")
+    immutable_profile_fields = ("model_id", "provider", "requested_effort", "api_effort", "thinking")
+    changed = [key for key in immutable_profile_fields if existing_profile.get(key) != profile.get(key)]
+    if changed:
+        raise ValueError(f"cannot resume: profile fields changed: {', '.join(changed)}")
+    return config
+
+
+def _load_current_attempts(output_root: Path, tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    attempts: list[dict[str, Any]] = []
+    for task in tasks:
+        attempt = read_json_object(output_root / "tasks" / str(task["id"]) / "attempt.json")
+        if attempt is not None:
+            attempts.append(attempt)
+    return attempts
+
+
+def _write_resume_history(
+    output_root: Path,
+    *,
+    concurrency: int,
+    decisions: list[tuple[str, ResumeDecision]],
+    plans: list[TaskRunPlan],
+) -> None:
+    history_path = output_root / "resume-history.json"
+    history = read_json_object(history_path) or {
+        "protocol": "arga-bench-cross-functional-resume-history/1",
+        "entries": [],
+    }
+    entries = history.get("entries")
+    if not isinstance(entries, list):
+        raise ValueError("resume-history entries must be an array")
+    entries.append(
+        {
+            "resumed_at": utc_now(),
+            "concurrency": concurrency,
+            "rerun_tasks": [str(plan.task["id"]) for plan in plans],
+            "archived_attempts": [plan.archive_path for plan in plans if plan.archive_path is not None],
+            "decisions": [
+                {"task_id": task_id, "action": decision.action, "reason": decision.reason}
+                for task_id, decision in decisions
+            ],
+        }
+    )
+    write_private_json(history_path, history)
+
+
 async def async_main(args: argparse.Namespace) -> int:
     if not os.environ.get("ARGA_API_KEY"):
         raise ValueError("ARGA_API_KEY is required")
@@ -486,44 +821,80 @@ async def async_main(args: argparse.Namespace) -> int:
     if len(tasks) != 40:
         raise ValueError(f"expected 40 tasks, found {len(tasks)}")
     output_root = args.output.resolve()
-    output_root.mkdir(parents=True, exist_ok=False)
-    write_private_json(
-        output_root / "run-config.json",
-        {
-            "protocol": "arga-bench-cross-functional-run/2",
-            "suite_id": suite["suite_id"],
-            "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
-            "profile": profile,
-            "concurrency": args.concurrency,
-            "attempts_per_scenario": 1,
-            "started_at": utc_now(),
-        },
-    )
+    resume_existing = args.resume and output_root.exists()
+    if resume_existing:
+        validate_resume_run_config(output_root, suite=suite, profile=profile)
+    else:
+        output_root.mkdir(parents=True, exist_ok=False)
+        write_private_json(
+            output_root / "run-config.json",
+            _run_config_payload(suite=suite, profile=profile, concurrency=args.concurrency),
+        )
     scenario_ids = await resolve_scenarios(tasks)
-    write_private_json(
-        output_root / "staging-scenarios.json",
-        {"suite_tag": SUITE_TAG, "scenario_ids": scenario_ids},
-    )
+    scenario_payload = {"suite_tag": SUITE_TAG, "scenario_ids": scenario_ids}
+    existing_scenarios = read_json_object(output_root / "staging-scenarios.json")
+    if existing_scenarios is not None and existing_scenarios != scenario_payload:
+        raise ValueError("cannot resume: staging Scenario identities changed")
+    if existing_scenarios is None:
+        write_private_json(output_root / "staging-scenarios.json", scenario_payload)
+
+    plans: list[TaskRunPlan]
+    resume_decisions: list[tuple[str, ResumeDecision]] = []
+    if resume_existing:
+        preparation_semaphore = asyncio.Semaphore(args.concurrency)
+        prepared = await asyncio.gather(
+            *(
+                prepare_resume_task(
+                    output_root=output_root,
+                    task=task,
+                    profile_id=str(profile["id"]),
+                    semaphore=preparation_semaphore,
+                )
+                for task in tasks
+            )
+        )
+        plans = []
+        for task, (plan, decision, _cleanup) in zip(tasks, prepared, strict=True):
+            resume_decisions.append((str(task["id"]), decision))
+            if plan is not None:
+                plans.append(plan)
+        _write_resume_history(
+            output_root,
+            concurrency=args.concurrency,
+            decisions=resume_decisions,
+            plans=plans,
+        )
+    else:
+        plans = [TaskRunPlan(task, 1) for task in tasks]
+
     semaphore = asyncio.Semaphore(args.concurrency)
     docs_cache = OfficialDocsSnapshotCache()
-    results = await asyncio.gather(
+    await asyncio.gather(
         *(
             run_task(
-                task,
-                scenario_id=scenario_ids[task["id"]],
+                plan.task,
+                scenario_id=scenario_ids[plan.task["id"]],
                 output_root=output_root,
                 semaphore=semaphore,
                 docs_cache=docs_cache,
                 profile=profile,
+                attempt_number=plan.attempt_number,
             )
-            for task in tasks
+            for plan in plans
         )
     )
+    results = _load_current_attempts(output_root, tasks)
     summary = {
         "protocol": "arga-bench-cross-functional-run-summary/2",
         "suite_id": suite["suite_id"],
         "profile": profile,
         "concurrency": args.concurrency,
+        "resumed": resume_existing,
+        "tasks_rerun": len(plans) if resume_existing else 0,
+        "resume_blocked": sum(decision.action == "blocked" for _, decision in resume_decisions),
+        "protected_invocations": sum(
+            decision.reason == "model_invocation_protected" for _, decision in resume_decisions
+        ),
         "attempts": len(results),
         "candidate_complete": sum(item["attempt_status"] == "candidate_complete" for item in results),
         "model_completed": sum(item["model_status"] == "completed" for item in results),
@@ -538,7 +909,14 @@ async def async_main(args: argparse.Namespace) -> int:
     }
     write_private_json(output_root / "run-summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True), flush=True)
-    return 0 if summary["candidate_complete"] == 40 and summary["cleanups_succeeded"] == 40 else 1
+    return (
+        0
+        if summary["attempts"] == 40
+        and summary["candidate_complete"] == 40
+        and summary["cleanups_succeeded"] == 40
+        and summary["resume_blocked"] == 0
+        else 1
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -546,6 +924,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--profile", required=True)
     parser.add_argument("--concurrency", type=int, choices=range(1, 21), default=10)
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume an existing profile directory and retry only proven zero-invocation infrastructure failures.",
+    )
     return parser.parse_args()
 
 

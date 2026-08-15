@@ -24,6 +24,23 @@ and the exact Scenario import payloads are in
 The candidate-context and outcome-fairness review is recorded in
 [`benchmark/cross_functional_40/FAIRNESS_AUDIT.md`](benchmark/cross_functional_40/FAIRNESS_AUDIT.md).
 
+Resume an interrupted Cross-Functional model matrix in place with a bounded
+global trial concurrency:
+
+```bash
+uv run python scripts/run_cross_functional_model_matrix.py \
+  --output /path/to/existing-matrix-run \
+  --resume \
+  --concurrency 10
+```
+
+Resume is fail-closed. A task/profile pair is retried only when its prior
+attempt is infrastructure-invalid with no model-invocation evidence, or when
+provisioning was interrupted before an attempt was recorded. Any pair with an
+`invocation.json` or invocation-started marker is preserved and never replayed.
+Before a retry, the old twin must be proven inert and the complete prior task
+directory is moved under that profile's `retry-archive/` directory.
+
 The development catalog contains 12 semantic task families with four variants each: 48 scored episodes with exact twin seeds, authorization envelopes, explicit six-or-more-step evidence graphs, and executable deterministic verification manifests. One-action API checks are separate smoke/conformance material and do not count toward the scored 48. The catalog remains a benchmark candidate rather than a public leaderboard until every episode passes live twin conformance, gold-solution, negative-control, and isolation gates.
 
 ## Principles
