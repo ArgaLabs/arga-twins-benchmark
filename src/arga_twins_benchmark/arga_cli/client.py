@@ -253,6 +253,7 @@ class SubprocessArgaCli:
                 marker in message
                 for marker in (
                     "Failed to load current user",
+                    "Failed to list scenarios",
                     "Failed to load twin provision status",
                     "Failed to tear down twins",
                 )
