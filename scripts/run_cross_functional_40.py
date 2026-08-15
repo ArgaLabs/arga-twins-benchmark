@@ -25,9 +25,8 @@ from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE_PATH = ROOT / "benchmark" / "cross_functional_40" / "suite.json"
+MODEL_MATRIX_PATH = ROOT / "benchmark" / "cross_functional_40" / "model_matrix.json"
 SUITE_TAG = "suite:cross-functional-40-v1"
-MODEL_ID = "claude-fable-5"
-MODEL_EFFORT = "high"
 PROVIDER_TOOL_LIMIT = 60
 OFFICIAL_DOCS_TOOL_LIMIT = 8
 MODEL_TIMEOUT_SECONDS = 600
@@ -90,7 +89,21 @@ def task_roles(task: dict[str, Any]) -> dict[str, str]:
     return {PROVIDER_ROLES[provider]: provider for provider in task["twins"]}
 
 
-def estimated_cost(usage: dict[str, Any]) -> dict[str, Any]:
+def load_profile(profile_id: str) -> dict[str, Any]:
+    payload = json.loads(MODEL_MATRIX_PATH.read_text())
+    profiles = payload.get("profiles")
+    if not isinstance(profiles, list):
+        raise ValueError("model matrix profiles must be an array")
+    matches = [profile for profile in profiles if isinstance(profile, dict) and profile.get("id") == profile_id]
+    if len(matches) != 1:
+        available = ", ".join(
+            sorted(str(profile.get("id")) for profile in profiles if isinstance(profile, dict))
+        )
+        raise ValueError(f"unknown profile {profile_id!r}; expected one of: {available}")
+    return cast(dict[str, Any], matches[0])
+
+
+def estimated_cost(usage: dict[str, Any], profile: dict[str, Any]) -> dict[str, Any]:
     input_tokens = int(usage.get("input_tokens", 0) or 0)
     output_tokens = int(usage.get("output_tokens", 0) or 0)
     cache_read = int(usage.get("cache_read_input_tokens", 0) or 0)
@@ -100,12 +113,19 @@ def estimated_cost(usage: dict[str, Any]) -> dict[str, Any]:
     if isinstance(cache_creation, dict):
         cache_5m = int(cache_creation.get("ephemeral_5m_input_tokens", 0) or 0)
         cache_1h = int(cache_creation.get("ephemeral_1h_input_tokens", 0) or 0)
+    input_rate = float(profile["input_usd_per_million"])
+    output_rate = float(profile["output_usd_per_million"])
+    cache_read_rate = float(profile["cache_read_usd_per_million"])
+    cache_write_5m_rate = input_rate * 1.25 if profile["provider"] == "anthropic" else 0.0
+    cache_write_1h_rate = input_rate * 2.0 if profile["provider"] == "anthropic" else 0.0
+    # Anthropic reports uncached input separately. OpenAI and Google include cached tokens in input totals.
+    billable_base_input = input_tokens if profile["provider"] == "anthropic" else max(0, input_tokens - cache_read)
     estimate = (
-        input_tokens * 10.0
-        + output_tokens * 50.0
-        + cache_read * 1.0
-        + cache_5m * 12.5
-        + cache_1h * 20.0
+        billable_base_input * input_rate
+        + output_tokens * output_rate
+        + cache_read * cache_read_rate
+        + cache_5m * cache_write_5m_rate
+        + cache_1h * cache_write_1h_rate
     ) / 1_000_000
     return {
         "currency": "USD",
@@ -116,14 +136,19 @@ def estimated_cost(usage: dict[str, Any]) -> dict[str, Any]:
         "cache_write_5m_input_tokens": cache_5m,
         "cache_write_1h_input_tokens": cache_1h,
         "rates_usd_per_million_tokens": {
-            "input": 10.0,
-            "output": 50.0,
-            "cache_read": 1.0,
-            "cache_write_5m": 12.5,
-            "cache_write_1h": 20.0,
+            "input": input_rate,
+            "output": output_rate,
+            "cache_read": cache_read_rate,
+            "cache_write_5m": cache_write_5m_rate,
+            "cache_write_1h": cache_write_1h_rate,
         },
-        "pricing_source": "https://www.anthropic.com/claude/fable",
+        "pricing_source": profile["pricing_source"],
         "pricing_checked_on": "2026-08-15",
+        "pricing_note": (
+            "Gemini 3.1 Pro standard <=200k-token prompt tier"
+            if profile["model_id"] == "gemini-3.1-pro-preview"
+            else None
+        ),
     }
 
 
@@ -236,6 +261,7 @@ async def run_task(
     output_root: Path,
     semaphore: asyncio.Semaphore,
     docs_cache: OfficialDocsSnapshotCache,
+    profile: dict[str, Any],
 ) -> dict[str, Any]:
     async with semaphore:
         task_id = task["id"]
@@ -288,8 +314,11 @@ async def run_task(
                 task_dir / "prompt.json",
                 {
                     "protocol": "arga-bench-trial-prompt/1",
-                    "model": MODEL_ID,
-                    "effort": MODEL_EFFORT,
+                    "profile_id": profile["id"],
+                    "model": profile["model_id"],
+                    "requested_effort": profile["requested_effort"],
+                    "api_effort": profile["api_effort"],
+                    "thinking": profile["thinking"],
                     "system_prompt": SYSTEM_PROMPT,
                     "user_prompt": task["prompt"],
                     "tool_definitions": tools,
@@ -310,13 +339,15 @@ async def run_task(
                 return {"ok": False, "error": f"unknown tool {tool_name!r}"}
 
             invocation = await invoke_model(
-                model_id=MODEL_ID,
+                model_id=profile["model_id"],
                 system_prompt=SYSTEM_PROMPT,
                 user_prompt=task["prompt"],
                 tool_schema=tools,
                 execute_tool=execute_tool,
                 max_tool_calls=PROVIDER_TOOL_LIMIT + OFFICIAL_DOCS_TOOL_LIMIT,
                 timeout_seconds=MODEL_TIMEOUT_SECONDS,
+                api_effort=profile["api_effort"],
+                thinking=profile["thinking"],
             )
             write_private_json(task_dir / "invocation.json", invocation.as_dict())
 
@@ -381,8 +412,13 @@ async def run_task(
             "domain": task["domain"],
             "scenario_id": scenario_id,
             "run_id": run.run_id if run else None,
-            "model": MODEL_ID,
-            "effort": MODEL_EFFORT,
+            "profile_id": profile["id"],
+            "model_label": profile["label"],
+            "model": profile["model_id"],
+            "provider": profile["provider"],
+            "requested_effort": profile["requested_effort"],
+            "api_effort": profile["api_effort"],
+            "thinking": profile["thinking"],
             "attempt_status": "candidate_complete" if invocation is not None else "infrastructure_invalid",
             "model_status": invocation.status if invocation is not None else None,
             "response_model": invocation.response_model if invocation is not None else None,
@@ -397,14 +433,14 @@ async def run_task(
             "final_text": invocation.final_text if invocation is not None else "",
             "usage": usage,
             "output_tokens": int(usage.get("output_tokens", 0) or 0),
-            "cost": estimated_cost(usage),
+            "cost": estimated_cost(usage, profile),
             "tool_calls": len(trace_steps),
             "provider_tool_calls": sum(item["kind"] == "provider_api" for item in trace_steps),
             "official_docs_tool_calls": sum(item["kind"] == "provider_docs" for item in trace_steps),
             "tool_steps": trace_steps,
             "raw_state_delta_count": len(raw_deltas),
             "raw_state_delta_count_by_provider": dict(sorted(delta_counts.items())),
-            "anthropic_transport_retries": transport_retries,
+            "model_transport_retries": transport_retries,
             "cleanup_succeeded": cleanup_ok,
             "error_type": type(error).__name__ if error else None,
             "error": str(error) if error else None,
@@ -433,8 +469,14 @@ async def run_task(
 async def async_main(args: argparse.Namespace) -> int:
     if not os.environ.get("ARGA_API_KEY"):
         raise ValueError("ARGA_API_KEY is required")
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        raise ValueError("ANTHROPIC_API_KEY is required")
+    profile = load_profile(args.profile)
+    required_key = {
+        "anthropic": "ANTHROPIC_API_KEY",
+        "openai": "OPENAI_API_KEY",
+        "google": "GEMINI_API_KEY",
+    }[profile["provider"]]
+    if not os.environ.get(required_key):
+        raise ValueError(f"{required_key} is required")
     suite = json.loads(SUITE_PATH.read_text())
     tasks = suite["tasks"]
     if len(tasks) != 40:
@@ -447,8 +489,7 @@ async def async_main(args: argparse.Namespace) -> int:
             "protocol": "arga-bench-cross-functional-run/2",
             "suite_id": suite["suite_id"],
             "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
-            "model": MODEL_ID,
-            "effort": MODEL_EFFORT,
+            "profile": profile,
             "concurrency": args.concurrency,
             "attempts_per_scenario": 1,
             "started_at": utc_now(),
@@ -469,6 +510,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 output_root=output_root,
                 semaphore=semaphore,
                 docs_cache=docs_cache,
+                profile=profile,
             )
             for task in tasks
         )
@@ -476,8 +518,7 @@ async def async_main(args: argparse.Namespace) -> int:
     summary = {
         "protocol": "arga-bench-cross-functional-run-summary/2",
         "suite_id": suite["suite_id"],
-        "model": MODEL_ID,
-        "effort": MODEL_EFFORT,
+        "profile": profile,
         "concurrency": args.concurrency,
         "attempts": len(results),
         "candidate_complete": sum(item["attempt_status"] == "candidate_complete" for item in results),
@@ -499,7 +540,8 @@ async def async_main(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--concurrency", type=int, choices=range(1, 17), default=10)
+    parser.add_argument("--profile", required=True)
+    parser.add_argument("--concurrency", type=int, choices=range(1, 21), default=10)
     return parser.parse_args()
 
 

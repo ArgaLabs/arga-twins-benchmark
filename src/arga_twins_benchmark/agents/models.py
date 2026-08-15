@@ -28,7 +28,7 @@ class ToolDefinition:
 class ModelInvocationResult:
     requested_model: str
     response_model: str | None
-    provider: Literal["anthropic", "openai"]
+    provider: Literal["anthropic", "openai", "google"]
     final_text: str
     status: InvocationStatus
     stop_reason: str

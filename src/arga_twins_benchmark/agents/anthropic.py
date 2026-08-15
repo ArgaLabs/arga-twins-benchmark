@@ -163,7 +163,14 @@ class AnthropicMessagesAdapter:
         self,
         *,
         api_key: str,
-        model_id: Literal["claude-opus-4-8", "claude-fable-5"],
+        model_id: Literal[
+            "claude-opus-4-8",
+            "claude-opus-5",
+            "claude-fable-5",
+            "claude-sonnet-5",
+        ],
+        effort: Literal["low", "medium", "high", "xhigh", "max"] = "high",
+        thinking_mode: Literal["adaptive", "model_default"] | None = None,
         client: httpx.AsyncClient | None = None,
         endpoint: str = ANTHROPIC_MESSAGES_URL,
     ) -> None:
@@ -171,21 +178,31 @@ class AnthropicMessagesAdapter:
             raise ValueError("Anthropic API key cannot be empty")
         self.api_key = api_key
         self.model_id = model_id
+        self.effort = effort
+        self.thinking_mode = thinking_mode
         self.endpoint = endpoint
         self._client = client
 
     def _thinking_config(self) -> dict[str, Any] | None:
-        if self.model_id == "claude-opus-4-8":
+        if self.thinking_mode == "adaptive":
+            return {"type": "adaptive"}
+        if self.thinking_mode is None and self.model_id != "claude-fable-5":
             return {"type": "adaptive"}
         return None
+
+    def _thinking_label(self) -> object:
+        config = self._thinking_config()
+        if config is not None:
+            return config
+        return "model_default_always"
 
     def _config(self, *, max_tool_calls: int, timeout_seconds: float) -> dict[str, Any]:
         return {
             "model": self.model_id,
             "provider": "anthropic",
             "endpoint": "messages",
-            "thinking": self._thinking_config() or "model_default_always",
-            "effort": "high",
+            "thinking": self._thinking_label(),
+            "effort": self.effort,
             "max_output_tokens": MAX_OUTPUT_TOKENS,
             "temperature": None,
             "max_tool_calls": max_tool_calls,
@@ -245,7 +262,7 @@ class AnthropicMessagesAdapter:
                         "system": system_prompt,
                         "messages": messages,
                         "tools": tool_payload,
-                        "output_config": {"effort": "high"},
+                        "output_config": {"effort": self.effort},
                     }
                     thinking_config = self._thinking_config()
                     if thinking_config is not None:

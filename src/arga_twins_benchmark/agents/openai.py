@@ -23,7 +23,7 @@ from arga_twins_benchmark.agents.models import (
 from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
-MAX_OUTPUT_TOKENS = 16_384
+MAX_OUTPUT_TOKENS = 128_000
 
 
 class OpenAIResponsesAdapter:
@@ -31,7 +31,8 @@ class OpenAIResponsesAdapter:
         self,
         *,
         api_key: str,
-        model_id: Literal["gpt-5.6-sol"] = "gpt-5.6-sol",
+        model_id: Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] = "gpt-5.6-sol",
+        effort: Literal["low", "medium", "high", "xhigh", "max"] = "high",
         client: httpx.AsyncClient | None = None,
         endpoint: str = OPENAI_RESPONSES_URL,
     ) -> None:
@@ -39,6 +40,7 @@ class OpenAIResponsesAdapter:
             raise ValueError("OpenAI API key cannot be empty")
         self.api_key = api_key
         self.model_id = model_id
+        self.effort = effort
         self.endpoint = endpoint
         self._client = client
 
@@ -47,7 +49,7 @@ class OpenAIResponsesAdapter:
             "model": self.model_id,
             "provider": "openai",
             "endpoint": "responses",
-            "reasoning": {"effort": "high"},
+            "reasoning": {"effort": self.effort},
             "max_output_tokens": MAX_OUTPUT_TOKENS,
             "temperature": None,
             "max_tool_calls": max_tool_calls,
@@ -113,7 +115,7 @@ class OpenAIResponsesAdapter:
                             "instructions": system_prompt,
                             "input": input_items,
                             "tools": tool_payload,
-                            "reasoning": {"effort": "high"},
+                            "reasoning": {"effort": self.effort},
                             "max_output_tokens": MAX_OUTPUT_TOKENS,
                             "store": False,
                             "include": ["reasoning.encrypted_content"],
@@ -172,6 +174,18 @@ class OpenAIResponsesAdapter:
                     output_value = response_value.get("output")
                     response_usage = response_value.get("usage")
                     merge_usage(usage, response_usage)
+                    if isinstance(response_usage, dict):
+                        input_details = cast(dict[str, Any], response_usage).get("input_tokens_details")
+                        if isinstance(input_details, dict):
+                            cached_tokens = cast(dict[str, Any], input_details).get("cached_tokens")
+                            if (
+                                isinstance(cached_tokens, int)
+                                and not isinstance(cached_tokens, bool)
+                                and cached_tokens > 0
+                            ):
+                                usage["cache_read_input_tokens"] = int(
+                                    usage.get("cache_read_input_tokens", 0) or 0
+                                ) + cached_tokens
                     if not isinstance(response_status, str) or not isinstance(output_value, list):
                         events.append({"type": "invalid_response", "reason": "missing_status_or_output"})
                         return result(

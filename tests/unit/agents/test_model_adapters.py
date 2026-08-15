@@ -9,6 +9,7 @@ import httpx
 import pytest
 
 from arga_twins_benchmark.agents.anthropic import AnthropicMessagesAdapter
+from arga_twins_benchmark.agents.google import GoogleGenerateContentAdapter
 from arga_twins_benchmark.agents.openai import OpenAIResponsesAdapter
 from arga_twins_benchmark.agents.runner import invoke_model
 from arga_twins_benchmark.providers import ProviderInfrastructureError
@@ -757,3 +758,205 @@ def test_invoke_model_requires_the_selected_providers_key(monkeypatch: pytest.Mo
                 10,
             )
         )
+
+
+@pytest.mark.parametrize(
+    ("model_id", "effort"),
+    [
+        ("claude-fable-5", "xhigh"),
+        ("claude-opus-5", "max"),
+        ("claude-opus-4-8", "medium"),
+        ("claude-sonnet-5", "low"),
+    ],
+)
+def test_anthropic_sends_the_exact_requested_effort(model_id: str, effort: str) -> None:
+    request_body: dict[str, Any] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        request_body.update(json.loads(request.content))
+        return httpx.Response(
+            200,
+            json=anthropic_message(
+                model=model_id,
+                content=[{"type": "text", "text": "done"}],
+                stop_reason="end_turn",
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise AssertionError("tool must not be called")
+
+    client = async_client(handler)
+    adapter = AnthropicMessagesAdapter(
+        api_key="test-anthropic-key",
+        model_id=model_id,  # type: ignore[arg-type]
+        effort=effort,  # type: ignore[arg-type]
+        thinking_mode="adaptive",
+        client=client,
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=1,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert request_body["output_config"] == {"effort": effort}
+    assert request_body["thinking"] == {"type": "adaptive"}
+    assert result.config["effort"] == effort
+
+
+@pytest.mark.parametrize("model_id", ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"])
+def test_openai_sends_native_max_effort_for_each_requested_model(model_id: str) -> None:
+    request_body: dict[str, Any] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        request_body.update(json.loads(request.content))
+        return httpx.Response(
+            200,
+            json=openai_response(
+                model=model_id,
+                output=[
+                    {
+                        "type": "message",
+                        "content": [{"type": "output_text", "text": "done"}],
+                    }
+                ],
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise AssertionError("tool must not be called")
+
+    client = async_client(handler)
+    adapter = OpenAIResponsesAdapter(
+        api_key="test-openai-key",
+        model_id=model_id,  # type: ignore[arg-type]
+        effort="max",
+        client=client,
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=1,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert request_body["model"] == model_id
+    assert request_body["reasoning"] == {"effort": "max"}
+    assert result.config["reasoning"] == {"effort": "max"}
+
+
+def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() -> None:
+    requests: list[dict[str, Any]] = []
+    signed_content = {
+        "role": "model",
+        "parts": [
+            {"thought": True, "text": "private reasoning", "thoughtSignature": "signed-thought"},
+            {
+                "functionCall": {
+                    "id": "call-1",
+                    "name": "provider_api",
+                    "args": {"method": "GET", "path": "/records"},
+                }
+            },
+            {
+                "functionCall": {
+                    "id": "call-2",
+                    "name": "provider_api",
+                    "args": {"method": "GET", "path": "/other"},
+                }
+            },
+        ],
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        requests.append(body)
+        if len(requests) == 1:
+            return httpx.Response(
+                200,
+                json={
+                    "candidates": [{"content": signed_content, "finishReason": "STOP"}],
+                    "usageMetadata": {
+                        "promptTokenCount": 10,
+                        "candidatesTokenCount": 2,
+                        "thoughtsTokenCount": 3,
+                        "totalTokenCount": 15,
+                    },
+                },
+            )
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "content": {"role": "model", "parts": [{"text": '{"status":"done"}'}]},
+                        "finishReason": "STOP",
+                    }
+                ],
+                "usageMetadata": {
+                    "promptTokenCount": 20,
+                    "candidatesTokenCount": 4,
+                    "thoughtsTokenCount": 1,
+                    "totalTokenCount": 25,
+                },
+            },
+        )
+
+    calls: list[tuple[str, dict[str, Any]]] = []
+
+    async def execute_tool(name: str, arguments: dict[str, Any]) -> object:
+        calls.append((name, arguments))
+        return {"status_code": 200, "body": []}
+
+    client = async_client(handler)
+    adapter = GoogleGenerateContentAdapter(
+        api_key="test-google-key",
+        model_id="gemini-3.5-flash",
+        client=client,
+        endpoint="https://google.test/v1beta/models",
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="SYSTEM EXACT",
+            user_prompt="USER EXACT",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=4,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert result.final_text == '{"status":"done"}'
+    assert result.tool_calls == 2
+    assert result.usage["input_tokens"] == 30
+    assert result.usage["output_tokens"] == 10
+    assert requests[0]["systemInstruction"] == {"parts": [{"text": "SYSTEM EXACT"}]}
+    assert requests[0]["generationConfig"] == {"maxOutputTokens": 65_536}
+    assert "thinkingConfig" not in requests[0]["generationConfig"]
+    assert requests[1]["contents"][1] == signed_content
+    response_parts = requests[1]["contents"][2]["parts"]
+    assert [part["functionResponse"]["id"] for part in response_parts] == ["call-1", "call-2"]
+    assert [part["functionResponse"]["name"] for part in response_parts] == [
+        "provider_api",
+        "provider_api",
+    ]
+    assert calls == [
+        ("provider_api", {"method": "GET", "path": "/records"}),
+        ("provider_api", {"method": "GET", "path": "/other"}),
+    ]
