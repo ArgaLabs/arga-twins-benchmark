@@ -1,0 +1,268 @@
+{
+  "description": "Maya Chen from release engineering just posted in the #security-help Slack channel: a deployment token may have been pasted into a public Slack thread during a failed release. She removed her message but does not know whether the token was real or which repository it belonged to.\n\nYou're the security operations responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: IT-03 Deployment credential exposure triage",
+  "seed_config": {
+    "github": {
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "default_branch": "main",
+          "description": "Operational service configuration and change history",
+          "files": [
+            {
+              "content": "# payments-api deployment credential fingerprint tok_7A91\n\nRelease audit 771 records credential fingerprint tok_7A91 for acme/payments-api.\n",
+              "path": "records/deployment-credential-exposure-triage.md"
+            },
+            {
+              "content": "# Previous-quarter notes\n\nFingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.\n",
+              "path": "records/previous-quarter.md"
+            },
+            {
+              "content": "# Operational service records\n",
+              "path": "README.md"
+            }
+          ],
+          "issues": [
+            {
+              "body": "Asset: payments-api deployment credential fingerprint tok_7A91\n\nRelease audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+              "title": "Deployment credential exposure triage"
+            },
+            {
+              "body": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "state": "closed",
+              "title": "Quarterly maintenance follow-up"
+            },
+            {
+              "body": "Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+              "state": "open",
+              "title": "Evidence follow-up: Deployment credential exposure triage"
+            },
+            {
+              "body": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "state": "open",
+              "title": "Earlier workstream: Deployment credential exposure triage"
+            }
+          ],
+          "name": "internal-operations",
+          "owner": "acme",
+          "private": true,
+          "prs": [
+            {
+              "base": "main",
+              "body": "Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+              "files": [
+                {
+                  "content": "Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+                  "path": "config/change.txt"
+                }
+              ],
+              "head": "change/deployment-credential-exposure-triage",
+              "merged": false,
+              "state": "open",
+              "title": "Change associated with deployment credential exposure triage"
+            },
+            {
+              "base": "main",
+              "body": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "files": [
+                {
+                  "content": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+                  "path": "docs/maintenance.md"
+                }
+              ],
+              "head": "docs/maintenance",
+              "state": "open",
+              "title": "Documentation maintenance"
+            },
+            {
+              "base": "main",
+              "body": "Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+              "files": [
+                {
+                  "content": "Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+                  "path": "sandbox/verification.txt"
+                }
+              ],
+              "head": "sandbox/deployment-credential-exposure-triage",
+              "merged": false,
+              "state": "open",
+              "title": "Sandbox verification for deployment credential exposure triage"
+            },
+            {
+              "base": "main",
+              "body": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "files": [
+                {
+                  "content": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+                  "path": "archive/record.txt"
+                }
+              ],
+              "head": "archive/deployment-credential-exposure-triage",
+              "merged": false,
+              "state": "open",
+              "title": "Archive maintenance for deployment credential exposure triage"
+            }
+          ]
+        }
+      ],
+      "users": [
+        {
+          "email": "ops-maintainer@acme.example",
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer"
+        },
+        {
+          "email": "release-reviewer@acme.example",
+          "login": "release-reviewer",
+          "name": "Release Reviewer"
+        }
+      ]
+    },
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: payments-api deployment credential fingerprint tok_7A91\nThe deleted Slack event was captured at 16:22 UTC and the credential last authenticated from the release runner at 16:28 UTC.",
+              "issuetype": "Bug",
+              "labels": [
+                "it-support"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "Deployment credential exposure triage"
+            },
+            {
+              "description": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: deployment credential exposure triage"
+            },
+            {
+              "description": "The deleted Slack event was captured at 16:22 UTC and the credential last authenticated from the release runner at 16:28 UTC.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: payments-api deployment credential fingerprint tok_7A91"
+            },
+            {
+              "description": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: Deployment credential exposure triage"
+            }
+          ],
+          "key": "IT",
+          "name": "It Support Operations"
+        }
+      ]
+    },
+    "notion": {
+      "databases": [],
+      "pages": [
+        {
+          "content": "No raw token is retained.",
+          "title": "Operations record \u2014 payments-api deployment credential fingerprint tok_7A91"
+        },
+        {
+          "content": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+          "title": "Previous-quarter operations record"
+        },
+        {
+          "content": "No raw token is retained.",
+          "title": "Review notes \u2014 payments-api deployment credential fingerprint tok_7A91"
+        },
+        {
+          "content": "Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+          "title": "Archived workstream \u2014 Deployment credential exposure triage"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "a deployment token may have been pasted into a public Slack thread during a failed release. She removed her message but does not know whether the token was real or which repository it belonged to.",
+              "user": "maya-chen"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for payments-api deployment credential fingerprint tok_7A91: Release audit 771 records credential fingerprint tok_7A91 for acme/payments-api.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Fingerprint tok_7A19 belongs to the read-only documentation publisher for acme/developer-docs and last authenticated eight days ago.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "security-help"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "maya-chen",
+          "real_name": "Maya Chen"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:it_support",
+    "task:it-03",
+    "content-sha256:09e2ccee9f44def84f9acd3887f146cc5bfbc6fb472fa9207b568e123c17bd5a"
+  ],
+  "twins": [
+    "github",
+    "jira",
+    "notion",
+    "slack"
+  ]
+}

@@ -6,6 +6,24 @@ This repository owns benchmark semantics, agent execution, grading, and experime
 
 ## Current status
 
+The active saved-Scenario release is **Cross-Functional 40 v1**: exactly 40
+deterministic multi-system tasks, with eight tasks each across IT support,
+CRM/outreach, marketing, developer workflows, and e-commerce. Every task uses
+the same two-paragraph operational responder prompt form, selects at least
+three service twins, requires at least eight semantic steps, checks in exact
+seed JSON for every selected twin, and defaults to denying unlisted mutations.
+All 40 Scenario payloads have been provisioned successfully through the Arga
+CLI and are tagged `suite:cross-functional-40-v1`.
+
+The task and prompt index is in
+[`benchmark/cross_functional_40/TASKS.md`](benchmark/cross_functional_40/TASKS.md),
+the full machine-readable suite is in
+[`benchmark/cross_functional_40/suite.json`](benchmark/cross_functional_40/suite.json),
+and the exact Scenario import payloads are in
+[`benchmark/cross_functional_40/scenarios/`](benchmark/cross_functional_40/scenarios/).
+The candidate-context and outcome-fairness review is recorded in
+[`benchmark/cross_functional_40/FAIRNESS_AUDIT.md`](benchmark/cross_functional_40/FAIRNESS_AUDIT.md).
+
 The development catalog contains 12 semantic task families with four variants each: 48 scored episodes with exact twin seeds, authorization envelopes, explicit six-or-more-step evidence graphs, and executable deterministic verification manifests. One-action API checks are separate smoke/conformance material and do not count toward the scored 48. The catalog remains a benchmark candidate rather than a public leaderboard until every episode passes live twin conformance, gold-solution, negative-control, and isolation gates.
 
 ## Principles

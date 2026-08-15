@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import json
+import ssl
 from time import monotonic
 from typing import Any, Literal, cast
 
@@ -24,7 +26,136 @@ from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
-MAX_OUTPUT_TOKENS = 16_384
+MAX_OUTPUT_TOKENS = 128_000
+
+
+def _overlay_mapping(target: dict[str, Any], update: object) -> None:
+    if not isinstance(update, dict):
+        return
+    for key, value in cast(dict[str, object], update).items():
+        if isinstance(value, dict):
+            nested = target.setdefault(key, {})
+            if not isinstance(nested, dict):
+                nested = {}
+                target[key] = nested
+            _overlay_mapping(cast(dict[str, Any], nested), value)
+        else:
+            target[key] = value
+
+
+def _sse_payloads(response_text: str) -> list[dict[str, Any]]:
+    payloads: list[dict[str, Any]] = []
+    data_lines: list[str] = []
+
+    def flush() -> None:
+        if not data_lines:
+            return
+        raw_data = "\n".join(data_lines)
+        data_lines.clear()
+        if raw_data == "[DONE]":
+            return
+        try:
+            value: object = json.loads(raw_data)
+        except json.JSONDecodeError:
+            return
+        if isinstance(value, dict):
+            payloads.append(cast(dict[str, Any], value))
+
+    for line in response_text.splitlines():
+        if not line:
+            flush()
+        elif line.startswith("data:"):
+            data_lines.append(line.removeprefix("data:").lstrip())
+    flush()
+    return payloads
+
+
+def _message_from_sse(response_text: str) -> dict[str, Any] | None:
+    message: dict[str, Any] | None = None
+    blocks: dict[int, dict[str, Any]] = {}
+    partial_json: dict[int, list[str]] = {}
+    response_usage: dict[str, Any] = {}
+
+    for event in _sse_payloads(response_text):
+        event_type = event.get("type")
+        if event_type == "message_start":
+            raw_message = event.get("message")
+            if not isinstance(raw_message, dict):
+                continue
+            message = dict(cast(dict[str, Any], raw_message))
+            raw_content = message.get("content")
+            if isinstance(raw_content, list):
+                blocks.update(
+                    {
+                        index: dict(cast(dict[str, Any], block))
+                        for index, block in enumerate(raw_content)
+                        if isinstance(block, dict)
+                    }
+                )
+            _overlay_mapping(response_usage, message.get("usage"))
+        elif event_type == "content_block_start":
+            index = event.get("index")
+            raw_block = event.get("content_block")
+            if isinstance(index, int) and isinstance(raw_block, dict):
+                blocks[index] = dict(cast(dict[str, Any], raw_block))
+        elif event_type == "content_block_delta":
+            index = event.get("index")
+            raw_delta = event.get("delta")
+            if not isinstance(index, int) or not isinstance(raw_delta, dict):
+                continue
+            delta = cast(dict[str, Any], raw_delta)
+            block = blocks.setdefault(index, {})
+            delta_type = delta.get("type")
+            if delta_type == "input_json_delta":
+                fragment = delta.get("partial_json")
+                if isinstance(fragment, str):
+                    partial_json.setdefault(index, []).append(fragment)
+            elif delta_type == "text_delta":
+                text = delta.get("text")
+                if isinstance(text, str):
+                    block["text"] = f"{block.get('text', '')}{text}"
+            elif delta_type == "thinking_delta":
+                thinking = delta.get("thinking")
+                if isinstance(thinking, str):
+                    block["thinking"] = f"{block.get('thinking', '')}{thinking}"
+            elif delta_type == "signature_delta":
+                signature = delta.get("signature")
+                if isinstance(signature, str):
+                    block["signature"] = f"{block.get('signature', '')}{signature}"
+            elif delta_type == "citations_delta":
+                citation = delta.get("citation")
+                if isinstance(citation, dict):
+                    block.setdefault("citations", []).append(citation)
+        elif event_type == "content_block_stop":
+            index = event.get("index")
+            if not isinstance(index, int) or index not in partial_json:
+                continue
+            raw_input = "".join(partial_json.pop(index))
+            try:
+                parsed_input: object = json.loads(raw_input)
+            except json.JSONDecodeError:
+                parsed_input = raw_input
+            blocks.setdefault(index, {})["input"] = parsed_input
+        elif event_type == "message_delta":
+            if message is None:
+                message = {}
+            raw_delta = event.get("delta")
+            if isinstance(raw_delta, dict):
+                message.update(cast(dict[str, Any], raw_delta))
+            _overlay_mapping(response_usage, event.get("usage"))
+
+    if message is None:
+        return None
+    for index, fragments in partial_json.items():
+        raw_input = "".join(fragments)
+        try:
+            parsed_input = json.loads(raw_input)
+        except json.JSONDecodeError:
+            parsed_input = raw_input
+        blocks.setdefault(index, {})["input"] = parsed_input
+    message["content"] = [blocks[index] for index in sorted(blocks)]
+    message["usage"] = response_usage
+    return message
 
 
 class AnthropicMessagesAdapter:
@@ -110,6 +241,7 @@ class AnthropicMessagesAdapter:
                     request_body: dict[str, Any] = {
                         "model": self.model_id,
                         "max_tokens": MAX_OUTPUT_TOKENS,
+                        "stream": True,
                         "system": system_prompt,
                         "messages": messages,
                         "tools": tool_payload,
@@ -118,15 +250,33 @@ class AnthropicMessagesAdapter:
                     thinking_config = self._thinking_config()
                     if thinking_config is not None:
                         request_body["thinking"] = thinking_config
-                    response = await client.post(
-                        self.endpoint,
-                        headers={
-                            "anthropic-version": ANTHROPIC_VERSION,
-                            "content-type": "application/json",
-                            "x-api-key": self.api_key,
-                        },
-                        json=request_body,
-                    )
+                    response: httpx.Response | None = None
+                    for transport_attempt in range(1, 4):
+                        try:
+                            response = await client.post(
+                                self.endpoint,
+                                headers={
+                                    "anthropic-version": ANTHROPIC_VERSION,
+                                    "content-type": "application/json",
+                                    "x-api-key": self.api_key,
+                                },
+                                json=request_body,
+                            )
+                            break
+                        except (httpx.TransportError, ssl.SSLError) as error:
+                            events.append(
+                                {
+                                    "type": "transport_error",
+                                    "error_type": type(error).__name__,
+                                    "attempt": transport_attempt,
+                                    "will_retry": transport_attempt < 3,
+                                }
+                            )
+                            if transport_attempt == 3:
+                                raise
+                            await asyncio.sleep(transport_attempt)
+                    if response is None:  # pragma: no cover - defensive exhaustiveness
+                        raise RuntimeError("Anthropic transport loop returned no response")
                     if response.status_code >= 400:
                         events.append(
                             {
@@ -150,10 +300,13 @@ class AnthropicMessagesAdapter:
                             started=started,
                             tool_calls=tool_calls,
                         )
-                    try:
-                        payload: object = response.json()
-                    except ValueError:
-                        payload = None
+                    if response.headers.get("content-type", "").startswith("text/event-stream"):
+                        payload: object = _message_from_sse(response.text)
+                    else:
+                        try:
+                            payload = response.json()
+                        except ValueError:
+                            payload = None
                     if not isinstance(payload, dict):
                         events.append({"type": "invalid_response", "reason": "response_not_object"})
                         return result(

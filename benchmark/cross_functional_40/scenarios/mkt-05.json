@@ -1,0 +1,205 @@
+{
+  "description": "Rina Ahmed from communications just posted in the #marketing-security Slack channel: the Project Harbor acquisition copy reached the publishing queue before its embargo. A harmless recruiting post has a similar title, and an open communications ticket references the acquisition packet.\n\nYou're the communications operations responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: MKT-05 Embargoed announcement hold",
+  "seed_config": {
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: Project Harbor acquisition announcement EMB-31\nThe Project Harbor publishing packet entered editorial review at 14:03 UTC. Jira COMMS-77 and Linear MKT-455 both reference the same acquisition copy; no company-page post reference has been recorded.",
+              "issuetype": "Task",
+              "labels": [
+                "marketing"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "Embargoed announcement hold"
+            },
+            {
+              "description": "A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: embargoed announcement hold"
+            },
+            {
+              "description": "The Project Harbor publishing packet entered editorial review at 14:03 UTC. Jira COMMS-77 and Linear MKT-455 both reference the same acquisition copy; no company-page post reference has been recorded.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: Project Harbor acquisition announcement EMB-31"
+            },
+            {
+              "description": "A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: Embargoed announcement hold"
+            }
+          ],
+          "key": "MKT",
+          "name": "Marketing Operations"
+        }
+      ]
+    },
+    "linear": {
+      "comments": [],
+      "issues": [
+        {
+          "description": "Project Harbor acquisition announcement EMB-31\n\nThe embargo ends at 16:00 UTC.",
+          "priority": 2,
+          "project": "Current operations",
+          "team_key": "MKT",
+          "title": "Embargoed announcement hold"
+        },
+        {
+          "description": "A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+          "priority": 4,
+          "project": "Current operations",
+          "team_key": "MKT",
+          "title": "Previous-quarter follow-up"
+        },
+        {
+          "description": "The embargo ends at 16:00 UTC.",
+          "priority": 3,
+          "project": "Current operations",
+          "team_key": "MKT",
+          "title": "Evidence review \u2014 Project Harbor acquisition announcement EMB-31"
+        },
+        {
+          "description": "A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+          "priority": 3,
+          "project": "Current operations",
+          "team_key": "MKT",
+          "title": "Parallel review \u2014 Embargoed announcement hold"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Current operations",
+          "state": "started",
+          "team_key": "MKT"
+        }
+      ],
+      "teams": [
+        {
+          "key": "MKT",
+          "name": "Marketing Team"
+        }
+      ]
+    },
+    "linkedin": {
+      "members": [
+        {
+          "email": "marketing@acme.example",
+          "headline": "Company communications",
+          "name": "Acme Marketing",
+          "vanity_name": "acme-marketing"
+        },
+        {
+          "email": "recruiting@acme.example",
+          "headline": "Careers at Acme",
+          "name": "Acme Recruiting",
+          "vanity_name": "acme-recruiting"
+        }
+      ],
+      "posts": [
+        {
+          "author_email": "recruiting@acme.example",
+          "text": "We are hiring product engineers in Seattle and Toronto. See the Acme careers page for details.",
+          "visibility": "PUBLIC"
+        },
+        {
+          "author_email": "marketing@acme.example",
+          "text": "From our operations archive: A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+          "visibility": "PUBLIC"
+        },
+        {
+          "author_email": "recruiting@acme.example",
+          "text": "A previous team update: A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+          "visibility": "PUBLIC"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "the Project Harbor acquisition copy reached the publishing queue before its embargo. A harmless recruiting post has a similar title, and an open communications ticket references the acquisition packet.",
+              "user": "rina-ahmed"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Project Harbor acquisition announcement EMB-31: The Project Harbor publishing packet entered editorial review at 14:03 UTC.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: A recruiting post titled 'Join the Harbor team' was published last week and contains no acquisition information.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "marketing-security"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "rina-ahmed",
+          "real_name": "Rina Ahmed"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:marketing",
+    "task:mkt-05",
+    "content-sha256:9652a3ee7ca2ce48760fd365064f3f7506872cccff45e777f5a3ee216db26ca0"
+  ],
+  "twins": [
+    "jira",
+    "linear",
+    "linkedin",
+    "slack"
+  ]
+}

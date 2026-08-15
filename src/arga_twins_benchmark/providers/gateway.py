@@ -1026,6 +1026,18 @@ def _provider_headers(provider: str, env: Mapping[str, str]) -> dict[str, str]:
         return {"Authorization": f"Bearer {token or 'ya29.drive-twin-owner'}"}
     if provider == "jira":
         return {"Authorization": f"Bearer {token or 'jira_default_seed_token'}"}
+    if provider == "hubspot":
+        return {"Authorization": f"Bearer {token}"} if token else {}
+    if provider == "salesforce":
+        return {"Authorization": f"Bearer {token}"} if token else {}
+    if provider == "linkedin":
+        headers = {
+            "LinkedIn-Version": "202608",
+            "X-RestLi-Protocol-Version": "2.0.0",
+        }
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        return headers
     if provider == "linear":
         return {"Authorization": token or "lin_api_twin_owner_personal_key_0001"}
     if provider == "notion":
@@ -1067,6 +1079,9 @@ _PROVIDER_ENV_KEYS: Final[dict[str, tuple[str, ...]]] = {
         "GOOGLE_OAUTH_ACCESS_TOKEN",
     ),
     "jira": ("JIRA_TOKEN", "JIRA_API_TOKEN"),
+    "hubspot": ("HUBSPOT_ACCESS_TOKEN", "HUBSPOT_TOKEN", "HUBSPOT_API_KEY"),
+    "salesforce": ("SALESFORCE_ACCESS_TOKEN", "SALESFORCE_TOKEN"),
+    "linkedin": ("LINKEDIN_ACCESS_TOKEN", "LINKEDIN_TOKEN"),
     "linear": ("LINEAR_API_KEY", "LINEAR_TOKEN"),
     "notion": ("NOTION_TOKEN", "NOTION_API_KEY"),
     "slack": ("SLACK_BOT_TOKEN", "SLACK_TOKEN"),

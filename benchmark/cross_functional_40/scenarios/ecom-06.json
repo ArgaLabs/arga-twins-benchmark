@@ -1,0 +1,155 @@
+{
+  "description": "Ana Gomez from monetization just posted in the #commerce-ops Slack channel: the Pro Annual catalog needs the approved FY27 price, but Stripe contains legacy, test, and regional products with nearly identical names. Existing subscribers must not be moved automatically.\n\nYou're the billing catalog administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: ECOM-06 Plan catalog price migration",
+  "seed_config": {
+    "notion": {
+      "databases": [],
+      "pages": [
+        {
+          "content": "Pricing approval PRICE-611 sets Pro Annual to USD 12,900 per year beginning FY27. Pro Annual EU and Pro Annual Test are separate products.",
+          "title": "Operations record \u2014 Pro Annual FY27 price approval PRICE-611"
+        },
+        {
+          "content": "The regional approval for Pro Annual EU remains EUR 11,400 and has no FY27 change.",
+          "title": "Previous-quarter operations record"
+        },
+        {
+          "content": "Pricing approval PRICE-611 sets Pro Annual to USD 12,900 per year beginning FY27. Pro Annual EU and Pro Annual Test are separate products.",
+          "title": "Review notes \u2014 Pro Annual FY27 price approval PRICE-611"
+        },
+        {
+          "content": "The regional approval for Pro Annual EU remains EUR 11,400 and has no FY27 change.",
+          "title": "Archived workstream \u2014 Plan catalog price migration"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "the Pro Annual catalog needs the approved FY27 price, but Stripe contains legacy, test, and regional products with nearly identical names. Existing subscribers must not be moved automatically.",
+              "user": "ana-gomez"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Pro Annual FY27 price approval PRICE-611: Pricing approval PRICE-611 sets Pro Annual to USD 12,900 per year beginning FY27.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: The regional approval for Pro Annual EU remains EUR 11,400 and has no FY27 change.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "commerce-ops"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "ana-gomez",
+          "real_name": "Ana Gomez"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    },
+    "stripe": {
+      "customers": [
+        {
+          "email": "pricing@acme.example",
+          "name": "Pricing Operations"
+        },
+        {
+          "email": "sandbox+plan-catalog-price-migration@example.test",
+          "name": "Plan catalog price migration Sandbox"
+        },
+        {
+          "email": "archive+plan-catalog-price-migration@example.test",
+          "name": "Plan catalog price migration Archive"
+        }
+      ],
+      "meters": [],
+      "products": [
+        {
+          "name": "Pro Annual",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 1190000
+            }
+          ]
+        },
+        {
+          "name": "Pro Annual EU",
+          "prices": [
+            {
+              "currency": "eur",
+              "unit_amount": 1140000
+            }
+          ]
+        },
+        {
+          "name": "Pro Annual Test",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 100
+            }
+          ]
+        },
+        {
+          "name": "Plan catalog price migration Preview",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 100
+            }
+          ]
+        },
+        {
+          "name": "Plan catalog price migration Archive",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 9900
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:ecommerce",
+    "task:ecom-06",
+    "content-sha256:9adcf774ac29d378c5e30541158c91375b67a18bf4bfefb61c1e2c2c627aaff9"
+  ],
+  "twins": [
+    "notion",
+    "slack",
+    "stripe"
+  ]
+}

@@ -52,6 +52,13 @@ def anthropic_message(
     }
 
 
+def anthropic_sse(*events: dict[str, Any]) -> str:
+    return (
+        "\n\n".join(f"event: {event['type']}\ndata: {json.dumps(event, separators=(',', ':'))}" for event in events)
+        + "\n\n"
+    )
+
+
 def openai_response(
     *,
     output: list[dict[str, Any]],
@@ -158,10 +165,37 @@ def test_anthropic_fable_uses_model_default_thinking_and_handles_refusal() -> No
         seen_request.update(json.loads(request.content))
         return httpx.Response(
             200,
-            json=anthropic_message(
-                content=[{"type": "text", "text": "I cannot do that."}],
-                stop_reason="refusal",
-                model="claude-fable-5",
+            headers={"Content-Type": "text/event-stream"},
+            text=anthropic_sse(
+                {
+                    "type": "message_start",
+                    "message": {
+                        "id": "msg_fable",
+                        "type": "message",
+                        "role": "assistant",
+                        "model": "claude-fable-5",
+                        "content": [],
+                        "stop_reason": None,
+                        "usage": {"input_tokens": 10, "output_tokens": 1},
+                    },
+                },
+                {
+                    "type": "content_block_start",
+                    "index": 0,
+                    "content_block": {"type": "text", "text": ""},
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 0,
+                    "delta": {"type": "text_delta", "text": "I cannot do that."},
+                },
+                {"type": "content_block_stop", "index": 0},
+                {
+                    "type": "message_delta",
+                    "delta": {"stop_reason": "refusal", "stop_sequence": None},
+                    "usage": {"output_tokens": 2},
+                },
+                {"type": "message_stop"},
             ),
         )
 
@@ -191,8 +225,135 @@ def test_anthropic_fable_uses_model_default_thinking_and_handles_refusal() -> No
     assert result.stop_reason == "refusal"
     assert result.final_text == "I cannot do that."
     assert "thinking" not in seen_request
+    assert seen_request["stream"] is True
+    assert seen_request["max_tokens"] == 128_000
     assert seen_request["output_config"] == {"effort": "high"}
     assert result.config["thinking"] == "model_default_always"
+    assert result.config["max_output_tokens"] == 128_000
+    assert result.usage == {"input_tokens": 10, "output_tokens": 2}
+
+
+def test_anthropic_stream_reconstructs_thinking_and_tool_input() -> None:
+    request_count = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal request_count
+        request_count += 1
+        start = {
+            "type": "message_start",
+            "message": {
+                "id": f"msg_{request_count}",
+                "type": "message",
+                "role": "assistant",
+                "model": "claude-fable-5",
+                "content": [],
+                "stop_reason": None,
+                "usage": {"input_tokens": 10 * request_count, "output_tokens": 1},
+            },
+        }
+        if request_count == 1:
+            events = (
+                start,
+                {
+                    "type": "content_block_start",
+                    "index": 0,
+                    "content_block": {"type": "thinking", "thinking": "", "signature": ""},
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 0,
+                    "delta": {"type": "thinking_delta", "thinking": "Check the provider."},
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 0,
+                    "delta": {"type": "signature_delta", "signature": "signed"},
+                },
+                {"type": "content_block_stop", "index": 0},
+                {
+                    "type": "content_block_start",
+                    "index": 1,
+                    "content_block": {
+                        "type": "tool_use",
+                        "id": "tool-stream",
+                        "name": "provider_api",
+                        "input": {},
+                    },
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 1,
+                    "delta": {"type": "input_json_delta", "partial_json": '{"method":"GET",'},
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 1,
+                    "delta": {"type": "input_json_delta", "partial_json": '"path":"/records"}'},
+                },
+                {"type": "content_block_stop", "index": 1},
+                {
+                    "type": "message_delta",
+                    "delta": {"stop_reason": "tool_use", "stop_sequence": None},
+                    "usage": {"output_tokens": 8},
+                },
+                {"type": "message_stop"},
+            )
+        else:
+            events = (
+                start,
+                {
+                    "type": "content_block_start",
+                    "index": 0,
+                    "content_block": {"type": "text", "text": ""},
+                },
+                {
+                    "type": "content_block_delta",
+                    "index": 0,
+                    "delta": {"type": "text_delta", "text": "Done"},
+                },
+                {"type": "content_block_stop", "index": 0},
+                {
+                    "type": "message_delta",
+                    "delta": {"stop_reason": "end_turn", "stop_sequence": None},
+                    "usage": {"output_tokens": 3},
+                },
+                {"type": "message_stop"},
+            )
+        return httpx.Response(
+            200,
+            headers={"Content-Type": "text/event-stream"},
+            text=anthropic_sse(*events),
+        )
+
+    calls: list[tuple[str, dict[str, Any]]] = []
+
+    async def execute_tool(name: str, arguments: dict[str, Any]) -> object:
+        calls.append((name, arguments))
+        return {"status_code": 200, "body": []}
+
+    client = async_client(handler)
+    adapter = AnthropicMessagesAdapter(
+        api_key="test-anthropic-key",
+        model_id="claude-fable-5",
+        client=client,
+        endpoint="https://anthropic.test/v1/messages",
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=2,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert result.final_text == "Done"
+    assert result.usage == {"input_tokens": 30, "output_tokens": 11}
+    assert calls == [("provider_api", {"method": "GET", "path": "/records"})]
 
 
 def test_anthropic_tool_limit_preflights_batch_without_side_effects() -> None:

@@ -1,0 +1,211 @@
+{
+  "description": "Elena Torres from fraud operations just posted in the #commerce-risk Slack channel: Trailpack Enterprise still appears available for new orders even though the catalog team replaced it last month. A regional product with nearly the same name is still sold.\n\nYou're the catalog operations responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: ECOM-03 Retired catalog product cleanup",
+  "seed_config": {
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: Trailpack Enterprise catalog entry\nProduct Trailpack Enterprise was replaced by Trailpack Business on 2026-07-01.",
+              "issuetype": "Task",
+              "labels": [
+                "ecommerce"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "Retired catalog product cleanup"
+            },
+            {
+              "description": "Trailpack Enterprise EU is sold by the regional entity and remains in the current catalog.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: retired catalog product cleanup"
+            },
+            {
+              "description": "Product Trailpack Enterprise was replaced by Trailpack Business on 2026-07-01.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: Trailpack Enterprise catalog entry"
+            },
+            {
+              "description": "Trailpack Enterprise EU is sold by the regional entity and remains in the current catalog.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: Retired catalog product cleanup"
+            }
+          ],
+          "key": "COM",
+          "name": "Ecommerce Operations"
+        }
+      ]
+    },
+    "notion": {
+      "databases": [],
+      "pages": [
+        {
+          "content": "Commerce approval CAT-301 records the old product as unavailable for new orders.",
+          "title": "Operations record \u2014 Trailpack Enterprise catalog entry"
+        },
+        {
+          "content": "Trailpack Enterprise EU is sold by the regional entity and remains in the current catalog.",
+          "title": "Previous-quarter operations record"
+        },
+        {
+          "content": "Commerce approval CAT-301 records the old product as unavailable for new orders.",
+          "title": "Review notes \u2014 Trailpack Enterprise catalog entry"
+        },
+        {
+          "content": "Trailpack Enterprise EU is sold by the regional entity and remains in the current catalog.",
+          "title": "Archived workstream \u2014 Retired catalog product cleanup"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "Trailpack Enterprise still appears available for new orders even though the catalog team replaced it last month. A regional product with nearly the same name is still sold.",
+              "user": "elena-torres"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Trailpack Enterprise catalog entry: Product Trailpack Enterprise was replaced by Trailpack Business on 2026-07-01.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Trailpack Enterprise EU is sold by the regional entity and remains in the current catalog.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "commerce-risk"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "elena-torres",
+          "real_name": "Elena Torres"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    },
+    "stripe": {
+      "customers": [
+        {
+          "email": "catalog@acme.example",
+          "name": "Catalog Operations"
+        },
+        {
+          "email": "sandbox+retired-catalog-product-cleanup@example.test",
+          "name": "Retired catalog product cleanup Sandbox"
+        },
+        {
+          "email": "archive+retired-catalog-product-cleanup@example.test",
+          "name": "Retired catalog product cleanup Archive"
+        }
+      ],
+      "meters": [],
+      "products": [
+        {
+          "name": "Trailpack Enterprise",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 18900
+            }
+          ]
+        },
+        {
+          "name": "Trailpack Business",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 19900
+            }
+          ]
+        },
+        {
+          "name": "Trailpack Enterprise EU",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 17400
+            }
+          ]
+        },
+        {
+          "name": "Retired catalog product cleanup Preview",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 100
+            }
+          ]
+        },
+        {
+          "name": "Retired catalog product cleanup Archive",
+          "prices": [
+            {
+              "currency": "usd",
+              "unit_amount": 9900
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:ecommerce",
+    "task:ecom-03",
+    "content-sha256:f1b5f89d0689157bbcba9d40ddfcb544a6e6b94ba08d06f07bf30838046b95b0"
+  ],
+  "twins": [
+    "jira",
+    "notion",
+    "slack",
+    "stripe"
+  ]
+}
