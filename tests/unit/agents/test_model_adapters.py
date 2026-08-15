@@ -621,6 +621,56 @@ def test_openai_propagates_retryable_provider_infrastructure_error() -> None:
     asyncio.run(client.aclose())
 
 
+def test_openai_retries_transient_transport_error_in_place() -> None:
+    calls = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise httpx.ConnectError("temporary TLS failure", request=request)
+        return httpx.Response(
+            200,
+            json=openai_response(
+                output=[
+                    {
+                        "id": "msg_1",
+                        "type": "message",
+                        "role": "assistant",
+                        "status": "completed",
+                        "content": [{"type": "output_text", "text": "done"}],
+                    }
+                ]
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise AssertionError("tool must not be called")
+
+    client = async_client(handler)
+    adapter = OpenAIResponsesAdapter(api_key="test-openai-key", client=client)
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=1,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert calls == 2
+    assert result.events[1] == {
+        "type": "transport_error",
+        "error_type": "ConnectError",
+        "attempt": 1,
+        "will_retry": True,
+    }
+
+
 def test_openai_responses_handles_refusal() -> None:
     def handler(_request: httpx.Request) -> httpx.Response:
         return httpx.Response(

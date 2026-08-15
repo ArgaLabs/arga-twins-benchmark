@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import ssl
 from time import monotonic
 from typing import Any, Literal, cast
 
@@ -104,23 +105,42 @@ class OpenAIResponsesAdapter:
         try:
             async with asyncio.timeout(timeout_seconds):
                 while True:
-                    response = await client.post(
-                        self.endpoint,
-                        headers={
-                            "authorization": f"Bearer {self.api_key}",
-                            "content-type": "application/json",
-                        },
-                        json={
-                            "model": self.model_id,
-                            "instructions": system_prompt,
-                            "input": input_items,
-                            "tools": tool_payload,
-                            "reasoning": {"effort": self.effort},
-                            "max_output_tokens": MAX_OUTPUT_TOKENS,
-                            "store": False,
-                            "include": ["reasoning.encrypted_content"],
-                        },
-                    )
+                    request_body = {
+                        "model": self.model_id,
+                        "instructions": system_prompt,
+                        "input": input_items,
+                        "tools": tool_payload,
+                        "reasoning": {"effort": self.effort},
+                        "max_output_tokens": MAX_OUTPUT_TOKENS,
+                        "store": False,
+                        "include": ["reasoning.encrypted_content"],
+                    }
+                    response: httpx.Response | None = None
+                    for transport_attempt in range(1, 4):
+                        try:
+                            response = await client.post(
+                                self.endpoint,
+                                headers={
+                                    "authorization": f"Bearer {self.api_key}",
+                                    "content-type": "application/json",
+                                },
+                                json=request_body,
+                            )
+                            break
+                        except (httpx.TransportError, ssl.SSLError) as error:
+                            events.append(
+                                {
+                                    "type": "transport_error",
+                                    "error_type": type(error).__name__,
+                                    "attempt": transport_attempt,
+                                    "will_retry": transport_attempt < 3,
+                                }
+                            )
+                            if transport_attempt == 3:
+                                raise
+                            await asyncio.sleep(transport_attempt)
+                    if response is None:  # pragma: no cover - defensive exhaustiveness
+                        raise RuntimeError("OpenAI transport loop returned no response")
                     if response.status_code >= 400:
                         events.append(
                             {
@@ -396,7 +416,7 @@ class OpenAIResponsesAdapter:
                 started=started,
                 tool_calls=tool_calls,
             )
-        except httpx.HTTPError as error:
+        except (httpx.HTTPError, ssl.SSLError) as error:
             events.append(
                 {
                     "type": "api_error",
