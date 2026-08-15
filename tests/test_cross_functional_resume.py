@@ -269,4 +269,5 @@ def test_matrix_resume_keeps_global_concurrency_bounded(
 
     assert maximum_active == 2
     assert all("--resume" in command for command in commands)
-    assert all(command[command.index("--concurrency") + 1] == "1" for command in commands)
+    assert all(command[command.index("--concurrency") + 1] == "40" for command in commands)
+    assert all(command[command.index("--lifecycle-concurrency") + 1] == "3" for command in commands)

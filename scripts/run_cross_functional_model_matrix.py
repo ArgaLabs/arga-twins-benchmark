@@ -57,6 +57,8 @@ async def run_profile(
     log_root: Path,
     semaphore: asyncio.Semaphore,
     resume: bool,
+    tasks_per_profile: int = 40,
+    lifecycle_concurrency: int = 3,
 ) -> dict[str, Any]:
     profile_id = str(profile["id"])
     output = output_root / "profiles" / profile_id
@@ -72,7 +74,9 @@ async def run_profile(
             "--output",
             str(output),
             "--concurrency",
-            "1",
+            str(tasks_per_profile),
+            "--lifecycle-concurrency",
+            str(lifecycle_concurrency),
         ]
         if resume:
             command.append("--resume")
@@ -150,7 +154,8 @@ async def async_main(args: argparse.Namespace) -> int:
                 "scenarios_per_profile": 40,
                 "total_trials": len(profiles) * 40,
                 "global_trial_concurrency": args.concurrency,
-                "per_profile_trial_concurrency": 1,
+                "per_profile_trial_concurrency": args.tasks_per_profile,
+                "per_profile_lifecycle_concurrency": args.lifecycle_concurrency,
                 "profile_launch_interval_seconds": args.launch_interval_seconds,
                 "attempts_per_model_scenario_pair": 1,
                 "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
@@ -168,6 +173,8 @@ async def async_main(args: argparse.Namespace) -> int:
                 log_root=log_root,
                 semaphore=semaphore,
                 resume=args.resume,
+                tasks_per_profile=args.tasks_per_profile,
+                lifecycle_concurrency=args.lifecycle_concurrency,
             )
             for launch_index, profile in enumerate(profiles)
         )
@@ -206,8 +213,10 @@ async def async_main(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--concurrency", type=int, choices=range(1, 31), default=30)
+    parser.add_argument("--concurrency", type=int, choices=range(1, 31), default=2)
     parser.add_argument("--launch-interval-seconds", type=float, default=0.5)
+    parser.add_argument("--tasks-per-profile", type=int, choices=range(1, 41), default=40)
+    parser.add_argument("--lifecycle-concurrency", type=int, choices=range(1, 11), default=3)
     parser.add_argument(
         "--resume",
         action="store_true",

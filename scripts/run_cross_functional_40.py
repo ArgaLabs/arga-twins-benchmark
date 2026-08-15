@@ -507,6 +507,7 @@ async def run_task(
     scenario_id: str,
     output_root: Path,
     semaphore: asyncio.Semaphore,
+    lifecycle_semaphore: asyncio.Semaphore,
     docs_cache: OfficialDocsSnapshotCache,
     profile: dict[str, Any],
     attempt_number: int = 1,
@@ -526,9 +527,12 @@ async def run_task(
         raw_deltas: list[Any] = []
         cleanup: dict[str, Any] = {}
         error: BaseException | None = None
+        lifecycle_acquired = False
 
         arga = SubprocessArgaCli()
         try:
+            await lifecycle_semaphore.acquire()
+            lifecycle_acquired = True
             run = await arga.create_twin_run(
                 twins=task["twins"],
                 scenario_id=scenario_id,
@@ -578,6 +582,8 @@ async def run_task(
             capturer = TrustedStateCapturer(timeout_seconds=60)
             baseline = await capturer.capture(control, roles=roles)
             write_private_json(task_dir / "baseline-state.json", baseline.artifact_payload())
+            lifecycle_semaphore.release()
+            lifecycle_acquired = False
 
             async def execute_tool(tool_name: str, tool_input: dict[str, Any]) -> object:
                 if tool_name == gateway.tool_definition["name"]:
@@ -641,11 +647,17 @@ async def run_task(
                 await docs.aclose()
             if run is not None:
                 try:
+                    if not lifecycle_acquired:
+                        await lifecycle_semaphore.acquire()
+                        lifecycle_acquired = True
                     cleanup = await wait_cleanup(arga, run.run_id)
                 except BaseException as cleanup_error:
                     cleanup = {"error_type": type(cleanup_error).__name__, "error": str(cleanup_error)}
                 write_private_json(task_dir / "cleanup.json", cleanup)
             arga.close()
+            if lifecycle_acquired:
+                lifecycle_semaphore.release()
+                lifecycle_acquired = False
 
         usage = invocation.usage if invocation is not None else {}
         trace_steps = []
@@ -841,7 +853,7 @@ async def async_main(args: argparse.Namespace) -> int:
     plans: list[TaskRunPlan]
     resume_decisions: list[tuple[str, ResumeDecision]] = []
     if resume_existing:
-        preparation_semaphore = asyncio.Semaphore(args.concurrency)
+        preparation_semaphore = asyncio.Semaphore(args.lifecycle_concurrency)
         prepared = await asyncio.gather(
             *(
                 prepare_resume_task(
@@ -868,6 +880,7 @@ async def async_main(args: argparse.Namespace) -> int:
         plans = [TaskRunPlan(task, 1) for task in tasks]
 
     semaphore = asyncio.Semaphore(args.concurrency)
+    lifecycle_semaphore = asyncio.Semaphore(args.lifecycle_concurrency)
     docs_cache = OfficialDocsSnapshotCache()
     await asyncio.gather(
         *(
@@ -876,6 +889,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 scenario_id=scenario_ids[plan.task["id"]],
                 output_root=output_root,
                 semaphore=semaphore,
+                lifecycle_semaphore=lifecycle_semaphore,
                 docs_cache=docs_cache,
                 profile=profile,
                 attempt_number=plan.attempt_number,
@@ -923,7 +937,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--profile", required=True)
-    parser.add_argument("--concurrency", type=int, choices=range(1, 21), default=10)
+    parser.add_argument("--concurrency", type=int, choices=range(1, 41), default=40)
+    parser.add_argument("--lifecycle-concurrency", type=int, choices=range(1, 11), default=3)
     parser.add_argument(
         "--resume",
         action="store_true",
