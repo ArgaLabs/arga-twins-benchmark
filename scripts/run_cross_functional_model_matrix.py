@@ -9,6 +9,7 @@ import json
 import os
 import sys
 from collections import defaultdict, deque
+from contextlib import AsyncExitStack
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
@@ -30,8 +31,8 @@ def load_profiles() -> list[dict[str, Any]]:
     if not isinstance(raw_profiles, list):
         raise ValueError("model matrix profiles must be an array")
     profiles = [cast(dict[str, Any], item) for item in raw_profiles if isinstance(item, dict)]
-    if len(profiles) != 30 or len({str(item.get("id")) for item in profiles}) != 30:
-        raise ValueError("model matrix must contain exactly 30 unique profiles")
+    if len(profiles) != 31 or len({str(item.get("id")) for item in profiles}) != 31:
+        raise ValueError("model matrix must contain exactly 31 unique profiles")
     return profiles
 
 
@@ -56,6 +57,7 @@ async def run_profile(
     output_root: Path,
     log_root: Path,
     semaphore: asyncio.Semaphore,
+    google_profile_semaphore: asyncio.Semaphore | None = None,
     resume: bool,
     retry_infrastructure_invalid: bool = False,
     retry_model_terminal: bool = False,
@@ -68,7 +70,12 @@ async def run_profile(
     output = output_root / "profiles" / profile_id
     log_path = log_root / f"{profile_id}.log"
     effective_task_concurrency = 1 if profile["provider"] == "google" else tasks_per_profile
-    async with semaphore:
+    async with AsyncExitStack() as stack:
+        if profile["provider"] == "google":
+            if google_profile_semaphore is None:
+                raise ValueError("google profiles require a shared profile semaphore")
+            await stack.enter_async_context(google_profile_semaphore)
+        await stack.enter_async_context(semaphore)
         await asyncio.sleep(launch_index * launch_interval_seconds)
         started_at = utc_now()
         command = [
@@ -182,11 +189,14 @@ async def async_main(args: argparse.Namespace) -> int:
                 "per_profile_cleanup_concurrency": args.cleanup_concurrency,
                 "profile_launch_interval_seconds": args.launch_interval_seconds,
                 "attempts_per_model_scenario_pair": 1,
+                "google_profile_concurrency": 1,
+                "google_task_concurrency": 1,
                 "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
                 "started_at": utc_now(),
             },
         )
     semaphore = asyncio.Semaphore(args.concurrency)
+    google_profile_semaphore = asyncio.Semaphore(1)
     outcomes = await asyncio.gather(
         *(
             run_profile(
@@ -196,6 +206,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 output_root=output_root,
                 log_root=log_root,
                 semaphore=semaphore,
+                google_profile_semaphore=google_profile_semaphore,
                 resume=args.resume,
                 retry_infrastructure_invalid=args.retry_infrastructure_invalid,
                 retry_model_terminal=args.retry_model_terminal,

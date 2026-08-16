@@ -37,8 +37,8 @@ def profiles() -> list[dict[str, Any]]:
     if not isinstance(raw, list):
         raise ValueError("model matrix profiles must be an array")
     values = [cast(dict[str, Any], item) for item in raw if isinstance(item, dict)]
-    if len(values) != 30:
-        raise ValueError("expected 30 model profiles")
+    if len(values) != 31:
+        raise ValueError("expected 31 model profiles")
     return values
 
 
@@ -81,9 +81,7 @@ async def preflight(profile: dict[str, Any], semaphore: asyncio.Semaphore) -> di
             "usage": result.usage,
             "effective_config": result.config,
             "passed": (
-                result.status == "completed"
-                and result.tool_calls == 1
-                and echo_inputs == [{"value": "profile-ok"}]
+                result.status == "completed" and result.tool_calls == 1 and echo_inputs == [{"value": "profile-ok"}]
             ),
         }
 

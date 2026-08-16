@@ -514,3 +514,59 @@ def test_matrix_resume_keeps_global_concurrency_bounded(
     assert all(command[command.index("--concurrency") + 1] == "40" for command in commands)
     assert all(command[command.index("--lifecycle-concurrency") + 1] == "3" for command in commands)
     assert all(command[command.index("--cleanup-concurrency") + 1] == "3" for command in commands)
+
+
+def test_matrix_serializes_google_profiles(tmp_path: Path, monkeypatch: Any) -> None:
+    active = 0
+    maximum_active = 0
+
+    class FakeProcess:
+        async def wait(self) -> int:
+            nonlocal active, maximum_active
+            active += 1
+            maximum_active = max(maximum_active, active)
+            await asyncio.sleep(0.01)
+            active -= 1
+            return 0
+
+    async def fake_create_subprocess_exec(*_command: str, **_kwargs: object) -> FakeProcess:
+        return FakeProcess()
+
+    monkeypatch.setattr(matrix_runner.asyncio, "create_subprocess_exec", fake_create_subprocess_exec)
+    output_root = tmp_path / "matrix"
+    log_root = output_root / "logs"
+    log_root.mkdir(parents=True)
+    (output_root / "profiles").mkdir()
+    profiles = [
+        {
+            "id": f"gemini-{index}",
+            "provider": "google",
+            "model_id": "gemini-test",
+            "requested_effort": "default",
+            "api_effort": "default",
+        }
+        for index in range(2)
+    ]
+
+    async def exercise() -> None:
+        semaphore = asyncio.Semaphore(2)
+        google_profile_semaphore = asyncio.Semaphore(1)
+        await asyncio.gather(
+            *(
+                matrix_runner.run_profile(
+                    profile,
+                    launch_index=0,
+                    launch_interval_seconds=0,
+                    output_root=output_root,
+                    log_root=log_root,
+                    semaphore=semaphore,
+                    google_profile_semaphore=google_profile_semaphore,
+                    resume=True,
+                )
+                for profile in profiles
+            )
+        )
+
+    asyncio.run(exercise())
+
+    assert maximum_active == 1

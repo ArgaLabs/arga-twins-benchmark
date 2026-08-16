@@ -16,6 +16,19 @@
       "pricing_source": "https://www.anthropic.com/claude/fable"
     },
     {
+      "id": "fable-5-high",
+      "label": "Fable 5 High",
+      "provider": "anthropic",
+      "model_id": "claude-fable-5",
+      "requested_effort": "high",
+      "api_effort": "high",
+      "thinking": "adaptive",
+      "input_usd_per_million": 10.0,
+      "output_usd_per_million": 50.0,
+      "cache_read_usd_per_million": 1.0,
+      "pricing_source": "https://www.anthropic.com/claude/fable"
+    },
+    {
       "id": "fable-5-medium",
       "label": "Fable 5 Medium",
       "provider": "anthropic",
