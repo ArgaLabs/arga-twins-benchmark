@@ -279,6 +279,92 @@ def test_slack_update_must_target_the_originating_channel(tmp_path: Path) -> Non
     assert slack_assertion["status"] == "fail"
 
 
+def test_inline_query_paths_and_explicit_call_limit_errors_are_complete_evidence(tmp_path: Path) -> None:
+    task, task_dir = _copy_historical_task(tmp_path, "IT-05")
+    invocation_path = task_dir / "invocation.json"
+    invocation = _read_object(invocation_path)
+    api_calls = [
+        event
+        for event in cast(list[dict[str, Any]], invocation["events"])
+        if event.get("type") == "tool_call" and event.get("name") == "provider_api"
+    ]
+    first_call = api_calls[0]
+    first_arguments = cast(dict[str, Any], first_call["arguments"])
+    first_arguments["method"] = "POST"
+    first_arguments["path"] = "/api/conversations%2Elist?limit=200"
+    first_output = cast(dict[str, Any], first_call["output"])
+    first_trace = cast(dict[str, Any], first_output["trace"])
+    first_trace["method"] = "POST"
+
+    jira_comment = next(
+        event for event in api_calls if str(cast(dict[str, Any], event["arguments"])["path"]).endswith("/comment")
+    )
+    jira_arguments = cast(dict[str, Any], jira_comment["arguments"])
+    jira_arguments["path"] = "/rest/api/2/issue/IT-1/comment"
+    jira_output = cast(dict[str, Any], jira_comment["output"])
+    jira_trace = cast(dict[str, Any], jira_output["trace"])
+    jira_trace["path"] = jira_arguments["path"]
+
+    rejected_call = api_calls[-1]
+    rejected_output = cast(dict[str, Any], rejected_call["output"])
+    rejected_trace = cast(dict[str, Any], rejected_output["trace"])
+    rejected_sequence = rejected_trace["sequence"]
+    rejected_tool_sequence = rejected_call["provider_call_index"]
+    rejected_trace["status_code"] = None
+    rejected_trace["error"] = "provider_api call limit of 60 has been reached"
+    rejected_output["status_code"] = None
+    rejected_output["error"] = rejected_trace["error"]
+    _write_object(invocation_path, invocation)
+
+    provider_trace_path = task_dir / "provider-trace.json"
+    provider_trace = _read_object(provider_trace_path)
+    persisted_first_trace = next(
+        event
+        for event in cast(list[dict[str, Any]], provider_trace["events"])
+        if event["sequence"] == first_trace["sequence"]
+    )
+    persisted_first_trace["method"] = "POST"
+    persisted_jira_trace = next(
+        event
+        for event in cast(list[dict[str, Any]], provider_trace["events"])
+        if event["sequence"] == jira_trace["sequence"]
+    )
+    persisted_jira_trace["path"] = jira_arguments["path"]
+    persisted_trace = next(
+        event
+        for event in cast(list[dict[str, Any]], provider_trace["events"])
+        if event["sequence"] == rejected_sequence
+    )
+    persisted_trace["status_code"] = None
+    persisted_trace["error"] = rejected_trace["error"]
+    _write_object(provider_trace_path, provider_trace)
+
+    tool_steps_path = task_dir / "tool-steps.json"
+    tool_steps = _read_object(tool_steps_path)
+    first_step = next(
+        step
+        for step in cast(list[dict[str, Any]], tool_steps["steps"])
+        if step["sequence"] == first_call["provider_call_index"]
+    )
+    first_step["method"] = "POST"
+    jira_step = next(
+        step
+        for step in cast(list[dict[str, Any]], tool_steps["steps"])
+        if step["sequence"] == jira_comment["provider_call_index"]
+    )
+    jira_step["path"] = jira_arguments["path"]
+    rejected_step = next(
+        step for step in cast(list[dict[str, Any]], tool_steps["steps"]) if step["sequence"] == rejected_tool_sequence
+    )
+    rejected_step["status_code"] = None
+    rejected_step["error"] = rejected_trace["error"]
+    _write_object(tool_steps_path, tool_steps)
+
+    result = grade_it_dev_legacy_task(task=task, task_dir=task_dir)
+
+    assert result["outcome"] == "pass"
+
+
 def test_unsupported_domain_is_an_evidence_gap() -> None:
     result = grade_it_dev_legacy_task(task={"id": "CRM-01"}, task_dir=Path("unused"))
 

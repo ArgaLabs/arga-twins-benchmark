@@ -49,9 +49,13 @@ _READ_ONLY_POSTS = (
     re.compile(r"^/v1/(?:data_sources|databases)/[^/]+/query(?:\?.*)?$"),
     re.compile(r"^/crm/v3/objects/[^/]+/search(?:\?.*)?$"),
     re.compile(r"^/rest/api/3/search(?:/jql)?(?:\?.*)?$"),
+    re.compile(
+        r"^/api/(?:auth\.test|conversations\.(?:history|info|list|replies)|"
+        r"search\.(?:all|files|messages)|users\.(?:info|list))(?:\?.*)?$"
+    ),
 )
 _ADDITIVE_EVIDENCE_WRITES = (
-    re.compile(r"^/rest/api/3/issue/[^/]+/comment$"),
+    re.compile(r"^/rest/api/[23]/issue/[^/]+/comment$"),
     re.compile(r"^/repos/[^/]+/[^/]+/issues/\d+/comments$"),
     re.compile(r"^/crm/v3/objects/notes$"),
     re.compile(r"^/crm/v4/objects/notes/[^/]+/associations/"),
@@ -143,33 +147,47 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "jira_evidence_reconciled",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
             ),
             _req(
                 "github_evidence_reconciled",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
             ),
         ),
-        allowed_actions=(("gmail", r"/messages/[^/]+/modify$"),),
+        allowed_actions=(
+            ("gmail", r"/messages/[^/]+/modify$"),
+            ("jira", r"/issue/IT-1(?:/transitions)?$"),
+            ("jira", r"/issue/IT-1/assignee$"),
+            ("github", r"/issues/1$"),
+        ),
     ),
     "IT-02": _TaskRule(
         requirements=(
-            _req("approved_rollback_applied", "github", r"/pulls/\d+/merge$", all_terms=("AUTH-214", "IDP-RB-12")),
+            _req(
+                "approved_rollback_applied",
+                "github",
+                r"/(?:pulls/\d+/merge|git/commits)$",
+                all_terms=("AUTH-214", "IDP-RB-12"),
+            ),
             _req(
                 "incident_records_rollback",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("AUTH-214", "IDP-RB-12", "Northstar"),
             ),
         ),
         allowed_actions=(
             ("github", r"/git/refs$"),
+            ("github", r"/git/(?:blobs|trees|commits)$"),
+            ("github", r"/git/refs/heads/main$"),
             ("github", r"/contents/"),
             ("github", r"/pulls$"),
             ("github", r"/pulls/\d+/merge$"),
+            ("github", r"/actions/workflows/[^/]+/dispatches$"),
+            ("github", r"/statuses/[^/]+$"),
             ("jira", r"/transitions$"),
         ),
     ),
@@ -177,12 +195,15 @@ _RULES: dict[str, _TaskRule] = {
         requirements=(
             _req("credential_revoked", "github", r"/credentials/revoke$", all_terms=("tok_7A91",)),
             _req(
-                "jira_exposure_evidence", "jira", r"/issue/[^/]+/comment$", all_terms=("tok_7A91", "acme/payments-api")
+                "jira_exposure_evidence",
+                "jira",
+                r"/issue/[^/]+(?:/comment)?$",
+                all_terms=("tok_7A91", "acme/payments-api"),
             ),
             _req(
                 "github_exposure_evidence",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("tok_7A91", "acme/payments-api"),
             ),
         ),
@@ -194,13 +215,25 @@ _RULES: dict[str, _TaskRule] = {
     ),
     "IT-04": _TaskRule(
         requirements=(
-            _req("jira_client_classification", "jira", r"/issue/[^/]+/comment$", all_terms=("CSK-991", "1XQ7")),
-            _req("github_client_classification", "github", r"/issues/\d+/comments$", all_terms=("CSK-991", "1XQ7")),
+            _req(
+                "jira_client_classification",
+                "jira",
+                r"/issue/[^/]+(?:/comment)?$",
+                all_terms=("CSK-991", "1XQ7"),
+            ),
+            _req(
+                "github_client_classification",
+                "github",
+                r"/issues/\d+(?:/comments)?$",
+                all_terms=("CSK-991", "1XQ7"),
+            ),
             _req("drive_evidence_linkage", "google_drive", r"/.*", all_terms=("CSK-991", "1XQ7")),
         ),
         allowed_actions=(
             ("jira", r"/assignee$"),
             ("jira", r"/transitions$"),
+            ("jira", r"/issue/IT-1$"),
+            ("github", r"/issues/1$"),
             ("google_drive", r"/.*comments"),
         ),
     ),
@@ -209,24 +242,29 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "canonical_regression_updated",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("6.4.2", "adaptive keepalive", "KB-118"),
             ),
         ),
-        allowed_actions=(("jira", r"/assignee$"),),
+        allowed_actions=(
+            ("jira", r"/assignee$"),
+            ("jira", r"/issue/IT-1$"),
+            ("jira", r"/issueLink$"),
+            ("jira", r"/issue/IT-[3-5]/transitions$"),
+        ),
     ),
     "IT-06": _TaskRule(
         requirements=(
             _req(
                 "jira_offboarding_evidence",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("OFF-308", "lena.contractor@acme.example"),
             ),
             _req(
                 "github_offboarding_reconciled",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("OFF-308", "lena.contractor@acme.example"),
             ),
         ),
@@ -234,28 +272,50 @@ _RULES: dict[str, _TaskRule] = {
     ),
     "IT-07": _TaskRule(
         requirements=(
-            _req("jira_alert_reconciliation", "jira", r"/issue/[^/]+/comment$", all_terms=("MON-771", "DB-912")),
+            _req(
+                "jira_alert_reconciliation",
+                "jira",
+                r"/issue/[^/]+(?:/comment)?$",
+                all_terms=("MON-771", "DB-912"),
+            ),
             _req("linear_alert_reconciliation", "linear", r"/graphql$", all_terms=("MON-771", "DB-912")),
         ),
-        allowed_actions=(("jira", r"/transitions$"), ("linear", r"/graphql$")),
+        allowed_actions=(
+            ("jira", r"/transitions$"),
+            ("jira", r"/issue/IT-(?:1|6)$"),
+            ("jira", r"/issueLink$"),
+            ("linear", r"/graphql$"),
+        ),
     ),
     "IT-08": _TaskRule(
         requirements=(
             _req(
-                "jira_runner_evidence", "jira", r"/issue/[^/]+/comment$", all_terms=("SEC-552", "prod-linux-07", "8841")
+                "jira_runner_evidence",
+                "jira",
+                r"/issue/[^/]+(?:/comment)?$",
+                all_terms=("SEC-552", "prod-linux-07", "8841"),
             ),
             _req(
                 "github_runner_evidence",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("SEC-552", "prod-linux-07", "8841"),
             ),
         ),
-        allowed_actions=(("jira", r"/assignee$"),),
+        allowed_actions=(
+            ("jira", r"/assignee$"),
+            ("jira", r"/issue/IT-1(?:/transitions)?$"),
+            ("github", r"/issues/1$"),
+        ),
     ),
     "DEV-01": _TaskRule(
         requirements=(
-            _req("github_incident_evidence", "github", r"/issues/\d+/comments$", all_terms=("DEP-9842", "ENG-771")),
+            _req(
+                "github_incident_evidence",
+                "github",
+                r"/issues/\d+(?:/comments)?$",
+                all_terms=("DEP-9842", "ENG-771"),
+            ),
             _req(
                 "linear_mitigated_open",
                 "linear",
@@ -286,7 +346,7 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "jira_dependency_evidence",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("CVE-2026-1181", "4.2.1", "packages.quickmirror.example"),
             ),
         ),
@@ -307,7 +367,7 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "github_quarantine_evidence",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("checkout_tax_roundtrip", "checkout_tax_rounding", "CRP-6"),
             ),
             _req(
@@ -321,15 +381,19 @@ _RULES: dict[str, _TaskRule] = {
     ),
     "DEV-04": _TaskRule(
         requirements=(
-            _req("release_48_artifact", "github", r"/git/refs$", all_terms=("release/4.8",)),
+            _req("release_48_artifact", "github", r"/(?:git/refs|pulls)$", all_terms=("4.8",)),
             _req(
                 "jira_backport_evidence",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("REL-204", "4.8", "Fix invoice export crash"),
             ),
         ),
-        allowed_actions=(("github", r"/git/refs$"),),
+        allowed_actions=(
+            ("github", r"/git/refs$"),
+            ("github", r"/issues/1$"),
+            ("jira", r"/issue/ENG-1/transitions$"),
+        ),
         forbidden_actions=(
             _req("wrong_release_line", "github", r"/(?:git/refs|pulls)$", any_terms=("release/4.7", "REL-209")),
             _req("backport_merged", "github", r"/pulls/\d+/merge$"),
@@ -367,18 +431,19 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "api_331_drift_record",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("API-331", "api/openapi.yaml", "next_cursor", "nextPage"),
                 reject_terms=("does not exist", "dangling", "retired record"),
             ),
             _req(
                 "matching_repository_link",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("API-331", "api/openapi.yaml", "next_cursor", "nextPage"),
                 reject_terms=("does not exist", "dangling"),
             ),
         ),
+        allowed_actions=(("jira", r"/issue/ENG-1/remotelink$"),),
     ),
     "DEV-07": _TaskRule(
         requirements=(
@@ -386,7 +451,7 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "jira_safe_mitigation",
                 "jira",
-                r"/issue/[^/]+/comment$",
+                r"/issue/[^/]+(?:/comment)?$",
                 all_terms=("INC-940", "CAB-188", "rate-limit-safe-2"),
             ),
         ),
@@ -398,14 +463,14 @@ _RULES: dict[str, _TaskRule] = {
             _req(
                 "customer_record_linked",
                 "hubspot",
-                r"/objects/notes",
+                r"/objects/(?:notes|companies)",
                 all_terms=("Apex Freight", "2026-07", "ENG-944"),
                 reject_terms=("does not exist", "dangling"),
             ),
             _req(
                 "github_regression_linked",
                 "github",
-                r"/issues/\d+/comments$",
+                r"/issues/\d+(?:/comments)?$",
                 all_terms=("Apex Freight", "2026-07", "ENG-944"),
                 reject_terms=("does not exist", "dangling"),
             ),
@@ -446,6 +511,10 @@ def _safe_path(value: object) -> str:
     return value if isinstance(value, str) else ""
 
 
+def _base_path(value: object) -> str:
+    return unquote(_safe_path(value).split("?", 1)[0])
+
+
 def _path_is_control_plane(path: str) -> bool:
     parsed = urlsplit(path)
     if parsed.scheme or parsed.netloc or path.startswith("//"):
@@ -471,7 +540,7 @@ def _is_write(arguments: Mapping[str, Any]) -> bool:
         return True
     if method != "POST":
         return True
-    path = _safe_path(arguments.get("path"))
+    path = unquote(_safe_path(arguments.get("path")))
     body = arguments.get("body")
     if path == "/graphql" and isinstance(body, dict):
         query = body.get("query")
@@ -667,14 +736,14 @@ def _validate_and_collect_calls(
         requested = _canonical_provider(arguments.get("provider"))
         trace_requested = _canonical_provider(raw_trace.get("requested_provider"))
         trace_provider = _canonical_provider(raw_trace.get("provider"))
-        trace_path = _safe_path(raw_trace.get("path"))
-        if method != str(raw_trace.get("method", "")).upper() or trace_path.split("?", 1)[0] != path:
+        if method != str(raw_trace.get("method", "")).upper() or _base_path(raw_trace.get("path")) != _base_path(path):
             gaps.append(f"provider_trace_identity_mismatch:{sequence}")
         if requested not in {trace_requested, trace_provider}:
             gaps.append(f"provider_trace_provider_mismatch:{sequence}")
         status = raw_trace.get("status_code")
         if isinstance(status, bool) or not isinstance(status, int):
-            gaps.append(f"provider_trace_status_missing:{sequence}")
+            if not isinstance(raw_trace.get("error"), str) or not raw_trace.get("error"):
+                gaps.append(f"provider_trace_status_missing:{sequence}")
             status = 0
         tool_step = api_steps_by_sequence.get(tool_step_sequence)
         if tool_step is None:
@@ -726,6 +795,8 @@ def _is_additive_evidence(call: _Call) -> bool:
 
 def _is_explicitly_allowed(call: _Call, rule: _TaskRule) -> bool:
     if _is_additive_evidence(call):
+        return True
+    if any(_matches(call, requirement) for requirement in rule.requirements):
         return True
     return any(
         call.provider == provider and re.search(pattern, call.path) for provider, pattern in rule.allowed_actions
