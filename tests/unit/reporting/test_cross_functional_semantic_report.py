@@ -46,6 +46,7 @@ def _write_metrics(matrix_dir: Path, profile_id: str, task_id: str) -> None:
     _write(
         task_dir / "attempt.json",
         {
+            "attempt_number": 2,
             "scenario_id": f"scenario-{task_id.lower()}",
             "stop_reason": "end_turn",
             "cleanup_succeeded": True,
@@ -58,6 +59,13 @@ def _write_metrics(matrix_dir: Path, profile_id: str, task_id: str) -> None:
         },
     )
     _write(
+        task_dir / "invocation.json",
+        {
+            "status": "completed",
+            "config": {"max_tool_calls": 120, "timeout_seconds": 1800},
+        },
+    )
+    _write(
         task_dir / "tool-steps.json",
         {
             "protocol": "arga-bench-tool-steps/1",
@@ -66,6 +74,19 @@ def _write_metrics(matrix_dir: Path, profile_id: str, task_id: str) -> None:
                 {"sequence": 2, "kind": "provider_docs"},
             ],
         },
+    )
+
+
+def _write_prior_terminal(matrix_dir: Path, profile_id: str, task_id: str, status: str) -> None:
+    _write(
+        matrix_dir
+        / "profiles"
+        / profile_id
+        / "retry-archive"
+        / task_id
+        / "attempt-0001"
+        / "attempt.json",
+        {"model_status": status},
     )
 
 
@@ -202,6 +223,8 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
         )
         for task in cast(list[dict[str, Any]], suite["tasks"]):
             _write_metrics(matrix_dir, profile, cast(str, task["id"]))
+    _write_prior_terminal(matrix_dir, ready_profile, "CRM-08", "refused")
+    _write_prior_terminal(matrix_dir, mixed_profile, "IT-05", "timed_out")
 
     def classifier(matrix: Path, **_kwargs: object) -> dict[str, Any]:
         return _fake_classification(
@@ -231,7 +254,7 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
     assert mixed["IT-04"]["score_eligible"] is False
     assert mixed["IT-05"]["semantic_outcome"] == "fail"
     assert mixed["IT-05"]["model_terminal_reason"] == "timed_out"
-    assert mixed["IT-05"]["domain_grade"] is None
+    assert mixed["IT-05"]["domain_grade"] is not None
     assert mixed["IT-06"]["validity"] == "invalid_infrastructure"
     assert mixed["IT-06"]["semantic_outcome"] is None
     assert mixed["IT-01"]["assertions"][0]["evidence"] == [{"artifact": "final-state.json", "pointer": "/providers"}]
@@ -254,6 +277,45 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
     assert report["scoring_ready_profiles"] == [ready_profile]
 
 
+def test_first_terminal_attempt_is_excluded_until_retried(tmp_path: Path) -> None:
+    task_dir = tmp_path / "matrix" / "profiles" / "profile" / "tasks" / "IT-01"
+    _write(
+        task_dir / "attempt.json",
+        {
+            "attempt_number": 1,
+            "cleanup_succeeded": True,
+            "usage": {"input_tokens": 100},
+            "output_tokens": 20,
+            "cost": {"estimate": 0.01},
+            "tool_calls": 68,
+            "provider_tool_calls": 60,
+            "official_docs_tool_calls": 8,
+        },
+    )
+    _write(
+        task_dir / "invocation.json",
+        {"status": "tool_limit_exceeded", "config": {"max_tool_calls": 68, "timeout_seconds": 600}},
+    )
+    classified = _classified_attempt(
+        profile_id="profile",
+        task_id="IT-01",
+        execution_class="model_terminal",
+        terminal_reason="tool_limit_exceeded",
+    )
+
+    result = semantic_report._task_result(  # pyright: ignore[reportPrivateUsage]
+        classified=classified,
+        matrix_dir=tmp_path / "matrix",
+        task={"id": "IT-01", "title": "Test", "domain": "it_support", "prompt": "Prompt"},
+        grader=None,
+    )
+
+    assert result["validity"] == "invalid_infrastructure"
+    assert result["score_eligible"] is False
+    assert result["semantic_outcome"] is None
+    assert result["evidence_gaps"] == ["model_terminal:retry_required:tool_limit_exceeded"]
+
+
 def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path) -> None:
     suite = _load(SUITE_PATH)
     profiles = cast(list[dict[str, Any]], _load(MODEL_MATRIX_PATH)["profiles"])
@@ -267,6 +329,8 @@ def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path)
         )
         for task in cast(list[dict[str, Any]], suite["tasks"]):
             _write_metrics(matrix_dir, profile, cast(str, task["id"]))
+    _write_prior_terminal(matrix_dir, ready_profile, "CRM-08", "refused")
+    _write_prior_terminal(matrix_dir, mixed_profile, "IT-05", "timed_out")
 
     def classifier(matrix: Path, **_kwargs: object) -> dict[str, Any]:
         return _fake_classification(

@@ -18,28 +18,36 @@ from typing import Any, cast
 
 from arga_twins_benchmark.agents import invoke_model
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli, TwinRun
-from arga_twins_benchmark.evaluation.state_capture import TrustedStateCapturer, diff_trusted_states
+from arga_twins_benchmark.evaluation.state_capture import (
+    StateCaptureError,
+    TrustedStateCapturer,
+    diff_trusted_states,
+)
 from arga_twins_benchmark.lifecycle import (
     cleanup_instance,
     cleanup_payload_proves_inert,
     write_private_json,
 )
 from arga_twins_benchmark.providers import OfficialDocsGateway, OfficialDocsSnapshotCache, ProviderGateway
-from arga_twins_benchmark.reporting.cross_functional_fair import snapshot_queries_for_task
+from arga_twins_benchmark.reporting.cross_functional_fair import (
+    snapshot_capture_contract_gaps,
+    snapshot_queries_for_task,
+)
 from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE_PATH = ROOT / "benchmark" / "cross_functional_40" / "suite.json"
 MODEL_MATRIX_PATH = ROOT / "benchmark" / "cross_functional_40" / "model_matrix.json"
 SUITE_TAG = "suite:cross-functional-40-v1"
-PROVIDER_TOOL_LIMIT = 60
-OFFICIAL_DOCS_TOOL_LIMIT = 8
-MODEL_TIMEOUT_SECONDS = 1_200
+PROVIDER_TOOL_LIMIT = 100
+OFFICIAL_DOCS_TOOL_LIMIT = 20
+MODEL_TIMEOUT_SECONDS = 1_800
 PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
+RETRYABLE_MODEL_TERMINAL_STATUSES = frozenset({"refused", "timed_out", "tool_limit_exceeded"})
 
 PROVIDER_ROLES = {
     "github": "code_host",
@@ -187,12 +195,53 @@ def _task_has_invocation_evidence(task_dir: Path, attempt: dict[str, Any] | None
     return (task_dir / "baseline-state.json").exists()
 
 
+def _archived_terminal_attempt_count(task_dir: Path) -> int | None:
+    """Count prior terminal outcomes, returning None for ambiguous archives."""
+
+    profile_root = task_dir.parents[1]
+    archive_root = profile_root / RETRY_ARCHIVE_DIR / task_dir.name
+    count = 0
+    for archive_dir in sorted(archive_root.glob("attempt-*")):
+        try:
+            attempt = read_json_object(archive_dir / "attempt.json")
+            invocation = read_json_object(archive_dir / "invocation.json")
+        except ValueError:
+            return None
+        attempt_status = attempt.get("model_status") if attempt is not None else None
+        invocation_status = invocation.get("status") if invocation is not None else None
+        statuses = {status for status in (attempt_status, invocation_status) if status is not None}
+        if statuses & RETRYABLE_MODEL_TERMINAL_STATUSES:
+            if len(statuses) != 1:
+                return None
+            count += 1
+    return count
+
+
+def _snapshot_query_ids(path: Path) -> frozenset[str] | None:
+    try:
+        payload = read_json_object(path)
+    except ValueError:
+        return None
+    if payload is None:
+        return None
+    queries = payload.get("queries")
+    if not isinstance(queries, dict):
+        return None
+    typed_queries = cast(dict[object, object], queries)
+    if not all(isinstance(key, str) for key in typed_queries):
+        return None
+    return frozenset(cast(str, key) for key in typed_queries)
+
+
 def classify_resume_task(
     task_dir: Path,
     *,
     task_id: str,
     profile_id: str,
     retry_infrastructure_invalid: bool = False,
+    retry_model_terminal: bool = False,
+    retry_missing_snapshot_evidence: bool = False,
+    expected_snapshot_query_ids: frozenset[str] | None = None,
 ) -> ResumeDecision:
     if not task_dir.exists():
         return ResumeDecision("run", "task_not_started")
@@ -237,6 +286,52 @@ def classify_resume_task(
                 and attempt.get("attempt_status") in {"infrastructure_invalid", "candidate_complete"}
             ):
                 return ResumeDecision("run", "explicit_model_infrastructure_retry", attempt)
+
+    if retry_model_terminal:
+        invocation_path = task_dir / "invocation.json"
+        try:
+            invocation = read_json_object(invocation_path) if invocation_path.exists() else None
+        except ValueError:
+            return ResumeDecision("blocked", "invocation_artifact_unreadable", attempt)
+        invocation_status = invocation.get("status") if invocation is not None else None
+        model_status = attempt.get("model_status") if attempt is not None else None
+        if (
+            attempt is not None
+            and attempt.get("attempt_status") == "candidate_complete"
+            and model_status in RETRYABLE_MODEL_TERMINAL_STATUSES
+            and invocation_status == model_status
+        ):
+            archived_terminal_attempts = _archived_terminal_attempt_count(task_dir)
+            if archived_terminal_attempts is None:
+                return ResumeDecision("blocked", "model_terminal_retry_history_ambiguous", attempt)
+            if archived_terminal_attempts == 0:
+                return ResumeDecision("run", "explicit_model_terminal_retry", attempt)
+            return ResumeDecision("skip", "model_terminal_retry_exhausted", attempt)
+
+    if retry_missing_snapshot_evidence:
+        if not expected_snapshot_query_ids:
+            return ResumeDecision("blocked", "snapshot_query_contract_missing", attempt)
+        invocation_path = task_dir / "invocation.json"
+        try:
+            invocation = read_json_object(invocation_path) if invocation_path.exists() else None
+        except ValueError:
+            return ResumeDecision("blocked", "invocation_artifact_unreadable", attempt)
+        model_status = attempt.get("model_status") if attempt is not None else None
+        invocation_status = invocation.get("status") if invocation is not None else None
+        if (
+            attempt is not None
+            and attempt.get("attempt_status") == "candidate_complete"
+            and model_status == "completed"
+            and invocation_status == "completed"
+        ):
+            baseline_ids = _snapshot_query_ids(task_dir / "baseline-state.json")
+            final_ids = _snapshot_query_ids(task_dir / "final-state.json")
+            if baseline_ids is None or final_ids is None:
+                return ResumeDecision("blocked", "snapshot_evidence_artifact_ambiguous", attempt)
+            if not baseline_ids and not final_ids:
+                return ResumeDecision("run", "explicit_missing_snapshot_evidence_retry", attempt)
+            if baseline_ids != expected_snapshot_query_ids or final_ids != expected_snapshot_query_ids:
+                return ResumeDecision("blocked", "snapshot_query_set_partial_or_changed", attempt)
 
     if _task_has_invocation_evidence(task_dir, attempt):
         return ResumeDecision("skip", "model_invocation_protected", attempt)
@@ -309,6 +404,9 @@ def archive_retryable_task(
     decision: ResumeDecision,
     cleanup: dict[str, Any] | None,
     retry_infrastructure_invalid: bool = False,
+    retry_model_terminal: bool = False,
+    retry_missing_snapshot_evidence: bool = False,
+    expected_snapshot_query_ids: frozenset[str] | None = None,
 ) -> tuple[Path, int]:
     task_dir = output_root / "tasks" / task_id
     rechecked = classify_resume_task(
@@ -316,6 +414,9 @@ def archive_retryable_task(
         task_id=task_id,
         profile_id=profile_id,
         retry_infrastructure_invalid=retry_infrastructure_invalid,
+        retry_model_terminal=retry_model_terminal,
+        retry_missing_snapshot_evidence=retry_missing_snapshot_evidence,
+        expected_snapshot_query_ids=expected_snapshot_query_ids,
     )
     if rechecked.action != "run" or rechecked.reason != decision.reason:
         raise RuntimeError(
@@ -353,15 +454,25 @@ async def prepare_resume_task(
     profile_id: str,
     semaphore: asyncio.Semaphore,
     retry_infrastructure_invalid: bool = False,
+    retry_model_terminal: bool = False,
+    retry_missing_snapshot_evidence: bool = False,
 ) -> tuple[TaskRunPlan | None, ResumeDecision, dict[str, Any] | None]:
     async with semaphore:
         task_id = str(task["id"])
         task_dir = output_root / "tasks" / task_id
+        expected_snapshot_query_ids = (
+            frozenset(query.id for query in snapshot_queries_for_task(task))
+            if retry_missing_snapshot_evidence
+            else None
+        )
         decision = classify_resume_task(
             task_dir,
             task_id=task_id,
             profile_id=profile_id,
             retry_infrastructure_invalid=retry_infrastructure_invalid,
+            retry_model_terminal=retry_model_terminal,
+            retry_missing_snapshot_evidence=retry_missing_snapshot_evidence,
+            expected_snapshot_query_ids=expected_snapshot_query_ids,
         )
         if decision.action != "run":
             return None, decision, None
@@ -389,6 +500,9 @@ async def prepare_resume_task(
             decision=decision,
             cleanup=cleanup,
             retry_infrastructure_invalid=retry_infrastructure_invalid,
+            retry_model_terminal=retry_model_terminal,
+            retry_missing_snapshot_evidence=retry_missing_snapshot_evidence,
+            expected_snapshot_query_ids=expected_snapshot_query_ids,
         )
         archive_path = None
         if task_dir.exists():
@@ -635,6 +749,9 @@ async def run_task(
                 roles=roles,
                 snapshot_queries=snapshot_queries,
             )
+            baseline_gaps = snapshot_capture_contract_gaps(task, baseline, label="baseline")
+            if baseline_gaps:
+                raise StateCaptureError("; ".join(baseline_gaps))
             write_private_json(task_dir / "baseline-state.json", baseline.artifact_payload())
             lifecycle_semaphore.release()
             lifecycle_acquired = False
@@ -674,6 +791,9 @@ async def run_task(
                 roles=roles,
                 snapshot_queries=snapshot_queries,
             )
+            final_gaps = snapshot_capture_contract_gaps(task, final_state, label="final")
+            if final_gaps:
+                raise StateCaptureError("; ".join(final_gaps))
             raw_deltas = diff_trusted_states(baseline, final_state)
             write_private_json(task_dir / "final-state.json", final_state.artifact_payload())
             write_private_json(
@@ -746,7 +866,9 @@ async def run_task(
             "thinking": profile["thinking"],
             "attempt_status": (
                 "candidate_complete"
-                if invocation is not None and invocation.status != "api_error"
+                if invocation is not None
+                and invocation.status not in RETRYABLE_MODEL_INFRA_STATUSES
+                and error is None
                 else "infrastructure_invalid"
             ),
             "model_status": invocation.status if invocation is not None else None,
@@ -808,6 +930,12 @@ def _run_config_payload(
         "profile": profile,
         "concurrency": concurrency,
         "attempts_per_scenario": 1,
+        "candidate_limits": {
+            "provider_tool_calls": PROVIDER_TOOL_LIMIT,
+            "official_docs_tool_calls": OFFICIAL_DOCS_TOOL_LIMIT,
+            "total_tool_calls": PROVIDER_TOOL_LIMIT + OFFICIAL_DOCS_TOOL_LIMIT,
+            "model_timeout_seconds": MODEL_TIMEOUT_SECONDS,
+        },
         "started_at": utc_now(),
     }
 
@@ -848,6 +976,8 @@ def _write_resume_history(
     *,
     concurrency: int,
     retry_infrastructure_invalid: bool,
+    retry_model_terminal: bool,
+    retry_missing_snapshot_evidence: bool,
     decisions: list[tuple[str, ResumeDecision]],
     plans: list[TaskRunPlan],
 ) -> None:
@@ -864,6 +994,14 @@ def _write_resume_history(
             "resumed_at": utc_now(),
             "concurrency": concurrency,
             "retry_infrastructure_invalid": retry_infrastructure_invalid,
+            "retry_model_terminal": retry_model_terminal,
+            "retry_missing_snapshot_evidence": retry_missing_snapshot_evidence,
+            "candidate_limits": {
+                "provider_tool_calls": PROVIDER_TOOL_LIMIT,
+                "official_docs_tool_calls": OFFICIAL_DOCS_TOOL_LIMIT,
+                "total_tool_calls": PROVIDER_TOOL_LIMIT + OFFICIAL_DOCS_TOOL_LIMIT,
+                "model_timeout_seconds": MODEL_TIMEOUT_SECONDS,
+            },
             "rerun_tasks": [str(plan.task["id"]) for plan in plans],
             "archived_attempts": [plan.archive_path for plan in plans if plan.archive_path is not None],
             "decisions": [
@@ -878,6 +1016,10 @@ def _write_resume_history(
 async def async_main(args: argparse.Namespace) -> int:
     if args.retry_infrastructure_invalid and not args.resume:
         raise ValueError("--retry-infrastructure-invalid requires --resume")
+    if args.retry_model_terminal and not args.resume:
+        raise ValueError("--retry-model-terminal requires --resume")
+    if args.retry_missing_snapshot_evidence and not args.resume:
+        raise ValueError("--retry-missing-snapshot-evidence requires --resume")
     if not os.environ.get("ARGA_API_KEY"):
         raise ValueError("ARGA_API_KEY is required")
     profile = load_profile(args.profile)
@@ -922,6 +1064,8 @@ async def async_main(args: argparse.Namespace) -> int:
                     profile_id=str(profile["id"]),
                     semaphore=preparation_semaphore,
                     retry_infrastructure_invalid=args.retry_infrastructure_invalid,
+                    retry_model_terminal=args.retry_model_terminal,
+                    retry_missing_snapshot_evidence=args.retry_missing_snapshot_evidence,
                 )
                 for task in tasks
             )
@@ -935,6 +1079,8 @@ async def async_main(args: argparse.Namespace) -> int:
             output_root,
             concurrency=args.concurrency,
             retry_infrastructure_invalid=args.retry_infrastructure_invalid,
+            retry_model_terminal=args.retry_model_terminal,
+            retry_missing_snapshot_evidence=args.retry_missing_snapshot_evidence,
             decisions=resume_decisions,
             plans=plans,
         )
@@ -969,6 +1115,8 @@ async def async_main(args: argparse.Namespace) -> int:
         "concurrency": args.concurrency,
         "resumed": resume_existing,
         "retry_infrastructure_invalid": args.retry_infrastructure_invalid,
+        "retry_model_terminal": args.retry_model_terminal,
+        "retry_missing_snapshot_evidence": args.retry_missing_snapshot_evidence,
         "tasks_rerun": len(plans) if resume_existing else 0,
         "resume_blocked": sum(decision.action == "blocked" for _, decision in resume_decisions),
         "protected_invocations": sum(
@@ -1016,6 +1164,22 @@ def parse_args() -> argparse.Namespace:
         help=(
             "With --resume, archive and retry only attempts explicitly proven infrastructure-invalid; "
             "completed and model-terminal attempts remain immutable."
+        ),
+    )
+    parser.add_argument(
+        "--retry-model-terminal",
+        action="store_true",
+        help=(
+            "With --resume, archive and retry first-attempt refusals, timeouts, and tool-limit "
+            "terminations once under the current candidate limits."
+        ),
+    )
+    parser.add_argument(
+        "--retry-missing-snapshot-evidence",
+        action="store_true",
+        help=(
+            "With --resume, archive and retry completed legacy attempts only when both trusted "
+            "snapshots contain an explicitly empty query set."
         ),
     )
     return parser.parse_args()

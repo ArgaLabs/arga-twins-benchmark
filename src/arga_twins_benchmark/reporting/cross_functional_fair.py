@@ -560,24 +560,37 @@ def _assertion(
     }
 
 
+def snapshot_capture_contract_gaps(
+    task: Mapping[str, Any],
+    snapshot: TrustedStateSnapshot,
+    *,
+    label: str,
+) -> list[str]:
+    """Return fail-closed task-specific capture contract violations."""
+
+    expected = {query.id: query for query in snapshot_queries_for_task(task)}
+    gaps: list[str] = []
+    if set(snapshot.queries) != set(expected):
+        gaps.append(f"{label}:snapshot_query_set:expected={sorted(expected)}:actual={sorted(snapshot.queries)}")
+        return gaps
+    for query_id, spec in expected.items():
+        capture = snapshot.queries[query_id]
+        contract = (capture.provider_role, capture.method, capture.path, capture.canonicalizer)
+        wanted = (spec.provider_role, spec.method, spec.path, spec.canonicalizer)
+        if contract != wanted or capture.status_code != 200:
+            gaps.append(f"{label}:snapshot_query_contract:{query_id}")
+    return gaps
+
+
 def _query_contract_gaps(
     task: Mapping[str, Any],
     baseline: TrustedStateSnapshot,
     final: TrustedStateSnapshot,
 ) -> list[str]:
-    expected = {query.id: query for query in snapshot_queries_for_task(task)}
-    gaps: list[str] = []
-    for label, snapshot in (("baseline", baseline), ("final", final)):
-        if set(snapshot.queries) != set(expected):
-            gaps.append(f"{label}:snapshot_query_set:expected={sorted(expected)}:actual={sorted(snapshot.queries)}")
-            continue
-        for query_id, spec in expected.items():
-            capture = snapshot.queries[query_id]
-            contract = (capture.provider_role, capture.method, capture.path, capture.canonicalizer)
-            wanted = (spec.provider_role, spec.method, spec.path, spec.canonicalizer)
-            if contract != wanted or capture.status_code != 200:
-                gaps.append(f"{label}:snapshot_query_contract:{query_id}")
-    return gaps
+    return [
+        *snapshot_capture_contract_gaps(task, baseline, label="baseline"),
+        *snapshot_capture_contract_gaps(task, final, label="final"),
+    ]
 
 
 def _relevant_mutations(mutations: Sequence[Mutation]) -> list[Mutation]:
@@ -1148,5 +1161,6 @@ __all__ = [
     "fair_contract_for_task",
     "grade_cross_functional_fair_attempt",
     "semantic_requirements_for_task",
+    "snapshot_capture_contract_gaps",
     "snapshot_queries_for_task",
 ]

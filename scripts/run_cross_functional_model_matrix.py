@@ -58,6 +58,8 @@ async def run_profile(
     semaphore: asyncio.Semaphore,
     resume: bool,
     retry_infrastructure_invalid: bool = False,
+    retry_model_terminal: bool = False,
+    retry_missing_snapshot_evidence: bool = False,
     tasks_per_profile: int = 40,
     lifecycle_concurrency: int = 3,
     cleanup_concurrency: int = 3,
@@ -87,6 +89,10 @@ async def run_profile(
             command.append("--resume")
         if retry_infrastructure_invalid:
             command.append("--retry-infrastructure-invalid")
+        if retry_model_terminal:
+            command.append("--retry-model-terminal")
+        if retry_missing_snapshot_evidence:
+            command.append("--retry-missing-snapshot-evidence")
         with log_path.open("ab" if resume else "wb") as log_file:
             process = await asyncio.create_subprocess_exec(
                 *command,
@@ -118,6 +124,8 @@ async def run_profile(
             "task_concurrency": effective_task_concurrency,
             "resumed": resume,
             "retry_infrastructure_invalid": retry_infrastructure_invalid,
+            "retry_model_terminal": retry_model_terminal,
+            "retry_missing_snapshot_evidence": retry_missing_snapshot_evidence,
             "started_at": started_at,
             "finished_at": utc_now(),
             "returncode": returncode,
@@ -131,6 +139,10 @@ async def run_profile(
 async def async_main(args: argparse.Namespace) -> int:
     if args.retry_infrastructure_invalid and not args.resume:
         raise ValueError("--retry-infrastructure-invalid requires --resume")
+    if args.retry_model_terminal and not args.resume:
+        raise ValueError("--retry-model-terminal requires --resume")
+    if args.retry_missing_snapshot_evidence and not args.resume:
+        raise ValueError("--retry-missing-snapshot-evidence requires --resume")
     profiles = provider_round_robin(load_profiles())
     output_root = args.output.resolve()
     resume_existing = args.resume and output_root.exists()
@@ -186,6 +198,8 @@ async def async_main(args: argparse.Namespace) -> int:
                 semaphore=semaphore,
                 resume=args.resume,
                 retry_infrastructure_invalid=args.retry_infrastructure_invalid,
+                retry_model_terminal=args.retry_model_terminal,
+                retry_missing_snapshot_evidence=args.retry_missing_snapshot_evidence,
                 tasks_per_profile=args.tasks_per_profile,
                 lifecycle_concurrency=args.lifecycle_concurrency,
                 cleanup_concurrency=args.cleanup_concurrency,
@@ -205,6 +219,8 @@ async def async_main(args: argparse.Namespace) -> int:
         "global_trial_concurrency": args.concurrency,
         "resumed": resume_existing,
         "retry_infrastructure_invalid": args.retry_infrastructure_invalid,
+        "retry_model_terminal": args.retry_model_terminal,
+        "retry_missing_snapshot_evidence": args.retry_missing_snapshot_evidence,
         "estimated_cost_usd": round(
             sum(float(item.get("estimated_cost_usd", 0.0) or 0.0) for item in summaries),
             8,
@@ -244,6 +260,22 @@ def parse_args() -> argparse.Namespace:
         help=(
             "With --resume, retry only attempts explicitly classified infrastructure-invalid; "
             "valid and model-terminal trials remain immutable."
+        ),
+    )
+    parser.add_argument(
+        "--retry-model-terminal",
+        action="store_true",
+        help=(
+            "With --resume, retry first-attempt refusals, timeouts, and tool-limit terminations "
+            "once under the current candidate limits."
+        ),
+    )
+    parser.add_argument(
+        "--retry-missing-snapshot-evidence",
+        action="store_true",
+        help=(
+            "With --resume, retry completed legacy attempts whose baseline and final trusted "
+            "snapshots both have an empty verifier-query set."
         ),
     )
     return parser.parse_args()

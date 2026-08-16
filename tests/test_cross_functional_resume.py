@@ -59,6 +59,17 @@ def _inert_cleanup(run_id: str = "run-1") -> dict[str, Any]:
     }
 
 
+def _terminal_attempt(status: str, *, attempt_number: int = 1) -> dict[str, Any]:
+    return {
+        **_zero_invocation_attempt(status="candidate_complete"),
+        "attempt_number": attempt_number,
+        "run_id": "run-1",
+        "model_status": status,
+        "response_model": "gpt-5.6-luna",
+        "stop_reason": status,
+    }
+
+
 def test_resume_allows_only_zero_invocation_infrastructure_invalid_attempt(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", _zero_invocation_attempt())
@@ -181,6 +192,93 @@ def test_explicit_infrastructure_retry_preserves_archived_invocation(tmp_path: P
     metadata = json.loads((archive / "archive-metadata.json").read_text())
     assert metadata["archive_reason"] == "explicit_model_infrastructure_retry"
     assert metadata["cleanup"] == _inert_cleanup()
+
+
+@pytest.mark.parametrize("status", ["tool_limit_exceeded", "timed_out", "refused"])
+def test_explicit_terminal_retry_archives_first_attempt_once(tmp_path: Path, status: str) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(task_dir / "attempt.json", _terminal_attempt(status))
+    _write_json(task_dir / "invocation.json", {"status": status})
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+
+    plan, decision, _cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_model_terminal=True,
+        )
+    )
+
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+    assert decision.reason == "explicit_model_terminal_retry"
+    assert json.loads((archive / "attempt.json").read_text())["model_status"] == status
+
+
+def test_explicit_terminal_retry_never_replays_second_terminal_attempt(tmp_path: Path) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(task_dir / "attempt.json", _terminal_attempt("timed_out", attempt_number=2))
+    _write_json(task_dir / "invocation.json", {"status": "timed_out"})
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "attempt.json",
+        _terminal_attempt("timed_out"),
+    )
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "invocation.json",
+        {"status": "timed_out"},
+    )
+
+    decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+
+    assert decision.action == "skip"
+    assert decision.reason == "model_terminal_retry_exhausted"
+
+
+def test_explicit_missing_snapshot_retry_accepts_only_both_empty_query_sets(tmp_path: Path) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    completed = {
+        **_zero_invocation_attempt(status="candidate_complete"),
+        "model_status": "completed",
+        "response_model": "gpt-5.6-luna",
+        "stop_reason": "completed",
+    }
+    _write_json(task_dir / "attempt.json", completed)
+    _write_json(task_dir / "invocation.json", {"status": "completed"})
+    _write_json(task_dir / "baseline-state.json", {"providers": {}, "queries": {}})
+    _write_json(task_dir / "final-state.json", {"providers": {}, "queries": {}})
+
+    decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_missing_snapshot_evidence=True,
+        expected_snapshot_query_ids=frozenset({"it_01_slack_state"}),
+    )
+
+    assert decision.action == "run"
+    assert decision.reason == "explicit_missing_snapshot_evidence_retry"
+
+    _write_json(
+        task_dir / "final-state.json",
+        {"providers": {}, "queries": {"it_01_slack_state": {}}},
+    )
+    partial = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_missing_snapshot_evidence=True,
+        expected_snapshot_query_ids=frozenset({"it_01_slack_state"}),
+    )
+    assert partial.action == "blocked"
+    assert partial.reason == "snapshot_query_set_partial_or_changed"
 
 
 def test_archive_rechecks_invocation_boundary_before_move(tmp_path: Path) -> None:
@@ -331,6 +429,8 @@ def test_resume_history_records_requested_concurrency(tmp_path: Path) -> None:
         tmp_path,
         concurrency=7,
         retry_infrastructure_invalid=True,
+        retry_model_terminal=True,
+        retry_missing_snapshot_evidence=True,
         decisions=decisions,
         plans=plans,
     )
@@ -338,6 +438,14 @@ def test_resume_history_records_requested_concurrency(tmp_path: Path) -> None:
     history = json.loads((tmp_path / "resume-history.json").read_text())
     assert history["entries"][0]["concurrency"] == 7
     assert history["entries"][0]["retry_infrastructure_invalid"] is True
+    assert history["entries"][0]["retry_model_terminal"] is True
+    assert history["entries"][0]["retry_missing_snapshot_evidence"] is True
+    assert history["entries"][0]["candidate_limits"] == {
+        "provider_tool_calls": 100,
+        "official_docs_tool_calls": 20,
+        "total_tool_calls": 120,
+        "model_timeout_seconds": 1800,
+    }
     assert history["entries"][0]["rerun_tasks"] == [TASK_ID]
 
 
@@ -390,6 +498,8 @@ def test_matrix_resume_keeps_global_concurrency_bounded(
                     log_root=log_root,
                     semaphore=semaphore,
                     resume=True,
+                    retry_model_terminal=True,
+                    retry_missing_snapshot_evidence=True,
                 )
                 for profile in profiles
             )
@@ -399,6 +509,8 @@ def test_matrix_resume_keeps_global_concurrency_bounded(
 
     assert maximum_active == 2
     assert all("--resume" in command for command in commands)
+    assert all("--retry-model-terminal" in command for command in commands)
+    assert all("--retry-missing-snapshot-evidence" in command for command in commands)
     assert all(command[command.index("--concurrency") + 1] == "40" for command in commands)
     assert all(command[command.index("--lifecycle-concurrency") + 1] == "3" for command in commands)
     assert all(command[command.index("--cleanup-concurrency") + 1] == "3" for command in commands)
