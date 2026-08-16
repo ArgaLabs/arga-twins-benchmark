@@ -333,7 +333,7 @@ def test_nonempty_queries_remain_invalid_until_executable_task_verifiers_exist(t
 
     assert attempt["execution_class"] == "exact_completed"
     assert attempt["validity"] == "invalid_grader"
-    assert attempt["evidence_gaps"] == ["executable_cross_functional_semantic_verifier_not_implemented"]
+    assert attempt["evidence_gaps"] == ["semantic_grade_not_applied_by_integrity_classifier"]
     assert attempt["score_eligible"] is False
 
 

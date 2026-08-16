@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import importlib
 import json
 import re
 from collections import Counter, defaultdict
@@ -12,11 +11,8 @@ from pathlib import Path
 from typing import Any, Literal, cast
 
 from arga_twins_benchmark.lifecycle import write_private_json
-from arga_twins_benchmark.reporting.cross_functional_crm_legacy import (
-    grade_cross_functional_crm_legacy,
-)
-from arga_twins_benchmark.reporting.cross_functional_it_dev_legacy import (
-    grade_it_dev_legacy_task,
+from arga_twins_benchmark.reporting.cross_functional_fair import (
+    grade_cross_functional_fair_attempt,
 )
 from arga_twins_benchmark.reporting.cross_functional_matrix import (
     CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
@@ -69,48 +65,24 @@ class DomainGrader:
 
 
 def _grade_it_dev(task_dir: Path, task: Mapping[str, Any]) -> DomainGrade:
-    return grade_it_dev_legacy_task(task=task, task_dir=task_dir)
+    return grade_cross_functional_fair_attempt(task_dir, task)
 
 
 def _crm_grader(*, suite_path: Path, tasks_path: Path) -> DomainGradeCallable:
-    def grade(task_dir: Path, _task: Mapping[str, Any]) -> DomainGrade:
-        return grade_cross_functional_crm_legacy(
-            task_dir,
-            suite_path=suite_path,
-            tasks_path=tasks_path,
-        )
+    del suite_path, tasks_path
+
+    def grade(task_dir: Path, task: Mapping[str, Any]) -> DomainGrade:
+        return grade_cross_functional_fair_attempt(task_dir, task)
 
     return grade
 
 
 def _mkt_ecom_grader() -> DomainGrader:
-    module_name = "arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy"
-    try:
-        module = importlib.import_module(module_name)
-    except ImportError as error:
-        return DomainGrader(
-            name="cross_functional_mkt_ecom_legacy",
-            prefixes=("MKT", "ECOM"),
-            grade=None,
-            unavailable_reason=f"domain_grader_unavailable:{module_name}:{type(error).__name__}",
-        )
-    candidate = getattr(module, "grade_mkt_ecom_legacy_attempt", None)
-    if not callable(candidate):
-        return DomainGrader(
-            name="cross_functional_mkt_ecom_legacy",
-            prefixes=("MKT", "ECOM"),
-            grade=None,
-            unavailable_reason=(f"domain_grader_unavailable:{module_name}:missing_grade_mkt_ecom_legacy_attempt"),
-        )
-
     def grade(task_dir: Path, task: Mapping[str, Any]) -> DomainGrade:
-        result: object = candidate(task_dir, task)
-        if not isinstance(result, dict):
-            raise CrossFunctionalSemanticReportError("MKT/ECOM grader returned a non-object result")
-        return cast(DomainGrade, result)
+        return grade_cross_functional_fair_attempt(task_dir, task)
 
     return DomainGrader(
-        name="cross_functional_mkt_ecom_legacy",
+        name="cross_functional_fair_v1",
         prefixes=("MKT", "ECOM"),
         grade=grade,
     )
@@ -121,16 +93,16 @@ def build_domain_grader_registry(
     suite_path: Path,
     tasks_path: Path,
 ) -> dict[str, DomainGrader]:
-    """Build the current registry, loading the forthcoming MKT/ECOM grader lazily."""
+    """Route all five domains through the per-task outcome-first grader."""
 
     graders = (
         DomainGrader(
-            name="cross_functional_it_dev_legacy",
+            name="cross_functional_fair_v1",
             prefixes=("IT", "DEV"),
             grade=_grade_it_dev,
         ),
         DomainGrader(
-            name="cross_functional_crm_legacy",
+            name="cross_functional_fair_v1",
             prefixes=("CRM",),
             grade=_crm_grader(suite_path=suite_path, tasks_path=tasks_path),
         ),

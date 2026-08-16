@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import importlib
 import json
 from collections.abc import Mapping
 from pathlib import Path
@@ -164,36 +163,17 @@ def _fake_registry() -> dict[str, DomainGrader]:
     return {prefix: grader for prefix in grader.prefixes}
 
 
-def test_registry_adapts_current_it_crm_and_mkt_ecom_modules(
+def test_registry_routes_every_domain_to_the_fair_task_grader(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     calls: list[str] = []
 
-    def fake_it(*, task: Mapping[str, Any], task_dir: Path) -> dict[str, Any]:
-        calls.append(f"it:{task['id']}:{task_dir.name}")
+    def fake_fair(task_dir: Path, task: Mapping[str, Any]) -> dict[str, Any]:
+        calls.append(f"{task['id']}:{task_dir.name}")
         return {"outcome": "pass", "assertions": [{"status": "pass"}]}
 
-    def fake_crm(
-        task_dir: Path,
-        *,
-        suite_path: Path,
-        tasks_path: Path,
-    ) -> dict[str, Any]:
-        assert suite_path == SUITE_PATH
-        assert tasks_path == TASKS_PATH
-        calls.append(f"crm:{task_dir.name}")
-        return {"outcome": "pass", "checks": [{"status": "pass"}]}
-
-    mkt_module = importlib.import_module("arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy")
-
-    def fake_mkt(task_dir: Path, task: Mapping[str, Any]) -> dict[str, Any]:
-        calls.append(f"mkt:{task['id']}:{task_dir.name}")
-        return {"outcome": "pass", "assertions": [{"status": "pass"}]}
-
-    monkeypatch.setattr(semantic_report, "grade_it_dev_legacy_task", fake_it)
-    monkeypatch.setattr(semantic_report, "grade_cross_functional_crm_legacy", fake_crm)
-    monkeypatch.setattr(mkt_module, "grade_mkt_ecom_legacy_attempt", fake_mkt)
+    monkeypatch.setattr(semantic_report, "grade_cross_functional_fair_attempt", fake_fair)
 
     registry = build_domain_grader_registry(suite_path=SUITE_PATH, tasks_path=TASKS_PATH)
 
@@ -205,7 +185,8 @@ def test_registry_adapts_current_it_crm_and_mkt_ecom_modules(
     registry["IT"].grade(tmp_path / "IT-01", {"id": "IT-01"})
     registry["CRM"].grade(tmp_path / "CRM-01", {"id": "CRM-01"})
     registry["MKT"].grade(tmp_path / "MKT-01", {"id": "MKT-01"})
-    assert calls == ["it:IT-01:IT-01", "crm:CRM-01", "mkt:MKT-01:MKT-01"]
+    assert calls == ["IT-01:IT-01", "CRM-01:CRM-01", "MKT-01:MKT-01"]
+    assert {grader.name for grader in registry.values()} == {"cross_functional_fair_v1"}
 
 
 def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path: Path) -> None:
@@ -372,7 +353,7 @@ def test_missing_domain_grader_is_invalid_grader_not_a_failure(tmp_path: Path) -
     task = cast(dict[str, Any], _load(SUITE_PATH)["tasks"][16])
     assert task["id"] == "MKT-01"
     missing = DomainGrader(
-        "cross_functional_mkt_ecom_legacy",
+        "cross_functional_fair_v1",
         ("MKT", "ECOM"),
         None,
         "domain_grader_unavailable:test",

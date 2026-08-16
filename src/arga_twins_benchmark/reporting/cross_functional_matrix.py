@@ -389,7 +389,7 @@ def _snapshot_evidence_gaps(
         return ["missing_snapshot_query_evidence"]
     if set(typed_baseline_queries) != set(typed_final_queries):
         return ["snapshot_query_contract_mismatch"]
-    return ["executable_cross_functional_semantic_verifier_not_implemented"]
+    return ["semantic_grade_not_applied_by_integrity_classifier"]
 
 
 def _retry_archive_proves_safe_retries(
@@ -1018,11 +1018,10 @@ def classify_cross_functional_matrix(
         "profiles": by_profile,
         "attempts": attempts,
         "remaining_semantic_grading_gap": {
-            "status": "not_implemented",
+            "status": "implemented_downstream",
+            "grader": "cross_functional_fair_v1",
             "required": (
-                "Forty executable task verifiers with task-specific snapshot queries, canonical final-state "
-                "assertions, default-deny semantic mutation policies, structured-fact evidence composition, "
-                "and forbidden-side-effect checks."
+                "Apply the per-task fair semantic grader after this artifact-integrity classification."
             ),
             "raw_state_diff_is_authoritative": False,
             "provider_trace_is_authoritative_for_business_outcomes": False,

@@ -25,6 +25,7 @@ from arga_twins_benchmark.lifecycle import (
     write_private_json,
 )
 from arga_twins_benchmark.providers import OfficialDocsGateway, OfficialDocsSnapshotCache, ProviderGateway
+from arga_twins_benchmark.reporting.cross_functional_fair import snapshot_queries_for_task
 from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -628,7 +629,12 @@ async def run_task(
             )
 
             capturer = TrustedStateCapturer(timeout_seconds=60)
-            baseline = await capturer.capture(control, roles=roles)
+            snapshot_queries = snapshot_queries_for_task(task)
+            baseline = await capturer.capture(
+                control,
+                roles=roles,
+                snapshot_queries=snapshot_queries,
+            )
             write_private_json(task_dir / "baseline-state.json", baseline.artifact_payload())
             lifecycle_semaphore.release()
             lifecycle_acquired = False
@@ -663,7 +669,11 @@ async def run_task(
             )
             write_private_json(task_dir / "invocation.json", invocation.as_dict())
 
-            final_state = await capturer.capture(control, roles=roles)
+            final_state = await capturer.capture(
+                control,
+                roles=roles,
+                snapshot_queries=snapshot_queries,
+            )
             raw_deltas = diff_trusted_states(baseline, final_state)
             write_private_json(task_dir / "final-state.json", final_state.artifact_payload())
             write_private_json(

@@ -487,6 +487,30 @@ _RULES: dict[str, _TaskRule] = {
 }
 
 
+def semantic_requirement_contracts(
+    task_id: str,
+) -> tuple[tuple[str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]], ...]:
+    """Expose route-independent business terms for the replacement grader.
+
+    Paths and write counts remain private to the historical compatibility
+    grader.  The fair grader imports only these semantic outcome terms.
+    """
+
+    rule = _RULES.get(task_id)
+    if rule is None:
+        return ()
+    return tuple(
+        (
+            requirement.assertion_id,
+            requirement.provider,
+            requirement.all_terms,
+            requirement.any_terms,
+            requirement.reject_terms,
+        )
+        for requirement in rule.requirements
+    )
+
+
 def _normalized_text(value: object) -> str:
     serialized = json.dumps(value, sort_keys=True, ensure_ascii=False) if not isinstance(value, str) else value
     return re.sub(r"[^a-z0-9@./#]+", " ", serialized.casefold()).strip()

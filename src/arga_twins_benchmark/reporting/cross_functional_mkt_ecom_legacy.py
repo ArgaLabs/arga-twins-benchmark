@@ -288,6 +288,23 @@ _RULES: dict[str, _Rule] = {
     ),
 }
 
+
+def semantic_requirement_contracts(
+    task_id: str,
+) -> tuple[tuple[str, str, tuple[tuple[str, ...], ...]], ...]:
+    """Expose route-independent business terms for the replacement grader.
+
+    Paths and write-count heuristics remain private to the historical grader.
+    """
+
+    rule = _RULES.get(task_id)
+    if rule is None:
+        return ()
+    return tuple(
+        (requirement.assertion_id, requirement.provider, requirement.token_groups) for requirement in rule.requirements
+    )
+
+
 _WRITE_TARGETS: dict[str, dict[str, tuple[str, ...]]] = {
     "MKT-01": {"linkedin": ("acme-marketing",), "linear": ("rel-26",)},
     "MKT-02": {"linear": ("ab-52",)},
@@ -1420,4 +1437,5 @@ __all__ = [
     "LEGACY_MKT_ECOM_GRADING_PROTOCOL",
     "grade_mkt_ecom_legacy_attempt",
     "grade_saved_mkt_ecom_legacy_run",
+    "semantic_requirement_contracts",
 ]
