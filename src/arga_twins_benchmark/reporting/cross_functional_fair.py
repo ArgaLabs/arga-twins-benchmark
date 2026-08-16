@@ -582,6 +582,14 @@ def snapshot_capture_contract_gaps(
     return gaps
 
 
+def canonicalize_cross_functional_snapshot(
+    snapshot: TrustedStateSnapshot,
+) -> list[CanonicalResource]:
+    """Canonicalize a trusted snapshot with the exact fair-grader registry."""
+
+    return canonicalize_query_results(snapshot, canonicalizers=_FAIR_CANONICALIZERS)
+
+
 def _query_contract_gaps(
     task: Mapping[str, Any],
     baseline: TrustedStateSnapshot,
@@ -1047,8 +1055,8 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
         gaps = _query_contract_gaps(task, baseline, final)
         if gaps:
             raise StateCaptureError("; ".join(gaps))
-        before = canonicalize_query_results(baseline, canonicalizers=_FAIR_CANONICALIZERS)
-        after = canonicalize_query_results(final, canonicalizers=_FAIR_CANONICALIZERS)
+        before = canonicalize_cross_functional_snapshot(baseline)
+        after = canonicalize_cross_functional_snapshot(final)
         mutations = _relevant_mutations(diff_canonical_resources(before, after))
     except StateCaptureError as error:
         return {
@@ -1158,6 +1166,7 @@ __all__ = [
     "CardinalityRequirement",
     "FairTaskContract",
     "SemanticRequirement",
+    "canonicalize_cross_functional_snapshot",
     "fair_contract_for_task",
     "grade_cross_functional_fair_attempt",
     "semantic_requirements_for_task",
