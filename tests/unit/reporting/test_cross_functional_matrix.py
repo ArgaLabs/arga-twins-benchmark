@@ -337,6 +337,124 @@ def test_nonempty_queries_remain_invalid_until_executable_task_verifiers_exist(t
     assert attempt["score_eligible"] is False
 
 
+def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation_history(
+    tmp_path: Path,
+) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    profile_dir = matrix_dir / "profiles" / profile["id"]
+
+    missing_number = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=missing_number, profile=profile, status="completed")
+    attempt_path = profile_dir / "tasks" / missing_number["id"] / "attempt.json"
+    attempt = json.loads(attempt_path.read_text(encoding="utf-8"))
+    attempt.pop("attempt_number")
+    _write_json(attempt_path, attempt)
+
+    interrupted_retry = suite["tasks"][1]
+    _write_attempt(
+        matrix_dir,
+        task=interrupted_retry,
+        profile=profile,
+        status="completed",
+        attempt_number=2,
+    )
+    interrupted_archive = profile_dir / "retry-archive" / interrupted_retry["id"] / "attempt-0001"
+    _write_json(
+        interrupted_archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "interrupted_before_attempt",
+            "profile_id": profile["id"],
+            "task_id": interrupted_retry["id"],
+        },
+    )
+
+    zero_invocation_retry = suite["tasks"][2]
+    _write_attempt(
+        matrix_dir,
+        task=zero_invocation_retry,
+        profile=profile,
+        status="completed",
+        attempt_number=2,
+    )
+    zero_archive = profile_dir / "retry-archive" / zero_invocation_retry["id"] / "attempt-0001"
+    _write_json(
+        zero_archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "zero_invocation_infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": zero_invocation_retry["id"],
+        },
+    )
+    _write_json(
+        zero_archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": zero_invocation_retry["id"],
+            "model_status": None,
+            "final_text": "",
+            "tool_calls": 0,
+            "provider_tool_calls": 0,
+            "official_docs_tool_calls": 0,
+        },
+    )
+
+    ambiguous_retry = suite["tasks"][3]
+    _write_attempt(
+        matrix_dir,
+        task=ambiguous_retry,
+        profile=profile,
+        status="completed",
+        attempt_number=2,
+    )
+    ambiguous_archive = profile_dir / "retry-archive" / ambiguous_retry["id"] / "attempt-0001"
+    _write_json(
+        ambiguous_archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "interrupted_before_attempt",
+            "profile_id": profile["id"],
+            "task_id": ambiguous_retry["id"],
+        },
+    )
+    _write_json(ambiguous_archive / "invocation.json", {"status": "completed"})
+
+    terminal_missing_number = suite["tasks"][4]
+    _write_attempt(matrix_dir, task=terminal_missing_number, profile=profile, status="timed_out")
+    terminal_path = profile_dir / "tasks" / terminal_missing_number["id"] / "attempt.json"
+    terminal_attempt = json.loads(terminal_path.read_text(encoding="utf-8"))
+    terminal_attempt.pop("attempt_number")
+    _write_json(terminal_path, terminal_attempt)
+
+    invalid_zero_number = suite["tasks"][5]
+    _write_attempt(
+        matrix_dir,
+        task=invalid_zero_number,
+        profile=profile,
+        status="completed",
+        attempt_number=0,
+    )
+
+    report = _classify(matrix_dir)
+    by_task = {item["task_id"]: item for item in report["attempts"] if item["profile_id"] == profile["id"]}
+
+    for task in (missing_number, interrupted_retry, zero_invocation_retry):
+        assert by_task[task["id"]]["execution_class"] == "exact_completed"
+        assert "attempt:invalid_attempt_number" not in by_task[task["id"]]["integrity"]["issues"]
+    assert by_task[ambiguous_retry["id"]]["execution_class"] == "infrastructure_invalid"
+    assert "attempt:invalid_attempt_number" in by_task[ambiguous_retry["id"]]["integrity"]["issues"]
+    assert by_task[terminal_missing_number["id"]]["execution_class"] == "model_terminal"
+    assert "attempt:invalid_attempt_number" not in by_task[terminal_missing_number["id"]]["integrity"]["issues"]
+    assert by_task[invalid_zero_number["id"]]["execution_class"] == "infrastructure_invalid"
+    assert "attempt:invalid_attempt_number" in by_task[invalid_zero_number["id"]]["integrity"]["issues"]
+
+
 def test_report_writer_refuses_to_mutate_preserved_matrix(tmp_path: Path) -> None:
     matrix_dir, suite, profile = _fixture_root(tmp_path)
     _write_attempt(matrix_dir, task=suite["tasks"][0], profile=profile, status="completed")

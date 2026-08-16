@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -26,6 +27,7 @@ _RAW_DIFF_PROTOCOL = "arga-bench-raw-state-diff/1"
 _PROVIDER_TRACE_PROTOCOL = "arga-bench-provider-trace/1"
 _DOCS_TRACE_PROTOCOL = "arga-bench-official-docs-trace/1"
 _TOOL_STEPS_PROTOCOL = "arga-bench-tool-steps/1"
+_RETRY_ARCHIVE_PROTOCOL = "arga-bench-cross-functional-retry-archive/1"
 
 _PROFILE_IDENTITY_FIELDS = (
     "id",
@@ -402,6 +404,151 @@ def _snapshot_evidence_gaps(
     return ["executable_cross_functional_semantic_verifier_not_implemented"]
 
 
+def _retry_archive_proves_zero_invocations(
+    *,
+    profile_dir: Path,
+    task_id: str,
+    profile_id: str,
+    attempt_number: object,
+) -> bool:
+    retry_root = profile_dir / "retry-archive" / task_id
+    if not retry_root.exists():
+        return True
+    if not retry_root.is_dir():
+        return False
+    entries = list(retry_root.iterdir())
+    if not entries:
+        return True
+    if not isinstance(attempt_number, int) or isinstance(attempt_number, bool) or attempt_number <= 1:
+        return False
+
+    archives: dict[int, Path] = {}
+    for entry in entries:
+        match = re.fullmatch(r"attempt-(\d{4})", entry.name)
+        if not entry.is_dir() or match is None:
+            return False
+        archive_number = int(match.group(1))
+        if archive_number in archives:
+            return False
+        archives[archive_number] = entry
+    if set(archives) != set(range(1, attempt_number)):
+        return False
+
+    for archive_number, archive_dir in archives.items():
+        if any(archive_dir.rglob("invocation.json")):
+            return False
+        metadata_issues: list[str] = []
+        metadata = _read_artifact(
+            archive_dir / "archive-metadata.json",
+            name="archive-metadata.json",
+            issues=metadata_issues,
+        )
+        if metadata_issues or metadata is None:
+            return False
+        if (
+            metadata.get("protocol") != _RETRY_ARCHIVE_PROTOCOL
+            or metadata.get("archive_number") != archive_number
+            or metadata.get("profile_id") != profile_id
+            or metadata.get("task_id") != task_id
+        ):
+            return False
+        reason = metadata.get("archive_reason")
+        archived_attempt_path = archive_dir / "attempt.json"
+        if reason == "interrupted_before_attempt":
+            if archived_attempt_path.exists():
+                return False
+            continue
+        if reason != "zero_invocation_infrastructure_invalid":
+            return False
+        archived_issues: list[str] = []
+        archived_attempt = _read_artifact(
+            archived_attempt_path,
+            name="attempt.json",
+            issues=archived_issues,
+        )
+        if archived_issues or archived_attempt is None:
+            return False
+        if (
+            archived_attempt.get("protocol") != _ATTEMPT_PROTOCOL
+            or archived_attempt.get("profile_id") != profile_id
+            or archived_attempt.get("task_id") != task_id
+            or archived_attempt.get("attempt_status") != "infrastructure_invalid"
+            or archived_attempt.get("model_status") is not None
+            or archived_attempt.get("final_text") not in (None, "")
+        ):
+            return False
+        for field in ("tool_calls", "provider_tool_calls", "official_docs_tool_calls"):
+            if archived_attempt.get(field) != 0:
+                return False
+    return True
+
+
+def _legacy_attempt_number_is_safe(
+    *,
+    profile_dir: Path,
+    task_dir: Path,
+    task_id: str,
+    profile: Mapping[str, Any],
+    attempt: Mapping[str, Any],
+    control: Mapping[str, Any] | None,
+    cleanup: Mapping[str, Any] | None,
+    invocation: Mapping[str, Any] | None,
+) -> bool:
+    attempt_number = attempt.get("attempt_number")
+    if isinstance(attempt_number, int) and not isinstance(attempt_number, bool) and attempt_number == 1:
+        return True
+    legacy_missing_number = "attempt_number" not in attempt
+    legacy_retry_number = (
+        isinstance(attempt_number, int)
+        and not isinstance(attempt_number, bool)
+        and attempt_number > 1
+    )
+    if not legacy_missing_number and not legacy_retry_number:
+        return False
+    run_id = attempt.get("run_id")
+    if (
+        attempt.get("task_id") != task_id
+        or _attempt_profile_issues(attempt, profile)
+        or not _non_empty_string(run_id)
+        or control is None
+        or control.get("run_id") != run_id
+        or cleanup is None
+        or not cleanup_payload_proves_inert(cleanup, expected_run_id=cast(str, run_id))
+        or invocation is None
+        or invocation.get("status") not in _MODEL_TERMINAL_STATUSES | {"completed"}
+        or attempt.get("model_status") != invocation.get("status")
+        or attempt.get("attempt_status") != "candidate_complete"
+        or invocation.get("requested_model") != profile.get("model_id")
+        or invocation.get("provider") != profile.get("provider")
+        or invocation.get("response_model") != profile.get("model_id")
+    ):
+        return False
+    invocation_artifacts = {path.name for path in task_dir.glob("*invocation*.json") if path.is_file()}
+    if not invocation_artifacts <= {"invocation.json", "model-invocation-started.json"} or (
+        "invocation.json" not in invocation_artifacts
+    ):
+        return False
+    marker_path = task_dir / "model-invocation-started.json"
+    if marker_path.is_file():
+        marker_issues: list[str] = []
+        marker = _read_artifact(marker_path, name=marker_path.name, issues=marker_issues)
+        if marker_issues or marker is None:
+            return False
+        if (
+            marker.get("protocol") != "arga-bench-model-invocation-started/1"
+            or marker.get("profile_id") != profile.get("id")
+            or marker.get("task_id") != task_id
+            or marker.get("attempt_number") != attempt_number
+        ):
+            return False
+    return _retry_archive_proves_zero_invocations(
+        profile_dir=profile_dir,
+        task_id=task_id,
+        profile_id=cast(str, profile["id"]),
+        attempt_number=attempt_number,
+    )
+
+
 def _classify_task(
     *,
     matrix_dir: Path,
@@ -438,8 +585,16 @@ def _classify_task(
             issues.append("attempt:mismatched_protocol")
         if attempt.get("task_id") != task_id:
             issues.append("attempt:mismatched_task_id")
-        attempt_number = attempt.get("attempt_number")
-        if isinstance(attempt_number, bool) or not isinstance(attempt_number, int) or attempt_number < 1:
+        if not _legacy_attempt_number_is_safe(
+            profile_dir=profile_dir,
+            task_dir=task_dir,
+            task_id=task_id,
+            profile=profile,
+            attempt=attempt,
+            control=control,
+            cleanup=cleanup,
+            invocation=invocation,
+        ):
             issues.append("attempt:invalid_attempt_number")
         issues.extend(_attempt_profile_issues(attempt, profile))
         if attempt.get("response_model") != profile.get("model_id"):
