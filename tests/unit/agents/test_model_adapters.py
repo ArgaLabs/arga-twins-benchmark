@@ -159,6 +159,61 @@ def test_anthropic_opus_runs_tool_loop_with_exact_prompts_and_high_effort() -> N
     assert requests[1]["messages"][-1]["content"][0]["type"] == "tool_result"
 
 
+def test_anthropic_retries_empty_tool_turn_without_polluting_history() -> None:
+    requests: list[dict[str, Any]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        requests.append(body)
+        if len(requests) == 1:
+            return httpx.Response(
+                200,
+                json=anthropic_message(
+                    content=[{"type": "thinking", "thinking": "", "signature": "signed"}],
+                    stop_reason="tool_use",
+                ),
+            )
+        return httpx.Response(
+            200,
+            json=anthropic_message(
+                content=[{"type": "text", "text": "done"}],
+                stop_reason="end_turn",
+            ),
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise AssertionError("tool must not be called")
+
+    client = async_client(handler)
+    adapter = AnthropicMessagesAdapter(
+        api_key="test-anthropic-key",
+        model_id="claude-sonnet-5",
+        client=client,
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=1,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert result.final_text == "done"
+    assert len(requests) == 2
+    assert requests[1]["messages"] == [{"role": "user", "content": "user"}]
+    assert result.events[2] == {
+        "type": "invalid_response_retry",
+        "reason": "tool_use_without_calls",
+        "attempt": 1,
+        "will_retry": True,
+    }
+
+
 def test_anthropic_fable_uses_model_default_thinking_and_handles_refusal() -> None:
     seen_request: dict[str, Any] = {}
 
@@ -1010,3 +1065,69 @@ def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() 
         ("provider_api", {"method": "GET", "path": "/records"}),
         ("provider_api", {"method": "GET", "path": "/other"}),
     ]
+
+
+def test_google_retries_quota_429_using_provider_retry_info() -> None:
+    calls = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return httpx.Response(
+                429,
+                json={
+                    "error": {
+                        "status": "RESOURCE_EXHAUSTED",
+                        "details": [
+                            {
+                                "@type": "type.googleapis.com/google.rpc.RetryInfo",
+                                "retryDelay": "0s",
+                            }
+                        ],
+                    }
+                },
+            )
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "content": {"role": "model", "parts": [{"text": "done"}]},
+                        "finishReason": "STOP",
+                    }
+                ],
+                "usageMetadata": {"promptTokenCount": 5, "candidatesTokenCount": 1},
+            },
+        )
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        raise AssertionError("tool must not be called")
+
+    client = async_client(handler)
+    adapter = GoogleGenerateContentAdapter(
+        api_key="test-google-key",
+        model_id="gemini-3.1-pro-preview",
+        client=client,
+    )
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=1,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert calls == 2
+    assert result.events[1] == {
+        "type": "http_retry",
+        "status_code": 429,
+        "attempt": 1,
+        "delay_seconds": 0.1,
+        "will_retry": True,
+    }

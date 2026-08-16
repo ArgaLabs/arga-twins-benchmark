@@ -38,6 +38,7 @@ PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
+RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
 
 PROVIDER_ROLES = {
     "github": "code_host",
@@ -185,7 +186,13 @@ def _task_has_invocation_evidence(task_dir: Path, attempt: dict[str, Any] | None
     return (task_dir / "baseline-state.json").exists()
 
 
-def classify_resume_task(task_dir: Path, *, task_id: str, profile_id: str) -> ResumeDecision:
+def classify_resume_task(
+    task_dir: Path,
+    *,
+    task_id: str,
+    profile_id: str,
+    retry_infrastructure_invalid: bool = False,
+) -> ResumeDecision:
     if not task_dir.exists():
         return ResumeDecision("run", "task_not_started")
     if not task_dir.is_dir():
@@ -202,6 +209,33 @@ def classify_resume_task(task_dir: Path, *, task_id: str, profile_id: str) -> Re
             return ResumeDecision("blocked", "attempt_task_mismatch", attempt)
         if attempt.get("profile_id") != profile_id:
             return ResumeDecision("blocked", "attempt_profile_mismatch", attempt)
+
+    if retry_infrastructure_invalid:
+        invocation_path = task_dir / "invocation.json"
+        try:
+            invocation = read_json_object(invocation_path) if invocation_path.exists() else None
+        except ValueError:
+            return ResumeDecision("blocked", "invocation_artifact_unreadable", attempt)
+        invocation_status = invocation.get("status") if invocation is not None else None
+        if attempt is None:
+            if invocation is None:
+                return ResumeDecision("run", "explicit_interrupted_infrastructure_retry")
+            if invocation_status in RETRYABLE_MODEL_INFRA_STATUSES:
+                return ResumeDecision("run", "explicit_model_infrastructure_retry")
+        else:
+            model_status = attempt.get("model_status")
+            if (
+                attempt.get("attempt_status") == "infrastructure_invalid"
+                and model_status is None
+                and invocation is None
+            ):
+                return ResumeDecision("run", "explicit_interrupted_infrastructure_retry", attempt)
+            if (
+                model_status in RETRYABLE_MODEL_INFRA_STATUSES
+                and invocation_status == model_status
+                and attempt.get("attempt_status") in {"infrastructure_invalid", "candidate_complete"}
+            ):
+                return ResumeDecision("run", "explicit_model_infrastructure_retry", attempt)
 
     if _task_has_invocation_evidence(task_dir, attempt):
         return ResumeDecision("skip", "model_invocation_protected", attempt)
@@ -273,16 +307,22 @@ def archive_retryable_task(
     profile_id: str,
     decision: ResumeDecision,
     cleanup: dict[str, Any] | None,
+    retry_infrastructure_invalid: bool = False,
 ) -> tuple[Path, int]:
     task_dir = output_root / "tasks" / task_id
-    rechecked = classify_resume_task(task_dir, task_id=task_id, profile_id=profile_id)
+    rechecked = classify_resume_task(
+        task_dir,
+        task_id=task_id,
+        profile_id=profile_id,
+        retry_infrastructure_invalid=retry_infrastructure_invalid,
+    )
     if rechecked.action != "run" or rechecked.reason != decision.reason:
         raise RuntimeError(
             f"resume eligibility changed for {profile_id}/{task_id}: "
             f"{decision.action}:{decision.reason} -> {rechecked.action}:{rechecked.reason}"
         )
     if not task_dir.exists():
-        return task_dir, 1
+        return task_dir, _next_archive_number(output_root, task_id)
 
     archive_number = _next_archive_number(output_root, task_id)
     archive_dir = output_root / RETRY_ARCHIVE_DIR / task_id / f"attempt-{archive_number:04d}"
@@ -311,11 +351,17 @@ async def prepare_resume_task(
     task: dict[str, Any],
     profile_id: str,
     semaphore: asyncio.Semaphore,
+    retry_infrastructure_invalid: bool = False,
 ) -> tuple[TaskRunPlan | None, ResumeDecision, dict[str, Any] | None]:
     async with semaphore:
         task_id = str(task["id"])
         task_dir = output_root / "tasks" / task_id
-        decision = classify_resume_task(task_dir, task_id=task_id, profile_id=profile_id)
+        decision = classify_resume_task(
+            task_dir,
+            task_id=task_id,
+            profile_id=profile_id,
+            retry_infrastructure_invalid=retry_infrastructure_invalid,
+        )
         if decision.action != "run":
             return None, decision, None
         cleanup: dict[str, Any] | None = None
@@ -341,6 +387,7 @@ async def prepare_resume_task(
             profile_id=profile_id,
             decision=decision,
             cleanup=cleanup,
+            retry_infrastructure_invalid=retry_infrastructure_invalid,
         )
         archive_path = None
         if task_dir.exists():
@@ -790,6 +837,7 @@ def _write_resume_history(
     output_root: Path,
     *,
     concurrency: int,
+    retry_infrastructure_invalid: bool,
     decisions: list[tuple[str, ResumeDecision]],
     plans: list[TaskRunPlan],
 ) -> None:
@@ -805,6 +853,7 @@ def _write_resume_history(
         {
             "resumed_at": utc_now(),
             "concurrency": concurrency,
+            "retry_infrastructure_invalid": retry_infrastructure_invalid,
             "rerun_tasks": [str(plan.task["id"]) for plan in plans],
             "archived_attempts": [plan.archive_path for plan in plans if plan.archive_path is not None],
             "decisions": [
@@ -817,6 +866,8 @@ def _write_resume_history(
 
 
 async def async_main(args: argparse.Namespace) -> int:
+    if args.retry_infrastructure_invalid and not args.resume:
+        raise ValueError("--retry-infrastructure-invalid requires --resume")
     if not os.environ.get("ARGA_API_KEY"):
         raise ValueError("ARGA_API_KEY is required")
     profile = load_profile(args.profile)
@@ -860,6 +911,7 @@ async def async_main(args: argparse.Namespace) -> int:
                     task=task,
                     profile_id=str(profile["id"]),
                     semaphore=preparation_semaphore,
+                    retry_infrastructure_invalid=args.retry_infrastructure_invalid,
                 )
                 for task in tasks
             )
@@ -872,6 +924,7 @@ async def async_main(args: argparse.Namespace) -> int:
         _write_resume_history(
             output_root,
             concurrency=args.concurrency,
+            retry_infrastructure_invalid=args.retry_infrastructure_invalid,
             decisions=resume_decisions,
             plans=plans,
         )
@@ -905,6 +958,7 @@ async def async_main(args: argparse.Namespace) -> int:
         "profile": profile,
         "concurrency": args.concurrency,
         "resumed": resume_existing,
+        "retry_infrastructure_invalid": args.retry_infrastructure_invalid,
         "tasks_rerun": len(plans) if resume_existing else 0,
         "resume_blocked": sum(decision.action == "blocked" for _, decision in resume_decisions),
         "protected_invocations": sum(
@@ -945,6 +999,14 @@ def parse_args() -> argparse.Namespace:
         "--resume",
         action="store_true",
         help="Resume an existing profile directory and retry only proven zero-invocation infrastructure failures.",
+    )
+    parser.add_argument(
+        "--retry-infrastructure-invalid",
+        action="store_true",
+        help=(
+            "With --resume, archive and retry only attempts explicitly proven infrastructure-invalid; "
+            "completed and model-terminal attempts remain immutable."
+        ),
     )
     return parser.parse_args()
 

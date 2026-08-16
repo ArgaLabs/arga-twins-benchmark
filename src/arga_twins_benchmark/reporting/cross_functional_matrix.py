@@ -10,9 +10,7 @@ from typing import Any, Literal, cast
 
 from arga_twins_benchmark.lifecycle import cleanup_payload_proves_inert, write_private_json
 
-CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL = (
-    "arga-bench-cross-functional-model-matrix-offline-classification/1"
-)
+CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL = "arga-bench-cross-functional-model-matrix-offline-classification/1"
 HISTORICAL_CALIBRATION_PROTOCOL = "arga-bench-cross-functional-historical-calibration/1"
 
 type ExecutionClass = Literal["exact_completed", "model_terminal", "infrastructure_invalid"]
@@ -135,9 +133,7 @@ def _profile_identity_issues(
     if actual is None:
         return [f"{prefix}:missing_profile"]
     return [
-        f"{prefix}:mismatched_{field}"
-        for field in _PROFILE_IDENTITY_FIELDS
-        if actual.get(field) != expected.get(field)
+        f"{prefix}:mismatched_{field}" for field in _PROFILE_IDENTITY_FIELDS if actual.get(field) != expected.get(field)
     ]
 
 
@@ -252,14 +248,10 @@ def _validate_calibration(
     passed = 0
     for task_id, raw_verdict in typed_verdicts.items():
         if not isinstance(raw_verdict, dict):
-            raise CrossFunctionalMatrixClassificationError(
-                f"historical calibration verdict {task_id!r} is malformed"
-            )
+            raise CrossFunctionalMatrixClassificationError(f"historical calibration verdict {task_id!r} is malformed")
         verdict = cast(dict[str, Any], raw_verdict)
         if not isinstance(verdict.get("passed"), bool) or not _non_empty_string(verdict.get("reason")):
-            raise CrossFunctionalMatrixClassificationError(
-                f"historical calibration verdict {task_id!r} is malformed"
-            )
+            raise CrossFunctionalMatrixClassificationError(f"historical calibration verdict {task_id!r} is malformed")
         passed += verdict["passed"] is True
     return {
         "calibration_id": calibration.get("calibration_id"),
@@ -346,11 +338,7 @@ def _validate_trace_artifacts(
     ):
         return issues
     typed_steps = cast(list[object], steps)
-    step_kinds = [
-        cast(dict[str, Any], item).get("kind")
-        for item in typed_steps
-        if isinstance(item, dict)
-    ]
+    step_kinds = [cast(dict[str, Any], item).get("kind") for item in typed_steps if isinstance(item, dict)]
     provider_step_count = sum(kind == "provider_api" for kind in step_kinds)
     docs_step_count = sum(kind == "provider_docs" for kind in step_kinds)
     declared = {
@@ -404,7 +392,7 @@ def _snapshot_evidence_gaps(
     return ["executable_cross_functional_semantic_verifier_not_implemented"]
 
 
-def _retry_archive_proves_zero_invocations(
+def _retry_archive_proves_safe_retries(
     *,
     profile_dir: Path,
     task_id: str,
@@ -435,8 +423,6 @@ def _retry_archive_proves_zero_invocations(
         return False
 
     for archive_number, archive_dir in archives.items():
-        if any(archive_dir.rglob("invocation.json")):
-            return False
         metadata_issues: list[str] = []
         metadata = _read_artifact(
             archive_dir / "archive-metadata.json",
@@ -455,10 +441,18 @@ def _retry_archive_proves_zero_invocations(
         reason = metadata.get("archive_reason")
         archived_attempt_path = archive_dir / "attempt.json"
         if reason == "interrupted_before_attempt":
-            if archived_attempt_path.exists():
+            if archived_attempt_path.exists() or any(archive_dir.rglob("invocation.json")):
                 return False
             continue
-        if reason != "zero_invocation_infrastructure_invalid":
+        if reason == "explicit_interrupted_infrastructure_retry":
+            if any(archive_dir.rglob("invocation.json")) or not isinstance(metadata.get("cleanup"), dict):
+                return False
+            if not archived_attempt_path.exists():
+                continue
+        elif reason not in {
+            "zero_invocation_infrastructure_invalid",
+            "explicit_model_infrastructure_retry",
+        }:
             return False
         archived_issues: list[str] = []
         archived_attempt = _read_artifact(
@@ -472,14 +466,37 @@ def _retry_archive_proves_zero_invocations(
             archived_attempt.get("protocol") != _ATTEMPT_PROTOCOL
             or archived_attempt.get("profile_id") != profile_id
             or archived_attempt.get("task_id") != task_id
-            or archived_attempt.get("attempt_status") != "infrastructure_invalid"
-            or archived_attempt.get("model_status") is not None
-            or archived_attempt.get("final_text") not in (None, "")
         ):
             return False
-        for field in ("tool_calls", "provider_tool_calls", "official_docs_tool_calls"):
-            if archived_attempt.get(field) != 0:
+        if reason == "explicit_model_infrastructure_retry":
+            if not isinstance(metadata.get("cleanup"), dict):
                 return False
+            invocation_issues: list[str] = []
+            archived_invocation = _read_artifact(
+                archive_dir / "invocation.json",
+                name="invocation.json",
+                issues=invocation_issues,
+            )
+            model_status = archived_attempt.get("model_status")
+            if (
+                invocation_issues
+                or archived_invocation is None
+                or model_status not in {"api_error", "invalid_response"}
+                or archived_invocation.get("status") != model_status
+                or archived_attempt.get("attempt_status") not in {"infrastructure_invalid", "candidate_complete"}
+            ):
+                return False
+            continue
+        if archived_attempt.get("attempt_status") != "infrastructure_invalid":
+            return False
+        if archived_attempt.get("model_status") is not None or archived_attempt.get("final_text") not in (None, ""):
+            return False
+        if reason == "zero_invocation_infrastructure_invalid":
+            if any(archive_dir.rglob("invocation.json")):
+                return False
+            for field in ("tool_calls", "provider_tool_calls", "official_docs_tool_calls"):
+                if archived_attempt.get(field) != 0:
+                    return False
     return True
 
 
@@ -499,9 +516,7 @@ def _legacy_attempt_number_is_safe(
         return True
     legacy_missing_number = "attempt_number" not in attempt
     legacy_retry_number = (
-        isinstance(attempt_number, int)
-        and not isinstance(attempt_number, bool)
-        and attempt_number > 1
+        isinstance(attempt_number, int) and not isinstance(attempt_number, bool) and attempt_number > 1
     )
     if not legacy_missing_number and not legacy_retry_number:
         return False
@@ -541,7 +556,7 @@ def _legacy_attempt_number_is_safe(
             or marker.get("attempt_number") != attempt_number
         ):
             return False
-    return _retry_archive_proves_zero_invocations(
+    return _retry_archive_proves_safe_retries(
         profile_dir=profile_dir,
         task_id=task_id,
         profile_id=cast(str, profile["id"]),
@@ -674,8 +689,7 @@ def _classify_task(
     if final is not None:
         issues.extend(_snapshot_issues(final, task=task, name="final_state"))
     if all(
-        artifact is not None
-        for artifact in (attempt, invocation, provider_trace, docs_trace, tool_steps, raw_diff)
+        artifact is not None for artifact in (attempt, invocation, provider_trace, docs_trace, tool_steps, raw_diff)
     ):
         issues.extend(
             _validate_trace_artifacts(
@@ -734,9 +748,7 @@ def _classify_task(
         },
         "run_id": run_id,
         "artifacts": {
-            name.removesuffix(".json").replace("-", "_"): str(
-                (task_dir / name).relative_to(matrix_dir)
-            )
+            name.removesuffix(".json").replace("-", "_"): str((task_dir / name).relative_to(matrix_dir))
             for name in _TASK_ARTIFACTS
             if (task_dir / name).is_file()
         },
@@ -752,11 +764,7 @@ def _counter_payload(attempts: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         if isinstance(item.get("model_terminal_reason"), str)
     )
     validity = Counter(str(item["validity"]) for item in attempts)
-    evidence_gaps = Counter(
-        str(gap)
-        for item in attempts
-        for gap in cast(list[object], item.get("evidence_gaps", []))
-    )
+    evidence_gaps = Counter(str(gap) for item in attempts for gap in cast(list[object], item.get("evidence_gaps", [])))
     outcomes = Counter(
         cast(str, item["semantic_outcome"])
         for item in attempts
@@ -837,9 +845,7 @@ def _profile_inputs(
     matrix_issues: Sequence[str],
 ) -> tuple[list[str], Mapping[str, Any] | None]:
     issues = list(matrix_issues)
-    issues.extend(
-        _profile_identity_issues(configured_profile, expected_profile, prefix="matrix_config_profile")
-    )
+    issues.extend(_profile_identity_issues(configured_profile, expected_profile, prefix="matrix_config_profile"))
     artifact_issues: list[str] = []
     run_config = _read_artifact(profile_dir / "run-config.json", name="run-config.json", issues=artifact_issues)
     scenarios = _read_artifact(

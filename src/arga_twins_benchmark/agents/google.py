@@ -18,6 +18,48 @@ from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 GOOGLE_GENERATIVE_LANGUAGE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 MAX_OUTPUT_TOKENS = 65_536
+MAX_REQUEST_ATTEMPTS = 8
+MAX_RETRY_DELAY_SECONDS = 60.0
+RETRYABLE_HTTP_STATUSES = frozenset({429, 500, 502, 503, 504})
+
+
+def _duration_seconds(value: object) -> float | None:
+    if isinstance(value, int | float) and not isinstance(value, bool):
+        return float(value) if value >= 0 else None
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip().lower()
+    if normalized.endswith("s"):
+        normalized = normalized[:-1]
+    try:
+        seconds = float(normalized)
+    except ValueError:
+        return None
+    return seconds if seconds >= 0 else None
+
+
+def _google_retry_delay(response: httpx.Response, attempt: int) -> float:
+    delay = _duration_seconds(response.headers.get("retry-after"))
+    if delay is None:
+        try:
+            payload: object = response.json()
+        except ValueError:
+            payload = None
+        if isinstance(payload, dict):
+            error = cast(dict[str, Any], payload).get("error")
+            details = cast(dict[str, Any], error).get("details") if isinstance(error, dict) else None
+            if isinstance(details, list):
+                for raw_detail in details:
+                    if not isinstance(raw_detail, dict):
+                        continue
+                    detail = cast(dict[str, Any], raw_detail)
+                    if str(detail.get("@type", "")).endswith("RetryInfo"):
+                        delay = _duration_seconds(detail.get("retryDelay"))
+                        if delay is not None:
+                            break
+    if delay is None:
+        delay = min(float(2 ** (attempt - 1)), MAX_RETRY_DELAY_SECONDS)
+    return min(max(delay, 0.1), MAX_RETRY_DELAY_SECONDS)
 
 
 def _tool_response(value: object) -> dict[str, Any]:
@@ -156,7 +198,7 @@ class GoogleGenerateContentAdapter:
                         "generationConfig": {"maxOutputTokens": MAX_OUTPUT_TOKENS},
                     }
                     response: httpx.Response | None = None
-                    for transport_attempt in range(1, 4):
+                    for request_attempt in range(1, MAX_REQUEST_ATTEMPTS + 1):
                         try:
                             response = await client.post(
                                 endpoint,
@@ -166,19 +208,36 @@ class GoogleGenerateContentAdapter:
                                 },
                                 json=request_body,
                             )
-                            break
                         except (httpx.TransportError, ssl.SSLError) as error:
                             events.append(
                                 {
                                     "type": "transport_error",
                                     "error_type": type(error).__name__,
-                                    "attempt": transport_attempt,
-                                    "will_retry": transport_attempt < 3,
+                                    "attempt": request_attempt,
+                                    "will_retry": request_attempt < MAX_REQUEST_ATTEMPTS,
                                 }
                             )
-                            if transport_attempt == 3:
+                            if request_attempt == MAX_REQUEST_ATTEMPTS:
                                 raise
-                            await asyncio.sleep(transport_attempt)
+                            await asyncio.sleep(min(float(request_attempt), MAX_RETRY_DELAY_SECONDS))
+                            continue
+                        if (
+                            response.status_code in RETRYABLE_HTTP_STATUSES
+                            and request_attempt < MAX_REQUEST_ATTEMPTS
+                        ):
+                            retry_delay = _google_retry_delay(response, request_attempt)
+                            events.append(
+                                {
+                                    "type": "http_retry",
+                                    "status_code": response.status_code,
+                                    "attempt": request_attempt,
+                                    "delay_seconds": retry_delay,
+                                    "will_retry": True,
+                                }
+                            )
+                            await asyncio.sleep(retry_delay)
+                            continue
+                        break
                     if response is None:  # pragma: no cover
                         raise RuntimeError("Google transport loop returned no response")
                     if response.status_code >= 400:

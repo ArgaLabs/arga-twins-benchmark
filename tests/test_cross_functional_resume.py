@@ -81,6 +81,108 @@ def test_resume_never_replays_pair_with_invocation_artifact(tmp_path: Path) -> N
     assert decision.reason == "model_invocation_protected"
 
 
+def test_explicit_infrastructure_retry_archives_api_error_but_not_completed_trial(
+    tmp_path: Path,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    api_error_attempt = {
+        **_zero_invocation_attempt(),
+        "model_status": "api_error",
+        "response_model": "gpt-5.6-luna",
+        "stop_reason": "http_429",
+    }
+    _write_json(task_dir / "attempt.json", api_error_attempt)
+    _write_json(task_dir / "invocation.json", {"status": "api_error"})
+
+    default_decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+    )
+    retry_decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_infrastructure_invalid=True,
+    )
+
+    assert default_decision.reason == "model_invocation_protected"
+    assert retry_decision.action == "run"
+    assert retry_decision.reason == "explicit_model_infrastructure_retry"
+
+    _write_json(
+        task_dir / "attempt.json",
+        {
+            **api_error_attempt,
+            "attempt_status": "candidate_complete",
+            "model_status": "invalid_response",
+            "stop_reason": "tool_use_without_calls",
+        },
+    )
+    _write_json(task_dir / "invocation.json", {"status": "invalid_response"})
+    invalid_response_retry = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_infrastructure_invalid=True,
+    )
+    assert invalid_response_retry.reason == "explicit_model_infrastructure_retry"
+
+    _write_json(
+        task_dir / "attempt.json",
+        {
+            **api_error_attempt,
+            "attempt_status": "candidate_complete",
+            "model_status": "completed",
+            "stop_reason": "completed",
+        },
+    )
+    _write_json(task_dir / "invocation.json", {"status": "completed"})
+    protected = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_infrastructure_invalid=True,
+    )
+    assert protected.action == "skip"
+    assert protected.reason == "model_invocation_protected"
+
+
+def test_explicit_infrastructure_retry_preserves_archived_invocation(tmp_path: Path) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(
+        task_dir / "attempt.json",
+        {
+            **_zero_invocation_attempt(),
+            "run_id": "run-1",
+            "model_status": "api_error",
+            "response_model": "gpt-5.6-luna",
+            "stop_reason": "transport_error",
+        },
+    )
+    _write_json(task_dir / "invocation.json", {"status": "api_error"})
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+
+    plan, decision, _cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_infrastructure_invalid=True,
+        )
+    )
+
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+    assert decision.reason == "explicit_model_infrastructure_retry"
+    assert json.loads((archive / "invocation.json").read_text())["status"] == "api_error"
+    metadata = json.loads((archive / "archive-metadata.json").read_text())
+    assert metadata["archive_reason"] == "explicit_model_infrastructure_retry"
+    assert metadata["cleanup"] == _inert_cleanup()
+
+
 def test_archive_rechecks_invocation_boundary_before_move(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", _zero_invocation_attempt())
@@ -161,6 +263,27 @@ def test_resume_archives_missing_attempt_only_after_prior_twin_is_inert(tmp_path
     assert (tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "control.json").is_file()
 
 
+def test_resume_continues_attempt_number_when_prior_archive_exists_but_task_never_relaunched(
+    tmp_path: Path,
+) -> None:
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    _write_json(archive / "archive-metadata.json", {"archive_number": 1})
+
+    plan, decision, cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_infrastructure_invalid=True,
+        )
+    )
+
+    assert decision.reason == "task_not_started"
+    assert cleanup is None
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+
+
 def test_resume_blocks_retry_when_prior_twin_cannot_be_identified(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", {**_zero_invocation_attempt(), "run_id": "run-unknown"})
@@ -204,10 +327,17 @@ def test_resume_history_records_requested_concurrency(tmp_path: Path) -> None:
     decisions = [(TASK_ID, runner.ResumeDecision("run", "task_not_started"))]
     plans = [runner.TaskRunPlan({"id": TASK_ID}, 1)]
 
-    runner._write_resume_history(tmp_path, concurrency=7, decisions=decisions, plans=plans)
+    runner._write_resume_history(
+        tmp_path,
+        concurrency=7,
+        retry_infrastructure_invalid=True,
+        decisions=decisions,
+        plans=plans,
+    )
 
     history = json.loads((tmp_path / "resume-history.json").read_text())
     assert history["entries"][0]["concurrency"] == 7
+    assert history["entries"][0]["retry_infrastructure_invalid"] is True
     assert history["entries"][0]["rerun_tasks"] == [TASK_ID]
 
 

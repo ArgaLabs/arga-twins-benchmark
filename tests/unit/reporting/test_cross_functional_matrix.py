@@ -455,6 +455,71 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
     assert "attempt:invalid_attempt_number" in by_task[invalid_zero_number["id"]]["integrity"]["issues"]
 
 
+def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_statuses(
+    tmp_path: Path,
+) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    profile_dir = matrix_dir / "profiles" / profile["id"]
+
+    safe_retry = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=safe_retry, profile=profile, status="completed", attempt_number=2)
+    safe_archive = profile_dir / "retry-archive" / safe_retry["id"] / "attempt-0001"
+    _write_json(
+        safe_archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_model_infrastructure_retry",
+            "profile_id": profile["id"],
+            "task_id": safe_retry["id"],
+            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+        },
+    )
+    _write_json(
+        safe_archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": safe_retry["id"],
+            "model_status": "api_error",
+        },
+    )
+    _write_json(safe_archive / "invocation.json", {"status": "api_error"})
+
+    unsafe_retry = suite["tasks"][1]
+    _write_attempt(matrix_dir, task=unsafe_retry, profile=profile, status="completed", attempt_number=2)
+    unsafe_archive = profile_dir / "retry-archive" / unsafe_retry["id"] / "attempt-0001"
+    _write_json(
+        unsafe_archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_model_infrastructure_retry",
+            "profile_id": profile["id"],
+            "task_id": unsafe_retry["id"],
+            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+        },
+    )
+    _write_json(
+        unsafe_archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": unsafe_retry["id"],
+            "model_status": "completed",
+        },
+    )
+    _write_json(unsafe_archive / "invocation.json", {"status": "completed"})
+
+    report = _classify(matrix_dir)
+    by_task = {item["task_id"]: item for item in report["attempts"] if item["profile_id"] == profile["id"]}
+
+    assert "attempt:invalid_attempt_number" not in by_task[safe_retry["id"]]["integrity"]["issues"]
+    assert "attempt:invalid_attempt_number" in by_task[unsafe_retry["id"]]["integrity"]["issues"]
+
+
 def test_report_writer_refuses_to_mutate_preserved_matrix(tmp_path: Path) -> None:
     matrix_dir, suite, profile = _fixture_root(tmp_path)
     _write_attempt(matrix_dir, task=suite["tasks"][0], profile=profile, status="completed")

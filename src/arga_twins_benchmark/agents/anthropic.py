@@ -27,6 +27,7 @@ from arga_twins_benchmark.errors import RetryableInfrastructureError
 ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 MAX_OUTPUT_TOKENS = 128_000
+MAX_EMPTY_TOOL_TURN_RETRIES = 2
 
 
 def _overlay_mapping(target: dict[str, Any], update: object) -> None:
@@ -248,6 +249,7 @@ class AnthropicMessagesAdapter:
         messages: list[dict[str, Any]] = [{"role": "user", "content": user_prompt}]
         response_model: str | None = None
         tool_calls = 0
+        empty_tool_turn_retries = 0
         started = monotonic()
         client = self._client or httpx.AsyncClient(timeout=None)
         owns_client = self._client is None
@@ -396,7 +398,19 @@ class AnthropicMessagesAdapter:
                             if block.get("type") == "tool_use":
                                 raw_calls.append(block)
                         if not raw_calls:
-                            events.append({"type": "invalid_response", "reason": "tool_use_without_calls"})
+                            messages.pop()
+                            empty_tool_turn_retries += 1
+                            will_retry = empty_tool_turn_retries <= MAX_EMPTY_TOOL_TURN_RETRIES
+                            events.append(
+                                {
+                                    "type": "invalid_response_retry",
+                                    "reason": "tool_use_without_calls",
+                                    "attempt": empty_tool_turn_retries,
+                                    "will_retry": will_retry,
+                                }
+                            )
+                            if will_retry:
+                                continue
                             return result(
                                 requested_model=self.model_id,
                                 response_model=response_model,

@@ -57,6 +57,7 @@ async def run_profile(
     log_root: Path,
     semaphore: asyncio.Semaphore,
     resume: bool,
+    retry_infrastructure_invalid: bool = False,
     tasks_per_profile: int = 40,
     lifecycle_concurrency: int = 3,
     cleanup_concurrency: int = 3,
@@ -84,6 +85,8 @@ async def run_profile(
         ]
         if resume:
             command.append("--resume")
+        if retry_infrastructure_invalid:
+            command.append("--retry-infrastructure-invalid")
         with log_path.open("ab" if resume else "wb") as log_file:
             process = await asyncio.create_subprocess_exec(
                 *command,
@@ -114,6 +117,7 @@ async def run_profile(
             "api_effort": profile["api_effort"],
             "task_concurrency": effective_task_concurrency,
             "resumed": resume,
+            "retry_infrastructure_invalid": retry_infrastructure_invalid,
             "started_at": started_at,
             "finished_at": utc_now(),
             "returncode": returncode,
@@ -125,6 +129,8 @@ async def run_profile(
 
 
 async def async_main(args: argparse.Namespace) -> int:
+    if args.retry_infrastructure_invalid and not args.resume:
+        raise ValueError("--retry-infrastructure-invalid requires --resume")
     profiles = provider_round_robin(load_profiles())
     output_root = args.output.resolve()
     resume_existing = args.resume and output_root.exists()
@@ -179,6 +185,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 log_root=log_root,
                 semaphore=semaphore,
                 resume=args.resume,
+                retry_infrastructure_invalid=args.retry_infrastructure_invalid,
                 tasks_per_profile=args.tasks_per_profile,
                 lifecycle_concurrency=args.lifecycle_concurrency,
                 cleanup_concurrency=args.cleanup_concurrency,
@@ -197,6 +204,7 @@ async def async_main(args: argparse.Namespace) -> int:
         "recorded_trials": sum(int(item.get("attempts", 0) or 0) for item in summaries),
         "global_trial_concurrency": args.concurrency,
         "resumed": resume_existing,
+        "retry_infrastructure_invalid": args.retry_infrastructure_invalid,
         "estimated_cost_usd": round(
             sum(float(item.get("estimated_cost_usd", 0.0) or 0.0) for item in summaries),
             8,
@@ -229,6 +237,14 @@ def parse_args() -> argparse.Namespace:
         "--resume",
         action="store_true",
         help="Resume the matrix and let each profile retry only proven zero-invocation failures.",
+    )
+    parser.add_argument(
+        "--retry-infrastructure-invalid",
+        action="store_true",
+        help=(
+            "With --resume, retry only attempts explicitly classified infrastructure-invalid; "
+            "valid and model-terminal trials remain immutable."
+        ),
     )
     return parser.parse_args()
 
