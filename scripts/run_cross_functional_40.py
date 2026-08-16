@@ -17,7 +17,7 @@ from time import monotonic
 from typing import Any, cast
 
 from arga_twins_benchmark.agents import invoke_model
-from arga_twins_benchmark.arga_cli import SubprocessArgaCli, TwinRun
+from arga_twins_benchmark.arga_cli import ArgaCliError, SubprocessArgaCli, TwinRun
 from arga_twins_benchmark.evaluation.state_capture import (
     StateCaptureError,
     TrustedStateCapturer,
@@ -44,6 +44,8 @@ OFFICIAL_DOCS_TOOL_LIMIT = 20
 MODEL_TIMEOUT_SECONDS = 1_800
 PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
+CONTROL_PLANE_MAX_ATTEMPTS = 5
+CONTROL_PLANE_RETRY_BASE_SECONDS = 1.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
@@ -561,6 +563,19 @@ def estimated_cost(usage: dict[str, Any], profile: dict[str, Any]) -> dict[str, 
     }
 
 
+async def retry_arga_cli(operation: Any, *, label: str) -> Any:
+    """Retry transient staging control-plane failures with bounded backoff."""
+
+    for attempt in range(1, CONTROL_PLANE_MAX_ATTEMPTS + 1):
+        try:
+            return await operation()
+        except ArgaCliError as error:
+            if attempt == CONTROL_PLANE_MAX_ATTEMPTS:
+                raise ArgaCliError(f"{label} failed after {CONTROL_PLANE_MAX_ATTEMPTS} attempts: {error}") from error
+            await asyncio.sleep(CONTROL_PLANE_RETRY_BASE_SECONDS * (2 ** (attempt - 1)))
+    raise AssertionError("control-plane retry loop must return or raise")
+
+
 async def wait_ready(
     arga: SubprocessArgaCli,
     run: TwinRun,
@@ -574,7 +589,13 @@ async def wait_ready(
         if asyncio.get_running_loop().time() >= deadline:
             raise TimeoutError(f"timed out waiting for twin run {latest.run_id}; status={latest.status}")
         await asyncio.sleep(POLL_SECONDS)
-        latest = await arga.status(latest.run_id)
+        latest = cast(
+            TwinRun,
+            await retry_arga_cli(
+                lambda: arga.status(latest.run_id),
+                label=f"load twin provision status for {latest.run_id}",
+            ),
+        )
         on_status(latest)
     if latest.status != "ready":
         raise RuntimeError(f"twin run {latest.run_id} ended in status {latest.status!r}")
@@ -584,13 +605,24 @@ async def wait_ready(
 async def wait_cleanup(arga: SubprocessArgaCli, run_id: str) -> dict[str, Any]:
     teardown: object
     try:
-        teardown = dict(await arga.teardown(run_id))
+        teardown = dict(
+            await retry_arga_cli(
+                lambda: arga.teardown(run_id),
+                label=f"tear down twin run {run_id}",
+            )
+        )
     except Exception as error:  # cleanup evidence retains failures without hiding the attempt
         teardown = {"error_type": type(error).__name__, "error": str(error)}
     deadline = asyncio.get_running_loop().time() + 180
     terminal = {"cancelled", "canceled", "expired", "torn_down", "terminated", "deleted", "cleaned_up"}
     while True:
-        status = await arga.status(run_id)
+        status = cast(
+            TwinRun,
+            await retry_arga_cli(
+                lambda: arga.status(run_id),
+                label=f"confirm cleanup for twin run {run_id}",
+            ),
+        )
         if status.status.casefold() in terminal and not status.twins:
             return {
                 "twin_run": dict(status.raw),
@@ -640,7 +672,10 @@ def concise_tool_steps(records: tuple[dict[str, Any], ...]) -> list[dict[str, An
 
 async def resolve_scenarios(tasks: list[dict[str, Any]]) -> dict[str, str]:
     async with SubprocessArgaCli() as arga:
-        scenarios = await arga.list_scenarios(tag=SUITE_TAG)
+        scenarios = await retry_arga_cli(
+            lambda: arga.list_scenarios(tag=SUITE_TAG),
+            label="list staging Scenarios",
+        )
     if len(scenarios) != 40:
         raise RuntimeError(f"expected 40 staging Scenarios tagged {SUITE_TAG!r}, found {len(scenarios)}")
     by_hash: dict[str, dict[str, Any]] = {}
@@ -742,7 +777,11 @@ async def run_task(
                 },
             )
 
-            capturer = TrustedStateCapturer(timeout_seconds=60)
+            capturer = TrustedStateCapturer(
+                timeout_seconds=60,
+                max_attempts=5,
+                retry_base_delay_seconds=1,
+            )
             snapshot_queries = snapshot_queries_for_task(task)
             baseline = await capturer.capture(
                 control,
@@ -866,9 +905,7 @@ async def run_task(
             "thinking": profile["thinking"],
             "attempt_status": (
                 "candidate_complete"
-                if invocation is not None
-                and invocation.status not in RETRYABLE_MODEL_INFRA_STATUSES
-                and error is None
+                if invocation is not None and invocation.status not in RETRYABLE_MODEL_INFRA_STATUSES and error is None
                 else "infrastructure_invalid"
             ),
             "model_status": invocation.status if invocation is not None else None,

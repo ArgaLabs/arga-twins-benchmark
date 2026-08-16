@@ -516,6 +516,22 @@ def test_matrix_resume_keeps_global_concurrency_bounded(
     assert all(command[command.index("--cleanup-concurrency") + 1] == "3" for command in commands)
 
 
+def test_control_plane_retry_recovers_transient_cli_failures(monkeypatch: Any) -> None:
+    attempts = 0
+
+    async def operation() -> str:
+        nonlocal attempts
+        attempts += 1
+        if attempts < 3:
+            raise runner.ArgaCliError("transient staging failure")
+        return "ready"
+
+    monkeypatch.setattr(runner, "CONTROL_PLANE_RETRY_BASE_SECONDS", 0)
+
+    assert asyncio.run(runner.retry_arga_cli(operation, label="test operation")) == "ready"
+    assert attempts == 3
+
+
 def test_matrix_serializes_google_profiles(tmp_path: Path, monkeypatch: Any) -> None:
     active = 0
     maximum_active = 0
