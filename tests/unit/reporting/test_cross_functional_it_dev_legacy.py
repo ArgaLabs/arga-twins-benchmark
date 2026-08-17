@@ -266,10 +266,7 @@ def test_dev_05_slack_update_accepts_semantically_equivalent_unmerged_wording() 
         arguments={
             "body": {
                 "channel": "CC0EE26BDEF",
-                "text": (
-                    "billing-storage owns this through the CODEOWNERS rules; "
-                    "I did not merge the pull request"
-                ),
+                "text": ("billing-storage owns this through the CODEOWNERS rules; I did not merge the pull request"),
             }
         },
         status_code=200,
@@ -404,6 +401,33 @@ def test_hubspot_association_batch_read_is_not_a_mutation() -> None:
             "body": {"inputs": [{"id": "198631683"}]},
         }
     )
+
+
+def test_missing_requirement_names_the_exact_step_and_omitted_facts() -> None:
+    requirement = legacy._Requirement(
+        assertion_id="github_evidence_reconciled",
+        provider="github",
+        path=r"/issues/\d+(?:/comments)?$",
+        all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
+    )
+    call = legacy._Call(
+        event_index=7,
+        sequence=4,
+        provider="github",
+        method="POST",
+        path="/repos/acme/internal-operations/issues/1/comments",
+        arguments={"body": {"body": "THR-447 investigated"}},
+        status_code=201,
+        target_text="",
+    )
+
+    matches, diagnostic_calls, detail = legacy._requirement_result(requirement, [call])
+
+    assert matches == []
+    assert diagnostic_calls == [call]
+    assert "GitHub step 4" in detail
+    assert "PRC-LT-214" in detail
+    assert "31d8c9f0" in detail
 
 
 def test_removing_a_note_created_in_the_same_trial_is_transient_cleanup() -> None:

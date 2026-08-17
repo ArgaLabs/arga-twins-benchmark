@@ -151,6 +151,15 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
             assert contract.semantic_requirements
 
 
+def test_crm01_fair_contract_does_not_require_unstated_hubspot_deal_mutations() -> None:
+    requirement_ids = {item.id for item in fair_contract_for_task(_task("CRM-01")).semantic_requirements}
+
+    assert "hubspot_company_canonical" in requirement_ids
+    assert "salesforce_existing_opportunity" in requirement_ids
+    assert "hubspot_deal_canonical" not in requirement_ids
+    assert "hubspot_handoff_linked" not in requirement_ids
+
+
 def test_jira_and_salesforce_use_business_state_queries_not_summary_snapshots() -> None:
     contract = fair_contract_for_task(_task("CRM-04"))
     paths = [query.path for query in contract.snapshot_queries]

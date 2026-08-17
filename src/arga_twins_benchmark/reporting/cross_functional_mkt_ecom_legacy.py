@@ -277,9 +277,7 @@ _RULES: dict[str, _Rule] = {
         },
     ),
     "ECOM-06": _Rule(
-        (
-            _require("approved_price_created", "stripe", "price-611", "1290000", "pro annual", "year"),
-        ),
+        (_require("approved_price_created", "stripe", "price-611", "1290000", "pro annual", "year"),),
         {
             **_SLACK_WRITE,
             "stripe": ("/v1/prices", "/v1/products/"),
@@ -898,6 +896,46 @@ def _assertion(assertion_id: str, passed: bool, evidence: Sequence[Mapping[str, 
     }
 
 
+def _requirement_label(requirement: _Requirement) -> str:
+    return requirement.assertion_id.replace("_", " ")
+
+
+def _token_group_label(group: Sequence[str]) -> str:
+    quoted = [f"“{token}”" for token in group]
+    return " or ".join(quoted)
+
+
+def _requirement_detail(
+    requirement: _Requirement,
+    matching: Sequence[_Call],
+    evidence_text: str,
+) -> str:
+    provider = {
+        "gmail": "Gmail",
+        "google_calendar": "Google Calendar",
+        "hubspot": "HubSpot",
+        "jira": "Jira",
+        "linkedin": "LinkedIn",
+        "slack": "Slack",
+    }.get(requirement.provider, requirement.provider.replace("_", " ").title())
+    label = _requirement_label(requirement)
+    missing_groups = [
+        group for group in requirement.token_groups if not any(_token_present(evidence_text, token) for token in group)
+    ]
+    if matching and not missing_groups:
+        steps = ", ".join(str(call.sequence) for call in matching[:3])
+        return f"{provider} step{'' if len(matching) == 1 else 's'} {steps} established {label}"
+    required = ", ".join(_token_group_label(group) for group in missing_groups or requirement.token_groups)
+    if matching:
+        steps = ", ".join(str(call.sequence) for call in matching[:3])
+        return (
+            f"{provider} step{'' if len(matching) == 1 else 's'} {steps} changed the relevant record, "
+            f"but the saved request and final state omit {required}"
+        )
+    path_note = f" using a path containing {' or '.join(requirement.path_any)}" if requirement.path_any else ""
+    return f"No accepted {provider} write{path_note} established {label}; required evidence: {required}"
+
+
 def _task_channel_and_refs(task: Mapping[str, Any]) -> tuple[str | None, tuple[str, ...]]:
     verification = task.get("verification")
     if not isinstance(verification, dict):
@@ -1029,9 +1067,7 @@ def _grade_semantics(
             r"/repos/acme/(?:web-campaigns|commerce-platform)/issues/(?:\d+/comments|1)",
             clean_path,
         )
-        salesforce_case_allowed = not (
-            task_id == "ECOM-04" and call.provider == "salesforce"
-        ) or (
+        salesforce_case_allowed = not (task_id == "ECOM-04" and call.provider == "salesforce") or (
             re.fullmatch(r"/services/data/v[^/]+/sobjects/case/[^/]+", clean_path) is not None
             and "ownerid" not in _normal_text(_body(call.arguments))
         )
@@ -1245,9 +1281,7 @@ def _grade_semantics(
                 requirement.assertion_id,
                 passed,
                 evidence,
-                "Complete mediated writes and saved state establish the required outcome."
-                if passed
-                else "The required external or tracking-system outcome is not established.",
+                _requirement_detail(requirement, matching, evidence_text),
             )
         )
         if not passed:

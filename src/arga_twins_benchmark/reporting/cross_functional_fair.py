@@ -193,16 +193,10 @@ def _salesforce_snapshot_queries(task_id: str) -> tuple[SnapshotQuerySpec, ...]:
 _CRM_REQUIREMENTS: dict[str, tuple[SemanticRequirement, ...]] = {
     "CRM-01": (
         SemanticRequirement("hubspot_company_canonical", "hubspot", (_group("Northstar Robotics"),)),
-        SemanticRequirement("hubspot_deal_canonical", "hubspot", (_group("NSR Expansion"),)),
-        SemanticRequirement(
-            "hubspot_handoff_linked",
-            "hubspot",
-            (_group("Northstar Robotics"), _group("NSR Expansion")),
-        ),
         SemanticRequirement(
             "salesforce_existing_opportunity",
             "salesforce",
-            (_group("Northstar Robotics"), _group("NSR Expansion"), _group("Priyanka Rao")),
+            (_group("Northstar Robotics"), _group("NSR Expansion")),
             mutation_required=False,
         ),
     ),
@@ -274,6 +268,28 @@ _CRM_REQUIREMENTS: dict[str, tuple[SemanticRequirement, ...]] = {
         ),
     ),
 }
+
+
+def _semantic_requirement_detail(requirement: SemanticRequirement, *, passed: bool) -> str:
+    provider = {
+        "github": "GitHub",
+        "gmail": "Gmail",
+        "google_calendar": "Google Calendar",
+        "hubspot": "HubSpot",
+        "jira": "Jira",
+        "linkedin": "LinkedIn",
+        "slack": "Slack",
+    }.get(requirement.provider, requirement.provider.replace("_", " ").title())
+    label = requirement.id.replace("_", " ")
+    groups = []
+    for group in requirement.token_groups:
+        alternatives = " or ".join(f"“{term}”" for term in group)
+        groups.append(alternatives)
+    expected = ", ".join(groups)
+    evidence_kind = "changed resource" if requirement.mutation_required else "final resource"
+    if passed:
+        return f"The canonical {provider} {evidence_kind} establishes {label}: {expected}"
+    return f"No canonical {provider} {evidence_kind} establishes {label}; it must contain {expected}"
 
 
 def _cardinality(
@@ -771,14 +787,17 @@ def _cardinality_assertions(
             and _groups_present(_mutation_text(mutation), requirement.token_groups)
         ]
         passed = requirement.minimum <= len(matches) <= requirement.maximum
+        label = requirement.id.replace("_", " ")
+        expected = (
+            f"exactly {requirement.minimum}"
+            if requirement.minimum == requirement.maximum
+            else f"between {requirement.minimum} and {requirement.maximum}"
+        )
         assertions.append(
             _assertion(
                 requirement.id,
                 "pass" if passed else "fail",
-                (
-                    f"canonical business-resource cardinality is {len(matches)} "
-                    f"(expected {requirement.minimum}..{requirement.maximum})"
-                ),
+                f"The final state contains {len(matches)} matching {label} resource(s); the task requires {expected}",
                 [
                     {
                         "artifact": "final-state.json",
@@ -1192,9 +1211,7 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
             _assertion(
                 requirement.id,
                 "pass" if passed else "fail",
-                "canonical final-state evidence establishes the required business outcome"
-                if passed
-                else "canonical final-state evidence does not establish the required business outcome",
+                _semantic_requirement_detail(requirement, passed=passed),
                 [
                     {
                         "artifact": "final-state.json",

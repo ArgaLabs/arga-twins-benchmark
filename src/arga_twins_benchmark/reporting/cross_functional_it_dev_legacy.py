@@ -912,6 +912,83 @@ def _matches(call: _Call, requirement: _Requirement) -> bool:
     )
 
 
+def _plain_label(identifier: str) -> str:
+    return identifier.replace("_", " ").replace(".", " ")
+
+
+def _joined_terms(terms: Sequence[str]) -> str:
+    quoted = [f"“{term}”" for term in terms]
+    if not quoted:
+        return ""
+    if len(quoted) == 1:
+        return quoted[0]
+    return f"{', '.join(quoted[:-1])}, and {quoted[-1]}"
+
+
+def _requirement_result(
+    requirement: _Requirement,
+    successful_writes: Sequence[_Call],
+) -> tuple[list[_Call], list[_Call], str]:
+    matches = [call for call in successful_writes if _matches(call, requirement)]
+    if matches:
+        call = matches[0]
+        return (
+            matches,
+            matches,
+            f"Step {call.sequence} completed the required {_plain_label(requirement.assertion_id)} action",
+        )
+
+    path_matches = [
+        call
+        for call in successful_writes
+        if call.provider == requirement.provider and re.search(requirement.path, call.path)
+    ]
+    label = _plain_label(requirement.assertion_id)
+    provider = {
+        "github": "GitHub",
+        "gmail": "Gmail",
+        "hubspot": "HubSpot",
+        "jira": "Jira",
+        "slack": "Slack",
+    }.get(requirement.provider, requirement.provider.replace("_", " ").title())
+    if path_matches:
+        call = path_matches[-1]
+        missing = [term for term in requirement.all_terms if not _semantic_term_present(call.text, term)]
+        if requirement.any_terms and not any(_semantic_term_present(call.text, term) for term in requirement.any_terms):
+            missing.append(f"one of: {', '.join(requirement.any_terms)}")
+        rejected = [term for term in requirement.reject_terms if _semantic_term_present(call.text, term)]
+        problems: list[str] = []
+        if missing:
+            problems.append(f"omitted {_joined_terms(missing)}")
+        if rejected:
+            problems.append(f"included forbidden context {_joined_terms(rejected)}")
+        problem = " and ".join(problems) or "did not match the task's required business facts"
+        return (
+            [],
+            [call],
+            f"{provider} step {call.sequence} called {call.method} {call.path}, but {problem}",
+        )
+
+    provider_writes = [call for call in successful_writes if call.provider == requirement.provider]
+    required_terms = [*requirement.all_terms]
+    if requirement.any_terms:
+        required_terms.append(f"one of: {', '.join(requirement.any_terms)}")
+    required = f" Required evidence: {_joined_terms(required_terms)}." if required_terms else ""
+    if provider_writes:
+        call = provider_writes[-1]
+        return (
+            [],
+            [call],
+            f"No successful {provider} write completed {label}. "
+            f"The closest write was step {call.sequence}: {call.method} {call.path}.{required}",
+        )
+    return (
+        [],
+        [],
+        f"No successful {provider} write was recorded for {label}.{required}",
+    )
+
+
 def _is_additive_evidence(call: _Call) -> bool:
     if call.provider == "slack" and call.path.endswith("/chat.postMessage"):
         return True
@@ -1213,16 +1290,14 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
     successful_writes = [call for call in calls if 200 <= call.status_code < 300 and _is_write(call.arguments)]
 
     for requirement in rule.requirements:
-        matches = [call for call in successful_writes if _matches(call, requirement)]
+        matches, diagnostic_calls, detail = _requirement_result(requirement, successful_writes)
         assertions.append(
             {
                 "id": requirement.assertion_id,
                 "status": "pass" if matches else "fail",
-                "evidence": [call.pointer for call in matches]
+                "evidence": [call.pointer for call in diagnostic_calls]
                 or [{"artifact": "suite.json", "pointer": f"/tasks/{task_id}/verification/required_outcomes"}],
-                "detail": "required external outcome is proved"
-                if matches
-                else "required external outcome is not proved",
+                "detail": detail,
             }
         )
 
