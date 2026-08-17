@@ -271,6 +271,8 @@ def classify_resume_task(
         invocation_status = invocation.get("status") if invocation is not None else None
         if attempt is None:
             if invocation is None:
+                if _task_has_invocation_evidence(task_dir, attempt):
+                    return ResumeDecision("skip", "model_invocation_protected")
                 return ResumeDecision("run", "explicit_interrupted_infrastructure_retry")
             if invocation_status in RETRYABLE_MODEL_INFRA_STATUSES:
                 return ResumeDecision("run", "explicit_model_infrastructure_retry")
@@ -281,7 +283,19 @@ def classify_resume_task(
                 and model_status is None
                 and invocation is None
             ):
+                if _task_has_invocation_evidence(task_dir, attempt):
+                    return ResumeDecision("skip", "model_invocation_protected", attempt)
                 return ResumeDecision("run", "explicit_interrupted_infrastructure_retry", attempt)
+            if (
+                attempt.get("attempt_status") == "infrastructure_invalid"
+                and model_status == "completed"
+                and invocation_status == "completed"
+            ):
+                return ResumeDecision(
+                    "run",
+                    "explicit_post_invocation_infrastructure_retry",
+                    attempt,
+                )
             if (
                 model_status in RETRYABLE_MODEL_INFRA_STATUSES
                 and invocation_status == model_status

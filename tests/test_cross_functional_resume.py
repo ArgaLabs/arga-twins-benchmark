@@ -159,6 +159,61 @@ def test_explicit_infrastructure_retry_archives_api_error_but_not_completed_tria
     assert protected.reason == "model_invocation_protected"
 
 
+def test_explicit_infrastructure_retry_accepts_completed_model_with_failed_evidence_capture(
+    tmp_path: Path,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(
+        task_dir / "attempt.json",
+        {
+            **_zero_invocation_attempt(),
+            "run_id": "run-1",
+            "model_status": "completed",
+            "response_model": "gpt-5.6-luna",
+            "stop_reason": "completed",
+            "error_type": "_StateCaptureHttpError",
+            "error": "snapshot query returned HTTP 500",
+        },
+    )
+    _write_json(task_dir / "invocation.json", {"status": "completed"})
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+
+    plan, decision, _cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_infrastructure_invalid=True,
+        )
+    )
+
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+    assert decision.reason == "explicit_post_invocation_infrastructure_retry"
+    assert json.loads((archive / "invocation.json").read_text())["status"] == "completed"
+
+
+@pytest.mark.parametrize("artifact", [runner.INVOCATION_STARTED_ARTIFACT, "baseline-state.json"])
+def test_explicit_infrastructure_retry_protects_ambiguous_crash_window(
+    tmp_path: Path,
+    artifact: str,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(task_dir / artifact, {"recorded": True})
+
+    decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_infrastructure_invalid=True,
+    )
+
+    assert decision.action == "skip"
+    assert decision.reason == "model_invocation_protected"
+
+
 def test_explicit_infrastructure_retry_preserves_archived_invocation(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(
