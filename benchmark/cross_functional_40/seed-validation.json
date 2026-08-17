@@ -101,7 +101,7 @@
       "task_id": "CRM-08"
     },
     {
-      "content_sha256": "9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e",
+      "content_sha256": "86445b80225c99fde4965f2445f5a9eec91179ab1d311b4bb1ea5910d1af0a27",
       "ok": true,
       "status": "ready",
       "task_id": "MKT-01"
@@ -173,7 +173,7 @@
       "task_id": "DEV-04"
     },
     {
-      "content_sha256": "5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47",
+      "content_sha256": "f50af7381b222257da1a6c7ecc2ed3fb2e90fcf9f88b5f0b72ec56230110fce1",
       "ok": true,
       "status": "ready",
       "task_id": "DEV-05"

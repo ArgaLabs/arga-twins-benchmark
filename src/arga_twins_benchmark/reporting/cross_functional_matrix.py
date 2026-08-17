@@ -116,6 +116,22 @@ def _content_hash(task: Mapping[str, Any]) -> str:
     return _sha256_bytes(payload)
 
 
+# These two Scenario identities predate verifier-only fairness revisions.  Their
+# candidate-visible prompt, twins, and seed are unchanged; only hidden scoring
+# metadata changed.  Preserve the recorded identity for saved-trial integrity
+# without accepting arbitrary historical hashes.
+_VERIFICATION_ONLY_LEGACY_CONTENT_HASHES: dict[str, frozenset[str]] = {
+    "DEV-05": frozenset({"5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47"}),
+    "MKT-01": frozenset({"9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e"}),
+}
+
+
+def _accepted_content_hashes(task: Mapping[str, Any]) -> frozenset[str]:
+    task_id = task.get("id")
+    legacy = _VERIFICATION_ONLY_LEGACY_CONTENT_HASHES.get(task_id, frozenset())
+    return legacy | {_content_hash(task)}
+
+
 def _prompt_hash(prompt: str) -> str:
     return _sha256_bytes(prompt.encode("utf-8"))
 
@@ -650,7 +666,7 @@ def _classify_task(
             issues.append("control:mismatched_task_id")
         if control.get("scenario_id") != expected_scenario_id:
             issues.append("control:mismatched_scenario_id")
-        if control.get("scenario_content_sha256") != _content_hash(task):
+        if control.get("scenario_content_sha256") not in _accepted_content_hashes(task):
             issues.append("control:mismatched_scenario_content_sha256")
         if not _non_empty_string(control.get("run_id")) or control.get("run_id") != run_id:
             issues.append("control:mismatched_run_id")

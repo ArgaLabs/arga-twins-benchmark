@@ -67,6 +67,9 @@ _PROVIDER_ALIASES = {
     "salesforce_crm": "salesforce",
     "team_chat": "slack",
 }
+_VALUE_ALIASES: dict[str, tuple[str, ...]] = {
+    "data-processing addendum": ("data processing addendum", "dpa"),
+}
 _SECONDARY_TARGET_TERMS: dict[str, tuple[tuple[str, ...], ...]] = {
     "CRM-02": (("renee.cho@alderbank.example",),),
     "CRM-07": (("Marco Ruiz", "HelioWorks"), ("Bounced contact cleanup",)),
@@ -185,7 +188,15 @@ class _Evidence:
 
     def provider_corpus(self, provider: str, *, mutations_only: bool = False) -> str:
         calls = self.calls_for(provider=provider, mutation=True if mutations_only else None)
-        return _text([call.corpus for call in calls])
+        provider_state: list[object] = []
+        final_providers = self.artifacts.get("final-state.json", {}).get("providers")
+        if isinstance(final_providers, dict):
+            provider_state = [
+                payload
+                for name, payload in cast(dict[str, object], final_providers).items()
+                if _provider(name) == provider
+            ]
+        return _text([*[call.corpus for call in calls], *provider_state])
 
 
 def _provider(value: object) -> str:
@@ -206,7 +217,11 @@ def _contains(corpus: str, value: object) -> bool:
     if isinstance(value, bool) or value is None:
         return False
     needle = _text(value).strip('"')
-    return bool(needle) and needle in corpus
+    if not needle:
+        return False
+    if needle in corpus:
+        return True
+    return any(alias in corpus for alias in _VALUE_ALIASES.get(needle, ()))
 
 
 def _decoded_message_text(value: object) -> list[str]:
@@ -589,6 +604,12 @@ def _resource_index(evidence: _Evidence) -> dict[str, str]:
     for call in evidence.calls:
         for identifier, corpus in _iter_resource_identifiers(call.output.get("body")):
             index.setdefault(identifier, []).append(corpus)
+    for artifact_name in ("baseline-state.json", "final-state.json"):
+        providers = evidence.artifacts.get(artifact_name, {}).get("providers")
+        if not isinstance(providers, dict):
+            continue
+        for identifier, corpus in _iter_resource_identifiers(providers):
+            index.setdefault(identifier, []).append(corpus)
     return {identifier: " ".join(corpora) for identifier, corpora in index.items()}
 
 
@@ -601,6 +622,7 @@ def _target_identifiers(call: _Call) -> set[str]:
     )
     body = call.arguments.get("body")
     identifiers.update(identifier for identifier, _ in _iter_resource_identifiers(call.arguments))
+    identifiers.update(identifier for identifier, _ in _iter_resource_identifiers(call.output.get("body")))
     if isinstance(body, dict):
         for key in ("id", "Id", "primaryObjectId", "objectIdToMerge"):
             value = cast(dict[str, Any], body).get(key)
@@ -1020,10 +1042,13 @@ def _mutation_match(
     all_values: Sequence[object] = (),
     any_values: Sequence[object] = (),
 ) -> _Call | None:
+    resources = _resource_index(evidence)
     for call in evidence.calls_for(provider=provider, path=path, mutation=True, succeeded=True):
-        if all_values and not _has_all(call.corpus, *all_values):
+        target_corpus = _text([resources.get(identifier, "") for identifier in _target_identifiers(call)])
+        evidence_corpus = f"{call.corpus} {target_corpus}"
+        if all_values and not _has_all(evidence_corpus, *all_values):
             continue
-        if any_values and not _has_any(call.corpus, any_values):
+        if any_values and not _has_any(evidence_corpus, any_values):
             continue
         return call
     return None

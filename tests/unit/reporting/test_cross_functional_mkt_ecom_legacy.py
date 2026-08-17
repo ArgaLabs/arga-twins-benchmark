@@ -8,6 +8,7 @@ from typing import Any
 
 import pytest
 
+import arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy as legacy
 from arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy import (
     LEGACY_MKT_ECOM_GRADING_PROTOCOL,
     grade_mkt_ecom_legacy_attempt,
@@ -316,6 +317,45 @@ def test_slack_auth_test_post_is_read_only(tmp_path: Path, suite: dict[str, Any]
     result = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
 
     assert result["outcome"] == "pass"
+
+
+@pytest.mark.parametrize(
+    ("expected", "evidence"),
+    [
+        ("publication_blocked", "AB-52 remains on legal hold and nothing is authorized to publish"),
+        ("unavailable_for_new_orders", "Trailpack Enterprise was deactivated and is now inactive"),
+        (
+            "mapping_documented_no_meter_mutation",
+            "The meter mapping is documented and Stripe remained unchanged",
+        ),
+    ],
+)
+def test_machine_dispositions_accept_bounded_human_equivalents(expected: str, evidence: str) -> None:
+    assert legacy._expected_fact_present(legacy._normal_text(evidence), "disposition", expected)
+
+
+def test_linkedin_restli_finder_post_is_read_only() -> None:
+    arguments = {
+        "body": {"authors": "urn:li:person:example", "q": "authors"},
+        "headers": {"X-RestLi-Method": "FINDER"},
+    }
+
+    assert legacy._is_mutating("linkedin", "POST", "/v2/ugcPosts", arguments) is False
+
+
+def test_task_scoped_operational_notes_are_authorized_without_allowing_block_rewrites() -> None:
+    operations_children = "/v1/blocks/bb1cddba-338e-5325-45f9-99add99c1ce3/children"
+
+    for task_id in ("MKT-01", "MKT-02", "ECOM-06"):
+        allowed = legacy._RULES[task_id].allowed_writes["notion"]
+        assert any(operations_children.startswith(prefix) for prefix in allowed)
+        assert not any("/v1/blocks/d471994e".startswith(prefix) for prefix in allowed)
+
+
+def test_ecom_06_does_not_invent_an_old_price_lifecycle_requirement() -> None:
+    requirement_ids = {requirement.assertion_id for requirement in legacy._RULES["ECOM-06"].requirements}
+
+    assert requirement_ids == {"approved_price_created"}
 
 
 def test_assertions_carry_artifact_pointers(suite: dict[str, Any]) -> None:

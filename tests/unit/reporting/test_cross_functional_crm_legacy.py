@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import tarfile
 from pathlib import Path
@@ -8,6 +9,7 @@ from typing import Any, cast
 
 import pytest
 
+import arga_twins_benchmark.reporting.cross_functional_crm_legacy as legacy
 from arga_twins_benchmark.reporting.cross_functional_crm_legacy import (
     CROSS_FUNCTIONAL_CRM_LEGACY_PROTOCOL,
     grade_cross_functional_crm_legacy,
@@ -119,6 +121,59 @@ def test_candidate_output_cannot_prove_an_external_draft_mutation(
     assert report["outcome"] == "fail"
     assert _check(report, "required.reviewed_unsent_confirmation")["status"] == "fail"
     assert report["policy"]["candidate_output_proves_external_mutation"] is False
+
+
+def test_semantic_matching_accepts_dpa_abbreviation() -> None:
+    assert legacy._contains("vendor security and dpa review", "data-processing addendum")
+
+
+def test_required_mutation_composes_call_identity_with_saved_final_state() -> None:
+    call = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="salesforce",
+        method="PATCH",
+        path="/services/data/v60.0/sobjects/Opportunity/006000000000001AAA",
+        arguments={
+            "method": "PATCH",
+            "path": "/services/data/v60.0/sobjects/Opportunity/006000000000001AAA",
+            "body": {"NextStep": "Route procurement review"},
+        },
+        output={"ok": True, "status_code": 204},
+        is_error=False,
+    )
+    evidence = legacy._Evidence(
+        task={"id": "CRM-02"},
+        artifacts={
+            "final-state.json": {
+                "providers": {
+                    "salesforce": {
+                        "opportunities": [
+                            {
+                                "Id": "006000000000001AAA",
+                                "Name": "Alder Bank Expansion",
+                                "Description": (
+                                    "Alder Bank procurement is blocked on vendor security and a DPA; "
+                                    "Lucas Wong owns the next step"
+                                ),
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        calls=[call],
+        gaps=[],
+    )
+
+    matched = legacy._mutation_match(
+        evidence,
+        provider="salesforce",
+        path=re.compile(r"/sobjects/opportunity", re.IGNORECASE),
+        all_values=("Alder Bank", "vendor security", "data-processing addendum", "Lucas Wong"),
+    )
+
+    assert matched is call
 
 
 def test_incomplete_mediated_records_fail_closed_as_evidence_gap(

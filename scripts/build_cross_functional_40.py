@@ -1199,6 +1199,8 @@ def outcome_verification(task_spec: dict[str, Any]) -> dict[str, Any]:
     profile = HARDENING_PROFILES[task_spec["id"]]
     non_slack = [provider for provider in task_spec["twins"] if provider != "slack"]
     fact_values = [str(value) for value in profile["facts"].values() if not isinstance(value, int)]
+    if task_spec["id"] == "MKT-01":
+        fact_values.extend(("Reliability Suite", "Revision 7"))
     return {
         "version": 2,
         "grading_basis": "observable_business_outcomes",
@@ -1307,12 +1309,11 @@ def materialize(task_spec: dict[str, Any]) -> dict[str, Any]:
                     "cardinality": 1,
                 },
                 {
-                    "id": "originating_thread_update",
+                    "id": "originating_channel_update",
                     "critical": True,
                     "provider": "slack",
                     "selector": {
                         "channel": "eng-reviews",
-                        "thread_reply_to_reporter": "morgan-yu",
                         "new_message_contains_all": [
                             "billing-storage",
                             ".github/CODEOWNERS",

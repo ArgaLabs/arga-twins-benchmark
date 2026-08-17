@@ -9014,7 +9014,9 @@
               "new_message": true,
               "references_any_observable_fact": [
                 "REL-26",
-                "Acme Marketing"
+                "Acme Marketing",
+                "Reliability Suite",
+                "Revision 7"
               ]
             }
           },
@@ -14415,7 +14417,7 @@
           },
           {
             "critical": true,
-            "id": "originating_thread_update",
+            "id": "originating_channel_update",
             "minimum_cardinality": 1,
             "provider": "slack",
             "selector": {
@@ -14424,8 +14426,7 @@
                 "billing-storage",
                 ".github/CODEOWNERS",
                 "unmerged"
-              ],
-              "thread_reply_to_reporter": "morgan-yu"
+              ]
             }
           },
           {
