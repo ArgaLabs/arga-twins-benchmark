@@ -45,9 +45,9 @@ def _fixture_root(tmp_path: Path) -> tuple[Path, dict[str, Any], dict[str, Any]]
             "protocol": "arga-bench-cross-functional-model-matrix-run/1",
             "suite_id": suite["suite_id"],
             "profiles": model_matrix["profiles"],
-            "profile_count": 30,
+            "profile_count": len(model_matrix["profiles"]),
             "scenarios_per_profile": 40,
-            "total_trials": 1200,
+            "total_trials": len(model_matrix["profiles"]) * 40,
             "attempts_per_model_scenario_pair": 1,
         },
     )
@@ -311,7 +311,7 @@ def test_historical_fable_high_verdicts_are_referenced_but_never_applied(tmp_pat
     assert calibration["historical_passes"] == 21
     assert calibration["historical_failures"] == 19
     assert calibration["profile"]["requested_effort"] == "high"
-    assert calibration["matching_current_profile_ids"] == []
+    assert calibration["matching_current_profile_ids"] == ["fable-5-high"]
     assert calibration["applied_to_current_attempts"] is False
     assert calibration["application_count"] == 0
     assert all(item["historical_calibration_applied"] is False for item in report["attempts"])
@@ -518,6 +518,61 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
 
     assert "attempt:invalid_attempt_number" not in by_task[safe_retry["id"]]["integrity"]["issues"]
     assert "attempt:invalid_attempt_number" in by_task[unsafe_retry["id"]]["integrity"]["issues"]
+
+
+def test_completed_retry_after_explicit_model_terminal_archive_is_valid(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
+    archive = matrix_dir / "profiles" / profile["id"] / "retry-archive" / task["id"] / "attempt-0001"
+    _write_json(
+        archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_model_terminal_retry",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+        },
+    )
+    _write_json(
+        archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "candidate_complete",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "model_status": "tool_limit_exceeded",
+        },
+    )
+    _write_json(archive / "invocation.json", {"status": "tool_limit_exceeded"})
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "exact_completed"
+    assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+
+def test_provider_max_tokens_is_a_model_terminal_not_infrastructure(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed")
+    task_dir = matrix_dir / "profiles" / profile["id"] / "tasks" / task["id"]
+    attempt = json.loads((task_dir / "attempt.json").read_text(encoding="utf-8"))
+    attempt.update({"model_status": "incomplete", "stop_reason": "MAX_TOKENS"})
+    _write_json(task_dir / "attempt.json", attempt)
+    invocation = json.loads((task_dir / "invocation.json").read_text(encoding="utf-8"))
+    invocation.update({"status": "incomplete", "stop_reason": "MAX_TOKENS"})
+    _write_json(task_dir / "invocation.json", invocation)
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "model_terminal"
+    assert result["model_terminal_reason"] == "output_limit_exceeded"
+    assert result["integrity"]["issues"] == []
 
 
 def test_report_writer_refuses_to_mutate_preserved_matrix(tmp_path: Path) -> None:

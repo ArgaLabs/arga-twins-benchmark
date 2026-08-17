@@ -98,7 +98,9 @@ _PROVIDER_OPERATIONAL_KEYS: dict[str, frozenset[str]] = {
     "linkedin": frozenset({"applications", "config", "counters", "events"}),
     "notion": frozenset({"events", "file_uploads", "views"}),
     "salesforce": frozenset({"configured_apps", "jobs", "now", "ok", "service"}),
-    "slack": frozenset({"apps", "events", "legacy_preferences", "legacy_resources", "triggers"}),
+    "slack": frozenset(
+        {"apps", "events", "legacy_preferences", "legacy_resources", "message_count", "triggers"}
+    ),
     "stripe": frozenset({"events", "generic_resources", "generic_singletons", "meter_event_identifiers"}),
 }
 
@@ -181,17 +183,19 @@ def _walk_entities(
     if isinstance(value, dict):
         mapping = cast(dict[str, Any], value)
         stable = cast(dict[str, Any], _stable_value(mapping, provider=provider))
-        explicit_identity = _explicit_identity(stable)
-        identity_context = tuple(
-            str(item)
-            for field, item in stable.items()
-            if field not in {"created_at", "updated_at", "createdAt", "updatedAt"}
-            and isinstance(item, str | int | float)
-            and not isinstance(item, bool)
-            and len(str(item)) <= 1000
+        entity_stable = {
+            key: item for key, item in stable.items() if _slug(key) not in _NESTED_ENTITY_COLLECTIONS
+        }
+        explicit_identity = _explicit_identity(entity_stable)
+        is_entity = bool(path and explicit_identity is not None and _has_business_content(entity_stable))
+        context_values = tuple(
+            str(entity_stable[field])
+            for field in ("id", "key", "identifier", "name", "Name", "email", "emailAddress")
+            if field in entity_stable
+            and isinstance(entity_stable[field], str | int)
+            and not isinstance(entity_stable[field], bool)
         )
-        next_context = (*ancestor_context, *identity_context)
-        is_entity = bool(path and explicit_identity is not None and _has_business_content(stable))
+        next_context = (*ancestor_context, *dict.fromkeys(context_values)) if is_entity else ancestor_context
         if is_entity:
             fallback = path[-1]
             identity = explicit_identity or fallback
@@ -202,8 +206,8 @@ def _walk_entities(
                 "provider": provider,
                 "collection": "/".join(path[:-1]),
                 "ancestor_context": list(dict.fromkeys(ancestor_context)),
-                "semantic_text": _stable_json(stable),
-                **stable,
+                "semantic_text": _stable_json(entity_stable),
+                **entity_stable,
             }
             resources.append(CanonicalResource(capture.provider_role, resource_type, resource_id, fields))
         for key, item in mapping.items():
@@ -238,6 +242,64 @@ def _walk_entities(
     return resources
 
 
+def _slack_event_messages(capture: CapturedQueryState) -> list[CanonicalResource]:
+    if capture.provider_name != "slack" or not isinstance(capture.body, dict):
+        return []
+    body = cast(dict[str, Any], capture.body)
+    channels = body.get("channels")
+    channel_names: dict[str, str] = {}
+    if isinstance(channels, list):
+        for raw_channel in cast(list[object], channels):
+            if not isinstance(raw_channel, dict):
+                continue
+            channel = cast(dict[str, Any], raw_channel)
+            channel_id = channel.get("id")
+            channel_name = channel.get("name")
+            if isinstance(channel_id, str) and isinstance(channel_name, str):
+                channel_names[channel_id] = channel_name
+
+    raw_events = body.get("events")
+    if not isinstance(raw_events, list):
+        return []
+    messages: list[CanonicalResource] = []
+    for index, raw_record in enumerate(cast(list[object], raw_events)):
+        if not isinstance(raw_record, dict):
+            continue
+        record = cast(dict[str, Any], raw_record)
+        envelope = record.get("envelope")
+        if not isinstance(envelope, dict):
+            continue
+        typed_envelope = cast(dict[str, Any], envelope)
+        event = typed_envelope.get("event")
+        if not isinstance(event, dict):
+            continue
+        typed_event = cast(dict[str, Any], event)
+        if typed_event.get("type") != "message" or not isinstance(typed_event.get("text"), str):
+            continue
+        channel = str(typed_event.get("channel", ""))
+        identity = str(
+            record.get("id") or typed_envelope.get("event_id") or typed_event.get("ts") or index
+        )
+        stable = {
+            "provider": "slack",
+            "channel": channel,
+            "channel_name": channel_names.get(channel, ""),
+            "text": typed_event["text"],
+            "ts": typed_event.get("ts"),
+            "user": typed_event.get("user"),
+            "source_method": record.get("source_method"),
+        }
+        messages.append(
+            CanonicalResource(
+                capture.provider_role,
+                "message",
+                f"slack:messages:{identity}",
+                {"semantic_text": _stable_json(stable), **stable},
+            )
+        )
+    return messages
+
+
 def cross_functional_admin_state_v1(capture: CapturedQueryState) -> Sequence[CanonicalResource]:
     """Project a trusted full-state read into stable, route-independent entities.
 
@@ -251,13 +313,16 @@ def cross_functional_admin_state_v1(capture: CapturedQueryState) -> Sequence[Can
     if not isinstance(capture.body, dict):
         raise _error(capture, "admin state must be a JSON object")
     provider = capture.provider_name
-    resources = _walk_entities(
-        cast(dict[str, Any], capture.body),
-        capture=capture,
-        provider=provider,
-        path=(),
-        ancestor_context=(),
-    )
+    resources = [
+        *_slack_event_messages(capture),
+        *_walk_entities(
+            cast(dict[str, Any], capture.body),
+            capture=capture,
+            provider=provider,
+            path=(),
+            ancestor_context=(),
+        ),
+    ]
     unique: dict[tuple[str, str], CanonicalResource] = {}
     for resource in resources:
         key = (resource.resource_type, resource.resource_id)

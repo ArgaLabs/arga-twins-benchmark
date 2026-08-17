@@ -452,6 +452,7 @@ def _retry_archive_proves_safe_retries(
         elif reason not in {
             "zero_invocation_infrastructure_invalid",
             "explicit_model_infrastructure_retry",
+            "explicit_model_terminal_retry",
         }:
             return False
         archived_issues: list[str] = []
@@ -468,7 +469,7 @@ def _retry_archive_proves_safe_retries(
             or archived_attempt.get("task_id") != task_id
         ):
             return False
-        if reason == "explicit_model_infrastructure_retry":
+        if reason in {"explicit_model_infrastructure_retry", "explicit_model_terminal_retry"}:
             if not isinstance(metadata.get("cleanup"), dict):
                 return False
             invocation_issues: list[str] = []
@@ -478,12 +479,22 @@ def _retry_archive_proves_safe_retries(
                 issues=invocation_issues,
             )
             model_status = archived_attempt.get("model_status")
+            allowed_statuses = (
+                {"api_error", "invalid_response"}
+                if reason == "explicit_model_infrastructure_retry"
+                else _MODEL_TERMINAL_STATUSES
+            )
+            allowed_attempt_statuses = (
+                {"infrastructure_invalid", "candidate_complete"}
+                if reason == "explicit_model_infrastructure_retry"
+                else {"candidate_complete"}
+            )
             if (
                 invocation_issues
                 or archived_invocation is None
-                or model_status not in {"api_error", "invalid_response"}
+                or model_status not in allowed_statuses
                 or archived_invocation.get("status") != model_status
-                or archived_attempt.get("attempt_status") not in {"infrastructure_invalid", "candidate_complete"}
+                or archived_attempt.get("attempt_status") not in allowed_attempt_statuses
             ):
                 return False
             continue
@@ -702,11 +713,18 @@ def _classify_task(
             )
         )
 
+    output_limit_terminal = bool(
+        model_status == "incomplete"
+        and attempt is not None
+        and invocation is not None
+        and attempt.get("stop_reason") == "MAX_TOKENS"
+        and invocation.get("stop_reason") == "MAX_TOKENS"
+    )
     if model_status not in _KNOWN_MODEL_STATUSES:
         issues.append("attempt:missing_or_unknown_model_status")
-    elif model_status not in _MODEL_TERMINAL_STATUSES and model_status != "completed":
+    elif model_status not in _MODEL_TERMINAL_STATUSES and model_status != "completed" and not output_limit_terminal:
         issues.append(f"model_infrastructure_status:{model_status}")
-    if attempt is not None and model_status in _MODEL_TERMINAL_STATUSES | {"completed"}:
+    if attempt is not None and (model_status in _MODEL_TERMINAL_STATUSES | {"completed"} or output_limit_terminal):
         if attempt.get("attempt_status") != "candidate_complete":
             issues.append("attempt:terminal_status_not_preserved")
 
@@ -719,7 +737,13 @@ def _classify_task(
         evidence_gaps: list[str] = []
     else:
         execution_class = "exact_completed" if model_status == "completed" else "model_terminal"
-        terminal_reason = model_status if model_status in _MODEL_TERMINAL_STATUSES else None
+        terminal_reason = (
+            "output_limit_exceeded"
+            if output_limit_terminal
+            else model_status
+            if model_status in _MODEL_TERMINAL_STATUSES
+            else None
+        )
         assert baseline is not None and final is not None
         evidence_gaps = _snapshot_evidence_gaps(baseline, final)
         validity = "invalid_grader"
@@ -923,8 +947,8 @@ def classify_cross_functional_matrix(
     tasks = _suite_tasks(suite)
     model_matrix = _load_trusted_object(model_matrix_path, label="model matrix")
     profiles = _profile_by_id(model_matrix, label="model matrix")
-    if len(profiles) != 30:
-        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 30 profiles")
+    if len(profiles) != 31:
+        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 31 profiles")
     calibration_payload = _load_trusted_object(
         historical_calibration_path,
         label="historical Fable 5 High calibration",

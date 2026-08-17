@@ -150,7 +150,7 @@ def _fake_classification(
         "protocol": CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
         "classification_policy": {"fail_closed": True},
         "matrix_integrity_issues": [],
-        "totals": {"scheduled_attempts": 1200},
+        "totals": {"scheduled_attempts": 1240},
         "attempts": attempts,
     }
 
@@ -184,17 +184,32 @@ def _fake_registry() -> dict[str, DomainGrader]:
     return {prefix: grader for prefix in grader.prefixes}
 
 
-def test_registry_routes_every_domain_to_the_fair_task_grader(
+def test_registry_routes_every_domain_to_task_contracts_with_state_fallback(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     calls: list[str] = []
 
     def fake_fair(task_dir: Path, task: Mapping[str, Any]) -> dict[str, Any]:
-        calls.append(f"{task['id']}:{task_dir.name}")
+        calls.append(f"state:{task['id']}:{task_dir.name}")
+        return {"outcome": "pass", "assertions": [{"status": "pass"}]}
+
+    def fake_it_dev(*, task: Mapping[str, Any], task_dir: Path) -> dict[str, Any]:
+        calls.append(f"task:{task['id']}:{task_dir.name}")
+        return {"outcome": "pass", "assertions": [{"status": "pass"}]}
+
+    def fake_crm(task_dir: Path, **_kwargs: object) -> dict[str, Any]:
+        calls.append(f"task:{task_dir.name}:{task_dir.name}")
+        return {"outcome": "pass", "assertions": [{"status": "pass"}]}
+
+    def fake_mkt_ecom(task_dir: Path, task: Mapping[str, Any]) -> dict[str, Any]:
+        calls.append(f"task:{task['id']}:{task_dir.name}")
         return {"outcome": "pass", "assertions": [{"status": "pass"}]}
 
     monkeypatch.setattr(semantic_report, "grade_cross_functional_fair_attempt", fake_fair)
+    monkeypatch.setattr(semantic_report, "grade_it_dev_legacy_task", fake_it_dev)
+    monkeypatch.setattr(semantic_report, "grade_cross_functional_crm_legacy", fake_crm)
+    monkeypatch.setattr(semantic_report, "grade_mkt_ecom_legacy_attempt", fake_mkt_ecom)
 
     registry = build_domain_grader_registry(suite_path=SUITE_PATH, tasks_path=TASKS_PATH)
 
@@ -206,15 +221,22 @@ def test_registry_routes_every_domain_to_the_fair_task_grader(
     registry["IT"].grade(tmp_path / "IT-01", {"id": "IT-01"})
     registry["CRM"].grade(tmp_path / "CRM-01", {"id": "CRM-01"})
     registry["MKT"].grade(tmp_path / "MKT-01", {"id": "MKT-01"})
-    assert calls == ["IT-01:IT-01", "CRM-01:CRM-01", "MKT-01:MKT-01"]
-    assert {grader.name for grader in registry.values()} == {"cross_functional_fair_v1"}
+    assert calls == [
+        "task:IT-01:IT-01",
+        "state:IT-01:IT-01",
+        "task:CRM-01:CRM-01",
+        "state:CRM-01:CRM-01",
+        "task:MKT-01:MKT-01",
+        "state:MKT-01:MKT-01",
+    ]
+    assert {grader.name for grader in registry.values()} == {"cross_functional_per_task_v2"}
 
 
 def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path: Path) -> None:
     suite = _load(SUITE_PATH)
     profiles = cast(list[dict[str, Any]], _load(MODEL_MATRIX_PATH)["profiles"])
-    ready_profile = cast(str, profiles[0]["id"])
-    mixed_profile = cast(str, profiles[1]["id"])
+    ready_profile = next(profile["id"] for profile in profiles if profile["id"] == "fable-5-xhigh")
+    mixed_profile = next(profile["id"] for profile in profiles if profile["id"] == "fable-5-medium")
     matrix_dir = tmp_path / "matrix"
     for profile in (ready_profile, mixed_profile):
         _write(
@@ -244,7 +266,7 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
     )
 
     assert report["protocol"] == CROSS_FUNCTIONAL_SEMANTIC_REPORT_PROTOCOL
-    assert len(report["attempts"]) == 1200
+    assert len(report["attempts"]) == 1240
     mixed = {attempt["task_id"]: attempt for attempt in report["attempts"] if attempt["profile_id"] == mixed_profile}
     assert mixed["IT-01"]["semantic_outcome"] == "pass"
     assert mixed["IT-02"]["semantic_outcome"] == "fail"
@@ -314,6 +336,36 @@ def test_first_terminal_attempt_is_excluded_until_retried(tmp_path: Path) -> Non
     assert result["score_eligible"] is False
     assert result["semantic_outcome"] is None
     assert result["evidence_gaps"] == ["model_terminal:retry_required:tool_limit_exceeded"]
+
+
+def test_provider_output_ceiling_is_scoreable_without_an_impossible_retry(tmp_path: Path) -> None:
+    task_dir = tmp_path / "matrix" / "profiles" / "profile" / "tasks" / "IT-01"
+    _write_metrics(tmp_path / "matrix", "profile", "IT-01")
+    _write(
+        task_dir / "invocation.json",
+        {
+            "status": "incomplete",
+            "config": {"max_output_tokens": 65_536, "max_tool_calls": 120, "timeout_seconds": 1800},
+        },
+    )
+    classified = _classified_attempt(
+        profile_id="profile",
+        task_id="IT-01",
+        execution_class="model_terminal",
+        terminal_reason="output_limit_exceeded",
+    )
+
+    result = semantic_report._task_result(  # pyright: ignore[reportPrivateUsage]
+        classified=classified,
+        matrix_dir=tmp_path / "matrix",
+        task={"id": "IT-01", "title": "Test", "domain": "it_support", "prompt": "Prompt"},
+        grader=_fake_registry()["IT"],
+    )
+
+    assert result["validity"] == "valid"
+    assert result["score_eligible"] is True
+    assert result["semantic_outcome"] == "fail"
+    assert result["model_terminal_reason"] == "output_limit_exceeded"
 
 
 def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path) -> None:
@@ -417,7 +469,7 @@ def test_missing_domain_grader_is_invalid_grader_not_a_failure(tmp_path: Path) -
     task = cast(dict[str, Any], _load(SUITE_PATH)["tasks"][16])
     assert task["id"] == "MKT-01"
     missing = DomainGrader(
-        "cross_functional_fair_v1",
+        "cross_functional_per_task_v2",
         ("MKT", "ECOM"),
         None,
         "domain_grader_unavailable:test",
