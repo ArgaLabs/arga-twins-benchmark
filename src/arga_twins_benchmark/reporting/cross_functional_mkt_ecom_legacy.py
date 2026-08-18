@@ -933,7 +933,8 @@ def _requirement_detail(
             f"but the saved request and final state omit {required}"
         )
     path_note = f" using a path containing {' or '.join(requirement.path_any)}" if requirement.path_any else ""
-    return f"No accepted {provider} write{path_note} established {label}; required evidence: {required}"
+    required_note = f"; required evidence: {required}" if required else ""
+    return f"No accepted {provider} write{path_note} established {label}{required_note}"
 
 
 def _task_channel_and_refs(task: Mapping[str, Any]) -> tuple[str | None, tuple[str, ...]]:

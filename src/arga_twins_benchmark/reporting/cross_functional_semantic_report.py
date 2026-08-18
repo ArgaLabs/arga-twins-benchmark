@@ -104,6 +104,20 @@ _EVIDENCE_PROVIDER_TOKENS = {
     "slack": ("slack", "originating channel"),
     "stripe": ("stripe",),
 }
+_TRIAL_EVIDENCE_ARTIFACTS = frozenset(
+    {
+        "attempt.json",
+        "baseline-state.json",
+        "cleanup.json",
+        "control.json",
+        "final-state.json",
+        "invocation.json",
+        "official-docs-trace.json",
+        "provider-trace.json",
+        "raw-state-diff.json",
+        "tool-steps.json",
+    }
+)
 
 
 class CrossFunctionalSemanticReportError(ValueError):
@@ -484,6 +498,8 @@ def _normalize_assertions(grade: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 def _enrich_decisive_assertion_evidence(
     assertions: Sequence[Mapping[str, Any]],
+    *,
+    task_dir: Path,
 ) -> list[dict[str, Any]]:
     """Give every decisive finding a navigable proof surface.
 
@@ -493,15 +509,64 @@ def _enrich_decisive_assertion_evidence(
     call-specific pointers are preserved unchanged.
     """
 
+    def pointer_exists(artifact: str, pointer: str) -> bool:
+        payload = _read_optional_object(task_dir / artifact)
+        if payload is None or pointer in {"", "/"}:
+            return payload is not None
+        if not pointer.startswith("/"):
+            return False
+        current: object = payload
+        for raw_token in pointer[1:].split("/"):
+            token = raw_token.replace("~1", "/").replace("~0", "~")
+            if isinstance(current, Mapping):
+                if token not in current:
+                    return False
+                current = current[token]
+                continue
+            if isinstance(current, list) and token.isdigit():
+                index = int(token)
+                if index >= len(current):
+                    return False
+                current = current[index]
+                continue
+            return False
+        return True
+
+    def linkable(pointer: Mapping[str, Any]) -> bool:
+        artifact = pointer.get("artifact")
+        path = pointer.get("pointer")
+        return (
+            isinstance(artifact, str)
+            and artifact in _TRIAL_EVIDENCE_ARTIFACTS
+            and isinstance(path, str)
+            and pointer_exists(artifact, path)
+        )
+
     enriched: list[dict[str, Any]] = []
     for assertion in assertions:
         item = dict(assertion)
-        evidence = item.get("evidence")
-        if isinstance(evidence, list) and evidence:
+        raw_evidence = item.get("evidence")
+        status = item.get("status")
+        if status not in {"fail", "unsafe"}:
+            item["evidence"] = (
+                [dict(pointer) for pointer in cast(list[object], raw_evidence) if isinstance(pointer, Mapping)]
+                if isinstance(raw_evidence, list)
+                else []
+            )
             enriched.append(item)
             continue
-        if item.get("status") not in {"fail", "unsafe", "evidence_gap"}:
-            item["evidence"] = []
+
+        evidence: list[dict[str, Any]] = []
+        if isinstance(raw_evidence, list):
+            for raw_pointer in cast(list[object], raw_evidence):
+                if not isinstance(raw_pointer, Mapping):
+                    continue
+                pointer = dict(raw_pointer)
+                artifact = pointer.get("artifact")
+                if linkable(pointer) or artifact == "suite.json":
+                    evidence.append(pointer)
+        item["evidence"] = evidence
+        if any(linkable(pointer) for pointer in evidence):
             enriched.append(item)
             continue
 
@@ -550,7 +615,7 @@ def _enrich_decisive_assertion_evidence(
                 "detail": "trusted before/after semantic changes",
             }
         )
-        item["evidence"] = pointers
+        item["evidence"] = [*evidence, *(pointer for pointer in pointers if linkable(pointer))]
         enriched.append(item)
     return enriched
 
@@ -1014,7 +1079,7 @@ def _task_result(
         evidence_gaps = ["execution_classifier:unknown_execution_class"]
 
     assertions = _enrich_unsafe_assertions(assertions, task_dir=task_dir)
-    assertions = _enrich_decisive_assertion_evidence(assertions)
+    assertions = _enrich_decisive_assertion_evidence(assertions, task_dir=task_dir)
     reason = (
         _reason(
             semantic_outcome,

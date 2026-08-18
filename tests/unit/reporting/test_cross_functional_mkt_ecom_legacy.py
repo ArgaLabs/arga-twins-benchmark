@@ -57,6 +57,18 @@ def _write(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def test_missing_requirement_with_no_token_groups_has_no_empty_required_evidence_clause() -> None:
+    requirement = legacy._Requirement(  # pyright: ignore[reportPrivateUsage]
+        assertion_id="no_company_post",
+        provider="linkedin",
+        token_groups=(),
+    )
+
+    detail = legacy._requirement_detail(requirement, (), "")  # pyright: ignore[reportPrivateUsage]
+
+    assert detail == "No accepted LinkedIn write established no company post"
+
+
 def _rewrite_call_route(task_dir: Path, *, old: str, new: str, method: str | None = None) -> None:
     invocation = _read(task_dir / "invocation.json")
     trace = _read(task_dir / "provider-trace.json")
