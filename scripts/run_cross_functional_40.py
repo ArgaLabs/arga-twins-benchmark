@@ -49,6 +49,8 @@ PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
 CONTROL_PLANE_MAX_ATTEMPTS = 5
 CONTROL_PLANE_RETRY_BASE_SECONDS = 1.0
+STATE_CAPTURE_MAX_ATTEMPTS = 8
+STATE_CAPTURE_RETRY_BASE_SECONDS = 1.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
@@ -843,13 +845,15 @@ async def run_task(
                     "tool_definitions": tools,
                     "provider_tool_call_limit": PROVIDER_TOOL_LIMIT,
                     "official_docs_tool_call_limit": OFFICIAL_DOCS_TOOL_LIMIT,
+                    "trusted_state_capture_max_attempts": STATE_CAPTURE_MAX_ATTEMPTS,
+                    "trusted_state_capture_retry_base_seconds": STATE_CAPTURE_RETRY_BASE_SECONDS,
                 },
             )
 
             capturer = TrustedStateCapturer(
                 timeout_seconds=60,
-                max_attempts=5,
-                retry_base_delay_seconds=1,
+                max_attempts=STATE_CAPTURE_MAX_ATTEMPTS,
+                retry_base_delay_seconds=STATE_CAPTURE_RETRY_BASE_SECONDS,
             )
             snapshot_queries = snapshot_queries_for_task(task)
             baseline = await capturer.capture(
