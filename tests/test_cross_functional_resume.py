@@ -273,6 +273,36 @@ def test_explicit_terminal_retry_archives_first_attempt_once(tmp_path: Path, sta
     assert json.loads((archive / "attempt.json").read_text())["model_status"] == status
 
 
+def test_explicit_terminal_retry_accepts_infrastructure_attempt_with_matching_terminal_invocation(
+    tmp_path: Path,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    attempt = {
+        **_terminal_attempt("timed_out"),
+        "attempt_status": "infrastructure_invalid",
+        "error_type": "_StateCaptureHttpError",
+    }
+    _write_json(task_dir / "attempt.json", attempt)
+    _write_json(task_dir / "invocation.json", {"status": "timed_out"})
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+
+    plan, decision, _cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_model_terminal=True,
+        )
+    )
+
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+    assert decision.reason == "explicit_model_terminal_retry"
+    assert json.loads((archive / "attempt.json").read_text())["attempt_status"] == "infrastructure_invalid"
+
+
 def test_explicit_terminal_retry_never_replays_second_terminal_attempt(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", _terminal_attempt("timed_out", attempt_number=2))

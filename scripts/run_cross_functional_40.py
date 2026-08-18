@@ -313,7 +313,7 @@ def classify_resume_task(
         model_status = attempt.get("model_status") if attempt is not None else None
         if (
             attempt is not None
-            and attempt.get("attempt_status") == "candidate_complete"
+            and attempt.get("attempt_status") in {"candidate_complete", "infrastructure_invalid"}
             and model_status in RETRYABLE_MODEL_TERMINAL_STATUSES
             and invocation_status == model_status
         ):
