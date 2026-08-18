@@ -368,13 +368,15 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-retry-archive/1",
             "archive_number": 1,
-            "archive_reason": "interrupted_before_attempt",
-            "profile_id": profile["id"],
-            "task_id": interrupted_retry["id"],
+                "archive_reason": "interrupted_before_attempt",
+                "profile_id": profile["id"],
+                "task_id": interrupted_retry["id"],
+                "cleanup": {"outcome": "interrupted_before_control_persisted"},
         },
     )
 
     zero_invocation_retry = suite["tasks"][2]
+    zero_invocation_run_id = f"run-{zero_invocation_retry['id'].lower()}"
     _write_attempt(
         matrix_dir,
         task=zero_invocation_retry,
@@ -388,9 +390,10 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-retry-archive/1",
             "archive_number": 1,
-            "archive_reason": "zero_invocation_infrastructure_invalid",
-            "profile_id": profile["id"],
-            "task_id": zero_invocation_retry["id"],
+                "archive_reason": "zero_invocation_infrastructure_invalid",
+                "profile_id": profile["id"],
+                "task_id": zero_invocation_retry["id"],
+                "cleanup": _archive_cleanup(zero_invocation_run_id),
         },
     )
     _write_json(
@@ -398,8 +401,9 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-attempt/2",
             "attempt_status": "infrastructure_invalid",
-            "profile_id": profile["id"],
-            "task_id": zero_invocation_retry["id"],
+                "profile_id": profile["id"],
+                "task_id": zero_invocation_retry["id"],
+                "run_id": zero_invocation_run_id,
             "model_status": None,
             "final_text": "",
             "tool_calls": 0,

@@ -459,9 +459,14 @@ def _retry_archive_proves_safe_retries(
         if reason == "interrupted_before_attempt":
             if archived_attempt_path.exists() or any(archive_dir.rglob("invocation.json")):
                 return False
+            if not _archived_cleanup_is_safe(archive_dir=archive_dir, cleanup=metadata.get("cleanup")):
+                return False
             continue
         if reason == "explicit_interrupted_infrastructure_retry":
-            if any(archive_dir.rglob("invocation.json")) or not isinstance(metadata.get("cleanup"), dict):
+            if any(archive_dir.rglob("invocation.json")) or not _archived_cleanup_is_safe(
+                archive_dir=archive_dir,
+                cleanup=metadata.get("cleanup"),
+            ):
                 return False
             if not archived_attempt_path.exists():
                 continue
@@ -493,15 +498,9 @@ def _retry_archive_proves_safe_retries(
             "explicit_model_terminal_retry",
             "explicit_missing_snapshot_evidence_retry",
         }:
-            archived_run_id = archived_attempt.get("run_id")
-            cleanup = metadata.get("cleanup")
-            if (
-                not _non_empty_string(archived_run_id)
-                or not isinstance(cleanup, dict)
-                or not cleanup_payload_proves_inert(
-                    cleanup,
-                    expected_run_id=cast(str, archived_run_id),
-                )
+            if not _archived_cleanup_is_safe(
+                archive_dir=archive_dir,
+                cleanup=metadata.get("cleanup"),
             ):
                 return False
             invocation_issues: list[str] = []
@@ -560,6 +559,8 @@ def _retry_archive_proves_safe_retries(
             return False
         if archived_attempt.get("model_status") is not None or archived_attempt.get("final_text") not in (None, ""):
             return False
+        if not _archived_cleanup_is_safe(archive_dir=archive_dir, cleanup=metadata.get("cleanup")):
+            return False
         if reason == "zero_invocation_infrastructure_invalid":
             if any(archive_dir.rglob("invocation.json")):
                 return False
@@ -567,6 +568,31 @@ def _retry_archive_proves_safe_retries(
                 if archived_attempt.get(field) != 0:
                     return False
     return True
+
+
+def _archived_cleanup_is_safe(*, archive_dir: Path, cleanup: object) -> bool:
+    run_ids: set[str] = set()
+    for filename in ("attempt.json", "control.json"):
+        path = archive_dir / filename
+        if not path.exists():
+            continue
+        issues: list[str] = []
+        payload = _read_artifact(path, name=filename, issues=issues)
+        if issues or payload is None:
+            return False
+        run_id = payload.get("run_id")
+        if run_id is not None:
+            if not _non_empty_string(run_id):
+                return False
+            run_ids.add(cast(str, run_id))
+    if len(run_ids) > 1:
+        return False
+    if not run_ids:
+        return cleanup == {"outcome": "interrupted_before_control_persisted"}
+    return isinstance(cleanup, dict) and cleanup_payload_proves_inert(
+        cleanup,
+        expected_run_id=next(iter(run_ids)),
+    )
 
 
 def _legacy_attempt_number_is_safe(
