@@ -39,8 +39,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SUITE_PATH = ROOT / "benchmark" / "cross_functional_40" / "suite.json"
 MODEL_MATRIX_PATH = ROOT / "benchmark" / "cross_functional_40" / "model_matrix.json"
 SUITE_TAG = "suite:cross-functional-40-v1"
-PROVIDER_TOOL_LIMIT = 100
-OFFICIAL_DOCS_TOOL_LIMIT = 20
+PROVIDER_TOOL_LIMIT = 160
+OFFICIAL_DOCS_TOOL_LIMIT = 40
 MODEL_TIMEOUT_SECONDS = 1_800
 PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
@@ -320,7 +320,14 @@ def classify_resume_task(
             archived_terminal_attempts = _archived_terminal_attempt_count(task_dir)
             if archived_terminal_attempts is None:
                 return ResumeDecision("blocked", "model_terminal_retry_history_ambiguous", attempt)
-            if archived_terminal_attempts == 0:
+            invocation_config = invocation.get("config") if invocation is not None else None
+            typed_config = invocation_config if isinstance(invocation_config, dict) else {}
+            used_lower_tool_ceiling = (
+                model_status == "tool_limit_exceeded"
+                and isinstance(typed_config.get("max_tool_calls"), int)
+                and typed_config["max_tool_calls"] < PROVIDER_TOOL_LIMIT + OFFICIAL_DOCS_TOOL_LIMIT
+            )
+            if archived_terminal_attempts == 0 or used_lower_tool_ceiling:
                 return ResumeDecision("run", "explicit_model_terminal_retry", attempt)
             return ResumeDecision("skip", "model_terminal_retry_exhausted", attempt)
 

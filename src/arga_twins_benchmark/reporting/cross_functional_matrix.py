@@ -503,7 +503,7 @@ def _retry_archive_proves_safe_retries(
             allowed_attempt_statuses = (
                 {"infrastructure_invalid", "candidate_complete"}
                 if reason == "explicit_model_infrastructure_retry"
-                else {"candidate_complete"}
+                else {"infrastructure_invalid", "candidate_complete"}
             )
             if (
                 invocation_issues

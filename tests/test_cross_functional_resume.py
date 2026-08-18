@@ -327,6 +327,64 @@ def test_explicit_terminal_retry_never_replays_second_terminal_attempt(tmp_path:
     assert decision.reason == "model_terminal_retry_exhausted"
 
 
+def test_explicit_terminal_retry_upgrades_an_attempt_clipped_by_the_old_tool_ceiling(
+    tmp_path: Path,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(task_dir / "attempt.json", _terminal_attempt("tool_limit_exceeded", attempt_number=2))
+    _write_json(
+        task_dir / "invocation.json",
+        {"status": "tool_limit_exceeded", "config": {"max_tool_calls": 120}},
+    )
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "attempt.json",
+        _terminal_attempt("tool_limit_exceeded"),
+    )
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "invocation.json",
+        {"status": "tool_limit_exceeded", "config": {"max_tool_calls": 120}},
+    )
+
+    decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+
+    assert decision.action == "run"
+    assert decision.reason == "explicit_model_terminal_retry"
+
+
+def test_explicit_terminal_retry_stops_after_attempt_at_current_tool_ceiling(tmp_path: Path) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_json(task_dir / "attempt.json", _terminal_attempt("tool_limit_exceeded", attempt_number=2))
+    _write_json(
+        task_dir / "invocation.json",
+        {"status": "tool_limit_exceeded", "config": {"max_tool_calls": 200}},
+    )
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "attempt.json",
+        _terminal_attempt("tool_limit_exceeded"),
+    )
+    _write_json(
+        tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001" / "invocation.json",
+        {"status": "tool_limit_exceeded", "config": {"max_tool_calls": 120}},
+    )
+
+    decision = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+
+    assert decision.action == "skip"
+    assert decision.reason == "model_terminal_retry_exhausted"
+
+
 def test_explicit_missing_snapshot_retry_accepts_only_both_empty_query_sets(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     completed = {
@@ -526,9 +584,9 @@ def test_resume_history_records_requested_concurrency(tmp_path: Path) -> None:
     assert history["entries"][0]["retry_model_terminal"] is True
     assert history["entries"][0]["retry_missing_snapshot_evidence"] is True
     assert history["entries"][0]["candidate_limits"] == {
-        "provider_tool_calls": 100,
-        "official_docs_tool_calls": 20,
-        "total_tool_calls": 120,
+        "provider_tool_calls": 160,
+        "official_docs_tool_calls": 40,
+        "total_tool_calls": 200,
         "model_timeout_seconds": 1800,
     }
     assert history["entries"][0]["rerun_tasks"] == [TASK_ID]

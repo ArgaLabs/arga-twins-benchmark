@@ -520,7 +520,11 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
     assert "attempt:invalid_attempt_number" in by_task[unsafe_retry["id"]]["integrity"]["issues"]
 
 
-def test_completed_retry_after_explicit_model_terminal_archive_is_valid(tmp_path: Path) -> None:
+@pytest.mark.parametrize("archived_attempt_status", ["candidate_complete", "infrastructure_invalid"])
+def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
+    tmp_path: Path,
+    archived_attempt_status: str,
+) -> None:
     matrix_dir, suite, profile = _fixture_root(tmp_path)
     task = suite["tasks"][0]
     _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
@@ -540,7 +544,7 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(tmp_path
         archive / "attempt.json",
         {
             "protocol": "arga-bench-cross-functional-attempt/2",
-            "attempt_status": "candidate_complete",
+            "attempt_status": archived_attempt_status,
             "profile_id": profile["id"],
             "task_id": task["id"],
             "model_status": "tool_limit_exceeded",

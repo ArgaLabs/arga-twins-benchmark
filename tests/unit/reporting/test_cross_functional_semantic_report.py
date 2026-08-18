@@ -62,7 +62,7 @@ def _write_metrics(matrix_dir: Path, profile_id: str, task_id: str) -> None:
         task_dir / "invocation.json",
         {
             "status": "completed",
-            "config": {"max_tool_calls": 120, "timeout_seconds": 1800},
+            "config": {"max_tool_calls": 200, "timeout_seconds": 1800},
         },
     )
     _write(
