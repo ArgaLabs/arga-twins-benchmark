@@ -1144,7 +1144,35 @@ async def async_main(args: argparse.Namespace) -> int:
     scenario_payload = {"suite_tag": SUITE_TAG, "scenario_ids": scenario_ids}
     existing_scenarios = read_json_object(output_root / "staging-scenarios.json")
     if existing_scenarios is not None and existing_scenarios != scenario_payload:
-        raise ValueError("cannot resume: staging Scenario identities changed")
+        retry_enabled = (
+            args.retry_infrastructure_invalid
+            or args.retry_model_terminal
+            or args.retry_missing_snapshot_evidence
+        )
+        existing_ids = existing_scenarios.get("scenario_ids")
+        if (
+            not resume_existing
+            or not retry_enabled
+            or existing_scenarios.get("suite_tag") != SUITE_TAG
+            or not isinstance(existing_ids, dict)
+            or set(existing_ids) != set(scenario_ids)
+        ):
+            raise ValueError("cannot resume: staging Scenario identities changed")
+        changed_task_ids = sorted(
+            task_id for task_id, scenario_id in scenario_ids.items() if existing_ids.get(task_id) != scenario_id
+        )
+        write_private_json(
+            output_root / "staging-scenarios-resume.json",
+            {
+                "protocol": "arga-bench-cross-functional-scenario-resolution/1",
+                "suite_tag": SUITE_TAG,
+                "resolved_at": utc_now(),
+                "changed_task_ids": changed_task_ids,
+                "original_scenario_ids": existing_ids,
+                "resolved_scenario_ids": scenario_ids,
+                "task_content_sha256": {str(task["id"]): content_hash(task) for task in tasks},
+            },
+        )
     if existing_scenarios is None:
         write_private_json(output_root / "staging-scenarios.json", scenario_payload)
 

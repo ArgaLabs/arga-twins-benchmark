@@ -53,6 +53,15 @@ _SITE_REQUIRED_METRICS = (
     "output_tokens",
     "estimated_cost_usd",
 )
+
+
+def _scenario_execution_sha256(task: Mapping[str, Any]) -> str:
+    candidate_contract = {
+        field: task.get(field)
+        for field in ("id", "prompt", "twins", "seed_config")
+    }
+    encoded = json.dumps(candidate_contract, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 _PROFILE_FIELDS = (
     "id",
     "label",
@@ -821,6 +830,7 @@ def _task_result(
     terminal_reason = classified.get("model_terminal_reason")
     metrics, tool_steps, metric_gaps = _attempt_metrics(task_dir)
     attempt = _read_optional_object(task_dir / "attempt.json") or {}
+    control = _read_optional_object(task_dir / "control.json") or {}
     domain_grade: DomainGrade | None = None
     assertions: list[dict[str, Any]] = []
     semantic_outcome: str | None = None
@@ -936,6 +946,8 @@ def _task_result(
         "metric_gaps": metric_gaps,
         "tool_steps": tool_steps,
         "scenario_id": attempt.get("scenario_id"),
+        "scenario_content_sha256": control.get("scenario_content_sha256"),
+        "scenario_execution_sha256": _scenario_execution_sha256(task),
         "stop_reason": attempt.get("stop_reason"),
         "cleanup_succeeded": attempt.get("cleanup_succeeded") is True,
     }
@@ -1165,6 +1177,8 @@ def _site_task(task: Mapping[str, Any]) -> dict[str, Any]:
         "terminal_reason": task.get("model_terminal_reason"),
         "run_id": task.get("run_id"),
         "scenario_id": task.get("scenario_id"),
+        "scenario_content_sha256": task.get("scenario_content_sha256"),
+        "scenario_execution_sha256": task.get("scenario_execution_sha256"),
         "stop_reason": task.get("stop_reason"),
         "tool_calls": metrics["tool_calls"],
         "provider_tool_calls": metrics["provider_tool_calls"],

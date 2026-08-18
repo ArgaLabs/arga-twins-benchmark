@@ -66,6 +66,8 @@ def _reports() -> dict[int, dict[str, Any]]:
                         },
                         "run_id": f"run-{repeat}-{profile_index}-{task_index}",
                         "scenario_id": f"scenario-{task_index}",
+                        "scenario_content_sha256": f"{task_index:064x}",
+                        "scenario_execution_sha256": f"{task_index + 100:064x}",
                     }
                 )
         reports[repeat] = {
@@ -149,6 +151,28 @@ def test_rejects_a_changed_grader_revision() -> None:
     reports[2]["grader_provenance"]["bundle_sha256"] = "c" * 64
 
     with pytest.raises(CrossFunctionalRepeatedReportError, match="changed the executable grader"):
+        build_cross_functional_repeated_report(reports, bootstrap_resamples=10)
+
+
+def test_accepts_recreated_scenario_id_with_identical_content() -> None:
+    reports = _reports()
+    reports[2]["attempts"][0]["scenario_id"] = "recreated-scenario"
+    reports[2]["attempts"][0]["scenario_content_sha256"] = "e" * 64
+
+    report = build_cross_functional_repeated_report(reports, bootstrap_resamples=10)
+
+    assert report["all_trials_scoring_ready"] is True
+
+
+def test_rejects_changed_scenario_content() -> None:
+    reports = _reports()
+    reports[2]["attempts"][0]["scenario_id"] = "recreated-scenario"
+    reports[2]["attempts"][0]["scenario_execution_sha256"] = "f" * 64
+
+    with pytest.raises(
+        CrossFunctionalRepeatedReportError,
+        match="changed candidate-visible scenario execution content",
+    ):
         build_cross_functional_repeated_report(reports, bootstrap_resamples=10)
 
 

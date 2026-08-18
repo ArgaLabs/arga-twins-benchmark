@@ -856,18 +856,19 @@ def _classify_task(
         raw_run_id = attempt.get("run_id")
         run_id = raw_run_id if _non_empty_string(raw_run_id) else None
 
-    expected_scenario_id = scenario_ids.get(task_id) if scenario_ids is not None else None
-    if not _non_empty_string(expected_scenario_id):
+    registered_scenario_id = scenario_ids.get(task_id) if scenario_ids is not None else None
+    if not _non_empty_string(registered_scenario_id):
         issues.append("scenario_mapping:missing_task_id")
-    if attempt is not None and attempt.get("scenario_id") != expected_scenario_id:
-        issues.append("attempt:mismatched_scenario_id")
+    attempt_scenario_id = attempt.get("scenario_id") if attempt is not None else None
+    if attempt is not None and not _non_empty_string(attempt_scenario_id):
+        issues.append("attempt:missing_scenario_id")
 
     if control is not None:
         if control.get("protocol") != _CONTROL_PROTOCOL:
             issues.append("control:mismatched_protocol")
         if control.get("instance_id") != task_id:
             issues.append("control:mismatched_task_id")
-        if control.get("scenario_id") != expected_scenario_id:
+        if control.get("scenario_id") != attempt_scenario_id:
             issues.append("control:mismatched_scenario_id")
         if control.get("scenario_content_sha256") not in _accepted_content_hashes(task):
             issues.append("control:mismatched_scenario_content_sha256")

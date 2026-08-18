@@ -263,9 +263,22 @@ def build_cross_functional_repeated_report(
                 raise CrossFunctionalRepeatedReportError(f"{profile_id}/{task_id} is missing a run ID")
             if len(set(run_ids)) != len(_EXPECTED_REPEATS):
                 raise CrossFunctionalRepeatedReportError(f"{profile_id}/{task_id} reused a candidate run")
-            scenario_ids = {item.get("scenario_id") for item in task_attempts}
-            if len(scenario_ids) != 1 or None in scenario_ids:
-                raise CrossFunctionalRepeatedReportError(f"{profile_id}/{task_id} changed scenario identity")
+            scenario_ids = [item.get("scenario_id") for item in task_attempts]
+            if not all(isinstance(scenario_id, str) and scenario_id for scenario_id in scenario_ids):
+                raise CrossFunctionalRepeatedReportError(f"{profile_id}/{task_id} is missing a scenario ID")
+            scenario_hashes = {item.get("scenario_execution_sha256") for item in task_attempts}
+            if (
+                len(scenario_hashes) != 1
+                or not all(
+                    isinstance(digest, str)
+                    and len(digest) == 64
+                    and all(character in "0123456789abcdef" for character in digest)
+                    for digest in scenario_hashes
+                )
+            ):
+                raise CrossFunctionalRepeatedReportError(
+                    f"{profile_id}/{task_id} changed candidate-visible scenario execution content"
+                )
             prompt_facts = {
                 (item.get("title"), item.get("domain"), item.get("prompt")) for item in task_attempts
             }
@@ -277,6 +290,7 @@ def build_cross_functional_repeated_report(
             task_clusters.append(
                 {
                     "task_id": task_id,
+                    "scenario_execution_sha256": next(iter(scenario_hashes)),
                     "pass_rate": pass_rate,
                     "exact_outcome_consistent": len(set(outcomes)) == 1,
                     "outcomes_by_repeat": [

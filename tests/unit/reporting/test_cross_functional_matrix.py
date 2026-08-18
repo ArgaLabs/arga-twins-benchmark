@@ -800,6 +800,22 @@ def test_provider_max_tokens_is_a_model_terminal_not_infrastructure(tmp_path: Pa
 
     assert result["execution_class"] == "model_terminal"
     assert result["model_terminal_reason"] == "output_limit_exceeded"
+
+
+def test_recreated_scenario_id_is_bound_by_content_hash_not_database_id(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed")
+    scenarios_path = matrix_dir / "profiles" / profile["id"] / "staging-scenarios.json"
+    scenarios = json.loads(scenarios_path.read_text(encoding="utf-8"))
+    scenarios["scenario_ids"][task["id"]] = "retired-database-identity"
+    _write_json(scenarios_path, scenarios)
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "exact_completed"
+    assert result["integrity"]["passed"] is True
     assert result["integrity"]["issues"] == []
 
 
