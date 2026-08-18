@@ -5,7 +5,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -56,6 +56,35 @@ def _inert_cleanup(run_id: str = "run-1") -> dict[str, Any]:
     return {
         "twin_run": {"run_id": run_id, "status": "cancelled", "twins": {}},
         "confirmation": {"outcome": "terminal_without_twins", "confirmed_status": "cancelled"},
+    }
+
+
+def test_wait_cleanup_accepts_failed_run_without_twins() -> None:
+    run_id = "failed-run"
+
+    class FailedProvisionArga:
+        async def teardown(self, target_run_id: str) -> dict[str, Any]:
+            assert target_run_id == run_id
+            return {"run_id": run_id, "status": "failed"}
+
+        async def status(self, target_run_id: str) -> Any:
+            assert target_run_id == run_id
+            return runner.TwinRun.from_payload(
+                {
+                    "run_id": run_id,
+                    "status": "failed",
+                    "twins": {},
+                    "error": "hubspot seed failed: ReadTimeout",
+                }
+            )
+
+    cleanup = asyncio.run(runner.wait_cleanup(cast(Any, FailedProvisionArga()), run_id))
+
+    assert cleanup["twin_run"]["run_id"] == run_id
+    assert cleanup["twin_run"]["twins"] == {}
+    assert cleanup["confirmation"] == {
+        "outcome": "terminal_without_twins",
+        "confirmed_status": "failed",
     }
 
 

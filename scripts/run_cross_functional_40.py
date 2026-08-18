@@ -673,7 +673,17 @@ async def wait_cleanup(arga: SubprocessArgaCli, run_id: str) -> dict[str, Any]:
     except Exception as error:  # cleanup evidence retains failures without hiding the attempt
         teardown = {"error_type": type(error).__name__, "error": str(error)}
     deadline = asyncio.get_running_loop().time() + 180
-    terminal = {"cancelled", "canceled", "expired", "torn_down", "terminated", "deleted", "cleaned_up"}
+    terminal = {
+        "cancelled",
+        "canceled",
+        "expired",
+        "failed",
+        "error",
+        "torn_down",
+        "terminated",
+        "deleted",
+        "cleaned_up",
+    }
     while True:
         status = cast(
             TwinRun,
