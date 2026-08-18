@@ -468,7 +468,9 @@ def _retry_archive_proves_safe_retries(
         elif reason not in {
             "zero_invocation_infrastructure_invalid",
             "explicit_model_infrastructure_retry",
+            "explicit_post_invocation_infrastructure_retry",
             "explicit_model_terminal_retry",
+            "explicit_missing_snapshot_evidence_retry",
         }:
             return False
         archived_issues: list[str] = []
@@ -485,8 +487,22 @@ def _retry_archive_proves_safe_retries(
             or archived_attempt.get("task_id") != task_id
         ):
             return False
-        if reason in {"explicit_model_infrastructure_retry", "explicit_model_terminal_retry"}:
-            if not isinstance(metadata.get("cleanup"), dict):
+        if reason in {
+            "explicit_model_infrastructure_retry",
+            "explicit_post_invocation_infrastructure_retry",
+            "explicit_model_terminal_retry",
+            "explicit_missing_snapshot_evidence_retry",
+        }:
+            archived_run_id = archived_attempt.get("run_id")
+            cleanup = metadata.get("cleanup")
+            if (
+                not _non_empty_string(archived_run_id)
+                or not isinstance(cleanup, dict)
+                or not cleanup_payload_proves_inert(
+                    cleanup,
+                    expected_run_id=cast(str, archived_run_id),
+                )
+            ):
                 return False
             invocation_issues: list[str] = []
             archived_invocation = _read_artifact(
@@ -498,11 +514,17 @@ def _retry_archive_proves_safe_retries(
             allowed_statuses = (
                 {"api_error", "invalid_response"}
                 if reason == "explicit_model_infrastructure_retry"
+                else {"completed"}
+                if reason == "explicit_post_invocation_infrastructure_retry"
+                else {"completed"}
+                if reason == "explicit_missing_snapshot_evidence_retry"
                 else _MODEL_TERMINAL_STATUSES
             )
             allowed_attempt_statuses = (
-                {"infrastructure_invalid", "candidate_complete"}
-                if reason == "explicit_model_infrastructure_retry"
+                {"infrastructure_invalid"}
+                if reason == "explicit_post_invocation_infrastructure_retry"
+                else {"candidate_complete"}
+                if reason == "explicit_missing_snapshot_evidence_retry"
                 else {"infrastructure_invalid", "candidate_complete"}
             )
             if (
@@ -513,6 +535,26 @@ def _retry_archive_proves_safe_retries(
                 or archived_attempt.get("attempt_status") not in allowed_attempt_statuses
             ):
                 return False
+            if reason == "explicit_missing_snapshot_evidence_retry":
+                snapshot_issues: list[str] = []
+                baseline = _read_artifact(
+                    archive_dir / "baseline-state.json",
+                    name="baseline-state.json",
+                    issues=snapshot_issues,
+                )
+                final = _read_artifact(
+                    archive_dir / "final-state.json",
+                    name="final-state.json",
+                    issues=snapshot_issues,
+                )
+                if (
+                    snapshot_issues
+                    or baseline is None
+                    or final is None
+                    or baseline.get("queries") != {}
+                    or final.get("queries") != {}
+                ):
+                    return False
             continue
         if archived_attempt.get("attempt_status") != "infrastructure_invalid":
             return False

@@ -35,6 +35,10 @@ def _content_hash(task: dict[str, Any]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _archive_cleanup(run_id: str) -> dict[str, Any]:
+    return {"twin_run": {"run_id": run_id, "status": "torn_down", "twins": {}}}
+
+
 def _fixture_root(tmp_path: Path) -> tuple[Path, dict[str, Any], dict[str, Any]]:
     suite = json.loads(SUITE_PATH.read_text(encoding="utf-8"))
     model_matrix = json.loads(MODEL_MATRIX_PATH.read_text(encoding="utf-8"))
@@ -462,6 +466,7 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
     profile_dir = matrix_dir / "profiles" / profile["id"]
 
     safe_retry = suite["tasks"][0]
+    safe_run_id = f"run-{safe_retry['id'].lower()}"
     _write_attempt(matrix_dir, task=safe_retry, profile=profile, status="completed", attempt_number=2)
     safe_archive = profile_dir / "retry-archive" / safe_retry["id"] / "attempt-0001"
     _write_json(
@@ -472,7 +477,7 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
             "archive_reason": "explicit_model_infrastructure_retry",
             "profile_id": profile["id"],
             "task_id": safe_retry["id"],
-            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+            "cleanup": _archive_cleanup(safe_run_id),
         },
     )
     _write_json(
@@ -482,12 +487,14 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
             "attempt_status": "infrastructure_invalid",
             "profile_id": profile["id"],
             "task_id": safe_retry["id"],
+            "run_id": safe_run_id,
             "model_status": "api_error",
         },
     )
     _write_json(safe_archive / "invocation.json", {"status": "api_error"})
 
     unsafe_retry = suite["tasks"][1]
+    unsafe_run_id = f"run-{unsafe_retry['id'].lower()}"
     _write_attempt(matrix_dir, task=unsafe_retry, profile=profile, status="completed", attempt_number=2)
     unsafe_archive = profile_dir / "retry-archive" / unsafe_retry["id"] / "attempt-0001"
     _write_json(
@@ -498,7 +505,7 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
             "archive_reason": "explicit_model_infrastructure_retry",
             "profile_id": profile["id"],
             "task_id": unsafe_retry["id"],
-            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+            "cleanup": _archive_cleanup(unsafe_run_id),
         },
     )
     _write_json(
@@ -508,6 +515,7 @@ def test_explicit_infrastructure_retry_archive_accepts_only_non_scoring_model_st
             "attempt_status": "infrastructure_invalid",
             "profile_id": profile["id"],
             "task_id": unsafe_retry["id"],
+            "run_id": unsafe_run_id,
             "model_status": "completed",
         },
     )
@@ -527,6 +535,7 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
 ) -> None:
     matrix_dir, suite, profile = _fixture_root(tmp_path)
     task = suite["tasks"][0]
+    archived_run_id = f"run-{task['id'].lower()}"
     _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
     archive = matrix_dir / "profiles" / profile["id"] / "retry-archive" / task["id"] / "attempt-0001"
     _write_json(
@@ -537,7 +546,7 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
             "archive_reason": "explicit_model_terminal_retry",
             "profile_id": profile["id"],
             "task_id": task["id"],
-            "cleanup": {"confirmation": {"outcome": "terminal_without_twins"}},
+            "cleanup": _archive_cleanup(archived_run_id),
         },
     )
     _write_json(
@@ -547,6 +556,7 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
             "attempt_status": archived_attempt_status,
             "profile_id": profile["id"],
             "task_id": task["id"],
+            "run_id": archived_run_id,
             "model_status": "tool_limit_exceeded",
         },
     )
@@ -557,6 +567,94 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
 
     assert result["execution_class"] == "exact_completed"
     assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+
+def test_completed_retry_after_post_invocation_infrastructure_archive_is_valid(
+    tmp_path: Path,
+) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    archived_run_id = f"run-{task['id'].lower()}"
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
+    archive = matrix_dir / "profiles" / profile["id"] / "retry-archive" / task["id"] / "attempt-0001"
+    _write_json(
+        archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_post_invocation_infrastructure_retry",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "cleanup": _archive_cleanup(archived_run_id),
+        },
+    )
+    _write_json(
+        archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "run_id": archived_run_id,
+            "model_status": "completed",
+        },
+    )
+    _write_json(archive / "invocation.json", {"status": "completed"})
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "exact_completed"
+    assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+
+def test_completed_retry_after_missing_snapshot_archive_is_valid(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    archived_run_id = f"run-{task['id'].lower()}"
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
+    archive = matrix_dir / "profiles" / profile["id"] / "retry-archive" / task["id"] / "attempt-0001"
+    _write_json(
+        archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_missing_snapshot_evidence_retry",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "cleanup": _archive_cleanup(archived_run_id),
+        },
+    )
+    _write_json(
+        archive / "attempt.json",
+        {
+            "protocol": "arga-bench-cross-functional-attempt/2",
+            "attempt_status": "candidate_complete",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "run_id": archived_run_id,
+            "model_status": "completed",
+        },
+    )
+    _write_json(archive / "invocation.json", {"status": "completed"})
+    _write_json(archive / "baseline-state.json", {"providers": {}, "queries": {}})
+    _write_json(archive / "final-state.json", {"providers": {}, "queries": {}})
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "exact_completed"
+    assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+    metadata_path = archive / "archive-metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["cleanup"] = _archive_cleanup("wrong-run")
+    _write_json(metadata_path, metadata)
+    tampered = _classify(matrix_dir)
+    tampered_result = next(
+        item for item in tampered["attempts"] if item["profile_id"] == profile["id"]
+    )
+    assert "attempt:invalid_attempt_number" in tampered_result["integrity"]["issues"]
 
 
 def test_provider_max_tokens_is_a_model_terminal_not_infrastructure(tmp_path: Path) -> None:
