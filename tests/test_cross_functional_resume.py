@@ -70,6 +70,80 @@ def _terminal_attempt(status: str, *, attempt_number: int = 1) -> dict[str, Any]
     }
 
 
+def _write_completed_legacy_gateway_ceiling_attempt(task_dir: Path, *, kind: str) -> None:
+    limit = 100 if kind == "provider_api" else 20
+    message = f"{kind} call limit of {limit} has been reached"
+    count = limit + 1
+    _write_json(
+        task_dir / "attempt.json",
+        {
+            **_zero_invocation_attempt(status="candidate_complete"),
+            "attempt_number": 1,
+            "run_id": "run-1",
+            "model_status": "completed",
+            "response_model": "gpt-5.6-luna",
+            "stop_reason": "end_turn",
+        },
+    )
+    _write_json(
+        task_dir / "prompt.json",
+        {
+            "protocol": "arga-bench-trial-prompt/1",
+            "provider_tool_call_limit": 100,
+            "official_docs_tool_call_limit": 20,
+        },
+    )
+    invocation_events = [
+        {
+            "type": "tool_call",
+            "name": kind,
+            "output": {"error": message} if sequence == count else {"ok": True},
+        }
+        for sequence in range(1, count + 1)
+    ]
+    _write_json(
+        task_dir / "invocation.json",
+        {
+            "status": "completed",
+            "tool_calls": count,
+            "events": invocation_events,
+            "config": {"max_tool_calls": 120},
+        },
+    )
+    provider_events = []
+    docs_events = []
+    selected_events = provider_events if kind == "provider_api" else docs_events
+    selected_events.extend(
+        {
+            "sequence": sequence,
+            "error": message if sequence == count else None,
+        }
+        for sequence in range(1, count + 1)
+    )
+    _write_json(
+        task_dir / "provider-trace.json",
+        {"protocol": "arga-bench-provider-trace/1", "events": provider_events},
+    )
+    _write_json(
+        task_dir / "official-docs-trace.json",
+        {"protocol": "arga-bench-official-docs-trace/1", "events": docs_events},
+    )
+    _write_json(
+        task_dir / "tool-steps.json",
+        {
+            "protocol": "arga-bench-tool-steps/1",
+            "steps": [
+                {
+                    "sequence": sequence,
+                    "kind": kind,
+                    "error": message if sequence == count else None,
+                }
+                for sequence in range(1, count + 1)
+            ],
+        },
+    )
+
+
 def test_resume_allows_only_zero_invocation_infrastructure_invalid_attempt(tmp_path: Path) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", _zero_invocation_attempt())
@@ -383,6 +457,88 @@ def test_explicit_terminal_retry_stops_after_attempt_at_current_tool_ceiling(tmp
 
     assert decision.action == "skip"
     assert decision.reason == "model_terminal_retry_exhausted"
+
+
+@pytest.mark.parametrize("kind", ["provider_api", "provider_docs"])
+def test_explicit_retry_upgrades_completed_attempt_rejected_by_old_gateway_ceiling(
+    tmp_path: Path,
+    kind: str,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_completed_legacy_gateway_ceiling_attempt(task_dir, kind=kind)
+
+    protected = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+    )
+    retry = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+
+    assert protected.action == "skip"
+    assert protected.reason == "model_invocation_protected"
+    assert retry.action == "run"
+    assert retry.reason == "explicit_old_gateway_ceiling_retry"
+
+
+def test_old_gateway_ceiling_retry_requires_complete_mediated_rejection_evidence(
+    tmp_path: Path,
+) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_completed_legacy_gateway_ceiling_attempt(task_dir, kind="provider_docs")
+    invocation = json.loads((task_dir / "invocation.json").read_text())
+    invocation["events"][-1]["output"] = {"ok": False}
+    _write_json(task_dir / "invocation.json", invocation)
+
+    incomplete = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+    assert incomplete.action == "skip"
+    assert incomplete.reason == "model_invocation_protected"
+
+    _write_completed_legacy_gateway_ceiling_attempt(task_dir, kind="provider_docs")
+    prompt = json.loads((task_dir / "prompt.json").read_text())
+    prompt.update({"provider_tool_call_limit": 160, "official_docs_tool_call_limit": 40})
+    _write_json(task_dir / "prompt.json", prompt)
+    current_limits = runner.classify_resume_task(
+        task_dir,
+        task_id=TASK_ID,
+        profile_id=PROFILE_ID,
+        retry_model_terminal=True,
+    )
+    assert current_limits.action == "skip"
+    assert current_limits.reason == "model_invocation_protected"
+
+
+def test_old_gateway_ceiling_retry_uses_distinct_archive_reason(tmp_path: Path) -> None:
+    task_dir = tmp_path / "tasks" / TASK_ID
+    _write_completed_legacy_gateway_ceiling_attempt(task_dir, kind="provider_api")
+    _write_json(task_dir / "control.json", {"scenario_id": "scenario-1", "run_id": "run-1"})
+    _write_json(task_dir / "cleanup.json", _inert_cleanup())
+
+    plan, decision, _cleanup = asyncio.run(
+        runner.prepare_resume_task(
+            output_root=tmp_path,
+            task={"id": TASK_ID},
+            profile_id=PROFILE_ID,
+            semaphore=asyncio.Semaphore(1),
+            retry_model_terminal=True,
+        )
+    )
+
+    archive = tmp_path / runner.RETRY_ARCHIVE_DIR / TASK_ID / "attempt-0001"
+    assert plan == runner.TaskRunPlan({"id": TASK_ID}, 2, str(archive))
+    assert decision.reason == "explicit_old_gateway_ceiling_retry"
+    metadata = json.loads((archive / "archive-metadata.json").read_text())
+    assert metadata["archive_reason"] == "explicit_old_gateway_ceiling_retry"
+    assert metadata["cleanup"] == _inert_cleanup()
 
 
 def test_explicit_missing_snapshot_retry_accepts_only_both_empty_query_sets(tmp_path: Path) -> None:

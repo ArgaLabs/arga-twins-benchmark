@@ -33,6 +33,9 @@ from arga_twins_benchmark.reporting.cross_functional_fair import (
     snapshot_capture_contract_gaps,
     snapshot_queries_for_task,
 )
+from arga_twins_benchmark.reporting.cross_functional_tool_ceiling import (
+    legacy_gateway_ceiling_rejections,
+)
 from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -235,6 +238,32 @@ def _snapshot_query_ids(path: Path) -> frozenset[str] | None:
     return frozenset(cast(str, key) for key in typed_queries)
 
 
+def _completed_attempt_hit_legacy_gateway_ceiling(
+    task_dir: Path,
+    invocation: dict[str, Any],
+) -> bool:
+    try:
+        prompt = read_json_object(task_dir / "prompt.json", required=True)
+        provider_trace = read_json_object(task_dir / "provider-trace.json", required=True)
+        docs_trace = read_json_object(task_dir / "official-docs-trace.json", required=True)
+        tool_steps = read_json_object(task_dir / "tool-steps.json", required=True)
+    except ValueError:
+        return False
+    assert prompt is not None
+    assert provider_trace is not None
+    assert docs_trace is not None
+    assert tool_steps is not None
+    return bool(
+        legacy_gateway_ceiling_rejections(
+            prompt=prompt,
+            invocation=invocation,
+            provider_trace=provider_trace,
+            docs_trace=docs_trace,
+            tool_steps=tool_steps,
+        )
+    )
+
+
 def classify_resume_task(
     task_dir: Path,
     *,
@@ -330,6 +359,15 @@ def classify_resume_task(
             if archived_terminal_attempts == 0 or used_lower_tool_ceiling:
                 return ResumeDecision("run", "explicit_model_terminal_retry", attempt)
             return ResumeDecision("skip", "model_terminal_retry_exhausted", attempt)
+        if (
+            attempt is not None
+            and attempt.get("attempt_status") == "candidate_complete"
+            and model_status == "completed"
+            and invocation_status == "completed"
+            and invocation is not None
+            and _completed_attempt_hit_legacy_gateway_ceiling(task_dir, invocation)
+        ):
+            return ResumeDecision("run", "explicit_old_gateway_ceiling_retry", attempt)
 
     if retry_missing_snapshot_evidence:
         if not expected_snapshot_query_ids:

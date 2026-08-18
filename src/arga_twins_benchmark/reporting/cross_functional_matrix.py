@@ -9,6 +9,9 @@ from pathlib import Path
 from typing import Any, Literal, cast
 
 from arga_twins_benchmark.lifecycle import cleanup_payload_proves_inert, write_private_json
+from arga_twins_benchmark.reporting.cross_functional_tool_ceiling import (
+    legacy_gateway_ceiling_rejections,
+)
 
 CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL = "arga-bench-cross-functional-model-matrix-offline-classification/1"
 HISTORICAL_CALIBRATION_PROTOCOL = "arga-bench-cross-functional-historical-calibration/1"
@@ -408,6 +411,122 @@ def _snapshot_evidence_gaps(
     return ["semantic_grade_not_applied_by_integrity_classifier"]
 
 
+def _archived_old_gateway_ceiling_retry_is_safe(
+    *,
+    archive_dir: Path,
+    task_id: str,
+    profile_id: str,
+    attempt: Mapping[str, Any],
+    invocation: Mapping[str, Any],
+) -> bool:
+    issues: list[str] = []
+    control = _read_artifact(archive_dir / "control.json", name="control.json", issues=issues)
+    prompt = _read_artifact(archive_dir / "prompt.json", name="prompt.json", issues=issues)
+    baseline = _read_artifact(
+        archive_dir / "baseline-state.json",
+        name="baseline-state.json",
+        issues=issues,
+    )
+    final = _read_artifact(
+        archive_dir / "final-state.json",
+        name="final-state.json",
+        issues=issues,
+    )
+    raw_diff = _read_artifact(
+        archive_dir / "raw-state-diff.json",
+        name="raw-state-diff.json",
+        issues=issues,
+    )
+    provider_trace = _read_artifact(
+        archive_dir / "provider-trace.json",
+        name="provider-trace.json",
+        issues=issues,
+    )
+    docs_trace = _read_artifact(
+        archive_dir / "official-docs-trace.json",
+        name="official-docs-trace.json",
+        issues=issues,
+    )
+    tool_steps = _read_artifact(
+        archive_dir / "tool-steps.json",
+        name="tool-steps.json",
+        issues=issues,
+    )
+    if issues or any(
+        artifact is None
+        for artifact in (
+            control,
+            prompt,
+            baseline,
+            final,
+            raw_diff,
+            provider_trace,
+            docs_trace,
+            tool_steps,
+        )
+    ):
+        return False
+    assert control is not None
+    assert prompt is not None
+    assert baseline is not None
+    assert final is not None
+    assert raw_diff is not None
+    assert provider_trace is not None
+    assert docs_trace is not None
+    assert tool_steps is not None
+
+    run_id = attempt.get("run_id")
+    model = attempt.get("model")
+    response_model = attempt.get("response_model")
+    provider = attempt.get("provider")
+    scenario_id = attempt.get("scenario_id")
+    if (
+        not _non_empty_string(run_id)
+        or not _non_empty_string(model)
+        or not _non_empty_string(response_model)
+        or not _non_empty_string(provider)
+        or not _non_empty_string(scenario_id)
+        or attempt.get("cleanup_succeeded") is not True
+        or control.get("protocol") != _CONTROL_PROTOCOL
+        or control.get("instance_id") != task_id
+        or control.get("run_id") != run_id
+        or control.get("scenario_id") != scenario_id
+        or prompt.get("profile_id") != profile_id
+        or prompt.get("model") != model
+        or prompt.get("user_prompt") != attempt.get("prompt")
+        or invocation.get("requested_model") != model
+        or invocation.get("response_model") != response_model
+        or invocation.get("provider") != provider
+        or invocation.get("user_prompt") != prompt.get("user_prompt")
+        or invocation.get("system_prompt") != prompt.get("system_prompt")
+        or invocation.get("stop_reason") != attempt.get("stop_reason")
+        or invocation.get("final_text") != attempt.get("final_text")
+        or not isinstance(baseline.get("providers"), dict)
+        or not isinstance(baseline.get("queries"), dict)
+        or not isinstance(final.get("providers"), dict)
+        or not isinstance(final.get("queries"), dict)
+    ):
+        return False
+    if _validate_trace_artifacts(
+        attempt=attempt,
+        invocation=invocation,
+        provider_trace=provider_trace,
+        docs_trace=docs_trace,
+        tool_steps=tool_steps,
+        raw_diff=raw_diff,
+    ):
+        return False
+    return bool(
+        legacy_gateway_ceiling_rejections(
+            prompt=prompt,
+            invocation=invocation,
+            provider_trace=provider_trace,
+            docs_trace=docs_trace,
+            tool_steps=tool_steps,
+        )
+    )
+
+
 def _retry_archive_proves_safe_retries(
     *,
     profile_dir: Path,
@@ -476,6 +595,7 @@ def _retry_archive_proves_safe_retries(
             "explicit_post_invocation_infrastructure_retry",
             "explicit_model_terminal_retry",
             "explicit_missing_snapshot_evidence_retry",
+            "explicit_old_gateway_ceiling_retry",
         }:
             return False
         archived_issues: list[str] = []
@@ -497,6 +617,7 @@ def _retry_archive_proves_safe_retries(
             "explicit_post_invocation_infrastructure_retry",
             "explicit_model_terminal_retry",
             "explicit_missing_snapshot_evidence_retry",
+            "explicit_old_gateway_ceiling_retry",
         }:
             if not _archived_cleanup_is_safe(
                 archive_dir=archive_dir,
@@ -517,6 +638,8 @@ def _retry_archive_proves_safe_retries(
                 if reason == "explicit_post_invocation_infrastructure_retry"
                 else {"completed"}
                 if reason == "explicit_missing_snapshot_evidence_retry"
+                else {"completed"}
+                if reason == "explicit_old_gateway_ceiling_retry"
                 else _MODEL_TERMINAL_STATUSES
             )
             allowed_attempt_statuses = (
@@ -524,6 +647,8 @@ def _retry_archive_proves_safe_retries(
                 if reason == "explicit_post_invocation_infrastructure_retry"
                 else {"candidate_complete"}
                 if reason == "explicit_missing_snapshot_evidence_retry"
+                else {"candidate_complete"}
+                if reason == "explicit_old_gateway_ceiling_retry"
                 else {"infrastructure_invalid", "candidate_complete"}
             )
             if (
@@ -554,6 +679,16 @@ def _retry_archive_proves_safe_retries(
                     or final.get("queries") != {}
                 ):
                     return False
+            if reason == "explicit_old_gateway_ceiling_retry" and not (
+                _archived_old_gateway_ceiling_retry_is_safe(
+                    archive_dir=archive_dir,
+                    task_id=task_id,
+                    profile_id=profile_id,
+                    attempt=archived_attempt,
+                    invocation=archived_invocation,
+                )
+            ):
+                return False
             continue
         if archived_attempt.get("attempt_status") != "infrastructure_invalid":
             return False

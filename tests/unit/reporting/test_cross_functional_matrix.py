@@ -216,6 +216,75 @@ def _write_attempt(
     )
 
 
+def _set_legacy_gateway_ceiling_evidence(task_dir: Path, *, kind: str) -> None:
+    limit = 100 if kind == "provider_api" else 20
+    message = f"{kind} call limit of {limit} has been reached"
+    count = limit + 1
+    prompt = json.loads((task_dir / "prompt.json").read_text(encoding="utf-8"))
+    prompt.update(
+        {
+            "provider_tool_call_limit": 100,
+            "official_docs_tool_call_limit": 20,
+        }
+    )
+    _write_json(task_dir / "prompt.json", prompt)
+
+    invocation = json.loads((task_dir / "invocation.json").read_text(encoding="utf-8"))
+    invocation["config"]["max_tool_calls"] = 120
+    invocation["tool_calls"] = count
+    invocation["events"] = [
+        {
+            "type": "tool_call",
+            "name": kind,
+            "output": {"error": message} if sequence == count else {"ok": True},
+        }
+        for sequence in range(1, count + 1)
+    ]
+    _write_json(task_dir / "invocation.json", invocation)
+
+    provider_events: list[dict[str, Any]] = []
+    docs_events: list[dict[str, Any]] = []
+    selected_events = provider_events if kind == "provider_api" else docs_events
+    selected_events.extend(
+        {
+            "sequence": sequence,
+            "error": message if sequence == count else None,
+        }
+        for sequence in range(1, count + 1)
+    )
+    _write_json(
+        task_dir / "provider-trace.json",
+        {"protocol": "arga-bench-provider-trace/1", "events": provider_events},
+    )
+    _write_json(
+        task_dir / "official-docs-trace.json",
+        {"protocol": "arga-bench-official-docs-trace/1", "events": docs_events},
+    )
+    _write_json(
+        task_dir / "tool-steps.json",
+        {
+            "protocol": "arga-bench-tool-steps/1",
+            "steps": [
+                {
+                    "sequence": sequence,
+                    "kind": kind,
+                    "error": message if sequence == count else None,
+                }
+                for sequence in range(1, count + 1)
+            ],
+        },
+    )
+    attempt = json.loads((task_dir / "attempt.json").read_text(encoding="utf-8"))
+    attempt.update(
+        {
+            "tool_calls": count,
+            "provider_tool_calls": count if kind == "provider_api" else 0,
+            "official_docs_tool_calls": count if kind == "provider_docs" else 0,
+        }
+    )
+    _write_json(task_dir / "attempt.json", attempt)
+
+
 def _classify(matrix_dir: Path) -> dict[str, Any]:
     return classify_cross_functional_matrix(
         matrix_dir,
@@ -658,6 +727,59 @@ def test_completed_retry_after_missing_snapshot_archive_is_valid(tmp_path: Path)
     tampered_result = next(
         item for item in tampered["attempts"] if item["profile_id"] == profile["id"]
     )
+    assert "attempt:invalid_attempt_number" in tampered_result["integrity"]["issues"]
+
+
+@pytest.mark.parametrize("kind", ["provider_api", "provider_docs"])
+def test_completed_retry_after_old_gateway_ceiling_archive_requires_exact_evidence(
+    tmp_path: Path,
+    kind: str,
+) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    profile_dir = matrix_dir / "profiles" / profile["id"]
+    task_dir = profile_dir / "tasks" / task["id"]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed")
+    _set_legacy_gateway_ceiling_evidence(task_dir, kind=kind)
+    archive = profile_dir / "retry-archive" / task["id"] / "attempt-0001"
+    archive.parent.mkdir(parents=True)
+    task_dir.rename(archive)
+    archived_attempt = json.loads((archive / "attempt.json").read_text(encoding="utf-8"))
+    archived_run_id = cast(str, archived_attempt["run_id"])
+    _write_json(
+        archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_old_gateway_ceiling_retry",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "cleanup": _archive_cleanup(archived_run_id),
+        },
+    )
+    _write_attempt(
+        matrix_dir,
+        task=task,
+        profile=profile,
+        status="completed",
+        attempt_number=2,
+    )
+
+    report = _classify(matrix_dir)
+    result = next(
+        item for item in report["attempts"] if item["profile_id"] == profile["id"] and item["task_id"] == task["id"]
+    )
+    assert result["execution_class"] == "exact_completed"
+    assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+    tool_steps = json.loads((archive / "tool-steps.json").read_text(encoding="utf-8"))
+    tool_steps["steps"][-1]["error"] = None
+    _write_json(archive / "tool-steps.json", tool_steps)
+    tampered = _classify(matrix_dir)
+    tampered_result = next(
+        item for item in tampered["attempts"] if item["profile_id"] == profile["id"] and item["task_id"] == task["id"]
+    )
+    assert tampered_result["execution_class"] == "infrastructure_invalid"
     assert "attempt:invalid_attempt_number" in tampered_result["integrity"]["issues"]
 
 
