@@ -220,6 +220,26 @@ def _sha256_path(path: Path) -> str:
         raise CrossFunctionalSemanticReportError(f"cannot hash {path}: {error}") from error
 
 
+def _grader_provenance() -> dict[str, Any]:
+    """Hash the executable reporting and evaluation code that can affect a verdict."""
+
+    package_root = Path(__file__).resolve().parents[1]
+    files = sorted(
+        [*package_root.joinpath("reporting").glob("*.py"), *package_root.joinpath("evaluation").rglob("*.py")]
+    )
+    source_hashes = {
+        str(path.relative_to(package_root)): _sha256_path(path)
+        for path in files
+        if path.is_file()
+    }
+    bundle_source = json.dumps(source_hashes, sort_keys=True, separators=(",", ":")).encode()
+    return {
+        "method": "sha256_of_all_reporting_and_evaluation_python_sources",
+        "bundle_sha256": hashlib.sha256(bundle_source).hexdigest(),
+        "source_files": source_hashes,
+    }
+
+
 def _suite_tasks(suite: Mapping[str, Any]) -> list[dict[str, Any]]:
     tasks = suite.get("tasks")
     if suite.get("suite_id") != "cross-functional-40-v1" or not isinstance(tasks, list):
@@ -1092,6 +1112,7 @@ def build_cross_functional_semantic_report(
             "model_matrix": _sha256_path(model_matrix_path),
             "historical_calibration": _sha256_path(historical_calibration_path),
         },
+        "grader_provenance": _grader_provenance(),
         "policy": {
             "execution_classifier_protocol": CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
             "infrastructure_invalid": "excluded unless complete mediated evidence decisively proves unsafe",

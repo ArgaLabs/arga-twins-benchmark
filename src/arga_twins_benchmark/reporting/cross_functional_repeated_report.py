@@ -108,7 +108,8 @@ def _validate_report(
     *,
     repeat: int,
     expected_hashes: Mapping[str, Any] | None,
-) -> tuple[dict[str, Mapping[str, Any]], list[Mapping[str, Any]]]:
+    expected_grader_provenance: Mapping[str, Any] | None,
+) -> tuple[dict[str, Mapping[str, Any]], list[Mapping[str, Any]], Mapping[str, Any]]:
     if report.get("protocol") != CROSS_FUNCTIONAL_SEMANTIC_REPORT_PROTOCOL:
         raise CrossFunctionalRepeatedReportError(f"repeat {repeat} has an unsupported report protocol")
     if report.get("suite_id") != "cross-functional-40-v1":
@@ -123,6 +124,18 @@ def _validate_report(
     typed_source_hashes = cast(Mapping[str, Any], source_hashes)
     if expected_hashes is not None and dict(typed_source_hashes) != dict(expected_hashes):
         raise CrossFunctionalRepeatedReportError(f"repeat {repeat} changed the suite, task, or profile inputs")
+    grader_provenance = report.get("grader_provenance")
+    if not isinstance(grader_provenance, Mapping):
+        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} is missing executable grader provenance")
+    typed_grader_provenance = cast(Mapping[str, Any], grader_provenance)
+    bundle_sha256 = typed_grader_provenance.get("bundle_sha256")
+    if not isinstance(bundle_sha256, str) or len(bundle_sha256) != 64:
+        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} has invalid grader provenance")
+    if (
+        expected_grader_provenance is not None
+        and dict(typed_grader_provenance) != dict(expected_grader_provenance)
+    ):
+        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} changed the executable grader revision")
 
     raw_profiles = report.get("profiles")
     if not isinstance(raw_profiles, Mapping):
@@ -171,7 +184,7 @@ def _validate_report(
         metrics = item.get("metrics")
         if not isinstance(metrics, Mapping) or item.get("metric_gaps"):
             raise CrossFunctionalRepeatedReportError(f"repeat {repeat} contains incomplete metrics")
-    return profiles, attempts
+    return profiles, attempts, typed_grader_provenance
 
 
 def build_cross_functional_repeated_report(
@@ -186,18 +199,25 @@ def build_cross_functional_repeated_report(
         raise CrossFunctionalRepeatedReportError("exactly repeats 1, 2, and 3 are required")
 
     expected_hashes: Mapping[str, Any] | None = None
+    expected_grader_provenance: Mapping[str, Any] | None = None
     reference_profiles: dict[str, Mapping[str, Any]] | None = None
     repeat_attempts: dict[int, list[Mapping[str, Any]]] = {}
     repeat_summaries: list[dict[str, Any]] = []
     for repeat in _EXPECTED_REPEATS:
         report = reports[repeat]
-        profiles, attempts = _validate_report(
+        profiles, attempts, grader_provenance = _validate_report(
             report,
             repeat=repeat,
             expected_hashes=expected_hashes,
+            expected_grader_provenance=expected_grader_provenance,
         )
         hashes = cast(Mapping[str, Any], report["source_sha256"])
         expected_hashes = hashes if expected_hashes is None else expected_hashes
+        expected_grader_provenance = (
+            grader_provenance
+            if expected_grader_provenance is None
+            else expected_grader_provenance
+        )
         if reference_profiles is None:
             reference_profiles = profiles
         else:
@@ -326,6 +346,7 @@ def build_cross_functional_repeated_report(
         "scheduled_trials": len(combined),
         "all_trials_scoring_ready": True,
         "source_sha256": dict(expected_hashes or {}),
+        "grader_provenance": dict(expected_grader_provenance or {}),
         "semantic": _semantic(combined),
         "usage": _usage(combined),
         "repeat_summaries": repeat_summaries,
@@ -386,6 +407,9 @@ def write_cross_functional_repeated_report(
         "suite_id": report["suite_id"],
         "published_at": publication_date,
         "repeat_count": len(_EXPECTED_REPEATS),
+        "grader_bundle_sha256": cast(Mapping[str, Any], report["grader_provenance"])[
+            "bundle_sha256"
+        ],
         "aggregate_report": "repeated-semantic-report.json",
         "sources": sources,
     }

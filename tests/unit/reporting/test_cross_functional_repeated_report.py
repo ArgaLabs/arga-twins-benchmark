@@ -80,6 +80,11 @@ def _reports() -> dict[int, dict[str, Any]]:
                 "model_matrix": "profiles-hash",
                 "historical_calibration": "calibration-hash",
             },
+            "grader_provenance": {
+                "method": "test_bundle",
+                "bundle_sha256": "a" * 64,
+                "source_files": {"reporting/test.py": "b" * 64},
+            },
             "profiles": profiles,
             "attempts": attempts,
         }
@@ -139,6 +144,14 @@ def test_rejects_an_excluded_trial() -> None:
         build_cross_functional_repeated_report(reports, bootstrap_resamples=10)
 
 
+def test_rejects_a_changed_grader_revision() -> None:
+    reports = _reports()
+    reports[2]["grader_provenance"]["bundle_sha256"] = "c" * 64
+
+    with pytest.raises(CrossFunctionalRepeatedReportError, match="changed the executable grader"):
+        build_cross_functional_repeated_report(reports, bootstrap_resamples=10)
+
+
 def test_writes_manifest_with_hashed_repeat_sources(tmp_path: Path) -> None:
     reports = _reports()
     paths: dict[int, Path] = {}
@@ -168,5 +181,6 @@ def test_writes_manifest_with_hashed_repeat_sources(tmp_path: Path) -> None:
     manifest = json.loads(Path(outputs["publication_manifest"]).read_text())
     assert manifest["protocol"] == CROSS_FUNCTIONAL_REPEATED_PUBLICATION_MANIFEST_PROTOCOL
     assert manifest["repeat_count"] == 3
+    assert manifest["grader_bundle_sha256"] == "a" * 64
     assert [source["repeat"] for source in manifest["sources"]] == [1, 2, 3]
     assert all(len(source["semantic_report_sha256"]) == 64 for source in manifest["sources"])
