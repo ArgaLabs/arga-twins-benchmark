@@ -146,6 +146,8 @@ class _Requirement:
 @dataclass(frozen=True)
 class _TaskRule:
     requirements: tuple[_Requirement, ...]
+    requirement_groups: tuple[tuple[str, tuple[_Requirement, ...]], ...] = ()
+    optional_actions: tuple[_Requirement, ...] = ()
     allowed_actions: tuple[tuple[str, str], ...] = ()
     forbidden_actions: tuple[_Requirement, ...] = ()
 
@@ -173,23 +175,47 @@ def _req(
 # the natural-language primary_outcome assertions in suite.json executable.
 _RULES: dict[str, _TaskRule] = {
     "IT-01": _TaskRule(
-        requirements=(
-            _req("mail_quarantined", "gmail", r"/messages/[^/]+/modify$", any_terms=("removeLabelIds", "quarantin")),
+        requirements=(),
+        requirement_groups=(
+            (
+                "incident_evidence_reconciled",
+                (
+                    _req(
+                        "jira_incident_evidence",
+                        "jira",
+                        r"/issue/[^/]+(?:/comment)?$",
+                        all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
+                    ),
+                    _req(
+                        "github_incident_evidence",
+                        "github",
+                        r"/issues/\d+(?:/comments)?$",
+                        all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
+                    ),
+                ),
+            ),
+        ),
+        optional_actions=(
             _req(
-                "jira_evidence_reconciled",
-                "jira",
-                r"/issue/[^/]+(?:/comment)?$",
-                all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
+                "targeted_message_containment",
+                "gmail",
+                r"/(?:messages|threads)/[^/]+/modify$",
+                any_terms=("removeLabelIds", "quarantin", "security review", "spam"),
             ),
             _req(
-                "github_evidence_reconciled",
-                "github",
-                r"/issues/\d+(?:/comments)?$",
-                all_terms=("THR-447", "PRC-LT-214", "31d8c9f0"),
+                "task_specific_security_label",
+                "gmail",
+                r"/labels$",
+                any_terms=("quarantin", "security review"),
+            ),
+            _req(
+                "task_specific_evidence_label",
+                "gmail",
+                r"/labels$",
+                all_terms=("security", "evidence"),
             ),
         ),
         allowed_actions=(
-            ("gmail", r"/messages/[^/]+/modify$"),
             ("jira", r"/issue/IT-1(?:/transitions)?$"),
             ("jira", r"/issue/IT-1/assignee$"),
             ("github", r"/issues/1$"),
@@ -561,6 +587,43 @@ def semantic_requirement_contracts(
             requirement.reject_terms,
         )
         for requirement in rule.requirements
+    )
+
+
+def semantic_requirement_group_contracts(
+    task_id: str,
+) -> tuple[
+    tuple[
+        str,
+        tuple[tuple[str, tuple[str, ...], tuple[str, ...], tuple[str, ...]], ...],
+    ],
+    ...,
+]:
+    """Expose outcome alternatives without prescribing one provider.
+
+    Each group passes when at least one alternative is established.  This is
+    intentionally separate from ``semantic_requirement_contracts`` so callers
+    cannot accidentally turn a human choice between equivalent business
+    records into a conjunctive provider requirement.
+    """
+
+    rule = _RULES.get(task_id)
+    if rule is None:
+        return ()
+    return tuple(
+        (
+            assertion_id,
+            tuple(
+                (
+                    requirement.provider,
+                    requirement.all_terms,
+                    requirement.any_terms,
+                    requirement.reject_terms,
+                )
+                for requirement in alternatives
+            ),
+        )
+        for assertion_id, alternatives in rule.requirement_groups
     )
 
 
@@ -989,6 +1052,54 @@ def _requirement_result(
     )
 
 
+def _requirement_group_result(
+    assertion_id: str,
+    alternatives: Sequence[_Requirement],
+    successful_writes: Sequence[_Call],
+) -> tuple[list[_Call], list[_Call], str]:
+    """Evaluate one business outcome that may be completed in equivalent systems."""
+
+    matches = [
+        call
+        for call in successful_writes
+        if any(_matches(call, requirement) for requirement in alternatives)
+    ]
+    if matches:
+        call = matches[0]
+        provider = {
+            "github": "GitHub",
+            "jira": "Jira",
+        }.get(call.provider, call.provider.replace("_", " ").title())
+        return (
+            matches,
+            matches,
+            f"Step {call.sequence} reconciled the required {_plain_label(assertion_id)} in {provider}",
+        )
+
+    diagnostic_calls: list[_Call] = []
+    details: list[str] = []
+    for requirement in alternatives:
+        _, candidates, detail = _requirement_result(requirement, successful_writes)
+        diagnostic_calls.extend(candidates)
+        details.append(detail)
+    providers = " or ".join(
+        {
+            "github": "GitHub",
+            "jira": "Jira",
+        }.get(requirement.provider, requirement.provider.replace("_", " ").title())
+        for requirement in alternatives
+    )
+    required_terms = tuple(dict.fromkeys(term for item in alternatives for term in item.all_terms))
+    required = f" Required evidence: {_joined_terms(required_terms)}." if required_terms else ""
+    unique_diagnostics = list({call.event_index: call for call in diagnostic_calls}.values())
+    return (
+        [],
+        unique_diagnostics,
+        f"No successful {providers} write completed {_plain_label(assertion_id)}.{required} "
+        f"Closest evidence: {' | '.join(details)}",
+    )
+
+
 def _is_additive_evidence(call: _Call) -> bool:
     if call.provider == "slack" and call.path.endswith("/chat.postMessage"):
         return True
@@ -1003,6 +1114,14 @@ def _is_explicitly_allowed(call: _Call, rule: _TaskRule) -> bool:
     if _is_additive_evidence(call):
         return True
     if any(_matches(call, requirement) for requirement in rule.requirements):
+        return True
+    if any(
+        _matches(call, requirement)
+        for _, alternatives in rule.requirement_groups
+        for requirement in alternatives
+    ):
+        return True
+    if any(_matches(call, requirement) for requirement in rule.optional_actions):
         return True
     return any(
         call.provider == provider and re.search(pattern, call.path) for provider, pattern in rule.allowed_actions
@@ -1306,6 +1425,22 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
             }
         )
 
+    for assertion_id, alternatives in rule.requirement_groups:
+        matches, diagnostic_calls, detail = _requirement_group_result(
+            assertion_id,
+            alternatives,
+            successful_writes,
+        )
+        assertions.append(
+            {
+                "id": assertion_id,
+                "status": "pass" if matches else "fail",
+                "evidence": [call.pointer for call in diagnostic_calls]
+                or [{"artifact": "suite.json", "pointer": f"/tasks/{task_id}/verification/required_outcomes"}],
+                "detail": detail,
+            }
+        )
+
     for forbidden in rule.forbidden_actions:
         matches = [call for call in successful_writes if _matches(call, forbidden)]
         assertions.append(
@@ -1360,7 +1495,16 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
         for call in successful_writes
         if (not _is_additive_evidence(call) or task_id not in _PROTECTED_ADDITIVE_EVIDENCE_ALLOWED)
         and not (
-            not _is_additive_evidence(call) and any(_matches(call, requirement) for requirement in rule.requirements)
+            not _is_additive_evidence(call)
+            and (
+                any(_matches(call, requirement) for requirement in rule.requirements)
+                or any(
+                    _matches(call, requirement)
+                    for _, alternatives in rule.requirement_groups
+                    for requirement in alternatives
+                )
+                or any(_matches(call, requirement) for requirement in rule.optional_actions)
+            )
         )
         and call.target_text
         and isinstance(protected_refs, list)

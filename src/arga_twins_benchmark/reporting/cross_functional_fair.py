@@ -105,6 +105,13 @@ class SemanticRequirement:
 
 
 @dataclass(frozen=True)
+class SemanticRequirementGroup:
+    id: str
+    alternatives: tuple[SemanticRequirement, ...]
+    minimum_alternatives: int = 1
+
+
+@dataclass(frozen=True)
 class CardinalityRequirement:
     id: str
     provider: str
@@ -120,6 +127,7 @@ class FairTaskContract:
     task_id: str
     snapshot_queries: tuple[SnapshotQuerySpec, ...]
     semantic_requirements: tuple[SemanticRequirement, ...]
+    semantic_requirement_groups: tuple[SemanticRequirementGroup, ...]
     cardinality_requirements: tuple[CardinalityRequirement, ...]
     reviewed_unsent_confirmation: bool
 
@@ -281,7 +289,7 @@ def _semantic_requirement_detail(requirement: SemanticRequirement, *, passed: bo
         "slack": "Slack",
     }.get(requirement.provider, requirement.provider.replace("_", " ").title())
     label = requirement.id.replace("_", " ")
-    groups = []
+    groups: list[str] = []
     for group in requirement.token_groups:
         alternatives = " or ".join(f"“{term}”" for term in group)
         groups.append(alternatives)
@@ -290,6 +298,26 @@ def _semantic_requirement_detail(requirement: SemanticRequirement, *, passed: bo
     if passed:
         return f"The canonical {provider} {evidence_kind} establishes {label}: {expected}"
     return f"No canonical {provider} {evidence_kind} establishes {label}; it must contain {expected}"
+
+
+def _semantic_requirement_matches(
+    requirement: SemanticRequirement,
+    *,
+    mutations: Sequence[Mutation],
+    after: Sequence[CanonicalResource],
+) -> list[Mutation | CanonicalResource]:
+    candidates: Sequence[Mutation | CanonicalResource] = mutations if requirement.mutation_required else after
+    matches: list[Mutation | CanonicalResource] = []
+    for candidate in candidates:
+        provider_role = candidate.twin if isinstance(candidate, Mutation) else candidate.provider_role
+        text = _mutation_text(candidate) if isinstance(candidate, Mutation) else _resource_text(candidate)
+        if (
+            _provider_for_role(provider_role) == requirement.provider
+            and _groups_present(text, requirement.token_groups)
+            and not any(_term_present(text, term) for term in requirement.forbidden_terms)
+        ):
+            matches.append(candidate)
+    return matches
 
 
 def _cardinality(
@@ -538,6 +566,33 @@ def _legacy_requirements(task_id: str) -> tuple[SemanticRequirement, ...]:
     return _CRM_REQUIREMENTS[task_id]
 
 
+def _legacy_requirement_groups(task_id: str) -> tuple[SemanticRequirementGroup, ...]:
+    if not task_id.startswith(("IT-", "DEV-")):
+        return ()
+    from arga_twins_benchmark.reporting.cross_functional_it_dev_legacy import (
+        semantic_requirement_group_contracts,
+    )
+
+    return tuple(
+        SemanticRequirementGroup(
+            id=assertion_id,
+            alternatives=tuple(
+                SemanticRequirement(
+                    id=f"{assertion_id}_{provider}",
+                    provider=provider,
+                    token_groups=(
+                        *(tuple((term,) for term in all_terms)),
+                        *((any_terms,) if any_terms else ()),
+                    ),
+                    forbidden_terms=reject_terms,
+                )
+                for provider, all_terms, any_terms, reject_terms in alternatives
+            ),
+        )
+        for assertion_id, alternatives in semantic_requirement_group_contracts(task_id)
+    )
+
+
 def semantic_requirements_for_task(task: Mapping[str, Any]) -> tuple[SemanticRequirement, ...]:
     task_id = _task_value(task, "id")
     if task_id not in _TASK_IDS:
@@ -551,12 +606,14 @@ def fair_contract_for_task(task: Mapping[str, Any]) -> FairTaskContract:
         raise ValueError(f"unsupported Cross-Functional task {task_id!r}")
     typed_task_id = cast(str, task_id)
     requirements = semantic_requirements_for_task(task)
-    if typed_task_id != "CRM-05" and not requirements:
+    requirement_groups = _legacy_requirement_groups(typed_task_id)
+    if typed_task_id != "CRM-05" and not requirements and not requirement_groups:
         raise ValueError(f"{typed_task_id}: fair task contract has no semantic outcome requirements")
     return FairTaskContract(
         task_id=typed_task_id,
         snapshot_queries=snapshot_queries_for_task(task),
         semantic_requirements=requirements,
+        semantic_requirement_groups=requirement_groups,
         cardinality_requirements=_CARDINALITY_REQUIREMENTS.get(typed_task_id, ()),
         reviewed_unsent_confirmation=typed_task_id in _REVIEWED_DRAFT_TASKS,
     )
@@ -1187,25 +1244,7 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
     requirements = contract.semantic_requirements
     assertions: list[dict[str, Any]] = []
     for requirement in requirements:
-        matches_count = 0
-        if requirement.mutation_required:
-            for candidate in mutations:
-                text = _mutation_text(candidate)
-                if (
-                    _provider_for_role(candidate.twin) == requirement.provider
-                    and _groups_present(text, requirement.token_groups)
-                    and not any(_term_present(text, term) for term in requirement.forbidden_terms)
-                ):
-                    matches_count += 1
-        else:
-            for candidate in after:
-                text = _resource_text(candidate)
-                if (
-                    _provider_for_role(candidate.provider_role) == requirement.provider
-                    and _groups_present(text, requirement.token_groups)
-                    and not any(_term_present(text, term) for term in requirement.forbidden_terms)
-                ):
-                    matches_count += 1
+        matches_count = len(_semantic_requirement_matches(requirement, mutations=mutations, after=after))
         passed = matches_count >= requirement.minimum_matches
         assertions.append(
             _assertion(
@@ -1217,6 +1256,35 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
                         "artifact": "final-state.json",
                         "pointer": f"/queries/{requirement.provider}",
                     }
+                ],
+            )
+        )
+
+    for group in contract.semantic_requirement_groups:
+        alternative_matches = [
+            (alternative, _semantic_requirement_matches(alternative, mutations=mutations, after=after))
+            for alternative in group.alternatives
+        ]
+        matched = [(alternative, matches) for alternative, matches in alternative_matches if matches]
+        passed = len(matched) >= group.minimum_alternatives
+        providers = " or ".join(
+            alternative.provider.replace("_", " ").title() for alternative in group.alternatives
+        )
+        assertions.append(
+            _assertion(
+                group.id,
+                "pass" if passed else "fail",
+                (
+                    f"The business outcome is established in {', '.join(item[0].provider for item in matched)}"
+                    if passed
+                    else f"No canonical changed resource in {providers} establishes {group.id.replace('_', ' ')}"
+                ),
+                [
+                    {
+                        "artifact": "final-state.json",
+                        "pointer": f"/queries/{alternative.provider}",
+                    }
+                    for alternative, _ in (matched or alternative_matches)
                 ],
             )
         )
@@ -1267,6 +1335,7 @@ __all__ = [
     "CardinalityRequirement",
     "FairTaskContract",
     "SemanticRequirement",
+    "SemanticRequirementGroup",
     "canonicalize_cross_functional_snapshot",
     "fair_contract_for_task",
     "grade_cross_functional_fair_attempt",

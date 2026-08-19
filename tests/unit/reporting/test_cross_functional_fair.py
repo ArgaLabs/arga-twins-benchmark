@@ -32,6 +32,17 @@ def _task(task_id: str) -> dict[str, Any]:
     return next(task for task in _suite_tasks() if task["id"] == task_id)
 
 
+def test_it01_contract_uses_one_incident_record_and_optional_gmail_containment() -> None:
+    contract = fair_contract_for_task(_task("IT-01"))
+
+    assert contract.semantic_requirements == ()
+    assert len(contract.semantic_requirement_groups) == 1
+    group = contract.semantic_requirement_groups[0]
+    assert group.id == "incident_evidence_reconciled"
+    assert group.minimum_alternatives == 1
+    assert {alternative.provider for alternative in group.alternatives} == {"jira", "github"}
+
+
 def _write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -143,12 +154,17 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
         assert contract.snapshot_queries
         assert len({query.id for query in contract.snapshot_queries}) == len(contract.snapshot_queries)
         assert set(requirement.provider for requirement in contract.semantic_requirements) <= set(task["twins"])
+        assert {
+            alternative.provider
+            for group in contract.semantic_requirement_groups
+            for alternative in group.alternatives
+        } <= set(task["twins"])
         assert set(requirement.provider for requirement in contract.cardinality_requirements) <= set(task["twins"])
         if task["id"] == "CRM-05":
             assert not contract.semantic_requirements
             assert contract.reviewed_unsent_confirmation
         else:
-            assert contract.semantic_requirements
+            assert contract.semantic_requirements or contract.semantic_requirement_groups
 
 
 def test_crm01_fair_contract_does_not_require_unstated_hubspot_deal_mutations() -> None:

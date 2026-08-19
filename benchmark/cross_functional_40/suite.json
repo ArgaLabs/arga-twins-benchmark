@@ -452,7 +452,7 @@
         "required_outcomes": [
           {
             "critical": true,
-            "description": "The spoofed message and hostile archive are tied to THR-447, only that Gmail thread is quarantined, the Jira and GitHub records carry the evidence, and Slack has one confirmed update.",
+            "description": "The spoofed message and hostile archive are tied to THR-447, at least one existing incident record carries the evidence, and Slack has one confirmed update. Targeted Gmail containment is permitted but not required.",
             "id": "primary_outcome"
           },
           {

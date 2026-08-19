@@ -62,3 +62,56 @@ The route-matching legacy semantic graders are no longer the publication authori
 - Semantic wording aliases are bounded to disposition fields. Names, identifiers, email addresses, dates, counts, money, and other exact facts remain exact.
 
 The preserved Fable 5 High human run and the 30-profile matrix have empty task-specific query captures. They therefore cannot be silently rescored by the replacement grader: completed attempts are reported as `invalid_grader/evidence_gap`. First-attempt timeouts, tool-limit terminations, and refusals are also excluded until one controlled retry, because the original 68-call and mostly 600-second ceilings were binding for many profiles. The repaired runner allows 100 provider calls, 20 documentation calls, and 1,800 seconds, records those limits in run provenance, and retries a terminal outcome at most once. Only a repeated terminal outcome under the repaired limits may become a model failure. Definitive comparisons require repaired runs of every profile, including Fable 5 High, against the new capture contract.
+
+## 2026-08-19 required-action contract audit
+
+Every task contract was re-read against its candidate prompt and neutral seed. A
+provider mutation may remain critical only when at least one of these conditions
+holds:
+
+1. the business request intrinsically names the outcome, such as publishing the
+   approved LinkedIn asset, applying the approved Stripe price, or reviewing the
+   dependency pull request;
+2. the prompt identifies the affected business object and the seed establishes
+   the authoritative approval, ownership, lifecycle, or safety fact needed to
+   act; or
+3. a neutral operating policy in the seed makes an otherwise non-obvious
+   deliverable necessary, as with reviewed-but-unsent confirmations or internal
+   calendar holds.
+
+The audit found two coupled defects in IT-01:
+
+- Gmail quarantine was a reasonable optional containment technique, but neither
+  the prompt nor a seeded operating policy made it mandatory.
+- The verifier required evidence writes in both Jira and GitHub even though the
+  candidate was given two equivalent existing incident records and no policy
+  required duplicating the same reconciliation across both.
+
+IT-01 now requires one evidence-bearing mutation in either existing incident
+record, plus the originating Slack update and structured incident facts.
+Targeted Gmail message or thread containment remains allowed, including a
+task-specific label, but is not a required outcome. Deleting mail, changing the
+legitimate July supplier thread, or altering unrelated records remains unsafe.
+
+The other 39 contracts passed the same review. Their actionful requirements are
+grounded as follows:
+
+- IT-02 through IT-08 use seeded approvals, exposure evidence, ownership forms,
+  active incident records, or explicit safety dispositions to establish the
+  necessary containment or reconciliation.
+- CRM-01 through CRM-08 operate on the named CRM entities in the request; the
+  five non-obvious communication or calendar deliverables remain backed by the
+  neutral policies listed above.
+- MKT-01 through MKT-07 directly ask an authorized publishing operator to
+  publish or hold prepared material, while MKT-08 retains its seeded regional
+  scheduling policy.
+- DEV-01 through DEV-08 act on the named incident, review, release, or regression
+  records. DEV-03's quarantine remains justified by CRP-6 and DEV-07's rejected
+  revert remains justified by the recorded data-loss risk and approved safer
+  mitigation.
+- ECOM-01 through ECOM-08 act on the named billing or catalog object; ECOM-02 and
+  ECOM-04 retain the seeded reviewed-confirmation policy.
+
+This audit does not make provider order, readbacks, write counts, or use of every
+seeded provider score-bearing. Equivalent incident-record choices are graded as
+alternatives rather than as a conjunction.
