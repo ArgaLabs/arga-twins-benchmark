@@ -1055,7 +1055,12 @@ def _slack_assertion(task: Mapping[str, Any], calls: Sequence[_Call]) -> dict[st
         "id": "originating_slack_update",
         "status": "pass" if matches else "fail",
         "evidence": [call.pointer for call in matches]
-        or [{"artifact": "suite.json", "pointer": "/verification/required_outcomes/originating_update"}],
+        or [
+            {
+                "artifact": "suite.json",
+                "pointer": "/verification/required_outcomes/originating_channel_update",
+            }
+        ],
         "detail": "originating channel has an evidence-based update"
         if matches
         else "no proved update in the originating channel",

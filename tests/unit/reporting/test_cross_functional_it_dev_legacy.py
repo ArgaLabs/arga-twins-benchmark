@@ -579,6 +579,12 @@ def test_slack_update_must_target_the_originating_channel(tmp_path: Path) -> Non
     assert result["outcome"] == "fail"
     slack_assertion = next(item for item in result["assertions"] if item["id"] == "originating_slack_update")
     assert slack_assertion["status"] == "fail"
+    assert slack_assertion["evidence"] == [
+        {
+            "artifact": "suite.json",
+            "pointer": "/verification/required_outcomes/originating_channel_update",
+        }
+    ]
 
 
 def test_inline_query_paths_and_explicit_call_limit_errors_are_complete_evidence(tmp_path: Path) -> None:
