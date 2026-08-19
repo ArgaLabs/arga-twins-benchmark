@@ -1330,6 +1330,73 @@ def _requirement_group_result(
     )
 
 
+def _it03_github_evidence_assertion(
+    requirement: _Requirement,
+    artifacts: Mapping[str, Mapping[str, Any]],
+    successful_writes: Sequence[_Call],
+) -> dict[str, Any]:
+    """Accept the pre-existing canonical exposure issue without a duplicate comment.
+
+    IT-03 starts with the credential fingerprint and owning repository already
+    recorded in ``acme/internal-operations#1``.  The responder must preserve
+    that evidence, route remediation through Jira, and inform the originating
+    Slack thread; appending the same two facts to GitHub again is not a distinct
+    business outcome.
+    """
+
+    matches, diagnostic_calls, detail = _requirement_result(requirement, successful_writes)
+    if matches:
+        return {
+            "id": requirement.assertion_id,
+            "status": "pass",
+            "evidence": [call.pointer for call in diagnostic_calls],
+            "detail": detail,
+        }
+
+    final_providers = artifacts.get("final-state.json", {}).get("providers")
+    if isinstance(final_providers, dict):
+        for provider_name, provider_state in cast(dict[str, object], final_providers).items():
+            if _canonical_provider(provider_name) != "github":
+                continue
+            for record in _walk_dicts(provider_state):
+                if record.get("name") != "internal-operations":
+                    continue
+                owner = record.get("owner")
+                owner_login = owner.get("login") if isinstance(owner, dict) else owner
+                if owner_login != "acme":
+                    continue
+                issues = record.get("issues")
+                if not isinstance(issues, list):
+                    continue
+                for raw_issue in cast(list[object], issues):
+                    if not isinstance(raw_issue, dict) or raw_issue.get("number") != 1:
+                        continue
+                    issue_text = _normalized_text(raw_issue)
+                    if all(_semantic_term_present(issue_text, term) for term in requirement.all_terms):
+                        return {
+                            "id": requirement.assertion_id,
+                            "status": "pass",
+                            "evidence": [
+                                {
+                                    "artifact": "final-state.json",
+                                    "pointer": f"/providers/{provider_name}",
+                                }
+                            ],
+                            "detail": (
+                                "Canonical GitHub issue acme/internal-operations#1 already records "
+                                "the credential fingerprint and owning repository; no duplicate comment required"
+                            ),
+                        }
+
+    return {
+        "id": requirement.assertion_id,
+        "status": "fail",
+        "evidence": [call.pointer for call in diagnostic_calls]
+        or [{"artifact": "final-state.json", "pointer": "/providers"}],
+        "detail": detail,
+    }
+
+
 def _it02_config_snapshot(
     artifact: Mapping[str, Any],
     *,
@@ -1595,6 +1662,20 @@ def _slack_assertion(task: Mapping[str, Any], calls: Sequence[_Call]) -> dict[st
     channel_name = _normalized_text(str(selector.get("channel", "")))
     reference_terms = selector.get("references_any_observable_fact", selector.get("new_message_contains_all", []))
     terms = [str(term) for term in reference_terms] if isinstance(reference_terms, list) else []
+    task_id = task.get("id")
+
+    def slack_term_present(text: str, term: str) -> bool:
+        if _semantic_term_present(text, term):
+            return True
+        # The owning organization is implicit inside Acme's security channel.
+        # Referring to the unique payments-api service is semantically the same
+        # incident target; requiring the redundant "acme/" prefix is another
+        # hidden literal-string obligation.
+        return (
+            task_id == "IT-03"
+            and _normalized_text(term) == "acme/payments api"
+            and _term_present(text, "payments-api")
+        )
 
     matches: list[_Call] = []
     channel_posts: list[_Call] = []
@@ -1613,9 +1694,9 @@ def _slack_assertion(task: Mapping[str, Any], calls: Sequence[_Call]) -> dict[st
             channel_posts.append(call)
         text = _normalized_text(body.get("text", ""))
         terms_match = (
-            all(_semantic_term_present(text, term) for term in terms)
+            all(slack_term_present(text, term) for term in terms)
             if "new_message_contains_all" in selector
-            else any(_semantic_term_present(text, term) for term in terms)
+            else any(slack_term_present(text, term) for term in terms)
         )
         if channel_matches and terms_match:
             matches.append(call)
@@ -1803,9 +1884,10 @@ def _duplicate_assertion(task: Mapping[str, Any], artifacts: Mapping[str, Mappin
 def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict[str, Any]:
     """Grade one legacy IT/DEV attempt entirely from saved, mediated evidence.
 
-    Required mutations are proved only by successful provider calls paired with
-    the provider trace.  Candidate prose may satisfy structured-result wording,
-    but it can never prove that an external mutation occurred.
+    Required mutations are proved by successful provider calls paired with the
+    provider trace. Task-specific preservation outcomes may also be established
+    by trusted canonical final state. Candidate prose may satisfy structured-
+    result wording, but it can never prove an external state outcome.
     """
 
     task_id = task.get("id")
@@ -1881,6 +1963,9 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
     for requirement in rule.requirements:
         if task_id == "IT-02" and requirement.assertion_id == "approved_rollback_applied":
             assertions.append(_it02_rollback_assertion(artifacts, successful_writes))
+            continue
+        if task_id == "IT-03" and requirement.assertion_id == "github_exposure_evidence":
+            assertions.append(_it03_github_evidence_assertion(requirement, artifacts, successful_writes))
             continue
         matches, diagnostic_calls, detail = _requirement_result(requirement, successful_writes)
         assertions.append(

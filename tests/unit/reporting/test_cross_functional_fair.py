@@ -5,6 +5,8 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, cast
 
+import arga_twins_benchmark.reporting.cross_functional_fair as fair
+from arga_twins_benchmark.evaluation.deterministic import CanonicalResource
 from arga_twins_benchmark.evaluation.state_capture import (
     CapturedProviderState,
     CapturedQueryState,
@@ -52,6 +54,34 @@ def test_it01_contract_uses_one_incident_record_and_optional_gmail_containment()
         "endpoint": "PRC-LT-214",
         "mail_thread": "THR-447",
     }
+
+
+def test_it03_contract_accepts_preserved_github_evidence_from_final_state() -> None:
+    contract = fair_contract_for_task(_task("IT-03"))
+    requirements = {requirement.id: requirement for requirement in contract.semantic_requirements}
+
+    assert requirements["jira_exposure_evidence"].mutation_required is True
+    assert requirements["github_exposure_evidence"].mutation_required is False
+    assert requirements["github_exposure_evidence"].resource_types == ("issue",)
+
+    matching_issue = CanonicalResource(
+        "code_host",
+        "issue",
+        "acme/internal-operations#1",
+        {"body": "Credential fingerprint tok_7A91 belongs to acme/payments-api."},
+    )
+    unrelated_file = CanonicalResource(
+        "code_host",
+        "file",
+        "records/exposure.md",
+        {"content": "Credential fingerprint tok_7A91 belongs to acme/payments-api."},
+    )
+
+    assert fair._semantic_requirement_matches(
+        requirements["github_exposure_evidence"],
+        mutations=[],
+        after=[unrelated_file, matching_issue],
+    ) == [matching_issue]
 
 
 def _write_json(path: Path, payload: object) -> None:

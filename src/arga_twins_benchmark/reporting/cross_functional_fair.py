@@ -81,6 +81,7 @@ class SemanticRequirement:
     mutation_required: bool = True
     minimum_matches: int = 1
     forbidden_terms: tuple[str, ...] = ()
+    resource_types: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -289,9 +290,11 @@ def _semantic_requirement_matches(
     matches: list[Mutation | CanonicalResource] = []
     for candidate in candidates:
         provider_role = candidate.twin if isinstance(candidate, Mutation) else candidate.provider_role
+        resource_type = candidate.resource_type
         text = _mutation_text(candidate) if isinstance(candidate, Mutation) else _resource_text(candidate)
         if (
             _provider_for_role(provider_role) == requirement.provider
+            and (not requirement.resource_types or resource_type in requirement.resource_types)
             and _groups_present(text, requirement.token_groups)
             and not any(_term_present(text, term) for term in requirement.forbidden_terms)
         ):
@@ -519,7 +522,13 @@ def _legacy_requirements(task_id: str) -> tuple[SemanticRequirement, ...]:
                     assertion_id,
                     provider,
                     groups,
+                    mutation_required=not (
+                        task_id == "IT-03" and assertion_id == "github_exposure_evidence"
+                    ),
                     forbidden_terms=reject_terms,
+                    resource_types=("issue",)
+                    if task_id == "IT-03" and assertion_id == "github_exposure_evidence"
+                    else (),
                 )
             )
         return tuple(requirements)

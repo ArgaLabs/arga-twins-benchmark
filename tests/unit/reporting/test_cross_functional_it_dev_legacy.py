@@ -225,6 +225,53 @@ def test_it_03_accepts_documented_owner_routing_with_rotation_outstanding() -> N
     assert assertion["status"] == "pass"
 
 
+def test_it_03_accepts_existing_canonical_github_evidence_without_duplicate_write() -> None:
+    requirement = next(
+        item
+        for item in legacy._RULES["IT-03"].requirements
+        if item.assertion_id == "github_exposure_evidence"
+    )
+    artifacts = {
+        "final-state.json": {
+            "providers": {
+                "github": {
+                    "state": {
+                        "seed_config": {
+                            "github": {
+                                "repos": [
+                                    {
+                                        "owner": "acme",
+                                        "name": "internal-operations",
+                                        "issues": [
+                                            {
+                                                "number": 1,
+                                                "title": "Deployment credential exposure triage",
+                                                "body": (
+                                                    "Asset: payments-api deployment credential fingerprint "
+                                                    "tok_7A91. Release audit 771 records it for "
+                                                    "acme/payments-api."
+                                                ),
+                                            }
+                                        ],
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    assertion = legacy._it03_github_evidence_assertion(requirement, artifacts, [])
+
+    assert assertion["status"] == "pass"
+    assert "no duplicate comment required" in assertion["detail"]
+    assert assertion["evidence"] == [
+        {"artifact": "final-state.json", "pointer": "/providers/github"}
+    ]
+
+
 def test_it_03_does_not_accept_a_false_revocation_claim_as_owner_routing() -> None:
     task = load_it_dev_legacy_tasks(SUITE_PATH)["IT-03"]
     artifacts = {
@@ -361,6 +408,29 @@ def test_dev_05_slack_update_accepts_semantically_equivalent_unmerged_wording() 
         },
         status_code=200,
         target_text="channel cc0ee26bdef name eng reviews",
+    )
+
+    assertion = legacy._slack_assertion(task, [call])
+
+    assert assertion["status"] == "pass"
+
+
+def test_it_03_slack_update_accepts_unambiguous_repository_shorthand() -> None:
+    task = load_it_dev_legacy_tasks(SUITE_PATH)["IT-03"]
+    call = legacy._Call(
+        event_index=1,
+        sequence=1,
+        provider="slack",
+        method="POST",
+        path="/api/chat.postMessage",
+        arguments={
+            "body": {
+                "channel": "CC0EE26BDEF",
+                "text": "I correlated the report to the real payments-api deployment credential.",
+            }
+        },
+        status_code=200,
+        target_text="channel cc0ee26bdef name security help",
     )
 
     assertion = legacy._slack_assertion(task, [call])
