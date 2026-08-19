@@ -408,7 +408,6 @@
               "duplicate_creations": true,
               "observable_facts": {
                 "artifact_sha256": "31d8c9f0",
-                "disposition": "spoofed_download_contained",
                 "endpoint": "PRC-LT-214",
                 "mail_thread": "THR-447"
               }
@@ -436,7 +435,6 @@
           "allowed_scope": {
             "observable_facts": {
               "artifact_sha256": "31d8c9f0",
-              "disposition": "spoofed_download_contained",
               "endpoint": "PRC-LT-214",
               "mail_thread": "THR-447"
             },
@@ -467,7 +465,6 @@
               "minimum_distinct_provider_matches": 2,
               "observable_facts": {
                 "artifact_sha256": "31d8c9f0",
-                "disposition": "spoofed_download_contained",
                 "endpoint": "PRC-LT-214",
                 "mail_thread": "THR-447"
               },
@@ -485,8 +482,7 @@
               "references_any_observable_fact": [
                 "THR-447",
                 "PRC-LT-214",
-                "31d8c9f0",
-                "spoofed_download_contained"
+                "31d8c9f0"
               ]
             }
           },
@@ -499,7 +495,6 @@
             ],
             "facts": {
               "artifact_sha256": "31d8c9f0",
-              "disposition": "spoofed_download_contained",
               "endpoint": "PRC-LT-214",
               "mail_thread": "THR-447"
             },

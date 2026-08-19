@@ -15,7 +15,6 @@ HARDENING_PROFILES: dict[str, dict[str, Any]] = {
             "mail_thread": "THR-447",
             "endpoint": "PRC-LT-214",
             "artifact_sha256": "31d8c9f0",
-            "disposition": "spoofed_download_contained",
         },
         "protected": ["rate-card-jul.pdf", "8a4e7712"],
     },

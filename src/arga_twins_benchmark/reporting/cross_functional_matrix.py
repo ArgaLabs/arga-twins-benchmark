@@ -124,7 +124,12 @@ def _content_hash(task: Mapping[str, Any]) -> str:
 # metadata changed.  Preserve the recorded identity for saved-trial integrity
 # without accepting arbitrary historical hashes.
 _VERIFICATION_ONLY_LEGACY_CONTENT_HASHES: dict[str, frozenset[str]] = {
-    "IT-01": frozenset({"88a6cbd7a2602fa78219ab7b0b88bd8ae873d4976f61ca1a5abfdb32a441c56b"}),
+    "IT-01": frozenset(
+        {
+            "88a6cbd7a2602fa78219ab7b0b88bd8ae873d4976f61ca1a5abfdb32a441c56b",
+            "7b66b98107c8e88c6e64117990600ff85c7ce60cf7156776f5dd6ee34df950eb",
+        }
+    ),
     "DEV-05": frozenset({"5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47"}),
     "MKT-01": frozenset({"9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e"}),
 }
