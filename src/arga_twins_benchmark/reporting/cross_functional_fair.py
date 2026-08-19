@@ -20,6 +20,11 @@ from arga_twins_benchmark.evaluation.state_capture import (
     canonicalize_query_results,
     diff_canonical_resources,
 )
+from arga_twins_benchmark.reporting.cross_functional_semantics import (
+    fact_items,
+    semantic_value_present,
+    structured_fact_present,
+)
 from arga_twins_benchmark.specs.models import SnapshotQuerySpec
 
 CROSS_FUNCTIONAL_FAIR_GRADER_PROTOCOL = "arga-bench-cross-functional-fair/1"
@@ -68,37 +73,6 @@ _CONTROL_PLANE_SEGMENTS = frozenset(
     {"admin", "_admin", "_twin", "control", "control-plane", "control_plane", "grader", "inspect", "reset", "seed"}
 )
 _REVIEWED_DRAFT_TASKS = frozenset({"CRM-02", "CRM-03", "CRM-05", "ECOM-02", "ECOM-04"})
-_SEMANTIC_TERM_ALIASES: dict[str, tuple[tuple[str, ...], ...]] = {
-    "alert_noise_consolidated_real_incident_open": (("MON-771", "DB-912", "open"),),
-    "backport_open_unmerged": (("backport", "open", "unmerged"), ("release/4.8", "not merged")),
-    "blocked_pending_owner_review": (("blocked", "billing-storage", "review"),),
-    "bounded_quarantine": (("quarantine", "24 hours"),),
-    "changes_requested_for_registry_policy": (("changes requested", "registry policy"),),
-    "credential_exposure_contained": (("credential", "revoked"), ("credential", "rotated")),
-    "draft_unsent": (("draft",),),
-    "drift_open_pending_fix": (("drift", "open", "pending"),),
-    "embargo_hold": (("embargo", "hold"),),
-    "empty_evaluation_profile_archived": (("evaluation", "archived"), ("evaluation", "deleted")),
-    "empty_trial_profile_archived": (("trial", "archived"), ("trial", "deleted")),
-    "mapping_documented_no_meter_mutation": (("mapping", "meter", "unchanged"),),
-    "mitigated_not_closed": (
-        ("mitigated", "remains open"),
-        ("mitigation", "incident open"),
-        ("mitigation", "pending verification"),
-        ("recovered", "incident open"),
-    ),
-    "publication_blocked": (("publication", "blocked"), ("no post", "legal hold")),
-    "regression_open_and_escalated": (("regression", "open", "escalated"),),
-    "renewal_at_risk": (("renewal", "at risk"),),
-    "rollback_required": (("rollback", "required"), ("rollback", "applied")),
-    "spoofed_download_contained": (("spoofed", "quarantined"), ("spoofed", "contained")),
-    "unapproved_client_blocked": (("unapproved", "blocked"), ("CSK-991", "denied")),
-    "unavailable_for_new_orders": (("inactive", "new purchases"), ("unavailable", "new orders")),
-    "unsafe_revert_rejected": (("unsafe revert", "rejected"), ("revert", "not performed")),
-    "verified_address_canonical_bounce_retained": (("verified address", "bounce", "retained"),),
-}
-
-
 @dataclass(frozen=True)
 class SemanticRequirement:
     id: str
@@ -503,11 +477,7 @@ def _term_present(text: str, term: str) -> bool:
 
 
 def _semantic_term_present(text: str, term: str) -> bool:
-    if _term_present(text, term):
-        return True
-    return any(
-        all(_term_present(text, alias_term) for alias_term in alias) for alias in _SEMANTIC_TERM_ALIASES.get(term, ())
-    )
+    return semantic_value_present(text, term)
 
 
 def _groups_present(text: str, groups: Sequence[Sequence[str]]) -> bool:
@@ -688,20 +658,23 @@ def _relevant_mutations(mutations: Sequence[Mutation]) -> list[Mutation]:
 
 
 def _task_facts(task: Mapping[str, Any]) -> tuple[str, ...]:
-    verification = _object_mapping(_task_value(task, "verification"))
-    required = _object_list(verification.get("required_outcomes"))
-    structured: dict[str, object] = {}
-    for item in required:
-        candidate = _object_mapping(item)
-        if candidate.get("id") == "structured_result":
-            structured = candidate
-            break
-    facts = _object_mapping(structured.get("facts"))
-    return tuple(str(value) for value in facts.values() if isinstance(value, str | int | float))
+    return tuple(str(value) for _, value in _task_fact_items(task) if isinstance(value, str | int | float))
+
+
+def _task_fact_items(task: Mapping[str, Any]) -> tuple[tuple[str, object], ...]:
+    return fact_items(cast(Mapping[str, object], task))
 
 
 def _task_scope_facts(task: Mapping[str, Any]) -> tuple[str, ...]:
     return tuple(fact for fact in _task_facts(task) if re.search(r"[a-z@/]", fact.casefold()))
+
+
+def _task_scope_fact_items(task: Mapping[str, Any]) -> tuple[tuple[str, object], ...]:
+    return tuple(
+        (key, value)
+        for key, value in _task_fact_items(task)
+        if isinstance(value, str) and re.search(r"[a-z@/]", value.casefold())
+    )
 
 
 def _protected_terms(task: Mapping[str, Any]) -> tuple[str, ...]:
@@ -744,13 +717,16 @@ def _slack_update_assertion(
     mutations: Sequence[Mutation],
 ) -> dict[str, Any]:
     channel = _originating_channel(task)
-    facts = _task_scope_facts(task)
+    fact_pairs = _task_scope_fact_items(task)
+    facts = tuple(str(value) for _, value in fact_pairs)
     matches: list[Mutation] = []
     for mutation in mutations:
         if _provider_for_role(mutation.twin) != "slack" or mutation.operation != "create":
             continue
         text = _mutation_text(mutation)
-        if channel is not None and _term_present(text, channel) and any(_term_present(text, fact) for fact in facts):
+        if channel is not None and _term_present(text, channel) and any(
+            structured_fact_present(text, key, value) for key, value in fact_pairs
+        ):
             matches.append(mutation)
     return _assertion(
         "originating_slack_update",
@@ -796,15 +772,18 @@ def _cross_system_assertion(
     minimum_raw = selector.get("minimum_distinct_provider_matches")
     minimum = minimum_raw if isinstance(minimum_raw, int) and not isinstance(minimum_raw, bool) else 2
     observable = _object_mapping(selector.get("observable_facts"))
-    facts = [str(value) for value in observable.values() if isinstance(value, str | int | float)]
-    strong_facts = [fact for fact in facts if len(re.findall(r"[a-z0-9]+", fact.casefold())) >= 1]
+    strong_facts = [
+        (str(key), value)
+        for key, value in observable.items()
+        if isinstance(value, str | int | float) and re.findall(r"[a-z0-9]+", str(value).casefold())
+    ]
     matched: set[str] = set()
     for provider in providers:
         corpus = " ".join(
             _resource_text(resource) for resource in resources if _provider_for_role(resource.provider_role) == provider
         )
         threshold = min(2, len(strong_facts))
-        if threshold and sum(_semantic_term_present(corpus, fact) for fact in strong_facts) >= threshold:
+        if threshold and sum(structured_fact_present(corpus, key, fact) for key, fact in strong_facts) >= threshold:
             matched.add(provider)
     passed = len(matched) >= minimum
     missing = sorted(providers - matched)
@@ -814,7 +793,7 @@ def _cross_system_assertion(
         (
             f"The required facts appear in {len(matched)} provider states ({', '.join(sorted(matched)) or 'none'}); "
             f"the contract requires at least {minimum}. Missing or fact-incomplete providers: "
-            f"{', '.join(missing) or 'none'}. Facts checked: {', '.join(strong_facts)}"
+            f"{', '.join(missing) or 'none'}. Facts checked: {', '.join(str(value) for _, value in strong_facts)}"
         ),
         [{"artifact": "final-state.json", "pointer": f"/queries/{provider}"} for provider in sorted(matched)]
         or [{"artifact": "final-state.json", "pointer": "/queries"}],
@@ -826,9 +805,9 @@ def _structured_assertion(
     resources: Sequence[CanonicalResource],
     output: str,
 ) -> dict[str, Any]:
-    facts = _task_facts(task)
+    facts = _task_fact_items(task)
     corpus = " ".join([*(_resource_text(resource) for resource in resources), _normal_text(output)])
-    missing = [fact for fact in facts if not _semantic_term_present(corpus, fact)]
+    missing = [str(fact) for key, fact in facts if not structured_fact_present(corpus, key, fact)]
     return _assertion(
         "structured_result",
         "pass" if not missing else "fail",

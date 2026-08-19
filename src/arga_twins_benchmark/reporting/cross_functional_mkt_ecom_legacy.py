@@ -9,6 +9,10 @@ from typing import Any, Literal, cast
 from urllib.parse import urlsplit
 
 from arga_twins_benchmark.lifecycle import cleanup_payload_proves_inert
+from arga_twins_benchmark.reporting.cross_functional_semantics import (
+    semantic_value_present,
+    structured_fact_present,
+)
 
 LEGACY_MKT_ECOM_GRADING_PROTOCOL = "arga-bench-cross-functional-mkt-ecom-legacy/1"
 
@@ -73,31 +77,6 @@ def _require(
 
 
 _SLACK_WRITE = {"slack": ("/api/chat.postmessage",)}
-
-_STRUCTURED_FACT_ALIASES: dict[str, tuple[tuple[str, ...], ...]] = {
-    "publication_blocked": (
-        ("publication", "hold"),
-        ("nothing", "authorized", "publish"),
-        ("not", "publish", "legal", "hold"),
-    ),
-    "unavailable_for_new_orders": (
-        ("deactivat",),
-        ("inactive",),
-        ("active", "false"),
-    ),
-    "mapping_documented_no_meter_mutation": (
-        ("mapping", "document", "no stripe"),
-        ("mapping", "document", "meter", "unchanged"),
-        ("root cause", "no stripe", "change"),
-        ("canonical", "meter", "no mutation"),
-    ),
-    "embargo_hold": (
-        ("embargo", "hold"),
-        ("embargo", "active"),
-        ("publication", "blocked", "16:00"),
-        ("do not", "publish", "16:00"),
-    ),
-}
 
 _CARDINALITY_LABELS = {
     "linkedin_post_cardinality": "new LinkedIn posts",
@@ -940,7 +919,7 @@ def _token_present(text: str, token: str) -> bool:
 
 
 def _tokens_present(text: str, groups: Iterable[Sequence[str]]) -> bool:
-    return all(any(_token_present(text, token) for token in group) for group in groups)
+    return all(any(semantic_value_present(text, token) for token in group) for group in groups)
 
 
 def _new_mapping_count(before: object, after: object, path: Sequence[str]) -> int | None:
@@ -1024,7 +1003,9 @@ def _requirement_detail(
     }.get(requirement.provider, requirement.provider.replace("_", " ").title())
     label = _requirement_label(requirement)
     missing_groups = [
-        group for group in requirement.token_groups if not any(_token_present(evidence_text, token) for token in group)
+        group
+        for group in requirement.token_groups
+        if not any(semantic_value_present(evidence_text, token) for token in group)
     ]
     if matching and not missing_groups:
         steps = ", ".join(str(call.sequence) for call in matching[:3])
@@ -1075,39 +1056,7 @@ def _required_outcome(task: Mapping[str, Any], outcome_id: str) -> Mapping[str, 
 
 
 def _expected_fact_present(text: str, key: str, expected: object) -> bool:
-    if isinstance(expected, bool):
-        return str(expected).casefold() in text
-    if isinstance(expected, (int, float)):
-        if expected == 0:
-            return re.search(r"\b(?:0|zero|no|none)\b", text) is not None
-        return re.search(rf"(?<!\d){re.escape(str(expected))}(?!\d)", text) is not None
-    expected_text = _normal_text(expected)
-    if expected_text in text:
-        return True
-    aliases = _STRUCTURED_FACT_ALIASES.get(str(expected), ())
-    if any(all(fragment in text for fragment in alias) for alias in aliases):
-        return True
-    if expected == "unavailable_for_new_orders":
-        return any(
-            phrase in text
-            for phrase in (
-                "unavailable for new orders",
-                "not available for new orders",
-                "no longer available for new orders",
-                "can no longer be used for new orders",
-            )
-        )
-    if isinstance(expected, str) and expected.endswith("_profile_archived"):
-        subject_words = [
-            word for word in expected.removesuffix("_profile_archived").split("_") if word not in {"empty"}
-        ]
-        return all(word in text for word in subject_words) and any(
-            marker in text for marker in ("archived", "deleted", '"deleted": true', "inactive")
-        )
-    words = [word for word in re.split(r"[^a-z0-9@./:%+-]+", expected_text) if len(word) > 1]
-    if key == "email_state" and expected == "draft_unsent":
-        return "draft" in text and any(word in text for word in ("unsent", "not sent", "review"))
-    return bool(words) and all(word in text for word in words)
+    return structured_fact_present(text, key, expected)
 
 
 def _structured_facts(task: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -1516,8 +1465,16 @@ def _grade_semantics(
         body = cast(Mapping[str, Any], _body(call.arguments))
         if body.get("channel") not in channel_ids:
             continue
-        if refs and not any(_token_present(_normal_text(body.get("text", "")), ref) for ref in refs):
-            continue
+        if refs:
+            message_text = _normal_text(body.get("text", ""))
+            fact_key_by_value = {str(value): str(key) for key, value in _structured_facts(task).items()}
+            if not any(
+                structured_fact_present(message_text, fact_key_by_value[ref], ref)
+                if ref in fact_key_by_value
+                else _token_present(message_text, ref)
+                for ref in refs
+            ):
+                continue
         matching_slack.append(call)
     slack_passed = channel is not None and bool(channel_ids) and bool(matching_slack)
     assertions.append(
