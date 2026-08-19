@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import re
 from collections import defaultdict
@@ -1100,6 +1102,186 @@ def _requirement_group_result(
     )
 
 
+def _it02_config_snapshot(
+    artifact: Mapping[str, Any],
+    *,
+    artifact_name: str,
+) -> tuple[str | None, dict[str, str], bool]:
+    """Return the trusted main-branch rollback file and its evidence pointer."""
+
+    queries = artifact.get("queries")
+    query = queries.get("it_02_github_state") if isinstance(queries, dict) else None
+    body = query.get("body") if isinstance(query, dict) else None
+    seed_config = body.get("seed_config") if isinstance(body, dict) else None
+    github = seed_config.get("github") if isinstance(seed_config, dict) else None
+    repos = github.get("repos") if isinstance(github, dict) else None
+    if isinstance(repos, list):
+        for repo_index, raw_repo in enumerate(cast(list[object], repos)):
+            if not isinstance(raw_repo, dict):
+                continue
+            repo = cast(dict[str, Any], raw_repo)
+            if repo.get("owner") != "acme" or repo.get("name") != "internal-operations":
+                continue
+            files = repo.get("files")
+            if not isinstance(files, list):
+                continue
+            for file_index, raw_file in enumerate(cast(list[object], files)):
+                if not isinstance(raw_file, dict):
+                    continue
+                file = cast(dict[str, Any], raw_file)
+                if file.get("path") != "config/change.txt" or file.get("branch", "main") != "main":
+                    continue
+                content = file.get("content")
+                return (
+                    content if isinstance(content, str) else None,
+                    {
+                        "artifact": artifact_name,
+                        "pointer": (
+                            "/queries/it_02_github_state/body/seed_config/github/repos/"
+                            f"{repo_index}/files/{file_index}"
+                        ),
+                    },
+                    True,
+                )
+            return (
+                None,
+                {
+                    "artifact": artifact_name,
+                    "pointer": (
+                        "/queries/it_02_github_state/body/seed_config/github/repos/"
+                        f"{repo_index}/files"
+                    ),
+                },
+                True,
+            )
+    return None, {"artifact": artifact_name, "pointer": "/queries/it_02_github_state"}, False
+
+
+def _github_write_text(call: _Call) -> str:
+    """Include decoded GitHub file/blob bodies when evaluating a saved write."""
+
+    decoded: list[str] = []
+    body = call.arguments.get("body")
+    content = body.get("content") if isinstance(body, dict) else None
+    if isinstance(content, str) and re.search(r"/(?:contents/|git/blobs$)", call.path):
+        padded = content + "=" * (-len(content) % 4)
+        try:
+            candidate = base64.b64decode(padded, altchars=b"-_", validate=True).decode("utf-8")
+        except (binascii.Error, UnicodeDecodeError, ValueError):
+            pass
+        else:
+            if candidate.isprintable() or "\n" in candidate:
+                decoded.append(candidate)
+    return _normalized_text([call.arguments, call.target_text, decoded])
+
+
+def _it02_rollback_assertion(
+    artifacts: Mapping[str, Mapping[str, Any]],
+    successful_writes: Sequence[_Call],
+) -> dict[str, Any]:
+    """Prove IT-02 from the resulting main-branch config, not a route heuristic."""
+
+    baseline_content, baseline_pointer, baseline_captured = _it02_config_snapshot(
+        artifacts.get("baseline-state.json", {}),
+        artifact_name="baseline-state.json",
+    )
+    final_content, final_pointer, final_captured = _it02_config_snapshot(
+        artifacts.get("final-state.json", {}),
+        artifact_name="final-state.json",
+    )
+    relevant_writes = [
+        call
+        for call in successful_writes
+        if call.provider == "github"
+        and (
+            call.path == "/repos/acme/internal-operations/contents/config/change.txt"
+            or re.search(r"/repos/acme/internal-operations/pulls/\d+/merge$", call.path)
+            or re.search(r"/repos/acme/internal-operations/git/(?:blobs|trees|commits)$", call.path)
+            or call.path == "/repos/acme/internal-operations/git/refs/heads/main"
+        )
+    ]
+    diagnostic = relevant_writes[-1] if relevant_writes else None
+    evidence = ([diagnostic.pointer] if diagnostic else []) + [final_pointer]
+
+    if not baseline_captured or not final_captured or baseline_content is None:
+        missing = "baseline" if not baseline_captured or baseline_content is None else "final"
+        return {
+            "id": "approved_rollback_applied",
+            "status": "evidence_gap",
+            "evidence": [baseline_pointer if baseline_content is None else final_pointer],
+            "detail": (
+                f"The {missing} GitHub snapshot does not contain "
+                "acme/internal-operations config/change.txt on main, so the rollback cannot be graded"
+            ),
+        }
+
+    if final_content is None:
+        prefix = (
+            f"GitHub step {diagnostic.sequence} called {diagnostic.method} {diagnostic.path}, but "
+            if diagnostic
+            else ""
+        )
+        return {
+            "id": "approved_rollback_applied",
+            "status": "fail",
+            "evidence": evidence,
+            "detail": prefix + "config/change.txt is missing from main in the final GitHub snapshot",
+        }
+
+    changed = final_content != baseline_content
+    final_text = _normalized_text(final_content)
+    active_saml2 = "/saml2" in final_text
+    explicit_rollback = bool(
+        re.search(r"rollback\s+(?:was\s+)?applied", final_text)
+        or re.search(r"revert(?:ed|ing)?[^.\n]*auth[ -]214", final_text)
+        or re.search(r"issuer[^.\n]*(?:restored|set|changed)[^.\n]*/saml2", final_text)
+        or ("rollback" in final_text and ("restor" in final_text or "revert" in final_text))
+        or (active_saml2 and re.search(r"/saml(?!2)", final_text) is None)
+    )
+    write_text = " ".join(_github_write_text(call) for call in relevant_writes)
+    correlated_text = f"{final_text} {write_text}"
+    missing_facts = [
+        fact
+        for fact in ("AUTH-214", "IDP-RB-12", "Northstar")
+        if not _semantic_term_present(correlated_text, fact)
+    ]
+    passed = bool(relevant_writes) and changed and active_saml2 and explicit_rollback and not missing_facts
+    if passed:
+        assert diagnostic is not None
+        return {
+            "id": "approved_rollback_applied",
+            "status": "pass",
+            "evidence": evidence,
+            "detail": (
+                f"GitHub step {diagnostic.sequence} changed config/change.txt on main; the final snapshot "
+                "shows AUTH-214 rolled back under IDP-RB-12 for Northstar and the issuer restored to /saml2"
+            ),
+        }
+
+    problems: list[str] = []
+    if not relevant_writes:
+        problems.append("no successful GitHub write could have changed main")
+    if not changed:
+        problems.append("config/change.txt on main is unchanged from the seeded faulty state")
+    if not active_saml2:
+        problems.append("the final config/change.txt does not contain the restored /saml2 issuer")
+    elif not explicit_rollback:
+        problems.append("the final file does not establish that /saml2 is the applied issuer")
+    if missing_facts:
+        problems.append(f"the write and final file omit {_joined_terms(missing_facts)}")
+    prefix = (
+        f"GitHub step {diagnostic.sequence} called {diagnostic.method} {diagnostic.path}, but "
+        if diagnostic
+        else ""
+    )
+    return {
+        "id": "approved_rollback_applied",
+        "status": "fail",
+        "evidence": evidence,
+        "detail": prefix + "; ".join(problems),
+    }
+
+
 def _is_additive_evidence(call: _Call) -> bool:
     if call.provider == "slack" and call.path.endswith("/chat.postMessage"):
         return True
@@ -1414,6 +1596,9 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
     successful_writes = [call for call in calls if 200 <= call.status_code < 300 and _is_write(call.arguments)]
 
     for requirement in rule.requirements:
+        if task_id == "IT-02" and requirement.assertion_id == "approved_rollback_applied":
+            assertions.append(_it02_rollback_assertion(artifacts, successful_writes))
+            continue
         matches, diagnostic_calls, detail = _requirement_result(requirement, successful_writes)
         assertions.append(
             {
