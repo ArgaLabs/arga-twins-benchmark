@@ -111,7 +111,9 @@ _STRUCTURED_FACT_MEANINGS = {
     "changes_requested_for_registry_policy": (
         "the pull-request review requested changes because the registry source was not approved"
     ),
-    "credential_exposure_contained": "the exposed credential was revoked or rotated and the exposure was contained",
+    "credential_exposure_contained": (
+        "the fingerprint-only exposure was documented and routed to the credential owner for rotation"
+    ),
     "draft_unsent": "the customer message was saved as an unsent draft for review",
     "drift_open_pending_fix": "the API contract drift remained open pending a fix",
     "embargo_hold": "publication remained on hold under the embargo",

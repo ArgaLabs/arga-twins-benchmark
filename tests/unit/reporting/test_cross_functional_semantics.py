@@ -22,7 +22,7 @@ _DISPOSITION_PARAPHRASES = {
     "blocked_pending_owner_review": "The batch is held for billing-storage approval",
     "bounded_quarantine": "The flaky test was isolated for one day",
     "changes_requested_for_registry_policy": "Changes requested because QuickMirror is an unapproved source",
-    "credential_exposure_contained": "The leaked token was invalidated",
+    "credential_exposure_contained": "Rotation remains outstanding with the credential owner",
     "drift_open_pending_fix": "The schema mismatch remains unresolved",
     "embargo_hold": "Publishing is blocked until 16:00",
     "empty_evaluation_profile_archived": "The unused evaluation customer was deactivated",
