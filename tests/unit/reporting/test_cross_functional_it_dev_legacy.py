@@ -291,6 +291,49 @@ def test_dev_05_slack_update_accepts_semantically_equivalent_unmerged_wording() 
     assert assertion["status"] == "pass"
 
 
+def test_dev_01_slack_update_accepts_human_incident_disposition() -> None:
+    task = load_it_dev_legacy_tasks(SUITE_PATH)["DEV-01"]
+    call = legacy._Call(
+        event_index=1,
+        sequence=21,
+        provider="slack",
+        method="POST",
+        path="/api/chat.postMessage",
+        arguments={
+            "body": {
+                "channel": "CENGINCIDENTS",
+                "text": (
+                    "Mitigation is in place and the incident remains open pending verification."
+                ),
+            }
+        },
+        status_code=200,
+        target_text="channel CENGINCIDENTS name eng incidents",
+    )
+
+    assertion = legacy._slack_assertion(task, [call])
+
+    assert assertion["status"] == "pass"
+
+
+def test_dev_01_structured_result_does_not_require_machine_label() -> None:
+    task = load_it_dev_legacy_tasks(SUITE_PATH)["DEV-01"]
+    structured = next(
+        outcome for outcome in task["verification"]["required_outcomes"] if outcome["id"] == "structured_result"
+    )
+    structured["facts"] = {"disposition": "mitigated_not_closed"}
+    artifacts = {
+        "invocation.json": {
+            "final_text": "Mitigation is in place; ENG-771 remains open pending recovery verification."
+        },
+        "final-state.json": {"providers": {}},
+    }
+
+    assertion = legacy._structured_assertion(task, [], artifacts)
+
+    assert assertion["status"] == "pass"
+
+
 @pytest.mark.parametrize(
     ("task_id", "disposition", "evidence"),
     [

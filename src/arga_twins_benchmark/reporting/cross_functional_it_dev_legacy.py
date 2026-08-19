@@ -73,11 +73,10 @@ _STRUCTURED_FACT_ALIASES: dict[str, tuple[tuple[str, ...], ...]] = {
     "regression_open_and_escalated": (("regression", "in progress"), ("regression", "open")),
     "alert_noise_consolidated_real_incident_open": (("MON-771", "DB-912", "open"),),
     "mitigated_not_closed": (
-        ("mitigat", "open"),
-        ("remains", "open"),
-        ("not", "closed"),
-        ("pending", "recovery"),
-        ("pending", "verification"),
+        ("mitigat", "remain", "open"),
+        ("mitigat", "incident", "open"),
+        ("mitigation", "pending", "verification"),
+        ("recover", "incident", "open"),
     ),
     "bounded_quarantine": (("quarantin", "24"), ("quarantin", "bounded")),
     "backport_open_unmerged": (("release/4.8", "no other pr"), ("4.8", "nothing merged")),
@@ -731,7 +730,10 @@ def _term_present(text: str, term: str) -> bool:
 def _semantic_term_present(text: str, term: str) -> bool:
     if _term_present(text, term):
         return True
-    aliases = _TERM_ALIASES.get(_normalized_text(term), ())
+    aliases = (
+        *_TERM_ALIASES.get(_normalized_text(term), ()),
+        *_STRUCTURED_FACT_ALIASES.get(term.casefold(), ()),
+    )
     return any(all(_term_present(text, alias_term) for alias_term in alias) for alias in aliases)
 
 
@@ -1227,7 +1229,10 @@ def _plain_label(identifier: str) -> str:
 
 
 def _joined_terms(terms: Sequence[str]) -> str:
-    quoted = [f"“{term}”" for term in terms]
+    reader_terms = {
+        "mitigated_not_closed": "the incident was mitigated and remained open pending verification",
+    }
+    quoted = [f"“{reader_terms.get(term, term)}”" for term in terms]
     if not quoted:
         return ""
     if len(quoted) == 1:

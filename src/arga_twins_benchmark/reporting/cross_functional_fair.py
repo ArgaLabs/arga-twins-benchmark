@@ -81,7 +81,12 @@ _SEMANTIC_TERM_ALIASES: dict[str, tuple[tuple[str, ...], ...]] = {
     "empty_evaluation_profile_archived": (("evaluation", "archived"), ("evaluation", "deleted")),
     "empty_trial_profile_archived": (("trial", "archived"), ("trial", "deleted")),
     "mapping_documented_no_meter_mutation": (("mapping", "meter", "unchanged"),),
-    "mitigated_not_closed": (("mitigated", "open"), ("mitigation", "not closed")),
+    "mitigated_not_closed": (
+        ("mitigated", "remains open"),
+        ("mitigation", "incident open"),
+        ("mitigation", "pending verification"),
+        ("recovered", "incident open"),
+    ),
     "publication_blocked": (("publication", "blocked"), ("no post", "legal hold")),
     "regression_open_and_escalated": (("regression", "open", "escalated"),),
     "renewal_at_risk": (("renewal", "at risk"),),
