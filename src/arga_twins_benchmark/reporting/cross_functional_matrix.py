@@ -149,6 +149,25 @@ def _non_empty_string(value: object) -> bool:
     return isinstance(value, str) and bool(value)
 
 
+def _is_output_limit_terminal(
+    attempt: Mapping[str, Any],
+    invocation: Mapping[str, Any],
+) -> bool:
+    if attempt.get("model_status") != "incomplete" or invocation.get("status") != "incomplete":
+        return False
+    if attempt.get("stop_reason") == "MAX_TOKENS" and invocation.get("stop_reason") == "MAX_TOKENS":
+        return True
+    events = invocation.get("events")
+    return isinstance(events, list) and any(
+        isinstance(event, dict)
+        and event.get("type") == "assistant_response"
+        and event.get("status") == "incomplete"
+        and isinstance(event.get("incomplete_details"), dict)
+        and event["incomplete_details"].get("reason") == "max_output_tokens"
+        for event in events
+    )
+
+
 def _profile_identity_issues(
     actual: Mapping[str, Any] | None,
     expected: Mapping[str, Any],
@@ -657,10 +676,15 @@ def _retry_archive_proves_safe_retries(
                 if reason == "explicit_old_gateway_ceiling_retry"
                 else {"infrastructure_invalid", "candidate_complete"}
             )
+            explicit_output_limit_retry = bool(
+                reason == "explicit_model_terminal_retry"
+                and archived_invocation is not None
+                and _is_output_limit_terminal(archived_attempt, archived_invocation)
+            )
             if (
                 invocation_issues
                 or archived_invocation is None
-                or model_status not in allowed_statuses
+                or (model_status not in allowed_statuses and not explicit_output_limit_retry)
                 or archived_invocation.get("status") != model_status
                 or archived_attempt.get("attempt_status") not in allowed_attempt_statuses
             ):
@@ -940,11 +964,7 @@ def _classify_task(
         )
 
     output_limit_terminal = bool(
-        model_status == "incomplete"
-        and attempt is not None
-        and invocation is not None
-        and attempt.get("stop_reason") == "MAX_TOKENS"
-        and invocation.get("stop_reason") == "MAX_TOKENS"
+        attempt is not None and invocation is not None and _is_output_limit_terminal(attempt, invocation)
     )
     if model_status not in _KNOWN_MODEL_STATUSES:
         issues.append("attempt:missing_or_unknown_model_status")

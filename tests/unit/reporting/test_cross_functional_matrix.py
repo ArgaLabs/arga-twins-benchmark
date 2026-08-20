@@ -212,6 +212,27 @@ def _write_attempt(
     )
 
 
+def _set_openai_output_limit_evidence(task_dir: Path) -> None:
+    attempt = json.loads((task_dir / "attempt.json").read_text(encoding="utf-8"))
+    attempt.update({"model_status": "incomplete", "stop_reason": "incomplete"})
+    _write_json(task_dir / "attempt.json", attempt)
+    invocation = json.loads((task_dir / "invocation.json").read_text(encoding="utf-8"))
+    invocation.update(
+        {
+            "status": "incomplete",
+            "stop_reason": "incomplete",
+            "events": [
+                {
+                    "type": "assistant_response",
+                    "status": "incomplete",
+                    "incomplete_details": {"reason": "max_output_tokens"},
+                }
+            ],
+        }
+    )
+    _write_json(task_dir / "invocation.json", invocation)
+
+
 def test_classifier_uses_selected_matrix_tasks(tmp_path: Path) -> None:
     matrix_dir, _suite, profile = _fixture_root(tmp_path)
     selected = ["IT-03", "IT-06"]
@@ -667,6 +688,43 @@ def test_completed_retry_after_explicit_model_terminal_archive_is_valid(
     assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
 
 
+def test_completed_retry_after_openai_output_limit_archive_is_valid(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    profile_dir = matrix_dir / "profiles" / profile["id"]
+    task_dir = profile_dir / "tasks" / task["id"]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed")
+    _set_openai_output_limit_evidence(task_dir)
+    archive = profile_dir / "retry-archive" / task["id"] / "attempt-0001"
+    archive.parent.mkdir(parents=True)
+    task_dir.rename(archive)
+    archived_attempt = json.loads((archive / "attempt.json").read_text(encoding="utf-8"))
+    _write_json(
+        archive / "archive-metadata.json",
+        {
+            "protocol": "arga-bench-cross-functional-retry-archive/1",
+            "archive_number": 1,
+            "archive_reason": "explicit_model_terminal_retry",
+            "profile_id": profile["id"],
+            "task_id": task["id"],
+            "cleanup": _archive_cleanup(cast(str, archived_attempt["run_id"])),
+        },
+    )
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed", attempt_number=2)
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+    assert result["execution_class"] == "exact_completed"
+    assert "attempt:invalid_attempt_number" not in result["integrity"]["issues"]
+
+    archived_invocation = json.loads((archive / "invocation.json").read_text(encoding="utf-8"))
+    archived_invocation["events"][0]["incomplete_details"]["reason"] = "content_filter"
+    _write_json(archive / "invocation.json", archived_invocation)
+    tampered = _classify(matrix_dir)
+    tampered_result = next(item for item in tampered["attempts"] if item["profile_id"] == profile["id"])
+    assert "attempt:invalid_attempt_number" in tampered_result["integrity"]["issues"]
+
+
 def test_completed_retry_after_post_invocation_infrastructure_archive_is_valid(
     tmp_path: Path,
 ) -> None:
@@ -817,6 +875,20 @@ def test_provider_max_tokens_is_a_model_terminal_not_infrastructure(tmp_path: Pa
     invocation = json.loads((task_dir / "invocation.json").read_text(encoding="utf-8"))
     invocation.update({"status": "incomplete", "stop_reason": "MAX_TOKENS"})
     _write_json(task_dir / "invocation.json", invocation)
+
+    report = _classify(matrix_dir)
+    result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])
+
+    assert result["execution_class"] == "model_terminal"
+    assert result["model_terminal_reason"] == "output_limit_exceeded"
+
+
+def test_openai_max_output_tokens_is_a_model_terminal_not_infrastructure(tmp_path: Path) -> None:
+    matrix_dir, suite, profile = _fixture_root(tmp_path)
+    task = suite["tasks"][0]
+    _write_attempt(matrix_dir, task=task, profile=profile, status="completed")
+    task_dir = matrix_dir / "profiles" / profile["id"] / "tasks" / task["id"]
+    _set_openai_output_limit_evidence(task_dir)
 
     report = _classify(matrix_dir)
     result = next(item for item in report["attempts"] if item["profile_id"] == profile["id"])

@@ -361,7 +361,7 @@ def test_explicit_infrastructure_retry_preserves_archived_invocation(tmp_path: P
     assert metadata["cleanup"] == _inert_cleanup()
 
 
-@pytest.mark.parametrize("status", ["tool_limit_exceeded", "timed_out", "refused"])
+@pytest.mark.parametrize("status", ["incomplete", "tool_limit_exceeded", "timed_out", "refused"])
 def test_explicit_terminal_retry_archives_first_attempt_once(tmp_path: Path, status: str) -> None:
     task_dir = tmp_path / "tasks" / TASK_ID
     _write_json(task_dir / "attempt.json", _terminal_attempt(status))

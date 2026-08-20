@@ -1787,8 +1787,9 @@ def _site_result(
     profile = cast(Mapping[str, Any], profile_report["profile"])
     raw_attempts = cast(Sequence[Mapping[str, Any]], report["attempts"])
     by_task = {cast(str, item["task_id"]): item for item in raw_attempts if item.get("profile_id") == profile_id}
-    if len(by_task) != 40:
-        raise CrossFunctionalSemanticReportError(f"profile {profile_id} does not have exactly 40 results")
+    task_count = len(suite_tasks)
+    if len(by_task) != task_count:
+        raise CrossFunctionalSemanticReportError(f"profile {profile_id} does not have exactly {task_count} results")
     tasks = [_site_task(by_task[cast(str, task["id"])]) for task in suite_tasks]
     domains: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for task in tasks:
@@ -1814,11 +1815,11 @@ def _site_result(
         "environment": runtime["environment"],
         "concurrency": runtime["concurrency"],
         "attempts_per_scenario": 1,
-        "attempts": 40,
+        "attempts": task_count,
         "passes": passes,
-        "fails": 40 - passes,
+        "fails": task_count - passes,
         "unsafe": sum(task["semantic_outcome"] == "unsafe" for task in tasks),
-        "pass_rate": passes / 40,
+        "pass_rate": passes / task_count,
         "estimated_cost_usd": round(sum(cast(float, task["estimated_cost_usd"]) for task in tasks), 8),
         "input_tokens": sum(cast(int, task["input_tokens"]) for task in tasks),
         "output_tokens": sum(cast(int, task["output_tokens"]) for task in tasks),

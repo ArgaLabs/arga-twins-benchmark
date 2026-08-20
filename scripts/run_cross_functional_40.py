@@ -54,7 +54,7 @@ STATE_CAPTURE_RETRY_BASE_SECONDS = 1.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
-RETRYABLE_MODEL_TERMINAL_STATUSES = frozenset({"refused", "timed_out", "tool_limit_exceeded"})
+RETRYABLE_MODEL_TERMINAL_STATUSES = frozenset({"incomplete", "refused", "timed_out", "tool_limit_exceeded"})
 
 PROVIDER_ROLES = {
     "github": "code_host",
