@@ -35,7 +35,7 @@ def _reports(task_count: int = 40) -> dict[int, dict[str, Any]]:
             "publication_profile_id": f"model-{profile_index:02}@high",
             "scoring_ready": True,
         }
-        for profile_index in range(31)
+        for profile_index in range(32)
     }
     for repeat in (1, 2, 3):
         attempts: list[dict[str, Any]] = []
@@ -76,7 +76,7 @@ def _reports(task_count: int = 40) -> dict[int, dict[str, Any]]:
             "task_ids": [f"IT-{task_index + 1:02}" for task_index in range(task_count)],
             "task_count": task_count,
             "matrix_scoring_ready": True,
-            "scoring_ready_profile_count": 31,
+            "scoring_ready_profile_count": 32,
             "source_matrix_dir": f"/preserved/repeat-{repeat}",
             "source_sha256": {
                 "suite": "suite-hash",
@@ -103,16 +103,16 @@ def test_builds_three_repeat_task_cluster_report() -> None:
     )
 
     assert report["protocol"] == CROSS_FUNCTIONAL_REPEATED_REPORT_PROTOCOL
-    assert report["scheduled_trials"] == 3720
+    assert report["scheduled_trials"] == 3840
     assert report["all_trials_scoring_ready"] is True
-    assert report["semantic"]["denominator"] == 3720
+    assert report["semantic"]["denominator"] == 3840
     assert report["usage"] == {
-        "input_tokens": 372_000,
-        "output_tokens": 37_200,
-        "estimated_cost_usd": 930.0,
-        "tool_calls": 22_320,
-        "provider_tool_calls": 18_600,
-        "official_docs_tool_calls": 3_720,
+        "input_tokens": 384_000,
+        "output_tokens": 38_400,
+        "estimated_cost_usd": 960.0,
+        "tool_calls": 23_040,
+        "provider_tool_calls": 19_200,
+        "official_docs_tool_calls": 3_840,
     }
     profile = report["profiles"]["profile-00"]
     assert profile["scheduled_trials"] == 120
@@ -139,7 +139,7 @@ def test_builds_selected_task_repeat_report() -> None:
 
     assert report["task_ids"] == ["IT-01", "IT-02"]
     assert report["task_count"] == 2
-    assert report["scheduled_trials"] == 186
+    assert report["scheduled_trials"] == 192
     assert report["profiles"]["profile-00"]["scheduled_trials"] == 6
 
 
@@ -203,7 +203,7 @@ def test_writes_manifest_with_hashed_repeat_sources(tmp_path: Path) -> None:
             json.dumps(
                 {
                     "protocol": CROSS_FUNCTIONAL_PUBLICATION_MANIFEST_PROTOCOL,
-                    "profiles": [{} for _ in range(31)],
+                    "profiles": [{} for _ in range(32)],
                 }
             )
         )

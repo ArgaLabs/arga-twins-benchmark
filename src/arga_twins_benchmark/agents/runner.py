@@ -22,6 +22,7 @@ SUPPORTED_MODEL_IDS = (
     "gpt-5.6-luna",
     "gemini-3.1-pro-preview",
     "gemini-3.5-flash",
+    "gemini-3.7-flash",
 )
 
 
@@ -77,7 +78,7 @@ async def invoke_model(
             effort=cast(Literal["low", "medium", "high", "xhigh", "max"], api_effort),
             endpoint=os.environ.get("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses"),
         )
-    elif model_id in {"gemini-3.1-pro-preview", "gemini-3.5-flash"}:
+    elif model_id in {"gemini-3.1-pro-preview", "gemini-3.5-flash", "gemini-3.7-flash"}:
         if api_effort != "default" or thinking != "model_default":
             raise ValueError("Gemini benchmark profiles must use provider-default thinking")
         api_key = os.environ.get("GEMINI_API_KEY", "")
@@ -85,7 +86,14 @@ async def invoke_model(
             raise ValueError("GEMINI_API_KEY is required")
         adapter = GoogleGenerateContentAdapter(
             api_key=api_key,
-            model_id=cast(Literal["gemini-3.1-pro-preview", "gemini-3.5-flash"], model_id),
+            model_id=cast(
+                Literal[
+                    "gemini-3.1-pro-preview",
+                    "gemini-3.5-flash",
+                    "gemini-3.7-flash",
+                ],
+                model_id,
+            ),
             endpoint=os.environ.get(
                 "GOOGLE_GENERATIVE_LANGUAGE_URL",
                 "https://generativelanguage.googleapis.com/v1beta/models",

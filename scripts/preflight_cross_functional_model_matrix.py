@@ -37,8 +37,8 @@ def profiles() -> list[dict[str, Any]]:
     if not isinstance(raw, list):
         raise ValueError("model matrix profiles must be an array")
     values = [cast(dict[str, Any], item) for item in raw if isinstance(item, dict)]
-    if len(values) != 31:
-        raise ValueError("expected 31 model profiles")
+    if len(values) != 32:
+        raise ValueError("expected 32 model profiles")
     return values
 
 

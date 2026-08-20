@@ -404,6 +404,19 @@
       "output_usd_per_million": 9.0,
       "cache_read_usd_per_million": 0.15,
       "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "id": "gemini-3-7-flash-default",
+      "label": "Gemini 3.7 Flash",
+      "provider": "google",
+      "model_id": "gemini-3.7-flash",
+      "requested_effort": "default",
+      "api_effort": "default",
+      "thinking": "model_default",
+      "input_usd_per_million": 0.75,
+      "output_usd_per_million": 3.75,
+      "cache_read_usd_per_million": 0.075,
+      "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing"
     }
   ]
 }

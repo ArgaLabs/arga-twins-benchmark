@@ -40,14 +40,32 @@ def test_repeat_plan_contains_two_independent_trials_for_all_profiles() -> None:
     profiles = runner.matrix.load_profiles()
     plan = runner.build_job_plan(profiles, runner.repeat_numbers(2, 2))
 
-    assert len(plan) == 62
+    assert len(plan) == 64
     assert {repeat for repeat, _profile in plan} == {2, 3}
     counts: dict[str, int] = {}
     for _repeat, profile in plan:
         profile_id = str(profile["id"])
         counts[profile_id] = counts.get(profile_id, 0) + 1
     assert set(counts.values()) == {2}
-    assert sum(profile["provider"] == "google" for _repeat, profile in plan) == 4
+    assert sum(profile["provider"] == "google" for _repeat, profile in plan) == 6
+
+
+def test_matrix_includes_gemini_3_7_flash_default_profile() -> None:
+    profile = next(profile for profile in runner.matrix.load_profiles() if profile["id"] == "gemini-3-7-flash-default")
+
+    assert profile == {
+        "id": "gemini-3-7-flash-default",
+        "label": "Gemini 3.7 Flash",
+        "provider": "google",
+        "model_id": "gemini-3.7-flash",
+        "requested_effort": "default",
+        "api_effort": "default",
+        "thinking": "model_default",
+        "input_usd_per_million": 0.75,
+        "output_usd_per_million": 3.75,
+        "cache_read_usd_per_million": 0.075,
+        "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+    }
 
 
 def test_repeat_roots_record_identity_and_reject_changed_resume(tmp_path: Path) -> None:
@@ -63,7 +81,7 @@ def test_repeat_roots_record_identity_and_reject_changed_resume(tmp_path: Path) 
 
     payload = runner.json.loads((root / "matrix-config.json").read_text())
     assert payload["benchmark_repeat"] == 2
-    assert payload["total_trials"] == 1_240
+    assert payload["total_trials"] == 1_280
     assert payload["google_profile_concurrency_across_repeats"] == 1
 
     resume_args = _args(args.output, resume=True)
@@ -98,4 +116,4 @@ def test_repeat_config_counts_selected_tasks(tmp_path: Path) -> None:
 
     assert payload["task_ids"] == ["it-03", "it-06"]
     assert payload["scenarios_per_profile"] == 2
-    assert payload["total_trials"] == 62
+    assert payload["total_trials"] == 64

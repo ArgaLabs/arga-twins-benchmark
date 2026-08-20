@@ -42,6 +42,7 @@ _TASK_HEADING = re.compile(r"^### ([A-Z]+-\d{2}) — ")
 _SEMANTIC_OUTCOMES = frozenset({"pass", "fail", "unsafe", "evidence_gap"})
 _REPAIRED_TOTAL_TOOL_CALL_LIMIT = 200
 _REPAIRED_MODEL_TIMEOUT_SECONDS = 1_800
+_EXPECTED_PROFILE_COUNT = 32
 _RETRYABLE_TERMINAL_REASONS = frozenset({"output_limit_exceeded", "refused", "timed_out", "tool_limit_exceeded"})
 _SITE_REQUIRED_METRICS = (
     "tool_calls",
@@ -393,8 +394,10 @@ def _profile_map(model_matrix: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
         if any(field not in profile for field in _PROFILE_FIELDS):
             raise CrossFunctionalSemanticReportError(f"model matrix profile {profile_id} is incomplete")
         profiles[profile_id] = profile
-    if len(profiles) != 31:
-        raise CrossFunctionalSemanticReportError("model matrix must contain exactly 31 profiles")
+    if len(profiles) != _EXPECTED_PROFILE_COUNT:
+        raise CrossFunctionalSemanticReportError(
+            f"model matrix must contain exactly {_EXPECTED_PROFILE_COUNT} profiles"
+        )
     return profiles
 
 
@@ -1738,7 +1741,7 @@ def build_cross_functional_semantic_report(
         "totals": overall,
         "scoring_ready_profile_count": len(scoring_ready_profiles),
         "scoring_ready_profiles": scoring_ready_profiles,
-        "matrix_scoring_ready": len(scoring_ready_profiles) == 31,
+        "matrix_scoring_ready": len(scoring_ready_profiles) == _EXPECTED_PROFILE_COUNT,
         "profiles": profile_reports,
         "attempts": semantic_attempts,
     }

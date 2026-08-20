@@ -1201,8 +1201,8 @@ def classify_cross_functional_matrix(
     all_tasks = _suite_tasks(suite)
     model_matrix = _load_trusted_object(model_matrix_path, label="model matrix")
     profiles = _profile_by_id(model_matrix, label="model matrix")
-    if len(profiles) != 31:
-        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 31 profiles")
+    if len(profiles) != 32:
+        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 32 profiles")
     calibration_payload = _load_trusted_object(
         historical_calibration_path,
         label="historical Fable 5 High calibration",

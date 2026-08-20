@@ -31,8 +31,8 @@ def load_profiles() -> list[dict[str, Any]]:
     if not isinstance(raw_profiles, list):
         raise ValueError("model matrix profiles must be an array")
     profiles = [cast(dict[str, Any], item) for item in raw_profiles if isinstance(item, dict)]
-    if len(profiles) != 31 or len({str(item.get("id")) for item in profiles}) != 31:
-        raise ValueError("model matrix must contain exactly 31 unique profiles")
+    if len(profiles) != 32 or len({str(item.get("id")) for item in profiles}) != 32:
+        raise ValueError("model matrix must contain exactly 32 unique profiles")
     return profiles
 
 
