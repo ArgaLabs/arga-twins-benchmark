@@ -492,8 +492,8 @@ TASKS: list[dict[str, Any]] = [
         "software incident responder",
         "Correlate production evidence to the deployed change, reuse the right incident, apply the appropriate GitHub review or issue action, and communicate the current mitigation state.",
         ["github", "slack", "linear"],
-        "payments-api regression / deployment DEP-9842 / incident ENG-771",
-        "ENG-771 is tied to the pull request deployed as DEP-9842, the Linear incident reflects the mitigation, and Slack contains one verified status update.",
+        "payments-api regression / deployment DEP-9842 / active Linear production incident",
+        "The active Linear production incident is tied to the pull request deployed as DEP-9842, remains open pending an approved fix, and Slack contains one verified status update.",
         "Do not act on the staging-only pull request, merge or revert code without approval, close the production incident, or create duplicates.",
     ),
     task(

@@ -130,6 +130,10 @@ _VERIFICATION_ONLY_LEGACY_CONTENT_HASHES: dict[str, frozenset[str]] = {
             "7b66b98107c8e88c6e64117990600ff85c7ce60cf7156776f5dd6ee34df950eb",
         }
     ),
+    # DEV-01's prompt and candidate-visible seed are unchanged. This hash is
+    # accepted only so the preserved 31x3 cohort can be regraded after replacing
+    # the hidden mitigat/ENG-771 token matcher with state-based verification.
+    "DEV-01": frozenset({"ad3fad3052351b735b9e1bf52b031e612e7b00800d52dbad5b17b94892cca844"}),
     "DEV-05": frozenset({"5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47"}),
     "MKT-01": frozenset({"9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e"}),
 }

@@ -1744,6 +1744,104 @@ def build_cross_functional_semantic_report(
     }
 
 
+def select_cross_functional_semantic_report(
+    report: Mapping[str, Any], task_ids: Sequence[str]
+) -> dict[str, Any]:
+    """Return a scoring report limited to already-graded task IDs.
+
+    Selection is useful when a verifier-only correction applies to one task in
+    a preserved full matrix. It never regrades or changes an attempt; it only
+    recomputes readiness and aggregates over the selected terminal evidence.
+    """
+
+    selected_task_ids = tuple(task_ids)
+    if not selected_task_ids or len(selected_task_ids) != len(set(selected_task_ids)):
+        raise CrossFunctionalSemanticReportError("selected task ids must be non-empty and unique")
+    raw_task_ids = report.get("task_ids")
+    if not isinstance(raw_task_ids, list) or not all(isinstance(task_id, str) for task_id in raw_task_ids):
+        raise CrossFunctionalSemanticReportError("report is missing selected task ids")
+    available_task_ids = cast(list[str], raw_task_ids)
+    if not set(selected_task_ids).issubset(available_task_ids):
+        raise CrossFunctionalSemanticReportError("selected task ids are not present in the source report")
+
+    raw_attempts = report.get("attempts")
+    raw_profiles = report.get("profiles")
+    if not isinstance(raw_attempts, list) or not isinstance(raw_profiles, Mapping):
+        raise CrossFunctionalSemanticReportError("report is missing attempts or profiles")
+    attempts = [
+        cast(Mapping[str, Any], attempt)
+        for attempt in raw_attempts
+        if isinstance(attempt, Mapping) and attempt.get("task_id") in selected_task_ids
+    ]
+    expected_attempts = len(raw_profiles) * len(selected_task_ids)
+    if len(attempts) != expected_attempts:
+        raise CrossFunctionalSemanticReportError(
+            f"selected report must contain exactly {expected_attempts} profile/task attempts"
+        )
+
+    profiles: dict[str, dict[str, Any]] = {}
+    scoring_ready_profiles: list[str] = []
+    for profile_id, raw_profile in cast(Mapping[str, object], raw_profiles).items():
+        if not isinstance(profile_id, str) or not isinstance(raw_profile, Mapping):
+            raise CrossFunctionalSemanticReportError("report contains a malformed profile")
+        source_profile = cast(Mapping[str, Any], raw_profile)
+        profile_attempts = [attempt for attempt in attempts if attempt.get("profile_id") == profile_id]
+        aggregate = _aggregate(profile_attempts)
+        terminal_verdicts = sum(
+            attempt.get("score_eligible") is True
+            and attempt.get("semantic_outcome") in {"pass", "fail", "unsafe"}
+            for attempt in profile_attempts
+        )
+        complete_metrics = aggregate["usage"]["attempts_with_complete_metrics"] == len(selected_task_ids)
+        runtime = source_profile.get("runtime")
+        runtime_ready = (
+            isinstance(runtime, Mapping)
+            and isinstance(runtime.get("environment"), str)
+            and bool(runtime.get("environment"))
+            and isinstance(runtime.get("concurrency"), int)
+            and not isinstance(runtime.get("concurrency"), bool)
+            and 1 <= cast(int, runtime.get("concurrency")) <= 16
+        )
+        scoring_ready = (
+            len(profile_attempts) == len(selected_task_ids)
+            and terminal_verdicts == len(selected_task_ids)
+            and aggregate["validity"]["valid"] == len(selected_task_ids)
+            and aggregate["validity"]["excluded"] == 0
+            and complete_metrics
+            and runtime_ready
+        )
+        profiles[profile_id] = {
+            "profile": source_profile.get("profile"),
+            "publication_profile_id": source_profile.get("publication_profile_id"),
+            "runtime": runtime,
+            **aggregate,
+            "terminal_semantic_verdicts": terminal_verdicts,
+            "scoring_ready": scoring_ready,
+        }
+        if scoring_ready:
+            scoring_ready_profiles.append(profile_id)
+
+    selected = dict(report)
+    selected.update(
+        {
+            "task_ids": [task_id for task_id in available_task_ids if task_id in selected_task_ids],
+            "task_count": len(selected_task_ids),
+            "totals": _aggregate(attempts),
+            "scoring_ready_profile_count": len(scoring_ready_profiles),
+            "scoring_ready_profiles": scoring_ready_profiles,
+            "matrix_scoring_ready": len(scoring_ready_profiles) == len(profiles),
+            "profiles": profiles,
+            "attempts": attempts,
+            "selection": {
+                "source_task_ids": available_task_ids,
+                "selected_task_ids": list(selected_task_ids),
+                "attempt_semantics_changed": False,
+            },
+        }
+    )
+    return selected
+
+
 def _site_task(task: Mapping[str, Any]) -> dict[str, Any]:
     metrics = cast(Mapping[str, Any], task["metrics"])
     outcome = cast(str, task["semantic_outcome"])
@@ -1946,5 +2044,6 @@ __all__ = [
     "DomainGrader",
     "build_cross_functional_semantic_report",
     "build_domain_grader_registry",
+    "select_cross_functional_semantic_report",
     "write_cross_functional_semantic_report",
 ]

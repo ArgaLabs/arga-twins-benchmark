@@ -225,8 +225,8 @@ HARDENING_PROFILES: dict[str, dict[str, Any]] = {
         "facts": {
             "deployment": "DEP-9842",
             "change": "Normalize payment idempotency keys",
-            "incident": "ENG-771",
-            "disposition": "mitigated_not_closed",
+            "incident": "Production checkout regression triage",
+            "disposition": "regression_open_and_escalated",
         },
         "protected": ["Refresh payment test fixtures", "ENG-699"],
     },
