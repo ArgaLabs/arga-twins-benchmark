@@ -12,102 +12,73 @@
       "repos": [
         {
           "default_branch": "main",
-          "description": "Operational service configuration and change history",
+          "description": "vendor-portal service repository",
           "files": [
             {
-              "content": "# Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\n\nOFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.\n",
-              "path": "records/departing-contractor-access-handoff.md"
-            },
-            {
-              "content": "# Previous-quarter notes\n\nLena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.\n",
-              "path": "records/previous-quarter.md"
-            },
-            {
-              "content": "# Operational service records\n",
+              "content": "# vendor-portal\n",
               "path": "README.md"
             }
           ],
           "issues": [
             {
-              "body": "Asset: Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\n\nOFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-              "title": "Departing contractor access handoff"
+              "body": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder. The engagement ended 2026-08-12; the form is signed by Emil Navarro and the engineering manager. Engineering offboarding policy requires each listed repository's matching access-handoff issue to be closed after the signed identity and Jira handoff are reconciled.\n\nThis issue tracks only vendor-portal. Close it after the signed identity and Jira handoff are reconciled; do not change repository files or ownership.",
+              "title": "OFF-308 contractor access handoff"
             },
             {
-              "body": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
+              "body": "Routine repository access review completed before OFF-308; no action is required.",
               "state": "closed",
-              "title": "Quarterly maintenance follow-up"
-            },
-            {
-              "body": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-              "state": "open",
-              "title": "Evidence follow-up: Departing contractor access handoff"
-            },
-            {
-              "body": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
-              "state": "open",
-              "title": "Earlier workstream: Departing contractor access handoff"
+              "title": "Completed quarterly repository access review"
             }
           ],
-          "name": "internal-operations",
+          "name": "vendor-portal",
           "owner": "acme",
           "private": true,
-          "prs": [
+          "prs": []
+        },
+        {
+          "default_branch": "main",
+          "description": "pricing-tools service repository",
+          "files": [
             {
-              "base": "main",
-              "body": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-              "files": [
-                {
-                  "content": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-                  "path": "config/change.txt"
-                }
-              ],
-              "head": "change/departing-contractor-access-handoff",
-              "merged": false,
-              "state": "open",
-              "title": "Change associated with departing contractor access handoff"
-            },
-            {
-              "base": "main",
-              "body": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
-              "files": [
-                {
-                  "content": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
-                  "path": "docs/maintenance.md"
-                }
-              ],
-              "head": "docs/maintenance",
-              "state": "open",
-              "title": "Documentation maintenance"
-            },
-            {
-              "base": "main",
-              "body": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-              "files": [
-                {
-                  "content": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
-                  "path": "sandbox/verification.txt"
-                }
-              ],
-              "head": "sandbox/departing-contractor-access-handoff",
-              "merged": false,
-              "state": "open",
-              "title": "Sandbox verification for departing contractor access handoff"
-            },
-            {
-              "base": "main",
-              "body": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
-              "files": [
-                {
-                  "content": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder.",
-                  "path": "archive/record.txt"
-                }
-              ],
-              "head": "archive/departing-contractor-access-handoff",
-              "merged": false,
-              "state": "open",
-              "title": "Archive maintenance for departing contractor access handoff"
+              "content": "# pricing-tools\n",
+              "path": "README.md"
             }
-          ]
+          ],
+          "issues": [
+            {
+              "body": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder. The engagement ended 2026-08-12; the form is signed by Emil Navarro and the engineering manager. Engineering offboarding policy requires each listed repository's matching access-handoff issue to be closed after the signed identity and Jira handoff are reconciled.\n\nThis issue tracks only pricing-tools. Close it after the signed identity and Jira handoff are reconciled; do not change repository files or ownership.",
+              "title": "OFF-308 contractor access handoff"
+            },
+            {
+              "body": "Routine repository access review completed before OFF-308; no action is required.",
+              "state": "closed",
+              "title": "Completed quarterly repository access review"
+            }
+          ],
+          "name": "pricing-tools",
+          "owner": "acme",
+          "private": true,
+          "prs": []
+        },
+        {
+          "default_branch": "main",
+          "description": "Finance workflow automation",
+          "files": [
+            {
+              "content": "# Finance automation\n",
+              "path": "README.md"
+            }
+          ],
+          "issues": [
+            {
+              "body": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder. She is not named on OFF-308. This active employee record is not part of OFF-308.",
+              "title": "Quarterly Planning ownership review"
+            }
+          ],
+          "name": "finance-automation",
+          "owner": "acme",
+          "private": true,
+          "prs": []
         }
       ],
       "users": [
@@ -128,27 +99,27 @@
         {
           "files": [
             {
-              "content": "Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\n\nThe engagement ended 2026-08-12; the form is signed by Emil Navarro and the engineering manager.",
+              "content": "Lena Ortiz / lena.contractor@acme.example\n\nOFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder. The engagement ended 2026-08-12; the form is signed by Emil Navarro and the engineering manager. Engineering offboarding policy requires each listed repository's matching access-handoff issue to be closed after the signed identity and Jira handoff are reconciled.",
               "mime_type": "text/plain",
-              "name": "departing-contractor-access-handoff.txt"
+              "name": "OFF-308-signed-offboarding.txt"
             },
             {
-              "content": "She is not named on OFF-308.",
+              "content": "Observed post-engagement activity is limited to acme/vendor-portal and acme/pricing-tools. Preserve this record during handoff.",
               "mime_type": "text/plain",
-              "name": "previous-quarter-record.txt"
-            },
-            {
-              "content": "Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\n\nThe engagement ended 2026-08-12; the form is signed by Emil Navarro and the engineering manager.",
-              "mime_type": "text/plain",
-              "name": "review-departing-contractor-access-handoff.txt"
-            },
-            {
-              "content": "She is not named on OFF-308.",
-              "mime_type": "text/plain",
-              "name": "archive-departing-contractor-access-handoff.txt"
+              "name": "OFF-308-activity-evidence.txt"
             }
           ],
-          "name": "Operations records"
+          "name": "Procurement 2026"
+        },
+        {
+          "files": [
+            {
+              "content": "Lena Ortez (lena.ortez@acme.example) is an active finance employee and owns the Quarterly Planning folder. She is not named on OFF-308.",
+              "mime_type": "text/plain",
+              "name": "active-owner-record.txt"
+            }
+          ],
+          "name": "Quarterly Planning"
         }
       ]
     },
@@ -162,7 +133,7 @@
                   "body": "Initial report received; investigation notes have not yet been reconciled."
                 }
               ],
-              "description": "Record: Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\nOFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
+              "description": "Record: Lena Ortiz / lena.contractor@acme.example / offboarding OFF-308\nEngineering offboarding policy requires each listed repository's matching access-handoff issue to be closed after the signed identity and Jira handoff are reconciled.",
               "issuetype": "Bug",
               "labels": [
                 "it-support"
@@ -182,7 +153,7 @@
               "summary": "Earlier review: departing contractor access handoff"
             },
             {
-              "description": "OFF-308 names lena.contractor@acme.example and lists acme/vendor-portal, acme/pricing-tools, and the Procurement 2026 Drive folder.",
+              "description": "Engineering offboarding policy requires each listed repository's matching access-handoff issue to be closed after the signed identity and Jira handoff are reconciled.",
               "issuetype": "Task",
               "labels": [
                 "evidence-review"
@@ -265,7 +236,7 @@
     "suite:cross-functional-40-v1",
     "domain:it_support",
     "task:it-06",
-    "content-sha256:a83a4348bd636bea12d48230f553f20887a4da5337a0f453a44b15d7b9d12325"
+    "content-sha256:1d30c804da41282f6fa36e6eb9db1790e3ba30805dffe891b575430b1e57cd43"
   ],
   "twins": [
     "github",

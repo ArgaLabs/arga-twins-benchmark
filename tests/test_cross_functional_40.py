@@ -120,6 +120,30 @@ def test_hardening_facts_are_observable_across_multiple_providers() -> None:
         assert len(profile["protected"]) >= 1
 
 
+def test_it03_and_it06_seed_the_exact_github_and_drive_assets_named_by_evidence() -> None:
+    suite = json.loads(SUITE_PATH.read_text())
+    tasks = {bundle["id"]: bundle for bundle in suite["tasks"]}
+
+    it03_repos = {repo["name"]: repo for repo in tasks["IT-03"]["seed_config"]["github"]["repos"]}
+    assert set(it03_repos) == {"payments-api", "developer-docs"}
+    assert it03_repos["payments-api"]["owner"] == "acme"
+    assert it03_repos["payments-api"]["issues"][0]["title"] == "Contain exposed deployment credential tok_7A91"
+
+    it06_repos = {repo["name"]: repo for repo in tasks["IT-06"]["seed_config"]["github"]["repos"]}
+    assert {"vendor-portal", "pricing-tools", "finance-automation"} == set(it06_repos)
+    for repo_name in ("vendor-portal", "pricing-tools"):
+        repo = it06_repos[repo_name]
+        assert repo["owner"] == "acme"
+        assert repo["issues"][0]["title"] == "OFF-308 contractor access handoff"
+        assert "lena.contractor@acme.example" in repo["issues"][0]["body"]
+
+    it06_folders = {folder["name"]: folder for folder in tasks["IT-06"]["seed_config"]["google_drive"]["folders"]}
+    assert set(it06_folders) == {"Procurement 2026", "Quarterly Planning"}
+    signed_form = it06_folders["Procurement 2026"]["files"][0]["content"]
+    assert "OFF-308" in signed_form
+    assert "signed by Emil Navarro" in signed_form
+
+
 def test_neutral_worlds_are_specific_and_present_without_answer_keys() -> None:
     builder = _load_builder()
     worlds_module = __import__("cross_functional_40_worlds")
@@ -151,15 +175,19 @@ def test_non_obvious_deliverables_have_human_workflow_policy_not_prompt_instruct
         or bundle["id"] in {"CRM-08", "MKT-08"}
     }
 
-    assert set(policies) == hidden_deliverable_tasks == {
-        "CRM-02",
-        "CRM-03",
-        "CRM-05",
-        "CRM-08",
-        "MKT-08",
-        "ECOM-02",
-        "ECOM-04",
-    }
+    assert (
+        set(policies)
+        == hidden_deliverable_tasks
+        == {
+            "CRM-02",
+            "CRM-03",
+            "CRM-05",
+            "CRM-08",
+            "MKT-08",
+            "ECOM-02",
+            "ECOM-04",
+        }
+    )
     direct_instruction = re.compile(
         r"\b(?:create|write|save|prepare)\b[^.\n]{0,40}\b(?:email draft|draft email|calendar hold)\b",
         re.IGNORECASE,

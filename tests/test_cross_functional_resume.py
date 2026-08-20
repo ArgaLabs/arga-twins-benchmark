@@ -59,6 +59,15 @@ def _inert_cleanup(run_id: str = "run-1") -> dict[str, Any]:
     }
 
 
+def test_select_tasks_preserves_suite_order_and_rejects_unknown_ids() -> None:
+    tasks = [{"id": "it-01"}, {"id": "it-02"}, {"id": "it-03"}]
+
+    assert runner.select_tasks(tasks, ["it-03", "it-01"]) == [tasks[0], tasks[2]]
+
+    with pytest.raises(ValueError, match="unknown task ids: it-99"):
+        runner.select_tasks(tasks, ["it-99"])
+
+
 def test_wait_cleanup_accepts_failed_run_without_twins() -> None:
     run_id = "failed-run"
 

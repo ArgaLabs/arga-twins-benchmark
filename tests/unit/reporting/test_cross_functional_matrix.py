@@ -17,12 +17,7 @@ from arga_twins_benchmark.reporting.cross_functional_matrix import (
 ROOT = Path(__file__).resolve().parents[3]
 SUITE_PATH = ROOT / "benchmark" / "cross_functional_40" / "suite.json"
 MODEL_MATRIX_PATH = ROOT / "benchmark" / "cross_functional_40" / "model_matrix.json"
-CALIBRATION_PATH = (
-    ROOT
-    / "benchmark"
-    / "cross_functional_40"
-    / "historical_fable_5_high_fairness_calibration.json"
-)
+CALIBRATION_PATH = ROOT / "benchmark" / "cross_functional_40" / "historical_fable_5_high_fairness_calibration.json"
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -137,6 +132,7 @@ def _write_attempt(
             "cleanup_succeeded": cleanup_ok,
         },
     )
+
     _write_json(
         task_dir / "control.json",
         {
@@ -214,6 +210,39 @@ def _write_attempt(
         task_dir / "tool-steps.json",
         {"protocol": "arga-bench-tool-steps/1", "steps": []},
     )
+
+
+def test_classifier_uses_selected_matrix_tasks(tmp_path: Path) -> None:
+    matrix_dir, _suite, profile = _fixture_root(tmp_path)
+    selected = ["IT-03", "IT-06"]
+    config = json.loads((matrix_dir / "matrix-config.json").read_text())
+    config.update(
+        {
+            "task_ids": selected,
+            "scenarios_per_profile": 2,
+            "total_trials": 62,
+        }
+    )
+    _write_json(matrix_dir / "matrix-config.json", config)
+    _write_json(
+        matrix_dir / "profiles" / profile["id"] / "staging-scenarios.json",
+        {
+            "suite_tag": "suite:cross-functional-40-v1",
+            "scenario_ids": {task_id: f"scenario-{task_id.lower()}" for task_id in selected},
+        },
+    )
+
+    report = classify_cross_functional_matrix(
+        matrix_dir,
+        suite_path=SUITE_PATH,
+        model_matrix_path=MODEL_MATRIX_PATH,
+        historical_calibration_path=CALIBRATION_PATH,
+    )
+
+    assert report["task_ids"] == selected
+    assert report["task_count"] == 2
+    assert len(report["attempts"]) == 62
+    assert {attempt["task_id"] for attempt in report["attempts"]} == set(selected)
 
 
 def _set_legacy_gateway_ceiling_evidence(task_dir: Path, *, kind: str) -> None:
@@ -333,11 +362,7 @@ def test_offline_classifier_separates_execution_terminal_and_fail_closed_evidenc
     report = _classify(matrix_dir)
 
     assert report["protocol"] == CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL
-    by_task = {
-        item["task_id"]: item
-        for item in report["attempts"]
-        if item["profile_id"] == profile["id"]
-    }
+    by_task = {item["task_id"]: item for item in report["attempts"] if item["profile_id"] == profile["id"]}
     assert by_task["IT-01"]["execution_class"] == "exact_completed"
     assert by_task["IT-01"]["validity"] == "invalid_grader"
     assert by_task["IT-01"]["evidence_gaps"] == ["missing_snapshot_query_evidence"]
@@ -437,10 +462,10 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-retry-archive/1",
             "archive_number": 1,
-                "archive_reason": "interrupted_before_attempt",
-                "profile_id": profile["id"],
-                "task_id": interrupted_retry["id"],
-                "cleanup": {"outcome": "interrupted_before_control_persisted"},
+            "archive_reason": "interrupted_before_attempt",
+            "profile_id": profile["id"],
+            "task_id": interrupted_retry["id"],
+            "cleanup": {"outcome": "interrupted_before_control_persisted"},
         },
     )
 
@@ -459,10 +484,10 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-retry-archive/1",
             "archive_number": 1,
-                "archive_reason": "zero_invocation_infrastructure_invalid",
-                "profile_id": profile["id"],
-                "task_id": zero_invocation_retry["id"],
-                "cleanup": _archive_cleanup(zero_invocation_run_id),
+            "archive_reason": "zero_invocation_infrastructure_invalid",
+            "profile_id": profile["id"],
+            "task_id": zero_invocation_retry["id"],
+            "cleanup": _archive_cleanup(zero_invocation_run_id),
         },
     )
     _write_json(
@@ -470,9 +495,9 @@ def test_legacy_attempt_number_is_accepted_only_with_unambiguous_zero_invocation
         {
             "protocol": "arga-bench-cross-functional-attempt/2",
             "attempt_status": "infrastructure_invalid",
-                "profile_id": profile["id"],
-                "task_id": zero_invocation_retry["id"],
-                "run_id": zero_invocation_run_id,
+            "profile_id": profile["id"],
+            "task_id": zero_invocation_retry["id"],
+            "run_id": zero_invocation_run_id,
             "model_status": None,
             "final_text": "",
             "tool_calls": 0,
@@ -724,9 +749,7 @@ def test_completed_retry_after_missing_snapshot_archive_is_valid(tmp_path: Path)
     metadata["cleanup"] = _archive_cleanup("wrong-run")
     _write_json(metadata_path, metadata)
     tampered = _classify(matrix_dir)
-    tampered_result = next(
-        item for item in tampered["attempts"] if item["profile_id"] == profile["id"]
-    )
+    tampered_result = next(item for item in tampered["attempts"] if item["profile_id"] == profile["id"])
     assert "attempt:invalid_attempt_number" in tampered_result["integrity"]["issues"]
 
 

@@ -65,6 +65,7 @@ async def run_profile(
     tasks_per_profile: int = 40,
     lifecycle_concurrency: int = 3,
     cleanup_concurrency: int = 3,
+    task_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     profile_id = str(profile["id"])
     output = output_root / "profiles" / profile_id
@@ -92,6 +93,8 @@ async def run_profile(
             "--cleanup-concurrency",
             str(cleanup_concurrency),
         ]
+        for task_id in task_ids or []:
+            command.extend(("--task", task_id))
         if resume:
             command.append("--resume")
         if retry_infrastructure_invalid:
@@ -151,6 +154,8 @@ async def async_main(args: argparse.Namespace) -> int:
     if args.retry_missing_snapshot_evidence and not args.resume:
         raise ValueError("--retry-missing-snapshot-evidence requires --resume")
     profiles = provider_round_robin(load_profiles())
+    task_ids = args.tasks or []
+    task_count = len(task_ids) if task_ids else 40
     output_root = args.output.resolve()
     resume_existing = args.resume and output_root.exists()
     if resume_existing:
@@ -168,6 +173,9 @@ async def async_main(args: argparse.Namespace) -> int:
         configured_ids = [str(item.get("id")) for item in configured_profiles if isinstance(item, dict)]
         if configured_ids != [str(item["id"]) for item in profiles]:
             raise ValueError("cannot resume: matrix profile identities or order changed")
+        configured_task_ids = config.get("task_ids", [])
+        if configured_task_ids != task_ids:
+            raise ValueError("cannot resume: selected task identities changed")
     else:
         output_root.mkdir(parents=True, exist_ok=False)
     log_root = output_root / "logs"
@@ -181,8 +189,9 @@ async def async_main(args: argparse.Namespace) -> int:
                 "suite_id": "cross-functional-40-v1",
                 "profiles": profiles,
                 "profile_count": len(profiles),
-                "scenarios_per_profile": 40,
-                "total_trials": len(profiles) * 40,
+                "task_ids": task_ids,
+                "scenarios_per_profile": task_count,
+                "total_trials": len(profiles) * task_count,
                 "global_trial_concurrency": args.concurrency,
                 "per_profile_trial_concurrency": args.tasks_per_profile,
                 "per_profile_lifecycle_concurrency": args.lifecycle_concurrency,
@@ -214,6 +223,7 @@ async def async_main(args: argparse.Namespace) -> int:
                 tasks_per_profile=args.tasks_per_profile,
                 lifecycle_concurrency=args.lifecycle_concurrency,
                 cleanup_concurrency=args.cleanup_concurrency,
+                task_ids=task_ids,
             )
             for launch_index, profile in enumerate(profiles)
         )
@@ -225,7 +235,7 @@ async def async_main(args: argparse.Namespace) -> int:
         "profile_count": len(profiles),
         "profiles_with_summaries": len(summaries),
         "profiles_returned_zero": sum(item["returncode"] == 0 for item in outcomes),
-        "expected_trials": len(profiles) * 40,
+        "expected_trials": len(profiles) * task_count,
         "recorded_trials": sum(int(item.get("attempts", 0) or 0) for item in summaries),
         "global_trial_concurrency": args.concurrency,
         "resumed": resume_existing,
@@ -255,6 +265,12 @@ async def async_main(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--task",
+        dest="tasks",
+        action="append",
+        help="Run only this task id; repeat to select multiple tasks.",
+    )
     parser.add_argument("--concurrency", type=int, choices=range(1, 31), default=2)
     parser.add_argument("--launch-interval-seconds", type=float, default=0.5)
     parser.add_argument("--tasks-per-profile", type=int, choices=range(1, 41), default=40)
