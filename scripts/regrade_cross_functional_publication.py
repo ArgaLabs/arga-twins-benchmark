@@ -56,12 +56,21 @@ def _canonical_json_sha256(value: object) -> str:
 def _published_trials(evidence_dir: Path) -> tuple[list[dict[str, Any]], dict[str, str]]:
     trials: list[dict[str, Any]] = []
     task_file_hashes: dict[str, str] = {}
+    publication_shapes: set[tuple[int, int, int]] = set()
     for path in sorted(evidence_dir.glob("*.json")):
         bundle = _read_object(path)
         task_id = bundle.get("taskId")
         profiles = bundle.get("profiles")
         if not isinstance(task_id, str) or not isinstance(profiles, list):
             raise ValueError(f"malformed public task evidence in {path}")
+        profile_count = bundle.get("profileCount")
+        repeat_count = bundle.get("repeatCount")
+        trial_count = bundle.get("trialCount")
+        if not all(isinstance(value, int) for value in (profile_count, repeat_count, trial_count)):
+            raise ValueError(f"missing publication shape metadata in {path}")
+        if profile_count != len(profiles) or repeat_count != 3 or trial_count != profile_count * repeat_count:
+            raise ValueError(f"inconsistent publication shape metadata in {path}")
+        publication_shapes.add((profile_count, repeat_count, trial_count))
         task_file_hashes[path.name] = _sha256_file(path)
         for profile in cast(list[object], profiles):
             if not isinstance(profile, Mapping) or not isinstance(profile.get("trials"), list):
@@ -76,10 +85,15 @@ def _published_trials(evidence_dir: Path) -> tuple[list[dict[str, Any]], dict[st
                 if trial.get("taskId") != task_id or trial.get("profileId") != profile_id:
                     raise ValueError(f"task/profile mismatch in {path}")
                 trials.append(trial)
-    if len(task_file_hashes) != 40 or len(trials) != 3_720:
+    if len(task_file_hashes) != 40 or len(publication_shapes) != 1:
         raise ValueError(
-            f"publication must contain 40 task files and 3,720 trials; got {len(task_file_hashes)} and {len(trials)}"
+            "publication must contain 40 task files with one consistent matrix shape; "
+            f"got {len(task_file_hashes)} files and shapes={sorted(publication_shapes)}"
         )
+    profile_count, repeat_count, _ = next(iter(publication_shapes))
+    expected_trials = len(task_file_hashes) * profile_count * repeat_count
+    if len(trials) != expected_trials:
+        raise ValueError(f"publication must contain {expected_trials} trials; got {len(trials)}")
     trial_ids = [trial.get("trialId") for trial in trials]
     run_ids = [trial.get("runId") for trial in trials]
     if any(not isinstance(value, str) or not value for value in [*trial_ids, *run_ids]):
@@ -175,6 +189,12 @@ def parse_args() -> argparse.Namespace:
         default=[],
         help="Regrade only the selected task ID; repeat for multiple tasks. Defaults to the full publication.",
     )
+    parser.add_argument(
+        "--profile-id",
+        action="append",
+        default=[],
+        help="Regrade only the selected publication profile ID; repeat for multiple profiles.",
+    )
     return parser.parse_args()
 
 
@@ -193,11 +213,18 @@ def main() -> int:
         raise ValueError("suite must contain exactly 40 unique tasks")
     source_trials, task_file_hashes = _published_trials(args.public_evidence_dir)
     selected_task_ids = set(cast(list[str], args.task_id))
+    selected_profile_ids = set(cast(list[str], args.profile_id))
     unknown_task_ids = selected_task_ids - set(tasks)
     if unknown_task_ids:
         raise ValueError(f"unknown task IDs: {sorted(unknown_task_ids)}")
+    publication_profile_ids = {cast(str, trial["profileId"]) for trial in source_trials}
+    unknown_profile_ids = selected_profile_ids - publication_profile_ids
+    if unknown_profile_ids:
+        raise ValueError(f"unknown profile IDs: {sorted(unknown_profile_ids)}")
     if selected_task_ids:
         source_trials = [trial for trial in source_trials if trial.get("taskId") in selected_task_ids]
+    if selected_profile_ids:
+        source_trials = [trial for trial in source_trials if trial.get("profileId") in selected_profile_ids]
     if not source_trials:
         raise ValueError("the selected regrade scope contains no published trials")
     artifact_dirs = _artifact_index(
@@ -284,6 +311,7 @@ def main() -> int:
         "method": "offline executable verifier over exact saved baseline state, final state, and mediated tool traces",
         "scope": {
             "taskIds": sorted(selected_task_ids or set(tasks)),
+            "profileIds": sorted(selected_profile_ids or publication_profile_ids),
             "trialCount": len(results),
         },
         "classificationPolicy": {
