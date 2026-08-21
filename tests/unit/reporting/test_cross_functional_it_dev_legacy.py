@@ -1626,9 +1626,7 @@ def test_dev04_accepts_approval_trail_recorded_in_canonical_jira_write() -> None
         method="POST",
         path="/rest/api/3/issue/ENG-1/comment",
         arguments={
-            "body": {
-                "body": "Backport PR #9 is open against release/4.8 with REL-204 release-manager approval."
-            }
+            "body": {"body": "Backport PR #9 is open against release/4.8 with REL-204 release-manager approval."}
         },
         status_code=201,
         target_text="Release branch backport coordination",
@@ -1637,6 +1635,23 @@ def test_dev04_accepts_approval_trail_recorded_in_canonical_jira_write() -> None
     assertions = legacy._dev04_primary_assertions(artifacts, [jira])  # pyright: ignore[reportPrivateUsage]
 
     assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+
+
+def test_jira_remote_link_is_additive_evidence_but_deletion_is_not() -> None:
+    created = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/remotelink",
+        arguments={"body": {"object": {"url": "https://github.com/acme/platform-services/pull/9"}}},
+        status_code=201,
+        target_text="Release branch backport coordination",
+    )
+    deleted = replace(created, method="DELETE", path="/rest/api/3/issue/ENG-1/remotelink/10012")
+
+    assert legacy._is_additive_evidence(created)  # pyright: ignore[reportPrivateUsage]
+    assert not legacy._is_additive_evidence(deleted)  # pyright: ignore[reportPrivateUsage]
 
 
 def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -> None:
