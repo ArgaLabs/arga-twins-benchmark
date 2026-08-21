@@ -1140,6 +1140,11 @@ def _same_trial_transient_cleanup_events(invocation: Mapping[str, object]) -> se
                 identifier = body.get(key)
                 if isinstance(identifier, str | int) and not isinstance(identifier, bool):
                     created.add((provider, str(identifier)))
+            if provider == "hubspot" and re.fullmatch(r"/crm/v3/lists/?", path, re.IGNORECASE):
+                for record in _walk_mappings(body):
+                    identifier = record.get("listId")
+                    if isinstance(identifier, str | int) and not isinstance(identifier, bool):
+                        created.add((provider, str(identifier)))
             if provider == "jira" and path.casefold().endswith("/issuelink"):
                 request_body = _object_mapping(arguments.get("body"))
                 issue_keys = {
