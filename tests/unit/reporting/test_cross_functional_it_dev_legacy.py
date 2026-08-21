@@ -1793,6 +1793,120 @@ def test_dev06_composes_drift_facts_across_linked_final_records() -> None:
     assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
 
 
+def _dev06_issue_link_artifacts(*, issue_number: int, issue_body: str) -> dict[str, dict[str, Any]]:
+    return {
+        "final-state.json": {
+            "queries": {
+                "dev_06_jira_issues": {
+                    "body": {
+                        "issues": [
+                            {
+                                "key": "ENG-1",
+                                "fields": {
+                                    "description": "api/openapi.yaml next_cursor versus SDK nextPage",
+                                    "status": {"name": "In Progress", "statusCategory": {"key": "indeterminate"}},
+                                    "resolution": None,
+                                },
+                            },
+                            *[
+                                {
+                                    "key": key,
+                                    "fields": {
+                                        "status": {"name": "Done", "statusCategory": {"key": "done"}},
+                                        "resolution": {"name": "Done"},
+                                    },
+                                }
+                                for key in ("ENG-3", "ENG-4")
+                            ],
+                        ]
+                    }
+                },
+                "dev_06_github_state": {
+                    "body": {
+                        "issues": [
+                            {
+                                "number": issue_number,
+                                "title": "API contract drift evidence",
+                                "body": issue_body,
+                                "state": "open",
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+    }
+
+
+def test_dev06_accepts_a_semantically_matching_open_issue_without_hardcoded_number() -> None:
+    artifacts = _dev06_issue_link_artifacts(
+        issue_number=3,
+        issue_body="api/openapi.yaml defines next_cursor as a nullable string.",
+    )
+    jira_comment = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/comment",
+        arguments={"body": {"body": "api/openapi.yaml next_cursor differs from SDK nextPage"}},
+        status_code=201,
+        target_text="API contract drift resolution",
+    )
+    github_comment = legacy._Call(
+        event_index=2,
+        sequence=3,
+        provider="github",
+        method="POST",
+        path="/repos/acme/platform-services/issues/3/comments",
+        arguments={"body": "Canonical Jira record ENG-1 tracks api/openapi.yaml next_cursor versus SDK nextPage."},
+        status_code=201,
+        target_text="API contract drift evidence",
+    )
+
+    assertions = legacy._dev06_primary_assertions(  # pyright: ignore[reportPrivateUsage]
+        artifacts,
+        [jira_comment, github_comment],
+    )
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+    assert assertions[1]["evidence"][-1]["pointer"].endswith("number=3")
+
+
+def test_dev06_does_not_accept_the_retired_partner_draft_issue_as_matching_evidence() -> None:
+    artifacts = _dev06_issue_link_artifacts(
+        issue_number=4,
+        issue_body="specs/partner-draft.yaml defines nextPage and was retired on 2025-11-30.",
+    )
+    jira_comment = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/comment",
+        arguments={"body": {"body": "api/openapi.yaml next_cursor differs from SDK nextPage"}},
+        status_code=201,
+        target_text="API contract drift resolution",
+    )
+    github_comment = legacy._Call(
+        event_index=2,
+        sequence=3,
+        provider="github",
+        method="POST",
+        path="/repos/acme/platform-services/issues/4/comments",
+        arguments={"body": "ENG-1 tracks api/openapi.yaml next_cursor versus SDK nextPage."},
+        status_code=201,
+        target_text="Earlier partner draft workstream",
+    )
+
+    assertions = legacy._dev06_primary_assertions(  # pyright: ignore[reportPrivateUsage]
+        artifacts,
+        [jira_comment, github_comment],
+    )
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "fail"]
+
+
 def test_same_trial_jira_issue_link_replacement_is_transient_cleanup() -> None:
     artifacts = {
         "invocation.json": {

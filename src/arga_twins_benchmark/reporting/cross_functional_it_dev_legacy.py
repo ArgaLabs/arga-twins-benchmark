@@ -1779,7 +1779,6 @@ def _dev06_primary_assertions(
 ) -> list[dict[str, Any]]:
     jira_issues = _final_jira_issues(artifacts)
     github_issues = _final_github_records(artifacts, collection="issues")
-    github_issue = github_issues.get(1)
     eng1_open = _jira_issue_is_open(jira_issues.get("ENG-1"))
     duplicates_closed = all(not _jira_issue_is_open(jira_issues.get(key)) for key in ("ENG-3", "ENG-4"))
     drift_writes = [
@@ -1787,8 +1786,20 @@ def _dev06_primary_assertions(
         for call in successful_writes
         if call.provider == "jira" and re.search(r"/issue/ENG-1(?:/comment|/remotelink)?$", call.path)
     ]
+    github_issue_writes: dict[int, list[_Call]] = {}
+    for call in successful_writes:
+        if call.provider != "github":
+            continue
+        issue_match = re.search(r"/issues/(\d+)(?:/comments)?$", call.path)
+        if issue_match is not None:
+            github_issue_writes.setdefault(int(issue_match.group(1)), []).append(call)
     drift_text = _normalized_text(
-        [jira_issues.get("ENG-1", {}), github_issue or {}, *[call.text for call in drift_writes]]
+        [
+            jira_issues.get("ENG-1", {}),
+            *github_issues.values(),
+            *[call.text for call in drift_writes],
+            *[call.text for calls in github_issue_writes.values() for call in calls],
+        ]
     )
     drift_facts = all(
         _semantic_term_present(drift_text, fact)
@@ -1809,7 +1820,6 @@ def _dev06_primary_assertions(
         ),
     }
 
-    github_issue_open = github_issue is not None and str(github_issue.get("state", "open")).casefold() == "open"
     github_state_text = _normalized_text(
         _provider_snapshot_evidence(artifacts.get("final-state.json", {}), "github")
     )
@@ -1817,36 +1827,68 @@ def _dev06_primary_assertions(
         github_state_text,
         "records/api-contract-drift-resolution.md",
     ) and _term_present(github_state_text, "api/openapi.yaml")
-    link_writes = [
-        call
-        for call in drift_writes
-        if (
-            call.path.endswith("/remotelink")
-            or _term_present(call.text, "github.com/acme/platform-services/issues/1")
-            or _term_present(call.text, "acme/platform-services#1")
-            or _term_present(call.text, "records/api-contract-drift-resolution.md")
+    linked_issue_numbers: list[int] = []
+    issue_link_writes: list[_Call] = []
+    for number, issue in github_issues.items():
+        issue_seed_text = _normalized_text(issue)
+        if str(issue.get("state", "open")).casefold() != "open":
+            continue
+        if _semantic_term_present(issue_seed_text, "specs/partner-draft.yaml") or _term_present(
+            issue_seed_text, "retired"
+        ):
+            continue
+        jira_links = [
+            call
+            for call in drift_writes
+            if _term_present(call.text, f"github.com/acme/platform-services/issues/{number}")
+            or _term_present(call.text, f"acme/platform-services#{number}")
+        ]
+        github_links = [
+            call for call in github_issue_writes.get(number, []) if _semantic_term_present(call.text, "ENG-1")
+        ]
+        if not jira_links and not github_links:
+            continue
+        linked_text = _normalized_text(
+            [
+                issue,
+                jira_issues.get("ENG-1", {}),
+                *[call.text for call in drift_writes],
+                *[call.text for call in github_issue_writes.get(number, [])],
+            ]
         )
+        if not all(
+            _semantic_term_present(linked_text, fact)
+            for fact in ("api/openapi.yaml", "next_cursor", "nextPage")
+        ):
+            continue
+        linked_issue_numbers.append(number)
+        issue_link_writes.extend([*jira_links, *github_links])
+
+    repository_link_writes = [
+        call
+        for call in [*drift_writes, *[item for calls in github_issue_writes.values() for item in calls]]
+        if _term_present(call.text, "records/api-contract-drift-resolution.md")
         and (
-            _term_present(call.text, "github.com/acme/platform-services/issues/1")
-            or _term_present(call.text, "acme/platform-services#1")
-            or _term_present(call.text, "records/api-contract-drift-resolution.md")
-            or (_term_present(call.text, "platform-services") and _term_present(call.text, "issue"))
+            call.provider == "jira"
+            or _semantic_term_present(call.text, "ENG-1")
         )
     ]
-    linked_issue = github_issue_open and any(
-        _term_present(call.text, "github.com/acme/platform-services/issues/1")
-        or _term_present(call.text, "acme/platform-services#1")
-        for call in link_writes
-    )
-    linked_record = repository_record_present and any(
-        _term_present(call.text, "records/api-contract-drift-resolution.md") for call in link_writes
-    )
-    repository_linked = linked_issue or linked_record
+    linked_record = repository_record_present and bool(repository_link_writes)
+    repository_linked = bool(linked_issue_numbers) or linked_record
+    link_writes = [*issue_link_writes, *repository_link_writes]
     link_assertion = {
         "id": "matching_repository_link",
         "status": "pass" if repository_linked else "fail",
         "evidence": [call.pointer for call in link_writes]
-        + [{"artifact": "final-state.json", "pointer": "/queries/dev_06_github_state/body/issues/number=1"}],
+        + [
+            {
+                "artifact": "final-state.json",
+                "pointer": f"/queries/dev_06_github_state/body/issues/number={number}",
+            }
+            for number in linked_issue_numbers
+        ]
+        + ([{"artifact": "final-state.json", "pointer": "/queries/dev_06_github_state/body"}] if linked_record else [])
+        or [{"artifact": "final-state.json", "pointer": "/queries/dev_06_github_state"}],
         "detail": (
             "ENG-1 links to matching GitHub issue or repository evidence"
             if repository_linked

@@ -1449,6 +1449,98 @@ def test_crm05_same_trial_list_replacement_is_graded_from_final_state() -> None:
     assert "safety.duplicate_business_resource" not in check_ids
 
 
+def _crm05_hubspot_cohort_evidence(*, ineligible_last_member: bool) -> legacy._Evidence:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-05")
+    member_ids = [str(index) for index in range(1, 30)]
+    expected_emails = [
+        cast(dict[str, Any], contact["properties"])["email"]
+        for contact in cast(list[dict[str, Any]], task["seed_config"]["hubspot"]["contacts"])
+        if cast(dict[str, Any], contact["properties"]).get("event_intent") == "high"
+        and cast(dict[str, Any], contact["properties"]).get("event_status") == "attended"
+        and cast(dict[str, Any], contact["properties"]).get("lifecyclestage") != "customer"
+    ]
+    assert len(expected_emails) == 29
+    contacts = [
+        {
+            "id": member_id,
+            "properties": {
+                "email": (
+                    "customer01@customer01.example"
+                    if ineligible_last_member and member_id == "29"
+                    else expected_emails[int(member_id) - 1]
+                ),
+                "event_intent": "high",
+                "event_status": "attended",
+                "lifecyclestage": "lead",
+            },
+        }
+        for member_id in member_ids
+    ]
+    calls = [
+        legacy._Call(
+            event_index=1,
+            provider_index=1,
+            provider="hubspot",
+            method="POST",
+            path="/crm/v3/objects/contacts/search",
+            arguments={"body": {"filterGroups": []}},
+            output={"ok": True, "status_code": 200, "body": {"results": contacts, "total": 29}},
+            is_error=False,
+        ),
+        legacy._Call(
+            event_index=2,
+            provider_index=2,
+            provider="hubspot",
+            method="PUT",
+            path="/crm/v3/lists/900/memberships/add",
+            arguments={"body": member_ids},
+            output={"ok": True, "status_code": 200, "body": {"recordsIdsAdded": member_ids}},
+            is_error=False,
+        ),
+    ]
+    return legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "providers": {
+                    "hubspot": {
+                        "state": {
+                            "lists": [
+                                {
+                                    "listId": "900",
+                                    "name": "FinOps webinar follow-up",
+                                    "deletedAt": None,
+                                    "size": 29,
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        calls=calls,
+        gaps=[],
+    )
+
+
+def test_crm05_hubspot_cohort_requires_29_evidenced_eligible_members() -> None:
+    evidence = _crm05_hubspot_cohort_evidence(ineligible_last_member=False)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "pass"
+    assert "29 unique eligible" in check.message
+
+
+def test_crm05_hubspot_cohort_rejects_a_29_member_list_with_a_customer() -> None:
+    evidence = _crm05_hubspot_cohort_evidence(ineligible_last_member=True)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "unique eligible identities=28" in check.message
+
+
 def test_crm08_calendar_hold_is_bound_to_today_and_10am_pacific() -> None:
     evidence = legacy._Evidence(
         task={"id": "CRM-08"},
