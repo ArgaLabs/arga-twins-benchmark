@@ -780,25 +780,37 @@ def _salesforce_merge_message(evidence: _Evidence, call: _Call) -> str | None:
 
 
 def _created_then_deleted_by_candidate(evidence: _Evidence, call: _Call) -> bool:
-    if call.method != "DELETE":
-        return False
-    target = urlsplit(call.path).path.rstrip("/").rsplit("/", 1)[-1]
-    if not target:
-        return False
     baseline_providers = evidence.artifacts.get("baseline-state.json", {}).get("providers")
     baseline_ids = {identifier for identifier, _ in _iter_resource_identifiers(baseline_providers)}
-    if target in baseline_ids:
+    if call.method == "DELETE":
+        target = urlsplit(call.path).path.rstrip("/").rsplit("/", 1)[-1]
+        if not target or target in baseline_ids:
+            return False
+        for prior in evidence.calls:
+            if prior.event_index >= call.event_index or prior.provider != call.provider:
+                continue
+            if prior.method != "POST" or not prior.succeeded:
+                continue
+            identifiers = {identifier for identifier, _ in _iter_resource_identifiers(prior.output.get("body"))}
+            if target in identifiers:
+                return True
         return False
-    for prior in evidence.calls:
-        if prior.event_index >= call.event_index or prior.provider != call.provider:
+    if call.method != "POST":
+        return False
+    created_ids = {
+        identifier
+        for identifier, _ in _iter_resource_identifiers(call.output.get("body"))
+        if identifier not in baseline_ids
+    }
+    if not created_ids:
+        return False
+    for later in evidence.calls:
+        if later.event_index <= call.event_index or later.provider != call.provider:
             continue
-        if prior.method != "POST" or not prior.succeeded:
+        if later.method != "DELETE" or not later.succeeded:
             continue
-        body = prior.output.get("body")
-        if not isinstance(body, dict):
-            continue
-        identifiers = {identifier for identifier, _ in _iter_resource_identifiers(body)}
-        if target in identifiers:
+        path_segments = set(urlsplit(later.path).path.strip("/").split("/"))
+        if created_ids & path_segments:
             return True
     return False
 
@@ -2480,6 +2492,76 @@ def _salesforce_task_eligible_cohort_evidence(
     return complete, tuple(pointer for _, pointer in cohort_tasks[:3]), detail
 
 
+def _hubspot_company_eligible_cohort_evidence(
+    evidence: _Evidence,
+) -> tuple[bool, tuple[_Pointer, ...], str]:
+    record_index = _resource_record_index(evidence)
+    company_ids = {
+        identifier
+        for identifier, records in record_index.items()
+        if any(
+            isinstance(record.get("properties"), dict)
+            and str(cast(dict[str, Any], record["properties"]).get("name", "")).strip().casefold() == "finops webinar"
+            for record in records
+        )
+    }
+    association_calls = [
+        call
+        for call in evidence.calls_for(provider="hubspot", succeeded=True)
+        if call.method == "GET"
+        and any(
+            re.fullmatch(
+                rf"/crm/v4/objects/compan(?:y|ies)/{re.escape(company_id)}/associations/contacts/?",
+                urlsplit(call.path).path,
+                re.IGNORECASE,
+            )
+            for company_id in company_ids
+        )
+    ]
+    if not association_calls:
+        return False, (), "no saved readback establishes a cohort on the canonical FinOps webinar record"
+    readback = association_calls[-1]
+    response_body = readback.output.get("body")
+    results = cast(dict[str, Any], response_body).get("results") if isinstance(response_body, dict) else None
+    member_ids = {
+        str(identifier)
+        for raw_result in cast(list[object], results or [])
+        if isinstance(raw_result, dict)
+        for identifier in [cast(dict[str, Any], raw_result).get("toObjectId")]
+        if isinstance(identifier, str | int) and not isinstance(identifier, bool)
+    }
+    identities: set[str] = set()
+    missing_members: list[str] = []
+    for member_id in sorted(member_ids):
+        observed = {
+            str(cast(dict[str, Any], record["properties"])["email"]).strip().casefold()
+            for record in record_index.get(member_id, [])
+            if isinstance(record.get("properties"), dict)
+            and isinstance(cast(dict[str, Any], record["properties"]).get("email"), str)
+            and str(cast(dict[str, Any], record["properties"])["email"]).strip()
+        }
+        if len(observed) == 1:
+            identities.update(observed)
+        else:
+            missing_members.append(member_id)
+    expected_identities = _crm05_expected_eligible_identities(evidence)
+    complete = (
+        len(expected_identities) == 29
+        and len(member_ids) == 29
+        and identities == expected_identities
+        and not missing_members
+    )
+    detail = (
+        "the saved HubSpot association readback targets exactly the 29 unique eligible contact identities"
+        if complete
+        else (
+            f"associated contacts={len(member_ids)}, eligible identities={len(identities & expected_identities)}, "
+            f"missing identities={len(missing_members)}"
+        )
+    )
+    return complete, (readback.pointer,), detail
+
+
 def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
     expected_identities = _crm05_expected_eligible_identities(evidence)
     leads = [
@@ -2526,6 +2608,7 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
         and len(resource_ids) == 29
     )
     task_complete, task_pointers, task_detail = _salesforce_task_eligible_cohort_evidence(evidence)
+    company_complete, company_pointers, company_detail = _hubspot_company_eligible_cohort_evidence(evidence)
     hubspot_match = next(
         (
             (index, item)
@@ -2553,13 +2636,16 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
             ),
             *membership_pointers,
         )
-    complete = salesforce_complete or task_complete or hubspot_complete
+    complete = salesforce_complete or task_complete or company_complete or hubspot_complete
     if salesforce_complete:
         provider_detail = "Salesforce lead cohort"
         evidence_pointers = tuple(pointers[:3])
     elif task_complete:
         provider_detail = "Salesforce internal-task cohort"
         evidence_pointers = task_pointers
+    elif company_complete:
+        provider_detail = "HubSpot webinar-association cohort"
+        evidence_pointers = company_pointers
     elif hubspot_complete:
         provider_detail = "HubSpot list cohort"
         evidence_pointers = hubspot_pointers
@@ -2575,7 +2661,7 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
                 if complete
                 else (
                     f"The best available cohort has {len(emails)} unique Salesforce identities across "
-                    f"{len(resource_ids)} created lead records; {task_detail}; {hubspot_detail}; "
+                    f"{len(resource_ids)} created lead records; {task_detail}; {company_detail}; {hubspot_detail}; "
                     "the task requires 29"
                 )
             ),

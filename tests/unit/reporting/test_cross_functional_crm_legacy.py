@@ -671,6 +671,7 @@ def test_deleting_a_resource_created_in_the_same_trial_is_not_a_seeded_record_de
         gaps=[],
     )
 
+    assert legacy._created_then_deleted_by_candidate(evidence, created) is True
     assert legacy._created_then_deleted_by_candidate(evidence, deleted) is True
 
 
@@ -702,6 +703,7 @@ def test_deleting_a_list_created_in_the_same_trial_is_not_a_seeded_record_deleti
         gaps=[],
     )
 
+    assert legacy._created_then_deleted_by_candidate(evidence, created) is True
     assert legacy._created_then_deleted_by_candidate(evidence, deleted) is True
 
 
@@ -1654,6 +1656,91 @@ def test_crm05_salesforce_tasks_accept_exact_eligible_internal_cohort() -> None:
 
 def test_crm05_salesforce_tasks_reject_customer_substitution() -> None:
     evidence = _crm05_salesforce_task_cohort_evidence(ineligible_last_member=True)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "eligible identities=28" in check.message
+
+
+def _crm05_hubspot_company_cohort_evidence(*, ineligible_last_member: bool) -> legacy._Evidence:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-05")
+    expected_emails = [
+        cast(dict[str, Any], contact["properties"])["email"]
+        for contact in cast(list[dict[str, Any]], task["seed_config"]["hubspot"]["contacts"])
+        if cast(dict[str, Any], contact["properties"]).get("event_intent") == "high"
+        and cast(dict[str, Any], contact["properties"]).get("event_status") == "attended"
+        and cast(dict[str, Any], contact["properties"]).get("lifecyclestage") != "customer"
+    ]
+    assert len(expected_emails) == 29
+    member_ids = [str(index) for index in range(1, 30)]
+    contacts = [
+        {
+            "id": member_id,
+            "properties": {
+                "email": (
+                    "customer01@customer01.example"
+                    if ineligible_last_member and member_id == "29"
+                    else expected_emails[int(member_id) - 1]
+                )
+            },
+        }
+        for member_id in member_ids
+    ]
+    calls = [
+        legacy._Call(
+            event_index=1,
+            provider_index=1,
+            provider="hubspot",
+            method="GET",
+            path="/crm/v3/objects/companies",
+            arguments={},
+            output={
+                "ok": True,
+                "status_code": 200,
+                "body": {"results": [{"id": "company-1", "properties": {"name": "FinOps webinar"}}]},
+            },
+            is_error=False,
+        ),
+        legacy._Call(
+            event_index=2,
+            provider_index=2,
+            provider="hubspot",
+            method="POST",
+            path="/crm/v3/objects/contacts/batch/read",
+            arguments={"body": {"inputs": [{"id": member_id} for member_id in member_ids]}},
+            output={"ok": True, "status_code": 200, "body": {"results": contacts}},
+            is_error=False,
+        ),
+        legacy._Call(
+            event_index=3,
+            provider_index=3,
+            provider="hubspot",
+            method="GET",
+            path="/crm/v4/objects/companies/company-1/associations/contacts",
+            arguments={},
+            output={
+                "ok": True,
+                "status_code": 200,
+                "body": {"results": [{"toObjectId": member_id} for member_id in member_ids]},
+            },
+            is_error=False,
+        ),
+    ]
+    return legacy._Evidence(task=task, artifacts={}, calls=calls, gaps=[])
+
+
+def test_crm05_hubspot_webinar_associations_accept_exact_eligible_cohort() -> None:
+    evidence = _crm05_hubspot_company_cohort_evidence(ineligible_last_member=False)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "pass"
+    assert "HubSpot webinar-association cohort" in check.message
+
+
+def test_crm05_hubspot_webinar_associations_reject_customer_substitution() -> None:
+    evidence = _crm05_hubspot_company_cohort_evidence(ineligible_last_member=True)
 
     check = legacy._primary_crm_05(evidence)[0]
 
