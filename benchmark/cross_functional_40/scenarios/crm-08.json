@@ -1,5 +1,5 @@
 {
-  "description": "Iris Novak from partnerships just posted in the #gtm-ops Slack channel: Orbit Systems asked to restart a previously closed evaluation and proposed two meeting times. There are two closed-lost opportunities and an unrelated active customer account with a similar name.\n\nYou're the pipeline operations lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should have exactly one verified evaluation active under its accountable owner and one internal hold at the agreed time. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Iris Novak from partnerships just posted in the #gtm-ops Slack channel: Orbit Systems asked to restart a previously closed evaluation and proposed two meeting times. There are two closed-lost opportunities and an unrelated active customer account with a similar name.\n\nYou're the pipeline operations lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should leave exactly one canonical Evaluation EV-204 active under Iris Novak in both HubSpot and Salesforce, update the canonical reactivation work item, and create exactly one attendee-free internal hold for 10:00 PT today. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: CRM-08 Closed-lost opportunity reactivation",
   "seed_config": {
     "google_calendar": {
@@ -396,7 +396,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-08",
-    "content-sha256:9cd8c480b78b5ee249e3d13938e7eaad8ab0e7740207c8ac6bf3f7650008e409"
+    "content-sha256:20c0b12288b92d6c9e515fd779afc6d8ced3a0ade47f5e0f91cdb92aedbb7216"
   ],
   "twins": [
     "google_calendar",

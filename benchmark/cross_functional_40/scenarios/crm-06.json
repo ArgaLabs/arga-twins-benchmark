@@ -1,5 +1,5 @@
 {
-  "description": "Noah Grant from enterprise sales just posted in the #gtm-ops Slack channel: BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.\n\nYou're the revenue systems administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should show one approved Strategic owner across both CRM records, with the territory request resolved and opportunity history unchanged. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Noah Grant from enterprise sales just posted in the #gtm-ops Slack channel: BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.\n\nYou're the revenue systems administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should assign Amina Yusuf as the approved Strategic owner of the canonical BluePeak Energy company/account and its live BluePeak Expansion opportunity in both HubSpot and Salesforce, resolve the canonical TERR-62 request, and leave the opportunity stage, amount, and activity history unchanged. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: CRM-06 Territory ownership conflict",
   "seed_config": {
     "hubspot": {
@@ -355,7 +355,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-06",
-    "content-sha256:72477cd30a69170a125a9c9e92a5833360ce91556d9dcb7ec06cff73a75cd944"
+    "content-sha256:4d01788816ef288e1a984481b6af94c7cad47244ba7725971d3df7fd22b8abd5"
   ],
   "twins": [
     "hubspot",

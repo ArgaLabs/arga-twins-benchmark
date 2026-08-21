@@ -132,9 +132,10 @@ def test_matches_all_16_historical_human_verdicts_without_model_oracle_input() -
         for task_id, result in results.items()
         # IT-03 and IT-06 use corrected named-resource fixtures. DEV-08 now
         # accepts the canonical live Linear identifier rather than requiring
-        # the scenario's human alias in every downstream write. Their old
-        # oracle labels are intentionally superseded by the state regrade.
-        if task_id not in {"IT-01", "IT-02", "IT-03", "IT-06", "DEV-08"}
+        # the scenario's human alias in every downstream write. DEV-04 and
+        # DEV-06 now have explicit replacement contracts and require fresh
+        # trials. Their old oracle labels are intentionally superseded.
+        if task_id not in {"IT-01", "IT-02", "IT-03", "IT-06", "DEV-04", "DEV-06", "DEV-08"}
         if (result["outcome"] == "pass") is not oracle[task_id]["passed"]
     }
     assert disagreements == {}
@@ -1548,6 +1549,135 @@ def test_inline_query_paths_and_explicit_call_limit_errors_are_complete_evidence
     result = grade_it_dev_legacy_task(task=task, task_dir=task_dir)
 
     assert result["outcome"] == "pass"
+
+
+def test_dev04_composes_jira_linkage_with_the_matching_final_pull_request() -> None:
+    artifacts = {
+        "final-state.json": {
+            "providers": {
+                "github": {
+                    "state": {
+                        "repos": [
+                            {
+                                "pull_requests": [
+                                    {
+                                        "number": 9,
+                                        "title": "[4.8] Backport: Fix invoice export crash",
+                                        "body": "REL-204 records release-manager approval.",
+                                        "base": "release/4.8",
+                                        "head": "backport/invoice-export",
+                                        "state": "open",
+                                        "merged": False,
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    jira = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/comment",
+        arguments={"body": {"body": "Backport PR #9 is open against release/4.8."}},
+        status_code=201,
+        target_text="Release branch backport coordination",
+    )
+
+    assertions = legacy._dev04_primary_assertions(artifacts, [jira])  # pyright: ignore[reportPrivateUsage]
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+
+
+def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -> None:
+    jira_issues = [
+        {
+            "key": "ENG-1",
+            "fields": {
+                "summary": "API contract drift resolution",
+                "status": {"name": "In Progress", "statusCategory": {"key": "indeterminate"}},
+                "resolution": None,
+            },
+        },
+        {
+            "key": "ENG-3",
+            "fields": {
+                "summary": "Evidence review: API contract drift",
+                "status": {"name": "Done", "statusCategory": {"key": "done"}},
+                "resolution": {"name": "Done"},
+            },
+        },
+        {
+            "key": "ENG-4",
+            "fields": {
+                "summary": "Parallel workstream: API contract drift",
+                "status": {"name": "Done", "statusCategory": {"key": "done"}},
+                "resolution": {"name": "Done"},
+            },
+        },
+    ]
+    artifacts = {
+        "final-state.json": {
+            "queries": {
+                "dev_06_jira_issues": {"body": {"issues": jira_issues}},
+                "dev_06_github_state": {
+                    "body": {
+                        "issues": [
+                            {
+                                "number": 1,
+                                "title": "API contract drift resolution",
+                                "state": "open",
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+    }
+    remote_link = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/remotelink",
+        arguments={
+            "body": {
+                "object": {
+                    "title": "api/openapi.yaml next_cursor nullable string; SDK emits nextPage integer",
+                    "url": "https://github.com/acme/platform-services/issues/1",
+                }
+            }
+        },
+        status_code=201,
+        target_text="API contract drift resolution",
+    )
+    duplicate_transition = legacy._Call(
+        event_index=2,
+        sequence=3,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-3/transitions",
+        arguments={"body": {"transition": {"id": "31"}}},
+        status_code=204,
+        target_text="Evidence review: public API pagination contract / SDK drift",
+        baseline_target_text="Evidence review: public API pagination contract / SDK drift",
+    )
+
+    assertions = legacy._dev06_primary_assertions(  # pyright: ignore[reportPrivateUsage]
+        artifacts,
+        [remote_link, duplicate_transition],
+    )
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+    assert legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
+        duplicate_transition,
+        legacy._RULES["DEV-06"],  # pyright: ignore[reportPrivateUsage]
+    )
+    assert legacy._dev06_related_reconciliation(duplicate_transition)  # pyright: ignore[reportPrivateUsage]
 
 
 def test_unsupported_domain_is_an_evidence_gap() -> None:

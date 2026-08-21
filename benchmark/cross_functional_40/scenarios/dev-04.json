@@ -1,5 +1,5 @@
 {
-  "description": "Taylor Brooks from release management just posted in the #eng-releases Slack channel: a customer-impacting fix merged to main but is missing from the supported 4.8 release branch. Two issues request backports, and only one maps to the shipped customer version.\n\nYou're the release engineer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain one open, unmerged 4.8 backport with its approval trail and clear release status. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Taylor Brooks from release management just posted in the #eng-releases Slack channel: a customer-impacting fix merged to main but is missing from the supported 4.8 release branch. Two issues request backports, and only one maps to the shipped customer version.\n\nYou're the release engineer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain exactly one open, unmerged backport of Fix invoice export crash targeting release/4.8, with the REL-204 approval trail linked from the canonical Jira backport record and its release status clear. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-04 Release branch backport coordination",
   "seed_config": {
     "github": {
@@ -242,7 +242,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-04",
-    "content-sha256:8b15125378e6aea6cd15eb1961f180ec2f577a5c0e897b92ca7eb9a07e38b9ad"
+    "content-sha256:faf42748299fc0ca1ed01b2fc3ae44214582d46ba095f97443ce266a2efa8cd6"
   ],
   "twins": [
     "github",

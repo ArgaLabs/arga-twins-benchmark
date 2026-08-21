@@ -288,8 +288,9 @@ TASKS: list[dict[str, Any]] = [
         "The correct opportunity carries the procurement blocker and next-step owner in both CRM views, with an internal Slack summary and no external outreach sent.",
         "Do not send email, update Alder Credit Union, create a duplicate deal, or change the opportunity amount.",
         candidate_objective=(
-            "show the procurement blocker and next-step owner on the correct opportunity in both CRM views, "
-            "with an internal handoff and no external outreach sent."
+            "show the vendor-security and data-processing-addendum blocker and Lucas Wong as next-step owner on "
+            "the correct Alder Bank Expansion opportunity in both CRM views, with an internal handoff and no "
+            "external outreach sent."
         ),
     ),
     task(
@@ -334,8 +335,9 @@ TASKS: list[dict[str, Any]] = [
         "Only eligible high-intent non-customers enter the complete follow-up cohort, CRM ownership is consistent, and no external outreach is sent.",
         "Do not enroll customers or no-shows, duplicate personal/corporate identities, send messages, or alter consent fields.",
         candidate_objective=(
-            "contain one complete internal follow-up cohort with every eligible high-intent non-customer and no "
-            "current customer or no-show, while external outreach remains unsent."
+            "contain exactly one complete 29-person internal follow-up cohort with every eligible high-intent "
+            "non-customer and no current customer, no-show, or duplicate identity, while external outreach remains "
+            "unsent."
         ),
     ),
     task(
@@ -352,8 +354,9 @@ TASKS: list[dict[str, Any]] = [
         "BluePeak has one approved Strategic owner across HubSpot and Salesforce, TERR-62 documents the decision, and Slack records the handoff.",
         "Do not delete activities, reassign unrelated BluePeak Solar, change opportunity stage or amount, or create a new account.",
         candidate_objective=(
-            "show one approved Strategic owner across both CRM records, with the territory request resolved "
-            "and opportunity history unchanged."
+            "assign Amina Yusuf as the approved Strategic owner of the canonical BluePeak Energy company/account "
+            "and its live BluePeak Expansion opportunity in both HubSpot and Salesforce, resolve the canonical "
+            "TERR-62 request, and leave the opportunity stage, amount, and activity history unchanged."
         ),
     ),
     task(
@@ -384,8 +387,9 @@ TASKS: list[dict[str, Any]] = [
         "The correct evaluation is reactivated once, both CRMs agree on ownership and stage, the reactivation work is updated, and one calendar hold matches the agreed time.",
         "Do not modify Orbit Systemics, duplicate the opportunity or meeting, invite external attendees, or alter historical closed-lost notes.",
         candidate_objective=(
-            "have exactly one verified evaluation active under its accountable owner and one internal hold "
-            "at the agreed time."
+            "leave exactly one canonical Evaluation EV-204 active under Iris Novak in both HubSpot and Salesforce, "
+            "update the canonical reactivation work item, and create exactly one attendee-free internal hold for "
+            "10:00 PT today."
         ),
     ),
     # Marketing (8)
@@ -558,7 +562,8 @@ TASKS: list[dict[str, Any]] = [
         "One correctly targeted 4.8 backport artifact is created or reconciled, REL-204 links it, and Slack receives the verified state.",
         "Do not merge the backport, target 4.7, duplicate the PR, or modify the unrelated issue.",
         candidate_objective=(
-            "contain one open, unmerged 4.8 backport with its approval trail and clear release status."
+            "contain exactly one open, unmerged backport of Fix invoice export crash targeting release/4.8, with "
+            "the REL-204 approval trail linked from the canonical Jira backport record and its release status clear."
         ),
     ),
     task(
@@ -586,11 +591,12 @@ TASKS: list[dict[str, Any]] = [
         "Determine the active contract, compare it with implementation evidence, create or update the canonical drift issue, and publish an internal decision without rewriting specifications.",
         ["github", "slack", "jira", "notion"],
         "pagination contract / api/openapi.yaml / Jira ENG-1",
-        "ENG-1 records the exact active-contract drift and implementation evidence, the right repository issue is linked, and Slack states the owner and next action.",
+        "ENG-1 records the exact active-contract drift and implementation evidence, matching GitHub issue or repository evidence is linked, and Slack states the owner and next action.",
         "Do not edit the spec, use the retired partner draft, change SDK code, or close the drift before a fix is merged.",
         candidate_objective=(
-            "contain one open drift record for the active contract, connected to repository evidence, with "
-            "the specifications unchanged."
+            "leave Jira ENG-1 as the sole open Jira drift record for api/openapi.yaml's next_cursor contract, link "
+            "ENG-1 to the matching open GitHub issue or repository evidence, reconcile the duplicate Jira records, "
+            "and leave both specifications and SDK code unchanged."
         ),
     ),
     task(

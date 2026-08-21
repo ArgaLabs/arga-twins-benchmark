@@ -1,5 +1,5 @@
 {
-  "description": "Nora Evans from SDK engineering just posted in the #eng-api Slack channel: the generated SDK no longer matches the documented pagination response. The repository contains two API specs, and one is explicitly marked as a retired partner draft.\n\nYou're the API governance maintainer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain one open drift record for the active contract, connected to repository evidence, with the specifications unchanged. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Nora Evans from SDK engineering just posted in the #eng-api Slack channel: the generated SDK no longer matches the documented pagination response. The repository contains two API specs, and one is explicitly marked as a retired partner draft.\n\nYou're the API governance maintainer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should leave Jira ENG-1 as the sole open Jira drift record for api/openapi.yaml's next_cursor contract, link ENG-1 to the matching open GitHub issue or repository evidence, reconcile the duplicate Jira records, and leave both specifications and SDK code unchanged. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-06 API contract drift resolution",
   "seed_config": {
     "github": {
@@ -257,7 +257,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-06",
-    "content-sha256:88c6ad3c8db3a41e006bdee25660c6979c6fed8242cf30226c7d2d309e2bddb6"
+    "content-sha256:c6f16056514c168fd95bc5563642fe885aec5fb3d360414224e0810805f6107e"
   ],
   "twins": [
     "github",
