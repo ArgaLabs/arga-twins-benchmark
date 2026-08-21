@@ -113,7 +113,7 @@
       "task_id": "MKT-02"
     },
     {
-      "content_sha256": "7e15632a3aa6f9cf8d29497d4516e48d1f4f6a02ba8f462e2e1c605c48f20219",
+      "content_sha256": "cffdd6a38c6a2569dae08c590396bddb827e76c9034e0ede67932ae6044b8c2b",
       "ok": true,
       "status": "ready",
       "task_id": "MKT-03"
@@ -155,7 +155,7 @@
       "task_id": "DEV-01"
     },
     {
-      "content_sha256": "4d6f6f5de9b3d1397653482b48210bf1a989811931e92f8248674ff46504f132",
+      "content_sha256": "fb6fcf6dd31dd3005f18870fea88ea48d1770d0df0924ed7827e2dac6554a4d6",
       "ok": true,
       "status": "ready",
       "task_id": "DEV-02"
@@ -173,7 +173,7 @@
       "task_id": "DEV-04"
     },
     {
-      "content_sha256": "f50af7381b222257da1a6c7ecc2ed3fb2e90fcf9f88b5f0b72ec56230110fce1",
+      "content_sha256": "894a0139bd80c25fe7155e9bc290ef8b329fb93dddaf1e63e9786d6a58c2886b",
       "ok": true,
       "status": "ready",
       "task_id": "DEV-05"
@@ -185,13 +185,13 @@
       "task_id": "DEV-06"
     },
     {
-      "content_sha256": "d0befb4d772dfff9f99cd6efb157ba1987402fe3ac347b9881f6a601830215ae",
+      "content_sha256": "701c874babc8dfd5146497fcee60fef5604be3f2e2c73f1aefdca06729ee7ba8",
       "ok": true,
       "status": "ready",
       "task_id": "DEV-07"
     },
     {
-      "content_sha256": "25ec3a6e0a58e7119707064bc27031bdea253e4efceee7e13c6b75ba82f37a72",
+      "content_sha256": "164fa2ff989f82c60ac34588ed7df526aaa10a34e4d7c6c56d236a71045b38b3",
       "ok": true,
       "status": "ready",
       "task_id": "DEV-08"

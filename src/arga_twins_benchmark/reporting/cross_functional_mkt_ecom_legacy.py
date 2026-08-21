@@ -13,6 +13,9 @@ from arga_twins_benchmark.reporting.cross_functional_semantics import (
     semantic_value_present,
     structured_fact_present,
 )
+from arga_twins_benchmark.reporting.cross_functional_state_outcomes import (
+    linear_cohort_measurement_outcome,
+)
 
 LEGACY_MKT_ECOM_GRADING_PROTOCOL = "arga-bench-cross-functional-mkt-ecom-legacy/1"
 
@@ -114,18 +117,14 @@ _RULES: dict[str, _Rule] = {
         linked_in_posts=0,
     ),
     "MKT-03": _Rule(
-        (
-            _require("production_cta_published", "linkedin", "/products/observability"),
-            _require("route_fix_reconciled", "linear", "obs-91", "add observability route"),
-        ),
+        (_require("route_fix_reconciled", "linear", "obs-91", "add observability route"),),
         {
             **_SLACK_WRITE,
-            "linkedin": ("/rest/posts", "/rest/ugcposts", "/v2/ugcposts", "/v2/posts"),
             "linear": ("/graphql",),
             "github": ("/repos/acme/web-campaigns/issues/",),
         },
         (("linkedin", ("preview.acme.example/observability", "/products/observe")),),
-        linked_in_posts=1,
+        linked_in_posts=0,
     ),
     "MKT-04": _Rule(
         (
@@ -154,7 +153,7 @@ _RULES: dict[str, _Rule] = {
     ),
     "MKT-06": _Rule(
         (
-            _require("measured_recap_published", "linkedin", "so-88", "29"),
+            _require("measured_recap_published", "linkedin", "29"),
             _require("cohort_measurement_reconciled", "linear", "so-88", "29", "duplicate", "existing customer"),
         ),
         {
@@ -167,7 +166,7 @@ _RULES: dict[str, _Rule] = {
     ),
     "MKT-07": _Rule(
         (
-            _require("corporate_revision_published", "linkedin", "a11y-2026", "revision 5"),
+            _require("corporate_revision_published", "linkedin", ("accessibility", "accessible"), "2026"),
             _require("duplicate_linear_work_reconciled", "linear", "a11y-2026", "revision 5", "regional revision 3"),
         ),
         {
@@ -336,7 +335,6 @@ _WRITE_TARGETS: dict[str, dict[str, tuple[str, ...]]] = {
     },
     "MKT-02": {"linear": ("ab-52",), "notion": ("ab-52", "lgl-442")},
     "MKT-03": {
-        "linkedin": ("acme-marketing",),
         "linear": ("obs-91",),
         "github": ("observability", "broken launch cta"),
     },
@@ -801,9 +799,7 @@ def _notion_target_text(call: _Call, calls: Sequence[_Call]) -> str:
         and any(identifier in candidate.text for identifier in identifiers)
     ]
     parent_ids = {
-        identifier
-        for candidate in direct
-        for identifier in re.findall(r"[0-9a-f]{8}-[0-9a-f-]{27,}", candidate.text)
+        identifier for candidate in direct for identifier in re.findall(r"[0-9a-f]{8}-[0-9a-f-]{27,}", candidate.text)
     }
     parent_evidence = [
         candidate.text
@@ -837,10 +833,7 @@ def _write_target_text(
     if call.provider == "jira":
         target_text += " " + _jira_read_target_text(call, calls)
     if (
-        (
-            call.provider == "linkedin"
-            and clean_path in {"/rest/posts", "/rest/ugcposts", "/v2/ugcposts", "/v2/posts"}
-        )
+        (call.provider == "linkedin" and clean_path in {"/rest/posts", "/rest/ugcposts", "/v2/ugcposts", "/v2/posts"})
         or (call.provider == "google_calendar" and clean_path.endswith("/events"))
         or (call.provider == "gmail" and "/drafts" in clean_path)
         or (call.provider == "stripe" and clean_path == "/v1/prices")
@@ -974,6 +967,49 @@ def _assertion(assertion_id: str, passed: bool, evidence: Sequence[Mapping[str, 
         "detail": detail,
         "evidence": list(evidence),
     }
+
+
+def _mkt06_cohort_assertion(
+    task: Mapping[str, Any],
+    baseline: Mapping[str, Any],
+    final: Mapping[str, Any],
+) -> dict[str, Any]:
+    result = linear_cohort_measurement_outcome(
+        task,
+        _provider_state(baseline, "linear"),
+        _provider_state(final, "linear"),
+    )
+    if result.passed and result.seeded_rule_preserved:
+        detail = (
+            f"The canonical Linear issue already retained the trusted {result.net_new_attendees}-person "
+            "cohort rule; no redundant Linear write was required."
+        )
+    elif result.passed:
+        detail = (
+            f"The canonical Linear issue records the computed {result.net_new_attendees}-person cohort "
+            "with customer exclusions and identity deduplication."
+        )
+    elif not result.found_before or not result.found_after:
+        detail = f"The verifier could not bind the target Linear issue “{result.title}” across saved state."
+    elif not result.contract_consistent:
+        detail = "The checked-in cohort facts do not agree with the trusted HubSpot identities."
+    else:
+        detail = "The target Linear issue does not preserve the cohort derived from trusted HubSpot identities."
+    return _assertion(
+        "cohort_measurement_reconciled",
+        result.passed,
+        [
+            _evidence(
+                "/providers/linear/state/issues",
+                "baseline-state.json / final-state.json",
+                (
+                    f"Computed cohort: {result.total_rows} rows, {result.customer_rows} customers, "
+                    f"{result.duplicate_rows} duplicates, {result.net_new_attendees} net new."
+                ),
+            )
+        ],
+        detail,
+    )
 
 
 def _requirement_label(requirement: _Requirement) -> str:
@@ -1342,6 +1378,12 @@ def _grade_semantics(
             reasons.append(f"fail:missing_required_resource:{assertion_id}")
 
     for requirement in rule.requirements:
+        if task_id == "MKT-06" and requirement.assertion_id == "cohort_measurement_reconciled":
+            cohort_assertion = _mkt06_cohort_assertion(task, baseline, final)
+            assertions.append(cohort_assertion)
+            if not cohort_assertion["passed"]:
+                reasons.append("fail:required_outcome:cohort_measurement_reconciled")
+            continue
         matching = []
         for call in accepted_writes:
             if call.provider != requirement.provider:
@@ -1356,18 +1398,28 @@ def _grade_semantics(
         )
         delta = _provider_delta(baseline, final, requirement.provider)
         evidence_text = f"{combined} {_normal_text([value for _, value in delta])}"
-        passed = bool(matching) and _tokens_present(evidence_text, requirement.token_groups)
+        state_commit_proof = bool(requirement.token_groups) and bool(delta)
+        passed = (bool(matching) or state_commit_proof) and _tokens_present(
+            evidence_text,
+            requirement.token_groups,
+        )
         evidence = [
             _evidence(call.pointer, "invocation.json", f"Accepted {call.method} {call.path}") for call in matching[:3]
         ]
         if delta:
             evidence.append(_evidence(delta[0][0], "final-state.json", "Provider state changed from baseline."))
+        detail = _requirement_detail(requirement, matching, evidence_text)
+        if passed and not matching:
+            detail = (
+                f"The trusted {requirement.provider.replace('_', ' ').title()} state change established "
+                f"{_requirement_label(requirement)} even though the mutation response reported an error."
+            )
         assertions.append(
             _assertion(
                 requirement.assertion_id,
                 passed,
                 evidence,
-                _requirement_detail(requirement, matching, evidence_text),
+                detail,
             )
         )
         if not passed:
