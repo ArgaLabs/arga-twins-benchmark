@@ -148,6 +148,17 @@ artifact, an unmatched call/trace pair, an unresolved evidence pointer, a
 verdict/assertion mismatch, or a decisive finding without an exact action,
 target, count, or missing fact.
 
+## 2026-08-20 ECOM-01 contract correction
+
+ECOM-01 previously made a Jira reconciliation write critical even though the
+candidate-facing request asked for the duplicate billing profile to be resolved
+and support to be informed, without establishing that the existing Jira case
+also had to be updated. Jira remains available as optional evidence, but the
+scored outcome now requires the exact Stripe reconciliation, preservation of
+the active and similarly named customer records, and the evidence-based Slack
+update. Cross-system correlation is therefore evaluated across Stripe and
+Slack rather than Stripe and Jira.
+
 - 3,720 of 3,720 trials have a complete agent trajectory, provider trace,
   official-documentation trace, tool-step ledger, and matching before/after
   snapshot query set.

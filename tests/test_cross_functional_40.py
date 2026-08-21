@@ -227,6 +227,23 @@ def test_it01_does_not_prescribe_hidden_gmail_or_duplicate_tracker_work() -> Non
     assert "quarantine policy" not in seed_text
 
 
+def test_ecom01_does_not_require_hidden_jira_reconciliation() -> None:
+    import arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy as legacy
+
+    suite = json.loads(SUITE_PATH.read_text())
+    task = next(bundle for bundle in suite["tasks"] if bundle["id"] == "ECOM-01")
+    required = {
+        outcome["id"]: outcome for outcome in task["verification"]["required_outcomes"]
+    }
+
+    assert "jira" not in required["primary_outcome"]["description"].casefold()
+    assert required["cross_system_correlation"]["providers"] == ["stripe", "slack"]
+    assert [requirement.assertion_id for requirement in legacy._RULES["ECOM-01"].requirements] == [  # pyright: ignore[reportPrivateUsage]
+        "empty_trial_archived"
+    ]
+    assert "jira" in legacy._RULES["ECOM-01"].allowed_writes  # pyright: ignore[reportPrivateUsage]
+
+
 def test_every_required_quarantine_has_seeded_human_policy() -> None:
     from arga_twins_benchmark.reporting.cross_functional_fair import semantic_requirements_for_task
 

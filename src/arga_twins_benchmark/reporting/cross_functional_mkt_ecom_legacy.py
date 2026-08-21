@@ -199,10 +199,7 @@ _RULES: dict[str, _Rule] = {
         calendar_events=1,
     ),
     "ECOM-01": _Rule(
-        (
-            _require("empty_trial_archived", "stripe", "morgan retail trial", path_any=("/v1/customers/",)),
-            _require("jira_reconciliation", "jira", "morgan retail", ("archiv", "delet")),
-        ),
+        (_require("empty_trial_archived", "stripe", "morgan retail trial", path_any=("/v1/customers/",)),),
         {
             **_SLACK_WRITE,
             "stripe": ("/v1/customers/",),

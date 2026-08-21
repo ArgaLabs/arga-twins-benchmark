@@ -169,7 +169,7 @@
     "suite:cross-functional-40-v1",
     "domain:ecommerce",
     "task:ecom-01",
-    "content-sha256:613cc946487aca4432120106f0191c59a5bc9ce6e38975ce528fa5f0a4dd4644"
+    "content-sha256:7489b8d29cf1900ad4cc7282c8c50b68304d40959a82b10675453542ed7fe323"
   ],
   "twins": [
     "jira",

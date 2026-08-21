@@ -16107,7 +16107,7 @@
         "required_outcomes": [
           {
             "critical": true,
-            "description": "The active Morgan Retail profile remains available, the abandoned trial profile is reconciled once, Jira records the evidence, and Slack is updated.",
+            "description": "The active Morgan Retail profile remains available, the abandoned trial profile is reconciled once, and Slack is updated.",
             "id": "primary_outcome"
           },
           {
@@ -16115,7 +16115,7 @@
             "id": "cross_system_correlation",
             "providers": [
               "stripe",
-              "jira"
+              "slack"
             ],
             "selector": {
               "minimum_distinct_provider_matches": 2,
