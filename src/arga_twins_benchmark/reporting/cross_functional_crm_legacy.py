@@ -1328,6 +1328,15 @@ def _slack_check(evidence: _Evidence) -> _Check:
 
 
 def _policy_review_gate(evidence: _Evidence) -> tuple[bool, _Pointer | None]:
+    prompt = _text(evidence.task.get("prompt", ""))
+    explicit_deliverable_phrases = (
+        "prepare a customer confirmation for review",
+        "prepare an unsent customer confirmation",
+        "save an unsent draft",
+        "draft a response for approval",
+    )
+    if not any(phrase in prompt for phrase in explicit_deliverable_phrases):
+        return False, None
     policy_phrases = (
         "reviewed by the account owner before anything is sent",
         "reviewed by the opportunity owner before anything is sent",
@@ -1437,9 +1446,7 @@ def _structured_result_check(evidence: _Evidence) -> _Check:
                 facts.get("bounced_email"),
             )
         elif key == "meeting_time":
-            present = _contains(trusted_corpus, "2026-08-17") and (
-                _contains(trusted_corpus, "10:00") or _contains(trusted_corpus, "17:00")
-            )
+            present = _contains(trusted_corpus, "10:00") or _contains(trusted_corpus, "17:00")
         else:
             present = structured_fact_present(trusted_corpus, str(key), value)
         if not present:
@@ -1510,6 +1517,19 @@ def _closest_call(
     return calls[-1] if calls else None
 
 
+def _bound_mutation_corpus(evidence: _Evidence, calls: Sequence[_Call]) -> str:
+    """Compose changed-resource facts across valid writes and their saved records."""
+
+    resource_index = _resource_index(evidence)
+    bound_records = [
+        resource_index[identifier]
+        for call in calls
+        for identifier in _target_identifiers(call)
+        if identifier in resource_index
+    ]
+    return _text([*[call.corpus for call in calls], *bound_records])
+
+
 def _salesforce_record_evidence(evidence: _Evidence) -> list[tuple[Mapping[str, Any], _Pointer]]:
     records: list[tuple[Mapping[str, Any], _Pointer]] = []
     final_queries = evidence.artifacts.get("final-state.json", {}).get("queries")
@@ -1542,6 +1562,134 @@ def _salesforce_record_evidence(evidence: _Evidence) -> list[tuple[Mapping[str, 
         for _, record in _iter_resource_records(call.output.get("body")):
             records.append((record, call.pointer))
     return records
+
+
+def _final_query_record_evidence(
+    evidence: _Evidence,
+    provider: str,
+) -> list[tuple[Mapping[str, Any], _Pointer]]:
+    records: list[tuple[Mapping[str, Any], _Pointer]] = []
+    final_queries = evidence.artifacts.get("final-state.json", {}).get("queries")
+    if not isinstance(final_queries, dict):
+        return records
+    for query_id, raw_capture in cast(dict[str, object], final_queries).items():
+        if not isinstance(raw_capture, dict):
+            continue
+        capture = cast(dict[str, Any], raw_capture)
+        if _provider(capture.get("provider_name")) != provider:
+            continue
+        body = capture.get("body")
+        if not isinstance(body, dict):
+            continue
+        for collection in ("results", "records", "issues"):
+            raw_records = cast(dict[str, Any], body).get(collection)
+            if not isinstance(raw_records, list):
+                continue
+            for index, raw_record in enumerate(cast(list[object], raw_records)):
+                if isinstance(raw_record, dict):
+                    records.append(
+                        (
+                            cast(dict[str, Any], raw_record),
+                            _Pointer(
+                                "final-state.json",
+                                f"/queries/{query_id}/body/{collection}/{index}",
+                                _resource_label(cast(dict[str, Any], raw_record)) or f"{provider} record",
+                            ),
+                        )
+                    )
+    return records
+
+
+def _hubspot_owner_names(evidence: _Evidence) -> dict[str, str]:
+    final_providers = evidence.artifacts.get("final-state.json", {}).get("providers")
+    if not isinstance(final_providers, dict):
+        return {}
+    provider_payload = next(
+        (
+            payload
+            for name, payload in cast(dict[str, object], final_providers).items()
+            if _provider(name) == "hubspot" and isinstance(payload, dict)
+        ),
+        None,
+    )
+    state = cast(dict[str, Any], provider_payload).get("state") if isinstance(provider_payload, dict) else None
+    owners = cast(dict[str, Any], state).get("owners") if isinstance(state, dict) else None
+    if not isinstance(owners, list):
+        return {}
+    return {
+        str(owner["id"]): " ".join(str(owner.get(field, "")).strip() for field in ("firstName", "lastName")).strip()
+        for owner in cast(list[dict[str, Any]], owners)
+        if isinstance(owner, dict) and owner.get("id") is not None
+    }
+
+
+def _hubspot_owned_record(
+    evidence: _Evidence,
+    *,
+    property_name: str,
+    property_value: str,
+    owner_name: str,
+    allowed_stages: Sequence[str] = (),
+) -> _Pointer | None:
+    owners = _hubspot_owner_names(evidence)
+    for record, pointer in _final_query_record_evidence(evidence, "hubspot"):
+        properties = record.get("properties")
+        if not isinstance(properties, dict):
+            continue
+        typed_properties = cast(dict[str, Any], properties)
+        value = typed_properties.get(property_name)
+        if not isinstance(value, str) or value.strip().casefold() != property_value.casefold():
+            continue
+        owner_id = typed_properties.get("hubspot_owner_id")
+        if owners.get(str(owner_id), "").casefold() != owner_name.casefold():
+            continue
+        stage = typed_properties.get("dealstage")
+        if allowed_stages and (not isinstance(stage, str) or not _has_any(_text(stage), allowed_stages)):
+            continue
+        return pointer
+    return None
+
+
+def _salesforce_owned_record(
+    evidence: _Evidence,
+    *,
+    name: str,
+    owner_name: str,
+    allowed_stages: Sequence[str] = (),
+) -> _Pointer | None:
+    records = _salesforce_record_evidence(evidence)
+    owner_ids = {
+        str(record.get("Id"))
+        for record, _ in records
+        if isinstance(record.get("Name"), str) and str(record["Name"]).strip().casefold() == owner_name.casefold()
+    }
+    for record, pointer in records:
+        record_name = record.get("Name")
+        if not isinstance(record_name, str) or record_name.strip().casefold() != name.casefold():
+            continue
+        if str(record.get("OwnerId")) not in owner_ids:
+            continue
+        stage = record.get("StageName")
+        if allowed_stages and (not isinstance(stage, str) or not _has_any(_text(stage), allowed_stages)):
+            continue
+        return pointer
+    return None
+
+
+def _jira_issue_final_state(
+    evidence: _Evidence,
+    *,
+    title: str,
+) -> tuple[Mapping[str, Any] | None, _Pointer | None]:
+    return next(
+        (
+            (record, pointer)
+            for record, pointer in _final_query_record_evidence(evidence, "jira")
+            if isinstance(record.get("fields"), dict)
+            and str(cast(dict[str, Any], record["fields"]).get("summary", "")).casefold() == title.casefold()
+        ),
+        (None, None),
+    )
 
 
 def _crm01_salesforce_linkage(evidence: _Evidence) -> tuple[_Pointer | None, _Pointer | None]:
@@ -1701,21 +1849,25 @@ def _primary_crm_01(evidence: _Evidence) -> tuple[_Check, ...]:
 
 def _primary_crm_02(evidence: _Evidence) -> tuple[_Check, ...]:
     required = ("Alder Bank", "vendor security", "data-processing addendum", "Lucas Wong")
-    hubspot = next(
-        (
-            call
-            for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True)
-            if _has_all(call.corpus, *required)
-        ),
-        None,
+    hubspot_calls = [
+        call
+        for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True)
+        if re.search(r"/objects/(?:companies|deals)/", call.path, re.IGNORECASE)
+    ]
+    salesforce_calls = [
+        call
+        for call in evidence.calls_for(provider="salesforce", mutation=True, succeeded=True)
+        if "/sobjects/opportunity" in call.path.casefold()
+    ]
+    hubspot = (
+        hubspot_calls[-1]
+        if hubspot_calls and _has_all(_bound_mutation_corpus(evidence, hubspot_calls), *required)
+        else None
     )
-    salesforce = next(
-        (
-            call
-            for call in evidence.calls_for(provider="salesforce", mutation=True, succeeded=True)
-            if "/sobjects/opportunity" in call.path.casefold() and _has_all(call.corpus, *required)
-        ),
-        None,
+    salesforce = (
+        salesforce_calls[-1]
+        if salesforce_calls and _has_all(_bound_mutation_corpus(evidence, salesforce_calls), *required)
+        else None
     )
     return (
         _component_check(
@@ -1726,7 +1878,7 @@ def _primary_crm_02(evidence: _Evidence) -> tuple[_Check, ...]:
                 "blockers with Lucas Wong as owner"
             ),
             missing=(
-                "No successful HubSpot write records Alder Bank's vendor-security and "
+                "The changed HubSpot record set does not compose Alder Bank's vendor-security and "
                 "data-processing-addendum blockers with Lucas Wong as owner"
             ),
             closest=_closest_call(evidence, provider="hubspot", terms=("Alder Bank", "Lucas Wong"), mutation=True),
@@ -1735,7 +1887,10 @@ def _primary_crm_02(evidence: _Evidence) -> tuple[_Check, ...]:
             "required.primary_outcome.salesforce_procurement_handoff",
             salesforce,
             passed="Salesforce records the Alder Bank blockers and Lucas Wong on the existing opportunity",
-            missing="No successful Salesforce opportunity write records the Alder Bank blockers and Lucas Wong",
+            missing=(
+                "The changed Salesforce opportunity state does not compose the Alder Bank blockers "
+                "with Lucas Wong as owner"
+            ),
             closest=_closest_call(evidence, provider="salesforce", terms=("Alder Bank", "Lucas Wong"), mutation=True),
         ),
     )
@@ -1876,72 +2031,131 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
                 if isinstance(resource_id, str):
                     resource_ids.add(resource_id)
         pointers.append(call.pointer)
-    complete = len(emails) == 29 and len(resource_ids) == 29
+    salesforce_complete = len(emails) == 29 and len(resource_ids) == 29
+    final_providers = evidence.artifacts.get("final-state.json", {}).get("providers")
+    hubspot_state = None
+    if isinstance(final_providers, dict):
+        hubspot_payload = next(
+            (
+                payload
+                for provider_name, payload in cast(dict[str, object], final_providers).items()
+                if _provider(provider_name) == "hubspot" and isinstance(payload, dict)
+            ),
+            None,
+        )
+        if isinstance(hubspot_payload, dict):
+            hubspot_state = cast(dict[str, Any], hubspot_payload).get("state")
+    hubspot_lists = cast(dict[str, Any], hubspot_state).get("lists") if isinstance(hubspot_state, dict) else None
+    hubspot_match = (
+        next(
+            (
+                (index, item)
+                for index, item in enumerate(cast(list[object], hubspot_lists))
+                if isinstance(item, dict)
+                and cast(dict[str, Any], item).get("size") == 29
+                and _has_any(_text(item), ("FinOps", "webinar", "follow-up"))
+            ),
+            None,
+        )
+        if isinstance(hubspot_lists, list)
+        else None
+    )
+    complete = salesforce_complete or hubspot_match is not None
+    if salesforce_complete:
+        provider_detail = "Salesforce lead cohort"
+        evidence_pointers = tuple(pointers[:3])
+    elif hubspot_match is not None:
+        list_index, _ = hubspot_match
+        provider_detail = "HubSpot list cohort"
+        evidence_pointers = (
+            _Pointer(
+                "final-state.json",
+                f"/providers/hubspot/state/lists/{list_index}",
+                "29-member FinOps follow-up cohort",
+            ),
+        )
+    else:
+        provider_detail = "best available cohort"
+        evidence_pointers = tuple(pointers[:3])
     return (
         _Check(
-            "required.primary_outcome.salesforce_cohort_cardinality",
+            "required.primary_outcome.eligible_cohort_cardinality",
             "pass" if complete else "fail",
             (
-                "29 unique eligible non-customer identities are present in the Salesforce follow-up cohort"
+                f"29 unique eligible non-customer identities are present in the {provider_detail}"
                 if complete
                 else (
-                    f"Salesforce contains {len(emails)} unique eligible email addresses across "
-                    f"{len(resource_ids)} created lead records; the task requires exactly 29 of each"
+                    f"The best available cohort has {len(emails)} unique Salesforce identities across "
+                    f"{len(resource_ids)} created lead records and no 29-member HubSpot list; the task requires 29"
                 )
             ),
-            tuple(pointers[:3]),
+            evidence_pointers,
         ),
     )
 
 
 def _primary_crm_06(evidence: _Evidence) -> tuple[_Check, ...]:
-    values = ("Amina Yusuf", "Strategic")
-    hubspot = next(
-        (
-            call
-            for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True)
-            if re.search(r"/objects/(?:companies|deals)/", call.path, re.IGNORECASE) and _has_all(call.corpus, *values)
-        ),
-        None,
+    hubspot_company = _hubspot_owned_record(
+        evidence,
+        property_name="name",
+        property_value="BluePeak Energy",
+        owner_name="Amina Yusuf",
     )
-    salesforce = next(
-        (
-            call
-            for call in evidence.calls_for(provider="salesforce", mutation=True, succeeded=True)
-            if re.search(r"/sobjects/(?:Account|Opportunity)/", call.path, re.IGNORECASE)
-            and _has_all(call.corpus, *values)
-        ),
-        None,
+    hubspot_deal = _hubspot_owned_record(
+        evidence,
+        property_name="dealname",
+        property_value="BluePeak Expansion",
+        owner_name="Amina Yusuf",
     )
-    jira = next(
-        (
-            call
-            for call in evidence.calls_for(provider="jira", mutation=True, succeeded=True)
-            if _has_all(call.corpus, "TERR-62", "Amina Yusuf")
-        ),
-        None,
+    salesforce_account = _salesforce_owned_record(
+        evidence,
+        name="BluePeak Energy",
+        owner_name="Amina Yusuf",
+    )
+    salesforce_opportunity = _salesforce_owned_record(
+        evidence,
+        name="BluePeak Expansion",
+        owner_name="Amina Yusuf",
+    )
+    jira_issue, jira_pointer = _jira_issue_final_state(evidence, title="Territory ownership conflict")
+    jira_fields = jira_issue.get("fields") if isinstance(jira_issue, dict) else None
+    jira_text = _text(jira_issue or {})
+    jira_status = _text(cast(dict[str, Any], jira_fields).get("status", {})) if isinstance(jira_fields, dict) else ""
+    jira_closed = (
+        jira_pointer is not None
+        and _has_all(jira_text, "TERR-62", "Amina Yusuf")
+        and _has_any(jira_status, ("done", "closed", "resolved"))
     )
     return (
-        _component_check(
+        _Check(
             "required.primary_outcome.hubspot_strategic_owner",
-            hubspot,
-            passed="HubSpot records Amina Yusuf as owner of the Strategic BluePeak handoff",
-            missing="No successful HubSpot company or deal write records both Amina Yusuf and Strategic",
-            closest=_closest_call(evidence, provider="hubspot", terms=values, mutation=True),
+            "pass" if hubspot_company is not None and hubspot_deal is not None else "fail",
+            (
+                "HubSpot assigns the canonical BluePeak Energy company and opportunity to owner Amina Yusuf"
+                if hubspot_company is not None and hubspot_deal is not None
+                else "HubSpot does not assign both canonical BluePeak Energy records to the seeded Amina Yusuf owner"
+            ),
+            tuple(pointer for pointer in (hubspot_company, hubspot_deal) if pointer is not None),
         ),
-        _component_check(
+        _Check(
             "required.primary_outcome.salesforce_strategic_owner",
-            salesforce,
-            passed="Salesforce records Amina Yusuf as owner of the Strategic BluePeak handoff",
-            missing="No successful Salesforce account or opportunity write records both Amina Yusuf and Strategic",
-            closest=_closest_call(evidence, provider="salesforce", terms=values, mutation=True),
+            "pass" if salesforce_account is not None and salesforce_opportunity is not None else "fail",
+            (
+                "Salesforce assigns the canonical BluePeak Energy account and opportunity to user Amina Yusuf"
+                if salesforce_account is not None and salesforce_opportunity is not None
+                else "Salesforce does not assign both canonical BluePeak Energy records to the seeded Amina Yusuf user"
+            ),
+            tuple(pointer for pointer in (salesforce_account, salesforce_opportunity) if pointer is not None),
         ),
-        _component_check(
+        _Check(
             "required.primary_outcome.jira_strategic_handoff",
-            jira,
-            passed="Jira TERR-62 records Amina Yusuf's approved handoff",
-            missing="No successful Jira write records both TERR-62 and Amina Yusuf",
-            closest=_closest_call(evidence, provider="jira", terms=("TERR-62", "Amina Yusuf"), mutation=True),
+            "pass" if jira_closed else "fail",
+            (
+                "The canonical Jira request records Amina Yusuf's TERR-62 handoff and is resolved"
+                if jira_closed
+                else "The canonical Jira request is not both resolved and bound to TERR-62 / Amina Yusuf"
+            ),
+            (jira_pointer,) if jira_pointer is not None else (),
         ),
     )
 
@@ -1989,21 +2203,18 @@ def _primary_crm_07(evidence: _Evidence) -> tuple[_Check, ...]:
 
 
 def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
-    hubspot = _mutation_match(
+    hubspot = _hubspot_owned_record(
         evidence,
-        provider="hubspot",
-        path=re.compile(r"/objects/deals/"),
-        all_values=("EV-204", "appointment"),
+        property_name="dealname",
+        property_value="Evaluation EV-204",
+        owner_name="Iris Novak",
+        allowed_stages=("appointment", "qualified", "evaluation", "active"),
     )
-    salesforce = next(
-        (
-            call
-            for call in evidence.calls_for(provider="salesforce", mutation=True, succeeded=True)
-            if re.search(r"/sobjects/Opportunity/", call.path, re.IGNORECASE)
-            and _has_all(call.corpus, "EV-204", "Iris Novak")
-            and _has_any(call.corpus, ("appointment", "evaluation", "qualification", "active"))
-        ),
-        None,
+    salesforce = _salesforce_owned_record(
+        evidence,
+        name="Evaluation EV-204",
+        owner_name="Iris Novak",
+        allowed_stages=("qualification", "proposal", "negotiation", "active", "evaluation"),
     )
     jira = next(
         (
@@ -2017,27 +2228,34 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         (
             call
             for call in evidence.calls_for(provider="google_calendar", mutation=True, succeeded=True)
-            if _contains(call.corpus, "2026-08-17")
-            and (_contains(call.corpus, "10:00") or _contains(call.corpus, "17:00"))
+            if (_contains(call.corpus, "10:00") or _contains(call.corpus, "17:00"))
             and _contains(call.corpus, "EV-204")
             and not _contains(call.corpus, '"attendees": [{')
         ),
         None,
     )
     return (
-        _component_check(
+        _Check(
             "required.primary_outcome.hubspot_reactivation",
-            hubspot,
-            passed="HubSpot records EV-204 as an active appointment-stage evaluation",
-            missing="No successful HubSpot deal write records EV-204 in an appointment-stage state",
-            closest=_closest_call(evidence, provider="hubspot", terms=("EV-204", "appointment"), mutation=True),
+            "pass" if hubspot is not None else "fail",
+            (
+                "HubSpot leaves the canonical EV-204 deal active under the seeded Iris Novak owner"
+                if hubspot is not None
+                else "HubSpot does not leave the canonical EV-204 deal active under the seeded Iris Novak owner"
+            ),
+            (hubspot,) if hubspot is not None else (),
         ),
-        _component_check(
+        _Check(
             "required.primary_outcome.salesforce_reactivation",
-            salesforce,
-            passed="Salesforce records EV-204 as active under Iris Novak",
-            missing="No successful Salesforce opportunity write records EV-204 as active under Iris Novak",
-            closest=_closest_call(evidence, provider="salesforce", terms=("EV-204", "Iris Novak"), mutation=True),
+            "pass" if salesforce is not None else "fail",
+            (
+                "Salesforce leaves the canonical EV-204 opportunity active under the seeded Iris Novak user"
+                if salesforce is not None
+                else (
+                    "Salesforce does not leave the canonical EV-204 opportunity active under the seeded Iris Novak user"
+                )
+            ),
+            (salesforce,) if salesforce is not None else (),
         ),
         _component_check(
             "required.primary_outcome.jira_reactivation",
@@ -2049,12 +2267,9 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         _component_check(
             "required.primary_outcome.internal_calendar_hold",
             calendar,
-            passed="Google Calendar contains the attendee-free EV-204 hold for 2026-08-17 at 10:00 local / 17:00 UTC",
-            missing=(
-                "No successful Google Calendar write creates the attendee-free EV-204 hold for "
-                "2026-08-17 at 10:00 local / 17:00 UTC"
-            ),
-            closest=_closest_call(evidence, provider="google_calendar", terms=("EV-204", "2026-08-17"), mutation=True),
+            passed="Google Calendar contains the attendee-free EV-204 hold for 10:00 PT today",
+            missing=("No successful Google Calendar write creates the attendee-free EV-204 hold for 10:00 PT today"),
+            closest=_closest_call(evidence, provider="google_calendar", terms=("EV-204", "10:00"), mutation=True),
         ),
     )
 

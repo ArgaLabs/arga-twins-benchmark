@@ -196,7 +196,7 @@ WORLD_FACTS: dict[str, dict[str, Any]] = {
         "asset": "Orbit Systems / 2026 evaluation restart",
         "current": (
             "Partnerships lead Dana Iqbal asked to restart evaluation EV-204, closed lost in May "
-            "for timing. She selected 2026-08-17 at 10:00 PT from the proposed times. Account "
+            "for timing. She selected 10:00 PT today from the proposed times. Account "
             "owner is Iris Novak."
         ),
         "related": (
@@ -345,7 +345,7 @@ WORLD_FACTS: dict[str, dict[str, Any]] = {
         "current": (
             "api/openapi.yaml defines next_cursor as nullable string. The SDK generator output "
             "expects nextPage as integer, matching neither the current server response nor the "
-            "public contract. Jira API-331 is open without implementation evidence."
+            "public contract. Jira ENG-1 is open without implementation evidence."
         ),
         "related": ("specs/partner-draft.yaml defines nextPage and is marked retired on 2025-11-30."),
     },

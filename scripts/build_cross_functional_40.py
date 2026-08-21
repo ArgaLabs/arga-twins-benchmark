@@ -114,17 +114,21 @@ def task(
     channel: str,
     report: str,
     role: str,
-    _mandate: str,
+    mandate: str,
     twins: list[str],
     target: str,
     success: str,
     forbidden: str,
+    *,
+    candidate_objective: str | None = None,
 ) -> dict[str, Any]:
+    del mandate
+    responsibility = f" The resolved state should {candidate_objective}" if candidate_objective else ""
     prompt = (
         f"{reporter} just posted in the #{channel} Slack channel: {report}\n\n"
         f"You're the {role}. Pick this up and handle it in the systems we operate. "
         "Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome "
-        f"before considering it resolved. {DOMAIN_PROMPT_BOUNDARIES[domain]} "
+        f"before considering it resolved.{responsibility} {DOMAIN_PROMPT_BOUNDARIES[domain]} "
         "Keep the people relying on the result informed."
     )
     return {
@@ -278,11 +282,15 @@ TASKS: list[dict[str, Any]] = [
         "gtm-ops",
         "the Alder Bank expansion has been sitting in negotiation for three weeks even though the champion replied with procurement requirements yesterday. The reply belongs to one of two similarly named Alder accounts.",
         "deal desk coordinator",
-        "Match the email to the correct CRM records, capture the procurement blocker, advance only the authorized opportunity state, and prepare an internal follow-up without sending external mail.",
+        "Match the email to the correct CRM records, capture the procurement blocker and owner across the live CRM records, and prepare an internal follow-up without sending external mail.",
         ["hubspot", "salesforce", "slack", "gmail"],
         "Alder Bank expansion / alderbank.example",
-        "The correct opportunity carries the procurement blocker and next-step owner in both CRM views, with an internal Slack summary and a saved draft only.",
+        "The correct opportunity carries the procurement blocker and next-step owner in both CRM views, with an internal Slack summary and no external outreach sent.",
         "Do not send email, update Alder Credit Union, create a duplicate deal, or change the opportunity amount.",
+        candidate_objective=(
+            "show the procurement blocker and next-step owner on the correct opportunity in both CRM views, "
+            "with an internal handoff and no external outreach sent."
+        ),
     ),
     task(
         "CRM-03",
@@ -292,10 +300,10 @@ TASKS: list[dict[str, Any]] = [
         "gtm-ops",
         "Driftline Logistics submitted a demo form and then emailed extra deployment details. Their domain appears on an older disqualified record, while the new request indicates a different business unit and buying timeline.",
         "inbound qualification specialist",
-        "Join the form-derived CRM evidence with the mailbox details, determine the correct account hierarchy, record the qualified handoff, and draft the next response for approval.",
+        "Join the form-derived CRM evidence with the mailbox details, determine the correct account hierarchy, record the qualified handoff, and leave external outreach unsent.",
         ["hubspot", "salesforce", "slack", "gmail"],
         "Driftline Logistics / Platform business unit",
-        "The platform business unit is qualified against the correct account, a single Salesforce opportunity is prepared, and one unsent Gmail draft plus Slack handoff exists.",
+        "The platform business unit is qualified against the correct account, a single Salesforce opportunity is prepared, Slack records the handoff, and no external outreach is sent.",
         "Do not revive the disqualified legacy unit, send mail, manufacture budget information, or create multiple opportunities.",
     ),
     task(
@@ -320,11 +328,15 @@ TASKS: list[dict[str, Any]] = [
         "gtm-ops",
         "the FinOps webinar produced a list of attendees, no-shows, and existing customers. Sales only wants high-intent non-customers routed, and one attendee used a personal email that is already associated with a corporate contact.",
         "GTM operations specialist",
-        "Reconcile identities across the attendance email and both CRMs, exclude customers and no-shows, create the approved internal follow-up cohort, and prepare drafts without sending them.",
+        "Reconcile identities across the attendance email and both CRMs, exclude customers and no-shows, create the approved internal follow-up cohort, and leave external outreach unsent.",
         ["hubspot", "salesforce", "slack", "gmail"],
         "FinOps webinar / 2026-08-07 attendee cohort",
-        "Only eligible high-intent non-customers enter the follow-up cohort, CRM ownership is consistent, and drafts remain unsent for review.",
+        "Only eligible high-intent non-customers enter the complete follow-up cohort, CRM ownership is consistent, and no external outreach is sent.",
         "Do not enroll customers or no-shows, duplicate personal/corporate identities, send messages, or alter consent fields.",
+        candidate_objective=(
+            "contain one complete internal follow-up cohort with every eligible high-intent non-customer and no "
+            "current customer or no-show, while external outreach remains unsent."
+        ),
     ),
     task(
         "CRM-06",
@@ -339,6 +351,10 @@ TASKS: list[dict[str, Any]] = [
         "BluePeak Energy / territory request TERR-62",
         "BluePeak has one approved Strategic owner across HubSpot and Salesforce, TERR-62 documents the decision, and Slack records the handoff.",
         "Do not delete activities, reassign unrelated BluePeak Solar, change opportunity stage or amount, or create a new account.",
+        candidate_objective=(
+            "show one approved Strategic owner across both CRM records, with the territory request resolved "
+            "and opportunity history unchanged."
+        ),
     ),
     task(
         "CRM-07",
@@ -367,6 +383,10 @@ TASKS: list[dict[str, Any]] = [
         "Orbit Systems / evaluation EV-204",
         "The correct evaluation is reactivated once, both CRMs agree on ownership and stage, the reactivation work is updated, and one calendar hold matches the agreed time.",
         "Do not modify Orbit Systemics, duplicate the opportunity or meeting, invite external attendees, or alter historical closed-lost notes.",
+        candidate_objective=(
+            "have exactly one verified evaluation active under its accountable owner and one internal hold "
+            "at the agreed time."
+        ),
     ),
     # Marketing (8)
     task(
@@ -537,6 +557,9 @@ TASKS: list[dict[str, Any]] = [
         "Fix invoice export crash / release 4.8 / Jira REL-204",
         "One correctly targeted 4.8 backport artifact is created or reconciled, REL-204 links it, and Slack receives the verified state.",
         "Do not merge the backport, target 4.7, duplicate the PR, or modify the unrelated issue.",
+        candidate_objective=(
+            "contain one open, unmerged 4.8 backport with its approval trail and clear release status."
+        ),
     ),
     task(
         "DEV-05",
@@ -562,9 +585,13 @@ TASKS: list[dict[str, Any]] = [
         "API governance maintainer",
         "Determine the active contract, compare it with implementation evidence, create or update the canonical drift issue, and publish an internal decision without rewriting specifications.",
         ["github", "slack", "jira", "notion"],
-        "pagination contract / api/openapi.yaml / Jira API-331",
-        "API-331 records the exact active-contract drift and implementation evidence, the right repository issue is linked, and Slack states the owner and next action.",
+        "pagination contract / api/openapi.yaml / Jira ENG-1",
+        "ENG-1 records the exact active-contract drift and implementation evidence, the right repository issue is linked, and Slack states the owner and next action.",
         "Do not edit the spec, use the retired partner draft, change SDK code, or close the drift before a fix is merged.",
+        candidate_objective=(
+            "contain one open drift record for the active contract, connected to repository evidence, with "
+            "the specifications unchanged."
+        ),
     ),
     task(
         "DEV-07",
@@ -617,10 +644,10 @@ TASKS: list[dict[str, Any]] = [
         "commerce-ops",
         "Northwind Studio asked for renewal notices to move to its accounts-payable address. HubSpot contains a similarly named prospect that has never been a customer.",
         "billing operations specialist",
-        "Resolve the exact customer across billing, CRM, and email, reconcile the verified billing contact, preserve the prior address in the internal record, and keep all external communication as a draft.",
+        "Resolve the exact customer across billing, CRM, and email, reconcile the verified billing contact, preserve the prior address in the internal record, and do not send external communication.",
         ["stripe", "slack", "hubspot", "gmail"],
         "Northwind Studio / billing contact change",
-        "The correct Stripe customer and HubSpot company carry the verified contact, one unsent email draft is prepared, and Slack reports the result.",
+        "The correct Stripe customer and HubSpot company carry the verified contact, Slack reports the result, and no external communication is sent.",
         "Do not send email, alter the prospect, erase the former-address audit note, change products, or create a duplicate customer.",
     ),
     task(
@@ -645,10 +672,10 @@ TASKS: list[dict[str, Any]] = [
         "commerce-ops",
         "Civic Research Institute's billing profile is missing its tax-exempt registration even though a current certificate is in Salesforce. Salesforce also contains an expired certificate for a different regional account.",
         "billing compliance specialist",
-        "Match the Stripe customer to the current Salesforce evidence, add the verified tax identity to only that customer, preserve the certificate trail, and prepare a customer message for review.",
+        "Match the Stripe customer to the current Salesforce evidence, add the verified tax identity to only that customer, preserve the certificate trail, and report the result without sending external outreach.",
         ["stripe", "slack", "salesforce", "gmail"],
         "Civic Research Institute / certificate TX-778",
-        "The correct Stripe customer carries the verified tax identity, Salesforce retains the evidence, a draft response is saved, and Slack is updated.",
+        "The correct Stripe customer carries the verified tax identity, Salesforce retains the evidence, Slack is updated, and no external outreach is sent.",
         "Do not use the expired certificate, send mail, alter Civic Research Europe, change account ownership, or erase tax history.",
     ),
     task(
@@ -1198,9 +1225,7 @@ def required_steps(task_spec: dict[str, Any]) -> list[dict[str, Any]]:
 def outcome_verification(task_spec: dict[str, Any]) -> dict[str, Any]:
     profile = HARDENING_PROFILES[task_spec["id"]]
     non_slack = [provider for provider in task_spec["twins"] if provider != "slack"]
-    correlation_providers = (
-        ["stripe", "slack"] if task_spec["id"] == "ECOM-01" else non_slack
-    )
+    correlation_providers = ["stripe", "slack"] if task_spec["id"] == "ECOM-01" else non_slack
     fact_values = [str(value) for value in profile["facts"].values() if not isinstance(value, int)]
     if task_spec["id"] == "MKT-01":
         fact_values.extend(("Reliability Suite", "Revision 7"))

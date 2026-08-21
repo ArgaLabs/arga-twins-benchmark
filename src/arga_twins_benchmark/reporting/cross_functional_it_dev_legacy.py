@@ -468,6 +468,8 @@ _RULES: dict[str, _TaskRule] = {
         ),
         allowed_actions=(
             ("github", r"/git/refs$"),
+            ("github", r"/contents/"),
+            ("github", r"/pulls$"),
             ("github", r"/issues/1(?:/comments)?$"),
             ("jira", r"/issue/ENG-1/transitions$"),
             # A factual rejection note on the 4.7 candidate preserves the
@@ -512,16 +514,16 @@ _RULES: dict[str, _TaskRule] = {
     "DEV-06": _TaskRule(
         requirements=(
             _req(
-                "api_331_drift_record",
+                "eng_1_drift_record",
                 "jira",
                 r"/issue/[^/]+(?:/comment)?$",
-                all_terms=("API-331", "api/openapi.yaml", "next_cursor", "nextPage"),
+                all_terms=("ENG-1", "api/openapi.yaml", "next_cursor", "nextPage"),
             ),
             _req(
                 "matching_repository_link",
                 "github",
                 r"/issues/\d+(?:/comments)?$",
-                all_terms=("API-331", "api/openapi.yaml", "next_cursor", "nextPage"),
+                all_terms=("ENG-1", "api/openapi.yaml", "next_cursor", "nextPage"),
             ),
         ),
         allowed_actions=(

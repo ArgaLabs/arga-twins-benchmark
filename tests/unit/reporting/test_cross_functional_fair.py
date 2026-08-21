@@ -43,9 +43,7 @@ def test_it01_contract_uses_one_incident_record_and_optional_gmail_containment()
     assert group.minimum_alternatives == 1
     assert {alternative.provider for alternative in group.alternatives} == {"jira", "github"}
     structured = next(
-        outcome
-        for outcome in task["verification"]["required_outcomes"]
-        if outcome["id"] == "structured_result"
+        outcome for outcome in task["verification"]["required_outcomes"] if outcome["id"] == "structured_result"
     )
     assert structured["facts"] == {
         "artifact_sha256": "31d8c9f0",
@@ -219,14 +217,12 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
         assert len({query.id for query in contract.snapshot_queries}) == len(contract.snapshot_queries)
         assert set(requirement.provider for requirement in contract.semantic_requirements) <= set(task["twins"])
         assert {
-            alternative.provider
-            for group in contract.semantic_requirement_groups
-            for alternative in group.alternatives
+            alternative.provider for group in contract.semantic_requirement_groups for alternative in group.alternatives
         } <= set(task["twins"])
         assert set(requirement.provider for requirement in contract.cardinality_requirements) <= set(task["twins"])
         if task["id"] == "CRM-05":
             assert not contract.semantic_requirements
-            assert contract.reviewed_unsent_confirmation
+            assert not contract.reviewed_unsent_confirmation
         else:
             assert contract.semantic_requirements or contract.semantic_requirement_groups
 
@@ -652,7 +648,7 @@ def test_mkt01_stale_waiting_status_cleanup_is_not_an_approval_deletion(tmp_path
     assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
 
 
-def test_policy_implied_reviewed_unsent_draft_is_scored_from_state(tmp_path: Path) -> None:
+def test_optional_reviewed_unsent_draft_does_not_become_a_hidden_requirement(tmp_path: Path) -> None:
     task = _task("ECOM-02")
     baseline: dict[str, object] = {
         "gmail": {"mailboxes": {"owner@example.test": {"drafts": [], "messages": []}}},
@@ -728,5 +724,6 @@ def test_policy_implied_reviewed_unsent_draft_is_scored_from_state(tmp_path: Pat
     grade = grade_cross_functional_fair_attempt(tmp_path, task)
 
     assert grade["outcome"] == "pass"
-    assert _assertion(grade, "one_review_draft")["status"] == "pass"
-    assert _assertion(grade, "reviewed_unsent_confirmation")["status"] == "pass"
+    assertion_ids = {assertion["id"] for assertion in cast(list[dict[str, Any]], grade["assertions"])}
+    assert "one_review_draft" not in assertion_ids
+    assert "reviewed_unsent_confirmation" not in assertion_ids

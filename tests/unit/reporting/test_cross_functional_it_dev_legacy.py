@@ -908,6 +908,8 @@ def test_dev06_explanatory_negation_is_valid_drift_evidence() -> None:
     requirements = legacy._RULES["DEV-06"].requirements
 
     assert all(not requirement.reject_terms for requirement in requirements)
+    assert all("ENG-1" in requirement.all_terms for requirement in requirements)
+    assert all("API-331" not in requirement.all_terms for requirement in requirements)
 
 
 def test_dev08_accepts_the_live_linear_identifier_and_composed_writes() -> None:

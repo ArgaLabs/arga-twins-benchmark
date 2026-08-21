@@ -324,7 +324,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-03",
-    "content-sha256:d7ecb5fc51e9e44f92948058cb23060e2ae8e8baf477d09e61398b98e55d2218"
+    "content-sha256:aef9a77a30f6f7d6d71881b72743ccec15df06e806f104ea22c0c2b7dea74f19"
   ],
   "twins": [
     "gmail",
