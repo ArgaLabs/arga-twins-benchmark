@@ -2703,6 +2703,39 @@ def _salesforce_task_eligible_cohort_evidence(
         for record, _ in cohort_tasks
         if isinstance(record.get("Id"), str) and str(record["Id"]).strip()
     }
+    changed_task_ids: set[str] = set()
+    mutation_pointers: list[_Pointer] = []
+    for call in evidence.calls_for(provider="salesforce", mutation=True, succeeded=True):
+        path = urlsplit(call.path).path
+        body = call.arguments.get("body")
+        output_body = call.output.get("body")
+        if re.fullmatch(r"/services/data/[^/]+/sobjects/Task/?", path, re.IGNORECASE):
+            if isinstance(output_body, dict):
+                identifier = cast(dict[str, Any], output_body).get("id")
+                if isinstance(identifier, str) and identifier.strip():
+                    changed_task_ids.add(identifier)
+                    mutation_pointers.append(call.pointer)
+            continue
+        if not re.fullmatch(r"/services/data/[^/]+/composite/sobjects/?", path, re.IGNORECASE):
+            continue
+        records = cast(dict[str, Any], body).get("records") if isinstance(body, dict) else None
+        if not isinstance(records, list) or not all(
+            isinstance(record, dict)
+            and isinstance(cast(dict[str, Any], record).get("attributes"), dict)
+            and str(cast(dict[str, Any], cast(dict[str, Any], record)["attributes"]).get("type", "")).casefold()
+            == "task"
+            for record in cast(list[object], records)
+        ):
+            continue
+        if isinstance(output_body, list):
+            changed_task_ids.update(
+                str(cast(dict[str, Any], result)["id"])
+                for result in cast(list[object], output_body)
+                if isinstance(result, dict)
+                and cast(dict[str, Any], result).get("success") is True
+                and isinstance(cast(dict[str, Any], result).get("id"), str)
+            )
+            mutation_pointers.append(call.pointer)
     contact_ids = {str(record["WhoId"]) for record, _ in cohort_tasks}
     identities = {contact_emails[contact_id] for contact_id in contact_ids if contact_id in contact_emails}
     expected_identities = _crm05_expected_eligible_identities(evidence)
@@ -2711,6 +2744,7 @@ def _salesforce_task_eligible_cohort_evidence(
         len(expected_identities) == 29
         and len(cohort_tasks) == 29
         and len(task_ids) == 29
+        and task_ids <= changed_task_ids
         and len(contact_ids) == 29
         and identities == expected_identities
     )
@@ -2718,11 +2752,12 @@ def _salesforce_task_eligible_cohort_evidence(
         "the saved Salesforce tasks target exactly the 29 unique eligible contact identities"
         if complete
         else (
-            f"matching tasks={len(cohort_tasks)}, unique task IDs={len(task_ids)}, "
+            f"matching tasks={len(cohort_tasks)}, changed task IDs={len(task_ids & changed_task_ids)}, "
+            f"unique task IDs={len(task_ids)}, "
             f"unique contacts={len(contact_ids)}, eligible identities={len(eligible_identities)}"
         )
     )
-    return complete, tuple(pointer for _, pointer in cohort_tasks[:3]), detail
+    return complete, tuple([*mutation_pointers[:3], *(pointer for _, pointer in cohort_tasks[:3])]), detail
 
 
 def _salesforce_contact_eligible_cohort_evidence(
@@ -2769,20 +2804,85 @@ def _salesforce_contact_eligible_cohort_evidence(
     return complete, tuple(pointer for _, pointer in cohort_contacts[:3]), detail
 
 
-def _crm05_has_explicit_cohort_mutation(evidence: _Evidence) -> bool:
-    for call in evidence.calls_for(mutation=True, succeeded=True):
+def _hubspot_contact_routing_cohort_evidence(
+    evidence: _Evidence,
+) -> tuple[bool, tuple[_Pointer, ...], str]:
+    """Prove that this attempt routed the exact eligible contacts for follow-up.
+
+    A final-state contact population is not sufficient: CRM-05 seeds the canonical
+    contacts before the candidate runs. The evidence must include successful writes
+    that move the exact 29 eligible identities into a sales-follow-up lifecycle stage.
+    """
+
+    routed_contact_ids: set[str] = set()
+    pointers: list[_Pointer] = []
+    for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True):
         path = urlsplit(call.path).path
-        if call.provider == "salesforce" and (
-            re.search(r"/sobjects/(?:Campaign|Lead|Task)(?:/|$)", path, re.IGNORECASE)
-            or re.search(r"/composite/tree/Lead$", path, re.IGNORECASE)
-        ):
-            return True
-        if call.provider == "hubspot" and (
-            re.search(r"/crm/v3/lists(?:/|$)", path, re.IGNORECASE)
-            or re.search(r"/associations/contacts(?:/|$)", path, re.IGNORECASE)
-        ):
-            return True
-    return False
+        body = call.arguments.get("body")
+        if not isinstance(body, dict):
+            continue
+        typed_body = cast(dict[str, Any], body)
+        inputs: list[dict[str, Any]] = []
+        if re.fullmatch(r"/crm/v3/objects/contacts/batch/update/?", path, re.IGNORECASE):
+            raw_inputs = typed_body.get("inputs")
+            if isinstance(raw_inputs, list):
+                inputs = [
+                    cast(dict[str, Any], item)
+                    for item in cast(list[object], raw_inputs)
+                    if isinstance(item, dict)
+                ]
+        else:
+            match = re.fullmatch(r"/crm/v3/objects/contacts/([^/]+)/?", path, re.IGNORECASE)
+            if match is not None:
+                inputs = [{"id": match.group(1), **typed_body}]
+        matched_call = False
+        for item in inputs:
+            properties = item.get("properties")
+            if not isinstance(properties, dict) or not _has_any(
+                _text(cast(dict[str, Any], properties).get("lifecyclestage")),
+                ("salesqualifiedlead", "sales qualified lead"),
+            ):
+                continue
+            identifier = item.get("id")
+            if isinstance(identifier, str | int) and not isinstance(identifier, bool):
+                routed_contact_ids.add(str(identifier))
+                matched_call = True
+        if matched_call:
+            pointers.append(call.pointer)
+
+    record_index = _resource_record_index(evidence)
+    expected_identities = _crm05_expected_eligible_identities(evidence)
+    identities = _crm05_contact_identities(evidence, routed_contact_ids)
+    final_routed_ids = {
+        contact_id
+        for contact_id in routed_contact_ids
+        if any(
+            _has_any(
+                _text(
+                    cast(Mapping[str, Any], record["properties"]).get("lifecyclestage")
+                    if isinstance(record.get("properties"), dict)
+                    else record.get("lifecyclestage")
+                ),
+                ("salesqualifiedlead", "sales qualified lead"),
+            )
+            for record in record_index.get(contact_id, [])
+        )
+    }
+    complete = (
+        len(expected_identities) == 29
+        and len(routed_contact_ids) == 29
+        and final_routed_ids == routed_contact_ids
+        and identities == expected_identities
+    )
+    detail = (
+        "successful HubSpot contact writes and saved readback route exactly the 29 eligible identities"
+        if complete
+        else (
+            f"routed contacts={len(routed_contact_ids)}, final routed contacts={len(final_routed_ids)}, "
+            f"unique eligible identities={len(identities & expected_identities)}"
+        )
+    )
+    return complete, tuple(pointers), detail
 
 
 def _hubspot_company_eligible_cohort_evidence(
@@ -2823,6 +2923,17 @@ def _hubspot_company_eligible_cohort_evidence(
         for identifier in [cast(dict[str, Any], raw_result).get("toObjectId")]
         if isinstance(identifier, str | int) and not isinstance(identifier, bool)
     }
+    changed_member_ids: set[str] = set()
+    mutation_pointers: list[_Pointer] = []
+    association_path = re.compile(
+        r"/crm/v4/objects/compan(?:y|ies)/([^/]+)/associations/contacts/([^/]+)/?",
+        re.IGNORECASE,
+    )
+    for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True):
+        match = association_path.fullmatch(urlsplit(call.path).path)
+        if match is not None and match.group(1) in company_ids:
+            changed_member_ids.add(match.group(2))
+            mutation_pointers.append(call.pointer)
     identities: set[str] = set()
     missing_members: list[str] = []
     for member_id in sorted(member_ids):
@@ -2841,6 +2952,7 @@ def _hubspot_company_eligible_cohort_evidence(
     complete = (
         len(expected_identities) == 29
         and len(member_ids) == 29
+        and changed_member_ids == member_ids
         and identities == expected_identities
         and not missing_members
     )
@@ -2848,11 +2960,12 @@ def _hubspot_company_eligible_cohort_evidence(
         "the saved HubSpot association readback targets exactly the 29 unique eligible contact identities"
         if complete
         else (
-            f"associated contacts={len(member_ids)}, eligible identities={len(identities & expected_identities)}, "
+            f"associated contacts={len(member_ids)}, changed associations={len(changed_member_ids)}, "
+            f"eligible identities={len(identities & expected_identities)}, "
             f"missing identities={len(missing_members)}"
         )
     )
-    return complete, (readback.pointer,), detail
+    return complete, tuple([*mutation_pointers[:3], readback.pointer]), detail
 
 
 def _hubspot_lead_contact_ids(record: Mapping[str, Any]) -> set[str]:
@@ -2948,10 +3061,18 @@ def _hubspot_lead_eligible_cohort_evidence(
         for record in active
         if isinstance(record.get("id"), str | int) and not isinstance(record.get("id"), bool)
     }
+    changed_lead_ids: set[str] = set()
+    mutation_pointers: list[_Pointer] = []
+    for call in evidence.calls_for(provider="hubspot", mutation=True, succeeded=True):
+        if not _crm05_hubspot_lead_mutation_is_authorized(evidence, call):
+            continue
+        changed_lead_ids.update(identifier for identifier, _ in _iter_resource_records(call.output.get("body")))
+        mutation_pointers.append(call.pointer)
     complete = (
         len(expected_identities) == 29
         and len(active) == 29
         and len(lead_ids) == 29
+        and lead_ids <= changed_lead_ids
         and all(len(identifiers) == 1 for identifiers in contact_ids)
         and len(all_contact_ids) == 29
         and identities == expected_identities
@@ -2960,11 +3081,12 @@ def _hubspot_lead_eligible_cohort_evidence(
         "the saved HubSpot lead readback contains 29 unique leads associated one-to-one with eligible contacts"
         if complete
         else (
-            f"active HubSpot leads={len(active)}, unique lead IDs={len(lead_ids)}, "
+            f"active HubSpot leads={len(active)}, changed lead IDs={len(lead_ids & changed_lead_ids)}, "
+            f"unique lead IDs={len(lead_ids)}, "
             f"associated contacts={len(all_contact_ids)}, eligible identities={len(identities & expected_identities)}"
         )
     )
-    return complete, (readback.pointer,), detail
+    return complete, tuple([*mutation_pointers[:3], readback.pointer]), detail
 
 
 def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
@@ -3012,14 +3134,7 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
         and emails == expected_identities
         and len(resource_ids) == 29
     )
-    contact_complete, contact_pointers, contact_detail = _salesforce_contact_eligible_cohort_evidence(evidence)
-    explicit_cohort_mutation = _crm05_has_explicit_cohort_mutation(evidence)
-    if contact_complete and explicit_cohort_mutation:
-        contact_complete = False
-        contact_detail = (
-            "the seeded Salesforce contact cohort is exact, but the candidate also mutated a separate cohort "
-            "resource that must independently reach a complete final state"
-        )
+    contact_complete, contact_pointers, contact_detail = _hubspot_contact_routing_cohort_evidence(evidence)
     task_complete, task_pointers, task_detail = _salesforce_task_eligible_cohort_evidence(evidence)
     company_complete, company_pointers, company_detail = _hubspot_company_eligible_cohort_evidence(evidence)
     hubspot_lead_complete, hubspot_lead_pointers, hubspot_lead_detail = _hubspot_lead_eligible_cohort_evidence(evidence)
@@ -3062,7 +3177,7 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
         provider_detail = "Salesforce lead cohort"
         evidence_pointers = tuple(pointers[:3])
     elif contact_complete:
-        provider_detail = "Salesforce contact cohort"
+        provider_detail = "HubSpot sales-qualified contact cohort"
         evidence_pointers = contact_pointers
     elif task_complete:
         provider_detail = "Salesforce internal-task cohort"

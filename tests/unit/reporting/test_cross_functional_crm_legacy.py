@@ -1713,6 +1713,19 @@ def _crm05_salesforce_task_cohort_evidence(*, ineligible_last_member: bool) -> l
         }
         for index, contact in enumerate(contacts, start=1)
     ]
+    calls = [
+        legacy._Call(
+            event_index=index,
+            provider_index=index,
+            provider="salesforce",
+            method="POST",
+            path="/services/data/v60.0/sobjects/Task",
+            arguments={"body": {key: value for key, value in task_record.items() if key != "Id"}},
+            output={"ok": True, "status_code": 201, "body": {"id": task_record["Id"]}},
+            is_error=False,
+        )
+        for index, task_record in enumerate(tasks, start=1)
+    ]
     return legacy._Evidence(
         task=task,
         artifacts={
@@ -1729,7 +1742,7 @@ def _crm05_salesforce_task_cohort_evidence(*, ineligible_last_member: bool) -> l
                 }
             }
         },
-        calls=[],
+        calls=calls,
         gaps=[],
     )
 
@@ -1812,22 +1825,94 @@ def test_crm05_salesforce_tasks_accept_exact_eligible_internal_cohort() -> None:
     assert "Salesforce internal-task cohort" in check.message
 
 
-def test_crm05_salesforce_contacts_accept_exact_preexisting_internal_cohort() -> None:
+def test_crm05_salesforce_tasks_reject_an_unchanged_final_state() -> None:
+    evidence = _crm05_salesforce_task_cohort_evidence(ineligible_last_member=False)
+    evidence.calls.clear()
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "changed task IDs=0" in check.message
+
+
+def test_crm05_salesforce_contacts_do_not_accept_an_unchanged_seeded_cohort() -> None:
     evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=False)
 
     check = legacy._primary_crm_05(evidence)[0]
 
+    assert check.status == "fail"
+    assert "routed contacts=0" in check.message
+
+
+def _crm05_hubspot_contact_routing_evidence(*, ineligible_last_member: bool) -> legacy._Evidence:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-05")
+    expected_emails = [
+        cast(dict[str, Any], contact["properties"])["email"]
+        for contact in cast(list[dict[str, Any]], task["seed_config"]["hubspot"]["contacts"])
+        if cast(dict[str, Any], contact["properties"]).get("event_intent") == "high"
+        and cast(dict[str, Any], contact["properties"]).get("event_status") == "attended"
+        and cast(dict[str, Any], contact["properties"]).get("lifecyclestage") != "customer"
+    ]
+    assert len(expected_emails) == 29
+    records = [
+        {
+            "id": str(index),
+            "properties": {
+                "email": (
+                    "customer01@customer01.example"
+                    if ineligible_last_member and index == 29
+                    else expected_emails[index - 1]
+                ),
+                "lifecyclestage": "salesqualifiedlead",
+            },
+        }
+        for index in range(1, 30)
+    ]
+    call = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="hubspot",
+        method="POST",
+        path="/crm/v3/objects/contacts/batch/update",
+        arguments={
+            "body": {
+                "inputs": [
+                    {"id": record["id"], "properties": {"lifecyclestage": "salesqualifiedlead"}}
+                    for record in records
+                ]
+            }
+        },
+        output={"ok": True, "status_code": 200, "body": {"results": records}},
+        is_error=False,
+    )
+    return legacy._Evidence(task=task, artifacts={}, calls=[call], gaps=[])
+
+
+def test_crm05_hubspot_contacts_accept_exact_changed_sales_follow_up_cohort() -> None:
+    evidence = _crm05_hubspot_contact_routing_evidence(ineligible_last_member=False)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
     assert check.status == "pass"
-    assert "Salesforce contact cohort" in check.message
+    assert "HubSpot sales-qualified contact cohort" in check.message
 
 
-def test_crm05_salesforce_contacts_reject_customer_substitution() -> None:
-    evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=True)
+def test_crm05_hubspot_contacts_reject_changed_cohort_with_customer_substitution() -> None:
+    evidence = _crm05_hubspot_contact_routing_evidence(ineligible_last_member=True)
 
     check = legacy._primary_crm_05(evidence)[0]
 
     assert check.status == "fail"
     assert "unique eligible identities=28" in check.message
+
+
+def test_crm05_salesforce_contacts_with_customer_substitution_still_do_not_prove_routing() -> None:
+    evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=True)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "routed contacts=0" in check.message
 
 
 def test_crm05_salesforce_contacts_do_not_rescue_an_incomplete_new_campaign() -> None:
@@ -1848,7 +1933,7 @@ def test_crm05_salesforce_contacts_do_not_rescue_an_incomplete_new_campaign() ->
     check = legacy._primary_crm_05(evidence)[0]
 
     assert check.status == "fail"
-    assert "separate cohort resource" in check.message
+    assert "routed contacts=0" in check.message
 
 
 def test_crm05_salesforce_tasks_reject_customer_substitution() -> None:
@@ -1909,9 +1994,22 @@ def _crm05_hubspot_company_cohort_evidence(*, ineligible_last_member: bool) -> l
             output={"ok": True, "status_code": 200, "body": {"results": contacts}},
             is_error=False,
         ),
+        *[
+            legacy._Call(
+                event_index=index + 2,
+                provider_index=index + 2,
+                provider="hubspot",
+                method="PUT",
+                path=f"/crm/v4/objects/companies/company-1/associations/contacts/{member_id}",
+                arguments={"body": [{"associationCategory": "HUBSPOT_DEFINED", "associationTypeId": 2}]},
+                output={"ok": True, "status_code": 200, "body": {}},
+                is_error=False,
+            )
+            for index, member_id in enumerate(member_ids, start=1)
+        ],
         legacy._Call(
-            event_index=3,
-            provider_index=3,
+            event_index=32,
+            provider_index=32,
             provider="hubspot",
             method="GET",
             path="/crm/v4/objects/companies/company-1/associations/contacts",
@@ -1934,6 +2032,16 @@ def test_crm05_hubspot_webinar_associations_accept_exact_eligible_cohort() -> No
 
     assert check.status == "pass"
     assert "HubSpot webinar-association cohort" in check.message
+
+
+def test_crm05_hubspot_webinar_associations_reject_an_unchanged_readback() -> None:
+    evidence = _crm05_hubspot_company_cohort_evidence(ineligible_last_member=False)
+    evidence.calls[:] = [call for call in evidence.calls if call.method == "GET"]
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "changed associations=0" in check.message
 
 
 def test_crm05_hubspot_webinar_associations_reject_customer_substitution() -> None:
@@ -2031,10 +2139,25 @@ def test_crm05_accepts_a_verified_hubspot_lead_cohort() -> None:
         output={"ok": True, "status_code": 200, "body": lead_results[0]},
         is_error=False,
     )
+    creates = [
+        replace(
+            create,
+            event_index=index,
+            provider_index=index,
+            arguments={
+                "body": {
+                    "properties": lead["properties"],
+                    "associations": lead["associations"],
+                }
+            },
+            output={"ok": True, "status_code": 200, "body": lead},
+        )
+        for index, lead in enumerate(lead_results, start=1)
+    ]
     readback = replace(
         create,
-        event_index=2,
-        provider_index=2,
+        event_index=30,
+        provider_index=30,
         method="GET",
         arguments={},
         output={"ok": True, "status_code": 200, "body": {"results": lead_results, "total": 29}},
@@ -2042,7 +2165,7 @@ def test_crm05_accepts_a_verified_hubspot_lead_cohort() -> None:
     evidence = legacy._Evidence(
         task=task,
         artifacts={"baseline-state.json": {"providers": {"hubspot": {"contacts": contacts}}}},
-        calls=[create, readback],
+        calls=[*creates, readback],
         gaps=[],
     )
 
@@ -2053,8 +2176,14 @@ def test_crm05_accepts_a_verified_hubspot_lead_cohort() -> None:
     assert complete
     assert legacy._crm05_hubspot_lead_mutation_is_authorized(  # pyright: ignore[reportPrivateUsage]
         evidence,
-        create,
+        creates[0],
     )
+    unchanged = replace(evidence, calls=[readback])
+    unchanged_complete, _, unchanged_detail = legacy._hubspot_lead_eligible_cohort_evidence(  # pyright: ignore[reportPrivateUsage]
+        unchanged
+    )
+    assert not unchanged_complete
+    assert "changed lead IDs=0" in unchanged_detail
 
 
 def test_crm05_rejects_a_hubspot_lead_for_a_personal_duplicate() -> None:
