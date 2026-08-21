@@ -674,6 +674,37 @@ def test_deleting_a_resource_created_in_the_same_trial_is_not_a_seeded_record_de
     assert legacy._created_then_deleted_by_candidate(evidence, deleted) is True
 
 
+def test_deleting_a_list_created_in_the_same_trial_is_not_a_seeded_record_deletion() -> None:
+    created = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="hubspot",
+        method="POST",
+        path="/crm/v3/lists",
+        arguments={"body": {"name": "temporary list"}},
+        output={"ok": True, "status_code": 201, "body": {"list": {"listId": "475172674"}}},
+        is_error=False,
+    )
+    deleted = legacy._Call(
+        event_index=2,
+        provider_index=2,
+        provider="hubspot",
+        method="DELETE",
+        path="/crm/v3/lists/475172674",
+        arguments={},
+        output={"ok": True, "status_code": 204},
+        is_error=False,
+    )
+    evidence = legacy._Evidence(
+        task={"id": "CRM-05"},
+        artifacts={"baseline-state.json": {"providers": {"hubspot": {"lists": []}}}},
+        calls=[created, deleted],
+        gaps=[],
+    )
+
+    assert legacy._created_then_deleted_by_candidate(evidence, deleted) is True
+
+
 def test_forbidden_deletion_names_the_actual_business_record() -> None:
     task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-06")
     discovered = legacy._Call(

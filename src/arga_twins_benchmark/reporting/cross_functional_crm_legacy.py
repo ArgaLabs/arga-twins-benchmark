@@ -604,7 +604,7 @@ def _iter_resource_identifiers(value: object) -> list[tuple[str, str]]:
     if isinstance(value, dict):
         typed = cast(dict[str, Any], value)
         corpus = _text(typed)
-        for key in ("id", "Id", "key", "Key", "hs_object_id"):
+        for key in ("id", "Id", "key", "Key", "hs_object_id", "listId"):
             identifier = typed.get(key)
             if isinstance(identifier, str | int) and not isinstance(identifier, bool):
                 identifiers.append((str(identifier), corpus))
@@ -797,8 +797,8 @@ def _created_then_deleted_by_candidate(evidence: _Evidence, call: _Call) -> bool
         body = prior.output.get("body")
         if not isinstance(body, dict):
             continue
-        identifier = cast(dict[str, Any], body).get("id")
-        if isinstance(identifier, str | int) and str(identifier) == target:
+        identifiers = {identifier for identifier, _ in _iter_resource_identifiers(body)}
+        if target in identifiers:
             return True
     return False
 
