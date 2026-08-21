@@ -1793,6 +1793,67 @@ def test_dev06_composes_drift_facts_across_linked_final_records() -> None:
     assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
 
 
+def test_same_trial_jira_issue_link_replacement_is_transient_cleanup() -> None:
+    artifacts = {
+        "invocation.json": {
+            "events": [
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "POST",
+                        "path": "/rest/api/3/issueLink",
+                        "body": {
+                            "inwardIssue": {"key": "ENG-1"},
+                            "outwardIssue": {"key": "ENG-3"},
+                            "type": {"name": "Duplicate"},
+                        },
+                    },
+                    "output": {"ok": True, "status_code": 201, "body": None},
+                },
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "GET",
+                        "path": "/rest/api/3/issue/ENG-3",
+                    },
+                    "output": {
+                        "ok": True,
+                        "status_code": 200,
+                        "body": {
+                            "key": "ENG-3",
+                            "fields": {
+                                "issuelinks": [
+                                    {
+                                        "id": "10011",
+                                        "inwardIssue": {"key": "ENG-1"},
+                                        "type": {"name": "Duplicate"},
+                                    }
+                                ]
+                            },
+                        },
+                    },
+                },
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "DELETE",
+                        "path": "/rest/api/3/issueLink/10011",
+                    },
+                    "output": {"ok": True, "status_code": 204, "body": None},
+                },
+            ]
+        }
+    }
+
+    assert legacy._same_trial_transient_cleanup_events(artifacts) == {2}  # pyright: ignore[reportPrivateUsage]
+
+
 def test_unsupported_domain_is_an_evidence_gap() -> None:
     result = grade_it_dev_legacy_task(task={"id": "CRM-01"}, task_dir=Path("unused"))
 

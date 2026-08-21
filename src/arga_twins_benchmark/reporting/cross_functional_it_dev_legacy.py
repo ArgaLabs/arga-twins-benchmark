@@ -777,6 +777,7 @@ def _same_trial_transient_cleanup_events(
     if not isinstance(raw_events, list):
         return set()
     created: dict[tuple[str, str], int] = {}
+    created_jira_link_pairs: set[frozenset[str]] = set()
     slack_messages: set[tuple[str, str]] = set()
     cleanups: set[int] = set()
     for event_index, raw_event in enumerate(cast(list[object], raw_events)):
@@ -803,6 +804,40 @@ def _same_trial_transient_cleanup_events(
                 for key in ("id", "number"):
                     identifier = typed_response.get(key)
                     if isinstance(identifier, str | int) and not isinstance(identifier, bool):
+                        created[(provider, str(identifier))] = event_index
+            if provider == "jira" and path.endswith("/issueLink"):
+                request_body = typed_arguments.get("body")
+                if isinstance(request_body, dict):
+                    typed_request = cast(dict[str, Any], request_body)
+                    issue_keys = {
+                        str(cast(dict[str, Any], issue).get("key"))
+                        for field in ("inwardIssue", "outwardIssue")
+                        if isinstance((issue := typed_request.get(field)), dict)
+                        and isinstance(cast(dict[str, Any], issue).get("key"), str)
+                    }
+                    if len(issue_keys) == 2:
+                        created_jira_link_pairs.add(frozenset(issue_keys))
+        if provider == "jira" and method == "GET":
+            issue_match = re.search(r"/issue/(ENG-\d+)$", path)
+            response_body = typed_output.get("body")
+            if issue_match is not None and isinstance(response_body, dict):
+                current_key = issue_match.group(1)
+                for record in _walk_dicts(response_body):
+                    identifier = record.get("id")
+                    linked_keys = {
+                        str(cast(Mapping[str, Any], linked).get("key"))
+                        for field in ("inwardIssue", "outwardIssue")
+                        if isinstance((linked := record.get(field)), Mapping)
+                        and isinstance(cast(Mapping[str, Any], linked).get("key"), str)
+                    }
+                    if (
+                        isinstance(identifier, str | int)
+                        and not isinstance(identifier, bool)
+                        and any(
+                            frozenset((current_key, linked_key)) in created_jira_link_pairs
+                            for linked_key in linked_keys
+                        )
+                    ):
                         created[(provider, str(identifier))] = event_index
         if provider == "slack" and method == "POST" and path.endswith("/chat.postMessage"):
             response_body = typed_output.get("body")
