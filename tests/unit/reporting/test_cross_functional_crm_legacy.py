@@ -1308,6 +1308,35 @@ def test_crm05_composite_tree_accepts_only_eligible_cohort_members() -> None:
     assert not legacy._cohort_call_is_authorized(includes_customer)
 
 
+def test_crm05_allows_salesforce_campaign_cohort_routes() -> None:
+    campaign = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="salesforce",
+        method="POST",
+        path="/services/data/v60.0/sobjects/Campaign",
+        arguments={
+            "body": {
+                "Name": "FinOps Webinar — Internal Follow-up Cohort",
+                "Status": "Planned",
+            }
+        },
+        output={"ok": True, "status_code": 201, "body": {"id": "701000000000001AAA"}},
+        is_error=False,
+    )
+    membership = replace(
+        campaign,
+        event_index=2,
+        provider_index=2,
+        path="/services/data/v60.0/sobjects/Campaign/701000000000001AAA/CampaignMembers",
+        arguments={"body": {"ContactId": "003000000000001AAA", "Status": "Planned"}},
+        output={"ok": True, "status_code": 200, "body": {"success": True}},
+    )
+
+    assert legacy._allowed_write("CRM-05", campaign)
+    assert legacy._allowed_write("CRM-05", membership)
+
+
 def test_crm04_can_correct_the_exact_champion_contact() -> None:
     call = legacy._Call(
         event_index=1,

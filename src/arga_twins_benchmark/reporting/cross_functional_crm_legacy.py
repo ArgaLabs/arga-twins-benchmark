@@ -955,7 +955,12 @@ def _allowed_write(task_id: str, call: _Call) -> bool:
         "CRM-02": "Account|Case|Contact|Opportunity|Task",
         "CRM-03": "Account|Case|Contact|Opportunity|Task",
         "CRM-04": "Account|Case|Opportunity|Task",
-        "CRM-05": "Case|Contact|Lead|Task",
+        # A Salesforce Campaign is a first-class way to persist the internal
+        # follow-up cohort requested by CRM-05.  Membership writes live below
+        # the Campaign resource, so allowing this object also covers those
+        # nested routes; outcome grading still requires an exact 29-person
+        # eligible readback before the cohort can pass.
+        "CRM-05": "Campaign|Case|Contact|Lead|Task",
         "CRM-06": "Account|Case|Contact|Opportunity|Task",
         "CRM-07": "Account|Case|Contact|Task",
         "CRM-08": "Account|Case|Contact|Opportunity|Task",
