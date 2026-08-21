@@ -1185,6 +1185,71 @@ def test_dev04_allows_closing_the_same_fix_pr_when_it_targets_main() -> None:
     )
 
 
+def test_dev04_allows_only_the_canonical_evidence_jira_issue_link() -> None:
+    related = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issueLink",
+        arguments={
+            "body": {
+                "inwardIssue": {"key": "ENG-3"},
+                "outwardIssue": {"key": "ENG-1"},
+                "type": {"name": "Relates"},
+            }
+        },
+        status_code=201,
+        target_text="",
+    )
+    wrong_release = replace(
+        related,
+        arguments={
+            "body": {
+                "inwardIssue": {"key": "ENG-4"},
+                "outwardIssue": {"key": "ENG-1"},
+                "type": {"name": "Relates"},
+            }
+        },
+    )
+
+    assert legacy._dev04_related_jira_link(related)  # pyright: ignore[reportPrivateUsage]
+    assert not legacy._dev04_related_jira_link(wrong_release)  # pyright: ignore[reportPrivateUsage]
+
+
+def test_dev04_allows_only_a_rel204_release_status() -> None:
+    release_status = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="github",
+        method="POST",
+        path="/repos/acme/platform-services/statuses/86d5b27cb164c531ec688b03016172a6b1babfbb",
+        arguments={
+            "body": {
+                "context": "release-status",
+                "description": "Release status clear — REL-204 approval confirmed",
+                "state": "success",
+                "target_url": "https://github.com/acme/platform-services/pull/9",
+            }
+        },
+        status_code=201,
+        target_text="",
+    )
+    unrelated = replace(
+        release_status,
+        arguments={
+            "body": {
+                "context": "ci/build",
+                "description": "Unrelated checks passed",
+                "state": "success",
+            }
+        },
+    )
+
+    assert legacy._dev04_release_status(release_status)  # pyright: ignore[reportPrivateUsage]
+    assert not legacy._dev04_release_status(unrelated)  # pyright: ignore[reportPrivateUsage]
+
+
 def test_dev04_allows_low_level_git_data_backport_construction() -> None:
     for path in (
         "/repos/acme/platform-services/git/blobs",

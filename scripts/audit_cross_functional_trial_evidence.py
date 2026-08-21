@@ -41,8 +41,9 @@ GENERIC_DECISIVE_DETAILS = {
 EXACT_DETAIL_SIGNALS = re.compile(
     r"(?:\bStep\s+\d+\b|/[A-Za-z0-9._~!$&'()*+,;=:@%/-]+|“[^”]+”|"
     r"\b(?:IT|DEV|CRM|MKT|ECOM|ENG|GTM|REL|SEC|MON|DB|OFF|AUTH|API)-\d+\b|"
-    r"\b(?:requires?|expected|observed|missing|omitted|contains?)\b.*\b\d+\b|"
-    r"\b(?:No successful|No accepted|No Salesforce|no relevant)\b|"
+    r"\b(?:requires?|expected|observed|missing|omitted|contains?|retains?)\b.*\b\d+\b|"
+    r"\b(?:No successful|No accepted|No Salesforce|No canonical|No active|No saved|no relevant)\b|"
+    r"\b(?:does not|do not)\b|"
     r"\b(?:does|do) not establish\s*:|\bduplicate business identities\s*:|\bincluded external attendee|"
     r"\b(?:matched|missing or fact-incomplete|facts? checked|matching resource changes)\b|"
     r"\b(?:provider returned|output-token ceiling|No saved Salesforce|No new fact-specific Slack)\b|"

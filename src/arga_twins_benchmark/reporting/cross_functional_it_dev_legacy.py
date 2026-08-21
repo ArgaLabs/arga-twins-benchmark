@@ -1727,6 +1727,43 @@ def _dev04_obsolete_tracking_reconciliation(call: _Call) -> bool:
     )
 
 
+def _dev04_related_jira_link(call: _Call) -> bool:
+    """Allow linking the canonical backport record to its evidence follow-up."""
+
+    if call.provider != "jira" or call.method != "POST" or not call.path.endswith("/issueLink"):
+        return False
+    body = call.arguments.get("body")
+    if not isinstance(body, dict):
+        return False
+    typed_body = cast(dict[str, Any], body)
+    issue_keys = {
+        str(cast(dict[str, Any], issue).get("key"))
+        for field in ("inwardIssue", "outwardIssue")
+        if isinstance((issue := typed_body.get(field)), dict)
+        and isinstance(cast(dict[str, Any], issue).get("key"), str)
+    }
+    return issue_keys == {"ENG-1", "ENG-3"}
+
+
+def _dev04_release_status(call: _Call) -> bool:
+    """Allow the requested release-status marker on the backport commit."""
+
+    if call.provider != "github" or call.method != "POST" or not re.search(r"/statuses/[0-9a-f]+$", call.path):
+        return False
+    body = call.arguments.get("body")
+    if not isinstance(body, dict):
+        return False
+    typed_body = cast(dict[str, Any], body)
+    context = _normalized_text(typed_body.get("context"))
+    detail = _normalized_text(
+        {
+            "description": typed_body.get("description"),
+            "target_url": typed_body.get("target_url"),
+        }
+    )
+    return "release status" in context and _semantic_term_present(detail, "REL-204")
+
+
 def _final_github_records(
     artifacts: Mapping[str, Mapping[str, Any]],
     *,
@@ -2656,6 +2693,8 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
         and not _is_explicitly_allowed(call, rule)
         and not (task_id == "DEV-04" and _dev04_wrong_base_pr_reconciliation(call, artifacts))
         and not (task_id == "DEV-04" and _dev04_obsolete_tracking_reconciliation(call))
+        and not (task_id == "DEV-04" and _dev04_related_jira_link(call))
+        and not (task_id == "DEV-04" and _dev04_release_status(call))
     ]
     assertions.append(
         {
@@ -2710,6 +2749,8 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
         and not (task_id == "DEV-03" and re.search(r"/issues/11/labels$", call.path))
         and not (task_id == "DEV-04" and _dev04_wrong_base_pr_reconciliation(call, artifacts))
         and not (task_id == "DEV-04" and _dev04_obsolete_tracking_reconciliation(call))
+        and not (task_id == "DEV-04" and _dev04_related_jira_link(call))
+        and not (task_id == "DEV-04" and _dev04_release_status(call))
         and not (task_id == "DEV-06" and _dev06_related_reconciliation(call))
         and (call.baseline_target_text or call.target_text)
         and isinstance(protected_refs, list)
