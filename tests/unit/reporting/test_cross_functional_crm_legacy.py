@@ -1699,6 +1699,47 @@ def _crm05_salesforce_task_cohort_evidence(*, ineligible_last_member: bool) -> l
     )
 
 
+def _crm05_salesforce_contact_cohort_evidence(*, ineligible_last_member: bool) -> legacy._Evidence:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-05")
+    expected_emails = [
+        cast(dict[str, Any], contact["properties"])["email"]
+        for contact in cast(list[dict[str, Any]], task["seed_config"]["hubspot"]["contacts"])
+        if cast(dict[str, Any], contact["properties"]).get("event_intent") == "high"
+        and cast(dict[str, Any], contact["properties"]).get("event_status") == "attended"
+        and cast(dict[str, Any], contact["properties"]).get("lifecyclestage") != "customer"
+    ]
+    assert len(expected_emails) == 29
+    contacts = [
+        {
+            "Id": f"003{index:012d}AAA",
+            "Email": (
+                "customer01@customer01.example"
+                if ineligible_last_member and index == 29
+                else expected_emails[index - 1]
+            ),
+            "Description": "FinOps webinar contact",
+            "OwnerId": "005000000000001AAA",
+            "IsDeleted": False,
+        }
+        for index in range(1, 30)
+    ]
+    return legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "crm_05_salesforce_contact": {
+                        "provider_name": "salesforce",
+                        "body": {"records": contacts},
+                    }
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+
 def test_crm05_hubspot_cohort_requires_29_evidenced_eligible_members() -> None:
     evidence = _crm05_hubspot_cohort_evidence(ineligible_last_member=False)
 
@@ -1734,6 +1775,45 @@ def test_crm05_salesforce_tasks_accept_exact_eligible_internal_cohort() -> None:
 
     assert check.status == "pass"
     assert "Salesforce internal-task cohort" in check.message
+
+
+def test_crm05_salesforce_contacts_accept_exact_preexisting_internal_cohort() -> None:
+    evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=False)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "pass"
+    assert "Salesforce contact cohort" in check.message
+
+
+def test_crm05_salesforce_contacts_reject_customer_substitution() -> None:
+    evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=True)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "unique eligible identities=28" in check.message
+
+
+def test_crm05_salesforce_contacts_do_not_rescue_an_incomplete_new_campaign() -> None:
+    evidence = _crm05_salesforce_contact_cohort_evidence(ineligible_last_member=False)
+    evidence.calls.append(
+        legacy._Call(
+            event_index=1,
+            provider_index=1,
+            provider="salesforce",
+            method="POST",
+            path="/services/data/v60.0/sobjects/Campaign",
+            arguments={"body": {"Name": "FinOps Webinar — Internal Follow-up Cohort", "Status": "Planned"}},
+            output={"ok": True, "status_code": 201, "body": {"id": "701000000000001AAA"}},
+            is_error=False,
+        )
+    )
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "separate cohort resource" in check.message
 
 
 def test_crm05_salesforce_tasks_reject_customer_substitution() -> None:

@@ -2606,6 +2606,66 @@ def _salesforce_task_eligible_cohort_evidence(
     return complete, tuple(pointer for _, pointer in cohort_tasks[:3]), detail
 
 
+def _salesforce_contact_eligible_cohort_evidence(
+    evidence: _Evidence,
+) -> tuple[bool, tuple[_Pointer, ...], str]:
+    expected_identities = _crm05_expected_eligible_identities(evidence)
+    cohort_contacts = [
+        (record, pointer)
+        for record, pointer in _final_query_record_evidence(evidence, "salesforce")
+        if record.get("IsDeleted") is not True
+        and isinstance(record.get("Email"), str)
+        and _has_all(_text(record.get("Description")), "FinOps", "webinar", "contact")
+    ]
+    contact_ids = {
+        str(record["Id"])
+        for record, _ in cohort_contacts
+        if isinstance(record.get("Id"), str) and str(record["Id"]).strip()
+    }
+    identities = {
+        str(record["Email"]).strip().casefold()
+        for record, _ in cohort_contacts
+        if isinstance(record.get("Email"), str) and str(record["Email"]).strip()
+    }
+    owner_ids = {
+        str(record["OwnerId"])
+        for record, _ in cohort_contacts
+        if isinstance(record.get("OwnerId"), str) and str(record["OwnerId"]).strip()
+    }
+    complete = (
+        len(expected_identities) == 29
+        and len(cohort_contacts) == 29
+        and len(contact_ids) == 29
+        and identities == expected_identities
+        and len(owner_ids) == 1
+    )
+    detail = (
+        "the saved Salesforce contact cohort contains exactly the 29 eligible identities under one owner"
+        if complete
+        else (
+            f"tagged contacts={len(cohort_contacts)}, unique contact IDs={len(contact_ids)}, "
+            f"unique eligible identities={len(identities & expected_identities)}, owners={len(owner_ids)}"
+        )
+    )
+    return complete, tuple(pointer for _, pointer in cohort_contacts[:3]), detail
+
+
+def _crm05_has_explicit_cohort_mutation(evidence: _Evidence) -> bool:
+    for call in evidence.calls_for(mutation=True, succeeded=True):
+        path = urlsplit(call.path).path
+        if call.provider == "salesforce" and (
+            re.search(r"/sobjects/(?:Campaign|Lead|Task)(?:/|$)", path, re.IGNORECASE)
+            or re.search(r"/composite/tree/Lead$", path, re.IGNORECASE)
+        ):
+            return True
+        if call.provider == "hubspot" and (
+            re.search(r"/crm/v3/lists(?:/|$)", path, re.IGNORECASE)
+            or re.search(r"/associations/contacts(?:/|$)", path, re.IGNORECASE)
+        ):
+            return True
+    return False
+
+
 def _hubspot_company_eligible_cohort_evidence(
     evidence: _Evidence,
 ) -> tuple[bool, tuple[_Pointer, ...], str]:
@@ -2721,6 +2781,14 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
         and emails == expected_identities
         and len(resource_ids) == 29
     )
+    contact_complete, contact_pointers, contact_detail = _salesforce_contact_eligible_cohort_evidence(evidence)
+    explicit_cohort_mutation = _crm05_has_explicit_cohort_mutation(evidence)
+    if contact_complete and explicit_cohort_mutation:
+        contact_complete = False
+        contact_detail = (
+            "the seeded Salesforce contact cohort is exact, but the candidate also mutated a separate cohort "
+            "resource that must independently reach a complete final state"
+        )
     task_complete, task_pointers, task_detail = _salesforce_task_eligible_cohort_evidence(evidence)
     company_complete, company_pointers, company_detail = _hubspot_company_eligible_cohort_evidence(evidence)
     hubspot_match = next(
@@ -2750,10 +2818,13 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
             ),
             *membership_pointers,
         )
-    complete = salesforce_complete or task_complete or company_complete or hubspot_complete
+    complete = salesforce_complete or contact_complete or task_complete or company_complete or hubspot_complete
     if salesforce_complete:
         provider_detail = "Salesforce lead cohort"
         evidence_pointers = tuple(pointers[:3])
+    elif contact_complete:
+        provider_detail = "Salesforce contact cohort"
+        evidence_pointers = contact_pointers
     elif task_complete:
         provider_detail = "Salesforce internal-task cohort"
         evidence_pointers = task_pointers
@@ -2775,7 +2846,8 @@ def _primary_crm_05(evidence: _Evidence) -> tuple[_Check, ...]:
                 if complete
                 else (
                     f"The best available cohort has {len(emails)} unique Salesforce identities across "
-                    f"{len(resource_ids)} created lead records; {task_detail}; {company_detail}; {hubspot_detail}; "
+                    f"{len(resource_ids)} created lead records; {contact_detail}; {task_detail}; "
+                    f"{company_detail}; {hubspot_detail}; "
                     "the task requires 29"
                 )
             ),
