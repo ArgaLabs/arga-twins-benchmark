@@ -1207,6 +1207,21 @@ def test_dev04_allows_low_level_git_data_backport_construction() -> None:
     )
 
 
+def test_protected_identifiers_do_not_match_separate_word_fragments() -> None:
+    unrelated = legacy._normalized_text(  # pyright: ignore[reportPrivateUsage]
+        "Release branch backport coordination; issue URL ends in /209"
+    )
+
+    assert not legacy._protected_reference_present(  # pyright: ignore[reportPrivateUsage]
+        unrelated,
+        "REL-209",
+    )
+    assert legacy._protected_reference_present(  # pyright: ignore[reportPrivateUsage]
+        legacy._normalized_text("Excluded request: REL-209"),  # pyright: ignore[reportPrivateUsage]
+        "REL-209",
+    )
+
+
 def test_provider_snapshot_evidence_includes_task_specific_query_results() -> None:
     snapshot = {
         "providers": {"jira_tracker": {"state": {"counts": {"issues": 4}}}},

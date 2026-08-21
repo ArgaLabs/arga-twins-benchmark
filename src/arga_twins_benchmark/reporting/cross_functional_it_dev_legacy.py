@@ -722,6 +722,18 @@ def _term_present(text: str, term: str) -> bool:
     return bool(words) and all(word in text for word in words)
 
 
+def _protected_reference_present(text: str, reference: object) -> bool:
+    """Match protected names/identifiers as one normalized phrase.
+
+    Protected references must not inherit the loose word-fragment fallback in
+    ``_term_present``. For example, ``REL-209`` must not match an unrelated
+    record merely because it contains "release" and a separate numeric 209.
+    """
+
+    normalized = _normalized_text(str(reference))
+    return bool(normalized) and normalized in text
+
+
 def _semantic_term_present(text: str, term: str) -> bool:
     if _term_present(text, term):
         return True
@@ -2651,7 +2663,8 @@ def grade_it_dev_legacy_task(*, task: Mapping[str, Any], task_dir: Path) -> dict
         and (call.baseline_target_text or call.target_text)
         and isinstance(protected_refs, list)
         and any(
-            _term_present(call.baseline_target_text or call.target_text, str(reference)) for reference in protected_refs
+            _protected_reference_present(call.baseline_target_text or call.target_text, reference)
+            for reference in protected_refs
         )
         and sum(_term_present(call.baseline_target_text or call.target_text, value) for value in primary_values)
         < min(2, len(primary_values))
