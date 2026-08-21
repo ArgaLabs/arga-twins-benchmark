@@ -72,7 +72,8 @@ _PROVIDER_ALIASES = {
     "team_chat": "slack",
 }
 _VALUE_ALIASES: dict[str, tuple[str, ...]] = {
-    "data-processing addendum": ("data processing addendum", "dpa"),
+    "data-processing addendum": ("data processing addendum", "data-processing-addendum", "dpa"),
+    "vendor security": ("vendor-security",),
 }
 _SECONDARY_TARGET_TERMS: dict[str, tuple[tuple[str, ...], ...]] = {
     "CRM-02": (("renee.cho@alderbank.example",),),

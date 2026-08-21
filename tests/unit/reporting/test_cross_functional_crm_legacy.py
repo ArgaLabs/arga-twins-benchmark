@@ -114,6 +114,11 @@ def test_candidate_output_cannot_rescue_missing_crm_business_state(
 
 def test_semantic_matching_accepts_dpa_abbreviation() -> None:
     assert legacy._contains("vendor security and dpa review", "data-processing addendum")
+    assert legacy._contains("vendor security and data-processing-addendum", "data-processing addendum")
+
+
+def test_semantic_matching_accepts_hyphenated_vendor_security() -> None:
+    assert legacy._contains("vendor-security review", "vendor security")
 
 
 def test_owner_grading_resolves_seeded_ids_instead_of_accepting_names_in_descriptions() -> None:
