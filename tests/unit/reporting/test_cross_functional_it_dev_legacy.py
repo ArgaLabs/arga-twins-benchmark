@@ -1726,6 +1726,73 @@ def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -
     assert legacy._dev06_related_reconciliation(duplicate_transition)  # pyright: ignore[reportPrivateUsage]
 
 
+def test_dev06_composes_drift_facts_across_linked_final_records() -> None:
+    jira_issues = [
+        {
+            "key": "ENG-1",
+            "fields": {
+                "summary": "API contract drift resolution",
+                "description": "The SDK generator expects nextPage as an integer.",
+                "status": {"name": "In Progress", "statusCategory": {"key": "indeterminate"}},
+                "resolution": None,
+            },
+        },
+        *[
+            {
+                "key": key,
+                "fields": {
+                    "status": {"name": "Done", "statusCategory": {"key": "done"}},
+                    "resolution": {"name": "Done"},
+                },
+            }
+            for key in ("ENG-3", "ENG-4")
+        ],
+    ]
+    artifacts = {
+        "final-state.json": {
+            "queries": {
+                "dev_06_jira_issues": {"body": {"issues": jira_issues}},
+                "dev_06_github_state": {
+                    "body": {
+                        "issues": [
+                            {
+                                "number": 1,
+                                "title": "API contract drift resolution",
+                                "body": "api/openapi.yaml defines next_cursor as a nullable string.",
+                                "state": "open",
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+    }
+    remote_link = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/remotelink",
+        arguments={
+            "body": {
+                "object": {
+                    "title": "Matching GitHub issue",
+                    "url": "https://github.com/acme/platform-services/issues/1",
+                }
+            }
+        },
+        status_code=201,
+        target_text="API contract drift resolution",
+    )
+
+    assertions = legacy._dev06_primary_assertions(  # pyright: ignore[reportPrivateUsage]
+        artifacts,
+        [remote_link],
+    )
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+
+
 def test_unsupported_domain_is_an_evidence_gap() -> None:
     result = grade_it_dev_legacy_task(task={"id": "CRM-01"}, task_dir=Path("unused"))
 

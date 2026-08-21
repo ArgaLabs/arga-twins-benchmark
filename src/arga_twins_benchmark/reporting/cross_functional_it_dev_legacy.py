@@ -1743,6 +1743,8 @@ def _dev06_primary_assertions(
     successful_writes: Sequence[_Call],
 ) -> list[dict[str, Any]]:
     jira_issues = _final_jira_issues(artifacts)
+    github_issues = _final_github_records(artifacts, collection="issues")
+    github_issue = github_issues.get(1)
     eng1_open = _jira_issue_is_open(jira_issues.get("ENG-1"))
     duplicates_closed = all(not _jira_issue_is_open(jira_issues.get(key)) for key in ("ENG-3", "ENG-4"))
     drift_writes = [
@@ -1750,7 +1752,9 @@ def _dev06_primary_assertions(
         for call in successful_writes
         if call.provider == "jira" and re.search(r"/issue/ENG-1(?:/comment|/remotelink)?$", call.path)
     ]
-    drift_text = _normalized_text([call.text for call in drift_writes])
+    drift_text = _normalized_text(
+        [jira_issues.get("ENG-1", {}), github_issue or {}, *[call.text for call in drift_writes]]
+    )
     drift_facts = all(
         _semantic_term_present(drift_text, fact)
         for fact in ("api/openapi.yaml", "next_cursor", "nextPage")
@@ -1770,8 +1774,6 @@ def _dev06_primary_assertions(
         ),
     }
 
-    github_issues = _final_github_records(artifacts, collection="issues")
-    github_issue = github_issues.get(1)
     github_issue_open = github_issue is not None and str(github_issue.get("state", "open")).casefold() == "open"
     github_state_text = _normalized_text(
         _provider_snapshot_evidence(artifacts.get("final-state.json", {}), "github")
