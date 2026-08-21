@@ -173,7 +173,36 @@ def test_crm01_outcome_does_not_require_an_unstated_hubspot_deal_merge_or_associ
                         ]
                     }
                 }
-            }
+            },
+            "final-state.json": {
+                "queries": {
+                    "crm_01_salesforce_account": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "account-primary",
+                                    "Name": "Northstar Robotics",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                    "crm_01_salesforce_opportunity": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "opportunity-primary",
+                                    "Name": "NSR Expansion",
+                                    "StageName": "Qualification",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                }
+            },
         },
         calls=calls,
         gaps=[],
@@ -186,6 +215,101 @@ def test_crm01_outcome_does_not_require_an_unstated_hubspot_deal_merge_or_associ
         "required.primary_outcome.salesforce_opportunity_linkage": "pass",
         "required.primary_outcome.slack_named_owner": "pass",
     }
+
+
+def test_crm01_salesforce_linkage_uses_open_final_state_not_named_owner_literal() -> None:
+    evidence = legacy._Evidence(
+        task={"id": "CRM-01"},
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "crm_01_salesforce_account": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "account-primary",
+                                    "Name": "Northstar Robotics",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                    "crm_01_salesforce_opportunity": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "opportunity-primary",
+                                    "Name": "NSR Expansion",
+                                    "StageName": "Qualification",
+                                    "IsDeleted": False,
+                                },
+                                {
+                                    "Id": "opportunity-duplicate",
+                                    "Name": "NSR Expansion Operations Review",
+                                    "StageName": "Closed Lost",
+                                    "IsDeleted": False,
+                                },
+                            ]
+                        },
+                    },
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    account, opportunity = legacy._crm01_salesforce_linkage(evidence)
+
+    assert account is not None
+    assert opportunity is not None
+    assert opportunity.pointer.endswith("/records/0")
+
+
+def test_crm01_salesforce_linkage_rejects_a_closed_canonical_opportunity() -> None:
+    evidence = legacy._Evidence(
+        task={"id": "CRM-01"},
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "crm_01_salesforce_account": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "account-primary",
+                                    "Name": "Northstar Robotics",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                    "crm_01_salesforce_opportunity": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "opportunity-primary",
+                                    "Name": "NSR Expansion",
+                                    "StageName": "Closed Lost",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    account, opportunity = legacy._crm01_salesforce_linkage(evidence)
+
+    assert account is not None
+    assert opportunity is None
 
 
 def test_current_hubspot_object_routes_are_authorized_for_the_correct_crm_objects() -> None:

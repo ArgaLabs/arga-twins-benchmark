@@ -1479,14 +1479,60 @@ def _closest_call(
     return calls[-1] if calls else None
 
 
-def _primary_crm_01(evidence: _Evidence) -> tuple[_Check, ...]:
-    company_merge = _mutation_match(
-        evidence,
-        provider="hubspot",
-        path=re.compile(r"/objects/companies/merge$"),
-        all_values=("Northstar Robotics",),
-    )
-    salesforce_account = next(
+def _salesforce_record_evidence(evidence: _Evidence) -> list[tuple[Mapping[str, Any], _Pointer]]:
+    records: list[tuple[Mapping[str, Any], _Pointer]] = []
+    final_queries = evidence.artifacts.get("final-state.json", {}).get("queries")
+    if isinstance(final_queries, dict):
+        for query_id, raw_capture in cast(dict[str, object], final_queries).items():
+            if not isinstance(raw_capture, dict):
+                continue
+            capture = cast(dict[str, Any], raw_capture)
+            if _provider(capture.get("provider_name")) != "salesforce":
+                continue
+            body = capture.get("body")
+            if not isinstance(body, dict) or not isinstance(cast(dict[str, Any], body).get("records"), list):
+                continue
+            for index, raw_record in enumerate(cast(list[object], cast(dict[str, Any], body)["records"])):
+                if not isinstance(raw_record, dict):
+                    continue
+                record = cast(dict[str, Any], raw_record)
+                label = _resource_label(record) or "Salesforce record"
+                records.append(
+                    (
+                        record,
+                        _Pointer(
+                            "final-state.json",
+                            f"/queries/{query_id}/body/records/{index}",
+                            label,
+                        ),
+                    )
+                )
+    for call in evidence.calls_for(provider="salesforce", succeeded=True):
+        for _, record in _iter_resource_records(call.output.get("body")):
+            records.append((record, call.pointer))
+    return records
+
+
+def _crm01_salesforce_linkage(evidence: _Evidence) -> tuple[_Pointer | None, _Pointer | None]:
+    account: _Pointer | None = None
+    opportunity: _Pointer | None = None
+    records = _salesforce_record_evidence(evidence)
+    final_snapshot_available = any(pointer.artifact == "final-state.json" for _, pointer in records)
+    for record, pointer in records:
+        name = record.get("Name")
+        if not isinstance(name, str) or record.get("IsDeleted") is True:
+            continue
+        normalized_name = name.strip().casefold()
+        if normalized_name == "northstar robotics":
+            account = account or pointer
+        if normalized_name != "nsr expansion":
+            continue
+        stage = record.get("StageName")
+        if isinstance(stage, str) and stage.strip() and "closed" not in stage.casefold():
+            opportunity = opportunity or pointer
+    if final_snapshot_available:
+        return account, opportunity
+    account_call = next(
         (
             call
             for call in evidence.calls_for(provider="salesforce", succeeded=True)
@@ -1494,16 +1540,29 @@ def _primary_crm_01(evidence: _Evidence) -> tuple[_Check, ...]:
         ),
         None,
     )
-    opportunity_link = next(
+    opportunity_call = next(
         (
             call
             for call in evidence.calls
             if call.succeeded
             and call.provider in {"salesforce", "jira", "slack"}
-            and _has_all(call.corpus, "NSR Expansion", "Priyanka Rao")
+            and _contains(call.corpus, "NSR Expansion")
         ),
         None,
     )
+    account = account or (account_call.pointer if account_call is not None else None)
+    opportunity = opportunity or (opportunity_call.pointer if opportunity_call is not None else None)
+    return account, opportunity
+
+
+def _primary_crm_01(evidence: _Evidence) -> tuple[_Check, ...]:
+    company_merge = _mutation_match(
+        evidence,
+        provider="hubspot",
+        path=re.compile(r"/objects/companies/merge$"),
+        all_values=("Northstar Robotics",),
+    )
+    salesforce_account, open_opportunity = _crm01_salesforce_linkage(evidence)
     owner_update = next(
         (
             call
@@ -1522,18 +1581,18 @@ def _primary_crm_01(evidence: _Evidence) -> tuple[_Check, ...]:
         ),
         _Check(
             "required.primary_outcome.salesforce_opportunity_linkage",
-            "pass" if salesforce_account is not None and opportunity_link is not None else "fail",
+            "pass" if salesforce_account is not None and open_opportunity is not None else "fail",
             (
-                "The Salesforce account and authorized operating record tie Northstar Robotics "
-                "to the existing NSR Expansion opportunity"
-                if salesforce_account is not None and opportunity_link is not None
+                "The final Salesforce state retains the canonical Northstar Robotics account "
+                "and the open NSR Expansion opportunity"
+                if salesforce_account is not None and open_opportunity is not None
                 else (
-                    "No Salesforce account response identifies Northstar Robotics"
+                    "No canonical Salesforce account named Northstar Robotics remains"
                     if salesforce_account is None
-                    else "No Salesforce, Jira, or Slack evidence ties NSR Expansion to Priyanka Rao"
+                    else "No open canonical Salesforce opportunity named NSR Expansion remains"
                 )
             ),
-            tuple(call.pointer for call in (salesforce_account, opportunity_link) if call is not None),
+            tuple(pointer for pointer in (salesforce_account, open_opportunity) if pointer is not None),
         ),
         _component_check(
             "required.primary_outcome.slack_named_owner",

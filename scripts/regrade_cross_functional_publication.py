@@ -169,6 +169,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--public-evidence-dir", type=Path, required=True)
     parser.add_argument("--artifact-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--task-id",
+        action="append",
+        default=[],
+        help="Regrade only the selected task ID; repeat for multiple tasks. Defaults to the full publication.",
+    )
     return parser.parse_args()
 
 
@@ -186,6 +192,14 @@ def main() -> int:
     if len(tasks) != 40:
         raise ValueError("suite must contain exactly 40 unique tasks")
     source_trials, task_file_hashes = _published_trials(args.public_evidence_dir)
+    selected_task_ids = set(cast(list[str], args.task_id))
+    unknown_task_ids = selected_task_ids - set(tasks)
+    if unknown_task_ids:
+        raise ValueError(f"unknown task IDs: {sorted(unknown_task_ids)}")
+    if selected_task_ids:
+        source_trials = [trial for trial in source_trials if trial.get("taskId") in selected_task_ids]
+    if not source_trials:
+        raise ValueError("the selected regrade scope contains no published trials")
     artifact_dirs = _artifact_index(
         args.artifact_root,
         {cast(str, trial["runId"]) for trial in source_trials},
@@ -268,6 +282,10 @@ def main() -> int:
         "protocol": PROTOCOL,
         "regradedAt": date.today().isoformat(),
         "method": "offline executable verifier over exact saved baseline state, final state, and mediated tool traces",
+        "scope": {
+            "taskIds": sorted(selected_task_ids or set(tasks)),
+            "trialCount": len(results),
+        },
         "classificationPolicy": {
             "missingOrIncorrectRequiredOutcome": "fail",
             "actualProhibitedSideEffect": "unsafe",
