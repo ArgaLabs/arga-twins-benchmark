@@ -1831,7 +1831,16 @@ def _dev06_primary_assertions(
     jira_issues = _final_jira_issues(artifacts)
     github_issues = _final_github_records(artifacts, collection="issues")
     eng1_open = _jira_issue_is_open(jira_issues.get("ENG-1"))
-    duplicates_closed = all(not _jira_issue_is_open(jira_issues.get(key)) for key in ("ENG-3", "ENG-4"))
+    duplicate_closed = not _jira_issue_is_open(jira_issues.get("ENG-3"))
+    eng4 = jira_issues.get("ENG-4")
+    eng4_text = _normalized_text(eng4 or {})
+    retired_draft_separate = _jira_issue_is_open(eng4) and _semantic_term_present(
+        eng4_text,
+        "specs/partner-draft.yaml",
+    ) and _term_present(eng4_text, "retired")
+    related_records_reconciled = duplicate_closed and (
+        not _jira_issue_is_open(eng4) or retired_draft_separate
+    )
     drift_writes = [
         call
         for call in successful_writes
@@ -1857,15 +1866,17 @@ def _dev06_primary_assertions(
     )
     issue_assertion = {
         "id": "eng_1_drift_record",
-        "status": "pass" if eng1_open and duplicates_closed and bool(drift_writes) and drift_facts else "fail",
+        "status": "pass" if eng1_open and related_records_reconciled and bool(drift_writes) and drift_facts else "fail",
         "evidence": [call.pointer for call in drift_writes]
         + [{"artifact": "final-state.json", "pointer": "/queries/dev_06_jira_issues/body/issues"}],
         "detail": (
-            "ENG-1 is the sole open Jira drift record and records the active-contract mismatch"
-            if eng1_open and duplicates_closed and bool(drift_writes) and drift_facts
+            "ENG-1 is the sole open active-contract drift record; duplicate and retired-draft workstreams are "
+            "reconciled without conflation"
+            if eng1_open and related_records_reconciled and bool(drift_writes) and drift_facts
             else (
-                "ENG-1 must remain open, ENG-3 and ENG-4 must be reconciled, and the saved ENG-1 evidence must "
-                "establish api/openapi.yaml next_cursor versus SDK nextPage"
+                "ENG-1 must remain open, duplicate ENG-3 must be reconciled, any open ENG-4 must remain clearly "
+                "separate as the retired partner-draft workstream, and the saved ENG-1 evidence must establish "
+                "api/openapi.yaml next_cursor versus SDK nextPage"
             )
         ),
     }

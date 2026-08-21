@@ -1813,9 +1813,10 @@ def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -
         {
             "key": "ENG-4",
             "fields": {
-                "summary": "Parallel workstream: API contract drift",
-                "status": {"name": "Done", "statusCategory": {"key": "done"}},
-                "resolution": {"name": "Done"},
+                "summary": "Parallel workstream: retired partner draft",
+                "description": "specs/partner-draft.yaml was retired on 2025-11-30.",
+                "status": {"name": "In Progress", "statusCategory": {"key": "indeterminate"}},
+                "resolution": None,
             },
         },
     ]
@@ -1878,6 +1879,14 @@ def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -
     )
     assert legacy._dev06_related_reconciliation(duplicate_transition)  # pyright: ignore[reportPrivateUsage]
 
+    unrelated_transition = replace(
+        duplicate_transition,
+        path="/rest/api/3/issue/ENG-4/transitions",
+        target_text="Parallel workstream: retired partner draft",
+        baseline_target_text="specs/partner-draft.yaml was retired on 2025-11-30",
+    )
+    assert legacy._dev06_related_reconciliation(unrelated_transition)  # pyright: ignore[reportPrivateUsage]
+
 
 def test_dev06_composes_drift_facts_across_linked_final_records() -> None:
     jira_issues = [
@@ -1890,16 +1899,21 @@ def test_dev06_composes_drift_facts_across_linked_final_records() -> None:
                 "resolution": None,
             },
         },
-        *[
-            {
-                "key": key,
-                "fields": {
-                    "status": {"name": "Done", "statusCategory": {"key": "done"}},
-                    "resolution": {"name": "Done"},
-                },
-            }
-            for key in ("ENG-3", "ENG-4")
-        ],
+        {
+            "key": "ENG-3",
+            "fields": {
+                "status": {"name": "Done", "statusCategory": {"key": "done"}},
+                "resolution": {"name": "Done"},
+            },
+        },
+        {
+            "key": "ENG-4",
+            "fields": {
+                "description": "specs/partner-draft.yaml was retired on 2025-11-30.",
+                "status": {"name": "In Progress", "statusCategory": {"key": "indeterminate"}},
+                "resolution": None,
+            },
+        },
     ]
     artifacts = {
         "final-state.json": {
