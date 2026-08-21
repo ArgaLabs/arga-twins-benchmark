@@ -1084,6 +1084,35 @@ def test_dev04_rejection_comment_on_wrong_release_candidate_is_allowed_evidence(
     )
 
 
+def test_dev04_allows_reconciling_related_github_evidence_issue_only() -> None:
+    related = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="github",
+        method="PATCH",
+        path="/repos/acme/platform-services/issues/3",
+        arguments={"body": {"state": "closed", "state_reason": "not planned"}},
+        status_code=200,
+        target_text="Evidence follow-up: release 4.8 backport REL-204",
+        baseline_target_text="Evidence follow-up: release 4.8 backport REL-204",
+    )
+    protected = replace(
+        related,
+        path="/repos/acme/platform-services/issues/4",
+        target_text="Earlier workstream: release 4.7 backport REL-209",
+        baseline_target_text="Earlier workstream: release 4.7 backport REL-209",
+    )
+
+    assert legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
+        related,
+        legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
+    )
+    assert not legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
+        protected,
+        legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
+    )
+
+
 def test_provider_snapshot_evidence_includes_task_specific_query_results() -> None:
     snapshot = {
         "providers": {"jira_tracker": {"state": {"counts": {"issues": 4}}}},

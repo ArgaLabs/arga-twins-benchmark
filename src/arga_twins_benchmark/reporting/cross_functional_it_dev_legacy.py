@@ -480,7 +480,11 @@ _RULES: dict[str, _TaskRule] = {
             ("github", r"/contents/"),
             ("github", r"/pulls$"),
             ("github", r"/pulls/\d+/(?:requested_reviewers|reviews)$"),
-            ("github", r"/issues/1(?:/comments)?$"),
+            # Issue 1 is the canonical coordination record. Issue 3 is the
+            # same-release evidence follow-up, so closing or annotating it as
+            # a duplicate after the 4.8 backport is reconciled is also within
+            # scope. The REL-209/4.7 issues remain outside the allowlist.
+            ("github", r"/issues/(?:1|3)(?:/comments)?$"),
             ("jira", r"/issue/ENG-(?:1|3)(?:/comment|/remotelink|/transitions)?$"),
             # A factual rejection note on the 4.7 candidate preserves the
             # decision record; it does not target 4.7 for a backport.
