@@ -1113,6 +1113,100 @@ def test_dev04_allows_reconciling_related_github_evidence_issue_only() -> None:
     )
 
 
+def test_dev04_allows_closing_the_same_fix_pr_when_it_targets_main() -> None:
+    wrong_base = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="github",
+        method="PATCH",
+        path="/repos/acme/platform-services/pulls/7",
+        arguments={"body": {"state": "closed"}},
+        status_code=200,
+        target_text="",
+        baseline_target_text=(
+            "Sandbox verification for release branch backport coordination; "
+            "Fix invoice export crash; Jira REL-204; base main"
+        ),
+    )
+    protected = replace(
+        wrong_base,
+        path="/repos/acme/platform-services/pulls/8",
+        baseline_target_text="Archive maintenance; Jira REL-209; base release/4.7",
+    )
+
+    artifacts = {
+        "baseline-state.json": {
+            "queries": {
+                "dev_04_github_state": {
+                    "body": {
+                        "pull_requests": [
+                            {
+                                "number": 7,
+                                "title": "Sandbox verification for release branch backport coordination",
+                                "body": "Fix invoice export crash; Jira REL-204 requests the 4.8 backport",
+                                "base": {"ref": "main"},
+                            },
+                            {
+                                "number": 8,
+                                "title": "Archive maintenance",
+                                "body": "Jira REL-209 requests release/4.7",
+                                "base": {"ref": "main"},
+                            },
+                        ]
+                    }
+                }
+            }
+        }
+    }
+
+    assert legacy._dev04_wrong_base_pr_reconciliation(  # pyright: ignore[reportPrivateUsage]
+        wrong_base,
+        artifacts,
+    )
+    assert not legacy._dev04_wrong_base_pr_reconciliation(  # pyright: ignore[reportPrivateUsage]
+        protected,
+        artifacts,
+    )
+
+
+def test_dev04_allows_low_level_git_data_backport_construction() -> None:
+    for path in (
+        "/repos/acme/platform-services/git/blobs",
+        "/repos/acme/platform-services/git/trees",
+        "/repos/acme/platform-services/git/commits",
+    ):
+        call = legacy._Call(
+            event_index=1,
+            sequence=2,
+            provider="github",
+            method="POST",
+            path=path,
+            arguments={"body": {"message": "Fix invoice export crash for REL-204 on release/4.8"}},
+            status_code=201,
+            target_text="",
+        )
+
+        assert legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
+            call,
+            legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
+        )
+
+    nested_ref = legacy._Call(
+        event_index=2,
+        sequence=3,
+        provider="github",
+        method="PATCH",
+        path="/repos/acme/platform-services/git/refs/heads/backport/4.8-invoice-export-crash",
+        arguments={"body": {"sha": "deadbeef", "force": False}},
+        status_code=200,
+        target_text="",
+    )
+    assert legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
+        nested_ref,
+        legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
+    )
+
+
 def test_provider_snapshot_evidence_includes_task_specific_query_results() -> None:
     snapshot = {
         "providers": {"jira_tracker": {"state": {"counts": {"issues": 4}}}},
