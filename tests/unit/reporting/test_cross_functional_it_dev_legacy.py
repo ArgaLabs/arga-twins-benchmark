@@ -1084,7 +1084,7 @@ def test_dev04_rejection_comment_on_wrong_release_candidate_is_allowed_evidence(
     )
 
 
-def test_dev04_allows_reconciling_related_github_evidence_issue_only() -> None:
+def test_dev04_allows_reconciling_related_and_adjudicated_obsolete_tracking_issues() -> None:
     related = legacy._Call(
         event_index=1,
         sequence=2,
@@ -1096,21 +1096,37 @@ def test_dev04_allows_reconciling_related_github_evidence_issue_only() -> None:
         target_text="Evidence follow-up: release 4.8 backport REL-204",
         baseline_target_text="Evidence follow-up: release 4.8 backport REL-204",
     )
-    protected = replace(
+    obsolete = replace(
         related,
         path="/repos/acme/platform-services/issues/4",
-        target_text="Earlier workstream: release 4.7 backport REL-209",
-        baseline_target_text="Earlier workstream: release 4.7 backport REL-209",
+        target_text="Earlier workstream: release 4.7 backport REL-209 for a customer upgraded to 5.0",
+        baseline_target_text="Earlier workstream: release 4.7 backport REL-209 for a customer upgraded to 5.0",
+    )
+    obsolete_jira = legacy._Call(
+        event_index=3,
+        sequence=4,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-4/transitions",
+        arguments={"body": {"transition": {"id": "31"}}},
+        status_code=204,
+        target_text="REL-209 requests a 4.7 backport for a customer already upgraded to 5.0",
+        baseline_target_text="REL-209 requests a 4.7 backport for a customer already upgraded to 5.0",
+    )
+    obsolete_pr = replace(
+        obsolete,
+        path="/repos/acme/platform-services/pulls/8",
+        target_text="Archive maintenance; REL-209; release 4.7; customer upgraded to 5.0",
+        baseline_target_text="Archive maintenance; REL-209; release 4.7; customer upgraded to 5.0",
     )
 
     assert legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
         related,
         legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
     )
-    assert not legacy._is_explicitly_allowed(  # pyright: ignore[reportPrivateUsage]
-        protected,
-        legacy._RULES["DEV-04"],  # pyright: ignore[reportPrivateUsage]
-    )
+    assert legacy._dev04_obsolete_tracking_reconciliation(obsolete)  # pyright: ignore[reportPrivateUsage]
+    assert legacy._dev04_obsolete_tracking_reconciliation(obsolete_jira)  # pyright: ignore[reportPrivateUsage]
+    assert not legacy._dev04_obsolete_tracking_reconciliation(obsolete_pr)  # pyright: ignore[reportPrivateUsage]
 
 
 def test_dev04_allows_closing_the_same_fix_pr_when_it_targets_main() -> None:
