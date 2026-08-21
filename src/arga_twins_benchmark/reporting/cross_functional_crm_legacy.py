@@ -841,6 +841,8 @@ def _salesforce_composite_is_allowed(task_id: str, call: _Call) -> bool:
         request = cast(dict[str, Any], raw_request)
         method = str(request.get("method", "")).upper()
         url = request.get("url")
+        if method in {"GET", "HEAD"} and isinstance(url, str):
+            continue
         if method not in {"PATCH", "POST", "PUT"} or not isinstance(url, str):
             return False
         synthetic = _Call(

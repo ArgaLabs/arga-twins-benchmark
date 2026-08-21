@@ -1192,6 +1192,55 @@ def test_single_target_salesforce_composite_update_uses_the_same_task_allowlist(
     assert not legacy._allowed_write("CRM-04", destructive)
 
 
+def test_salesforce_composite_allows_read_only_and_mixed_authorized_subrequests() -> None:
+    read_only = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="salesforce",
+        method="POST",
+        path="/services/data/v60.0/composite",
+        arguments={
+            "body": {
+                "compositeRequest": [
+                    {
+                        "method": "GET",
+                        "url": "/services/data/v60.0/sobjects/Account/001000000000001AAA",
+                    }
+                ]
+            }
+        },
+        output={"ok": True, "status_code": 200, "body": {}},
+        is_error=False,
+    )
+    mixed = legacy._Call(
+        event_index=2,
+        provider_index=2,
+        provider="salesforce",
+        method="POST",
+        path="/services/data/v60.0/composite",
+        arguments={
+            "body": {
+                "compositeRequest": [
+                    {
+                        "method": "GET",
+                        "url": "/services/data/v60.0/sobjects/Account/001000000000001AAA",
+                    },
+                    {
+                        "method": "PATCH",
+                        "url": "/services/data/v60.0/sobjects/Opportunity/006000000000001AAA",
+                        "body": {"OwnerId": "005000000000002AAA"},
+                    },
+                ]
+            }
+        },
+        output={"ok": True, "status_code": 200, "body": {}},
+        is_error=False,
+    )
+
+    assert legacy._allowed_write("CRM-06", read_only)
+    assert legacy._allowed_write("CRM-06", mixed)
+
+
 def test_salesforce_composite_targets_are_bound_to_the_nested_business_records() -> None:
     call = legacy._Call(
         event_index=1,
