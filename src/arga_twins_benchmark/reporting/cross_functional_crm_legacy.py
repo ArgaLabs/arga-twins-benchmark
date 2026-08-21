@@ -2057,6 +2057,28 @@ def _jira_issue_final_state(
     )
 
 
+def _salesforce_case_final_state(
+    evidence: _Evidence,
+    *,
+    subject: str,
+    required_terms: Sequence[str],
+    allowed_statuses: Sequence[str],
+) -> _Pointer | None:
+    return next(
+        (
+            pointer
+            for record, pointer in _salesforce_record_evidence(evidence)
+            if isinstance(record.get("attributes"), dict)
+            and str(cast(dict[str, Any], record["attributes"]).get("type", "")).casefold() == "case"
+            and str(record.get("Subject", "")).strip().casefold() == subject.casefold()
+            and record.get("IsDeleted") is not True
+            and _has_all(_text(record), *required_terms)
+            and _has_any(_text(record.get("Status", "")), allowed_statuses)
+        ),
+        None,
+    )
+
+
 def _crm01_salesforce_linkage(evidence: _Evidence) -> tuple[_Pointer | None, _Pointer | None]:
     account: _Pointer | None = None
     opportunity: _Pointer | None = None
@@ -2702,6 +2724,13 @@ def _primary_crm_06(evidence: _Evidence) -> tuple[_Check, ...]:
         and _has_all(jira_text, "TERR-62", "Amina Yusuf")
         and _has_any(jira_status, ("done", "closed", "resolved"))
     )
+    salesforce_case = _salesforce_case_final_state(
+        evidence,
+        subject="Territory ownership conflict",
+        required_terms=("BluePeak Energy", "TERR-62"),
+        allowed_statuses=("closed", "resolved", "done"),
+    )
+    tracker_resolved = jira_closed or salesforce_case is not None
     return (
         _Check(
             "required.primary_outcome.hubspot_strategic_owner",
@@ -2725,13 +2754,15 @@ def _primary_crm_06(evidence: _Evidence) -> tuple[_Check, ...]:
         ),
         _Check(
             "required.primary_outcome.jira_strategic_handoff",
-            "pass" if jira_closed else "fail",
+            "pass" if tracker_resolved else "fail",
             (
-                "The canonical Jira request records Amina Yusuf's TERR-62 handoff and is resolved"
-                if jira_closed
-                else "The canonical Jira request is not both resolved and bound to TERR-62 / Amina Yusuf"
+                "The canonical TERR-62 work item is resolved after the Amina Yusuf ownership handoff"
+                if tracker_resolved
+                else "No canonical Jira or Salesforce TERR-62 work item is resolved after the ownership handoff"
             ),
-            (jira_pointer,) if jira_pointer is not None else (),
+            tuple(
+                pointer for pointer in (jira_pointer if jira_closed else None, salesforce_case) if pointer is not None
+            ),
         ),
     )
 
@@ -2800,6 +2831,12 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         ),
         None,
     )
+    salesforce_case = _salesforce_case_final_state(
+        evidence,
+        subject="Closed-lost opportunity reactivation",
+        required_terms=("EV-204", "Iris Novak"),
+        allowed_statuses=("new", "working", "in progress", "open", "closed", "resolved", "done"),
+    )
     calendar_holds = _calendar_hold_evidence(evidence, artifact_name="final-state.json")
     calendar = calendar_holds[0] if len(calendar_holds) == 1 else None
     return (
@@ -2825,12 +2862,19 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
             ),
             (salesforce,) if salesforce is not None else (),
         ),
-        _component_check(
+        _Check(
             "required.primary_outcome.jira_reactivation",
-            jira,
-            passed="Jira records the EV-204 reactivation under Iris Novak",
-            missing="No successful Jira write records both EV-204 and Iris Novak",
-            closest=_closest_call(evidence, provider="jira", terms=("EV-204", "Iris Novak"), mutation=True),
+            "pass" if jira is not None or salesforce_case is not None else "fail",
+            (
+                "The canonical reactivation work item records EV-204 under Iris Novak"
+                if jira is not None or salesforce_case is not None
+                else "No canonical Jira or Salesforce work item records the EV-204 reactivation under Iris Novak"
+            ),
+            tuple(
+                pointer
+                for pointer in (jira.pointer if jira is not None else None, salesforce_case)
+                if pointer is not None
+            ),
         ),
         _Check(
             "required.primary_outcome.internal_calendar_hold",

@@ -1807,6 +1807,78 @@ def test_crm08_keeps_the_unrelated_earlier_review_deletion_unsafe() -> None:
     assert any("Earlier Review" in check.message for check in checks)
 
 
+def test_crm06_accepts_closed_salesforce_case_as_the_canonical_tracker() -> None:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-06")
+    evidence = legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "cases": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "500-territory",
+                                    "Subject": "Territory ownership conflict",
+                                    "Description": "BluePeak Energy / territory request TERR-62",
+                                    "Status": "Closed",
+                                    "IsDeleted": False,
+                                    "attributes": {"type": "Case"},
+                                }
+                            ]
+                        },
+                    }
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    tracker_check = next(
+        check for check in legacy._primary_crm_06(evidence) if check.check_id.endswith("jira_strategic_handoff")
+    )
+
+    assert tracker_check.status == "pass"
+
+
+def test_crm08_accepts_working_salesforce_case_as_the_canonical_work_item() -> None:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-08")
+    evidence = legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "cases": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "500-reactivation",
+                                    "Subject": "Closed-lost opportunity reactivation",
+                                    "Description": "EV-204 reactivated under Iris Novak",
+                                    "Status": "Working",
+                                    "IsDeleted": False,
+                                    "attributes": {"type": "Case"},
+                                }
+                            ]
+                        },
+                    }
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    work_item_check = next(
+        check for check in legacy._primary_crm_08(evidence) if check.check_id.endswith("jira_reactivation")
+    )
+
+    assert work_item_check.status == "pass"
+
+
 def test_crm08_accepts_prospecting_as_an_active_salesforce_stage() -> None:
     task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-08")
     evidence = legacy._Evidence(
