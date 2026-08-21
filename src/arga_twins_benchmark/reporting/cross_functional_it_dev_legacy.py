@@ -1714,8 +1714,9 @@ def _dev04_primary_assertions(
         or _term_present(jira_text, f"pull/{matching_number}")
         or _term_present(jira_text, "backport")
     )
-    approval = _semantic_term_present(pr_text, "REL-204") and _semantic_term_present(
-        pr_text, "release-manager approval"
+    approval_text = _normalized_text((pr_text, jira_text))
+    approval = _semantic_term_present(approval_text, "REL-204") and _semantic_term_present(
+        approval_text, "release-manager approval"
     )
     jira_linked = bool(jira_writes) and pr_reference and approval
     assertions.append(

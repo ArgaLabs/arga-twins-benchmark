@@ -1593,6 +1593,52 @@ def test_dev04_composes_jira_linkage_with_the_matching_final_pull_request() -> N
     assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
 
 
+def test_dev04_accepts_approval_trail_recorded_in_canonical_jira_write() -> None:
+    artifacts = {
+        "final-state.json": {
+            "providers": {
+                "github": {
+                    "state": {
+                        "repos": [
+                            {
+                                "pull_requests": [
+                                    {
+                                        "number": 9,
+                                        "title": "[4.8] Backport: Fix invoice export crash",
+                                        "body": "Customer-impacting invoice export backport.",
+                                        "base": "release/4.8",
+                                        "head": "backport/invoice-export",
+                                        "state": "open",
+                                        "merged": False,
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    jira = legacy._Call(
+        event_index=1,
+        sequence=2,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/ENG-1/comment",
+        arguments={
+            "body": {
+                "body": "Backport PR #9 is open against release/4.8 with REL-204 release-manager approval."
+            }
+        },
+        status_code=201,
+        target_text="Release branch backport coordination",
+    )
+
+    assertions = legacy._dev04_primary_assertions(artifacts, [jira])  # pyright: ignore[reportPrivateUsage]
+
+    assert [assertion["status"] for assertion in assertions] == ["pass", "pass"]
+
+
 def test_dev06_accepts_jira_remote_link_and_related_duplicate_reconciliation() -> None:
     jira_issues = [
         {
