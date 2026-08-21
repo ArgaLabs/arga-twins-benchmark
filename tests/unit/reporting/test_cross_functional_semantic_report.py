@@ -593,7 +593,7 @@ def test_failure_reason_states_the_exact_expected_business_outcome() -> None:
     assert reason == (
         "Fail: qualification was not reconciled into the required Salesforce opportunity.\n"
         "Expected: The platform business unit is qualified against the correct account, a single "
-        "Salesforce opportunity is prepared, and one unsent Gmail draft plus Slack handoff exists."
+        "Salesforce opportunity is prepared, Slack records the handoff, and no external outreach is sent."
     )
 
 
