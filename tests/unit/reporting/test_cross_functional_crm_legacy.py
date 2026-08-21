@@ -406,7 +406,7 @@ def test_crm03_qualification_composes_hubspot_writes_and_salesforce_final_state(
     checks = legacy._primary_crm_03(evidence)
 
     assert {check.check_id: check.status for check in checks} == {
-        "required.primary_outcome.hubspot_qualification": "pass",
+        "required.cross_system_correlation": "pass",
         "required.primary_outcome.salesforce_qualification": "pass",
     }
     salesforce = next(
@@ -414,6 +414,79 @@ def test_crm03_qualification_composes_hubspot_writes_and_salesforce_final_state(
     )
     assert len(salesforce.evidence) == 3
     assert all(pointer.artifact == "final-state.json" for pointer in salesforce.evidence)
+
+
+def test_crm03_correlation_accepts_salesforce_final_state_and_gmail_draft_without_hubspot_write() -> None:
+    evidence = legacy._Evidence(
+        task={
+            "id": "CRM-03",
+            "verification": {
+                "required_outcomes": [
+                    {
+                        "id": "structured_result",
+                        "facts": {
+                            "business_unit": "Platform",
+                            "company": "Driftline Logistics",
+                            "contact": "nia.ford@platform.driftline.example",
+                            "deployment_size": "240 operators",
+                        },
+                    }
+                ]
+            },
+        },
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "crm_03_salesforce_account": {
+                        "provider_name": "salesforce",
+                        "body": {"records": [{"Name": "Driftline Logistics — Platform"}]},
+                    },
+                    "crm_03_salesforce_contact": {
+                        "provider_name": "salesforce",
+                        "body": {"records": [{"Email": "nia.ford@platform.driftline.example"}]},
+                    },
+                    "crm_03_salesforce_opportunity": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Name": "Platform Evaluation",
+                                    "StageName": "Qualification",
+                                    "Description": "Deployment for 240 operators in Q4",
+                                }
+                            ]
+                        },
+                    },
+                }
+            }
+        },
+        calls=[
+            legacy._Call(
+                event_index=1,
+                provider_index=1,
+                provider="gmail",
+                method="POST",
+                path="/gmail/v1/users/me/drafts",
+                arguments={
+                    "body": {
+                        "raw": (
+                            "Proposed confirmation for Driftline Logistics Platform: Nia Ford, "
+                            "nia.ford@platform.driftline.example, requested 240 operators."
+                        )
+                    }
+                },
+                output={"ok": True, "status_code": 200, "body": {"id": "draft-primary"}},
+                is_error=False,
+            )
+        ],
+        gaps=[],
+    )
+
+    checks = {check.check_id: check for check in legacy._primary_crm_03(evidence)}
+
+    assert checks["required.cross_system_correlation"].status == "pass"
+    assert "Salesforce, Gmail" in checks["required.cross_system_correlation"].message
+    assert checks["required.primary_outcome.salesforce_qualification"].status == "pass"
 
 
 def test_crm03_salesforce_qualification_rejects_closed_canonical_opportunity() -> None:

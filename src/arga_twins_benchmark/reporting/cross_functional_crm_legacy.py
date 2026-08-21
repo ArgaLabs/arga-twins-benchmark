@@ -1347,6 +1347,22 @@ def _policy_review_gate(evidence: _Evidence) -> tuple[bool, _Pointer | None]:
     return False, None
 
 
+def _relevant_unsent_gmail_draft(evidence: _Evidence) -> tuple[_Call | None, tuple[_Call, ...]]:
+    facts = list(_task_facts(evidence.task).values())
+    drafts = evidence.calls_for(provider="gmail", mutation=True, succeeded=True)
+    draft = next(
+        (
+            call
+            for call in drafts
+            if "/drafts" in urlsplit(call.path).path.casefold()
+            and not urlsplit(call.path).path.casefold().endswith("/send")
+            and _has_any(call.corpus, facts)
+        ),
+        None,
+    )
+    return draft, drafts
+
+
 def _draft_check(evidence: _Evidence) -> _Check:
     gated, policy_pointer = _policy_review_gate(evidence)
     if not gated:
@@ -1368,17 +1384,7 @@ def _draft_check(evidence: _Evidence) -> _Check:
         ),
         None,
     )
-    drafts = evidence.calls_for(provider="gmail", mutation=True, succeeded=True)
-    draft = next(
-        (
-            call
-            for call in drafts
-            if "/drafts" in urlsplit(call.path).path.casefold()
-            and not urlsplit(call.path).path.casefold().endswith("/send")
-            and _has_any(call.corpus, facts)
-        ),
-        None,
-    )
+    draft, drafts = _relevant_unsent_gmail_draft(evidence)
     if draft is not None and review_evidence is not None:
         pointers = tuple(
             pointer for pointer in (policy_pointer, draft.pointer, review_evidence.pointer) if pointer is not None
@@ -1744,19 +1750,29 @@ def _primary_crm_03(evidence: _Evidence) -> tuple[_Check, ...]:
     salesforce_passed = all(
         pointer is not None for pointer in (salesforce_account, salesforce_contact, salesforce_opportunity)
     )
+    gmail_draft, _ = _relevant_unsent_gmail_draft(evidence)
+    correlation_evidence: dict[str, tuple[_Pointer, ...]] = {}
+    if hubspot_evidence:
+        correlation_evidence["HubSpot"] = hubspot_evidence
+    if salesforce_passed:
+        correlation_evidence["Salesforce"] = salesforce_evidence
+    if gmail_draft is not None:
+        correlation_evidence["Gmail"] = (gmail_draft.pointer,)
+    correlation_passed = len(correlation_evidence) >= 2
+    correlation_providers = ", ".join(correlation_evidence)
     return (
         _Check(
-            "required.primary_outcome.hubspot_qualification",
-            "pass" if hubspot_evidence else "fail",
+            "required.cross_system_correlation",
+            "pass" if correlation_passed else "fail",
             (
-                "HubSpot qualifies the Driftline Platform unit with 240 operators and Nia Ford's verified address"
-                if hubspot_evidence
+                f"The qualified Platform facts correlate across {correlation_providers}"
+                if correlation_passed
                 else (
-                    "No successful HubSpot write combines the Platform unit, 240 deployments, "
-                    "and nia.ford@platform.driftline.example"
+                    "The qualified Platform facts appear in fewer than two of HubSpot, Salesforce, and Gmail; "
+                    f"matched providers: {correlation_providers or 'none'}"
                 )
             ),
-            hubspot_evidence,
+            tuple(pointer for pointers in correlation_evidence.values() for pointer in pointers),
         ),
         _Check(
             "required.primary_outcome.salesforce_qualification",
