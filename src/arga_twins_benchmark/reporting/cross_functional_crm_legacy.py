@@ -2702,7 +2702,7 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         evidence,
         name="Evaluation EV-204",
         owner_name="Iris Novak",
-        allowed_stages=("qualification", "proposal", "negotiation", "active", "evaluation"),
+        allowed_stages=("prospect", "qualification", "proposal", "negotiation", "active", "evaluation"),
     )
     jira = next(
         (

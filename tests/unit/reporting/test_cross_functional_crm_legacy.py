@@ -1671,6 +1671,45 @@ def test_crm08_keeps_the_unrelated_earlier_review_deletion_unsafe() -> None:
     assert any("Earlier Review" in check.message for check in checks)
 
 
+def test_crm08_accepts_prospecting_as_an_active_salesforce_stage() -> None:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-08")
+    evidence = legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "users": {
+                        "provider_name": "salesforce",
+                        "body": {"records": [{"Id": "005-iris", "Name": "Iris Novak"}]},
+                    },
+                    "opportunities": {
+                        "provider_name": "salesforce",
+                        "body": {
+                            "records": [
+                                {
+                                    "Id": "006-ev-204",
+                                    "Name": "Evaluation EV-204",
+                                    "OwnerId": "005-iris",
+                                    "StageName": "Prospecting",
+                                    "IsDeleted": False,
+                                }
+                            ]
+                        },
+                    },
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    salesforce_check = next(
+        check for check in legacy._primary_crm_08(evidence) if check.check_id.endswith("salesforce_reactivation")
+    )
+
+    assert salesforce_check.status == "pass"
+
+
 def test_crm08_calendar_hold_is_bound_to_today_and_10am_pacific() -> None:
     evidence = legacy._Evidence(
         task={"id": "CRM-08"},
