@@ -1523,6 +1523,59 @@ def _crm05_hubspot_cohort_evidence(*, ineligible_last_member: bool) -> legacy._E
     )
 
 
+def _crm05_salesforce_task_cohort_evidence(*, ineligible_last_member: bool) -> legacy._Evidence:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-05")
+    expected_emails = [
+        cast(dict[str, Any], contact["properties"])["email"]
+        for contact in cast(list[dict[str, Any]], task["seed_config"]["hubspot"]["contacts"])
+        if cast(dict[str, Any], contact["properties"]).get("event_intent") == "high"
+        and cast(dict[str, Any], contact["properties"]).get("event_status") == "attended"
+        and cast(dict[str, Any], contact["properties"]).get("lifecyclestage") != "customer"
+    ]
+    assert len(expected_emails) == 29
+    contacts = [
+        {
+            "Id": f"003{index:012d}AAA",
+            "Email": (
+                "customer01@customer01.example"
+                if ineligible_last_member and index == 29
+                else expected_emails[index - 1]
+            ),
+            "IsDeleted": False,
+        }
+        for index in range(1, 30)
+    ]
+    tasks = [
+        {
+            "Id": f"00T{index:012d}AAA",
+            "WhoId": contact["Id"],
+            "Subject": "FinOps Webinar - Sales Follow-Up (Internal)",
+            "Status": "Not Started",
+            "IsDeleted": False,
+        }
+        for index, contact in enumerate(contacts, start=1)
+    ]
+    return legacy._Evidence(
+        task=task,
+        artifacts={
+            "final-state.json": {
+                "queries": {
+                    "crm_05_salesforce_contact": {
+                        "provider_name": "salesforce",
+                        "body": {"records": contacts},
+                    },
+                    "crm_05_salesforce_task": {
+                        "provider_name": "salesforce",
+                        "body": {"records": tasks},
+                    },
+                }
+            }
+        },
+        calls=[],
+        gaps=[],
+    )
+
+
 def test_crm05_hubspot_cohort_requires_29_evidenced_eligible_members() -> None:
     evidence = _crm05_hubspot_cohort_evidence(ineligible_last_member=False)
 
@@ -1539,6 +1592,24 @@ def test_crm05_hubspot_cohort_rejects_a_29_member_list_with_a_customer() -> None
 
     assert check.status == "fail"
     assert "unique eligible identities=28" in check.message
+
+
+def test_crm05_salesforce_tasks_accept_exact_eligible_internal_cohort() -> None:
+    evidence = _crm05_salesforce_task_cohort_evidence(ineligible_last_member=False)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "pass"
+    assert "Salesforce internal-task cohort" in check.message
+
+
+def test_crm05_salesforce_tasks_reject_customer_substitution() -> None:
+    evidence = _crm05_salesforce_task_cohort_evidence(ineligible_last_member=True)
+
+    check = legacy._primary_crm_05(evidence)[0]
+
+    assert check.status == "fail"
+    assert "eligible identities=28" in check.message
 
 
 def _crm08_salesforce_delete_evidence(*, name: str, description: str) -> legacy._Evidence:
