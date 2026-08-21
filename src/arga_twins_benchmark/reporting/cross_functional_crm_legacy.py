@@ -1326,7 +1326,12 @@ def _calendar_hold_evidence(
                 continue
             event = cast(dict[str, Any], raw_event)
             event_text = _text({"summary": event.get("summary"), "description": event.get("description")})
-            if not _contains(event_text, "EV-204"):
+            identifies_evaluation = _contains(event_text, "EV-204") or _has_all(
+                event_text,
+                "Orbit Systems",
+                "evaluation",
+            )
+            if not identifies_evaluation:
                 continue
             attendees = event.get("attendees")
             if isinstance(attendees, list) and attendees:
@@ -2987,13 +2992,29 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         owner_name="Iris Novak",
         allowed_stages=("prospect", "qualification", "proposal", "negotiation", "active", "evaluation"),
     )
-    jira = next(
+    explicit_jira = next(
         (
             call
             for call in evidence.calls_for(provider="jira", mutation=True, succeeded=True)
             if _has_all(call.corpus, "EV-204", "Iris Novak")
         ),
         None,
+    )
+    jira_issue, jira_pointer = _jira_issue_final_state(evidence, title="Closed-lost opportunity reactivation")
+    jira_fields = jira_issue.get("fields") if isinstance(jira_issue, dict) else None
+    jira_status = _text(cast(dict[str, Any], jira_fields).get("status", {})) if isinstance(jira_fields, dict) else ""
+    canonical_jira_update = _mutation_match(
+        evidence,
+        provider="jira",
+        path=re.compile(r"/issue/"),
+        all_values=("Orbit Systems", "Iris Novak"),
+    )
+    resolved_canonical_jira = (
+        jira_pointer
+        if jira_pointer is not None
+        and canonical_jira_update is not None
+        and _has_any(jira_status, ("done", "closed", "resolved"))
+        else None
     )
     salesforce_case = _salesforce_case_final_state(
         evidence,
@@ -3028,15 +3049,21 @@ def _primary_crm_08(evidence: _Evidence) -> tuple[_Check, ...]:
         ),
         _Check(
             "required.primary_outcome.jira_reactivation",
-            "pass" if jira is not None or salesforce_case is not None else "fail",
+            "pass"
+            if explicit_jira is not None or resolved_canonical_jira is not None or salesforce_case is not None
+            else "fail",
             (
                 "The canonical reactivation work item records EV-204 under Iris Novak"
-                if jira is not None or salesforce_case is not None
+                if explicit_jira is not None or resolved_canonical_jira is not None or salesforce_case is not None
                 else "No canonical Jira or Salesforce work item records the EV-204 reactivation under Iris Novak"
             ),
             tuple(
                 pointer
-                for pointer in (jira.pointer if jira is not None else None, salesforce_case)
+                for pointer in (
+                    explicit_jira.pointer if explicit_jira is not None else None,
+                    resolved_canonical_jira,
+                    salesforce_case,
+                )
                 if pointer is not None
             ),
         ),

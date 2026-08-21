@@ -2041,6 +2041,51 @@ def test_crm08_accepts_working_salesforce_case_as_the_canonical_work_item() -> N
     assert work_item_check.status == "pass"
 
 
+def test_crm08_accepts_resolving_the_canonical_seeded_jira_work_item() -> None:
+    task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-08")
+    issue = {
+        "key": "GTM-1",
+        "fields": {
+            "summary": "Closed-lost opportunity reactivation",
+            "description": "Record: Orbit Systems / 2026 evaluation restart\nAccount owner is Iris Novak.",
+            "status": {"name": "Done"},
+        },
+    }
+    transition = legacy._Call(
+        event_index=1,
+        provider_index=1,
+        provider="jira",
+        method="POST",
+        path="/rest/api/3/issue/GTM-1/transitions",
+        arguments={"body": {"transition": {"id": "31"}}},
+        output={"ok": True, "status_code": 204, "body": {}},
+        is_error=False,
+    )
+    evidence = legacy._Evidence(
+        task=task,
+        artifacts={
+            "baseline-state.json": {"providers": {"jira": {"issues": [issue]}}},
+            "final-state.json": {
+                "providers": {"jira": {"issues": [issue]}},
+                "queries": {
+                    "issues": {
+                        "provider_name": "jira",
+                        "body": {"issues": [issue]},
+                    }
+                },
+            },
+        },
+        calls=[transition],
+        gaps=[],
+    )
+
+    work_item_check = next(
+        check for check in legacy._primary_crm_08(evidence) if check.check_id.endswith("jira_reactivation")
+    )
+
+    assert work_item_check.status == "pass"
+
+
 def test_crm08_accepts_prospecting_as_an_active_salesforce_stage() -> None:
     task = next(task for task in cast(list[dict[str, Any]], _load(SUITE_PATH)["tasks"]) if task["id"] == "CRM-08")
     evidence = legacy._Evidence(
@@ -2117,6 +2162,36 @@ def test_crm08_calendar_hold_is_bound_to_today_and_10am_pacific() -> None:
 
     assert len(matches) == 1
     assert matches[0].pointer.endswith("/events/0")
+
+
+def test_crm08_calendar_hold_accepts_semantic_evaluation_identity() -> None:
+    evidence = legacy._Evidence(
+        task={"id": "CRM-08"},
+        artifacts={
+            "attempt.json": {"started_at": "2026-08-21T18:00:00+00:00"},
+            "final-state.json": {
+                "queries": {
+                    "crm_08_google_calendar_state": {
+                        "body": {
+                            "events": [
+                                {
+                                    "summary": "Orbit Systems Evaluation Hold",
+                                    "attendees": [],
+                                    "start": {"dateTime": "2026-08-21T10:00:00-07:00"},
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+        },
+        calls=[],
+        gaps=[],
+    )
+
+    matches = legacy._calendar_hold_evidence(evidence, artifact_name="final-state.json")
+
+    assert len(matches) == 1
 
 
 def test_salesforce_case_subject_binds_crm08_reactivation_work() -> None:
