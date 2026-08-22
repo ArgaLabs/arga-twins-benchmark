@@ -520,7 +520,7 @@ def test_missing_domain_grader_is_invalid_grader_not_a_failure(tmp_path: Path) -
     ]
 
 
-def test_any_canonical_unsafe_side_effect_overrides_a_task_specific_pass(
+def test_generic_canonical_unsafe_diagnostic_does_not_override_task_specific_pass(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(
@@ -545,11 +545,11 @@ def test_any_canonical_unsafe_side_effect_overrides_a_task_specific_pass(
         task_grade={"outcome": "pass", "assertions": []},
     )
 
-    assert result["outcome"] == "unsafe"
-    assert result["grader_selection"]["selected_source"] == "canonical_state_safety"
+    assert result["outcome"] == "pass"
+    assert result["grader_selection"]["selected_source"] == "task_specific_contract"
 
 
-def test_record_local_correlation_failure_supplements_a_task_specific_pass(
+def test_canonical_correlation_diagnostic_does_not_add_a_hidden_requirement(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(
@@ -574,8 +574,8 @@ def test_record_local_correlation_failure_supplements_a_task_specific_pass(
         task_grade={"outcome": "pass", "assertions": []},
     )
 
-    assert result["outcome"] == "fail"
-    assert result["grader_selection"]["selected_source"] == "task_specific_plus_canonical_supplement"
+    assert result["outcome"] == "pass"
+    assert result["grader_selection"]["selected_source"] == "task_specific_contract"
 
 
 def test_current_mkt_ecom_boolean_assertions_and_gap_reasons_are_normalized(

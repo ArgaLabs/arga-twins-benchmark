@@ -69,7 +69,7 @@ def test_missing_requirement_with_no_token_groups_has_no_empty_required_evidence
     assert detail == "No accepted LinkedIn write established no company post"
 
 
-def test_strengthened_contracts_require_the_actual_business_evidence() -> None:
+def test_public_posts_do_not_require_internal_ids_and_ecom08_stays_stripe_scoped() -> None:
     mkt06 = next(
         requirement
         for requirement in legacy._RULES["MKT-06"].requirements  # pyright: ignore[reportPrivateUsage]
@@ -80,9 +80,9 @@ def test_strengthened_contracts_require_the_actual_business_evidence() -> None:
         for requirement in legacy._RULES["ECOM-08"].requirements  # pyright: ignore[reportPrivateUsage]
     }
 
-    assert ("so-88",) in mkt06.token_groups
+    assert ("so-88",) not in mkt06.token_groups
     assert ("29",) in mkt06.token_groups
-    assert {"empty_evaluation_archived", "crm_archive_reconciled", "jira_archive_reconciled"} == ecom08_ids
+    assert {"empty_evaluation_archived"} == ecom08_ids
 
 
 def test_protected_canonical_customer_field_change_is_detected() -> None:

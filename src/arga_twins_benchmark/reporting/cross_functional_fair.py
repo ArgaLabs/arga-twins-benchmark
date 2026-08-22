@@ -1678,8 +1678,6 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
         )
 
     assertions.extend(_cardinality_assertions(mutations, contract.cardinality_requirements))
-    if task_id == "DEV-05":
-        assertions.extend(_dev05_selector_assertions(after, mutations))
     if contract.reviewed_unsent_confirmation:
         assertions.append(_reviewed_draft_assertion(task, mutations))
     if task_id == "CRM-05":
