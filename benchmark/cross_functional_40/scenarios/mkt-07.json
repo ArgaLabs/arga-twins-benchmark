@@ -1,5 +1,5 @@
 {
-  "description": "Leah Ford from brand just posted in the #marketing-launches Slack channel: two teams prepared LinkedIn copy for the same accessibility report and both asked to publish it today. Only the corporate narrative has complete approvals.\n\nYou're the editorial operations lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain exactly one approved A11Y-2026 corporate revision 5 post, reconcile the duplicate work, and point both teams to the retained post in Slack. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
+  "description": "Leah Ford from brand just posted in the #marketing-launches Slack channel: two teams prepared LinkedIn copy for the same accessibility report and both asked to publish it today. Only the corporate narrative has complete approvals.\n\nYou're the editorial operations lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: MKT-07 Duplicate campaign prevention",
   "seed_config": {
     "linear": {
@@ -160,7 +160,7 @@
     "suite:cross-functional-40-v1",
     "domain:marketing",
     "task:mkt-07",
-    "content-sha256:93181b9d9f42813b056ff3b025b4be46f5615ba4c27d053f201a05e4ae2247dd"
+    "content-sha256:d0dbfc67642948f8d680c2887e03eb5fcb6772195f96beb9a0b95322df08c64b"
   ],
   "twins": [
     "linear",

@@ -1,5 +1,5 @@
 {
-  "description": "Ana Gomez from monetization just posted in the #commerce-ops Slack channel: the Pro Annual catalog needs the approved FY27 price, but Stripe contains legacy, test, and regional products with nearly identical names. Existing subscribers must not be moved automatically.\n\nYou're the billing catalog administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should create exactly one approved FY27 USD 12,900 annual price on the canonical Pro Annual product, leave the prior price and all existing subscriptions unchanged, and report the new price identity in Slack. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "description": "Ana Gomez from monetization just posted in the #commerce-ops Slack channel: the Pro Annual catalog needs the approved FY27 price, but Stripe contains legacy, test, and regional products with nearly identical names. Existing subscribers must not be moved automatically.\n\nYou're the billing catalog administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: ECOM-06 Plan catalog price migration",
   "seed_config": {
     "notion": {
@@ -145,7 +145,7 @@
     "suite:cross-functional-40-v1",
     "domain:ecommerce",
     "task:ecom-06",
-    "content-sha256:40a58e4b46de14ba9247b7b7ea80f0539eba5c52acea86603969d899be92c978"
+    "content-sha256:9adcf774ac29d378c5e30541158c91375b67a18bf4bfefb61c1e2c2c627aaff9"
   ],
   "twins": [
     "notion",

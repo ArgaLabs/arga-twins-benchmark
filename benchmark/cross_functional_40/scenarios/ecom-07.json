@@ -1,5 +1,5 @@
 {
-  "description": "Imani Brooks from chargebacks just posted in the #commerce-risk Slack channel: Harbor Goods changed its legal billing name, and the current signed account letter is in Drive. Stripe also contains a separate UK customer whose name differs by one letter.\n\nYou're the billing data specialist. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should update only the US Stripe customer to Harbor Goods Cooperative, reference the signed Drive record from BILL-742, preserve the email and tax address, and report the result in Slack. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "description": "Imani Brooks from chargebacks just posted in the #commerce-risk Slack channel: Harbor Goods changed its legal billing name, and the current signed account letter is in Drive. Stripe also contains a separate UK customer whose name differs by one letter.\n\nYou're the billing data specialist. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: ECOM-07 Customer legal-name correction",
   "seed_config": {
     "google_drive": {
@@ -194,7 +194,7 @@
     "suite:cross-functional-40-v1",
     "domain:ecommerce",
     "task:ecom-07",
-    "content-sha256:2fff8a3101fa21f17a2808392e86d30ba685b2f285361fa03194c5aa3268e056"
+    "content-sha256:2578c6412afec0c2d701736df379f633e5cd691ffa6b76d591a8ad8e04bb4903"
   ],
   "twins": [
     "google_drive",

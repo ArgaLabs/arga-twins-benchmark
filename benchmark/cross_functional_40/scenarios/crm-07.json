@@ -1,5 +1,5 @@
 {
-  "description": "Talia Mbeki from lifecycle marketing just posted in the #gtm-ops Slack channel: campaign mail to Marco Ruiz at HelioWorks hard-bounced, but another address for him appears in a signed reply thread and Salesforce. The similar Helio Workspaces account should not be touched.\n\nYou're the CRM data steward. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should make the verified address canonical in both CRMs, retain the bounced address as auditable but non-contactable history, and name the updated canonical record in Slack. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Talia Mbeki from lifecycle marketing just posted in the #gtm-ops Slack channel: campaign mail to Marco Ruiz at HelioWorks hard-bounced, but another address for him appears in a signed reply thread and Salesforce. The similar Helio Workspaces account should not be touched.\n\nYou're the CRM data steward. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: CRM-07 Bounced contact cleanup",
   "seed_config": {
     "gmail": {
@@ -312,7 +312,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-07",
-    "content-sha256:f9683814122a129587c848ed30d77d3fabea8186e2f0b3f9780b30b97a2022c6"
+    "content-sha256:bc6ec79171c59301f396ea603c99d201b76f217db6763121144084b77885722b"
   ],
   "twins": [
     "gmail",

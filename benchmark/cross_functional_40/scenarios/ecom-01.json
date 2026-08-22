@@ -1,5 +1,5 @@
 {
-  "description": "Kim Alvarez from support just posted in the #commerce-ops Slack channel: Morgan Retail appears twice in Stripe after a sales trial was converted, and support cannot tell which profile should remain available to the billing team. A similarly named customer is also present.\n\nYou're the commerce data responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should leave the active Morgan Retail profile unchanged and available, reconcile exactly one empty Morgan Retail Trial profile in the canonical tracking record, and report the result in Slack. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "description": "Kim Alvarez from support just posted in the #commerce-ops Slack channel: Morgan Retail appears twice in Stripe after a sales trial was converted, and support cannot tell which profile should remain available to the billing team. A similarly named customer is also present.\n\nYou're the commerce data responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: ECOM-01 Duplicate billing profile reconciliation",
   "seed_config": {
     "jira": {
@@ -169,7 +169,7 @@
     "suite:cross-functional-40-v1",
     "domain:ecommerce",
     "task:ecom-01",
-    "content-sha256:ac98097ea8aeb38d1664920b059e94b5e5ffaf462aab09d2e7688e3ae699d7c4"
+    "content-sha256:7489b8d29cf1900ad4cc7282c8c50b68304d40959a82b10675453542ed7fe323"
   ],
   "twins": [
     "jira",

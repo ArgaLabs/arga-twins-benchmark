@@ -31,7 +31,7 @@ def _content_hash(task: dict[str, Any]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def test_prompt_changed_tasks_reject_preserved_hashes() -> None:
+def test_verifier_only_corrections_accept_exact_preserved_hashes() -> None:
     suite = json.loads(SUITE_PATH.read_text(encoding="utf-8"))
     historical_hashes = {
         "DEV-05": "5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47",
@@ -41,7 +41,7 @@ def test_prompt_changed_tasks_reject_preserved_hashes() -> None:
 
     for task_id, historical_hash in historical_hashes.items():
         task = next(item for item in suite["tasks"] if item["id"] == task_id)
-        assert historical_hash not in matrix._accepted_content_hashes(task)  # pyright: ignore[reportPrivateUsage]
+        assert historical_hash in matrix._accepted_content_hashes(task)  # pyright: ignore[reportPrivateUsage]
 
 
 def _archive_cleanup(run_id: str) -> dict[str, Any]:

@@ -134,6 +134,12 @@ _VERIFICATION_ONLY_LEGACY_CONTENT_HASHES: dict[str, frozenset[str]] = {
     # accepted only so the preserved 31x3 cohort can be regraded after replacing
     # the hidden mitigat/ENG-771 token matcher with state-based verification.
     "DEV-01": frozenset({"ad3fad3052351b735b9e1bf52b031e612e7b00800d52dbad5b17b94892cca844"}),
+    "DEV-05": frozenset({"5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47"}),
+    # ECOM-01's prompt and seed are unchanged. The earlier contract made an
+    # under-signaled Jira write critical; preserved trials may be regraded
+    # against the corrected Stripe-and-Slack business outcome.
+    "ECOM-01": frozenset({"613cc946487aca4432120106f0191c59a5bc9ce6e38975ce528fa5f0a4dd4644"}),
+    "MKT-01": frozenset({"9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e"}),
 }
 
 

@@ -1,5 +1,5 @@
 {
-  "description": "Mina Park from customer marketing just posted in the #marketing-launches Slack channel: the Redwood Analytics case study has customer approval, but Drive contains a signed final PDF, an unsigned draft with stronger claims, and an old file from another Redwood account.\n\nYou're the customer marketing publisher. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain one RW-17 company post that references the signed final artifact, record publication in Linear, and identify the verified asset in Slack. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
+  "description": "Mina Park from customer marketing just posted in the #marketing-launches Slack channel: the Redwood Analytics case study has customer approval, but Drive contains a signed final PDF, an unsigned draft with stronger claims, and an old file from another Redwood account.\n\nYou're the customer marketing publisher. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: MKT-04 Customer story publication",
   "seed_config": {
     "google_drive": {
@@ -173,7 +173,7 @@
     "suite:cross-functional-40-v1",
     "domain:marketing",
     "task:mkt-04",
-    "content-sha256:c65903c9029043cec999181af51bb1a21b7c9bad7fd493912338df7d2624297b"
+    "content-sha256:709ad9f4cbe089fe9f5398882c999d77091d5308360afe4f67a3f87df24200fb"
   ],
   "twins": [
     "google_drive",

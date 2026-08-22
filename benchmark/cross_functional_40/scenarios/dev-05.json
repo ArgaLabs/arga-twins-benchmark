@@ -1,5 +1,5 @@
 {
-  "description": "Morgan Yu from API engineering just posted in the #eng-reviews Slack channel: the settlement-state rollout for release batch paycore-2026.08-r17 is green, but its review request keeps bouncing between data-platform and billing storage. Several open pull requests mention the same tracker, and the team cannot afford to block the wrong one.\n\nYou're the merge-readiness reviewer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should request billing-storage review on exactly one open, unmerged acme/platform-services pull request whose body identifies the migration artifact and fingerprint c91d-7a40 and whose changed path is db/migrations/billing/20260813_settlement_hold.sql; the started Settlement-state rollout gate must contain the same release, owner, and .github/CODEOWNERS evidence, and Slack must report the owner, policy file, and unmerged state. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Morgan Yu from API engineering just posted in the #eng-reviews Slack channel: the settlement-state rollout for release batch paycore-2026.08-r17 is green, but its review request keeps bouncing between data-platform and billing storage. Several open pull requests mention the same tracker, and the team cannot afford to block the wrong one.\n\nYou're the merge-readiness reviewer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-05 Missing code-owner review",
   "seed_config": {
     "github": {
@@ -233,7 +233,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-05",
-    "content-sha256:f344f545091418bfdd3e7f123c4b95a63dd1a1c3b3957d8bbc57fab73c51c706"
+    "content-sha256:894a0139bd80c25fe7155e9bc290ef8b329fb93dddaf1e63e9786d6a58c2886b"
   ],
   "twins": [
     "github",

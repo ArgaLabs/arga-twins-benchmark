@@ -1,5 +1,5 @@
 {
-  "description": "Amira Cole from inbound sales just posted in the #gtm-ops Slack channel: Northstar Robotics requested an enterprise demo, but HubSpot shows two similar companies and Salesforce already has an account with an open opportunity. She does not want the prospect contacted twice.\n\nYou're the revenue operations owner. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should retain one canonical Northstar handoff, link the existing Salesforce opportunity to its canonical account, mark the HubSpot duplicate for consolidation, and name one accountable owner in Slack. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Amira Cole from inbound sales just posted in the #gtm-ops Slack channel: Northstar Robotics requested an enterprise demo, but HubSpot shows two similar companies and Salesforce already has an account with an open opportunity. She does not want the prospect contacted twice.\n\nYou're the revenue operations owner. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: CRM-01 Duplicate enterprise lead handoff",
   "seed_config": {
     "hubspot": {
@@ -314,7 +314,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-01",
-    "content-sha256:6151a1cc4d2fbb8e23558c820cc1521b02f659f2f24c74488172c962acc0855f"
+    "content-sha256:e5eed62af3d35bfa49ed433f495e2b06574e304e0c8af8540dc7600218a31875"
   ],
   "twins": [
     "hubspot",
