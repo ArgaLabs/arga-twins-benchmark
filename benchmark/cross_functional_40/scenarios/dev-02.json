@@ -1,5 +1,5 @@
 {
-  "description": "Basil Okafor from application security just posted in the #eng-security Slack channel: a dependency update claims to fix a critical parser vulnerability, but the lockfile diff also pulls an unapproved package source. A second PR changes documentation only.\n\nYou're the security code reviewer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Basil Okafor from application security just posted in the #eng-security Slack channel: a dependency update claims to fix a critical parser vulnerability, but the lockfile diff also pulls an unapproved package source. A second PR changes documentation only.\n\nYou're the security code reviewer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should request changes on the exact dependency pull request because of packages.quickmirror.example, record the CVE and approved version in the canonical Jira issue, leave the documentation-only PR untouched, and merge nothing. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-02 Dependency security fix review",
   "seed_config": {
     "github": {
@@ -257,7 +257,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-02",
-    "content-sha256:fb6fcf6dd31dd3005f18870fea88ea48d1770d0df0924ed7827e2dac6554a4d6"
+    "content-sha256:314228077274d247cbac3cbbd0de8251b3de20aed565da0afdad1364a62b4ab6"
   ],
   "twins": [
     "github",

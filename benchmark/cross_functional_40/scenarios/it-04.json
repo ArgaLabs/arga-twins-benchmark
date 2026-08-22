@@ -1,5 +1,5 @@
 {
-  "description": "Jon Bell from design just posted in the #it-helpdesk Slack channel: a new OAuth application called Cloud Sketch asked for repository and file access after he opened a shared design brief. He denied the prompt, but a similarly named approved app is already used by the company.\n\nYou're the access review responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
+  "description": "Jon Bell from design just posted in the #it-helpdesk Slack channel: a new OAuth application called Cloud Sketch asked for repository and file access after he opened a shared design brief. He denied the prompt, but a similarly named approved app is already used by the company.\n\nYou're the access review responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should classify CSK-991 in the canonical Jira and GitHub records, link the Drive evidence to the case, and leave the approved CloudSketch Enterprise integration untouched. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: IT-04 Suspicious OAuth application review",
   "seed_config": {
     "github": {
@@ -265,7 +265,7 @@
     "suite:cross-functional-40-v1",
     "domain:it_support",
     "task:it-04",
-    "content-sha256:1bdcef9ad6b4a56cf8099d9042a498d89a71bd4643d604bb700e25a768bf25c6"
+    "content-sha256:1b93b7ad247f7e9f24ed230fec237b3d1696c0a3d8be4b533dc4870f71b25b81"
   ],
   "twins": [
     "github",

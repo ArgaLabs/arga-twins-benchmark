@@ -5,6 +5,9 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, cast
 
+import arga_twins_benchmark.reporting.cross_functional_fair as fair
+from arga_twins_benchmark.evaluation.deterministic import CanonicalResource
+from arga_twins_benchmark.evaluation.protocol import Mutation
 from arga_twins_benchmark.evaluation.state_capture import (
     CapturedProviderState,
     CapturedQueryState,
@@ -225,6 +228,85 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
             assert not contract.reviewed_unsent_confirmation
         else:
             assert contract.semantic_requirements or contract.semantic_requirement_groups
+
+
+def test_cross_system_correlation_does_not_pool_sibling_records() -> None:
+    task = _task("IT-04")
+    resources = [
+        CanonicalResource("jira_tracker", "issue", "jira:one", {"summary": "CSK-991"}),
+        CanonicalResource("jira_tracker", "issue", "jira:two", {"description": "Drive file 1XQ7"}),
+        CanonicalResource(
+            "code_host",
+            "issue",
+            "github:one",
+            {"body": "CSK-991 references Drive file 1XQ7"},
+        ),
+    ]
+
+    assertion = fair._cross_system_assertion(task, resources)  # pyright: ignore[reportPrivateUsage]
+
+    assert assertion["status"] == "fail"
+    assert "github" in assertion["detail"]
+    assert "jira" in assertion["detail"]
+
+
+def test_dev05_explicit_selectors_require_the_linked_changed_path_and_comment() -> None:
+    resources = [
+        CanonicalResource(
+            "code_host",
+            "pr",
+            "github:repos/acme/platform-services/prs:5",
+            {
+                "number": 5,
+                "repository": "acme/platform-services",
+                "body": "paycore-2026.08-r17; Artifact class migration; Fingerprint c91d-7a40",
+                "state": "open",
+                "merged": False,
+                "requested_teams": ["billing-storage"],
+            },
+        ),
+        CanonicalResource(
+            "code_host",
+            "file",
+            "github:repos/acme/platform-services/prs/5/files:db/migrations/billing/20260813_settlement_hold.sql",
+            {"path": "db/migrations/billing/20260813_settlement_hold.sql"},
+        ),
+        CanonicalResource(
+            "linear_tracker",
+            "issue",
+            "linear:issues:lin-1",
+            {"id": "lin-1", "title": "Settlement-state rollout gate", "state_type": "started"},
+        ),
+        CanonicalResource(
+            "linear_tracker",
+            "comment",
+            "linear:issues/lin-1/comments:c1",
+            {"body": ("paycore-2026.08-r17 c91d-7a40 is blocked on billing-storage per .github/CODEOWNERS")},
+        ),
+    ]
+    mutations = [
+        Mutation(
+            twin="team_chat",
+            resource_type="message",
+            resource_id="slack:m1",
+            operation="create",
+            after={"text": "billing-storage owns this under .github/CODEOWNERS; it remains unmerged"},
+        )
+    ]
+
+    assertions = fair._dev05_selector_assertions(resources, mutations)  # pyright: ignore[reportPrivateUsage]
+    statuses = {assertion["id"]: assertion["status"] for assertion in assertions}
+    without_file = fair._dev05_selector_assertions(  # pyright: ignore[reportPrivateUsage]
+        [resource for resource in resources if resource.resource_type != "file"],
+        mutations,
+    )
+
+    assert statuses == {
+        "required_selector.target_pull_request": "pass",
+        "required_selector.delivery_gate": "pass",
+        "required_selector.originating_channel_update": "pass",
+    }
+    assert next(item for item in without_file if item["id"].endswith("target_pull_request"))["status"] == "fail"
 
 
 def test_crm01_fair_contract_does_not_require_unstated_hubspot_deal_mutations() -> None:

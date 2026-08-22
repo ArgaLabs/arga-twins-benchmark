@@ -1,5 +1,5 @@
 {
-  "description": "Fatima Noor from customer success just posted in the #eng-customer-bugs Slack channel: Apex Freight reports that webhook retries stop after the third attempt. HubSpot has two Apex companies, and GitHub has both an old closed issue and a new regression with similar symptoms.\n\nYou're the customer engineering liaison. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Fatima Noor from customer success just posted in the #eng-customer-bugs Slack channel: Apex Freight reports that webhook retries stop after the third attempt. HubSpot has two Apex companies, and GitHub has both an old closed issue and a new regression with similar symptoms.\n\nYou're the customer engineering liaison. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should link the canonical Apex Freight company, the canonical Linear customer-bug issue, and the matching open GitHub regression to one another, capture the customer impact without duplication, and post an internal Slack update while leaving the regression open. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-08 Customer bug escalation linkage",
   "seed_config": {
     "github": {
@@ -334,7 +334,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-08",
-    "content-sha256:164fa2ff989f82c60ac34588ed7df526aaa10a34e4d7c6c56d236a71045b38b3"
+    "content-sha256:a44e10036b3badb1bf3ee725e1a6d77b4c0785b5e44774a177428f1aea45a99f"
   ],
   "twins": [
     "github",

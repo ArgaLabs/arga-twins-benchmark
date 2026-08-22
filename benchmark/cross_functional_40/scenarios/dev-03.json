@@ -1,5 +1,5 @@
 {
-  "description": "Jordan Lee from developer experience just posted in the #eng-builds Slack channel: the same integration test failed in six unrelated pull requests overnight, but a similarly named unit test reflects a real product regression. Teams are rerunning jobs manually.\n\nYou're the build reliability owner. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Jordan Lee from developer experience just posted in the #eng-builds Slack channel: the same integration test failed in six unrelated pull requests overnight, but a similarly named unit test reflects a real product regression. Teams are rerunning jobs manually.\n\nYou're the build reliability owner. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should track the flaky checkout_tax_roundtrip test once with an actual 24-hour quarantine, keep the checkout_tax_rounding product regression active, reconcile the GitHub and Linear evidence, and put the approved workaround in Slack. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-03 Flaky CI test quarantine",
   "seed_config": {
     "github": {
@@ -284,7 +284,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-03",
-    "content-sha256:b369308b7fba74a1c6f7310f473cccf96c03f1d41148a7a8a5d159a9ba28d45a"
+    "content-sha256:2785693cea81bb7e2f2bed932ff3978ca69097a9957b0f88a64d40c5b4472521"
   ],
   "twins": [
     "github",

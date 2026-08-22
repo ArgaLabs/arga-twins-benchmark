@@ -31,13 +31,17 @@ def _content_hash(task: dict[str, Any]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def test_ecom01_preserved_hash_is_accepted_for_verifier_only_correction() -> None:
+def test_prompt_changed_tasks_reject_preserved_hashes() -> None:
     suite = json.loads(SUITE_PATH.read_text(encoding="utf-8"))
-    task = next(item for item in suite["tasks"] if item["id"] == "ECOM-01")
+    historical_hashes = {
+        "DEV-05": "5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47",
+        "ECOM-01": "613cc946487aca4432120106f0191c59a5bc9ce6e38975ce528fa5f0a4dd4644",
+        "MKT-01": "9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e",
+    }
 
-    assert "613cc946487aca4432120106f0191c59a5bc9ce6e38975ce528fa5f0a4dd4644" in (
-        matrix._accepted_content_hashes(task)  # pyright: ignore[reportPrivateUsage]
-    )
+    for task_id, historical_hash in historical_hashes.items():
+        task = next(item for item in suite["tasks"] if item["id"] == task_id)
+        assert historical_hash not in matrix._accepted_content_hashes(task)  # pyright: ignore[reportPrivateUsage]
 
 
 def _archive_cleanup(run_id: str) -> dict[str, Any]:

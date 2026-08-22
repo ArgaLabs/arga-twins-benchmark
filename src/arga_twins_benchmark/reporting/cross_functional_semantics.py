@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import re
 import unicodedata
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from datetime import UTC, datetime
 from typing import cast
 
@@ -414,3 +414,78 @@ def fact_items(task: Mapping[str, object]) -> tuple[tuple[str, object], ...]:
 
 def matching_fact_present(corpus: object, facts: Sequence[tuple[str, object]]) -> bool:
     return any(structured_fact_present(corpus, key, value) for key, value in facts)
+
+
+_RECORD_FIELD_CONTAINERS = frozenset(
+    {
+        "attributes",
+        "fields",
+        "metadata",
+        "properties",
+    }
+)
+
+
+def _local_record_value(value: object, *, field_container: bool = False) -> object | None:
+    """Return one record's local fields without absorbing sibling resources.
+
+    Provider snapshots commonly nest business records under collections such as
+    ``issues`` or ``customers``. Serializing the collection owner would pool all
+    children and make unrelated records look correlated. Named field containers
+    such as Jira ``fields`` and HubSpot ``properties`` are part of the enclosing
+    record, so those are retained recursively.
+    """
+
+    if isinstance(value, Mapping):
+        local: dict[str, object] = {}
+        for raw_key, child in value.items():
+            key = str(raw_key)
+            if isinstance(child, (str, int, float, bool)) or child is None:
+                local[key] = child
+            elif key.casefold() in _RECORD_FIELD_CONTAINERS:
+                nested = _local_record_value(child, field_container=True)
+                if nested not in ({}, [], None):
+                    local[key] = nested
+            elif field_container and isinstance(child, Mapping):
+                nested = _local_record_value(child, field_container=True)
+                if nested not in ({}, [], None):
+                    local[key] = nested
+        return local
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)) and field_container:
+        return [
+            item for child in value if (item := _local_record_value(child, field_container=True)) not in ({}, [], None)
+        ]
+    return None
+
+
+def record_corpora(value: object) -> tuple[object, ...]:
+    """Return independently matchable record-local corpora from provider state."""
+
+    corpora: list[object] = []
+
+    def walk(candidate: object) -> None:
+        if isinstance(candidate, Mapping):
+            local = _local_record_value(candidate)
+            if isinstance(local, Mapping) and local:
+                corpora.append(local)
+            for child in candidate.values():
+                walk(child)
+        elif isinstance(candidate, Sequence) and not isinstance(candidate, (str, bytes, bytearray)):
+            for child in candidate:
+                walk(child)
+
+    walk(value)
+    return tuple(corpora)
+
+
+def maximum_record_fact_matches(value: object, facts: Iterable[tuple[str, object]]) -> int:
+    """Return the largest fact count established by one provider record."""
+
+    materialized = tuple(facts)
+    return max(
+        (
+            sum(structured_fact_present(corpus, key, expected) for key, expected in materialized)
+            for corpus in record_corpora(value)
+        ),
+        default=0,
+    )

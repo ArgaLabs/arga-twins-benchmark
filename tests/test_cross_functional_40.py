@@ -328,7 +328,7 @@ def test_optional_customer_review_policy_is_not_a_hidden_deliverable() -> None:
     assert [
         requirement.assertion_id
         for requirement in legacy._RULES["ECOM-08"].requirements  # pyright: ignore[reportPrivateUsage]
-    ] == ["empty_evaluation_archived"]
+    ] == ["empty_evaluation_archived", "crm_archive_reconciled", "jira_archive_reconciled"]
 
 
 def test_seed_validation_report_covers_every_task() -> None:

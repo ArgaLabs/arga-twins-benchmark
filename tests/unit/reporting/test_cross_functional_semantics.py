@@ -9,6 +9,7 @@ import pytest
 from arga_twins_benchmark.reporting.cross_functional_semantics import (
     SEMANTIC_EQUIVALENTS,
     SEMANTIC_FACT_KEYS,
+    maximum_record_fact_matches,
     normalize_match_text,
     semantic_value_present,
     structured_fact_present,
@@ -121,3 +122,25 @@ def test_iso_datetime_accepts_the_same_instant_with_an_explicit_offset() -> None
     assert semantic_value_present(evidence, "2026-08-18T17:15")
     assert semantic_value_present(evidence, "2026-08-18T17:45")
     assert not semantic_value_present(evidence, "2026-08-18T18:15")
+
+
+def test_record_fact_matching_does_not_compose_facts_across_sibling_records() -> None:
+    facts = (("case", "OBS-91"), ("production_cta", "/products/observability"))
+    split_records = {
+        "issues": [
+            {"id": "one", "title": "OBS-91"},
+            {"id": "two", "description": "Use /products/observability"},
+        ]
+    }
+    joined_record = {
+        "issues": [
+            {
+                "id": "one",
+                "title": "OBS-91",
+                "description": "Use /products/observability",
+            }
+        ]
+    }
+
+    assert maximum_record_fact_matches(split_records, facts) == 1
+    assert maximum_record_fact_matches(joined_record, facts) == 2

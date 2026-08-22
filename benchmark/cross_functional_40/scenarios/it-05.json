@@ -1,5 +1,5 @@
 {
-  "description": "Priya Desai from legal just posted in the #it-helpdesk Slack channel: the VPN disconnects every few minutes since yesterday's desktop client update. Several colleagues report the same symptom, but the network status page is green.\n\nYou're the endpoint support lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
+  "description": "Priya Desai from legal just posted in the #it-helpdesk Slack channel: the VPN disconnects every few minutes since yesterday's desktop client update. Several colleagues report the same symptom, but the network status page is green.\n\nYou're the endpoint support lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should connect the duplicate reports to build 6.4.2, escalate the canonical Jira issue with the matching repository evidence, and put the approved workaround in the originating Slack channel. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: IT-05 VPN regression after client update",
   "seed_config": {
     "github": {
@@ -290,7 +290,7 @@
     "suite:cross-functional-40-v1",
     "domain:it_support",
     "task:it-05",
-    "content-sha256:df9ad27c9722d3f1eabdcee5a5fbfa05d0a28075fee0ca0ea86e989d7d22b516"
+    "content-sha256:36a44ad69da73f235ec113224c39fa97fc09be9853a21cab9589c3486177b684"
   ],
   "twins": [
     "github",

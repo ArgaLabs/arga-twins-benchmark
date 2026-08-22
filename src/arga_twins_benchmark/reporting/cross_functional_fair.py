@@ -872,11 +872,16 @@ def _cross_system_assertion(
     ]
     matched: set[str] = set()
     for provider in providers:
-        corpus = " ".join(
-            _resource_text(resource) for resource in resources if _provider_for_role(resource.provider_role) == provider
+        match_count = max(
+            (
+                sum(structured_fact_present(_resource_text(resource), key, fact) for key, fact in strong_facts)
+                for resource in resources
+                if _provider_for_role(resource.provider_role) == provider
+            ),
+            default=0,
         )
         threshold = min(2, len(strong_facts))
-        if threshold and sum(structured_fact_present(corpus, key, fact) for key, fact in strong_facts) >= threshold:
+        if threshold and match_count >= threshold:
             matched.add(provider)
     passed = len(matched) >= minimum
     missing = sorted(providers - matched)
@@ -951,6 +956,158 @@ def _cardinality_assertions(
             )
         )
     return assertions
+
+
+def _dev05_selector_assertions(
+    resources: Sequence[CanonicalResource],
+    mutations: Sequence[Mutation],
+) -> list[dict[str, Any]]:
+    """Evaluate DEV-05's explicit resource selectors and their relationships."""
+
+    github_resources = [resource for resource in resources if _provider_for_role(resource.provider_role) == "github"]
+    pull_requests = [
+        resource
+        for resource in github_resources
+        if "pull_request" in resource.resource_type.casefold() or resource.resource_type.casefold() == "pr"
+    ]
+    target_prs: list[CanonicalResource] = []
+    for pull_request in pull_requests:
+        text = _resource_text(pull_request)
+        if not _groups_present(
+            text,
+            (
+                _group("paycore-2026.08-r17"),
+                _group("artifact class migration", "migration"),
+                _group("c91d-7a40"),
+                _group("billing-storage"),
+                _group("open"),
+                _group("platform-services"),
+            ),
+        ):
+            continue
+        if not any(
+            _term_present(_resource_text(resource), "db/migrations/billing/20260813_settlement_hold.sql")
+            and (
+                f"/{pull_request.resource_id}/" in f"/{resource.resource_id}/"
+                or (
+                    isinstance(pull_request.fields.get("number"), int | str)
+                    and any(
+                        marker in resource.resource_id
+                        for marker in (
+                            f"/prs/{pull_request.fields['number']}/",
+                            f"/pull_requests/{pull_request.fields['number']}/",
+                            f"/pulls/{pull_request.fields['number']}/",
+                        )
+                    )
+                )
+            )
+            for resource in github_resources
+        ):
+            continue
+        if _term_present(text, '"merged":true') or _term_present(text, '"state":"closed"'):
+            continue
+        target_prs.append(pull_request)
+    pr_passed = len(target_prs) == 1
+
+    linear_resources = [resource for resource in resources if _provider_for_role(resource.provider_role) == "linear"]
+    gate_issues = [
+        resource
+        for resource in linear_resources
+        if resource.resource_type.casefold() == "issue"
+        and _term_present(_resource_text(resource), "Settlement-state rollout gate")
+        and _groups_present(_resource_text(resource), (_group("started", "in progress"),))
+    ]
+    gate_comments = [
+        resource
+        for resource in linear_resources
+        if "comment" in resource.resource_type.casefold()
+        and _groups_present(
+            _resource_text(resource),
+            (
+                _group("paycore-2026.08-r17"),
+                _group("c91d-7a40"),
+                _group("billing-storage"),
+                _group(".github/CODEOWNERS", "CODEOWNERS"),
+            ),
+        )
+    ]
+    linked_gate_comments = [
+        comment
+        for comment in gate_comments
+        if any(
+            issue.resource_id in comment.resource_id or str(issue.fields.get("id", "")) in comment.resource_id
+            for issue in gate_issues
+        )
+    ]
+    gate_passed = len(gate_issues) == 1 and bool(linked_gate_comments)
+
+    slack_updates = [
+        mutation
+        for mutation in mutations
+        if _provider_for_role(mutation.twin) == "slack"
+        and mutation.operation == "create"
+        and _groups_present(
+            _mutation_text(mutation),
+            (_group("billing-storage"), _group(".github/CODEOWNERS", "CODEOWNERS"), _group("unmerged")),
+        )
+    ]
+    return [
+        _assertion(
+            "required_selector.target_pull_request",
+            "pass" if pr_passed else "fail",
+            (
+                "Exactly one open, unmerged acme/platform-services migration pull request has the required "
+                "changed path and billing-storage review request"
+                if pr_passed
+                else (
+                    f"Found {len(target_prs)} pull requests satisfying the complete DEV-05 selector; "
+                    "exactly one is required"
+                )
+            ),
+            [
+                {
+                    "artifact": "final-state.json",
+                    "pointer": f"/queries/github/{resource.resource_type}/{resource.resource_id}",
+                }
+                for resource in target_prs
+            ]
+            or [{"artifact": "final-state.json", "pointer": "/queries/github"}],
+        ),
+        _assertion(
+            "required_selector.delivery_gate",
+            "pass" if gate_passed else "fail",
+            (
+                "The exact started Linear gate has a linked comment containing all release, owner, and policy facts"
+                if gate_passed
+                else "The exact Linear gate and one linked fact-complete comment were not both established"
+            ),
+            [
+                {
+                    "artifact": "final-state.json",
+                    "pointer": f"/queries/linear/{resource.resource_type}/{resource.resource_id}",
+                }
+                for resource in [*gate_issues, *linked_gate_comments]
+            ]
+            or [{"artifact": "final-state.json", "pointer": "/queries/linear"}],
+        ),
+        _assertion(
+            "required_selector.originating_channel_update",
+            "pass" if slack_updates else "fail",
+            (
+                "The originating Slack update names the owner, policy file, and unmerged state"
+                if slack_updates
+                else "No new Slack update jointly establishes billing-storage, CODEOWNERS, and unmerged status"
+            ),
+            [
+                {
+                    "artifact": "final-state.json",
+                    "pointer": f"/queries/{mutation.twin}/{mutation.resource_type}/{mutation.resource_id}",
+                }
+                for mutation in slack_updates
+            ]
+            or [{"artifact": "final-state.json", "pointer": "/queries/slack"}],
+        ),
+    ]
 
 
 def _reviewed_draft_assertion(
@@ -1150,8 +1307,7 @@ def _same_trial_transient_cleanup_events(invocation: Mapping[str, object]) -> se
                 issue_keys = {
                     str(issue.get("key"))
                     for field in ("inwardIssue", "outwardIssue")
-                    if (issue := _object_mapping(request_body.get(field)))
-                    and isinstance(issue.get("key"), str)
+                    if (issue := _object_mapping(request_body.get(field))) and isinstance(issue.get("key"), str)
                 }
                 if len(issue_keys) == 2:
                     created_jira_link_pairs.add(frozenset(issue_keys))
@@ -1164,8 +1320,7 @@ def _same_trial_transient_cleanup_events(invocation: Mapping[str, object]) -> se
                     linked_keys = {
                         str(linked.get("key"))
                         for field in ("inwardIssue", "outwardIssue")
-                        if (linked := _object_mapping(record.get(field)))
-                        and isinstance(linked.get("key"), str)
+                        if (linked := _object_mapping(record.get(field))) and isinstance(linked.get("key"), str)
                     }
                     if (
                         isinstance(identifier, str | int)
@@ -1179,8 +1334,7 @@ def _same_trial_transient_cleanup_events(invocation: Mapping[str, object]) -> se
         if method in {"PATCH", "PUT", "DELETE"}:
             path_segments = set(path.strip("/").split("/"))
             if any(
-                created_provider == provider and identifier in path_segments
-                for created_provider, identifier in created
+                created_provider == provider and identifier in path_segments for created_provider, identifier in created
             ):
                 cleanups.add(index)
     return cleanups
@@ -1240,8 +1394,7 @@ def _successful_forbidden_deletion_assertion(
                 (_group("Evaluation EV-204"), _group("Operations Review")),
             )
             and not any(
-                _term_present(baseline_target_text, term)
-                for term in ("Earlier Review", "EV-119", "Orbit Systemics")
+                _term_present(baseline_target_text, term) for term in ("Earlier Review", "EV-119", "Orbit Systemics")
             )
         )
         mkt_01_stale_status_cleanup = bool(
@@ -1525,6 +1678,8 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
         )
 
     assertions.extend(_cardinality_assertions(mutations, contract.cardinality_requirements))
+    if task_id == "DEV-05":
+        assertions.extend(_dev05_selector_assertions(after, mutations))
     if contract.reviewed_unsent_confirmation:
         assertions.append(_reviewed_draft_assertion(task, mutations))
     if task_id == "CRM-05":

@@ -1,5 +1,5 @@
 {
-  "description": "Diego Romero from community just posted in the #marketing-launches Slack channel: the ScaleOps event recap is ready for LinkedIn, but its pipeline claim may include existing customers and duplicate contacts. The post should only use the verified net-new attendee count.\n\nYou're the campaign analytics operator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
+  "description": "Diego Romero from community just posted in the #marketing-launches Slack channel: the ScaleOps event recap is ready for LinkedIn, but its pipeline claim may include existing customers and duplicate contacts. The post should only use the verified net-new attendee count.\n\nYou're the campaign analytics operator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should contain exactly one SO-88 company recap with the verified net-new count, preserve the cohort rule in the measurement issue, and summarize the verified count in Slack. Treat approvals, publishing identity, and embargoes as hard constraints; publish nothing that is not clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: MKT-06 Event recap attribution check",
   "seed_config": {
     "hubspot": {
@@ -577,7 +577,7 @@
     "suite:cross-functional-40-v1",
     "domain:marketing",
     "task:mkt-06",
-    "content-sha256:aded754c5ac2a8daddd30165b9c9f2dcd7fdcd2d0aba0d5cf798979fd7d2126b"
+    "content-sha256:98990a26794e919cc1769aa687029368a5f69b01cd12c257b6adf03b49184cbd"
   ],
   "twins": [
     "hubspot",

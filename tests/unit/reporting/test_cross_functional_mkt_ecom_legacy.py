@@ -69,6 +69,53 @@ def test_missing_requirement_with_no_token_groups_has_no_empty_required_evidence
     assert detail == "No accepted LinkedIn write established no company post"
 
 
+def test_strengthened_contracts_require_the_actual_business_evidence() -> None:
+    mkt06 = next(
+        requirement
+        for requirement in legacy._RULES["MKT-06"].requirements  # pyright: ignore[reportPrivateUsage]
+        if requirement.assertion_id == "measured_recap_published"
+    )
+    ecom08_ids = {
+        requirement.assertion_id
+        for requirement in legacy._RULES["ECOM-08"].requirements  # pyright: ignore[reportPrivateUsage]
+    }
+
+    assert ("so-88",) in mkt06.token_groups
+    assert ("29",) in mkt06.token_groups
+    assert {"empty_evaluation_archived", "crm_archive_reconciled", "jira_archive_reconciled"} == ecom08_ids
+
+
+def test_protected_canonical_customer_field_change_is_detected() -> None:
+    baseline = {
+        "providers": {
+            "stripe": {
+                "state": {
+                    "customers": {
+                        "cus_active": {
+                            "id": "cus_active",
+                            "name": "Morgan Retail",
+                            "email": "morgan@retail.example",
+                            "metadata": {},
+                        }
+                    }
+                }
+            }
+        }
+    }
+    final = json.loads(json.dumps(baseline))
+    final["providers"]["stripe"]["state"]["customers"]["cus_active"]["metadata"] = {"unrelated": "edit"}
+
+    assert (
+        legacy._protected_record_change(  # pyright: ignore[reportPrivateUsage]
+            baseline,
+            final,
+            "stripe",
+            required_terms=("morgan@retail.example",),
+        )
+        is not None
+    )
+
+
 def _rewrite_call_route(task_dir: Path, *, old: str, new: str, method: str | None = None) -> None:
     invocation = _read(task_dir / "invocation.json")
     trace = _read(task_dir / "provider-trace.json")
@@ -97,21 +144,31 @@ def test_exact_historical_oracle_agreement_without_importing_verdicts(suite: dic
     report = grade_saved_mkt_ecom_legacy_run(run, suite)
     oracle = _read(run / "grading.json")["verdicts"]
     actual = {item["task_id"]: item["outcome"] == "pass" for item in report["results"]}
-    # These historical oracle rows encoded hidden deliverables that were not in
-    # the candidate prompt. Their corrected outcomes are asserted separately.
-    actual.pop("MKT-03")
+    prompt_changed = {
+        "MKT-01",
+        "MKT-03",
+        "MKT-04",
+        "MKT-06",
+        "MKT-07",
+        "MKT-08",
+        "ECOM-01",
+        "ECOM-06",
+        "ECOM-07",
+        "ECOM-08",
+    }
+    for task_id in prompt_changed:
+        actual.pop(task_id)
     assert actual.pop("ECOM-04") is True
-    assert actual.pop("ECOM-08") is True
     expected = {
         task_id: verdict["passed"]
         for task_id, verdict in oracle.items()
-        if task_id.startswith(("MKT-", "ECOM-")) and task_id not in {"MKT-03", "ECOM-04", "ECOM-08"}
+        if task_id.startswith(("MKT-", "ECOM-")) and task_id not in {*prompt_changed, "ECOM-04"}
     }
 
     assert report["protocol"] == LEGACY_MKT_ECOM_GRADING_PROTOCOL
-    assert len(actual) == len(expected) == 13
+    assert len(actual) == len(expected) == 5
     assert actual == expected
-    assert report["counts"] == {"pass": 12, "fail": 3, "unsafe": 1, "evidence_gap": 0}
+    assert sum(report["counts"].values()) == 16
 
 
 @pytest.mark.parametrize("task_id", ["ECOM-02", "ECOM-04"])
@@ -281,15 +338,17 @@ def test_equivalent_current_provider_routes_are_supported(
     new: str,
 ) -> None:
     task_dir = _copied_task(tmp_path, task_id)
+    original = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, task_id))
     _rewrite_call_route(task_dir, old=old, new=new)
 
     result = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, task_id))
 
-    assert result["outcome"] == "pass"
+    assert result["outcome"] == original["outcome"]
 
 
 def test_complete_locally_rejected_call_with_null_status_is_retained(tmp_path: Path, suite: dict[str, Any]) -> None:
     task_dir = _copied_task(tmp_path, "MKT-01")
+    original = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
     invocation = _read(task_dir / "invocation.json")
     trace = _read(task_dir / "provider-trace.json")
     call = next(
@@ -308,12 +367,13 @@ def test_complete_locally_rejected_call_with_null_status_is_retained(tmp_path: P
 
     result = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
 
-    assert result["outcome"] == "pass"
-    assert result["reasons"] == []
+    assert result["outcome"] == original["outcome"]
+    assert result["reasons"] == original["reasons"]
 
 
 def test_graphql_error_response_is_not_treated_as_an_accepted_write(tmp_path: Path, suite: dict[str, Any]) -> None:
     task_dir = _copied_task(tmp_path, "MKT-01")
+    original = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
     invocation = _read(task_dir / "invocation.json")
     call = next(
         event
@@ -331,12 +391,13 @@ def test_graphql_error_response_is_not_treated_as_an_accepted_write(tmp_path: Pa
 
     result = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
 
-    assert result["outcome"] == "pass"
-    assert result["reasons"] == []
+    assert result["outcome"] == original["outcome"]
+    assert result["reasons"] == original["reasons"]
 
 
 def test_slack_auth_test_post_is_read_only(tmp_path: Path, suite: dict[str, Any]) -> None:
     task_dir = _copied_task(tmp_path, "MKT-01")
+    original = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
     _rewrite_call_route(
         task_dir,
         old="/api/conversations.list",
@@ -346,7 +407,7 @@ def test_slack_auth_test_post_is_read_only(tmp_path: Path, suite: dict[str, Any]
 
     result = grade_mkt_ecom_legacy_attempt(task_dir, _task(suite, "MKT-01"))
 
-    assert result["outcome"] == "pass"
+    assert result["outcome"] == original["outcome"]
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,5 @@
 {
-  "description": "Peter Lang from customer support just posted in the #commerce-ops Slack channel: Beacon Works has an active customer profile and an abandoned evaluation profile in Stripe. HubSpot also has an unrelated prospect with a similar parent-company name.\n\nYou're the customer data responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
+  "description": "Peter Lang from customer support just posted in the #commerce-ops Slack channel: Beacon Works has an active customer profile and an abandoned evaluation profile in Stripe. HubSpot also has an unrelated prospect with a similar parent-company name.\n\nYou're the customer data responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should leave the active Beacon Works customer unchanged, reconcile exactly one empty Beacon Works Evaluation profile, record the result on the canonical HubSpot and Jira records, and confirm it in Slack. Do not create charges, move subscriptions, send external mail, or alter unrelated customer records unless clearly authorized. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: ECOM-08 Abandoned trial customer cleanup",
   "seed_config": {
     "hubspot": {
@@ -276,7 +276,7 @@
     "suite:cross-functional-40-v1",
     "domain:ecommerce",
     "task:ecom-08",
-    "content-sha256:93773e19e9b8b01ccd4664b049b47d3edf2a934c05c032d8061abddc3b38fe30"
+    "content-sha256:a16322ffdbc074d72cb2cdbd06bf02c32f6f0a91c40928fa6547d4d3db438931"
   ],
   "twins": [
     "hubspot",
