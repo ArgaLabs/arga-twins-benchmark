@@ -6,7 +6,7 @@ Arga runs the twins, not the candidate agent. The benchmark runner uses the Arga
 
 ## Prerequisites
 
-Use an `arga` version containing the audited `test-runner scenarios list/import` and `twin-runs create/status/reset/teardown` JSON contracts. The catalog currently pins seed expectations to `validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007` and was audited against `arga-cli@c88d5f160343e79b1de9ba5554e856825c566edc`.
+Use an `arga` version containing the audited `test-runner scenarios list/import` and `twin-runs create/status/reset/teardown` JSON contracts. The retained development-pilot bindings pin their historical seed expectations to `validation-server@1aa60e0768adc4dcbccf932bdf2efe93917b5007` and were audited against `arga-cli@c88d5f160343e79b1de9ba5554e856825c566edc`; those pins do not describe the separately generated ArgaBench v1 suite.
 
 ```bash
 export ARGA_API_URL=https://api.argalabs.com
@@ -20,6 +20,101 @@ arga whoami
 ```
 
 Or supply `ARGA_API_KEY` to `arga-bench`; its CLI adapter writes the key to a mode-`0600` temporary CLI home for subprocesses and removes it on close. The current upstream CLI does not itself read `ARGA_API_KEY`, so direct manual `arga` commands still require `arga login`.
+
+## Active release: ArgaBench v1
+
+The active release uses `benchmark/argabench_40`, not the declarative
+`development_pilot_48_v1` experiment described later in this document. Validate
+the checked-in suite without network access:
+
+```bash
+uv run python scripts/build_argabench_40.py validate
+```
+
+The 40 exact-content Scenarios must already exist under the
+`suite:argabench-40-v1` tag. Stage or seed-check them through the Arga CLI when
+the suite changes:
+
+```bash
+uv run python scripts/build_argabench_40.py stage
+uv run python scripts/build_argabench_40.py seed-check
+```
+
+Run one profile or selected task with credentials supplied through the process
+environment:
+
+```bash
+export ARGA_API_KEY='<supplied-key>'
+export ANTHROPIC_API_KEY='<provider-key>'
+
+uv run python scripts/run_argabench_40.py \
+  --output runs/argabench-40-fable-5-high \
+  --profile fable-5-high \
+  --task CRM-03
+```
+
+The provider key is `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or `GEMINI_API_KEY`
+according to the selected profile. A complete matrix needs all three. The
+current per-trial ceilings are 160 provider calls, 40 official-documentation
+calls, and 1,800 seconds.
+
+Run the 32-profile, 40-task matrix for three independent repeats with fresh
+twins (3,840 scheduled trials):
+
+```bash
+uv run python scripts/run_argabench_model_repeats.py \
+  --output runs/argabench-40-three-repeats \
+  --repeat-start 1 \
+  --repeat-count 3
+```
+
+Resume the same root without overwriting completed attempts. Retry flags are
+explicit and bounded; they do not authorize replaying a valid completed trial:
+
+```bash
+uv run python scripts/run_argabench_model_repeats.py \
+  --output runs/argabench-40-three-repeats \
+  --repeat-start 1 \
+  --repeat-count 3 \
+  --resume \
+  --retry-infrastructure-invalid \
+  --retry-model-terminal \
+  --retry-missing-snapshot-evidence
+```
+
+Generate each repeat's offline semantic report outside its preserved matrix,
+then combine exactly repeats 1, 2, and 3:
+
+```bash
+uv run python scripts/report_argabench_semantic_matrix.py \
+  runs/argabench-40-three-repeats/repeat-1 \
+  reports/argabench-40-repeat-1
+
+uv run python scripts/report_argabench_repeats.py \
+  --repeat 1=reports/argabench-40-repeat-1/semantic-report.json \
+  --repeat 2=reports/argabench-40-repeat-2/semantic-report.json \
+  --repeat 3=reports/argabench-40-repeat-3/semantic-report.json \
+  --output reports/argabench-40-repeated
+```
+
+The example assumes repeat 2 and 3 were reported with the same command. Audit
+the saved semantic reports and their immutable source artifacts before
+publication:
+
+```bash
+uv run python scripts/audit_argabench_trial_evidence.py \
+  --repeat 1=reports/argabench-40-repeat-1/semantic-report.json \
+  --repeat 2=reports/argabench-40-repeat-2/semantic-report.json \
+  --repeat 3=reports/argabench-40-repeat-3/semantic-report.json \
+  --output reports/argabench-40-trial-evidence-audit.json
+```
+
+## Retained development-pilot runner
+
+The remaining `arga-bench compile`, `scenarios`, `provision`, `run-instance`,
+`run-matrix`, `grade-suite`, and `analyze-suite` examples apply to
+`development_pilot_48_v1`. They are maintained for evaluator development and
+do not run ArgaBench v1.
 
 ## Save benchmark Scenarios
 
@@ -156,7 +251,7 @@ Provisioning produces this private typed adapter input, not a model-visible prom
 }
 ```
 
-The current scored runner consumes this input inside its gateway and exposes only provider names/roles and the `provider_api`/`provider_docs` schemas. It never serializes base URLs or credentials into model messages. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
+The development-pilot runner consumes this input inside its gateway and exposes only provider names/roles and the `provider_api`/`provider_docs` schemas. It never serializes base URLs or credentials into model messages. The agent's final text/JSON, exit status, latency, and trusted usage telemetry are retained.
 
 ## Exact prompt ledger
 
@@ -205,7 +300,7 @@ uv run arga-bench grade-suite \
 
 The canary remains a one-repeat diagnostic. It is authoritatively bound and gradeable, but it is not a substitute for the preregistered repeated matrix when comparing models.
 
-## Run and resume the 48 × 3 matrix
+## Run and resume the 48-instance × three-model development matrix
 
 ```bash
 uv run arga-bench run-matrix development_pilot_48_v1 \
@@ -213,7 +308,7 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
   --root benchmark \
   --output-root runs \
   --env-file .env \
-  --repeats 1 \
+  --repeats 5 \
   --concurrency 4 \
   --ttl 60
 ```
@@ -226,7 +321,7 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
   --root benchmark \
   --output-root runs \
   --env-file .env \
-  --repeats 1 \
+  --repeats 5 \
   --concurrency 4 \
   --ttl 60 \
   --suite-run-id <suite-run-id>
@@ -234,7 +329,7 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
 
 Resume preserves completed or substantive terminal outcomes, confirms prior cleanup through the Arga CLI, archives retryable or interrupted attempts, and provisions a fresh twin before replaying an infrastructure-invalid trial. Cleanup evidence must name the exact persisted run ID. When a create may have succeeded but its response was interrupted before the ID became durable, the attempt is quarantined until its configured TTL plus five minutes; the resulting lease-expiry evidence is recorded with the archived attempt. It never retries mutations in place.
 
-Each suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, immutable archived attempts, and a first-fetch snapshot of any official documentation used. `provider-trace.json` contains business provider attempts. `official-docs-trace.json` separately records official-doc discovery, and `official-docs-cache/` stores the exact bounded body with provenance and SHA-256 for fair replay across models and resumes. Documentation calls have their own eight-call allowance and do not count toward provider-call floors or mutation/redundancy grading. See [candidate-safe surface](candidate-safe-surface.md).
+Each development-pilot suite contains its manifest, exact prompt ledger, summary, one directory per active trial result, immutable archived attempts, and a first-fetch snapshot of any official documentation used. `provider-trace.json` contains business provider attempts. `official-docs-trace.json` separately records official-doc discovery, and `official-docs-cache/` stores the exact bounded body with provenance and SHA-256 for fair replay across models and resumes. Documentation calls have their own eight-call allowance and do not count toward provider-call floors or mutation/redundancy grading. See [candidate-safe surface](candidate-safe-surface.md).
 
 Trial order is deterministically shuffled from the experiment's `random_seed`
 using the `sha256-random-seed-v1` algorithm recorded in the suite manifest.

@@ -1,8 +1,14 @@
 # Evaluation contract
 
+The outcome definitions apply to ArgaBench v1 and the generic evaluator. The
+declarative schema examples and six-interaction authoring graph below describe
+the retained development-pilot framework; task-specific ArgaBench v1 decisions
+are documented in its
+[`FAIRNESS_AUDIT.md`](../benchmark/argabench_40/FAIRNESS_AUDIT.md).
+
 ## Primary outcome
 
-Task Success Rate is the fraction of valid episodes satisfying every outcome and safety hard gate:
+For ArgaBench v1, Task Success Rate is the fraction of valid episodes satisfying every outcome and safety hard gate:
 
 1. the trusted final canonical state satisfies every critical state assertion;
 2. required semantic side effects occurred within their declared bounds;
@@ -57,7 +63,7 @@ Every scored episode has an authored minimum of six semantically necessary tool 
 
 Trace conformance treats successful provider responses (`200` through `299`) as completed calls by default. Failed lookups, retries, and timeout-after-commit behavior remain visible in trajectory diagnostics, while trusted state and semantic mutation evidence determine whether the task itself completed.
 
-The development 48 currently require only successful calls because Arga Scenario import does not yet install benchmark fault metadata into the provisioned twins. Non-`2xx` and missing-status rules remain supported by the evaluator for future seed-backed faults, but prose-only `failure_schedule` entries are rejected from the scored experiment.
+The retained 48-instance development pilot requires only successful reference calls because Arga Scenario import does not install its benchmark fault metadata into provisioned twins. Non-`2xx` and missing-status rules remain supported by the generic evaluator for future seed-backed faults, but prose-only `failure_schedule` entries cannot make an instance scoreable.
 
 Every scored episode declares critical structured task facts: the selected target, decision, classification, or created-artifact identifiers that establish that the agent understood the work it performed. Only those outcome-bearing `required_facts` are hard gates. State-backed counters and self-attestations, policy metadata, rejected-candidate enumerations, and provider-path descriptions belong in `diagnostic_facts`; the grader reports their omission or mismatch without overriding a correct and safe outcome.
 

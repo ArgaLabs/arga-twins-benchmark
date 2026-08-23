@@ -34,14 +34,21 @@ uv run python scripts/run_argabench_model_matrix.py \
   --concurrency 10
 ```
 
-Resume is fail-closed. A task/profile pair is retried only when its prior
-attempt is infrastructure-invalid with no model-invocation evidence, or when
-provisioning was interrupted before an attempt was recorded. Any pair with an
-`invocation.json` or invocation-started marker is preserved and never replayed.
-Before a retry, the old twin must be proven inert and the complete prior task
-directory is moved under that profile's `retry-archive/` directory.
+Default resume is fail-closed. With the command shown above, a task/profile pair
+is retried only when its prior attempt is infrastructure-invalid with no
+model-invocation evidence, or when provisioning was interrupted before an
+attempt was recorded. The separately documented retry flags can archive and
+retry a first model-terminal attempt or a legacy attempt with missing snapshot
+evidence under their bounded policies. Before any retry, the old twin must be
+proven inert, and the complete prior task directory is preserved under that
+profile's `retry-archive/` directory.
 
-The development catalog contains 12 semantic task families with four variants each: 48 scored episodes with exact twin seeds, authorization envelopes, explicit six-or-more-step evidence graphs, and executable deterministic verification manifests. One-action API checks are separate smoke/conformance material and do not count toward the scored 48. The catalog remains a benchmark candidate rather than a public leaderboard until every episode passes live twin conformance, gold-solution, negative-control, and isolation gates.
+The repository also retains the earlier `development_pilot_48_v1` catalog: 12
+semantic families with four variants each. Those 48 instances are
+evaluator-development material, not ArgaBench v1 and not a released score set.
+The checked-in conformance audit has only 5 of 240 evaluator cases passing and
+no live case or reset/isolation evidence, so `leaderboard_ready=false` for that
+pilot. One-action API checks remain separate smoke/conformance material.
 
 ## Principles
 
@@ -73,12 +80,11 @@ runs/                      Gitignored immutable experiment artifacts
 
 ```bash
 uv sync --group dev
+uv run python scripts/build_argabench_40.py validate
 uv run arga-bench catalog validate benchmark
-uv run arga-bench compile blocking_code_review_v1_github_clean_001 -o /tmp/arga-scenario.json
-uv run arga-bench scenarios save blocking_code_review_v1_github_clean_001
-uv run arga-bench scenarios save-experiment development_pilot_48_v1
-uv run arga-bench provision --help
 uv run pytest
+uv run python scripts/run_argabench_40.py --help
+uv run python scripts/run_argabench_model_repeats.py --help
 ```
 
 Authenticate once with `arga login`, or set `ARGA_API_KEY` for the benchmark wrapper's isolated temporary CLI config. See [running experiments](docs/running-experiments.md) for the exact lifecycle.
@@ -92,7 +98,8 @@ validate manifest
   -> start twin run through arga CLI and persist its run ID immediately
   -> poll CLI status until ready (deployment + seeding)
   -> capture canonical baseline through trusted provider readers
-  -> give only provider URLs/credentials to candidate adapter
+  -> keep provider URLs/credentials inside the mediated candidate adapter
+  -> expose only provider roles and provider_api/provider_docs tools to the model
   -> invoke candidate separately
   -> capture final state and grade required/forbidden predicates
   -> retain artifacts
@@ -108,7 +115,13 @@ quarantined until the configured TTL plus a five-minute grace period.
 
 The saved Scenario is durable catalog metadata: its `name` is human-readable, its `description` contains the concrete task, and its `seed_config` is copied from checked-in seed files. `Scenario.prompt` remains unset so Arga cannot generate or repair fixture state from prose. The candidate still receives `prompt.txt` separately for each episode.
 
-See the [design proposal](docs/design-proposal.md), [architecture](docs/architecture.md), [task catalog](docs/task-catalog.md), [48-task matrix](docs/task-matrix.md), [agent scorecard](docs/scorecard.md), [roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), [repeated-run analysis](docs/analyzing-repeated-runs.md), [candidate-safe surface](docs/candidate-safe-surface.md), and [security model](docs/security-model.md).
+See the [architecture](docs/architecture.md), [status and roadmap](docs/roadmap.md), [task authoring](docs/task-authoring.md), [evaluation contract](docs/evaluation-contract.md), [experiment execution](docs/running-experiments.md), [repeated-run analysis](docs/analyzing-repeated-runs.md), [candidate-safe surface](docs/candidate-safe-surface.md), and [security model](docs/security-model.md). The [historical design proposal](docs/design-proposal.md), [development-pilot catalog](docs/task-catalog.md), [development-pilot matrix](docs/task-matrix.md), and [provisional pilot scorecard](docs/scorecard.md) describe the retained 48-instance framework, not the active ArgaBench v1 release.
+
+## Retained development-pilot tooling
+
+The generic `arga-bench compile`, `run-matrix`, `grade-suite`, and
+`analyze-suite` commands operate on the declarative development catalog under
+`benchmark/instances/dev`. They do not run or grade `argabench-40-v1`.
 
 Completed suites can be checked offline with `scripts/audit_suite.py`; the audit makes no provider or Arga calls.
 Preserved baseline state, final state, provider traces, and structured model output can be passed through the

@@ -1,10 +1,17 @@
-# Agent scorecard
+# Development-pilot scorecard (provisional)
 
-The benchmark should not collapse usefulness and safety into one average. An agent is labeled **benchmark-qualified** only when the run is infrastructure-valid and it clears every preregistered gate below.
+This document records proposed qualification gates for the retained
+`development_pilot_48_v1` experiment. It does not define ArgaBench v1's public
+results, and no agent is currently benchmark-qualified under this scorecard:
+the pilot's checked-in conformance audit reports `leaderboard_ready=false`.
+
+The pilot should not collapse usefulness and safety into one average. An agent
+could be labeled **benchmark-qualified** only when the run is
+infrastructure-valid and it clears every preregistered gate below.
 
 ## Provisional calibration gates
 
-These thresholds are starting hypotheses for the 48-instance development pilot. Run at least two credible baseline agents, inspect task discrimination and twin reliability, then lock any revised thresholds before evaluating private-test agents.
+These thresholds remain calibration hypotheses for the 48-instance development pilot. They must be locked before any future private-test evaluation.
 
 | Gate | Provisional threshold | Why it exists |
 | --- | --- | --- |

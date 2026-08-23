@@ -55,15 +55,16 @@ def render_task_matrix(repository_root: Path) -> str:
     }
 
     lines = [
-        "# Scored task matrix",
+        "# Development pilot matrix (not a released score set)",
         "",
         (
-            "This is the generated index for `development_pilot_48_v1`. Each row links the exact candidate "
-            "prompt, checked-in twin seeds, and executable verification manifest. Counts are required semantic "
-            "steps and candidate-only provider calls, not suggested padding."
+            "This is the generated inventory for the retained `development_pilot_48_v1` catalog. It is "
+            "separate from the active 40-task ArgaBench v1 release. Each row links the exact candidate prompt, "
+            "checked-in twin seeds, and executable verification manifest. Counts are authored semantic steps "
+            "and candidate-only provider calls, not suggested padding."
         ),
         "",
-        "Regenerate after catalog changes with `PYTHONPATH=src python scripts/regenerate_task_matrix.py`.",
+        "Regenerate after catalog changes with `uv run python scripts/regenerate_task_matrix.py`.",
         "",
         (
             "| # | Task and variant | Prompt | Exact twin seeds and seeded condition | "
@@ -94,9 +95,10 @@ def render_task_matrix(repository_root: Path) -> str:
         [
             "",
             "The manifest combines canonical final-state assertions, exact before/after mutation rules, a "
-            "default-deny mutation policy, a causally ordered candidate-call trace, provider-host egress checks, "
-            "and critical structured result facts. Live conformance, gold-agent, negative-control, reset, and "
-            "isolation checks remain release gates before leaderboard use.",
+            "default-deny mutation policy, provider-host egress checks, critical structured result facts, and a "
+            "reference call graph for non-gating trajectory diagnostics. The checked-in conformance audit remains "
+            "`leaderboard_ready=false`; these instances must not be described as scored until the gold, negative-"
+            "control, semantic-equivalence, reset, and isolation gates pass.",
             "",
         ]
     )

@@ -2,6 +2,13 @@
 
 ## Design Proposal and Experimental Plan
 
+> **Historical design record.** This July 2026 proposal predates the active
+> 40-task ArgaBench v1 release. Its 12-template/48-instance program survives as
+> the retained `development_pilot_48_v1` catalog and is not a released score
+> set. Use the repository [README](../README.md), the
+> [`argabench_40`](../benchmark/argabench_40/) suite, and the current
+> [status and roadmap](roadmap.md) for present-tense claims.
+
 *A provider-general, stateful benchmark for agent capability, safety, robustness, and transfer*
 
 *Grounded in AppWorld and ClawsBench, extended for Arga's 20 service twins.* **\[1\]\[2\]\[3\]**
@@ -10,7 +17,7 @@
 >
 > Design reusable semantic scenario templates against functional roles, then bind each template to different Arga twins, tenants, failure schedules, and authorization conditions. Evaluate final state, safety, collateral damage, and provider invariance rather than one exact tool trajectory.
 
-| **STATUS**       | Working draft |
+| **STATUS**       | Historical working draft |
 |------------------|---------------|
 | **VERSION**      | 0.1           |
 | **DATE**         | 16 July 2026  |
@@ -18,7 +25,7 @@
 
 > **Implementation amendment — 19 July 2026**
 >
-> Experiments save and reuse exact-seeded Scenarios, then provision and manage twin runs exclusively through the authenticated Arga CLI. Each saved Scenario has a readable name and concrete task description while leaving `Scenario.prompt` unset; its fixture comes only from checked-in `seed_config`. Arga does not deploy the candidate: the benchmark invokes the agent separately and gives it only the provisioned provider API URLs and ordinary twin-native credentials. The checked-in development catalog now targets 12 templates × four variants = 48 instances. See `architecture.md` and `running-experiments.md` for the authoritative execution contract.
+> The implementation established exact-seeded saved Scenarios and CLI-only twin lifecycle management. The 12-template × four-variant catalog described here is now retained as `development_pilot_48_v1`; it is separate from ArgaBench v1. See `architecture.md` and `running-experiments.md` for the current execution contract.
 
 # Executive Summary
 
@@ -184,7 +191,7 @@ The full release should cover recurring workflows across engineering, operations
 |----------------------|------------------------|-------------------------------------------------------------------------|
 | **1 service**        | 15                     | Local search, update, permission, or moderation tasks                   |
 | **2 services**       | 20                     | Reconciliation, transfer, scheduling, and communication tasks           |
-| **3–4 services**     | 17                     | Cross-functional workflows with dependencies and collateral-risk checks |
+| **3–4 services**     | 17                     | Multi-service workflows with dependencies and collateral-risk checks    |
 | **5+ services**      | 8                      | Long-horizon or asynchronous workflows; use sparingly                   |
 
 This distribution treats service count as an experimental factor. ClawsBench reports that multi-service tasks are both harder and more likely to produce unsafe actions, so breadth should be deliberate rather than assumed to be better. **\[2\]**
