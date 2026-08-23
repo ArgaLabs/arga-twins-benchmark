@@ -4,6 +4,7 @@ import json
 import re
 import unicodedata
 from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 from typing import cast
 
 # These fields describe business meaning rather than an identifier.  The
@@ -265,6 +266,45 @@ def exact_fact_present(corpus: object, expected: object) -> bool:
     return re.search(rf"{left_boundary}{re.escape(needle)}{right_boundary}", text) is not None
 
 
+_ISO_DATETIME_PATTERN = re.compile(
+    r"(?<!\d)(\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}"
+    r"(?::\d{2}(?:\.\d+)?)?(?:[Zz]|[+-]\d{2}:\d{2})?)(?!\d)"
+)
+
+
+def _serialized_text(value: object) -> str:
+    if isinstance(value, str):
+        return value
+    try:
+        return json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def _parse_iso_datetime(value: str) -> datetime | None:
+    rendered = value.strip().replace(" ", "T").replace("z", "+00:00").replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(rendered)
+    except ValueError:
+        return None
+    # Suite timestamps without an explicit offset are canonical UTC instants.
+    # Candidate evidence may render the same instant using a local UTC offset.
+    return parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed
+
+
+def _equivalent_datetime_present(corpus: object, expected: object) -> bool:
+    if not isinstance(expected, str) or _ISO_DATETIME_PATTERN.fullmatch(expected.strip()) is None:
+        return False
+    expected_datetime = _parse_iso_datetime(expected)
+    if expected_datetime is None:
+        return False
+    for candidate in _ISO_DATETIME_PATTERN.findall(_serialized_text(corpus)):
+        candidate_datetime = _parse_iso_datetime(candidate)
+        if candidate_datetime is not None and candidate_datetime.astimezone(UTC) == expected_datetime.astimezone(UTC):
+            return True
+    return False
+
+
 def _word_stem(word: str) -> str:
     if len(word) <= 3 or re.search(r"\d|[@./:+\-]", word):
         return word
@@ -324,11 +364,12 @@ def semantic_value_present(corpus: object, expected: object) -> bool:
     canonical = normalize_match_text(expected)
     if exact_fact_present(text, canonical):
         return True
+    if _equivalent_datetime_present(corpus, expected):
+        return True
     alternatives = SEMANTIC_EQUIVALENTS.get(canonical, ())
     if alternatives:
         return any(
-            all(_semantic_fragment_present(text, fragment) for fragment in alternative)
-            for alternative in alternatives
+            all(_semantic_fragment_present(text, fragment) for fragment in alternative) for alternative in alternatives
         )
     if _intrinsically_exact(expected):
         return False

@@ -317,6 +317,6 @@ def test_dev05_calibration_requires_observable_codeowner_resolution() -> None:
     serialized = json.dumps(verification, sort_keys=True)
     assert '"requested_team": "billing-storage"' in serialized
     assert '"policy_file": ".github/CODEOWNERS"' in serialized
-    assert '"resource_type": "pull_request_review"' in serialized
+    assert '"resource_type": "pull_request_review"' not in serialized
     structured = next(item for item in verification["required_outcomes"] if item["id"] == "structured_result")
     assert "task_id" not in structured["facts"]

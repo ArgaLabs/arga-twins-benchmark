@@ -10,6 +10,7 @@ from arga_twins_benchmark.reporting.cross_functional_semantics import (
     SEMANTIC_EQUIVALENTS,
     SEMANTIC_FACT_KEYS,
     normalize_match_text,
+    semantic_value_present,
     structured_fact_present,
 )
 
@@ -109,3 +110,14 @@ def test_negated_machine_label_words_do_not_accidentally_pass() -> None:
         "disposition",
         "mitigated_not_closed",
     )
+
+
+def test_iso_datetime_accepts_the_same_instant_with_an_explicit_offset() -> None:
+    evidence = {
+        "start": {"dateTime": "2026-08-18T10:15:00-07:00"},
+        "end": {"dateTime": "2026-08-18T10:45:00-07:00"},
+    }
+
+    assert semantic_value_present(evidence, "2026-08-18T17:15")
+    assert semantic_value_present(evidence, "2026-08-18T17:45")
+    assert not semantic_value_present(evidence, "2026-08-18T18:15")

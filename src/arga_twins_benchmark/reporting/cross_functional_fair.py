@@ -76,6 +76,8 @@ _CONTROL_PLANE_SEGMENTS = frozenset(
     {"admin", "_admin", "_twin", "control", "control-plane", "control_plane", "grader", "inspect", "reset", "seed"}
 )
 _REVIEWED_DRAFT_TASKS = frozenset({"CRM-02", "CRM-03", "CRM-05", "ECOM-02", "ECOM-04"})
+
+
 @dataclass(frozen=True)
 class SemanticRequirement:
     id: str
@@ -342,9 +344,7 @@ _CARDINALITY_REQUIREMENTS: dict[str, tuple[CardinalityRequirement, ...]] = {
         _cardinality("one_company_post", "linkedin", "create", ("post",), (_group("REL-26"),), minimum=1, maximum=1),
     ),
     "MKT-02": (_cardinality("no_company_post", "linkedin", "create", ("post",), (), minimum=0, maximum=0),),
-    "MKT-03": (
-        _cardinality("one_company_post", "linkedin", "create", ("post",), (_group("OBS-91"),), minimum=1, maximum=1),
-    ),
+    "MKT-03": (_cardinality("no_company_post", "linkedin", "create", ("post",), (), minimum=0, maximum=0),),
     "MKT-04": (
         _cardinality(
             "one_company_post",
@@ -358,7 +358,7 @@ _CARDINALITY_REQUIREMENTS: dict[str, tuple[CardinalityRequirement, ...]] = {
     ),
     "MKT-05": (_cardinality("no_company_post", "linkedin", "create", ("post",), (), minimum=0, maximum=0),),
     "MKT-06": (
-        _cardinality("one_company_post", "linkedin", "create", ("post",), (_group("SO-88"),), minimum=1, maximum=1),
+        _cardinality("one_company_post", "linkedin", "create", ("post",), (_group("29"),), minimum=1, maximum=1),
     ),
     "MKT-07": (
         _cardinality(
@@ -366,7 +366,7 @@ _CARDINALITY_REQUIREMENTS: dict[str, tuple[CardinalityRequirement, ...]] = {
             "linkedin",
             "create",
             ("post",),
-            (_group("A11Y-2026"),),
+            (_group("accessibility", "accessible"), _group("2026")),
             minimum=1,
             maximum=1,
         ),
@@ -588,6 +588,7 @@ def _trusted_provider_state(snapshot: TrustedStateSnapshot, provider: str) -> ob
         cast(object, {}),
     )
 
+
 def _mkt06_cohort_measurement_assertion(
     task: Mapping[str, Any],
     baseline: TrustedStateSnapshot,
@@ -639,6 +640,7 @@ def _mkt06_cohort_measurement_assertion(
         detail,
         evidence,
     )
+
 
 def fair_contract_for_task(task: Mapping[str, Any]) -> FairTaskContract:
     task_id = _task_value(task, "id")
@@ -789,8 +791,10 @@ def _slack_update_assertion(
         if _provider_for_role(mutation.twin) != "slack" or mutation.operation != "create":
             continue
         text = _mutation_text(mutation)
-        if channel is not None and _term_present(text, channel) and any(
-            structured_fact_present(text, key, value) for key, value in fact_pairs
+        if (
+            channel is not None
+            and _term_present(text, channel)
+            and any(structured_fact_present(text, key, value) for key, value in fact_pairs)
         ):
             matches.append(mutation)
     return _assertion(
@@ -1088,10 +1092,7 @@ def _successful_forbidden_deletion_assertion(
                 and not isinstance(identifier, bool)
                 and (
                     re.search(r"/objects/[^/]+$", urlsplit(path).path, re.IGNORECASE)
-                    or (
-                        provider == "jira"
-                        and re.search(r"/issue/[^/]+/comment$", urlsplit(path).path, re.IGNORECASE)
-                    )
+                    or (provider == "jira" and re.search(r"/issue/[^/]+/comment$", urlsplit(path).path, re.IGNORECASE))
                 )
             ):
                 created_resources.add((provider, str(identifier)))
@@ -1110,8 +1111,7 @@ def _successful_forbidden_deletion_assertion(
             or (
                 task_id == "IT-02"
                 and provider == "github"
-                and _decoded_path(path)
-                == "/repos/acme/internal-operations/contents/config/change.txt"
+                and _decoded_path(path) == "/repos/acme/internal-operations/contents/config/change.txt"
             )
             or (task_id in {"ECOM-01", "ECOM-08"} and provider == "stripe")
             or (task_id == "ECOM-04" and provider == "stripe" and "/tax_ids/" in path)
@@ -1358,9 +1358,7 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
         ]
         matched = [(alternative, matches) for alternative, matches in alternative_matches if matches]
         passed = len(matched) >= group.minimum_alternatives
-        providers = " or ".join(
-            alternative.provider.replace("_", " ").title() for alternative in group.alternatives
-        )
+        providers = " or ".join(alternative.provider.replace("_", " ").title() for alternative in group.alternatives)
         assertions.append(
             _assertion(
                 group.id,
