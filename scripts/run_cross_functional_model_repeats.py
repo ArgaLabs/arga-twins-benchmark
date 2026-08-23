@@ -23,16 +23,10 @@ def repeat_numbers(start: int, count: int) -> tuple[int, ...]:
     return tuple(range(start, start + count))
 
 
-def build_job_plan(
-    profiles: Sequence[dict[str, Any]], repeats: Sequence[int]
-) -> list[tuple[int, dict[str, Any]]]:
+def build_job_plan(profiles: Sequence[dict[str, Any]], repeats: Sequence[int]) -> list[tuple[int, dict[str, Any]]]:
     """Interleave repeats so neither repeat systematically receives earlier capacity."""
 
-    return [
-        (repeat, profile)
-        for profile in matrix.provider_round_robin(list(profiles))
-        for repeat in repeats
-    ]
+    return [(repeat, profile) for profile in matrix.provider_round_robin(list(profiles)) for repeat in repeats]
 
 
 def matrix_config(
@@ -41,13 +35,16 @@ def matrix_config(
     repeat: int,
     args: argparse.Namespace,
 ) -> dict[str, Any]:
+    task_ids = args.tasks or []
+    task_count = len(task_ids) if task_ids else 40
     return {
         "protocol": "arga-bench-cross-functional-model-matrix-run/1",
         "suite_id": "cross-functional-40-v1",
         "profiles": list(profiles),
         "profile_count": len(profiles),
-        "scenarios_per_profile": 40,
-        "total_trials": len(profiles) * 40,
+        "task_ids": task_ids,
+        "scenarios_per_profile": task_count,
+        "total_trials": len(profiles) * task_count,
         "global_trial_concurrency": args.profile_concurrency,
         "per_profile_trial_concurrency": args.tasks_per_profile,
         "per_profile_lifecycle_concurrency": args.lifecycle_concurrency,
@@ -67,6 +64,7 @@ def validate_existing_config(
     *,
     profiles: Sequence[dict[str, Any]],
     repeat: int,
+    task_ids: Sequence[str] = (),
 ) -> None:
     if not path.is_file():
         raise ValueError(f"cannot resume repeat {repeat}: matrix config is missing: {path}")
@@ -83,13 +81,13 @@ def validate_existing_config(
         raise ValueError(f"cannot resume repeat {repeat}: matrix profiles are missing")
     typed_configured = cast(list[object], configured)
     configured_ids = [
-        str(cast(dict[str, object], item).get("id"))
-        for item in typed_configured
-        if isinstance(item, dict)
+        str(cast(dict[str, object], item).get("id")) for item in typed_configured if isinstance(item, dict)
     ]
     expected_ids = [str(item["id"]) for item in profiles]
     if configured_ids != expected_ids:
         raise ValueError(f"cannot resume repeat {repeat}: profile identities or order changed")
+    if typed_payload.get("task_ids", []) != list(task_ids):
+        raise ValueError(f"cannot resume repeat {repeat}: selected task identities changed")
 
 
 def prepare_repeat_root(
@@ -104,7 +102,12 @@ def prepare_repeat_root(
     if exists and not args.resume:
         raise FileExistsError(root)
     if exists:
-        validate_existing_config(root / "matrix-config.json", profiles=profiles, repeat=repeat)
+        validate_existing_config(
+            root / "matrix-config.json",
+            profiles=profiles,
+            repeat=repeat,
+            task_ids=args.tasks or [],
+        )
     else:
         root.mkdir(parents=True, exist_ok=False)
         write_private_json(
@@ -124,6 +127,7 @@ def summarize_repeat(
     outcomes: Sequence[dict[str, Any]],
     args: argparse.Namespace,
 ) -> dict[str, Any]:
+    task_count = len(args.tasks) if args.tasks else 40
     summaries = [item["summary"] for item in outcomes if isinstance(item.get("summary"), dict)]
     summary = {
         "protocol": "arga-bench-cross-functional-model-matrix-summary/1",
@@ -132,7 +136,7 @@ def summarize_repeat(
         "profile_count": len(profiles),
         "profiles_with_summaries": len(summaries),
         "profiles_returned_zero": sum(item["returncode"] == 0 for item in outcomes),
-        "expected_trials": len(profiles) * 40,
+        "expected_trials": len(profiles) * task_count,
         "recorded_trials": sum(int(item.get("attempts", 0) or 0) for item in summaries),
         "global_trial_concurrency": args.profile_concurrency,
         "resumed": args.resume,
@@ -163,6 +167,7 @@ async def async_main(args: argparse.Namespace) -> int:
 
     repeats = repeat_numbers(args.repeat_start, args.repeat_count)
     profiles = matrix.provider_round_robin(matrix.load_profiles())
+    task_count = len(args.tasks) if args.tasks else 40
     output = cast(Path, args.output).resolve()
     if output.exists() and not args.resume:
         raise FileExistsError(output)
@@ -184,8 +189,9 @@ async def async_main(args: argparse.Namespace) -> int:
         "repeat_count": len(repeats),
         "repeats": list(repeats),
         "profile_count": len(profiles),
-        "trials_per_repeat": len(profiles) * 40,
-        "total_trials": len(repeats) * len(profiles) * 40,
+        "task_ids": args.tasks or [],
+        "trials_per_repeat": len(profiles) * task_count,
+        "total_trials": len(repeats) * len(profiles) * task_count,
         "profile_concurrency_across_repeats": args.profile_concurrency,
         "tasks_per_profile": args.tasks_per_profile,
         "google_profile_concurrency_across_repeats": 1,
@@ -198,7 +204,14 @@ async def async_main(args: argparse.Namespace) -> int:
         if not isinstance(existing, dict):
             raise ValueError("cannot resume: repeat config must be an object")
         typed_existing = cast(dict[str, object], existing)
-        for key in ("suite_id", "repeat_start", "repeat_count", "repeats", "profile_count"):
+        for key in (
+            "suite_id",
+            "repeat_start",
+            "repeat_count",
+            "repeats",
+            "profile_count",
+            "task_ids",
+        ):
             if typed_existing.get(key) != parent_config[key]:
                 raise ValueError(f"cannot resume: repeat config changed: {key}")
     else:
@@ -224,12 +237,11 @@ async def async_main(args: argparse.Namespace) -> int:
             tasks_per_profile=args.tasks_per_profile,
             lifecycle_concurrency=args.lifecycle_concurrency,
             cleanup_concurrency=args.cleanup_concurrency,
+            task_ids=args.tasks or [],
         )
         return repeat, outcome
 
-    completed = await asyncio.gather(
-        *(run_one(index, repeat, profile) for index, (repeat, profile) in enumerate(plan))
-    )
+    completed = await asyncio.gather(*(run_one(index, repeat, profile) for index, (repeat, profile) in enumerate(plan)))
     by_repeat: dict[int, list[dict[str, Any]]] = {repeat: [] for repeat in repeats}
     for repeat, outcome in completed:
         by_repeat[repeat].append(outcome)
@@ -248,15 +260,11 @@ async def async_main(args: argparse.Namespace) -> int:
         "protocol": "arga-bench-cross-functional-model-repeats-summary/1",
         "suite_id": "cross-functional-40-v1",
         "repeats": list(repeats),
-        "expected_trials": len(repeats) * len(profiles) * 40,
+        "expected_trials": len(repeats) * len(profiles) * task_count,
         "recorded_trials": sum(item["recorded_trials"] for item in repeat_summaries.values()),
-        "profiles_returned_zero": sum(
-            item["profiles_returned_zero"] for item in repeat_summaries.values()
-        ),
+        "profiles_returned_zero": sum(item["profiles_returned_zero"] for item in repeat_summaries.values()),
         "expected_profile_runs": len(repeats) * len(profiles),
-        "estimated_cost_usd": round(
-            sum(item["estimated_cost_usd"] for item in repeat_summaries.values()), 8
-        ),
+        "estimated_cost_usd": round(sum(item["estimated_cost_usd"] for item in repeat_summaries.values()), 8),
         "input_tokens": sum(item["input_tokens"] for item in repeat_summaries.values()),
         "output_tokens": sum(item["output_tokens"] for item in repeat_summaries.values()),
         "tool_calls": sum(item["tool_calls"] for item in repeat_summaries.values()),
@@ -276,6 +284,12 @@ async def async_main(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--task",
+        dest="tasks",
+        action="append",
+        help="Run only this task id; repeat to select multiple tasks.",
+    )
     parser.add_argument("--repeat-start", type=int, default=2)
     parser.add_argument("--repeat-count", type=int, default=2)
     parser.add_argument("--profile-concurrency", type=int, choices=range(1, 31), default=10)

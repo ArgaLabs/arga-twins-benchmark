@@ -21,6 +21,7 @@ SPEC.loader.exec_module(runner)
 def _args(output: Path, *, resume: bool = False) -> argparse.Namespace:
     return argparse.Namespace(
         output=output,
+        tasks=None,
         repeat_start=2,
         repeat_count=2,
         profile_concurrency=10,
@@ -51,9 +52,7 @@ def test_repeat_plan_contains_two_independent_trials_for_all_profiles() -> None:
 
 def test_repeat_roots_record_identity_and_reject_changed_resume(tmp_path: Path) -> None:
     args = _args(tmp_path / "runs")
-    profiles: list[dict[str, Any]] = runner.matrix.provider_round_robin(
-        runner.matrix.load_profiles()
-    )
+    profiles: list[dict[str, Any]] = runner.matrix.provider_round_robin(runner.matrix.load_profiles())
     args.output.mkdir()
     root = runner.prepare_repeat_root(
         args.output,
@@ -88,3 +87,15 @@ def test_repeat_roots_record_identity_and_reject_changed_resume(tmp_path: Path) 
         assert "repeat identity changed" in str(error)
     else:  # pragma: no cover - explicit failure branch
         raise AssertionError("changed repeat identity was accepted")
+
+
+def test_repeat_config_counts_selected_tasks(tmp_path: Path) -> None:
+    args = _args(tmp_path / "runs")
+    args.tasks = ["it-03", "it-06"]
+    profiles: list[dict[str, Any]] = runner.matrix.provider_round_robin(runner.matrix.load_profiles())
+
+    payload = runner.matrix_config(profiles=profiles, repeat=1, args=args)
+
+    assert payload["task_ids"] == ["it-03", "it-06"]
+    assert payload["scenarios_per_profile"] == 2
+    assert payload["total_trials"] == 62

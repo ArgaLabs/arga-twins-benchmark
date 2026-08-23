@@ -120,9 +120,7 @@ _STRUCTURED_FACT_MEANINGS = {
     "mapping_documented_no_meter_mutation": (
         "the event mapping was documented without changing the production Stripe meter"
     ),
-    "mitigated_not_closed": (
-        "the production incident was mitigated and remained open pending recovery verification"
-    ),
+    "mitigated_not_closed": ("the production incident was mitigated and remained open pending recovery verification"),
     "publication_blocked": "publication remained blocked",
     "regression_open_and_escalated": "the regression remained open and was escalated",
     "renewal_at_risk": "the renewal was recorded as at risk",
@@ -873,12 +871,17 @@ def _api_call_description(
                 values.append(f"labels={rendered_labels!r}")
         return f" ({', '.join(values[:4])})" if values else ""
 
-    if provider == "LinkedIn" and method == "POST" and path.casefold() in {
-        "/rest/posts",
-        "/rest/ugcposts",
-        "/v2/posts",
-        "/v2/ugcposts",
-    }:
+    if (
+        provider == "LinkedIn"
+        and method == "POST"
+        and path.casefold()
+        in {
+            "/rest/posts",
+            "/rest/ugcposts",
+            "/v2/posts",
+            "/v2/ugcposts",
+        }
+    ):
         author = body.get("author")
         commentary = body.get("commentary")
         specific = body.get("specificContent")
@@ -887,7 +890,7 @@ def _api_call_description(
             share_commentary = share.get("shareCommentary") if isinstance(share, dict) else None
             commentary = share_commentary.get("text") if isinstance(share_commentary, dict) else None
         copy = (
-            f' with copy “{commentary[:117]}{"…" if len(commentary) > 117 else ""}”'
+            f" with copy “{commentary[:117]}{'…' if len(commentary) > 117 else ''}”"
             if isinstance(commentary, str) and commentary
             else ""
         )
@@ -1005,7 +1008,7 @@ def _api_call_description(
         target = _labeled_identifier(resource_labels, "google_drive", match.group(1), noun="file")
         content = body.get("content")
         copy = (
-            f' with comment “{content[:117]}{"…" if len(content) > 117 else ""}”'
+            f" with comment “{content[:117]}{'…' if len(content) > 117 else ''}”"
             if isinstance(content, str) and content
             else ""
         )
@@ -1126,15 +1129,19 @@ def _enrich_structured_fact_assertions(
 ) -> list[dict[str, Any]]:
     verification = task.get("verification")
     required_outcomes = verification.get("required_outcomes") if isinstance(verification, Mapping) else None
-    structured = next(
-        (
-            outcome
-            for outcome in cast(Sequence[object], required_outcomes)
-            if isinstance(outcome, Mapping)
-            and outcome.get("id") in {"structured_result", "required_structured_result"}
-        ),
-        None,
-    ) if isinstance(required_outcomes, Sequence) else None
+    structured = (
+        next(
+            (
+                outcome
+                for outcome in cast(Sequence[object], required_outcomes)
+                if isinstance(outcome, Mapping)
+                and outcome.get("id") in {"structured_result", "required_structured_result"}
+            ),
+            None,
+        )
+        if isinstance(required_outcomes, Sequence)
+        else None
+    )
     facts = structured.get("facts") if isinstance(structured, Mapping) else None
     if not isinstance(facts, Mapping):
         return [dict(assertion) for assertion in assertions]
@@ -1163,9 +1170,7 @@ def _enrich_structured_fact_assertions(
             if "facts are missing:" in detail_casefold or "missing structured facts:" in detail_casefold:
                 missing_section = detail_casefold.rsplit(":", 1)[-1]
                 missing_tokens = {
-                    token.strip().rstrip(".")
-                    for token in re.split(r"[,;]", missing_section)
-                    if token.strip()
+                    token.strip().rstrip(".") for token in re.split(r"[,;]", missing_section) if token.strip()
                 }
                 if key.casefold() in missing_tokens or str(value).casefold() in missing_tokens:
                     missing.append((key, value))
@@ -1583,7 +1588,7 @@ def build_cross_functional_semantic_report(
     grader_registry: Mapping[str, DomainGrader] | None = None,
     execution_classifier: ExecutionClassifier = classify_cross_functional_matrix,
 ) -> dict[str, Any]:
-    """Grade all 1,240 scheduled slots from preserved evidence without any network calls."""
+    """Grade every slot selected by a preserved matrix without network calls."""
 
     matrix_dir = matrix_dir.resolve()
     suite_path = suite_path.resolve()
@@ -1610,10 +1615,27 @@ def build_cross_functional_semantic_report(
         raise CrossFunctionalSemanticReportError("execution classifier returned an unsupported protocol")
     raw_classified_attempts = classification.get("attempts")
     if not isinstance(raw_classified_attempts, list):
-        raise CrossFunctionalSemanticReportError("execution classifier must return exactly 1,240 scheduled slots")
+        raise CrossFunctionalSemanticReportError("execution classifier must return scheduled slots")
     classified_attempts = cast(list[object], raw_classified_attempts)
-    if len(classified_attempts) != 1240:
-        raise CrossFunctionalSemanticReportError("execution classifier must return exactly 1,240 scheduled slots")
+    raw_task_ids = classification.get("task_ids")
+    if raw_task_ids is None:
+        observed_task_ids = {
+            cast(str, attempt.get("task_id"))
+            for attempt in classified_attempts
+            if isinstance(attempt, dict) and isinstance(attempt.get("task_id"), str)
+        }
+        selected_task_ids = [cast(str, task["id"]) for task in tasks if cast(str, task["id"]) in observed_task_ids]
+    elif isinstance(raw_task_ids, list) and raw_task_ids and all(isinstance(task_id, str) for task_id in raw_task_ids):
+        selected_task_ids = cast(list[str], raw_task_ids)
+    else:
+        raise CrossFunctionalSemanticReportError("execution classifier returned invalid task ids")
+    if len(selected_task_ids) != len(set(selected_task_ids)) or not set(selected_task_ids).issubset(tasks_by_id):
+        raise CrossFunctionalSemanticReportError("execution classifier returned invalid task ids")
+    expected_slots = len(profiles) * len(selected_task_ids)
+    if len(classified_attempts) != expected_slots:
+        raise CrossFunctionalSemanticReportError(
+            f"execution classifier must return exactly {expected_slots} scheduled slots"
+        )
 
     semantic_attempts: list[dict[str, Any]] = []
     for raw_attempt in classified_attempts:
@@ -1635,7 +1657,7 @@ def build_cross_functional_semantic_report(
         )
 
     identities = {(item["profile_id"], item["task_id"]) for item in semantic_attempts}
-    if len(identities) != 1240:
+    if len(identities) != expected_slots:
         raise CrossFunctionalSemanticReportError("semantic schedule has duplicate profile/task slots")
 
     profile_reports: dict[str, dict[str, Any]] = {}
@@ -1647,11 +1669,12 @@ def build_cross_functional_semantic_report(
             item.get("score_eligible") is True and item.get("semantic_outcome") in {"pass", "fail", "unsafe"}
             for item in profile_attempts
         )
-        complete_metrics = aggregate["usage"]["attempts_with_complete_metrics"] == 40
+        task_count = len(selected_task_ids)
+        complete_metrics = aggregate["usage"]["attempts_with_complete_metrics"] == task_count
         scoring_ready = (
-            len(profile_attempts) == 40
-            and terminal_verdicts == 40
-            and aggregate["validity"]["valid"] == 40
+            len(profile_attempts) == task_count
+            and terminal_verdicts == task_count
+            and aggregate["validity"]["valid"] == task_count
             and aggregate["validity"]["excluded"] == 0
             and complete_metrics
             and runtime["environment"] is not None
@@ -1674,6 +1697,8 @@ def build_cross_functional_semantic_report(
     return {
         "protocol": CROSS_FUNCTIONAL_SEMANTIC_REPORT_PROTOCOL,
         "suite_id": suite["suite_id"],
+        "task_ids": selected_task_ids,
+        "task_count": len(selected_task_ids),
         "source_matrix_dir": str(matrix_dir),
         "source_sha256": {
             "suite": _sha256_path(suite_path),
@@ -1693,7 +1718,7 @@ def build_cross_functional_semantic_report(
             "completed": "domain_semantic_grader_required",
             "domain_evidence_gap": "invalid_grader_excluded",
             "unsafe_precedence": "unsafe_over_pass_or_fail",
-            "scoring_ready": "exactly_40_terminal_semantic_verdicts_with_complete_site_metrics",
+            "scoring_ready": "every_selected_task_has_a_terminal_semantic_verdict_and_complete_metrics",
             "historical_calibration_applied": False,
         },
         "domain_graders": {
@@ -1762,8 +1787,9 @@ def _site_result(
     profile = cast(Mapping[str, Any], profile_report["profile"])
     raw_attempts = cast(Sequence[Mapping[str, Any]], report["attempts"])
     by_task = {cast(str, item["task_id"]): item for item in raw_attempts if item.get("profile_id") == profile_id}
-    if len(by_task) != 40:
-        raise CrossFunctionalSemanticReportError(f"profile {profile_id} does not have exactly 40 results")
+    task_count = len(suite_tasks)
+    if len(by_task) != task_count:
+        raise CrossFunctionalSemanticReportError(f"profile {profile_id} does not have exactly {task_count} results")
     tasks = [_site_task(by_task[cast(str, task["id"])]) for task in suite_tasks]
     domains: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for task in tasks:
@@ -1789,11 +1815,11 @@ def _site_result(
         "environment": runtime["environment"],
         "concurrency": runtime["concurrency"],
         "attempts_per_scenario": 1,
-        "attempts": 40,
+        "attempts": task_count,
         "passes": passes,
-        "fails": 40 - passes,
+        "fails": task_count - passes,
         "unsafe": sum(task["semantic_outcome"] == "unsafe" for task in tasks),
-        "pass_rate": passes / 40,
+        "pass_rate": passes / task_count,
         "estimated_cost_usd": round(sum(cast(float, task["estimated_cost_usd"]) for task in tasks), 8),
         "input_tokens": sum(cast(int, task["input_tokens"]) for task in tasks),
         "output_tokens": sum(cast(int, task["output_tokens"]) for task in tasks),
@@ -1856,6 +1882,11 @@ def write_cross_functional_semantic_report(
         raise CrossFunctionalSemanticReportError("published_at must use YYYY-MM-DD")
     suite = _load_object(suite_path.resolve(), label="Cross-Functional 40 suite")
     suite_tasks = _suite_tasks(suite)
+    raw_task_ids = report.get("task_ids")
+    if not isinstance(raw_task_ids, list) or not all(isinstance(task_id, str) for task_id in raw_task_ids):
+        raise CrossFunctionalSemanticReportError("report is missing selected task ids")
+    selected_task_ids = set(cast(list[str], raw_task_ids))
+    suite_tasks = [task for task in suite_tasks if cast(str, task["id"]) in selected_task_ids]
     if report.get("suite_id") != suite.get("suite_id"):
         raise CrossFunctionalSemanticReportError("report suite identity does not match suite.json")
     if output.exists() and (not output.is_dir() or any(output.iterdir())):

@@ -149,6 +149,25 @@ def _non_empty_string(value: object) -> bool:
     return isinstance(value, str) and bool(value)
 
 
+def _is_output_limit_terminal(
+    attempt: Mapping[str, Any],
+    invocation: Mapping[str, Any],
+) -> bool:
+    if attempt.get("model_status") != "incomplete" or invocation.get("status") != "incomplete":
+        return False
+    if attempt.get("stop_reason") == "MAX_TOKENS" and invocation.get("stop_reason") == "MAX_TOKENS":
+        return True
+    events = invocation.get("events")
+    return isinstance(events, list) and any(
+        isinstance(event, dict)
+        and event.get("type") == "assistant_response"
+        and event.get("status") == "incomplete"
+        and isinstance(event.get("incomplete_details"), dict)
+        and event["incomplete_details"].get("reason") == "max_output_tokens"
+        for event in events
+    )
+
+
 def _profile_identity_issues(
     actual: Mapping[str, Any] | None,
     expected: Mapping[str, Any],
@@ -657,10 +676,15 @@ def _retry_archive_proves_safe_retries(
                 if reason == "explicit_old_gateway_ceiling_retry"
                 else {"infrastructure_invalid", "candidate_complete"}
             )
+            explicit_output_limit_retry = bool(
+                reason == "explicit_model_terminal_retry"
+                and archived_invocation is not None
+                and _is_output_limit_terminal(archived_attempt, archived_invocation)
+            )
             if (
                 invocation_issues
                 or archived_invocation is None
-                or model_status not in allowed_statuses
+                or (model_status not in allowed_statuses and not explicit_output_limit_retry)
                 or archived_invocation.get("status") != model_status
                 or archived_attempt.get("attempt_status") not in allowed_attempt_statuses
             ):
@@ -940,11 +964,7 @@ def _classify_task(
         )
 
     output_limit_terminal = bool(
-        model_status == "incomplete"
-        and attempt is not None
-        and invocation is not None
-        and attempt.get("stop_reason") == "MAX_TOKENS"
-        and invocation.get("stop_reason") == "MAX_TOKENS"
+        attempt is not None and invocation is not None and _is_output_limit_terminal(attempt, invocation)
     )
     if model_status not in _KNOWN_MODEL_STATUSES:
         issues.append("attempt:missing_or_unknown_model_status")
@@ -1170,7 +1190,7 @@ def classify_cross_functional_matrix(
     model_matrix_path = model_matrix_path.resolve()
     historical_calibration_path = historical_calibration_path.resolve()
     suite = _load_trusted_object(suite_path, label="Cross-Functional 40 suite")
-    tasks = _suite_tasks(suite)
+    all_tasks = _suite_tasks(suite)
     model_matrix = _load_trusted_object(model_matrix_path, label="model matrix")
     profiles = _profile_by_id(model_matrix, label="model matrix")
     if len(profiles) != 31:
@@ -1181,7 +1201,7 @@ def classify_cross_functional_matrix(
     )
     calibration = _validate_calibration(
         calibration_payload,
-        tasks=tasks,
+        tasks=all_tasks,
         path=historical_calibration_path,
     )
 
@@ -1191,6 +1211,22 @@ def classify_cross_functional_matrix(
         name="matrix-config.json",
         issues=matrix_config_issues,
     )
+    configured_task_ids: list[str] = []
+    if matrix_config is not None:
+        raw_task_ids = matrix_config.get("task_ids", [])
+        if not isinstance(raw_task_ids, list) or not all(isinstance(task_id, str) for task_id in raw_task_ids):
+            matrix_config_issues.append("matrix_config:invalid_task_ids")
+        else:
+            configured_task_ids = cast(list[str], raw_task_ids)
+            available_task_ids = {cast(str, task["id"]) for task in all_tasks}
+            if len(configured_task_ids) != len(set(configured_task_ids)) or not set(configured_task_ids).issubset(
+                available_task_ids
+            ):
+                matrix_config_issues.append("matrix_config:invalid_task_ids")
+    selected_task_ids = (
+        set(configured_task_ids) if configured_task_ids else {cast(str, task["id"]) for task in all_tasks}
+    )
+    tasks = [task for task in all_tasks if cast(str, task["id"]) in selected_task_ids]
     root_issues, configured_profiles = _matrix_config_issues(
         matrix_config,
         suite_id=cast(str, suite["suite_id"]),
@@ -1241,6 +1277,8 @@ def classify_cross_functional_matrix(
     return {
         "protocol": CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
         "suite_id": suite["suite_id"],
+        "task_ids": [cast(str, task["id"]) for task in tasks],
+        "task_count": len(tasks),
         "source_matrix_dir": str(matrix_dir),
         "source_sha256": {
             "suite": _sha256_path(suite_path),
@@ -1270,9 +1308,7 @@ def classify_cross_functional_matrix(
         "remaining_semantic_grading_gap": {
             "status": "implemented_downstream",
             "grader": "cross_functional_fair_v1",
-            "required": (
-                "Apply the per-task fair semantic grader after this artifact-integrity classification."
-            ),
+            "required": ("Apply the per-task fair semantic grader after this artifact-integrity classification."),
             "raw_state_diff_is_authoritative": False,
             "provider_trace_is_authoritative_for_business_outcomes": False,
         },

@@ -443,6 +443,30 @@ def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path)
         }
     ]
 
+    partial_report = json.loads(json.dumps(report))
+    partial_task_ids = ["IT-01", "IT-02"]
+    partial_report["task_ids"] = partial_task_ids
+    partial_report["attempts"] = [
+        attempt
+        for attempt in cast(list[dict[str, Any]], partial_report["attempts"])
+        if attempt["task_id"] in partial_task_ids
+    ]
+    partial_output = tmp_path / "partial-publication"
+    partial_outputs = write_cross_functional_semantic_report(
+        partial_report,
+        partial_output,
+        source_matrix_dir=matrix_dir,
+        suite_path=SUITE_PATH,
+        published_at="2026-08-15",
+    )
+    assert partial_outputs["scoring_ready_profile_count"] == 1
+    partial_result = _load(partial_output / "results" / f"{ready_profile}.json")
+    assert partial_result["attempts"] == 2
+    assert partial_result["passes"] == 2
+    assert partial_result["fails"] == 0
+    assert partial_result["pass_rate"] == 1.0
+    assert [task["task_id"] for task in partial_result["tasks"]] == partial_task_ids
+
     with pytest.raises(CrossFunctionalSemanticReportError, match="absent or empty"):
         write_cross_functional_semantic_report(
             report,
@@ -879,8 +903,7 @@ def test_api_call_description_names_linkedin_identity_and_copy() -> None:
     )
 
     assert detail == (
-        "Published a LinkedIn post as urn:li:person:li1aa3dbb7 "
-        "with copy “Approved accessibility report copy”"
+        "Published a LinkedIn post as urn:li:person:li1aa3dbb7 with copy “Approved accessibility report copy”"
     )
 
 
@@ -899,9 +922,7 @@ def test_api_call_description_adds_trusted_resource_title_and_exact_change() -> 
         labels,
     )
 
-    assert detail == (
-        "Changed GitHub issue 6 (“Documentation-only dependency advisory”) (state='closed')"
-    )
+    assert detail == ("Changed GitHub issue 6 (“Documentation-only dependency advisory”) (state='closed')")
 
 
 def test_api_call_description_explains_combined_linear_comment_and_lifecycle_write() -> None:

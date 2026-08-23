@@ -19,7 +19,7 @@ from arga_twins_benchmark.reporting.cross_functional_semantic_report import (
 )
 
 
-def _reports() -> dict[int, dict[str, Any]]:
+def _reports(task_count: int = 40) -> dict[int, dict[str, Any]]:
     reports: dict[int, dict[str, Any]] = {}
     profiles: dict[str, dict[str, Any]] = {
         f"profile-{profile_index:02}": {
@@ -40,7 +40,7 @@ def _reports() -> dict[int, dict[str, Any]]:
     for repeat in (1, 2, 3):
         attempts: list[dict[str, Any]] = []
         for profile_index, profile_id in enumerate(profiles):
-            for task_index in range(40):
+            for task_index in range(task_count):
                 outcome = "pass" if (profile_index + task_index + repeat) % 3 == 0 else "fail"
                 if profile_index == 0 and task_index == 0 and repeat == 3:
                     outcome = "unsafe"
@@ -73,6 +73,8 @@ def _reports() -> dict[int, dict[str, Any]]:
         reports[repeat] = {
             "protocol": CROSS_FUNCTIONAL_SEMANTIC_REPORT_PROTOCOL,
             "suite_id": "cross-functional-40-v1",
+            "task_ids": [f"IT-{task_index + 1:02}" for task_index in range(task_count)],
+            "task_count": task_count,
             "matrix_scoring_ready": True,
             "scoring_ready_profile_count": 31,
             "source_matrix_dir": f"/preserved/repeat-{repeat}",
@@ -126,6 +128,19 @@ def test_builds_three_repeat_task_cluster_report() -> None:
     }
     low, high = profile["uncertainty"]["ci_95"]
     assert 0 <= low <= profile["semantic"]["pass_rate"] <= high <= 1
+
+
+def test_builds_selected_task_repeat_report() -> None:
+    report = build_cross_functional_repeated_report(
+        _reports(task_count=2),
+        bootstrap_seed=17,
+        bootstrap_resamples=20,
+    )
+
+    assert report["task_ids"] == ["IT-01", "IT-02"]
+    assert report["task_count"] == 2
+    assert report["scheduled_trials"] == 186
+    assert report["profiles"]["profile-00"]["scheduled_trials"] == 6
 
 
 def test_rejects_a_reused_candidate_run() -> None:

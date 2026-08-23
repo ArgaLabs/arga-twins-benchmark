@@ -54,7 +54,7 @@ STATE_CAPTURE_RETRY_BASE_SECONDS = 1.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
-RETRYABLE_MODEL_TERMINAL_STATUSES = frozenset({"refused", "timed_out", "tool_limit_exceeded"})
+RETRYABLE_MODEL_TERMINAL_STATUSES = frozenset({"incomplete", "refused", "timed_out", "tool_limit_exceeded"})
 
 PROVIDER_ROLES = {
     "github": "code_host",
@@ -136,6 +136,19 @@ def load_profile(profile_id: str) -> dict[str, Any]:
         available = ", ".join(sorted(str(profile.get("id")) for profile in profiles if isinstance(profile, dict)))
         raise ValueError(f"unknown profile {profile_id!r}; expected one of: {available}")
     return cast(dict[str, Any], matches[0])
+
+
+def select_tasks(tasks: list[dict[str, Any]], requested_task_ids: list[str] | None) -> list[dict[str, Any]]:
+    if not requested_task_ids:
+        return tasks
+    if len(requested_task_ids) != len(set(requested_task_ids)):
+        raise ValueError("--task values must be unique")
+    available = {str(task["id"]): task for task in tasks}
+    unknown = sorted(set(requested_task_ids) - set(available))
+    if unknown:
+        raise ValueError(f"unknown task ids: {', '.join(unknown)}")
+    requested = set(requested_task_ids)
+    return [task for task in tasks if str(task["id"]) in requested]
 
 
 def read_json_object(path: Path, *, required: bool = False) -> dict[str, Any] | None:
@@ -1032,12 +1045,15 @@ def _run_config_payload(
     suite: dict[str, Any],
     profile: dict[str, Any],
     concurrency: int,
+    tasks: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
         "protocol": "arga-bench-cross-functional-run/2",
         "suite_id": suite["suite_id"],
         "environment": os.environ.get("ARGA_API_URL", "https://api.argalabs.com"),
         "profile": profile,
+        "task_ids": [str(task["id"]) for task in tasks],
+        "task_count": len(tasks),
         "concurrency": concurrency,
         "attempts_per_scenario": 1,
         "candidate_limits": {
@@ -1055,6 +1071,7 @@ def validate_resume_run_config(
     *,
     suite: dict[str, Any],
     profile: dict[str, Any],
+    tasks: list[dict[str, Any]],
 ) -> dict[str, Any]:
     config = read_json_object(output_root / "run-config.json", required=True)
     assert config is not None
@@ -1069,6 +1086,12 @@ def validate_resume_run_config(
     changed = [key for key in immutable_profile_fields if existing_profile.get(key) != profile.get(key)]
     if changed:
         raise ValueError(f"cannot resume: profile fields changed: {', '.join(changed)}")
+    configured_task_ids = config.get("task_ids")
+    if configured_task_ids is None:
+        configured_task_ids = [str(task["id"]) for task in suite["tasks"]]
+    expected_task_ids = [str(task["id"]) for task in tasks]
+    if configured_task_ids != expected_task_ids:
+        raise ValueError("cannot resume: selected task identities changed")
     return config
 
 
@@ -1141,27 +1164,31 @@ async def async_main(args: argparse.Namespace) -> int:
     if not os.environ.get(required_key):
         raise ValueError(f"{required_key} is required")
     suite = json.loads(SUITE_PATH.read_text())
-    tasks = suite["tasks"]
-    if len(tasks) != 40:
-        raise ValueError(f"expected 40 tasks, found {len(tasks)}")
+    suite_tasks = suite["tasks"]
+    if len(suite_tasks) != 40:
+        raise ValueError(f"expected 40 tasks, found {len(suite_tasks)}")
+    tasks = select_tasks(suite_tasks, args.tasks)
     output_root = args.output.resolve()
     resume_existing = args.resume and output_root.exists()
     if resume_existing:
-        validate_resume_run_config(output_root, suite=suite, profile=profile)
+        validate_resume_run_config(output_root, suite=suite, profile=profile, tasks=tasks)
     else:
         output_root.mkdir(parents=True, exist_ok=False)
         write_private_json(
             output_root / "run-config.json",
-            _run_config_payload(suite=suite, profile=profile, concurrency=args.concurrency),
+            _run_config_payload(
+                suite=suite,
+                profile=profile,
+                concurrency=args.concurrency,
+                tasks=tasks,
+            ),
         )
     scenario_ids = await resolve_scenarios(tasks)
     scenario_payload = {"suite_tag": SUITE_TAG, "scenario_ids": scenario_ids}
     existing_scenarios = read_json_object(output_root / "staging-scenarios.json")
     if existing_scenarios is not None and existing_scenarios != scenario_payload:
         retry_enabled = (
-            args.retry_infrastructure_invalid
-            or args.retry_model_terminal
-            or args.retry_missing_snapshot_evidence
+            args.retry_infrastructure_invalid or args.retry_model_terminal or args.retry_missing_snapshot_evidence
         )
         existing_ids = existing_scenarios.get("scenario_ids")
         if (
@@ -1276,9 +1303,9 @@ async def async_main(args: argparse.Namespace) -> int:
     print(json.dumps(summary, indent=2, sort_keys=True), flush=True)
     return (
         0
-        if summary["attempts"] == 40
-        and summary["candidate_complete"] == 40
-        and summary["cleanups_succeeded"] == 40
+        if summary["attempts"] == len(tasks)
+        and summary["candidate_complete"] == len(tasks)
+        and summary["cleanups_succeeded"] == len(tasks)
         and summary["resume_blocked"] == 0
         else 1
     )
@@ -1288,6 +1315,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--profile", required=True)
+    parser.add_argument(
+        "--task",
+        dest="tasks",
+        action="append",
+        help="Run only this task id; repeat to select multiple tasks.",
+    )
     parser.add_argument("--concurrency", type=int, choices=range(1, 41), default=40)
     parser.add_argument("--lifecycle-concurrency", type=int, choices=range(1, 11), default=3)
     parser.add_argument("--cleanup-concurrency", type=int, choices=range(1, 11), default=3)
