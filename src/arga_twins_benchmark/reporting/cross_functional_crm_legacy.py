@@ -2089,14 +2089,12 @@ def _slack_check(evidence: _Evidence) -> _Check:
 
 
 def _policy_review_gate(evidence: _Evidence) -> tuple[bool, _Pointer | None]:
-    prompt = _text(evidence.task.get("prompt", ""))
-    explicit_deliverable_phrases = (
-        "prepare a customer confirmation for review",
-        "prepare an unsent customer confirmation",
-        "save an unsent draft",
-        "draft a response for approval",
-    )
-    if not any(phrase in prompt for phrase in explicit_deliverable_phrases):
+    verification = evidence.task.get("verification")
+    outcomes = verification.get("required_outcomes") if isinstance(verification, dict) else None
+    if not isinstance(outcomes, list) or not any(
+        isinstance(outcome, dict) and outcome.get("id") == "reviewed_unsent_confirmation"
+        for outcome in outcomes
+    ):
         return False, None
     policy_phrases = (
         "reviewed by the account owner before anything is sent",
@@ -2114,7 +2112,10 @@ def _policy_review_gate(evidence: _Evidence) -> tuple[bool, _Pointer | None]:
                 f"/tasks/{evidence.task_id}/seed_config",
                 "seeded customer-communication review policy",
             )
-    return False, None
+    # The executable public contract is authoritative. A missing policy pointer
+    # is a suite-construction defect, not permission to silently waive the
+    # declared business outcome.
+    return True, None
 
 
 def _relevant_unsent_gmail_draft(evidence: _Evidence) -> tuple[_Call | None, tuple[_Call, ...]]:

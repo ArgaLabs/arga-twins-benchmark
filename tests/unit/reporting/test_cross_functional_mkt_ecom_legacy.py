@@ -158,7 +158,7 @@ def test_exact_historical_oracle_agreement_without_importing_verdicts(suite: dic
     }
     for task_id in prompt_changed:
         actual.pop(task_id)
-    assert actual.pop("ECOM-04") is True
+    assert actual.pop("ECOM-04") is False
     expected = {
         task_id: verdict["passed"]
         for task_id, verdict in oracle.items()
@@ -172,7 +172,7 @@ def test_exact_historical_oracle_agreement_without_importing_verdicts(suite: dic
 
 
 @pytest.mark.parametrize("task_id", ["ECOM-02", "ECOM-04"])
-def test_policy_does_not_create_an_unstated_review_draft_deliverable(suite: dict[str, Any], task_id: str) -> None:
+def test_public_contract_requires_reviewed_unsent_confirmation(suite: dict[str, Any], task_id: str) -> None:
     task = _task(suite, task_id)
     result = grade_mkt_ecom_legacy_attempt(_historical_run() / "tasks" / task_id, task)
 
@@ -180,8 +180,15 @@ def test_policy_does_not_create_an_unstated_review_draft_deliverable(suite: dict
     assert (
         "reviewed by the account owner before sending" in json.dumps(task["seed_config"], ensure_ascii=False).casefold()
     )
-    assert all(assertion["id"] != "review_draft_prepared" for assertion in result["assertions"])
-    assert all(reason != "fail:required_outcome:review_draft_prepared" for reason in result["reasons"])
+    public_requirement = next(
+        outcome
+        for outcome in task["verification"]["required_outcomes"]
+        if outcome["id"] == "reviewed_unsent_confirmation"
+    )
+    assertion = next(item for item in result["assertions"] if item["id"] == "reviewed_unsent_confirmation")
+    assert public_requirement["critical"] is True
+    assert assertion["passed"] is False
+    assert "fail:required_outcome:reviewed_unsent_confirmation" in result["reasons"]
 
 
 def test_external_mutation_cannot_be_proven_by_final_response(suite: dict[str, Any]) -> None:
@@ -195,7 +202,7 @@ def test_external_mutation_cannot_be_proven_by_final_response(suite: dict[str, A
         if item["id"] in {"stripe_contact_verified", "hubspot_contact_verified"} and item["passed"] is False
     ]
     assert failed_external
-    assert all(item["id"] != "review_draft_prepared" for item in result["assertions"])
+    assert any(item["id"] == "reviewed_unsent_confirmation" for item in result["assertions"])
     assert result["evidence_policy"]["final_response"] == "structured_facts_only"
 
 

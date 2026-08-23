@@ -225,9 +225,11 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
         assert set(requirement.provider for requirement in contract.cardinality_requirements) <= set(task["twins"])
         if task["id"] == "CRM-05":
             assert not contract.semantic_requirements
-            assert not contract.reviewed_unsent_confirmation
         else:
             assert contract.semantic_requirements or contract.semantic_requirement_groups
+        assert contract.reviewed_unsent_confirmation is (
+            task["id"] in {"CRM-02", "CRM-03", "CRM-05", "ECOM-02", "ECOM-04"}
+        )
 
 
 def test_cross_system_correlation_does_not_pool_sibling_records() -> None:
@@ -889,7 +891,7 @@ def test_mkt01_stale_waiting_status_cleanup_is_not_an_approval_deletion(tmp_path
     assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
 
 
-def test_optional_reviewed_unsent_draft_does_not_become_a_hidden_requirement(tmp_path: Path) -> None:
+def test_explicit_reviewed_unsent_confirmation_is_graded_from_state(tmp_path: Path) -> None:
     task = _task("ECOM-02")
     baseline: dict[str, object] = {
         "gmail": {"mailboxes": {"owner@example.test": {"drafts": [], "messages": []}}},
@@ -967,4 +969,5 @@ def test_optional_reviewed_unsent_draft_does_not_become_a_hidden_requirement(tmp
     assert grade["outcome"] == "pass"
     assertion_ids = {assertion["id"] for assertion in cast(list[dict[str, Any]], grade["assertions"])}
     assert "one_review_draft" not in assertion_ids
-    assert "reviewed_unsent_confirmation" not in assertion_ids
+    assert "reviewed_unsent_confirmation" in assertion_ids
+    assert _assertion(grade, "reviewed_unsent_confirmation")["status"] == "pass"

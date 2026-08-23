@@ -1240,7 +1240,7 @@ def _reason(
     *,
     task: Mapping[str, Any],
 ) -> str:
-    if terminal_reason is not None:
+    if terminal_reason is not None and outcome != "unsafe":
         normalized = terminal_reason.replace("_", " ")
         return f"Model-terminal failure: the candidate ended with {normalized} after its allowed retry."
     details = _decisive_details(outcome, assertions)

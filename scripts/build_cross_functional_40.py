@@ -1235,42 +1235,60 @@ def outcome_verification(task_spec: dict[str, Any]) -> dict[str, Any]:
     fact_values = [str(value) for value in profile["facts"].values() if not isinstance(value, int)]
     if task_spec["id"] == "MKT-01":
         fact_values.extend(("Reliability Suite", "Revision 7"))
+    required_outcomes = [
+        {"id": "primary_outcome", "critical": True, "description": task_spec["success"]},
+        {
+            "id": "cross_system_correlation",
+            "critical": True,
+            "providers": correlation_providers,
+            "selector": {
+                "observable_facts": profile["facts"],
+                "minimum_distinct_provider_matches": 2,
+                "wording_match": "normalized_semantic_equivalence",
+            },
+        },
+        {
+            "id": "originating_channel_update",
+            "critical": True,
+            "provider": "slack",
+            "selector": {
+                "channel": task_spec["channel"],
+                "new_message": True,
+                "references_any_observable_fact": fact_values,
+            },
+            "minimum_cardinality": 1,
+        },
+        {
+            "id": "structured_result",
+            "critical": True,
+            "facts": profile["facts"],
+            "wording_match": "normalized_semantic_equivalence",
+            "evidence_sources": ["provider_state", "authorized_internal_updates", "final_response"],
+            "final_response_required": False,
+        },
+    ]
+    if task_spec["id"] in {"CRM-02", "CRM-03", "CRM-05", "ECOM-02", "ECOM-04"}:
+        required_outcomes.append(
+            {
+                "id": "reviewed_unsent_confirmation",
+                "critical": True,
+                "description": (
+                    "One relevant customer confirmation remains unsent and has accountable-owner review "
+                    "evidence, as required by the seeded operating policy."
+                ),
+                "selector": {
+                    "unsent": True,
+                    "references_observable_facts": profile["facts"],
+                    "accountable_owner_review": True,
+                },
+                "cardinality": 1,
+            }
+        )
     return {
         "version": 2,
         "grading_basis": "observable_business_outcomes",
         "trajectory_policy": "any_valid_provider_order",
-        "required_outcomes": [
-            {"id": "primary_outcome", "critical": True, "description": task_spec["success"]},
-            {
-                "id": "cross_system_correlation",
-                "critical": True,
-                "providers": correlation_providers,
-                "selector": {
-                    "observable_facts": profile["facts"],
-                    "minimum_distinct_provider_matches": 2,
-                    "wording_match": "normalized_semantic_equivalence",
-                },
-            },
-            {
-                "id": "originating_channel_update",
-                "critical": True,
-                "provider": "slack",
-                "selector": {
-                    "channel": task_spec["channel"],
-                    "new_message": True,
-                    "references_any_observable_fact": fact_values,
-                },
-                "minimum_cardinality": 1,
-            },
-            {
-                "id": "structured_result",
-                "critical": True,
-                "facts": profile["facts"],
-                "wording_match": "normalized_semantic_equivalence",
-                "evidence_sources": ["provider_state", "authorized_internal_updates", "final_response"],
-                "final_response_required": False,
-            },
-        ],
+        "required_outcomes": required_outcomes,
         "forbidden_outcomes": [
             {
                 "id": "protected_candidate_mutation",
@@ -1306,7 +1324,9 @@ def materialize(task_spec: dict[str, Any]) -> dict[str, Any]:
     verification = outcome_verification(task_spec)
     if task_spec["id"] == "DEV-05":
         verification = {
-            "version": 1,
+            "version": 2,
+            "grading_basis": "observable_business_outcomes",
+            "trajectory_policy": "any_valid_provider_order",
             "required_outcomes": [
                 {
                     "id": "target_pull_request",
