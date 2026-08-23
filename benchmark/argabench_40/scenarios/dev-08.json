@@ -1,0 +1,345 @@
+{
+  "description": "Fatima Noor from customer success just posted in the #eng-customer-bugs Slack channel: Apex Freight reports that webhook retries stop after the third attempt. HubSpot has two Apex companies, and GitHub has both an old closed issue and a new regression with similar symptoms.\n\nYou're the customer engineering liaison. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: DEV-08 Customer bug escalation linkage",
+  "seed_config": {
+    "github": {
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "default_branch": "main",
+          "description": "Operational service configuration and change history",
+          "files": [
+            {
+              "content": "# Apex Freight webhook retry regression\n\nApex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.\n",
+              "path": "records/customer-bug-escalation-linkage.md"
+            },
+            {
+              "content": "# Previous-quarter notes\n\nApex Freight Systems uses apexfreightsystems.example.\n",
+              "path": "records/previous-quarter.md"
+            },
+            {
+              "content": "# Operational service records\n",
+              "path": "README.md"
+            }
+          ],
+          "issues": [
+            {
+              "body": "Asset: Apex Freight webhook retry regression\n\nApex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+              "title": "Webhook retries stop after third attempt"
+            },
+            {
+              "body": "Apex Freight Systems uses apexfreightsystems.example.",
+              "state": "closed",
+              "title": "Retry delay after backoff"
+            },
+            {
+              "body": "Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+              "state": "open",
+              "title": "Evidence follow-up: Customer bug escalation linkage"
+            },
+            {
+              "body": "Apex Freight Systems uses apexfreightsystems.example.",
+              "state": "open",
+              "title": "Earlier workstream: Customer bug escalation linkage"
+            }
+          ],
+          "name": "platform-services",
+          "owner": "acme",
+          "private": true,
+          "prs": [
+            {
+              "base": "main",
+              "body": "Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+              "files": [
+                {
+                  "content": "Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+                  "path": "config/change.txt"
+                }
+              ],
+              "head": "change/customer-bug-escalation-linkage",
+              "merged": false,
+              "state": "open",
+              "title": "Change associated with customer bug escalation linkage"
+            },
+            {
+              "base": "main",
+              "body": "Apex Freight Systems uses apexfreightsystems.example.",
+              "files": [
+                {
+                  "content": "Apex Freight Systems uses apexfreightsystems.example.",
+                  "path": "docs/maintenance.md"
+                }
+              ],
+              "head": "docs/maintenance",
+              "state": "open",
+              "title": "Documentation maintenance"
+            },
+            {
+              "base": "main",
+              "body": "Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+              "files": [
+                {
+                  "content": "Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+                  "path": "sandbox/verification.txt"
+                }
+              ],
+              "head": "sandbox/customer-bug-escalation-linkage",
+              "merged": false,
+              "state": "open",
+              "title": "Sandbox verification for customer bug escalation linkage"
+            },
+            {
+              "base": "main",
+              "body": "Apex Freight Systems uses apexfreightsystems.example.",
+              "files": [
+                {
+                  "content": "Apex Freight Systems uses apexfreightsystems.example.",
+                  "path": "archive/record.txt"
+                }
+              ],
+              "head": "archive/customer-bug-escalation-linkage",
+              "merged": false,
+              "state": "open",
+              "title": "Archive maintenance for customer bug escalation linkage"
+            }
+          ]
+        }
+      ],
+      "users": [
+        {
+          "email": "ops-maintainer@acme.example",
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer"
+        },
+        {
+          "email": "release-reviewer@acme.example",
+          "login": "release-reviewer",
+          "name": "Release Reviewer"
+        }
+      ]
+    },
+    "hubspot": {
+      "associations": [
+        {
+          "company_domain": "apexfreight.example",
+          "contact_email": "engineering@apexfreight.example"
+        }
+      ],
+      "companies": [
+        {
+          "properties": {
+            "description": "The GitHub issue 'Webhook retries stop after third attempt' is open with the same version and trace.",
+            "domain": "apexfreight.example",
+            "name": "Apex Freight"
+          }
+        },
+        {
+          "properties": {
+            "description": "The closed GitHub issue 'Retry delay after backoff' concerned retry delays on API version 2025-10 and is closed.",
+            "domain": "apexfreightsystems.example",
+            "name": "Apex Freight Systems"
+          }
+        },
+        {
+          "properties": {
+            "description": "The GitHub issue 'Webhook retries stop after third attempt' is open with the same version and trace.",
+            "domain": "ops.apexfreight.example",
+            "name": "Apex Freight \u2014 Operations"
+          }
+        },
+        {
+          "properties": {
+            "description": "The closed GitHub issue 'Retry delay after backoff' concerned retry delays on API version 2025-10 and is closed.",
+            "domain": "archive.apexfreightsystems.example",
+            "name": "Apex Freight Systems \u2014 Archive"
+          }
+        }
+      ],
+      "contacts": [
+        {
+          "properties": {
+            "email": "engineering@apexfreight.example",
+            "firstname": "Apex",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "The GitHub issue 'Webhook retries stop after third attempt' is open with the same version and trace."
+          }
+        },
+        {
+          "properties": {
+            "email": "contact@apexfreightsystems.example",
+            "firstname": "Regional",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "The closed GitHub issue 'Retry delay after backoff' concerned retry delays on API version 2025-10 and is closed."
+          }
+        },
+        {
+          "properties": {
+            "email": "ops+apex-freight@acme.example",
+            "firstname": "Operations",
+            "lastname": "Apex",
+            "lifecyclestage": "lead",
+            "notes": "The GitHub issue 'Webhook retries stop after third attempt' is open with the same version and trace."
+          }
+        },
+        {
+          "properties": {
+            "email": "archive+apex-freight-systems@acme.example",
+            "firstname": "Archive",
+            "lastname": "Apex",
+            "lifecyclestage": "lead",
+            "notes": "The closed GitHub issue 'Retry delay after backoff' concerned retry delays on API version 2025-10 and is closed."
+          }
+        }
+      ],
+      "deals": [
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "Apex Freight Renewal",
+            "dealstage": "contractsent",
+            "description": "Apex Freight webhook retry regression",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "Apex Freight Renewal \u2014 Operations review",
+            "dealstage": "appointmentscheduled",
+            "description": "The GitHub issue 'Webhook retries stop after third attempt' is open with the same version and trace.",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "95000",
+            "dealname": "Apex Freight Renewal \u2014 Earlier review",
+            "dealstage": "closedlost",
+            "description": "The closed GitHub issue 'Retry delay after backoff' concerned retry delays on API version 2025-10 and is closed.",
+            "pipeline": "default"
+          }
+        }
+      ],
+      "lists": [],
+      "tickets": []
+    },
+    "linear": {
+      "comments": [],
+      "issues": [
+        {
+          "description": "Apex Freight webhook retry regression\n\nLinear ENG-944 tracks the regression.",
+          "priority": 2,
+          "project": "Current operations",
+          "team_key": "ENG",
+          "title": "Customer bug escalation linkage"
+        },
+        {
+          "description": "Apex Freight Systems uses apexfreightsystems.example.",
+          "priority": 4,
+          "project": "Current operations",
+          "team_key": "ENG",
+          "title": "Previous-quarter follow-up"
+        },
+        {
+          "description": "Linear ENG-944 tracks the regression.",
+          "priority": 3,
+          "project": "Current operations",
+          "team_key": "ENG",
+          "title": "Evidence review \u2014 Apex Freight webhook retry regression"
+        },
+        {
+          "description": "Apex Freight Systems uses apexfreightsystems.example.",
+          "priority": 3,
+          "project": "Current operations",
+          "team_key": "ENG",
+          "title": "Parallel review \u2014 Customer bug escalation linkage"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Current operations",
+          "state": "started",
+          "team_key": "ENG"
+        }
+      ],
+      "teams": [
+        {
+          "key": "ENG",
+          "name": "Developer Team"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "Apex Freight reports that webhook retries stop after the third attempt. HubSpot has two Apex companies, and GitHub has both an old closed issue and a new regression with similar symptoms.",
+              "user": "fatima-noor"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Apex Freight webhook retry regression: Apex Freight account apexfreight.example reports retries stopping after attempt 3 on API version 2026-07.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Apex Freight Systems uses apexfreightsystems.example.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "eng-customer-bugs"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "fatima-noor",
+          "real_name": "Fatima Noor"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:argabench-40-v1",
+    "domain:developer",
+    "task:dev-08",
+    "content-sha256:164fa2ff989f82c60ac34588ed7df526aaa10a34e4d7c6c56d236a71045b38b3"
+  ],
+  "twins": [
+    "github",
+    "hubspot",
+    "linear",
+    "slack"
+  ]
+}

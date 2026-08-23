@@ -6,29 +6,29 @@ This repository owns benchmark semantics, agent execution, grading, and experime
 
 ## Current status
 
-The active saved-Scenario release is **Cross-Functional 40 v1**: exactly 40
+The active saved-Scenario release is **ArgaBench v1**: exactly 40
 deterministic multi-system tasks, with eight tasks each across IT support,
 CRM/outreach, marketing, developer workflows, and e-commerce. Every task uses
 the same two-paragraph operational responder prompt form, selects at least
 three service twins, requires at least eight semantic steps, checks in exact
 seed JSON for every selected twin, and defaults to denying unlisted mutations.
 All 40 Scenario payloads have been provisioned successfully through the Arga
-CLI and are tagged `suite:cross-functional-40-v1`.
+CLI and are tagged `suite:argabench-40-v1`.
 
 The task and prompt index is in
-[`benchmark/cross_functional_40/TASKS.md`](benchmark/cross_functional_40/TASKS.md),
+[`benchmark/argabench_40/TASKS.md`](benchmark/argabench_40/TASKS.md),
 the full machine-readable suite is in
-[`benchmark/cross_functional_40/suite.json`](benchmark/cross_functional_40/suite.json),
+[`benchmark/argabench_40/suite.json`](benchmark/argabench_40/suite.json),
 and the exact Scenario import payloads are in
-[`benchmark/cross_functional_40/scenarios/`](benchmark/cross_functional_40/scenarios/).
+[`benchmark/argabench_40/scenarios/`](benchmark/argabench_40/scenarios/).
 The candidate-context and outcome-fairness review is recorded in
-[`benchmark/cross_functional_40/FAIRNESS_AUDIT.md`](benchmark/cross_functional_40/FAIRNESS_AUDIT.md).
+[`benchmark/argabench_40/FAIRNESS_AUDIT.md`](benchmark/argabench_40/FAIRNESS_AUDIT.md).
 
-Resume an interrupted Cross-Functional model matrix in place with a bounded
+Resume an interrupted ArgaBench model matrix in place with a bounded
 global trial concurrency:
 
 ```bash
-uv run python scripts/run_cross_functional_model_matrix.py \
+uv run python scripts/run_argabench_model_matrix.py \
   --output /path/to/existing-matrix-run \
   --resume \
   --concurrency 10
