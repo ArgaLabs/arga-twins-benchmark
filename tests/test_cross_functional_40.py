@@ -174,6 +174,48 @@ def test_non_obvious_deliverables_have_human_workflow_policy_not_prompt_instruct
         assert policy_occurrences == 1, f"{task_id} policy must be present exactly once"
 
 
+def test_it01_does_not_prescribe_hidden_gmail_or_duplicate_tracker_work() -> None:
+    from arga_twins_benchmark.reporting.cross_functional_it_dev_legacy import (
+        semantic_requirement_contracts,
+        semantic_requirement_group_contracts,
+    )
+
+    builder = _load_builder()
+    suite = json.loads(SUITE_PATH.read_text())
+    task = next(bundle for bundle in suite["tasks"] if bundle["id"] == "IT-01")
+    primary = next(
+        outcome for outcome in task["verification"]["required_outcomes"] if outcome["id"] == "primary_outcome"
+    )["description"]
+    seed_text = "\n".join(builder.seed_strings(task["seed_config"])).casefold()
+
+    assert "gmail thread is quarantined" not in primary.casefold()
+    assert "permitted but not required" in primary.casefold()
+    assert "mail_quarantined" not in {item[0] for item in semantic_requirement_contracts("IT-01")}
+    groups = semantic_requirement_group_contracts("IT-01")
+    assert len(groups) == 1
+    assertion_id, alternatives = groups[0]
+    assert assertion_id == "incident_evidence_reconciled"
+    assert {alternative[0] for alternative in alternatives} == {"jira", "github"}
+    assert "quarantine policy" not in seed_text
+
+
+def test_every_required_quarantine_has_seeded_human_policy() -> None:
+    from arga_twins_benchmark.reporting.cross_functional_fair import semantic_requirements_for_task
+
+    builder = _load_builder()
+    suite = json.loads(SUITE_PATH.read_text())
+    quarantine_tasks = {
+        task["id"]
+        for task in suite["tasks"]
+        if any("quarantin" in requirement.id for requirement in semantic_requirements_for_task(task))
+    }
+
+    assert quarantine_tasks == {"DEV-03"}
+    dev03 = next(task for task in suite["tasks"] if task["id"] == "DEV-03")
+    seed_text = "\n".join(builder.seed_strings(dev03["seed_config"])).casefold()
+    assert "active reliability policy crp-6 permits a 24-hour bounded quarantine" in seed_text
+
+
 def test_outcome_verifiers_do_not_grade_hidden_write_counts() -> None:
     suite = json.loads(SUITE_PATH.read_text())
 

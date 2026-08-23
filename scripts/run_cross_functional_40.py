@@ -33,19 +33,24 @@ from arga_twins_benchmark.reporting.cross_functional_fair import (
     snapshot_capture_contract_gaps,
     snapshot_queries_for_task,
 )
+from arga_twins_benchmark.reporting.cross_functional_tool_ceiling import (
+    legacy_gateway_ceiling_rejections,
+)
 from arga_twins_benchmark.runner import SYSTEM_PROMPT
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE_PATH = ROOT / "benchmark" / "cross_functional_40" / "suite.json"
 MODEL_MATRIX_PATH = ROOT / "benchmark" / "cross_functional_40" / "model_matrix.json"
 SUITE_TAG = "suite:cross-functional-40-v1"
-PROVIDER_TOOL_LIMIT = 100
-OFFICIAL_DOCS_TOOL_LIMIT = 20
+PROVIDER_TOOL_LIMIT = 160
+OFFICIAL_DOCS_TOOL_LIMIT = 40
 MODEL_TIMEOUT_SECONDS = 1_800
 PROVISION_TIMEOUT_SECONDS = 1_200
 POLL_SECONDS = 2.0
 CONTROL_PLANE_MAX_ATTEMPTS = 5
 CONTROL_PLANE_RETRY_BASE_SECONDS = 1.0
+STATE_CAPTURE_MAX_ATTEMPTS = 8
+STATE_CAPTURE_RETRY_BASE_SECONDS = 1.0
 INVOCATION_STARTED_ARTIFACT = "model-invocation-started.json"
 RETRY_ARCHIVE_DIR = "retry-archive"
 RETRYABLE_MODEL_INFRA_STATUSES = frozenset({"api_error", "invalid_response"})
@@ -235,6 +240,32 @@ def _snapshot_query_ids(path: Path) -> frozenset[str] | None:
     return frozenset(cast(str, key) for key in typed_queries)
 
 
+def _completed_attempt_hit_legacy_gateway_ceiling(
+    task_dir: Path,
+    invocation: dict[str, Any],
+) -> bool:
+    try:
+        prompt = read_json_object(task_dir / "prompt.json", required=True)
+        provider_trace = read_json_object(task_dir / "provider-trace.json", required=True)
+        docs_trace = read_json_object(task_dir / "official-docs-trace.json", required=True)
+        tool_steps = read_json_object(task_dir / "tool-steps.json", required=True)
+    except ValueError:
+        return False
+    assert prompt is not None
+    assert provider_trace is not None
+    assert docs_trace is not None
+    assert tool_steps is not None
+    return bool(
+        legacy_gateway_ceiling_rejections(
+            prompt=prompt,
+            invocation=invocation,
+            provider_trace=provider_trace,
+            docs_trace=docs_trace,
+            tool_steps=tool_steps,
+        )
+    )
+
+
 def classify_resume_task(
     task_dir: Path,
     *,
@@ -271,6 +302,8 @@ def classify_resume_task(
         invocation_status = invocation.get("status") if invocation is not None else None
         if attempt is None:
             if invocation is None:
+                if _task_has_invocation_evidence(task_dir, attempt):
+                    return ResumeDecision("skip", "model_invocation_protected")
                 return ResumeDecision("run", "explicit_interrupted_infrastructure_retry")
             if invocation_status in RETRYABLE_MODEL_INFRA_STATUSES:
                 return ResumeDecision("run", "explicit_model_infrastructure_retry")
@@ -281,7 +314,19 @@ def classify_resume_task(
                 and model_status is None
                 and invocation is None
             ):
+                if _task_has_invocation_evidence(task_dir, attempt):
+                    return ResumeDecision("skip", "model_invocation_protected", attempt)
                 return ResumeDecision("run", "explicit_interrupted_infrastructure_retry", attempt)
+            if (
+                attempt.get("attempt_status") == "infrastructure_invalid"
+                and model_status == "completed"
+                and invocation_status == "completed"
+            ):
+                return ResumeDecision(
+                    "run",
+                    "explicit_post_invocation_infrastructure_retry",
+                    attempt,
+                )
             if (
                 model_status in RETRYABLE_MODEL_INFRA_STATUSES
                 and invocation_status == model_status
@@ -299,16 +344,32 @@ def classify_resume_task(
         model_status = attempt.get("model_status") if attempt is not None else None
         if (
             attempt is not None
-            and attempt.get("attempt_status") == "candidate_complete"
+            and attempt.get("attempt_status") in {"candidate_complete", "infrastructure_invalid"}
             and model_status in RETRYABLE_MODEL_TERMINAL_STATUSES
             and invocation_status == model_status
         ):
             archived_terminal_attempts = _archived_terminal_attempt_count(task_dir)
             if archived_terminal_attempts is None:
                 return ResumeDecision("blocked", "model_terminal_retry_history_ambiguous", attempt)
-            if archived_terminal_attempts == 0:
+            invocation_config = invocation.get("config") if invocation is not None else None
+            typed_config = invocation_config if isinstance(invocation_config, dict) else {}
+            used_lower_tool_ceiling = (
+                model_status == "tool_limit_exceeded"
+                and isinstance(typed_config.get("max_tool_calls"), int)
+                and typed_config["max_tool_calls"] < PROVIDER_TOOL_LIMIT + OFFICIAL_DOCS_TOOL_LIMIT
+            )
+            if archived_terminal_attempts == 0 or used_lower_tool_ceiling:
                 return ResumeDecision("run", "explicit_model_terminal_retry", attempt)
             return ResumeDecision("skip", "model_terminal_retry_exhausted", attempt)
+        if (
+            attempt is not None
+            and attempt.get("attempt_status") == "candidate_complete"
+            and model_status == "completed"
+            and invocation_status == "completed"
+            and invocation is not None
+            and _completed_attempt_hit_legacy_gateway_ceiling(task_dir, invocation)
+        ):
+            return ResumeDecision("run", "explicit_old_gateway_ceiling_retry", attempt)
 
     if retry_missing_snapshot_evidence:
         if not expected_snapshot_query_ids:
@@ -614,7 +675,17 @@ async def wait_cleanup(arga: SubprocessArgaCli, run_id: str) -> dict[str, Any]:
     except Exception as error:  # cleanup evidence retains failures without hiding the attempt
         teardown = {"error_type": type(error).__name__, "error": str(error)}
     deadline = asyncio.get_running_loop().time() + 180
-    terminal = {"cancelled", "canceled", "expired", "torn_down", "terminated", "deleted", "cleaned_up"}
+    terminal = {
+        "cancelled",
+        "canceled",
+        "expired",
+        "failed",
+        "error",
+        "torn_down",
+        "terminated",
+        "deleted",
+        "cleaned_up",
+    }
     while True:
         status = cast(
             TwinRun,
@@ -774,13 +845,15 @@ async def run_task(
                     "tool_definitions": tools,
                     "provider_tool_call_limit": PROVIDER_TOOL_LIMIT,
                     "official_docs_tool_call_limit": OFFICIAL_DOCS_TOOL_LIMIT,
+                    "trusted_state_capture_max_attempts": STATE_CAPTURE_MAX_ATTEMPTS,
+                    "trusted_state_capture_retry_base_seconds": STATE_CAPTURE_RETRY_BASE_SECONDS,
                 },
             )
 
             capturer = TrustedStateCapturer(
                 timeout_seconds=60,
-                max_attempts=5,
-                retry_base_delay_seconds=1,
+                max_attempts=STATE_CAPTURE_MAX_ATTEMPTS,
+                retry_base_delay_seconds=STATE_CAPTURE_RETRY_BASE_SECONDS,
             )
             snapshot_queries = snapshot_queries_for_task(task)
             baseline = await capturer.capture(
@@ -1085,7 +1158,35 @@ async def async_main(args: argparse.Namespace) -> int:
     scenario_payload = {"suite_tag": SUITE_TAG, "scenario_ids": scenario_ids}
     existing_scenarios = read_json_object(output_root / "staging-scenarios.json")
     if existing_scenarios is not None and existing_scenarios != scenario_payload:
-        raise ValueError("cannot resume: staging Scenario identities changed")
+        retry_enabled = (
+            args.retry_infrastructure_invalid
+            or args.retry_model_terminal
+            or args.retry_missing_snapshot_evidence
+        )
+        existing_ids = existing_scenarios.get("scenario_ids")
+        if (
+            not resume_existing
+            or not retry_enabled
+            or existing_scenarios.get("suite_tag") != SUITE_TAG
+            or not isinstance(existing_ids, dict)
+            or set(existing_ids) != set(scenario_ids)
+        ):
+            raise ValueError("cannot resume: staging Scenario identities changed")
+        changed_task_ids = sorted(
+            task_id for task_id, scenario_id in scenario_ids.items() if existing_ids.get(task_id) != scenario_id
+        )
+        write_private_json(
+            output_root / "staging-scenarios-resume.json",
+            {
+                "protocol": "arga-bench-cross-functional-scenario-resolution/1",
+                "suite_tag": SUITE_TAG,
+                "resolved_at": utc_now(),
+                "changed_task_ids": changed_task_ids,
+                "original_scenario_ids": existing_ids,
+                "resolved_scenario_ids": scenario_ids,
+                "task_content_sha256": {str(task["id"]): content_hash(task) for task in tasks},
+            },
+        )
     if existing_scenarios is None:
         write_private_json(output_root / "staging-scenarios.json", scenario_payload)
 

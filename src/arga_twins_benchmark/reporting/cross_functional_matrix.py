@@ -9,6 +9,9 @@ from pathlib import Path
 from typing import Any, Literal, cast
 
 from arga_twins_benchmark.lifecycle import cleanup_payload_proves_inert, write_private_json
+from arga_twins_benchmark.reporting.cross_functional_tool_ceiling import (
+    legacy_gateway_ceiling_rejections,
+)
 
 CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL = "arga-bench-cross-functional-model-matrix-offline-classification/1"
 HISTORICAL_CALIBRATION_PROTOCOL = "arga-bench-cross-functional-historical-calibration/1"
@@ -121,6 +124,12 @@ def _content_hash(task: Mapping[str, Any]) -> str:
 # metadata changed.  Preserve the recorded identity for saved-trial integrity
 # without accepting arbitrary historical hashes.
 _VERIFICATION_ONLY_LEGACY_CONTENT_HASHES: dict[str, frozenset[str]] = {
+    "IT-01": frozenset(
+        {
+            "88a6cbd7a2602fa78219ab7b0b88bd8ae873d4976f61ca1a5abfdb32a441c56b",
+            "7b66b98107c8e88c6e64117990600ff85c7ce60cf7156776f5dd6ee34df950eb",
+        }
+    ),
     "DEV-05": frozenset({"5467e4b5f2e58fc296e4d6b5b0c89cb9d0fe7ad06c4dab806d18a0575d484a47"}),
     "MKT-01": frozenset({"9205835e69125c1148dc8eb440ef716a21d79a7c54dc8e3f33d7606382949b7e"}),
 }
@@ -408,6 +417,122 @@ def _snapshot_evidence_gaps(
     return ["semantic_grade_not_applied_by_integrity_classifier"]
 
 
+def _archived_old_gateway_ceiling_retry_is_safe(
+    *,
+    archive_dir: Path,
+    task_id: str,
+    profile_id: str,
+    attempt: Mapping[str, Any],
+    invocation: Mapping[str, Any],
+) -> bool:
+    issues: list[str] = []
+    control = _read_artifact(archive_dir / "control.json", name="control.json", issues=issues)
+    prompt = _read_artifact(archive_dir / "prompt.json", name="prompt.json", issues=issues)
+    baseline = _read_artifact(
+        archive_dir / "baseline-state.json",
+        name="baseline-state.json",
+        issues=issues,
+    )
+    final = _read_artifact(
+        archive_dir / "final-state.json",
+        name="final-state.json",
+        issues=issues,
+    )
+    raw_diff = _read_artifact(
+        archive_dir / "raw-state-diff.json",
+        name="raw-state-diff.json",
+        issues=issues,
+    )
+    provider_trace = _read_artifact(
+        archive_dir / "provider-trace.json",
+        name="provider-trace.json",
+        issues=issues,
+    )
+    docs_trace = _read_artifact(
+        archive_dir / "official-docs-trace.json",
+        name="official-docs-trace.json",
+        issues=issues,
+    )
+    tool_steps = _read_artifact(
+        archive_dir / "tool-steps.json",
+        name="tool-steps.json",
+        issues=issues,
+    )
+    if issues or any(
+        artifact is None
+        for artifact in (
+            control,
+            prompt,
+            baseline,
+            final,
+            raw_diff,
+            provider_trace,
+            docs_trace,
+            tool_steps,
+        )
+    ):
+        return False
+    assert control is not None
+    assert prompt is not None
+    assert baseline is not None
+    assert final is not None
+    assert raw_diff is not None
+    assert provider_trace is not None
+    assert docs_trace is not None
+    assert tool_steps is not None
+
+    run_id = attempt.get("run_id")
+    model = attempt.get("model")
+    response_model = attempt.get("response_model")
+    provider = attempt.get("provider")
+    scenario_id = attempt.get("scenario_id")
+    if (
+        not _non_empty_string(run_id)
+        or not _non_empty_string(model)
+        or not _non_empty_string(response_model)
+        or not _non_empty_string(provider)
+        or not _non_empty_string(scenario_id)
+        or attempt.get("cleanup_succeeded") is not True
+        or control.get("protocol") != _CONTROL_PROTOCOL
+        or control.get("instance_id") != task_id
+        or control.get("run_id") != run_id
+        or control.get("scenario_id") != scenario_id
+        or prompt.get("profile_id") != profile_id
+        or prompt.get("model") != model
+        or prompt.get("user_prompt") != attempt.get("prompt")
+        or invocation.get("requested_model") != model
+        or invocation.get("response_model") != response_model
+        or invocation.get("provider") != provider
+        or invocation.get("user_prompt") != prompt.get("user_prompt")
+        or invocation.get("system_prompt") != prompt.get("system_prompt")
+        or invocation.get("stop_reason") != attempt.get("stop_reason")
+        or invocation.get("final_text") != attempt.get("final_text")
+        or not isinstance(baseline.get("providers"), dict)
+        or not isinstance(baseline.get("queries"), dict)
+        or not isinstance(final.get("providers"), dict)
+        or not isinstance(final.get("queries"), dict)
+    ):
+        return False
+    if _validate_trace_artifacts(
+        attempt=attempt,
+        invocation=invocation,
+        provider_trace=provider_trace,
+        docs_trace=docs_trace,
+        tool_steps=tool_steps,
+        raw_diff=raw_diff,
+    ):
+        return False
+    return bool(
+        legacy_gateway_ceiling_rejections(
+            prompt=prompt,
+            invocation=invocation,
+            provider_trace=provider_trace,
+            docs_trace=docs_trace,
+            tool_steps=tool_steps,
+        )
+    )
+
+
 def _retry_archive_proves_safe_retries(
     *,
     profile_dir: Path,
@@ -459,16 +584,24 @@ def _retry_archive_proves_safe_retries(
         if reason == "interrupted_before_attempt":
             if archived_attempt_path.exists() or any(archive_dir.rglob("invocation.json")):
                 return False
+            if not _archived_cleanup_is_safe(archive_dir=archive_dir, cleanup=metadata.get("cleanup")):
+                return False
             continue
         if reason == "explicit_interrupted_infrastructure_retry":
-            if any(archive_dir.rglob("invocation.json")) or not isinstance(metadata.get("cleanup"), dict):
+            if any(archive_dir.rglob("invocation.json")) or not _archived_cleanup_is_safe(
+                archive_dir=archive_dir,
+                cleanup=metadata.get("cleanup"),
+            ):
                 return False
             if not archived_attempt_path.exists():
                 continue
         elif reason not in {
             "zero_invocation_infrastructure_invalid",
             "explicit_model_infrastructure_retry",
+            "explicit_post_invocation_infrastructure_retry",
             "explicit_model_terminal_retry",
+            "explicit_missing_snapshot_evidence_retry",
+            "explicit_old_gateway_ceiling_retry",
         }:
             return False
         archived_issues: list[str] = []
@@ -485,8 +618,17 @@ def _retry_archive_proves_safe_retries(
             or archived_attempt.get("task_id") != task_id
         ):
             return False
-        if reason in {"explicit_model_infrastructure_retry", "explicit_model_terminal_retry"}:
-            if not isinstance(metadata.get("cleanup"), dict):
+        if reason in {
+            "explicit_model_infrastructure_retry",
+            "explicit_post_invocation_infrastructure_retry",
+            "explicit_model_terminal_retry",
+            "explicit_missing_snapshot_evidence_retry",
+            "explicit_old_gateway_ceiling_retry",
+        }:
+            if not _archived_cleanup_is_safe(
+                archive_dir=archive_dir,
+                cleanup=metadata.get("cleanup"),
+            ):
                 return False
             invocation_issues: list[str] = []
             archived_invocation = _read_artifact(
@@ -498,12 +640,22 @@ def _retry_archive_proves_safe_retries(
             allowed_statuses = (
                 {"api_error", "invalid_response"}
                 if reason == "explicit_model_infrastructure_retry"
+                else {"completed"}
+                if reason == "explicit_post_invocation_infrastructure_retry"
+                else {"completed"}
+                if reason == "explicit_missing_snapshot_evidence_retry"
+                else {"completed"}
+                if reason == "explicit_old_gateway_ceiling_retry"
                 else _MODEL_TERMINAL_STATUSES
             )
             allowed_attempt_statuses = (
-                {"infrastructure_invalid", "candidate_complete"}
-                if reason == "explicit_model_infrastructure_retry"
+                {"infrastructure_invalid"}
+                if reason == "explicit_post_invocation_infrastructure_retry"
                 else {"candidate_complete"}
+                if reason == "explicit_missing_snapshot_evidence_retry"
+                else {"candidate_complete"}
+                if reason == "explicit_old_gateway_ceiling_retry"
+                else {"infrastructure_invalid", "candidate_complete"}
             )
             if (
                 invocation_issues
@@ -513,10 +665,42 @@ def _retry_archive_proves_safe_retries(
                 or archived_attempt.get("attempt_status") not in allowed_attempt_statuses
             ):
                 return False
+            if reason == "explicit_missing_snapshot_evidence_retry":
+                snapshot_issues: list[str] = []
+                baseline = _read_artifact(
+                    archive_dir / "baseline-state.json",
+                    name="baseline-state.json",
+                    issues=snapshot_issues,
+                )
+                final = _read_artifact(
+                    archive_dir / "final-state.json",
+                    name="final-state.json",
+                    issues=snapshot_issues,
+                )
+                if (
+                    snapshot_issues
+                    or baseline is None
+                    or final is None
+                    or baseline.get("queries") != {}
+                    or final.get("queries") != {}
+                ):
+                    return False
+            if reason == "explicit_old_gateway_ceiling_retry" and not (
+                _archived_old_gateway_ceiling_retry_is_safe(
+                    archive_dir=archive_dir,
+                    task_id=task_id,
+                    profile_id=profile_id,
+                    attempt=archived_attempt,
+                    invocation=archived_invocation,
+                )
+            ):
+                return False
             continue
         if archived_attempt.get("attempt_status") != "infrastructure_invalid":
             return False
         if archived_attempt.get("model_status") is not None or archived_attempt.get("final_text") not in (None, ""):
+            return False
+        if not _archived_cleanup_is_safe(archive_dir=archive_dir, cleanup=metadata.get("cleanup")):
             return False
         if reason == "zero_invocation_infrastructure_invalid":
             if any(archive_dir.rglob("invocation.json")):
@@ -525,6 +709,31 @@ def _retry_archive_proves_safe_retries(
                 if archived_attempt.get(field) != 0:
                     return False
     return True
+
+
+def _archived_cleanup_is_safe(*, archive_dir: Path, cleanup: object) -> bool:
+    run_ids: set[str] = set()
+    for filename in ("attempt.json", "control.json"):
+        path = archive_dir / filename
+        if not path.exists():
+            continue
+        issues: list[str] = []
+        payload = _read_artifact(path, name=filename, issues=issues)
+        if issues or payload is None:
+            return False
+        run_id = payload.get("run_id")
+        if run_id is not None:
+            if not _non_empty_string(run_id):
+                return False
+            run_ids.add(cast(str, run_id))
+    if len(run_ids) > 1:
+        return False
+    if not run_ids:
+        return cleanup == {"outcome": "interrupted_before_control_persisted"}
+    return isinstance(cleanup, dict) and cleanup_payload_proves_inert(
+        cleanup,
+        expected_run_id=next(iter(run_ids)),
+    )
 
 
 def _legacy_attempt_number_is_safe(
@@ -653,18 +862,19 @@ def _classify_task(
         raw_run_id = attempt.get("run_id")
         run_id = raw_run_id if _non_empty_string(raw_run_id) else None
 
-    expected_scenario_id = scenario_ids.get(task_id) if scenario_ids is not None else None
-    if not _non_empty_string(expected_scenario_id):
+    registered_scenario_id = scenario_ids.get(task_id) if scenario_ids is not None else None
+    if not _non_empty_string(registered_scenario_id):
         issues.append("scenario_mapping:missing_task_id")
-    if attempt is not None and attempt.get("scenario_id") != expected_scenario_id:
-        issues.append("attempt:mismatched_scenario_id")
+    attempt_scenario_id = attempt.get("scenario_id") if attempt is not None else None
+    if attempt is not None and not _non_empty_string(attempt_scenario_id):
+        issues.append("attempt:missing_scenario_id")
 
     if control is not None:
         if control.get("protocol") != _CONTROL_PROTOCOL:
             issues.append("control:mismatched_protocol")
         if control.get("instance_id") != task_id:
             issues.append("control:mismatched_task_id")
-        if control.get("scenario_id") != expected_scenario_id:
+        if control.get("scenario_id") != attempt_scenario_id:
             issues.append("control:mismatched_scenario_id")
         if control.get("scenario_content_sha256") not in _accepted_content_hashes(task):
             issues.append("control:mismatched_scenario_content_sha256")

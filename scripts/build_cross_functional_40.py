@@ -151,10 +151,10 @@ TASKS: list[dict[str, Any]] = [
         "security-intake",
         "a compressed supplier rate-card download opened a hidden browser process and registered a new startup entry on her procurement laptop. The attachment arrived inside a reply to an existing sourcing thread, so she cannot tell whether the sender was spoofed.",
         "endpoint incident analyst",
-        "Correlate the message headers, archive fingerprint, endpoint trace, and repository indicator; quarantine only the matching mail thread, reconcile the security case and repository work, and preserve the evidence.",
+        "Correlate the message headers, archive fingerprint, and endpoint trace; preserve the evidence, reconcile one existing incident record, and keep any mailbox containment narrowly targeted if it is warranted.",
         ["slack", "jira", "github", "gmail"],
         "Keisha Bell / PRC-LT-214 / rate-card-aug.zip / THR-447",
-        "The spoofed message and hostile archive are tied to THR-447, only that Gmail thread is quarantined, the Jira and GitHub records carry the evidence, and Slack has one confirmed update.",
+        "The spoofed message and hostile archive are tied to THR-447, at least one existing incident record carries the evidence, and Slack has one confirmed update. Targeted Gmail containment is permitted but not required.",
         "Do not quarantine the legitimate supplier thread, change repository code, delete mail, alter unrelated records, or announce recovery before verification.",
     ),
     task(

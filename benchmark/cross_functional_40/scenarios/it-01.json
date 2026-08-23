@@ -296,7 +296,7 @@
     "suite:cross-functional-40-v1",
     "domain:it_support",
     "task:it-01",
-    "content-sha256:88a6cbd7a2602fa78219ab7b0b88bd8ae873d4976f61ca1a5abfdb32a441c56b"
+    "content-sha256:1a5993d625d0f0e0308fea01f2ab04dc1122f26f8ee118d8f1104d39de1fece1"
   ],
   "twins": [
     "github",
