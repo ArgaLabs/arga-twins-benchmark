@@ -163,19 +163,21 @@ def test_neutral_worlds_are_specific_and_present_without_answer_keys() -> None:
         serialized_seeds.add(serialized)
 
 
-def test_workflow_policies_are_neutral_and_do_not_create_hidden_deliverables() -> None:
+def test_workflow_policies_are_neutral_and_required_deliverables_are_public() -> None:
     builder = _load_builder()
     policies = __import__("cross_functional_40_seeds").WORKFLOW_POLICIES
     suite = json.loads(SUITE_PATH.read_text())
     tasks = {bundle["id"]: bundle for bundle in suite["tasks"]}
-    hidden_deliverable_tasks = {
+    reviewed_confirmation_tasks = {
         bundle["id"]
         for bundle in suite["tasks"]
-        if "draft" in bundle["verification"]["required_outcomes"][0].get("description", "").lower()
-        or bundle["id"] in {"CRM-08", "MKT-08"}
+        if any(
+            outcome["id"] == "reviewed_unsent_confirmation"
+            for outcome in bundle["verification"]["required_outcomes"]
+        )
     }
 
-    assert hidden_deliverable_tasks == {"CRM-08", "MKT-08"}
+    assert reviewed_confirmation_tasks == {"CRM-02", "CRM-03", "CRM-05", "ECOM-02", "ECOM-04"}
     assert set(policies) == {
         "CRM-02",
         "CRM-03",
@@ -197,6 +199,16 @@ def test_workflow_policies_are_neutral_and_do_not_create_hidden_deliverables() -
         assert not any(tool_name in policy.lower() for tool_name in bundle["twins"])
         policy_occurrences = sum(policy in value for value in builder.seed_strings(bundle["seed_config"]))
         assert policy_occurrences == 1, f"{task_id} policy must be present exactly once"
+        if task_id in reviewed_confirmation_tasks:
+            outcome = next(
+                item
+                for item in bundle["verification"]["required_outcomes"]
+                if item["id"] == "reviewed_unsent_confirmation"
+            )
+            assert outcome["critical"] is True
+            assert outcome["cardinality"] == 1
+            assert outcome["selector"]["unsent"] is True
+            assert outcome["selector"]["accountable_owner_review"] is True
 
 
 def test_it01_does_not_prescribe_hidden_gmail_or_duplicate_tracker_work() -> None:
@@ -311,19 +323,26 @@ def test_repaired_low_pass_scenarios_expose_outcomes_and_seed_actionable_assets(
     assert "Jira API-331" not in json.dumps(dev06)
 
 
-def test_optional_customer_review_policy_is_not_a_hidden_deliverable() -> None:
+def test_customer_review_policy_is_an_explicit_outcome_without_provider_prompting() -> None:
     import arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy as legacy
 
     suite = json.loads(SUITE_PATH.read_text())
     tasks = {task["id"]: task for task in suite["tasks"]}
     for task_id in ("ECOM-02", "ECOM-04"):
+        reviewed = next(
+            outcome
+            for outcome in tasks[task_id]["verification"]["required_outcomes"]
+            if outcome["id"] == "reviewed_unsent_confirmation"
+        )
         structured = next(
             outcome
             for outcome in tasks[task_id]["verification"]["required_outcomes"]
             if outcome["id"] == "structured_result"
         )
+        assert reviewed["critical"] is True
         assert "email_state" not in structured["facts"]
         assert all(requirement.provider != "gmail" for requirement in legacy._RULES[task_id].requirements)  # pyright: ignore[reportPrivateUsage]
+        assert legacy._RULES[task_id].gmail_drafts == 1  # pyright: ignore[reportPrivateUsage]
 
     assert [
         requirement.assertion_id
@@ -357,6 +376,9 @@ def test_dev05_calibration_requires_observable_codeowner_resolution() -> None:
     assert sum("Fingerprint c91d-7a40" in pr["body"] for pr in repo["prs"]) == 3
 
     verification = bundle["verification"]
+    assert verification["version"] == 2
+    assert verification["grading_basis"] == "observable_business_outcomes"
+    assert verification["trajectory_policy"] == "any_valid_provider_order"
     serialized = json.dumps(verification, sort_keys=True)
     assert '"requested_team": "billing-storage"' in serialized
     assert '"policy_file": ".github/CODEOWNERS"' in serialized

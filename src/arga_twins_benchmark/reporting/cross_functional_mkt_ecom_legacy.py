@@ -243,6 +243,7 @@ _RULES: dict[str, _Rule] = {
             ("stripe", ("northwind studios prospect", "northwind-studios.example")),
             ("hubspot", ("northwind studios prospect", "northwind-studios.example")),
         ),
+        gmail_drafts=1,
     ),
     "ECOM-03": _Rule(
         (
@@ -266,6 +267,7 @@ _RULES: dict[str, _Rule] = {
             "gmail": ("/gmail/v1/users/",),
         },
         (("stripe", ("civic research europe", "tx-441")),),
+        gmail_drafts=1,
     ),
     "ECOM-05": _Rule(
         (
@@ -1245,6 +1247,10 @@ def _structured_facts(task: Mapping[str, Any]) -> Mapping[str, Any]:
     return facts if isinstance(facts, dict) else {}
 
 
+def _requires_reviewed_unsent_confirmation(task: Mapping[str, Any]) -> bool:
+    return _required_outcome(task, "reviewed_unsent_confirmation") is not None
+
+
 def _correlation_contract(task: Mapping[str, Any]) -> tuple[tuple[str, ...], int]:
     outcome = _required_outcome(task, "cross_system_correlation")
     selector = outcome.get("selector") if isinstance(outcome, dict) else None
@@ -1657,6 +1663,47 @@ def _grade_semantics(
         )
         if not passed:
             reasons.append(f"fail:missing_required_resource:{assertion_id}")
+
+    if _requires_reviewed_unsent_confirmation(task):
+        facts = tuple(str(value) for value in _structured_facts(task).values())
+        relevant_drafts = [
+            call
+            for call in accepted_writes
+            if call.provider == "gmail"
+            and "/drafts" in urlsplit(call.path).path.casefold()
+            and not urlsplit(call.path).path.casefold().endswith("/send")
+            and sum(semantic_value_present(call.text, fact) for fact in facts) >= min(2, len(facts))
+        ]
+        review_terms = ("review", "owner", "approval", "approve")
+        review_records = [
+            call
+            for call in accepted_writes
+            if call.provider in {"slack", "jira", "linear"}
+            and any(_token_present(call.text, term) for term in review_terms)
+            and any(semantic_value_present(call.text, fact) for fact in facts)
+        ]
+        confirmation_passed = bool(relevant_drafts and review_records)
+        assertions.append(
+            _assertion(
+                "reviewed_unsent_confirmation",
+                confirmation_passed,
+                [
+                    _evidence(call.pointer, "invocation.json", f"Accepted {call.method} {call.path}")
+                    for call in [*relevant_drafts[:1], *review_records[:1]]
+                ],
+                (
+                    "One fact-relevant customer confirmation remains unsent with accountable-owner review evidence."
+                    if confirmation_passed
+                    else (
+                        "The seeded workflow policy requires one fact-relevant unsent customer confirmation and "
+                        "an internal accountable-owner review record; observed "
+                        f"{len(relevant_drafts)} matching draft(s) and {len(review_records)} matching review record(s)."
+                    )
+                ),
+            )
+        )
+        if not confirmation_passed:
+            reasons.append("fail:required_outcome:reviewed_unsent_confirmation")
 
     for requirement in rule.requirements:
         if task_id == "MKT-06" and requirement.assertion_id == "cohort_measurement_reconciled":

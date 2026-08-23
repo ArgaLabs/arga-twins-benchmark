@@ -12,3 +12,4 @@ dist/
 build/
 runs/*
 !runs/.gitkeep
+reports/internal/

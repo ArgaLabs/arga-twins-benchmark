@@ -675,13 +675,18 @@ def fair_contract_for_task(task: Mapping[str, Any]) -> FairTaskContract:
     requirement_groups = _legacy_requirement_groups(typed_task_id)
     if typed_task_id != "CRM-05" and not requirements and not requirement_groups:
         raise ValueError(f"{typed_task_id}: fair task contract has no semantic outcome requirements")
+    verification = _object_mapping(_task_value(task, "verification"))
+    required_outcomes = _object_list(verification.get("required_outcomes"))
+    reviewed_unsent_confirmation = any(
+        _object_mapping(outcome).get("id") == "reviewed_unsent_confirmation" for outcome in required_outcomes
+    )
     return FairTaskContract(
         task_id=typed_task_id,
         snapshot_queries=snapshot_queries_for_task(task),
         semantic_requirements=requirements,
         semantic_requirement_groups=requirement_groups,
         cardinality_requirements=_CARDINALITY_REQUIREMENTS.get(typed_task_id, ()),
-        reviewed_unsent_confirmation=False,
+        reviewed_unsent_confirmation=reviewed_unsent_confirmation,
     )
 
 

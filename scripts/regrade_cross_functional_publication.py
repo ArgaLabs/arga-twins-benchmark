@@ -103,27 +103,44 @@ def _published_trials(evidence_dir: Path) -> tuple[list[dict[str, Any]], dict[st
     return trials, task_file_hashes
 
 
-def _artifact_index(artifact_root: Path, target_run_ids: set[str]) -> dict[str, Path]:
+def _artifact_index(artifact_roots: Sequence[Path], target_run_ids: set[str]) -> dict[str, Path]:
     matches: dict[str, list[Path]] = defaultdict(list)
     scanned = 0
-    for attempt_path in artifact_root.rglob("attempt.json"):
-        scanned += 1
-        try:
-            attempt = _read_object(attempt_path)
-        except (OSError, UnicodeError, json.JSONDecodeError, ValueError):
-            continue
-        run_id = attempt.get("run_id")
-        if isinstance(run_id, str) and run_id in target_run_ids:
-            matches[run_id].append(attempt_path.parent)
+    for artifact_root in artifact_roots:
+        for attempt_path in artifact_root.rglob("attempt.json"):
+            scanned += 1
+            try:
+                attempt = _read_object(attempt_path)
+            except (OSError, UnicodeError, json.JSONDecodeError, ValueError):
+                continue
+            run_id = attempt.get("run_id")
+            if isinstance(run_id, str) and run_id in target_run_ids:
+                matches[run_id].append(attempt_path.parent)
     missing = sorted(target_run_ids - set(matches))
-    duplicates = {run_id: paths for run_id, paths in matches.items() if len(paths) != 1}
-    if missing or duplicates:
+    resolved: dict[str, Path] = {}
+    ambiguous: dict[str, list[Path]] = {}
+    for run_id, paths in matches.items():
+        unique: dict[str, Path] = {}
+        for path in paths:
+            identity = _canonical_json_sha256(
+                {
+                    name: _sha256_file(path / name)
+                    for name in ARTIFACT_NAMES
+                    if (path / name).is_file()
+                }
+            )
+            unique.setdefault(identity, path)
+        if len(unique) == 1:
+            resolved[run_id] = next(iter(unique.values()))
+        else:
+            ambiguous[run_id] = paths
+    if missing or ambiguous:
         raise ValueError(
             f"artifact resolution failed after scanning {scanned} attempts: "
-            f"missing={len(missing)}, duplicate={len(duplicates)}"
+            f"missing={len(missing)}, ambiguous={len(ambiguous)}"
         )
-    print(f"resolved {len(matches)} exact run IDs from {scanned} saved attempts", flush=True)
-    return {run_id: paths[0] for run_id, paths in matches.items()}
+    print(f"resolved {len(resolved)} exact run IDs from {scanned} saved attempts", flush=True)
+    return resolved
 
 
 def _terminal_assertion(source_trial: Mapping[str, Any]) -> dict[str, Any]:
@@ -181,7 +198,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--suite", type=Path, default=Path("benchmark/cross_functional_40/suite.json"))
     parser.add_argument("--tasks", type=Path, default=Path("benchmark/cross_functional_40/TASKS.md"))
     parser.add_argument("--public-evidence-dir", type=Path, required=True)
-    parser.add_argument("--artifact-root", type=Path, required=True)
+    parser.add_argument(
+        "--artifact-root",
+        type=Path,
+        action="append",
+        required=True,
+        help="Root containing saved attempt artifacts; repeat for multiple roots.",
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--task-id",
