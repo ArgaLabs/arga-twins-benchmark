@@ -22,7 +22,7 @@ HISTORICAL_CALIBRATION_PATH = BENCHMARK_ROOT / "historical_fable_5_high_fairness
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("matrix_dir", type=Path, help="Preserved 31-profile matrix directory (read-only).")
+    parser.add_argument("matrix_dir", type=Path, help="Preserved 32-profile matrix directory (read-only).")
     parser.add_argument("output_dir", type=Path, help="New report directory outside matrix_dir.")
     parser.add_argument("--published-at", help="Publication manifest date in YYYY-MM-DD form.")
     return parser.parse_args()

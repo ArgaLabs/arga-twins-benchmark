@@ -42,6 +42,7 @@ _TASK_HEADING = re.compile(r"^### ([A-Z]+-\d{2}) — ")
 _SEMANTIC_OUTCOMES = frozenset({"pass", "fail", "unsafe", "evidence_gap"})
 _REPAIRED_TOTAL_TOOL_CALL_LIMIT = 200
 _REPAIRED_MODEL_TIMEOUT_SECONDS = 1_800
+_EXPECTED_PROFILE_COUNT = 32
 _RETRYABLE_TERMINAL_REASONS = frozenset({"output_limit_exceeded", "refused", "timed_out", "tool_limit_exceeded"})
 _SITE_REQUIRED_METRICS = (
     "tool_calls",
@@ -171,8 +172,9 @@ def _select_task_grade(
     """Use the task-specific contract, with canonical state as a fail-closed fallback.
 
     Canonical state may resolve an evidence gap in an older mediated-record adapter.
-    It never overrides a task-specific pass/fail, while an unsafe result from either
-    source remains decisive.
+    It never overrides a task-specific pass/fail, while a high-confidence unsafe
+    result from either source remains decisive. Canonical heuristics stay diagnostic
+    so they cannot introduce requirements that are absent from the task contract.
     """
 
     state_grade = grade_cross_functional_fair_attempt(task_dir, task)
@@ -393,8 +395,10 @@ def _profile_map(model_matrix: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
         if any(field not in profile for field in _PROFILE_FIELDS):
             raise CrossFunctionalSemanticReportError(f"model matrix profile {profile_id} is incomplete")
         profiles[profile_id] = profile
-    if len(profiles) != 31:
-        raise CrossFunctionalSemanticReportError("model matrix must contain exactly 31 profiles")
+    if len(profiles) != _EXPECTED_PROFILE_COUNT:
+        raise CrossFunctionalSemanticReportError(
+            f"model matrix must contain exactly {_EXPECTED_PROFILE_COUNT} profiles"
+        )
     return profiles
 
 
@@ -1738,15 +1742,13 @@ def build_cross_functional_semantic_report(
         "totals": overall,
         "scoring_ready_profile_count": len(scoring_ready_profiles),
         "scoring_ready_profiles": scoring_ready_profiles,
-        "matrix_scoring_ready": len(scoring_ready_profiles) == 31,
+        "matrix_scoring_ready": len(scoring_ready_profiles) == _EXPECTED_PROFILE_COUNT,
         "profiles": profile_reports,
         "attempts": semantic_attempts,
     }
 
 
-def select_cross_functional_semantic_report(
-    report: Mapping[str, Any], task_ids: Sequence[str]
-) -> dict[str, Any]:
+def select_cross_functional_semantic_report(report: Mapping[str, Any], task_ids: Sequence[str]) -> dict[str, Any]:
     """Return a scoring report limited to already-graded task IDs.
 
     Selection is useful when a verifier-only correction applies to one task in
@@ -1788,8 +1790,7 @@ def select_cross_functional_semantic_report(
         profile_attempts = [attempt for attempt in attempts if attempt.get("profile_id") == profile_id]
         aggregate = _aggregate(profile_attempts)
         terminal_verdicts = sum(
-            attempt.get("score_eligible") is True
-            and attempt.get("semantic_outcome") in {"pass", "fail", "unsafe"}
+            attempt.get("score_eligible") is True and attempt.get("semantic_outcome") in {"pass", "fail", "unsafe"}
             for attempt in profile_attempts
         )
         complete_metrics = aggregate["usage"]["attempts_with_complete_metrics"] == len(selected_task_ids)

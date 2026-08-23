@@ -119,7 +119,7 @@ def _content_hash(task: Mapping[str, Any]) -> str:
     return _sha256_bytes(payload)
 
 
-# These two Scenario identities predate verifier-only fairness revisions.  Their
+# These Scenario identities predate verifier-only fairness revisions. Their
 # candidate-visible prompt, twins, and seed are unchanged; only hidden scoring
 # metadata changed.  Preserve the recorded identity for saved-trial integrity
 # without accepting arbitrary historical hashes.
@@ -1201,8 +1201,8 @@ def classify_cross_functional_matrix(
     all_tasks = _suite_tasks(suite)
     model_matrix = _load_trusted_object(model_matrix_path, label="model matrix")
     profiles = _profile_by_id(model_matrix, label="model matrix")
-    if len(profiles) != 31:
-        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 31 profiles")
+    if len(profiles) != 32:
+        raise CrossFunctionalMatrixClassificationError("Cross-Functional model matrix must contain 32 profiles")
     calibration_payload = _load_trusted_object(
         historical_calibration_path,
         label="historical Fable 5 High calibration",

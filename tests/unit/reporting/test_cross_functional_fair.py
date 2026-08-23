@@ -5,6 +5,9 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, cast
 
+import arga_twins_benchmark.reporting.cross_functional_fair as fair
+from arga_twins_benchmark.evaluation.deterministic import CanonicalResource
+from arga_twins_benchmark.evaluation.protocol import Mutation
 from arga_twins_benchmark.evaluation.state_capture import (
     CapturedProviderState,
     CapturedQueryState,
@@ -43,9 +46,7 @@ def test_it01_contract_uses_one_incident_record_and_optional_gmail_containment()
     assert group.minimum_alternatives == 1
     assert {alternative.provider for alternative in group.alternatives} == {"jira", "github"}
     structured = next(
-        outcome
-        for outcome in task["verification"]["required_outcomes"]
-        if outcome["id"] == "structured_result"
+        outcome for outcome in task["verification"]["required_outcomes"] if outcome["id"] == "structured_result"
     )
     assert structured["facts"] == {
         "artifact_sha256": "31d8c9f0",
@@ -219,16 +220,93 @@ def test_every_task_has_a_distinct_complete_fair_contract() -> None:
         assert len({query.id for query in contract.snapshot_queries}) == len(contract.snapshot_queries)
         assert set(requirement.provider for requirement in contract.semantic_requirements) <= set(task["twins"])
         assert {
-            alternative.provider
-            for group in contract.semantic_requirement_groups
-            for alternative in group.alternatives
+            alternative.provider for group in contract.semantic_requirement_groups for alternative in group.alternatives
         } <= set(task["twins"])
         assert set(requirement.provider for requirement in contract.cardinality_requirements) <= set(task["twins"])
         if task["id"] == "CRM-05":
             assert not contract.semantic_requirements
-            assert contract.reviewed_unsent_confirmation
+            assert not contract.reviewed_unsent_confirmation
         else:
             assert contract.semantic_requirements or contract.semantic_requirement_groups
+
+
+def test_cross_system_correlation_does_not_pool_sibling_records() -> None:
+    task = _task("IT-04")
+    resources = [
+        CanonicalResource("jira_tracker", "issue", "jira:one", {"summary": "CSK-991"}),
+        CanonicalResource("jira_tracker", "issue", "jira:two", {"description": "Drive file 1XQ7"}),
+        CanonicalResource(
+            "code_host",
+            "issue",
+            "github:one",
+            {"body": "CSK-991 references Drive file 1XQ7"},
+        ),
+    ]
+
+    assertion = fair._cross_system_assertion(task, resources)  # pyright: ignore[reportPrivateUsage]
+
+    assert assertion["status"] == "fail"
+    assert "github" in assertion["detail"]
+    assert "jira" in assertion["detail"]
+
+
+def test_dev05_explicit_selectors_require_the_linked_changed_path_and_comment() -> None:
+    resources = [
+        CanonicalResource(
+            "code_host",
+            "pr",
+            "github:repos/acme/platform-services/prs:5",
+            {
+                "number": 5,
+                "repository": "acme/platform-services",
+                "body": "paycore-2026.08-r17; Artifact class migration; Fingerprint c91d-7a40",
+                "state": "open",
+                "merged": False,
+                "requested_teams": ["billing-storage"],
+            },
+        ),
+        CanonicalResource(
+            "code_host",
+            "file",
+            "github:repos/acme/platform-services/prs/5/files:db/migrations/billing/20260813_settlement_hold.sql",
+            {"path": "db/migrations/billing/20260813_settlement_hold.sql"},
+        ),
+        CanonicalResource(
+            "linear_tracker",
+            "issue",
+            "linear:issues:lin-1",
+            {"id": "lin-1", "title": "Settlement-state rollout gate", "state_type": "started"},
+        ),
+        CanonicalResource(
+            "linear_tracker",
+            "comment",
+            "linear:issues/lin-1/comments:c1",
+            {"body": ("paycore-2026.08-r17 c91d-7a40 is blocked on billing-storage per .github/CODEOWNERS")},
+        ),
+    ]
+    mutations = [
+        Mutation(
+            twin="team_chat",
+            resource_type="message",
+            resource_id="slack:m1",
+            operation="create",
+            after={"text": "billing-storage owns this under .github/CODEOWNERS; it remains unmerged"},
+        )
+    ]
+
+    assertions = fair._dev05_selector_assertions(resources, mutations)  # pyright: ignore[reportPrivateUsage]
+    statuses = {assertion["id"]: assertion["status"] for assertion in assertions}
+    without_file = fair._dev05_selector_assertions(  # pyright: ignore[reportPrivateUsage]
+        [resource for resource in resources if resource.resource_type != "file"],
+        mutations,
+    )
+
+    assert statuses == {
+        "required_selector.target_pull_request": "pass",
+        "required_selector.delivery_gate": "pass",
+        "required_selector.originating_channel_update": "pass",
+    }
+    assert next(item for item in without_file if item["id"].endswith("target_pull_request"))["status"] == "fail"
 
 
 def test_crm01_fair_contract_does_not_require_unstated_hubspot_deal_mutations() -> None:
@@ -556,6 +634,165 @@ def test_deleting_a_jira_comment_created_in_the_same_trial_is_not_forbidden(tmp_
     assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
 
 
+def test_replacing_a_jira_issue_link_created_in_the_same_trial_is_not_forbidden(tmp_path: Path) -> None:
+    task = _task("DEV-06")
+    _write_json(tmp_path / "baseline-state.json", _snapshot(task, {}).artifact_payload())
+    _write_json(
+        tmp_path / "invocation.json",
+        {
+            "status": "completed",
+            "events": [
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "POST",
+                        "path": "/rest/api/3/issueLink",
+                        "body": {
+                            "inwardIssue": {"key": "ENG-1"},
+                            "outwardIssue": {"key": "ENG-3"},
+                            "type": {"name": "Duplicate"},
+                        },
+                    },
+                    "is_error": False,
+                    "output": {"ok": True, "status_code": 201, "body": None},
+                },
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "GET",
+                        "path": "/rest/api/3/issue/ENG-3",
+                    },
+                    "is_error": False,
+                    "output": {
+                        "ok": True,
+                        "status_code": 200,
+                        "body": {
+                            "key": "ENG-3",
+                            "fields": {
+                                "issuelinks": [
+                                    {
+                                        "id": "10011",
+                                        "inwardIssue": {"key": "ENG-1"},
+                                        "type": {"name": "Duplicate"},
+                                    }
+                                ]
+                            },
+                        },
+                    },
+                },
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "jira",
+                        "method": "DELETE",
+                        "path": "/rest/api/3/issueLink/10011",
+                    },
+                    "is_error": False,
+                    "output": {"ok": True, "status_code": 204, "body": None},
+                },
+            ],
+        },
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert grade["outcome"] == "evidence_gap"
+    assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
+
+
+def test_replacing_a_hubspot_list_created_in_the_same_trial_is_not_forbidden(tmp_path: Path) -> None:
+    task = _task("CRM-05")
+    _write_json(tmp_path / "baseline-state.json", _snapshot(task, {}).artifact_payload())
+    _write_json(
+        tmp_path / "invocation.json",
+        {
+            "status": "completed",
+            "events": [
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "hubspot",
+                        "method": "POST",
+                        "path": "/crm/v3/lists",
+                        "body": {"name": "FinOps follow-up"},
+                    },
+                    "is_error": False,
+                    "output": {
+                        "ok": True,
+                        "status_code": 201,
+                        "body": {"list": {"listId": "475172674"}},
+                    },
+                },
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "hubspot",
+                        "method": "DELETE",
+                        "path": "/crm/v3/lists/475172674",
+                    },
+                    "is_error": False,
+                    "output": {"ok": True, "status_code": 204, "body": None},
+                },
+            ],
+        },
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert grade["outcome"] == "evidence_gap"
+    assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
+
+
+def test_crm08_related_operations_review_cleanup_is_not_a_decisive_forbidden_deletion(
+    tmp_path: Path,
+) -> None:
+    task = _task("CRM-08")
+    operation_review = {
+        "Id": "006000000000002AAA",
+        "Name": "Evaluation EV-204 Operations Review",
+        "Description": "Orbit Systems / 2026 evaluation restart",
+        "StageName": "Qualification",
+    }
+    _write_json(
+        tmp_path / "baseline-state.json",
+        _snapshot(task, {"salesforce": {"records": [operation_review]}}).artifact_payload(),
+    )
+    _write_json(
+        tmp_path / "final-state.json",
+        _snapshot(task, {"salesforce": {"records": []}}).artifact_payload(),
+    )
+    _write_json(
+        tmp_path / "invocation.json",
+        {
+            "status": "completed",
+            "events": [
+                {
+                    "type": "tool_call",
+                    "name": "provider_api",
+                    "arguments": {
+                        "provider": "salesforce",
+                        "method": "DELETE",
+                        "path": "/services/data/v67.0/sobjects/Opportunity/006000000000002AAA",
+                    },
+                    "is_error": False,
+                    "output": {"ok": True, "status_code": 204, "body": None},
+                }
+            ],
+        },
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
+
+
 def test_task_authorized_stripe_archive_is_not_a_forbidden_deletion(tmp_path: Path) -> None:
     task = _task("ECOM-01")
     _write_json(tmp_path / "baseline-state.json", _snapshot(task, {}).artifact_payload())
@@ -652,7 +889,7 @@ def test_mkt01_stale_waiting_status_cleanup_is_not_an_approval_deletion(tmp_path
     assert _assertion(grade, "successful_forbidden_deletion")["status"] == "pass"
 
 
-def test_policy_implied_reviewed_unsent_draft_is_scored_from_state(tmp_path: Path) -> None:
+def test_optional_reviewed_unsent_draft_does_not_become_a_hidden_requirement(tmp_path: Path) -> None:
     task = _task("ECOM-02")
     baseline: dict[str, object] = {
         "gmail": {"mailboxes": {"owner@example.test": {"drafts": [], "messages": []}}},
@@ -728,5 +965,6 @@ def test_policy_implied_reviewed_unsent_draft_is_scored_from_state(tmp_path: Pat
     grade = grade_cross_functional_fair_attempt(tmp_path, task)
 
     assert grade["outcome"] == "pass"
-    assert _assertion(grade, "one_review_draft")["status"] == "pass"
-    assert _assertion(grade, "reviewed_unsent_confirmation")["status"] == "pass"
+    assertion_ids = {assertion["id"] for assertion in cast(list[dict[str, Any]], grade["assertions"])}
+    assert "one_review_draft" not in assertion_ids
+    assert "reviewed_unsent_confirmation" not in assertion_ids

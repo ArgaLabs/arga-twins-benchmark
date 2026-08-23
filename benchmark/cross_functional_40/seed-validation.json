@@ -1,9 +1,153 @@
 {
   "checked": 40,
-  "checked_this_run": 2,
+  "checked_this_run": 6,
   "failed": 0,
   "passed": 40,
   "results": [
+    {
+      "content_sha256": "e5eed62af3d35bfa49ed433f495e2b06574e304e0c8af8540dc7600218a31875",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-01"
+    },
+    {
+      "content_sha256": "474008841fdbc9d5d1918935d4bac00057c2e8d4cadd46979dc0a37505fa6aa0",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-02"
+    },
+    {
+      "content_sha256": "aef9a77a30f6f7d6d71881b72743ccec15df06e806f104ea22c0c2b7dea74f19",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-03"
+    },
+    {
+      "content_sha256": "cd38a04ce8242c672bf2511b5f3955451da47f9177dcec17e28bfefefb39b8a8",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-04"
+    },
+    {
+      "content_sha256": "8cec4a3c204ca4f23f784c54a39e1adfa83fb5f7cfeb45a231f9f940d252a9f9",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-05"
+    },
+    {
+      "content_sha256": "4d01788816ef288e1a984481b6af94c7cad47244ba7725971d3df7fd22b8abd5",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-06"
+    },
+    {
+      "content_sha256": "bc6ec79171c59301f396ea603c99d201b76f217db6763121144084b77885722b",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-07"
+    },
+    {
+      "content_sha256": "20c0b12288b92d6c9e515fd779afc6d8ced3a0ade47f5e0f91cdb92aedbb7216",
+      "ok": true,
+      "status": "ready",
+      "task_id": "CRM-08"
+    },
+    {
+      "content_sha256": "de38002f0f28e86e0788b2d3db65fb8c6b4397eb2234694dec6b7193fd8dc258",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-01"
+    },
+    {
+      "content_sha256": "fb6fcf6dd31dd3005f18870fea88ea48d1770d0df0924ed7827e2dac6554a4d6",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-02"
+    },
+    {
+      "content_sha256": "b369308b7fba74a1c6f7310f473cccf96c03f1d41148a7a8a5d159a9ba28d45a",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-03"
+    },
+    {
+      "content_sha256": "faf42748299fc0ca1ed01b2fc3ae44214582d46ba095f97443ce266a2efa8cd6",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-04"
+    },
+    {
+      "content_sha256": "894a0139bd80c25fe7155e9bc290ef8b329fb93dddaf1e63e9786d6a58c2886b",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-05"
+    },
+    {
+      "content_sha256": "c6f16056514c168fd95bc5563642fe885aec5fb3d360414224e0810805f6107e",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-06"
+    },
+    {
+      "content_sha256": "701c874babc8dfd5146497fcee60fef5604be3f2e2c73f1aefdca06729ee7ba8",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-07"
+    },
+    {
+      "content_sha256": "164fa2ff989f82c60ac34588ed7df526aaa10a34e4d7c6c56d236a71045b38b3",
+      "ok": true,
+      "status": "ready",
+      "task_id": "DEV-08"
+    },
+    {
+      "content_sha256": "7489b8d29cf1900ad4cc7282c8c50b68304d40959a82b10675453542ed7fe323",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-01"
+    },
+    {
+      "content_sha256": "1c55120ec98f2f151d0bc177cb82b89d73758008132a8fee6d6a5cb42681e859",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-02"
+    },
+    {
+      "content_sha256": "f1b5f89d0689157bbcba9d40ddfcb544a6e6b94ba08d06f07bf30838046b95b0",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-03"
+    },
+    {
+      "content_sha256": "1f758445c5b0ecb53265517fd8fc2b0ca720c8ddec224faf9dadb2ad46bebba5",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-04"
+    },
+    {
+      "content_sha256": "9583f5e952712a74607ecf1ae1fe85faa4436d26837013f6cc14ff4e6d2c0f61",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-05"
+    },
+    {
+      "content_sha256": "9adcf774ac29d378c5e30541158c91375b67a18bf4bfefb61c1e2c2c627aaff9",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-06"
+    },
+    {
+      "content_sha256": "2578c6412afec0c2d701736df379f633e5cd691ffa6b76d591a8ad8e04bb4903",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-07"
+    },
+    {
+      "content_sha256": "93773e19e9b8b01ccd4664b049b47d3edf2a934c05c032d8061abddc3b38fe30",
+      "ok": true,
+      "status": "ready",
+      "task_id": "ECOM-08"
+    },
     {
       "content_sha256": "1a5993d625d0f0e0308fea01f2ab04dc1122f26f8ee118d8f1104d39de1fece1",
       "ok": true,
@@ -53,54 +197,6 @@
       "task_id": "IT-08"
     },
     {
-      "content_sha256": "e5eed62af3d35bfa49ed433f495e2b06574e304e0c8af8540dc7600218a31875",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-01"
-    },
-    {
-      "content_sha256": "b6f2839cdace78c15ef051b81c71ca5ca64cfe696dc9917344849ddb50b64643",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-02"
-    },
-    {
-      "content_sha256": "d7ecb5fc51e9e44f92948058cb23060e2ae8e8baf477d09e61398b98e55d2218",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-03"
-    },
-    {
-      "content_sha256": "cd38a04ce8242c672bf2511b5f3955451da47f9177dcec17e28bfefefb39b8a8",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-04"
-    },
-    {
-      "content_sha256": "07384276ac1b63f6f09f8ce3d324e6aa9c1434086585a4d7cf2d22d122c7bf18",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-05"
-    },
-    {
-      "content_sha256": "9e9c18f46c0521640f4d61a91214931e2945368552f501928c38b7ee9035ef1c",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-06"
-    },
-    {
-      "content_sha256": "bc6ec79171c59301f396ea603c99d201b76f217db6763121144084b77885722b",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-07"
-    },
-    {
-      "content_sha256": "38bca8a6a24012c28931cfb7be2ede6298e7d1c9dce1eab1e3549a467f96cd3b",
-      "ok": true,
-      "status": "ready",
-      "task_id": "CRM-08"
-    },
-    {
       "content_sha256": "86445b80225c99fde4965f2445f5a9eec91179ab1d311b4bb1ea5910d1af0a27",
       "ok": true,
       "status": "ready",
@@ -147,102 +243,6 @@
       "ok": true,
       "status": "ready",
       "task_id": "MKT-08"
-    },
-    {
-      "content_sha256": "de38002f0f28e86e0788b2d3db65fb8c6b4397eb2234694dec6b7193fd8dc258",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-01"
-    },
-    {
-      "content_sha256": "fb6fcf6dd31dd3005f18870fea88ea48d1770d0df0924ed7827e2dac6554a4d6",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-02"
-    },
-    {
-      "content_sha256": "b369308b7fba74a1c6f7310f473cccf96c03f1d41148a7a8a5d159a9ba28d45a",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-03"
-    },
-    {
-      "content_sha256": "2ed2f1148fe047f913ada37ee6c3516237ab9c0eadf7456509cf49e74204f62f",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-04"
-    },
-    {
-      "content_sha256": "894a0139bd80c25fe7155e9bc290ef8b329fb93dddaf1e63e9786d6a58c2886b",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-05"
-    },
-    {
-      "content_sha256": "bf33de75f8b62d5c6719e3a807653abf97a248e4632fcd6deebe7669bfc5cdcf",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-06"
-    },
-    {
-      "content_sha256": "701c874babc8dfd5146497fcee60fef5604be3f2e2c73f1aefdca06729ee7ba8",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-07"
-    },
-    {
-      "content_sha256": "164fa2ff989f82c60ac34588ed7df526aaa10a34e4d7c6c56d236a71045b38b3",
-      "ok": true,
-      "status": "ready",
-      "task_id": "DEV-08"
-    },
-    {
-      "content_sha256": "7489b8d29cf1900ad4cc7282c8c50b68304d40959a82b10675453542ed7fe323",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-01"
-    },
-    {
-      "content_sha256": "c0824ed39a14f07e6b5bd5e8e0d5a59e4c3cdc5a56bd7855d65bc5fc4103e330",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-02"
-    },
-    {
-      "content_sha256": "f1b5f89d0689157bbcba9d40ddfcb544a6e6b94ba08d06f07bf30838046b95b0",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-03"
-    },
-    {
-      "content_sha256": "66d64be4703d6a1e1948e465e8b372f9c2b6545edde530f824b45278583054c9",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-04"
-    },
-    {
-      "content_sha256": "9583f5e952712a74607ecf1ae1fe85faa4436d26837013f6cc14ff4e6d2c0f61",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-05"
-    },
-    {
-      "content_sha256": "9adcf774ac29d378c5e30541158c91375b67a18bf4bfefb61c1e2c2c627aaff9",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-06"
-    },
-    {
-      "content_sha256": "2578c6412afec0c2d701736df379f633e5cd691ffa6b76d591a8ad8e04bb4903",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-07"
-    },
-    {
-      "content_sha256": "93773e19e9b8b01ccd4664b049b47d3edf2a934c05c032d8061abddc3b38fe30",
-      "ok": true,
-      "status": "ready",
-      "task_id": "ECOM-08"
     }
   ],
   "suite_id": "cross-functional-40-v1"

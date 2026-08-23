@@ -865,6 +865,39 @@ def test_invoke_model_requires_the_selected_providers_key(monkeypatch: pytest.Mo
         )
 
 
+def test_invoke_model_routes_gemini_3_7_flash(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "test-google-key")
+    observed: dict[str, Any] = {}
+    sentinel = object()
+
+    async def fake_invoke(adapter: GoogleGenerateContentAdapter, **kwargs: Any) -> object:
+        observed["model_id"] = adapter.model_id
+        observed["kwargs"] = kwargs
+        return sentinel
+
+    async def execute_tool(_name: str, _arguments: dict[str, Any]) -> object:
+        return {}
+
+    monkeypatch.setattr(GoogleGenerateContentAdapter, "invoke", fake_invoke)
+    invocation = asyncio.run(
+        invoke_model(
+            "gemini-3.7-flash",
+            "system",
+            "user",
+            TOOL_SCHEMA,
+            execute_tool,
+            3,
+            10,
+            api_effort="default",
+            thinking="model_default",
+        )
+    )
+
+    assert invocation is sentinel
+    assert observed["model_id"] == "gemini-3.7-flash"
+    assert observed["kwargs"]["max_tool_calls"] == 3
+
+
 @pytest.mark.parametrize(
     ("model_id", "effort"),
     [
@@ -964,8 +997,10 @@ def test_openai_sends_native_max_effort_for_each_requested_model(model_id: str) 
     assert result.config["reasoning"] == {"effort": "max"}
 
 
-def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() -> None:
+@pytest.mark.parametrize("model_id", ["gemini-3.5-flash", "gemini-3.7-flash"])
+def test_google_preserves_thought_signatures_and_groups_parallel_tool_results(model_id: str) -> None:
     requests: list[dict[str, Any]] = []
+    request_paths: list[str] = []
     signed_content = {
         "role": "model",
         "parts": [
@@ -990,6 +1025,7 @@ def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() 
     def handler(request: httpx.Request) -> httpx.Response:
         body = json.loads(request.content)
         requests.append(body)
+        request_paths.append(request.url.path)
         if len(requests) == 1:
             return httpx.Response(
                 200,
@@ -1030,7 +1066,7 @@ def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() 
     client = async_client(handler)
     adapter = GoogleGenerateContentAdapter(
         api_key="test-google-key",
-        model_id="gemini-3.5-flash",
+        model_id=model_id,  # type: ignore[arg-type]
         client=client,
         endpoint="https://google.test/v1beta/models",
     )
@@ -1052,6 +1088,7 @@ def test_google_preserves_thought_signatures_and_groups_parallel_tool_results() 
     assert result.usage["input_tokens"] == 30
     assert result.usage["output_tokens"] == 10
     assert requests[0]["systemInstruction"] == {"parts": [{"text": "SYSTEM EXACT"}]}
+    assert set(request_paths) == {f"/v1beta/models/{model_id}:generateContent"}
     assert requests[0]["generationConfig"] == {"maxOutputTokens": 65_536}
     assert "thinkingConfig" not in requests[0]["generationConfig"]
     assert requests[1]["contents"][1] == signed_content

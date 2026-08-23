@@ -1,5 +1,5 @@
 {
-  "description": "Noah Grant from enterprise sales just posted in the #gtm-ops Slack channel: BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.\n\nYou're the revenue systems administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Noah Grant from enterprise sales just posted in the #gtm-ops Slack channel: BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.\n\nYou're the revenue systems administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should assign Amina Yusuf as the approved Strategic owner of the canonical BluePeak Energy company/account and its live BluePeak Expansion opportunity in both HubSpot and Salesforce, resolve the canonical TERR-62 request, and leave the opportunity stage, amount, and activity history unchanged. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: CRM-06 Territory ownership conflict",
   "seed_config": {
     "hubspot": {
@@ -14,6 +14,7 @@
           "properties": {
             "description": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold.",
             "domain": "bluepeakenergy.example",
+            "hubspot_owner_id": "52000001",
             "name": "BluePeak Energy"
           }
         },
@@ -84,6 +85,7 @@
             "dealname": "BluePeak Expansion",
             "dealstage": "appointmentscheduled",
             "description": "BluePeak Energy / territory request TERR-62",
+            "hubspot_owner_id": "52000001",
             "pipeline": "default"
           }
         },
@@ -107,7 +109,37 @@
         }
       ],
       "lists": [],
-      "tickets": []
+      "owners": [
+        {
+          "email": "west.owner@acme.example",
+          "first_name": "West",
+          "id": 52000001,
+          "last_name": "Territory",
+          "user_id": 152000001
+        },
+        {
+          "email": "amina.yusuf@acme.example",
+          "first_name": "Amina",
+          "id": 52000002,
+          "last_name": "Yusuf",
+          "user_id": 152000002
+        }
+      ],
+      "tickets": [],
+      "users": [
+        {
+          "email": "west.owner@acme.example",
+          "first_name": "West",
+          "id": 152000001,
+          "last_name": "Territory"
+        },
+        {
+          "email": "amina.yusuf@acme.example",
+          "first_name": "Amina",
+          "id": 152000002,
+          "last_name": "Yusuf"
+        }
+      ]
     },
     "jira": {
       "projects": [
@@ -169,6 +201,7 @@
         {
           "Description": "The active opportunity remains in Discovery.",
           "Name": "BluePeak Energy",
+          "OwnerId": "005000000000001AAA",
           "Website": "https://bluepeakenergy.example"
         },
         {
@@ -207,7 +240,20 @@
           "LastName": "BluePeak"
         }
       ],
+      "display_name": "West Territory Owner",
+      "email": "west.owner@acme.example",
       "records": [
+        {
+          "object": "User",
+          "values": {
+            "Alias": "amina",
+            "Email": "amina.yusuf@acme.example",
+            "Id": "005000000000002AAA",
+            "IsActive": true,
+            "Name": "Amina Yusuf",
+            "Username": "amina.yusuf@acme.example"
+          }
+        },
         {
           "object": "Opportunity",
           "values": {
@@ -215,6 +261,7 @@
             "CloseDate": "2026-10-31",
             "Description": "The active opportunity remains in Discovery.",
             "Name": "BluePeak Expansion",
+            "OwnerId": "005000000000001AAA",
             "StageName": "Qualification"
           }
         },
@@ -247,7 +294,8 @@
             "StageName": "Closed Lost"
           }
         }
-      ]
+      ],
+      "username": "west.owner@acme.example"
     },
     "slack": {
       "channels": [
@@ -307,7 +355,7 @@
     "suite:cross-functional-40-v1",
     "domain:crm_outreach",
     "task:crm-06",
-    "content-sha256:9e9c18f46c0521640f4d61a91214931e2945368552f501928c38b7ee9035ef1c"
+    "content-sha256:4d01788816ef288e1a984481b6af94c7cad47244ba7725971d3df7fd22b8abd5"
   ],
   "twins": [
     "hubspot",

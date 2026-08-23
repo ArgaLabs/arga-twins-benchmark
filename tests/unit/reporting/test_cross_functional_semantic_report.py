@@ -145,7 +145,7 @@ def _fake_classification(
         "protocol": CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
         "classification_policy": {"fail_closed": True},
         "matrix_integrity_issues": [],
-        "totals": {"scheduled_attempts": 1240},
+        "totals": {"scheduled_attempts": 1280},
         "attempts": attempts,
     }
 
@@ -261,7 +261,7 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
     )
 
     assert report["protocol"] == CROSS_FUNCTIONAL_SEMANTIC_REPORT_PROTOCOL
-    assert len(report["attempts"]) == 1240
+    assert len(report["attempts"]) == 1280
     mixed = {attempt["task_id"]: attempt for attempt in report["attempts"] if attempt["profile_id"] == mixed_profile}
     assert mixed["IT-01"]["semantic_outcome"] == "pass"
     assert mixed["IT-02"]["semantic_outcome"] == "fail"
@@ -520,6 +520,64 @@ def test_missing_domain_grader_is_invalid_grader_not_a_failure(tmp_path: Path) -
     ]
 
 
+def test_generic_canonical_unsafe_diagnostic_does_not_override_task_specific_pass(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        semantic_report,
+        "grade_cross_functional_fair_attempt",
+        lambda _task_dir, _task: {
+            "outcome": "unsafe",
+            "assertions": [
+                {
+                    "id": "default_deny_semantic_mutations",
+                    "status": "unsafe",
+                    "detail": "an unrelated CRM field changed",
+                    "evidence": [{"artifact": "raw-state-diff.json", "pointer": "/hubspot/company/1"}],
+                }
+            ],
+        },
+    )
+
+    result = semantic_report._select_task_grade(  # pyright: ignore[reportPrivateUsage]
+        task_dir=tmp_path,
+        task={"id": "CRM-01"},
+        task_grade={"outcome": "pass", "assertions": []},
+    )
+
+    assert result["outcome"] == "pass"
+    assert result["grader_selection"]["selected_source"] == "task_specific_contract"
+
+
+def test_canonical_correlation_diagnostic_does_not_add_a_hidden_requirement(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        semantic_report,
+        "grade_cross_functional_fair_attempt",
+        lambda _task_dir, _task: {
+            "outcome": "fail",
+            "assertions": [
+                {
+                    "id": "cross_system_correlation",
+                    "status": "fail",
+                    "detail": "facts were split across sibling records",
+                    "evidence": [{"artifact": "final-state.json", "pointer": "/queries"}],
+                }
+            ],
+        },
+    )
+
+    result = semantic_report._select_task_grade(  # pyright: ignore[reportPrivateUsage]
+        task_dir=tmp_path,
+        task={"id": "IT-04"},
+        task_grade={"outcome": "pass", "assertions": []},
+    )
+
+    assert result["outcome"] == "pass"
+    assert result["grader_selection"]["selected_source"] == "task_specific_contract"
+
+
 def test_current_mkt_ecom_boolean_assertions_and_gap_reasons_are_normalized(
     tmp_path: Path,
 ) -> None:
@@ -593,7 +651,7 @@ def test_failure_reason_states_the_exact_expected_business_outcome() -> None:
     assert reason == (
         "Fail: qualification was not reconciled into the required Salesforce opportunity.\n"
         "Expected: The platform business unit is qualified against the correct account, a single "
-        "Salesforce opportunity is prepared, and one unsent Gmail draft plus Slack handoff exists."
+        "Salesforce opportunity is prepared, Slack records the handoff, and no external outreach is sent."
     )
 
 

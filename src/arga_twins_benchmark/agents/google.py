@@ -121,7 +121,11 @@ class GoogleGenerateContentAdapter:
         self,
         *,
         api_key: str,
-        model_id: Literal["gemini-3.1-pro-preview", "gemini-3.5-flash"],
+        model_id: Literal[
+            "gemini-3.1-pro-preview",
+            "gemini-3.5-flash",
+            "gemini-3.7-flash",
+        ],
         client: httpx.AsyncClient | None = None,
         endpoint: str = GOOGLE_GENERATIVE_LANGUAGE_URL,
     ) -> None:
@@ -221,10 +225,7 @@ class GoogleGenerateContentAdapter:
                                 raise
                             await asyncio.sleep(min(float(request_attempt), MAX_RETRY_DELAY_SECONDS))
                             continue
-                        if (
-                            response.status_code in RETRYABLE_HTTP_STATUSES
-                            and request_attempt < MAX_REQUEST_ATTEMPTS
-                        ):
+                        if response.status_code in RETRYABLE_HTTP_STATUSES and request_attempt < MAX_REQUEST_ATTEMPTS:
                             retry_delay = _google_retry_delay(response, request_attempt)
                             events.append(
                                 {
@@ -406,9 +407,7 @@ class GoogleGenerateContentAdapter:
                             arguments = dict(cast(dict[str, Any], raw_args)) if isinstance(raw_args, dict) else {}
                             call_started = monotonic()
                             is_error = (
-                                not isinstance(call_id, str)
-                                or name not in tool_names
-                                or not isinstance(raw_args, dict)
+                                not isinstance(call_id, str) or name not in tool_names or not isinstance(raw_args, dict)
                             )
                             if is_error:
                                 tool_output: object = {"error": {"type": "InvalidToolCall"}}

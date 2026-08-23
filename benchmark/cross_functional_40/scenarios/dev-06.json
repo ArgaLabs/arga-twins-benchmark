@@ -1,5 +1,5 @@
 {
-  "description": "Nora Evans from SDK engineering just posted in the #eng-api Slack channel: the generated SDK no longer matches the documented pagination response. The repository contains two API specs, and one is explicitly marked as a retired partner draft.\n\nYou're the API governance maintainer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "description": "Nora Evans from SDK engineering just posted in the #eng-api Slack channel: the generated SDK no longer matches the documented pagination response. The repository contains two API specs, and one is explicitly marked as a retired partner draft.\n\nYou're the API governance maintainer. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. The resolved state should leave Jira ENG-1 as the sole open Jira drift record for api/openapi.yaml's next_cursor contract, link ENG-1 to the matching open GitHub issue or repository evidence, reconcile the duplicate Jira records, and leave both specifications and SDK code unchanged. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
   "name": "ArgaBench 40: DEV-06 API contract drift resolution",
   "seed_config": {
     "github": {
@@ -182,7 +182,7 @@
       "databases": [],
       "pages": [
         {
-          "content": "Jira API-331 is open without implementation evidence.",
+          "content": "Jira ENG-1 is open without implementation evidence.",
           "title": "Operations record \u2014 public API pagination contract / SDK drift"
         },
         {
@@ -190,7 +190,7 @@
           "title": "Previous-quarter operations record"
         },
         {
-          "content": "Jira API-331 is open without implementation evidence.",
+          "content": "Jira ENG-1 is open without implementation evidence.",
           "title": "Review notes \u2014 public API pagination contract / SDK drift"
         },
         {
@@ -257,7 +257,7 @@
     "suite:cross-functional-40-v1",
     "domain:developer",
     "task:dev-06",
-    "content-sha256:bf33de75f8b62d5c6719e3a807653abf97a248e4632fcd6deebe7669bfc5cdcf"
+    "content-sha256:c6f16056514c168fd95bc5563642fe885aec5fb3d360414224e0810805f6107e"
   ],
   "twins": [
     "github",

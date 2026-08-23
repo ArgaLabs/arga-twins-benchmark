@@ -163,7 +163,7 @@ def test_neutral_worlds_are_specific_and_present_without_answer_keys() -> None:
         serialized_seeds.add(serialized)
 
 
-def test_non_obvious_deliverables_have_human_workflow_policy_not_prompt_instructions() -> None:
+def test_workflow_policies_are_neutral_and_do_not_create_hidden_deliverables() -> None:
     builder = _load_builder()
     policies = __import__("cross_functional_40_seeds").WORKFLOW_POLICIES
     suite = json.loads(SUITE_PATH.read_text())
@@ -175,19 +175,16 @@ def test_non_obvious_deliverables_have_human_workflow_policy_not_prompt_instruct
         or bundle["id"] in {"CRM-08", "MKT-08"}
     }
 
-    assert (
-        set(policies)
-        == hidden_deliverable_tasks
-        == {
-            "CRM-02",
-            "CRM-03",
-            "CRM-05",
-            "CRM-08",
-            "MKT-08",
-            "ECOM-02",
-            "ECOM-04",
-        }
-    )
+    assert hidden_deliverable_tasks == {"CRM-08", "MKT-08"}
+    assert set(policies) == {
+        "CRM-02",
+        "CRM-03",
+        "CRM-05",
+        "CRM-08",
+        "MKT-08",
+        "ECOM-02",
+        "ECOM-04",
+    }
     direct_instruction = re.compile(
         r"\b(?:create|write|save|prepare)\b[^.\n]{0,40}\b(?:email draft|draft email|calendar hold)\b",
         re.IGNORECASE,
@@ -232,9 +229,7 @@ def test_ecom01_does_not_require_hidden_jira_reconciliation() -> None:
 
     suite = json.loads(SUITE_PATH.read_text())
     task = next(bundle for bundle in suite["tasks"] if bundle["id"] == "ECOM-01")
-    required = {
-        outcome["id"]: outcome for outcome in task["verification"]["required_outcomes"]
-    }
+    required = {outcome["id"]: outcome for outcome in task["verification"]["required_outcomes"]}
 
     assert "jira" not in required["primary_outcome"]["description"].casefold()
     assert required["cross_system_correlation"]["providers"] == ["stripe", "slack"]
@@ -286,6 +281,54 @@ def test_outcome_verifiers_do_not_grade_hidden_write_counts() -> None:
         assert len(updates) == 1
         assert updates[0]["minimum_cardinality"] == 1
         assert "cardinality" not in updates[0]
+
+
+def test_repaired_low_pass_scenarios_expose_outcomes_and_seed_actionable_assets() -> None:
+    suite = json.loads(SUITE_PATH.read_text())
+    tasks = {task["id"]: task for task in suite["tasks"]}
+
+    for task_id in ("CRM-06", "CRM-08", "DEV-04", "DEV-06"):
+        assert "The resolved state should" in tasks[task_id]["prompt"]
+
+    crm06 = tasks["CRM-06"]["seed_config"]
+    assert any(owner["first_name"] == "Amina" and owner["last_name"] == "Yusuf" for owner in crm06["hubspot"]["owners"])
+    assert any(
+        record["object"] == "User" and record["values"]["Name"] == "Amina Yusuf"
+        for record in crm06["salesforce"]["records"]
+    )
+
+    crm08 = tasks["CRM-08"]["seed_config"]
+    calendar_events = crm08["google_calendar"]["calendars"][0]["events"]
+    assert all("start" not in event and "end" not in event for event in calendar_events[:2])
+    assert {event["start_time"] for event in calendar_events[:2]} == {"08:00:00", "12:00:00"}
+    assert any(owner["first_name"] == "Iris" and owner["last_name"] == "Novak" for owner in crm08["hubspot"]["owners"])
+
+    dev04_repo = tasks["DEV-04"]["seed_config"]["github"]["repos"][0]
+    assert {branch["name"] for branch in dev04_repo["branches"]} >= {"release/4.8"}
+
+    dev06 = tasks["DEV-06"]
+    assert "Jira ENG-1" in dev06["target"]
+    assert "Jira API-331" not in json.dumps(dev06)
+
+
+def test_optional_customer_review_policy_is_not_a_hidden_deliverable() -> None:
+    import arga_twins_benchmark.reporting.cross_functional_mkt_ecom_legacy as legacy
+
+    suite = json.loads(SUITE_PATH.read_text())
+    tasks = {task["id"]: task for task in suite["tasks"]}
+    for task_id in ("ECOM-02", "ECOM-04"):
+        structured = next(
+            outcome
+            for outcome in tasks[task_id]["verification"]["required_outcomes"]
+            if outcome["id"] == "structured_result"
+        )
+        assert "email_state" not in structured["facts"]
+        assert all(requirement.provider != "gmail" for requirement in legacy._RULES[task_id].requirements)  # pyright: ignore[reportPrivateUsage]
+
+    assert [
+        requirement.assertion_id
+        for requirement in legacy._RULES["ECOM-08"].requirements  # pyright: ignore[reportPrivateUsage]
+    ] == ["empty_evaluation_archived"]
 
 
 def test_seed_validation_report_covers_every_task() -> None:

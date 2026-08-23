@@ -1,0 +1,31 @@
+{
+  "aggregate_report": "repeated-semantic-report.json",
+  "grader_bundle_sha256": "191667ff972345de935a6ce7a634f16af4b04a1534c9b5f800eb5c7c8ee350e0",
+  "protocol": "arga-bench-cross-functional-repeated-publication-manifest/1",
+  "published_at": "2026-08-21",
+  "repeat_count": 3,
+  "sources": [
+    {
+      "publication_manifest": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-1/publication-manifest.json",
+      "publication_manifest_sha256": "54112bd8e67fd84a64914d00d2595685f97843dd96f79efb2fa5e16e0ff9e364",
+      "repeat": 1,
+      "semantic_report": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-1/semantic-report.json",
+      "semantic_report_sha256": "7e93145704dd5dee93c1d02ab2eab11137761adbc8e75e34c5c6187300490842"
+    },
+    {
+      "publication_manifest": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-2/publication-manifest.json",
+      "publication_manifest_sha256": "54112bd8e67fd84a64914d00d2595685f97843dd96f79efb2fa5e16e0ff9e364",
+      "repeat": 2,
+      "semantic_report": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-2/semantic-report.json",
+      "semantic_report_sha256": "666474e9c9c749382027a406fc1d8a9c671b1e2e1b24f9f6dccc24502acb9297"
+    },
+    {
+      "publication_manifest": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-3/publication-manifest.json",
+      "publication_manifest_sha256": "54112bd8e67fd84a64914d00d2595685f97843dd96f79efb2fa5e16e0ff9e364",
+      "repeat": 3,
+      "semantic_report": "/Users/tonghx/arga-twins-benchmark-worktrees/semantic-grader-contracts/reports/cross-functional-40-six-task-rerun-20260821-v4/repeat-3/semantic-report.json",
+      "semantic_report_sha256": "fbd36f35d7668f3a7294e6d8e764991bc2c2a1fc82c81f3f99db33b995cae5df"
+    }
+  ],
+  "suite_id": "cross-functional-40-v1"
+}

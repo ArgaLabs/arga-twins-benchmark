@@ -933,6 +933,128 @@ def _crm05_salesforce(task_spec: dict[str, Any]) -> dict[str, Any]:
     return seed
 
 
+def _crm_owner_hubspot_seed(
+    task_spec: dict[str, Any],
+    *,
+    current_owner: tuple[int, int, str, str, str],
+    approved_owner: tuple[int, int, str, str, str],
+) -> dict[str, Any]:
+    seed = hubspot_seed(task_spec)
+    current_owner_id, current_user_id, current_email, current_first, current_last = current_owner
+    approved_owner_id, approved_user_id, approved_email, approved_first, approved_last = approved_owner
+    seed["users"] = [
+        {
+            "id": current_user_id,
+            "email": current_email,
+            "first_name": current_first,
+            "last_name": current_last,
+        },
+        {
+            "id": approved_user_id,
+            "email": approved_email,
+            "first_name": approved_first,
+            "last_name": approved_last,
+        },
+    ]
+    seed["owners"] = [
+        {
+            "id": current_owner_id,
+            "email": current_email,
+            "first_name": current_first,
+            "last_name": current_last,
+            "user_id": current_user_id,
+        },
+        {
+            "id": approved_owner_id,
+            "email": approved_email,
+            "first_name": approved_first,
+            "last_name": approved_last,
+            "user_id": approved_user_id,
+        },
+    ]
+    seed["companies"][0]["properties"]["hubspot_owner_id"] = str(current_owner_id)
+    seed["deals"][0]["properties"]["hubspot_owner_id"] = str(current_owner_id)
+    return seed
+
+
+def _crm_owner_salesforce_seed(
+    task_spec: dict[str, Any],
+    *,
+    current_owner: tuple[str, str, str],
+    approved_owner: tuple[str, str, str, str],
+) -> dict[str, Any]:
+    seed = salesforce_seed(task_spec)
+    current_name, current_email, current_username = current_owner
+    approved_id, approved_name, approved_email, approved_username = approved_owner
+    seed.update(
+        {
+            "display_name": current_name,
+            "email": current_email,
+            "username": current_username,
+        }
+    )
+    seed["records"].insert(
+        0,
+        {
+            "object": "User",
+            "values": {
+                "Id": approved_id,
+                "Name": approved_name,
+                "Email": approved_email,
+                "Username": approved_username,
+                "Alias": approved_name.split()[0].casefold()[:8],
+                "IsActive": True,
+            },
+        },
+    )
+    seed["accounts"][0]["OwnerId"] = "005000000000001AAA"
+    target_opportunity = next(record for record in seed["records"] if record["object"] == "Opportunity")
+    target_opportunity["values"]["OwnerId"] = "005000000000001AAA"
+    return seed
+
+
+def _crm06_hubspot(task_spec: dict[str, Any]) -> dict[str, Any]:
+    return _crm_owner_hubspot_seed(
+        task_spec,
+        current_owner=(52000001, 152000001, "west.owner@acme.example", "West", "Territory"),
+        approved_owner=(52000002, 152000002, "amina.yusuf@acme.example", "Amina", "Yusuf"),
+    )
+
+
+def _crm06_salesforce(task_spec: dict[str, Any]) -> dict[str, Any]:
+    return _crm_owner_salesforce_seed(
+        task_spec,
+        current_owner=("West Territory Owner", "west.owner@acme.example", "west.owner@acme.example"),
+        approved_owner=(
+            "005000000000002AAA",
+            "Amina Yusuf",
+            "amina.yusuf@acme.example",
+            "amina.yusuf@acme.example",
+        ),
+    )
+
+
+def _crm08_hubspot(task_spec: dict[str, Any]) -> dict[str, Any]:
+    return _crm_owner_hubspot_seed(
+        task_spec,
+        current_owner=(52000011, 152000011, "former.pipeline@acme.example", "Former", "Pipeline"),
+        approved_owner=(52000012, 152000012, "iris.novak@acme.example", "Iris", "Novak"),
+    )
+
+
+def _crm08_salesforce(task_spec: dict[str, Any]) -> dict[str, Any]:
+    return _crm_owner_salesforce_seed(
+        task_spec,
+        current_owner=("Former Pipeline Owner", "former.pipeline@acme.example", "former.pipeline@acme.example"),
+        approved_owner=(
+            "005000000000002AAA",
+            "Iris Novak",
+            "iris.novak@acme.example",
+            "iris.novak@acme.example",
+        ),
+    )
+
+
 def _crm07_salesforce(task_spec: dict[str, Any]) -> dict[str, Any]:
     seed = salesforce_seed(task_spec)
     seed["contacts"][0]["Email"] = "marco@helioworks.example"
@@ -948,18 +1070,26 @@ def _crm08_calendar() -> dict[str, Any]:
                 "events": [
                     {
                         "summary": "Partner pipeline review",
-                        "start": "2026-08-17T15:00:00Z",
-                        "end": "2026-08-17T16:00:00Z",
+                        "start_time": "08:00:00",
+                        "duration_minutes": 60,
+                        "timezone": "America/Los_Angeles",
                     },
                     {
                         "summary": "Customer advisory call",
-                        "start": "2026-08-17T19:00:00Z",
-                        "end": "2026-08-17T20:00:00Z",
+                        "start_time": "12:00:00",
+                        "duration_minutes": 60,
+                        "timezone": "America/Los_Angeles",
                     },
                 ],
             }
         ]
     }
+
+
+def _dev04_github(task_spec: dict[str, Any]) -> dict[str, Any]:
+    seed = github_seed(task_spec)
+    seed["repos"][0]["branches"] = [{"name": "release/4.8", "from": "main"}]
+    return seed
 
 
 def _mkt04_drive() -> dict[str, Any]:
@@ -1468,7 +1598,11 @@ TASK_PROVIDER_OVERRIDES = {
     ("CRM-05", "gmail"): _crm05_gmail,
     ("CRM-05", "hubspot"): _crm05_hubspot,
     ("CRM-05", "salesforce"): _crm05_salesforce,
+    ("CRM-06", "hubspot"): _crm06_hubspot,
+    ("CRM-06", "salesforce"): _crm06_salesforce,
     ("CRM-07", "salesforce"): _crm07_salesforce,
+    ("CRM-08", "hubspot"): _crm08_hubspot,
+    ("CRM-08", "salesforce"): _crm08_salesforce,
     ("CRM-08", "google_calendar"): lambda _task: _crm08_calendar(),
     ("MKT-04", "google_drive"): lambda _task: _mkt04_drive(),
     ("MKT-06", "hubspot"): _mkt06_hubspot,
@@ -1476,6 +1610,7 @@ TASK_PROVIDER_OVERRIDES = {
     ("MKT-07", "notion"): lambda _task: _mkt07_notion(),
     ("MKT-08", "google_calendar"): lambda _task: _mkt08_calendar(),
     ("DEV-03", "github"): _dev03_github,
+    ("DEV-04", "github"): _dev04_github,
     ("DEV-05", "github"): _dev05_github,
     ("DEV-05", "linear"): _dev05_linear,
     ("DEV-05", "slack"): _dev05_slack,

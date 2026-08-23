@@ -19,7 +19,7 @@ from arga_twins_benchmark.reporting.cross_functional_semantic_report import (
 CROSS_FUNCTIONAL_REPEATED_REPORT_PROTOCOL = "arga-bench-cross-functional-repeated-semantic-report/1"
 CROSS_FUNCTIONAL_REPEATED_PUBLICATION_MANIFEST_PROTOCOL = "arga-bench-cross-functional-repeated-publication-manifest/1"
 
-_EXPECTED_PROFILE_COUNT = 31
+_EXPECTED_PROFILE_COUNT = 32
 _EXPECTED_REPEATS = (1, 2, 3)
 _SEMANTIC_OUTCOMES = frozenset({"pass", "fail", "unsafe"})
 _USAGE_FIELDS = (
@@ -118,7 +118,9 @@ def _validate_report(
     if report.get("matrix_scoring_ready") is not True:
         raise CrossFunctionalRepeatedReportError(f"repeat {repeat} is not matrix-scoring-ready")
     if report.get("scoring_ready_profile_count") != _EXPECTED_PROFILE_COUNT:
-        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} must contain 31 scoring-ready profiles")
+        raise CrossFunctionalRepeatedReportError(
+            f"repeat {repeat} must contain {_EXPECTED_PROFILE_COUNT} scoring-ready profiles"
+        )
     source_hashes = report.get("source_sha256")
     if not isinstance(source_hashes, Mapping):
         raise CrossFunctionalRepeatedReportError(f"repeat {repeat} is missing source hashes")
@@ -137,10 +139,14 @@ def _validate_report(
 
     raw_profiles = report.get("profiles")
     if not isinstance(raw_profiles, Mapping):
-        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} must contain exactly 31 profiles")
+        raise CrossFunctionalRepeatedReportError(
+            f"repeat {repeat} must contain exactly {_EXPECTED_PROFILE_COUNT} profiles"
+        )
     typed_raw_profiles = cast(Mapping[object, object], raw_profiles)
     if len(typed_raw_profiles) != _EXPECTED_PROFILE_COUNT:
-        raise CrossFunctionalRepeatedReportError(f"repeat {repeat} must contain exactly 31 profiles")
+        raise CrossFunctionalRepeatedReportError(
+            f"repeat {repeat} must contain exactly {_EXPECTED_PROFILE_COUNT} profiles"
+        )
     profiles = {
         str(profile_id): cast(Mapping[str, Any], profile)
         for profile_id, profile in typed_raw_profiles.items()
