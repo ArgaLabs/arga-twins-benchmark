@@ -1,0 +1,318 @@
+{
+  "description": "Mateo Silva from customer success just posted in the #customer-risk Slack channel: Cedar Health's champion reported that the security review is blocking renewal, but the health score in HubSpot is still green and Salesforce has two renewal opportunities for adjacent subsidiaries.\n\nYou're the renewal operations lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: CRM-04 Renewal risk escalation",
+  "seed_config": {
+    "hubspot": {
+      "associations": [
+        {
+          "company_domain": "cedarhealth.example",
+          "contact_email": "asha.reed@cedarhealth.example"
+        }
+      ],
+      "companies": [
+        {
+          "properties": {
+            "description": "Cedar Health US opportunity FY27 Renewal closes 2026-10-31.",
+            "domain": "cedarhealth.example",
+            "name": "Cedar Health US"
+          }
+        },
+        {
+          "properties": {
+            "description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+            "domain": "cedarhealth.ca",
+            "name": "Cedar Health Canada"
+          }
+        },
+        {
+          "properties": {
+            "description": "Cedar Health US opportunity FY27 Renewal closes 2026-10-31.",
+            "domain": "ops.cedarhealth.example",
+            "name": "Cedar Health US \u2014 Operations"
+          }
+        },
+        {
+          "properties": {
+            "description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+            "domain": "archive.cedarhealth.ca",
+            "name": "Cedar Health Canada \u2014 Archive"
+          }
+        }
+      ],
+      "contacts": [
+        {
+          "properties": {
+            "email": "asha.reed@cedarhealth.example",
+            "firstname": "Cedar",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "Cedar Health US opportunity FY27 Renewal closes 2026-10-31."
+          }
+        },
+        {
+          "properties": {
+            "email": "contact@cedarhealth.ca",
+            "firstname": "Regional",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete."
+          }
+        },
+        {
+          "properties": {
+            "email": "ops+cedar-health-us@acme.example",
+            "firstname": "Operations",
+            "lastname": "Cedar",
+            "lifecyclestage": "lead",
+            "notes": "Cedar Health US opportunity FY27 Renewal closes 2026-10-31."
+          }
+        },
+        {
+          "properties": {
+            "email": "archive+cedar-health-canada@acme.example",
+            "firstname": "Archive",
+            "lastname": "Cedar",
+            "lifecyclestage": "lead",
+            "notes": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete."
+          }
+        }
+      ],
+      "deals": [
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "FY27 Renewal",
+            "dealstage": "contractsent",
+            "description": "Cedar Health US / FY27 renewal",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "FY27 Renewal \u2014 Operations review",
+            "dealstage": "appointmentscheduled",
+            "description": "Cedar Health US opportunity FY27 Renewal closes 2026-10-31.",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "95000",
+            "dealname": "FY27 Renewal \u2014 Earlier review",
+            "dealstage": "closedlost",
+            "description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+            "pipeline": "default"
+          }
+        }
+      ],
+      "lists": [],
+      "tickets": []
+    },
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: Cedar Health US / FY27 renewal\nChampion Asha Reed reported that security review SR-188 is blocking signature.",
+              "issuetype": "Task",
+              "labels": [
+                "crm-outreach"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "Renewal risk escalation"
+            },
+            {
+              "description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: renewal risk escalation"
+            },
+            {
+              "description": "Champion Asha Reed reported that security review SR-188 is blocking signature.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: Cedar Health US / FY27 renewal"
+            },
+            {
+              "description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: Renewal risk escalation"
+            }
+          ],
+          "key": "GTM",
+          "name": "Crm Outreach Operations"
+        }
+      ]
+    },
+    "salesforce": {
+      "accounts": [
+        {
+          "Description": "HubSpot health is green from a score last calculated before the report.",
+          "Name": "Cedar Health US",
+          "Website": "https://cedarhealth.example"
+        },
+        {
+          "Description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+          "Name": "Cedar Health Canada",
+          "Website": "https://cedarhealth.ca"
+        },
+        {
+          "Description": "HubSpot health is green from a score last calculated before the report.",
+          "Name": "Cedar Health US Operations",
+          "Website": "https://ops.cedarhealth.example"
+        },
+        {
+          "Description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+          "Name": "Cedar Health Canada Archive",
+          "Website": "https://archive.cedarhealth.ca"
+        }
+      ],
+      "contacts": [
+        {
+          "Description": "Cedar Health US / FY27 renewal",
+          "Email": "asha.reed@cedarhealth.example",
+          "FirstName": "Primary",
+          "LastName": "Contact"
+        },
+        {
+          "Description": "HubSpot health is green from a score last calculated before the report.",
+          "Email": "ops+cedar-health-us@acme.example",
+          "FirstName": "Operations",
+          "LastName": "Cedar"
+        },
+        {
+          "Description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+          "Email": "archive+cedar-health-us@acme.example",
+          "FirstName": "Archive",
+          "LastName": "Cedar"
+        }
+      ],
+      "records": [
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-10-31",
+            "Description": "HubSpot health is green from a score last calculated before the report.",
+            "Name": "FY27 Renewal",
+            "StageName": "Negotiation/Review"
+          }
+        },
+        {
+          "object": "Case",
+          "values": {
+            "Description": "Cedar Health US / FY27 renewal",
+            "Priority": "High",
+            "Status": "New",
+            "Subject": "Renewal risk escalation"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-11-30",
+            "Description": "HubSpot health is green from a score last calculated before the report.",
+            "Name": "FY27 Renewal Operations Review",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 95000,
+            "CloseDate": "2025-10-31",
+            "Description": "Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+            "Name": "FY27 Renewal Earlier Review",
+            "StageName": "Closed Lost"
+          }
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "Cedar Health's champion reported that the security review is blocking renewal, but the health score in HubSpot is still green and Salesforce has two renewal opportunities for adjacent subsidiaries.",
+              "user": "mateo-silva"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Cedar Health US / FY27 renewal: Cedar Health US opportunity FY27 Renewal closes 2026-10-31.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Cedar Health Canada renewal closes 2027-02-28 and its security review is complete.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "customer-risk"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "mateo-silva",
+          "real_name": "Mateo Silva"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:argabench-40-v1",
+    "domain:crm_outreach",
+    "task:crm-04",
+    "content-sha256:cd38a04ce8242c672bf2511b5f3955451da47f9177dcec17e28bfefefb39b8a8"
+  ],
+  "twins": [
+    "hubspot",
+    "jira",
+    "salesforce",
+    "slack"
+  ]
+}

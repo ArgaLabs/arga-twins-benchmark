@@ -1,0 +1,323 @@
+{
+  "description": "Talia Mbeki from lifecycle marketing just posted in the #gtm-ops Slack channel: campaign mail to Marco Ruiz at HelioWorks hard-bounced, but another address for him appears in a signed reply thread and Salesforce. The similar Helio Workspaces account should not be touched.\n\nYou're the CRM data steward. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: CRM-07 Bounced contact cleanup",
+  "seed_config": {
+    "gmail": {
+      "drafts": [],
+      "labels": [
+        {
+          "name": "Operations"
+        }
+      ],
+      "messages": [
+        {
+          "body": "Regarding Marco Ruiz / HelioWorks contact record:\n\nmarco.ruiz@helioworks.example hard-bounced on 2026-08-11.",
+          "from": "records@acme.example",
+          "labels": [
+            "INBOX",
+            "Operations"
+          ],
+          "subject": "Bounced contact cleanup",
+          "thread_id": "thread-bounced-contact-cleanup",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+          "from": "archive@acme.example",
+          "labels": [
+            "INBOX"
+          ],
+          "subject": "Previous account correspondence",
+          "thread_id": "thread-previous-account-correspondence",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "marco.ruiz@helioworks.example hard-bounced on 2026-08-11.",
+          "from": "operations@acme.example",
+          "labels": [
+            "INBOX",
+            "Operations"
+          ],
+          "subject": "Fwd: Marco Ruiz / HelioWorks contact record",
+          "thread_id": "thread-bounced-contact-cleanup-forward",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+          "from": "records@acme.example",
+          "labels": [
+            "INBOX"
+          ],
+          "subject": "Earlier review: Bounced contact cleanup",
+          "thread_id": "thread-bounced-contact-cleanup-earlier",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        }
+      ]
+    },
+    "hubspot": {
+      "associations": [
+        {
+          "company_domain": "helioworks.example",
+          "contact_email": "marco.ruiz@helioworks.example"
+        }
+      ],
+      "companies": [
+        {
+          "properties": {
+            "description": "A signed reply from marco@helioworks.example states that it replaces the former address.",
+            "domain": "helioworks.example",
+            "name": "HelioWorks"
+          }
+        },
+        {
+          "properties": {
+            "description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+            "domain": "helioworkspaces.example",
+            "name": "Helio Workspaces"
+          }
+        },
+        {
+          "properties": {
+            "description": "A signed reply from marco@helioworks.example states that it replaces the former address.",
+            "domain": "ops.helioworks.example",
+            "name": "HelioWorks \u2014 Operations"
+          }
+        },
+        {
+          "properties": {
+            "description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+            "domain": "archive.helioworkspaces.example",
+            "name": "Helio Workspaces \u2014 Archive"
+          }
+        }
+      ],
+      "contacts": [
+        {
+          "properties": {
+            "email": "marco.ruiz@helioworks.example",
+            "firstname": "HelioWorks",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "A signed reply from marco@helioworks.example states that it replaces the former address."
+          }
+        },
+        {
+          "properties": {
+            "email": "contact@helioworkspaces.example",
+            "firstname": "Regional",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations."
+          }
+        },
+        {
+          "properties": {
+            "email": "ops+helioworks@acme.example",
+            "firstname": "Operations",
+            "lastname": "HelioWorks",
+            "lifecyclestage": "lead",
+            "notes": "A signed reply from marco@helioworks.example states that it replaces the former address."
+          }
+        },
+        {
+          "properties": {
+            "email": "archive+helio-workspaces@acme.example",
+            "firstname": "Archive",
+            "lastname": "HelioWorks",
+            "lifecyclestage": "lead",
+            "notes": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations."
+          }
+        }
+      ],
+      "deals": [
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "HelioWorks Renewal",
+            "dealstage": "contractsent",
+            "description": "Marco Ruiz / HelioWorks contact record",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "HelioWorks Renewal \u2014 Operations review",
+            "dealstage": "appointmentscheduled",
+            "description": "A signed reply from marco@helioworks.example states that it replaces the former address.",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "95000",
+            "dealname": "HelioWorks Renewal \u2014 Earlier review",
+            "dealstage": "closedlost",
+            "description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+            "pipeline": "default"
+          }
+        }
+      ],
+      "lists": [],
+      "tickets": []
+    },
+    "salesforce": {
+      "accounts": [
+        {
+          "Description": "Salesforce lists the same contact under HelioWorks.",
+          "Name": "HelioWorks",
+          "Website": "https://helioworks.example"
+        },
+        {
+          "Description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+          "Name": "Helio Workspaces",
+          "Website": "https://helioworkspaces.example"
+        },
+        {
+          "Description": "Salesforce lists the same contact under HelioWorks.",
+          "Name": "HelioWorks Operations",
+          "Website": "https://ops.helioworks.example"
+        },
+        {
+          "Description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+          "Name": "Helio Workspaces Archive",
+          "Website": "https://archive.helioworkspaces.example"
+        }
+      ],
+      "contacts": [
+        {
+          "Description": "Former address marco.ruiz@helioworks.example hard-bounced on 2026-08-11.",
+          "Email": "marco@helioworks.example",
+          "FirstName": "Primary",
+          "LastName": "Contact"
+        },
+        {
+          "Description": "Salesforce lists the same contact under HelioWorks.",
+          "Email": "ops+helioworks@acme.example",
+          "FirstName": "Operations",
+          "LastName": "HelioWorks"
+        },
+        {
+          "Description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+          "Email": "archive+helioworks@acme.example",
+          "FirstName": "Archive",
+          "LastName": "HelioWorks"
+        }
+      ],
+      "records": [
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-10-31",
+            "Description": "Salesforce lists the same contact under HelioWorks.",
+            "Name": "HelioWorks Renewal",
+            "StageName": "Negotiation/Review"
+          }
+        },
+        {
+          "object": "Case",
+          "values": {
+            "Description": "Marco Ruiz / HelioWorks contact record",
+            "Priority": "High",
+            "Status": "New",
+            "Subject": "Bounced contact cleanup"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-11-30",
+            "Description": "Salesforce lists the same contact under HelioWorks.",
+            "Name": "HelioWorks Renewal Operations Review",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 95000,
+            "CloseDate": "2025-10-31",
+            "Description": "Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+            "Name": "HelioWorks Renewal Earlier Review",
+            "StageName": "Closed Lost"
+          }
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "campaign mail to Marco Ruiz at HelioWorks hard-bounced, but another address for him appears in a signed reply thread and Salesforce. The similar Helio Workspaces account should not be touched.",
+              "user": "talia-mbeki"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Marco Ruiz / HelioWorks contact record: marco.ruiz@helioworks.example hard-bounced on 2026-08-11.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Helio Workspaces uses helioworkspaces.example and has a different Marco Ruiz in facilities operations.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "gtm-ops"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "talia-mbeki",
+          "real_name": "Talia Mbeki"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:argabench-40-v1",
+    "domain:crm_outreach",
+    "task:crm-07",
+    "content-sha256:bc6ec79171c59301f396ea603c99d201b76f217db6763121144084b77885722b"
+  ],
+  "twins": [
+    "gmail",
+    "hubspot",
+    "salesforce",
+    "slack"
+  ]
+}

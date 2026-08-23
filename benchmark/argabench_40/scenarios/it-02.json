@@ -1,0 +1,268 @@
+{
+  "description": "Eli Morgan from customer operations just posted in the #it-helpdesk Slack channel: the support team started getting SSO login loops right after the morning authentication configuration rollout. Password logins still work for a few users, and there are two similarly named changes in flight.\n\nYou're the identity incident responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: IT-02 SSO outage after configuration change",
+  "seed_config": {
+    "github": {
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "default_branch": "main",
+          "description": "Operational service configuration and change history",
+          "files": [
+            {
+              "content": "# Northstar support tenant / authentication rollout AUTH-214\n\nAUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.\n",
+              "path": "records/sso-outage-after-configuration-change.md"
+            },
+            {
+              "content": "# Previous-quarter notes\n\nAUTH-241 updates session duration for the sandbox tenant.\n",
+              "path": "records/previous-quarter.md"
+            },
+            {
+              "content": "# Operational service records\n",
+              "path": "README.md"
+            }
+          ],
+          "issues": [
+            {
+              "body": "Asset: Northstar support tenant / authentication rollout AUTH-214\n\nAUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+              "title": "SSO outage after configuration change"
+            },
+            {
+              "body": "AUTH-241 updates session duration for the sandbox tenant.",
+              "state": "closed",
+              "title": "Quarterly maintenance follow-up"
+            },
+            {
+              "body": "AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+              "state": "open",
+              "title": "Evidence follow-up: SSO outage after configuration change"
+            },
+            {
+              "body": "AUTH-241 updates session duration for the sandbox tenant.",
+              "state": "open",
+              "title": "Earlier workstream: SSO outage after configuration change"
+            }
+          ],
+          "name": "internal-operations",
+          "owner": "acme",
+          "private": true,
+          "prs": [
+            {
+              "base": "main",
+              "body": "AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+              "files": [
+                {
+                  "content": "AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+                  "path": "config/change.txt"
+                }
+              ],
+              "head": "change/sso-outage-after-configuration-change",
+              "merged": true,
+              "state": "merged",
+              "title": "Change associated with sso outage after configuration change"
+            },
+            {
+              "base": "main",
+              "body": "AUTH-241 updates session duration for the sandbox tenant.",
+              "files": [
+                {
+                  "content": "AUTH-241 updates session duration for the sandbox tenant.",
+                  "path": "docs/maintenance.md"
+                }
+              ],
+              "head": "docs/maintenance",
+              "state": "open",
+              "title": "Documentation maintenance"
+            },
+            {
+              "base": "main",
+              "body": "AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+              "files": [
+                {
+                  "content": "AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml. Approved rollback record IDP-RB-12 revision 9 covers the Northstar support tenant, restores /saml2, and requires two successful SSO probes while the incident remains open.",
+                  "path": "sandbox/verification.txt"
+                }
+              ],
+              "head": "sandbox/sso-outage-after-configuration-change",
+              "merged": false,
+              "state": "open",
+              "title": "Sandbox verification for sso outage after configuration change"
+            },
+            {
+              "base": "main",
+              "body": "AUTH-241 updates session duration for the sandbox tenant.",
+              "files": [
+                {
+                  "content": "AUTH-241 updates session duration for the sandbox tenant.",
+                  "path": "archive/record.txt"
+                }
+              ],
+              "head": "archive/sso-outage-after-configuration-change",
+              "merged": false,
+              "state": "open",
+              "title": "Archive maintenance for sso outage after configuration change"
+            }
+          ]
+        }
+      ],
+      "users": [
+        {
+          "email": "ops-maintainer@acme.example",
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer"
+        },
+        {
+          "email": "release-reviewer@acme.example",
+          "login": "release-reviewer",
+          "name": "Release Reviewer"
+        }
+      ]
+    },
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: Northstar support tenant / authentication rollout AUTH-214\nLogin-loop telemetry began four minutes later.",
+              "issuetype": "Bug",
+              "labels": [
+                "it-support"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "SSO outage after configuration change"
+            },
+            {
+              "description": "Its rollout has not started and its test results contain no Northstar traffic.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: sso outage after configuration change"
+            },
+            {
+              "description": "Login-loop telemetry began four minutes later.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: Northstar support tenant / authentication rollout AUTH-214"
+            },
+            {
+              "description": "Its rollout has not started and its test results contain no Northstar traffic.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: SSO outage after configuration change"
+            }
+          ],
+          "key": "IT",
+          "name": "It Support Operations"
+        }
+      ]
+    },
+    "notion": {
+      "databases": [],
+      "pages": [
+        {
+          "content": "Rollout check 1842 is still green because it covers password authentication only.",
+          "title": "Operations record \u2014 Northstar support tenant / authentication rollout AUTH-214"
+        },
+        {
+          "content": "AUTH-241 updates session duration for the sandbox tenant.",
+          "title": "Previous-quarter operations record"
+        },
+        {
+          "content": "Rollout check 1842 is still green because it covers password authentication only.",
+          "title": "Review notes \u2014 Northstar support tenant / authentication rollout AUTH-214"
+        },
+        {
+          "content": "AUTH-241 updates session duration for the sandbox tenant.",
+          "title": "Archived workstream \u2014 SSO outage after configuration change"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "the support team started getting SSO login loops right after the morning authentication configuration rollout. Password logins still work for a few users, and there are two similarly named changes in flight.",
+              "user": "eli-morgan"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Northstar support tenant / authentication rollout AUTH-214: AUTH-214 changed the Northstar support tenant issuer from /saml2 to /saml.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: AUTH-241 updates session duration for the sandbox tenant.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "it-helpdesk"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "eli-morgan",
+          "real_name": "Eli Morgan"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:argabench-40-v1",
+    "domain:it_support",
+    "task:it-02",
+    "content-sha256:7557319d815182484e0fc1512937df692ea6f322a38f1cb8b373f712e08d01d2"
+  ],
+  "twins": [
+    "github",
+    "jira",
+    "notion",
+    "slack"
+  ]
+}
