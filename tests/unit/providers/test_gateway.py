@@ -106,6 +106,50 @@ def test_applies_provider_default_authentication(provider: str, header: str, exp
     asyncio.run(client.aclose())
 
 
+@pytest.mark.parametrize(
+    ("provider", "env", "expected_headers"),
+    [
+        ("hubspot", {"HUBSPOT_ACCESS_TOKEN": "hubspot-token"}, {"authorization": "Bearer hubspot-token"}),
+        (
+            "salesforce",
+            {"SALESFORCE_ACCESS_TOKEN": "salesforce-token"},
+            {"authorization": "Bearer salesforce-token"},
+        ),
+        (
+            "linkedin",
+            {"LINKEDIN_ACCESS_TOKEN": "linkedin-token"},
+            {
+                "authorization": "Bearer linkedin-token",
+                "linkedin-version": "202608",
+                "x-restli-protocol-version": "2.0.0",
+            },
+        ),
+    ],
+)
+def test_applies_provisioned_business_provider_authentication(
+    provider: str,
+    env: dict[str, str],
+    expected_headers: dict[str, str],
+) -> None:
+    observed: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        for header in expected_headers:
+            observed[header] = request.headers[header]
+        return httpx.Response(200, json={"ok": True})
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    access = _access(provider)
+    access[provider]["env"] = env
+    gateway = ProviderGateway(access, client=client)
+
+    result = _run(gateway, {"provider": provider, "method": "GET", "path": "/v1/resource"})
+
+    assert result["ok"] is True
+    assert observed == expected_headers
+    asyncio.run(client.aclose())
+
+
 def test_exposes_one_dynamic_tool_schema() -> None:
     client = httpx.AsyncClient(transport=httpx.MockTransport(lambda _request: httpx.Response(200)))
     gateway = ProviderGateway(

@@ -1,0 +1,335 @@
+{
+  "description": "Sofia Patel from demand generation just posted in the #gtm-ops Slack channel: Driftline Logistics submitted a demo form and then emailed extra deployment details. Their domain appears on an older disqualified record, while the new request indicates a different business unit and buying timeline.\n\nYou're the inbound qualification specialist. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: CRM-03 Inbound demo qualification",
+  "seed_config": {
+    "gmail": {
+      "drafts": [],
+      "labels": [
+        {
+          "name": "Operations"
+        }
+      ],
+      "messages": [
+        {
+          "body": "Regarding Driftline Logistics / Platform business unit demo:\n\nNia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+          "from": "records@acme.example",
+          "labels": [
+            "INBOX",
+            "Operations"
+          ],
+          "subject": "Inbound demo qualification",
+          "thread_id": "thread-inbound-demo-qualification",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+          "from": "archive@acme.example",
+          "labels": [
+            "INBOX"
+          ],
+          "subject": "Previous account correspondence",
+          "thread_id": "thread-previous-account-correspondence",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+          "from": "operations@acme.example",
+          "labels": [
+            "INBOX",
+            "Operations"
+          ],
+          "subject": "Fwd: Driftline Logistics / Platform business unit demo",
+          "thread_id": "thread-inbound-demo-qualification-forward",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+          "from": "records@acme.example",
+          "labels": [
+            "INBOX"
+          ],
+          "subject": "Earlier review: Inbound demo qualification",
+          "thread_id": "thread-inbound-demo-qualification-earlier",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        },
+        {
+          "body": "Qualified inbound demo requests require a proposed customer confirmation reviewed by the opportunity owner before anything is sent.",
+          "from": "operations-policy@acme.example",
+          "labels": [
+            "INBOX"
+          ],
+          "subject": "Customer communication review policy",
+          "thread_id": "thread-policy-inbound-demo-qualification",
+          "to": [
+            "owner@gmail-twin.local"
+          ]
+        }
+      ]
+    },
+    "hubspot": {
+      "associations": [
+        {
+          "company_domain": "platform.driftline.example",
+          "contact_email": "nia.ford@platform.driftline.example"
+        }
+      ],
+      "companies": [
+        {
+          "properties": {
+            "description": "The parent is Driftline Logistics; the Platform business unit has no open opportunity.",
+            "domain": "platform.driftline.example",
+            "name": "Driftline Logistics \u2014 Platform"
+          }
+        },
+        {
+          "properties": {
+            "description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+            "domain": "driftline.example",
+            "name": "Driftline Freight Brokerage"
+          }
+        },
+        {
+          "properties": {
+            "description": "The parent is Driftline Logistics; the Platform business unit has no open opportunity.",
+            "domain": "ops.platform.driftline.example",
+            "name": "Driftline Logistics \u2014 Platform \u2014 Operations"
+          }
+        },
+        {
+          "properties": {
+            "description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+            "domain": "archive.driftline.example",
+            "name": "Driftline Freight Brokerage \u2014 Archive"
+          }
+        }
+      ],
+      "contacts": [
+        {
+          "properties": {
+            "email": "nia.ford@platform.driftline.example",
+            "firstname": "Driftline",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "The parent is Driftline Logistics; the Platform business unit has no open opportunity."
+          }
+        },
+        {
+          "properties": {
+            "email": "contact@driftline.example",
+            "firstname": "Regional",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker."
+          }
+        },
+        {
+          "properties": {
+            "email": "ops+driftline-logistics-platform@acme.example",
+            "firstname": "Operations",
+            "lastname": "Driftline",
+            "lifecyclestage": "lead",
+            "notes": "The parent is Driftline Logistics; the Platform business unit has no open opportunity."
+          }
+        },
+        {
+          "properties": {
+            "email": "archive+driftline-freight-brokerage@acme.example",
+            "firstname": "Archive",
+            "lastname": "Driftline",
+            "lifecyclestage": "lead",
+            "notes": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker."
+          }
+        }
+      ],
+      "deals": [
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "Platform Evaluation",
+            "dealstage": "qualifiedtobuy",
+            "description": "Driftline Logistics / Platform business unit demo",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "Platform Evaluation \u2014 Operations review",
+            "dealstage": "appointmentscheduled",
+            "description": "The parent is Driftline Logistics; the Platform business unit has no open opportunity.",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "95000",
+            "dealname": "Platform Evaluation \u2014 Earlier review",
+            "dealstage": "closedlost",
+            "description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+            "pipeline": "default"
+          }
+        }
+      ],
+      "lists": [],
+      "tickets": []
+    },
+    "salesforce": {
+      "accounts": [
+        {
+          "Description": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+          "Name": "Driftline Logistics \u2014 Platform",
+          "Website": "https://platform.driftline.example"
+        },
+        {
+          "Description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+          "Name": "Driftline Freight Brokerage",
+          "Website": "https://driftline.example"
+        },
+        {
+          "Description": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+          "Name": "Driftline Logistics \u2014 Platform Operations",
+          "Website": "https://ops.platform.driftline.example"
+        },
+        {
+          "Description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+          "Name": "Driftline Freight Brokerage Archive",
+          "Website": "https://archive.driftline.example"
+        }
+      ],
+      "contacts": [
+        {
+          "Description": "Driftline Logistics / Platform business unit demo",
+          "Email": "nia.ford@platform.driftline.example",
+          "FirstName": "Primary",
+          "LastName": "Contact"
+        },
+        {
+          "Description": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+          "Email": "ops+driftline-logistics-platform@acme.example",
+          "FirstName": "Operations",
+          "LastName": "Driftline"
+        },
+        {
+          "Description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+          "Email": "archive+driftline-logistics-platform@acme.example",
+          "FirstName": "Archive",
+          "LastName": "Driftline"
+        }
+      ],
+      "records": [
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-10-31",
+            "Description": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+            "Name": "Platform Evaluation",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Case",
+          "values": {
+            "Description": "Driftline Logistics / Platform business unit demo",
+            "Priority": "High",
+            "Status": "New",
+            "Subject": "Inbound demo qualification"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-11-30",
+            "Description": "Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+            "Name": "Platform Evaluation Operations Review",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 95000,
+            "CloseDate": "2025-10-31",
+            "Description": "Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+            "Name": "Platform Evaluation Earlier Review",
+            "StageName": "Closed Lost"
+          }
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "Driftline Logistics submitted a demo form and then emailed extra deployment details. Their domain appears on an older disqualified record, while the new request indicates a different business unit and buying timeline.",
+              "user": "sofia-patel"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for Driftline Logistics / Platform business unit demo: Nia Ford at platform.driftline.example requested deployment for 240 operators in Q4 and confirmed a September evaluation.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: Driftline Freight Brokerage used driftline.example in 2024 and was disqualified after requesting a consumer shipment tracker.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "gtm-ops"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "sofia-patel",
+          "real_name": "Sofia Patel"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:crm_outreach",
+    "task:crm-03",
+    "content-sha256:d7ecb5fc51e9e44f92948058cb23060e2ae8e8baf477d09e61398b98e55d2218"
+  ],
+  "twins": [
+    "gmail",
+    "hubspot",
+    "salesforce",
+    "slack"
+  ]
+}

@@ -1,5 +1,5 @@
 schema_version: 1
-catalog_reviewed_at: "2026-07-27"
+catalog_reviewed_at: "2026-08-15"
 retrieval_policy: strictly_allowlisted_live_official_docs
 providers:
   notion:
@@ -304,3 +304,95 @@ providers:
         title: Stripe Coupons API
         url: https://docs.stripe.com/api/coupons
         operations: [GET /v1/coupons]
+
+  hubspot:
+    owner: HubSpot
+    api_version: "2026-03"
+    allowed_hosts: [developers.hubspot.com]
+    allowed_paths:
+      developers.hubspot.com: [/docs/llms.txt, /docs/api-reference/, /docs/reference/api]
+    documents:
+      - id: documentation-index
+        title: HubSpot developer documentation index
+        url: https://developers.hubspot.com/docs/llms.txt
+        operations: [discover_reference, authentication, pagination]
+      - id: crm-overview
+        title: Understanding the HubSpot CRM APIs
+        url: https://developers.hubspot.com/docs/api-reference/latest/crm/understanding-the-crm
+        operations: [objects, records, properties, associations, pipelines, search]
+      - id: contacts
+        title: HubSpot CRM contacts API
+        url: https://developers.hubspot.com/docs/api-reference/latest/crm/objects/contacts/guide
+        operations:
+          - GET /crm/objects/2026-03/contacts
+          - POST /crm/objects/2026-03/contacts
+          - "PATCH /crm/objects/2026-03/contacts/{contact_id}"
+      - id: deals
+        title: HubSpot CRM deals API
+        url: https://developers.hubspot.com/docs/api-reference/latest/crm/objects/deals/guide
+        operations:
+          - GET /crm/objects/2026-03/deals
+          - POST /crm/objects/2026-03/deals
+          - "PATCH /crm/objects/2026-03/deals/{deal_id}"
+      - id: associations
+        title: HubSpot CRM associations API
+        url: https://developers.hubspot.com/docs/api-reference/latest/crm/associations/overview
+        operations:
+          - "GET /crm/associations/2026-03/{from_object}/{to_object}/labels"
+          - "PUT /crm/objects/2026-03/{from_object}/{from_id}/associations/{to_object}/{to_id}/{association_type_id}"
+
+  salesforce:
+    owner: Salesforce
+    api_version: rolling REST API
+    allowed_hosts: [developer.salesforce.com]
+    allowed_paths:
+      developer.salesforce.com: [/docs/atlas.en-us.api_rest.meta/api_rest/]
+    documents:
+      - id: rest-introduction
+        title: Salesforce REST API Developer Guide
+        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
+        operations: [authentication, versions, limits, resources]
+      - id: query
+        title: Salesforce Query resource
+        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_query.htm
+        operations: [GET /services/data/vXX.X/query]
+      - id: sobject-records
+        title: Salesforce sObject Rows resource
+        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_retrieve.htm
+        operations:
+          - "GET /services/data/vXX.X/sobjects/{sobject}/{record_id}"
+          - "PATCH /services/data/vXX.X/sobjects/{sobject}/{record_id}"
+      - id: composite
+        title: Salesforce Composite resource
+        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_composite_composite_post.htm
+        operations: [POST /services/data/vXX.X/composite]
+
+  linkedin:
+    owner: LinkedIn
+    api_version: rolling Marketing API
+    allowed_hosts: [learn.microsoft.com]
+    allowed_paths:
+      learn.microsoft.com: [/en-us/linkedin/marketing/]
+    documents:
+      - id: marketing-overview
+        title: LinkedIn Marketing API program
+        url: https://learn.microsoft.com/en-us/linkedin/marketing/
+        operations: [authentication, versioning, community_management, advertising]
+      - id: community-management-overview
+        title: LinkedIn Community Management API overview
+        url: https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares
+        operations: [posts, shares, social_actions]
+      - id: posts
+        title: LinkedIn Posts API
+        url: https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api
+        operations:
+          - GET /rest/posts
+          - POST /rest/posts
+          - "DELETE /rest/posts/{post_urn}"
+      - id: social-actions
+        title: LinkedIn Network Update Social Actions API
+        url: https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/network-update-social-actions
+        operations:
+          - "GET /rest/socialActions/{post_urn}"
+          - "GET /rest/socialActions/{post_urn}/comments"
+          - "POST /rest/socialActions/{post_urn}/comments"

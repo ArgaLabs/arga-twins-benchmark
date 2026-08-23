@@ -1,0 +1,301 @@
+{
+  "description": "Priya Desai from legal just posted in the #it-helpdesk Slack channel: the VPN disconnects every few minutes since yesterday's desktop client update. Several colleagues report the same symptom, but the network status page is green.\n\nYou're the endpoint support lead. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Preserve evidence and avoid destructive or unrelated changes. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: IT-05 VPN regression after client update",
+  "seed_config": {
+    "github": {
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "default_branch": "main",
+          "description": "Operational service configuration and change history",
+          "files": [
+            {
+              "content": "# SecureLink desktop client 6.4.2 / VPN regression\n\nSecureLink 6.4.2 was released at 18:00 UTC.\n",
+              "path": "records/vpn-regression-after-client-update.md"
+            },
+            {
+              "content": "# Previous-quarter notes\n\nA February gateway outage affected clients 6.3.x and produced failed service probes.\n",
+              "path": "records/previous-quarter.md"
+            },
+            {
+              "content": "# Operational service records\n",
+              "path": "README.md"
+            }
+          ],
+          "issues": [
+            {
+              "body": "Asset: SecureLink desktop client 6.4.2 / VPN regression\n\nSecureLink 6.4.2 was released at 18:00 UTC.",
+              "title": "VPN regression after client update"
+            },
+            {
+              "body": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+              "state": "closed",
+              "title": "Quarterly maintenance follow-up"
+            },
+            {
+              "body": "SecureLink 6.4.2 was released at 18:00 UTC.",
+              "state": "open",
+              "title": "Evidence follow-up: VPN regression after client update"
+            },
+            {
+              "body": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+              "state": "open",
+              "title": "Earlier workstream: VPN regression after client update"
+            }
+          ],
+          "name": "internal-operations",
+          "owner": "acme",
+          "private": true,
+          "prs": [
+            {
+              "base": "main",
+              "body": "SecureLink 6.4.2 was released at 18:00 UTC.",
+              "files": [
+                {
+                  "content": "SecureLink 6.4.2 was released at 18:00 UTC.",
+                  "path": "config/change.txt"
+                }
+              ],
+              "head": "change/vpn-regression-after-client-update",
+              "merged": true,
+              "state": "merged",
+              "title": "Change associated with vpn regression after client update"
+            },
+            {
+              "base": "main",
+              "body": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+              "files": [
+                {
+                  "content": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+                  "path": "docs/maintenance.md"
+                }
+              ],
+              "head": "docs/maintenance",
+              "state": "open",
+              "title": "Documentation maintenance"
+            },
+            {
+              "base": "main",
+              "body": "SecureLink 6.4.2 was released at 18:00 UTC.",
+              "files": [
+                {
+                  "content": "SecureLink 6.4.2 was released at 18:00 UTC.",
+                  "path": "sandbox/verification.txt"
+                }
+              ],
+              "head": "sandbox/vpn-regression-after-client-update",
+              "merged": false,
+              "state": "open",
+              "title": "Sandbox verification for vpn regression after client update"
+            },
+            {
+              "base": "main",
+              "body": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+              "files": [
+                {
+                  "content": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+                  "path": "archive/record.txt"
+                }
+              ],
+              "head": "archive/vpn-regression-after-client-update",
+              "merged": false,
+              "state": "open",
+              "title": "Archive maintenance for vpn regression after client update"
+            }
+          ]
+        }
+      ],
+      "users": [
+        {
+          "email": "ops-maintainer@acme.example",
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer"
+        },
+        {
+          "email": "release-reviewer@acme.example",
+          "login": "release-reviewer",
+          "name": "Release Reviewer"
+        }
+      ]
+    },
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: SecureLink desktop client 6.4.2 / VPN regression\nFour disconnect reports show the same keepalive timeout on 6.4.2; service probes stayed healthy.",
+              "issuetype": "Bug",
+              "labels": [
+                "it-support"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "VPN regression after client update"
+            },
+            {
+              "description": "Its workaround changed DNS and was retired after the gateway repair.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: vpn regression after client update"
+            },
+            {
+              "description": "SecureLink 6.4.2 disconnects after approximately four minutes.",
+              "issuetype": "Bug",
+              "labels": [
+                "vpn",
+                "support-intake"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "VPN disconnect report from Morgan Price"
+            },
+            {
+              "description": "SecureLink 6.4.2 keepalive timeout while gateway health remains green.",
+              "issuetype": "Bug",
+              "labels": [
+                "vpn",
+                "support-intake"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "VPN disconnect report from Dae Kim"
+            },
+            {
+              "description": "Disconnect began after updating from 6.4.1 to 6.4.2.",
+              "issuetype": "Bug",
+              "labels": [
+                "vpn",
+                "support-intake"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "VPN disconnect report from Luca Moretti"
+            },
+            {
+              "description": "Four disconnect reports show the same keepalive timeout on 6.4.2; service probes stayed healthy.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: SecureLink desktop client 6.4.2 / VPN regression"
+            },
+            {
+              "description": "Its workaround changed DNS and was retired after the gateway repair.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: VPN regression after client update"
+            }
+          ],
+          "key": "IT",
+          "name": "It Support Operations"
+        }
+      ]
+    },
+    "notion": {
+      "databases": [],
+      "pages": [
+        {
+          "content": "Support note KB-118 says affected users can disable adaptive keepalive until 6.4.3 ships.",
+          "title": "Operations record \u2014 SecureLink desktop client 6.4.2 / VPN regression"
+        },
+        {
+          "content": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+          "title": "Previous-quarter operations record"
+        },
+        {
+          "content": "Support note KB-118 says affected users can disable adaptive keepalive until 6.4.3 ships.",
+          "title": "Review notes \u2014 SecureLink desktop client 6.4.2 / VPN regression"
+        },
+        {
+          "content": "A February gateway outage affected clients 6.3.x and produced failed service probes.",
+          "title": "Archived workstream \u2014 VPN regression after client update"
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "the VPN disconnects every few minutes since yesterday's desktop client update. Several colleagues report the same symptom, but the network status page is green.",
+              "user": "priya-desai"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for SecureLink desktop client 6.4.2 / VPN regression: SecureLink 6.4.2 was released at 18:00 UTC.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: A February gateway outage affected clients 6.3.x and produced failed service probes.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "it-helpdesk"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "priya-desai",
+          "real_name": "Priya Desai"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:it_support",
+    "task:it-05",
+    "content-sha256:df9ad27c9722d3f1eabdcee5a5fbfa05d0a28075fee0ca0ea86e989d7d22b516"
+  ],
+  "twins": [
+    "github",
+    "jira",
+    "notion",
+    "slack"
+  ]
+}

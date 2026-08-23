@@ -1,0 +1,318 @@
+{
+  "description": "Noah Grant from enterprise sales just posted in the #gtm-ops Slack channel: BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.\n\nYou're the revenue systems administrator. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not send external outreach or disturb unrelated accounts unless the available evidence clearly authorizes it. Keep the people relying on the result informed.",
+  "name": "ArgaBench 40: CRM-06 Territory ownership conflict",
+  "seed_config": {
+    "hubspot": {
+      "associations": [
+        {
+          "company_domain": "bluepeakenergy.example",
+          "contact_email": "procurement@bluepeakenergy.example"
+        }
+      ],
+      "companies": [
+        {
+          "properties": {
+            "description": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold.",
+            "domain": "bluepeakenergy.example",
+            "name": "BluePeak Energy"
+          }
+        },
+        {
+          "properties": {
+            "description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+            "domain": "bluepeaksolar.example",
+            "name": "BluePeak Solar"
+          }
+        },
+        {
+          "properties": {
+            "description": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold.",
+            "domain": "ops.bluepeakenergy.example",
+            "name": "BluePeak Energy \u2014 Operations"
+          }
+        },
+        {
+          "properties": {
+            "description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+            "domain": "archive.bluepeaksolar.example",
+            "name": "BluePeak Solar \u2014 Archive"
+          }
+        }
+      ],
+      "contacts": [
+        {
+          "properties": {
+            "email": "procurement@bluepeakenergy.example",
+            "firstname": "BluePeak",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold."
+          }
+        },
+        {
+          "properties": {
+            "email": "contact@bluepeaksolar.example",
+            "firstname": "Regional",
+            "lastname": "Contact",
+            "lifecyclestage": "lead",
+            "notes": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy."
+          }
+        },
+        {
+          "properties": {
+            "email": "ops+bluepeak-energy@acme.example",
+            "firstname": "Operations",
+            "lastname": "BluePeak",
+            "lifecyclestage": "lead",
+            "notes": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold."
+          }
+        },
+        {
+          "properties": {
+            "email": "archive+bluepeak-solar@acme.example",
+            "firstname": "Archive",
+            "lastname": "BluePeak",
+            "lifecyclestage": "lead",
+            "notes": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy."
+          }
+        }
+      ],
+      "deals": [
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "BluePeak Expansion",
+            "dealstage": "appointmentscheduled",
+            "description": "BluePeak Energy / territory request TERR-62",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "120000",
+            "dealname": "BluePeak Expansion \u2014 Operations review",
+            "dealstage": "appointmentscheduled",
+            "description": "BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold.",
+            "pipeline": "default"
+          }
+        },
+        {
+          "properties": {
+            "amount": "95000",
+            "dealname": "BluePeak Expansion \u2014 Earlier review",
+            "dealstage": "closedlost",
+            "description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+            "pipeline": "default"
+          }
+        }
+      ],
+      "lists": [],
+      "tickets": []
+    },
+    "jira": {
+      "projects": [
+        {
+          "issues": [
+            {
+              "comments": [
+                {
+                  "body": "Initial report received; investigation notes have not yet been reconciled."
+                }
+              ],
+              "description": "Record: BluePeak Energy / territory request TERR-62\nTERR-62 was approved by revenue leadership for owner Amina Yusuf.",
+              "issuetype": "Task",
+              "labels": [
+                "crm-outreach"
+              ],
+              "priority": "High",
+              "status": "In Progress",
+              "summary": "Territory ownership conflict"
+            },
+            {
+              "description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+              "issuetype": "Task",
+              "labels": [
+                "operations-history"
+              ],
+              "priority": "Medium",
+              "status": "Done",
+              "summary": "Earlier review: territory ownership conflict"
+            },
+            {
+              "description": "TERR-62 was approved by revenue leadership for owner Amina Yusuf.",
+              "issuetype": "Task",
+              "labels": [
+                "evidence-review"
+              ],
+              "priority": "Medium",
+              "status": "To Do",
+              "summary": "Evidence review: BluePeak Energy / territory request TERR-62"
+            },
+            {
+              "description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+              "issuetype": "Task",
+              "labels": [
+                "parallel-review"
+              ],
+              "priority": "Medium",
+              "status": "In Progress",
+              "summary": "Parallel workstream: Territory ownership conflict"
+            }
+          ],
+          "key": "GTM",
+          "name": "Crm Outreach Operations"
+        }
+      ]
+    },
+    "salesforce": {
+      "accounts": [
+        {
+          "Description": "The active opportunity remains in Discovery.",
+          "Name": "BluePeak Energy",
+          "Website": "https://bluepeakenergy.example"
+        },
+        {
+          "Description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+          "Name": "BluePeak Solar",
+          "Website": "https://bluepeaksolar.example"
+        },
+        {
+          "Description": "The active opportunity remains in Discovery.",
+          "Name": "BluePeak Energy Operations",
+          "Website": "https://ops.bluepeakenergy.example"
+        },
+        {
+          "Description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+          "Name": "BluePeak Solar Archive",
+          "Website": "https://archive.bluepeaksolar.example"
+        }
+      ],
+      "contacts": [
+        {
+          "Description": "BluePeak Energy / territory request TERR-62",
+          "Email": "procurement@bluepeakenergy.example",
+          "FirstName": "Primary",
+          "LastName": "Contact"
+        },
+        {
+          "Description": "The active opportunity remains in Discovery.",
+          "Email": "ops+bluepeak-energy@acme.example",
+          "FirstName": "Operations",
+          "LastName": "BluePeak"
+        },
+        {
+          "Description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+          "Email": "archive+bluepeak-energy@acme.example",
+          "FirstName": "Archive",
+          "LastName": "BluePeak"
+        }
+      ],
+      "records": [
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-10-31",
+            "Description": "The active opportunity remains in Discovery.",
+            "Name": "BluePeak Expansion",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Case",
+          "values": {
+            "Description": "BluePeak Energy / territory request TERR-62",
+            "Priority": "High",
+            "Status": "New",
+            "Subject": "Territory ownership conflict"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 120000,
+            "CloseDate": "2026-11-30",
+            "Description": "The active opportunity remains in Discovery.",
+            "Name": "BluePeak Expansion Operations Review",
+            "StageName": "Qualification"
+          }
+        },
+        {
+          "object": "Opportunity",
+          "values": {
+            "Amount": 95000,
+            "CloseDate": "2025-10-31",
+            "Description": "BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+            "Name": "BluePeak Expansion Earlier Review",
+            "StageName": "Closed Lost"
+          }
+        }
+      ]
+    },
+    "slack": {
+      "channels": [
+        {
+          "messages": [
+            {
+              "text": "BluePeak Energy appears assigned to both the West and Strategic teams after its headquarters moved. A live opportunity has activity from both owners, and a territory request is already open.",
+              "user": "noah-grant"
+            },
+            {
+              "text": "The records system completed its nightly archival at 02:00 UTC.",
+              "user": "operations-coordinator"
+            },
+            {
+              "text": "Records sync for BluePeak Energy / territory request TERR-62: BluePeak Energy moved its headquarters to New York on 2026-07-01 and now meets the Strategic segment threshold.",
+              "user": "records-liaison"
+            },
+            {
+              "text": "Earlier activity in the same workstream: BluePeak Solar is headquartered in Nevada, remains in West territory, and has no relationship to BluePeak Energy.",
+              "user": "audit-coordinator"
+            }
+          ],
+          "name": "gtm-ops"
+        },
+        {
+          "messages": [
+            {
+              "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+              "user": "operations-coordinator"
+            }
+          ],
+          "name": "company-updates"
+        }
+      ],
+      "users": [
+        {
+          "name": "noah-grant",
+          "real_name": "Noah Grant"
+        },
+        {
+          "name": "operations-coordinator",
+          "real_name": "Operations Coordinator"
+        },
+        {
+          "name": "records-liaison",
+          "real_name": "Records Liaison"
+        },
+        {
+          "name": "audit-coordinator",
+          "real_name": "Audit Coordinator"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "arga-bench",
+    "suite:cross-functional-40-v1",
+    "domain:crm_outreach",
+    "task:crm-06",
+    "content-sha256:9e9c18f46c0521640f4d61a91214931e2945368552f501928c38b7ee9035ef1c"
+  ],
+  "twins": [
+    "hubspot",
+    "jira",
+    "salesforce",
+    "slack"
+  ]
+}

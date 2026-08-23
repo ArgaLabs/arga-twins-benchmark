@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import ssl
 from time import monotonic
 from typing import Any, Literal, cast
 
@@ -23,7 +24,7 @@ from arga_twins_benchmark.agents.models import (
 from arga_twins_benchmark.errors import RetryableInfrastructureError
 
 OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
-MAX_OUTPUT_TOKENS = 16_384
+MAX_OUTPUT_TOKENS = 128_000
 
 
 class OpenAIResponsesAdapter:
@@ -31,7 +32,8 @@ class OpenAIResponsesAdapter:
         self,
         *,
         api_key: str,
-        model_id: Literal["gpt-5.6-sol"] = "gpt-5.6-sol",
+        model_id: Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] = "gpt-5.6-sol",
+        effort: Literal["low", "medium", "high", "xhigh", "max"] = "high",
         client: httpx.AsyncClient | None = None,
         endpoint: str = OPENAI_RESPONSES_URL,
     ) -> None:
@@ -39,6 +41,7 @@ class OpenAIResponsesAdapter:
             raise ValueError("OpenAI API key cannot be empty")
         self.api_key = api_key
         self.model_id = model_id
+        self.effort = effort
         self.endpoint = endpoint
         self._client = client
 
@@ -47,7 +50,7 @@ class OpenAIResponsesAdapter:
             "model": self.model_id,
             "provider": "openai",
             "endpoint": "responses",
-            "reasoning": {"effort": "high"},
+            "reasoning": {"effort": self.effort},
             "max_output_tokens": MAX_OUTPUT_TOKENS,
             "temperature": None,
             "max_tool_calls": max_tool_calls,
@@ -102,23 +105,42 @@ class OpenAIResponsesAdapter:
         try:
             async with asyncio.timeout(timeout_seconds):
                 while True:
-                    response = await client.post(
-                        self.endpoint,
-                        headers={
-                            "authorization": f"Bearer {self.api_key}",
-                            "content-type": "application/json",
-                        },
-                        json={
-                            "model": self.model_id,
-                            "instructions": system_prompt,
-                            "input": input_items,
-                            "tools": tool_payload,
-                            "reasoning": {"effort": "high"},
-                            "max_output_tokens": MAX_OUTPUT_TOKENS,
-                            "store": False,
-                            "include": ["reasoning.encrypted_content"],
-                        },
-                    )
+                    request_body = {
+                        "model": self.model_id,
+                        "instructions": system_prompt,
+                        "input": input_items,
+                        "tools": tool_payload,
+                        "reasoning": {"effort": self.effort},
+                        "max_output_tokens": MAX_OUTPUT_TOKENS,
+                        "store": False,
+                        "include": ["reasoning.encrypted_content"],
+                    }
+                    response: httpx.Response | None = None
+                    for transport_attempt in range(1, 4):
+                        try:
+                            response = await client.post(
+                                self.endpoint,
+                                headers={
+                                    "authorization": f"Bearer {self.api_key}",
+                                    "content-type": "application/json",
+                                },
+                                json=request_body,
+                            )
+                            break
+                        except (httpx.TransportError, ssl.SSLError) as error:
+                            events.append(
+                                {
+                                    "type": "transport_error",
+                                    "error_type": type(error).__name__,
+                                    "attempt": transport_attempt,
+                                    "will_retry": transport_attempt < 3,
+                                }
+                            )
+                            if transport_attempt == 3:
+                                raise
+                            await asyncio.sleep(transport_attempt)
+                    if response is None:  # pragma: no cover - defensive exhaustiveness
+                        raise RuntimeError("OpenAI transport loop returned no response")
                     if response.status_code >= 400:
                         events.append(
                             {
@@ -172,6 +194,18 @@ class OpenAIResponsesAdapter:
                     output_value = response_value.get("output")
                     response_usage = response_value.get("usage")
                     merge_usage(usage, response_usage)
+                    if isinstance(response_usage, dict):
+                        input_details = cast(dict[str, Any], response_usage).get("input_tokens_details")
+                        if isinstance(input_details, dict):
+                            cached_tokens = cast(dict[str, Any], input_details).get("cached_tokens")
+                            if (
+                                isinstance(cached_tokens, int)
+                                and not isinstance(cached_tokens, bool)
+                                and cached_tokens > 0
+                            ):
+                                usage["cache_read_input_tokens"] = int(
+                                    usage.get("cache_read_input_tokens", 0) or 0
+                                ) + cached_tokens
                     if not isinstance(response_status, str) or not isinstance(output_value, list):
                         events.append({"type": "invalid_response", "reason": "missing_status_or_output"})
                         return result(
@@ -382,7 +416,7 @@ class OpenAIResponsesAdapter:
                 started=started,
                 tool_calls=tool_calls,
             )
-        except httpx.HTTPError as error:
+        except (httpx.HTTPError, ssl.SSLError) as error:
             events.append(
                 {
                     "type": "api_error",
