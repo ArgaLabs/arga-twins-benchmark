@@ -603,10 +603,10 @@ TASKS: list[dict[str, Any]] = [
         "commerce-ops",
         "Morgan Retail appears twice in Stripe after a sales trial was converted, and support cannot tell which profile should remain available to the billing team. A similarly named customer is also present.",
         "commerce data responder",
-        "Resolve the profiles from the account evidence, reconcile only the abandoned duplicate, document the result in the existing case, and explain the verified state to support.",
+        "Resolve the profiles from the account evidence, reconcile only the abandoned duplicate, and explain the verified state to support.",
         ["stripe", "slack", "jira"],
         "Morgan Retail / morgan@retail.example",
-        "The active Morgan Retail profile remains available, the abandoned trial profile is reconciled once, Jira records the evidence, and Slack is updated.",
+        "The active Morgan Retail profile remains available, the abandoned trial profile is reconciled once, and Slack is updated.",
         "Do not alter Morgan Markets, change prices, create another customer, or remove the active billing profile.",
     ),
     task(
@@ -1198,6 +1198,9 @@ def required_steps(task_spec: dict[str, Any]) -> list[dict[str, Any]]:
 def outcome_verification(task_spec: dict[str, Any]) -> dict[str, Any]:
     profile = HARDENING_PROFILES[task_spec["id"]]
     non_slack = [provider for provider in task_spec["twins"] if provider != "slack"]
+    correlation_providers = (
+        ["stripe", "slack"] if task_spec["id"] == "ECOM-01" else non_slack
+    )
     fact_values = [str(value) for value in profile["facts"].values() if not isinstance(value, int)]
     if task_spec["id"] == "MKT-01":
         fact_values.extend(("Reliability Suite", "Revision 7"))
@@ -1210,7 +1213,7 @@ def outcome_verification(task_spec: dict[str, Any]) -> dict[str, Any]:
             {
                 "id": "cross_system_correlation",
                 "critical": True,
-                "providers": non_slack,
+                "providers": correlation_providers,
                 "selector": {
                     "observable_facts": profile["facts"],
                     "minimum_distinct_provider_matches": 2,

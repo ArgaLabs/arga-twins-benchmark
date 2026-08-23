@@ -7,6 +7,7 @@ from typing import Any, cast
 
 import pytest
 
+import arga_twins_benchmark.reporting.cross_functional_matrix as matrix
 from arga_twins_benchmark.reporting.cross_functional_matrix import (
     CROSS_FUNCTIONAL_MATRIX_CLASSIFICATION_PROTOCOL,
     CrossFunctionalMatrixClassificationError,
@@ -28,6 +29,15 @@ def _write_json(path: Path, payload: object) -> None:
 def _content_hash(task: dict[str, Any]) -> str:
     payload = json.dumps(task, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(payload).hexdigest()
+
+
+def test_ecom01_preserved_hash_is_accepted_for_verifier_only_correction() -> None:
+    suite = json.loads(SUITE_PATH.read_text(encoding="utf-8"))
+    task = next(item for item in suite["tasks"] if item["id"] == "ECOM-01")
+
+    assert "613cc946487aca4432120106f0191c59a5bc9ce6e38975ce528fa5f0a4dd4644" in (
+        matrix._accepted_content_hashes(task)  # pyright: ignore[reportPrivateUsage]
+    )
 
 
 def _archive_cleanup(run_id: str) -> dict[str, Any]:

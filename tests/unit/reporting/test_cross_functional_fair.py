@@ -130,6 +130,59 @@ def _mkt01_states() -> tuple[dict[str, object], dict[str, object]]:
     return baseline, cast(dict[str, object], final)
 
 
+def _mkt06_states(*, linear_description: str | None = None) -> tuple[dict[str, object], dict[str, object]]:
+    task = _task("MKT-06")
+    seeded_linear = cast(dict[str, Any], task["seed_config"])["linear"]
+    seeded_issues = cast(dict[str, Any], seeded_linear)["issues"]
+    issues = [
+        {"id": f"mkt-{index}", **cast(dict[str, Any], issue)}
+        for index, issue in enumerate(cast(list[object], seeded_issues), start=1)
+        if isinstance(issue, dict)
+    ]
+    baseline: dict[str, object] = {
+        "hubspot": {
+            "companies": [
+                {
+                    "id": "scaleops-event",
+                    "name": "ScaleOps event",
+                    "description": "SO-88 attendee export contains 42 rows.",
+                }
+            ]
+        },
+        "linear": {"issues": issues, "comments": []},
+        "linkedin": {"ugc_posts": []},
+        "slack": {
+            "channels": [
+                {
+                    "id": "C-MKT",
+                    "name": "marketing-launches",
+                    "messages": [{"id": "s-0", "text": "Please verify SO-88."}],
+                }
+            ]
+        },
+    }
+    final = cast(dict[str, object], json.loads(json.dumps(baseline)))
+    if linear_description is not None:
+        target = next(
+            issue
+            for issue in cast(list[dict[str, Any]], cast(dict[str, Any], final["linear"])["issues"])
+            if issue["title"] == task["title"]
+        )
+        target["description"] = linear_description
+    cast(dict[str, Any], final["linkedin"])["ugc_posts"] = [
+        {
+            "id": "post-1",
+            "author": "Acme Marketing",
+            "text": "ScaleOps SO-88 recap: 29 verified net-new attendees.",
+        }
+    ]
+    channel = cast(list[dict[str, Any]], cast(dict[str, Any], final["slack"])["channels"])[0]
+    cast(list[dict[str, Any]], channel["messages"]).append(
+        {"id": "s-1", "text": "SO-88 verified at 29 net-new attendees; the recap is live."}
+    )
+    return baseline, final
+
+
 def _write_attempt(
     task_dir: Path,
     task: Mapping[str, Any],
@@ -218,6 +271,71 @@ def test_valid_end_state_passes_independent_of_candidate_route(tmp_path: Path) -
         grades.append(grade_cross_functional_fair_attempt(task_dir, task))
     assert [grade["outcome"] for grade in grades] == ["pass", "pass"]
     assert grades[0]["policy"]["api_routes_graded"] is False
+
+
+def test_mkt06_already_correct_linear_record_requires_no_duplicate_write(tmp_path: Path) -> None:
+    task = _task("MKT-06")
+    baseline, final = _mkt06_states()
+    _write_attempt(
+        tmp_path,
+        task,
+        baseline=baseline,
+        final=final,
+        final_text="SO-88 was published with 29 verified net-new attendees.",
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert grade["outcome"] == "pass"
+    measurement = _assertion(grade, "cohort_measurement_reconciled")
+    assert measurement["status"] == "pass"
+    assert "no additional Linear write was required" in measurement["detail"]
+
+
+def test_mkt06_accepts_semantically_equivalent_cohort_wording(tmp_path: Path) -> None:
+    task = _task("MKT-06")
+    baseline, final = _mkt06_states(
+        linear_description=(
+            "Campaign SO-88 has 29 eligible people once 9 current client accounts are filtered "
+            "and 4 repeated identities are collapsed."
+        )
+    )
+    _write_attempt(
+        tmp_path,
+        task,
+        baseline=baseline,
+        final=final,
+        final_text="SO-88 was published with 29 verified net-new attendees.",
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert grade["outcome"] == "pass"
+    measurement = _assertion(grade, "cohort_measurement_reconciled")
+    assert measurement["status"] == "pass"
+    assert measurement["evidence"][0]["semantic_rule_recorded"] is True
+
+
+def test_mkt06_final_prose_cannot_rescue_wrong_linear_measurement(tmp_path: Path) -> None:
+    task = _task("MKT-06")
+    baseline, final = _mkt06_states(linear_description="Campaign SO-88 still claims all 42 export rows are new teams.")
+    _write_attempt(
+        tmp_path,
+        task,
+        baseline=baseline,
+        final=final,
+        final_text=(
+            "SO-88 has 29 net-new attendees after excluding 9 existing customers and "
+            "reconciling 4 duplicate identities."
+        ),
+    )
+
+    grade = grade_cross_functional_fair_attempt(tmp_path, task)
+
+    assert grade["outcome"] == "fail"
+    measurement = _assertion(grade, "cohort_measurement_reconciled")
+    assert measurement["status"] == "fail"
+    assert "final_text" not in str(measurement["evidence"])
 
 
 def test_successful_write_call_cannot_rescue_a_reverted_end_state(tmp_path: Path) -> None:

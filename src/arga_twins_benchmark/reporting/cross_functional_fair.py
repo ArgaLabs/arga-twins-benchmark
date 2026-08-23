@@ -25,6 +25,9 @@ from arga_twins_benchmark.reporting.cross_functional_semantics import (
     semantic_value_present,
     structured_fact_present,
 )
+from arga_twins_benchmark.reporting.cross_functional_state_outcomes import (
+    linear_cohort_measurement_outcome,
+)
 from arga_twins_benchmark.specs.models import SnapshotQuerySpec
 
 CROSS_FUNCTIONAL_FAIR_GRADER_PROTOCOL = "arga-bench-cross-functional-fair/1"
@@ -536,6 +539,7 @@ def _legacy_requirements(task_id: str) -> tuple[SemanticRequirement, ...]:
             )
             for assertion_id, provider, token_groups in semantic_requirement_contracts(task_id)
             if not (task_id in _REVIEWED_DRAFT_TASKS and provider == "gmail" and not token_groups)
+            and not (task_id == "MKT-06" and assertion_id == "cohort_measurement_reconciled")
         )
         return marketing_commerce_requirements
     return _CRM_REQUIREMENTS[task_id]
@@ -574,6 +578,67 @@ def semantic_requirements_for_task(task: Mapping[str, Any]) -> tuple[SemanticReq
         raise ValueError(f"unsupported Cross-Functional task {task_id!r}")
     return _legacy_requirements(cast(str, task_id))
 
+
+def _trusted_provider_state(snapshot: TrustedStateSnapshot, provider: str) -> object:
+    captured = snapshot.providers.get(provider)
+    if captured is not None and captured.state:
+        return captured.state
+    return next(
+        (query.body for query in snapshot.queries.values() if query.provider_name == provider),
+        cast(object, {}),
+    )
+
+def _mkt06_cohort_measurement_assertion(
+    task: Mapping[str, Any],
+    baseline: TrustedStateSnapshot,
+    final: TrustedStateSnapshot,
+) -> dict[str, Any]:
+    result = linear_cohort_measurement_outcome(
+        task,
+        _trusted_provider_state(baseline, "linear"),
+        _trusted_provider_state(final, "linear"),
+    )
+    evidence = [
+        {
+            "artifact": "baseline-state.json / final-state.json",
+            "pointer": "/providers/linear/state/issues",
+            "issue_id": result.issue_id,
+            "campaign": result.campaign,
+            "computed_cohort": {
+                "total_rows": result.total_rows,
+                "customer_rows": result.customer_rows,
+                "duplicate_rows": result.duplicate_rows,
+                "net_new_attendees": result.net_new_attendees,
+            },
+            "seeded_rule_preserved": result.seeded_rule_preserved,
+            "semantic_rule_recorded": result.semantic_rule_recorded,
+        }
+    ]
+    if result.passed and result.seeded_rule_preserved:
+        detail = (
+            f"The canonical Linear issue already retained the trusted {result.net_new_attendees}-person "
+            "cohort rule; no additional Linear write was required"
+        )
+    elif result.passed:
+        detail = (
+            f"The canonical Linear issue records the computed {result.net_new_attendees}-person cohort "
+            "with customer exclusions and identity deduplication"
+        )
+    elif not result.found_before or not result.found_after:
+        detail = f"The verifier could not bind the target Linear issue “{result.title}” across baseline and final state"
+    elif not result.contract_consistent:
+        detail = "The checked-in cohort facts do not agree with the trusted HubSpot identities"
+    else:
+        detail = (
+            "The target Linear issue does not preserve or semantically restate the cohort derived from "
+            "trusted HubSpot identities"
+        )
+    return _assertion(
+        "cohort_measurement_reconciled",
+        "pass" if result.passed else "fail",
+        detail,
+        evidence,
+    )
 
 def fair_contract_for_task(task: Mapping[str, Any]) -> FairTaskContract:
     task_id = _task_value(task, "id")
@@ -1267,6 +1332,8 @@ def grade_cross_functional_fair_attempt(task_dir: Path, task: Mapping[str, Any])
     contract = fair_contract_for_task(task)
     requirements = contract.semantic_requirements
     assertions: list[dict[str, Any]] = []
+    if task_id == "MKT-06":
+        assertions.append(_mkt06_cohort_measurement_assertion(task, baseline, final))
     for requirement in requirements:
         matches_count = len(_semantic_requirement_matches(requirement, mutations=mutations, after=after))
         passed = matches_count >= requirement.minimum_matches
