@@ -28,7 +28,6 @@ _DISPOSITION_PARAPHRASES = {
     "empty_evaluation_profile_archived": "The unused evaluation customer was deactivated",
     "empty_trial_profile_archived": "The empty trial customer was removed",
     "mapping_documented_no_meter_mutation": "The root cause was recorded and no Stripe change was made",
-    "mitigated_not_closed": "Service was restored, with the incident still awaiting verification",
     "publication_blocked": "Nothing is authorized to publish while legal review is on hold",
     "regression_open_and_escalated": "The client bug is unresolved and with engineering",
     "renewal_at_risk": "The renewal is jeopardized by the open review",

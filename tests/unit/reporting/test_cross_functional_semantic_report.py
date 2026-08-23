@@ -19,6 +19,7 @@ from arga_twins_benchmark.reporting.cross_functional_semantic_report import (
     DomainGrader,
     build_cross_functional_semantic_report,
     build_domain_grader_registry,
+    select_cross_functional_semantic_report,
     write_cross_functional_semantic_report,
 )
 
@@ -443,14 +444,15 @@ def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path)
         }
     ]
 
-    partial_report = json.loads(json.dumps(report))
     partial_task_ids = ["IT-01", "IT-02"]
-    partial_report["task_ids"] = partial_task_ids
-    partial_report["attempts"] = [
-        attempt
-        for attempt in cast(list[dict[str, Any]], partial_report["attempts"])
-        if attempt["task_id"] in partial_task_ids
-    ]
+    partial_report = select_cross_functional_semantic_report(report, partial_task_ids)
+    assert partial_report["scoring_ready_profile_count"] == 2
+    assert partial_report["matrix_scoring_ready"] is False
+    assert partial_report["selection"] == {
+        "source_task_ids": [task["id"] for task in cast(list[dict[str, Any]], suite["tasks"])],
+        "selected_task_ids": partial_task_ids,
+        "attempt_semantics_changed": False,
+    }
     partial_output = tmp_path / "partial-publication"
     partial_outputs = write_cross_functional_semantic_report(
         partial_report,
@@ -459,7 +461,7 @@ def test_writer_emits_results_v2_only_for_scoring_ready_profiles(tmp_path: Path)
         suite_path=SUITE_PATH,
         published_at="2026-08-15",
     )
-    assert partial_outputs["scoring_ready_profile_count"] == 1
+    assert partial_outputs["scoring_ready_profile_count"] == 2
     partial_result = _load(partial_output / "results" / f"{ready_profile}.json")
     assert partial_result["attempts"] == 2
     assert partial_result["passes"] == 2
