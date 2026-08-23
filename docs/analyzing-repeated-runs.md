@@ -1,13 +1,20 @@
 # Analyzing repeated benchmark runs
 
-`arga-bench analyze-suite` turns a completed outcome-first semantic grade and its preserved suite artifacts into two aggregate reports:
+`arga-bench analyze-suite` turns a completed outcome-first semantic grade from
+the retained declarative development pilot into two aggregate reports:
 
 - machine-readable JSON for downstream analysis;
 - Markdown suitable for the benchmark report.
 
 The command is offline. It does not call Arga, a twin, a model provider, or an official documentation site.
 
-## Run it
+It does not consume the active `argabench-40-v1` matrix layout. ArgaBench v1
+uses `scripts/report_argabench_semantic_matrix.py` for each repeat and
+`scripts/report_argabench_repeats.py` to combine exactly three repeat reports.
+See [running experiments](running-experiments.md#active-release-argabench-v1)
+for the current commands.
+
+## Run it for the retained development pilot
 
 Grade the preserved suite first:
 

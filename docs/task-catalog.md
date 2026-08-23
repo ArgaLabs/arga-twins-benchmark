@@ -1,4 +1,9 @@
-# Development task catalog
+# Retained development-pilot catalog
+
+This catalog belongs to `development_pilot_48_v1`. It is not the active
+ArgaBench v1 task set and is not currently scoreable: the checked-in
+conformance audit reports `leaderboard_ready=false`. The active release is the
+40-task suite under [`benchmark/argabench_40`](../benchmark/argabench_40/).
 
 The first catalog is a balanced 12-family × four-variant matrix. Each instance directory contains the exact candidate `prompt.txt`, checked-in `seed/*.json`, authorization/budget metadata in `instance.yaml`, and a deterministic `verification.yaml` describing required state, allowed mutations, forbidden mutations, critical requirements, partial-credit diagnostics, and output contract.
 
@@ -21,7 +26,7 @@ The generated [48-task matrix](task-matrix.md) links every exact prompt, seed fi
 
 ## Why these tasks
 
-Together they cover read-modify-write work, multi-service joins, generated identifiers, safety pairs, no-op judgment, idempotency, pagination, provider transfer, embedded untrusted instructions, and collateral-damage control. They use only currently seedable twins; tasks that require deterministic seeded Stripe charges/refunds or inspectable PostgreSQL rows remain out of v1.
+Together they cover read-modify-write work, multi-service joins, generated identifiers, safety pairs, no-op judgment, idempotency, pagination, provider transfer, embedded untrusted instructions, and collateral-damage control. They use the twin surfaces supported by the retained pilot's pinned bindings; tasks that require deterministic seeded Stripe charges/refunds or inspectable PostgreSQL rows were left out of that pilot.
 
 The suite intentionally separates five outcomes:
 

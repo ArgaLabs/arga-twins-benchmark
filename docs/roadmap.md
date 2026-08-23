@@ -1,52 +1,51 @@
-# Roadmap
+# Status and roadmap
 
-## Milestone 0 — Contracts and 48-instance development catalog
+## Active release: ArgaBench v1
 
-Deliverables:
+The active release is `argabench-40-v1`: 40 deterministic tasks across five
+domains, with eight tasks per domain. Its suite, task prompts, Scenario payloads,
+model matrix, and fairness audit live under
+[`benchmark/argabench_40`](../benchmark/argabench_40/). The dedicated runners
+support profile matrices, three independent repeats, bounded concurrency,
+immutable attempt preservation, explicit retry provenance, trusted before/after
+state capture, mediated provider traces, and offline semantic reporting.
 
-- Pydantic models and committed JSON Schemas.
-- Catalog validation, deterministic fingerprints, and exact-seeded Scenario compiler.
-- Durable named Scenarios with task descriptions, content-hash reuse, and no `Scenario.prompt`.
-- Typed subprocess adapter for the audited Arga CLI lifecycle.
-- Twelve semantic families and 48 specified development instances.
-- Controlled-clock, authorization, required/forbidden mutation, budget, and output contracts.
+Current maintenance priorities are:
 
-Exit criterion: every artifact validates and fingerprints reproducibly without live infrastructure.
+1. Keep task contracts, Scenario seeds, verifier capture queries, and public
+   evidence synchronized by content hash.
+2. Re-run only trials made non-comparable by a corrected task, verifier, or
+   capture contract; preserve the superseded attempt and retry provenance.
+3. Keep fail/unsafe classification consistent: missing required work is
+   `fail`, while an actual prohibited side effect is `unsafe`.
+4. Continue publishing repeat-level variance and uncertainty from at least
+   three independent repeats.
 
-## Milestone 1 — CLI-only vertical slice
+## Retained development pilot
 
-Deliverables:
+The separate `development_pilot_48_v1` catalog contains 12 semantic families
+and four variants per family. It remains useful for compiler, generic runner,
+and evaluator development, but it is not ArgaBench v1 and is not a released
+leaderboard set.
 
-- Runner that saves or reuses a Scenario and manages twin runs through the Arga CLI only.
-- Pluggable candidate adapter that receives sanitized provider endpoints and invokes the agent separately.
-- Durable state machine, immutable artifacts, and credential-redacted CLI traces.
-- Canonical state diffing, deterministic predicates, and infrastructure-invalid classification.
-- Gold solution and known-wrong controls for one inspectable task.
-- Ten fresh-provision gold passes.
+The checked-in conformance audit reports:
 
-Start with `blocking_code_review_v1_github_clean_001`, then add one safety pair and one provider-transfer pair.
+- `leaderboard_ready=false`;
+- 5 of 240 evaluator cases passing and 235 pending; and
+- no live case or reset/isolation records.
 
-Exit criterion: `arga-bench run` executes and grades an episode end to end, always tears down, and reproduces the same relevant state across ten provisions.
+Promoting any of those 48 instances would require current-fingerprint gold,
+semantic-equivalence, and negative-control evidence plus ten-reset,
+fresh-provision isolation, mutation-visibility, and teardown evidence. Until
+then, documentation and reports must call them development instances rather
+than scored episodes.
 
-## Milestone 2 — Conformance and small scientific pilot
+## External platform gaps
 
-Promote a representative 16-instance slice only after each selected task passes live seed-shape, provider-read, reset, gold, negative-control, and collateral-damage tests. Add batch execution, paired seeds, fixed budgets, randomized ordering, resume support, and clustered reporting.
-
-Exit criterion: two agents can be compared on the same 16-instance matrix with complete traces, hard safety failures, and infrastructure-invalid episodes excluded from agent metrics.
-
-## Milestone 3 — 48-instance calibration release
-
-Promote the checked-in 12 templates × four variants = 48 instances after Milestone 2 passes. Rotate entities and distractors into private variants, and add controlled failure schedules where providers support deterministic injection.
-
-## Milestone 4 — Main benchmark
-
-Expand to 60 templates and 240 instances, then run provider-transfer, tool-catalog, scaffolding, interface, asynchronous-recovery, and multi-tenant experiments.
-
-## Immediate implementation order
-
-1. Add `ARGA_API_KEY` precedence, `twin-runs diagnostics`, and stable `twin-runs logs` upstream to the Arga CLI.
-2. Implement the runner against fake CLI and fake candidate adapters.
-3. Add the first live GitHub vertical slice and provider canonicalizer.
-4. Conformance-test all seed shapes and deterministic verifier predicates.
-5. Run gold and known-wrong controls across ten fresh provisions per selected task.
-6. Complete public twin data/control-plane isolation before scoring untrusted agents.
+The installed Arga CLI exposes Scenario import/list and twin-run
+create/status/reset/teardown, but not `twin-runs diagnostics` or a stable
+twin-specific logs command. Trusted provider readers therefore remain the
+grading source for baseline and final state. A server-side candidate-safe
+profile remains defense in depth; the local mediated gateway is still required
+to keep twin addresses, credentials, and control-plane routes out of model
+context.

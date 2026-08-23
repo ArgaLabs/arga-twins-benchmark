@@ -1,5 +1,11 @@
 # Official documentation live-retrieval validation
 
+This is a dated validation record, not a claim that the same bytes or URLs are
+unchanged today. Current runs retain their own retrieval provenance.
+The smoke covered the 11 catalogs registered on the validation date; the
+current 14-provider registry also includes HubSpot, Salesforce, and LinkedIn,
+which are not retroactively included in this record.
+
 Validation date: 2026-07-27 (America/Vancouver). Retrieval timestamps below
 are UTC. Each response was fetched through `OfficialDocsGateway` from the
 checked-in provider allowlist. The SHA-256 value covers the exact bounded

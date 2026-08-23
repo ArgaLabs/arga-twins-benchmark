@@ -1,4 +1,7 @@
-# Verifier conformance
+# Development-pilot verifier conformance
+
+This registry covers `development_pilot_48_v1`, not the active 40-task
+ArgaBench v1 release.
 
 Verifier conformance is a release gate, not an agent leaderboard track. A model
 result is not rankable until the verifier for that exact instance has proved all
@@ -20,8 +23,9 @@ evidence keeps `leaderboard_ready=false`.
 
 ## Checked-in coverage
 
-[`registry.json`](registry.json) is an explicit typed registry for all 48 scored
-instances. It has a one-to-one relationship with:
+[`registry.json`](registry.json) is an explicit typed registry for all 48
+development instances. They remain unscored until this gate passes. The
+registry has a one-to-one relationship with:
 
 - 48 `gold_solution_id` values declared by verification manifests;
 - 144 `negative_control_ids` values declared by verification manifests; and

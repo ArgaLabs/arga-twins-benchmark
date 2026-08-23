@@ -18,11 +18,11 @@ The model receives the tool schemas and provider or role names. Twin base URLs, 
 
 Fetches use HTTPS, exact provider-specific hosts, provider-specific path prefixes, bounded responses, and manual redirect validation. An input URL, redirect, or page link outside that provider's host and path scope is rejected. The tool cannot make arbitrary web requests, cannot cross from one Google product's docs to another, and has no twin or model-service credentials. Official OpenAPI or schema material is allowed when it is reached inside an official docs scope; only twin-hosted schema discovery is blocked.
 
-The model receives at most 20,000 characters from one fetch, using query-centered excerpts when requested. The runner separately saves the exact bounded response body (up to 512 KiB), even when only a smaller excerpt was shown.
+The model receives at most 20,000 characters from one fetch, using query-centered excerpts when requested. The generic development-pilot runner separately saves the exact bounded response body (normally up to 512 KiB, with the documented 4 MiB Jira exception), even when only a smaller excerpt was shown.
 
 ### Source registry
 
-The catalog was reviewed on 2026-07-27. These are the official owners, versions, path scopes, and starting documents:
+The catalog was reviewed on 2026-08-15. These are the official owners, versions, path scopes, and starting documents:
 
 | Twin | Version label | Strict official scope | Starting document |
 | --- | --- | --- | --- |
@@ -37,6 +37,9 @@ The catalog was reviewed on 2026-07-27. These are the official owners, versions,
 | Linear | rolling GraphQL schema | `linear.app/developers/` | `https://linear.app/developers/graphql?noRedirect=1` |
 | Slack | rolling Web API | `docs.slack.dev/reference/methods`, `api.slack.com/methods/` | `https://docs.slack.dev/reference/methods` |
 | Stripe | rolling API reference | `docs.stripe.com/api` | `https://docs.stripe.com/api` |
+| HubSpot | 2026-03 | `developers.hubspot.com/docs/llms.txt`, `/docs/api-reference/`, `/docs/reference/api` | `https://developers.hubspot.com/docs/llms.txt` |
+| Salesforce | rolling REST API | `developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/` | `https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm` |
+| LinkedIn | rolling Marketing API | `learn.microsoft.com/en-us/linkedin/marketing/` | `https://learn.microsoft.com/en-us/linkedin/marketing/` |
 
 The complete navigation registry is [`official_api_docs.yaml`](../src/arga_twins_benchmark/providers/official_api_docs.yaml).
 
@@ -55,7 +58,10 @@ Ordinary provider resources whose later path component or filename happens to be
 
 ## Fairness, replay, and accounting
 
-Official sites can change during a matrix. The suite uses a concurrency-safe first-fetch snapshot keyed by provider and exact URL. The first successful body is reused for all models, repeats, and resumed runs. Artifacts are:
+Official sites can change during a matrix. The retained development-pilot
+runner uses a persistent, concurrency-safe first-fetch snapshot keyed by
+provider and exact URL. The first successful body is reused for all models,
+repeats, and resumed runs. Its artifacts are:
 
 - `official-docs-cache/manifest.json`: suite-scoped URL, owner, API version, response metadata, path, and SHA-256 provenance;
 - `official-docs-cache/responses/<sha256>.body`: the exact bounded bytes used for replay;
@@ -65,11 +71,33 @@ Official sites can change during a matrix. The suite uses a concurrency-safe fir
 
 Suite audit checks docs trace protocol and sequence, split call counts, and every successful fetch hash and byte length against the suite cache body. Semantic state grading, minimum business-call diagnostics, mutation analysis, and redundant-call detection continue to use only the provider trace.
 
-Each instance retains its original `provider_api` call limit. Secure mode adds a separately enforced allowance of eight `provider_docs` calls and increases the model adapter's combined ceiling by the same amount, so normal documentation reads do not consume the business API budget.
+The active ArgaBench v1 runner uses the same local candidate-safe gateway but a
+different cache and budget contract: 160 `provider_api` calls, 40
+`provider_docs` calls, and a 1,800-second model timeout. Its first-fetch cache is
+shared only across tasks within one profile process; it is not persisted or
+shared across profiles or independent repeats. The per-trial official-docs
+trace is retained, but the current ArgaBench matrix cannot claim one immutable
+documentation body across every model and repeat.
+
+The retained development-pilot runner instead keeps each instance's authored
+`provider_api` limit and adds eight `provider_docs` calls. Its persistent suite
+cache provides the cross-model/repeat replay behavior described above.
 
 ## Running and feature gates
 
-Secure local routing and official docs are on by default:
+Secure local routing and official docs are on by default in ArgaBench v1:
+
+```bash
+uv run python scripts/run_argabench_40.py \
+  --output runs/argabench-40-fable-5-high \
+  --profile fable-5-high \
+  --task CRM-03
+```
+
+Run the complete three-repeat matrix with
+`scripts/run_argabench_model_repeats.py`; see
+[running experiments](running-experiments.md). The generic commands below are
+for the retained development pilot:
 
 ```bash
 uv run arga-bench run-instance <instance-id> --model <model-id>
@@ -85,8 +113,11 @@ uv run arga-bench run-matrix development_pilot_48_v1 \
   --arga-candidate-safe-profile
 ```
 
-The flag is deliberately opt-in until that external deployment is confirmed. Local gateway enforcement remains active without it.
+That flag exists on the generic development-pilot runner and is deliberately
+opt-in until the external deployment is confirmed. The active ArgaBench v1
+runner always enables its local mediated gateway and does not currently expose
+the server-side flag.
 
 ## Tradeoffs
 
-Live official retrieval keeps the benchmark honest about API discovery and avoids committing third-party documentation copies. The suite snapshot makes comparisons within and across resumed runs reproducible, but a newly created suite may see a newer official page. Reports should retain the catalog review date, API version label, retrieval timestamp, ETag or Last-Modified when supplied, and content SHA-256. A future fully offline leaderboard can pre-populate the same snapshot format from reviewed official mirrors without changing the candidate tool contract.
+Live official retrieval keeps the benchmark honest about API discovery and avoids committing third-party documentation copies. The development-pilot suite snapshot makes comparisons within and across resumed runs reproducible, but a newly created suite may see a newer official page. ArgaBench v1 currently has only the weaker per-profile cache described above. Reports should retain the catalog review date, API version label, retrieval timestamp, ETag or Last-Modified when supplied, and content SHA-256. A future fully offline benchmark can pre-populate the same snapshot format from reviewed official mirrors without changing the candidate tool contract.
