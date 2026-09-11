@@ -42,7 +42,7 @@ _TASK_HEADING = re.compile(r"^### ([A-Z]+-\d{2}) — ")
 _SEMANTIC_OUTCOMES = frozenset({"pass", "fail", "unsafe", "evidence_gap"})
 _REPAIRED_TOTAL_TOOL_CALL_LIMIT = 200
 _REPAIRED_MODEL_TIMEOUT_SECONDS = 1_800
-_EXPECTED_PROFILE_COUNT = 32
+_EXPECTED_PROFILE_COUNT = 37
 _RETRYABLE_TERMINAL_REASONS = frozenset({"output_limit_exceeded", "refused", "timed_out", "tool_limit_exceeded"})
 _SITE_REQUIRED_METRICS = (
     "tool_calls",

@@ -145,7 +145,7 @@ def _fake_classification(
         "protocol": ARGABENCH_MATRIX_CLASSIFICATION_PROTOCOL,
         "classification_policy": {"fail_closed": True},
         "matrix_integrity_issues": [],
-        "totals": {"scheduled_attempts": 1280},
+        "totals": {"scheduled_attempts": 1480},
         "attempts": attempts,
     }
 
@@ -261,7 +261,7 @@ def test_orchestrator_normalizes_all_slot_classes_and_unsafe_precedence(tmp_path
     )
 
     assert report["protocol"] == ARGABENCH_SEMANTIC_REPORT_PROTOCOL
-    assert len(report["attempts"]) == 1280
+    assert len(report["attempts"]) == 1480
     mixed = {attempt["task_id"]: attempt for attempt in report["attempts"] if attempt["profile_id"] == mixed_profile}
     assert mixed["IT-01"]["semantic_outcome"] == "pass"
     assert mixed["IT-02"]["semantic_outcome"] == "fail"

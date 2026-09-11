@@ -58,8 +58,8 @@ according to the selected profile. A complete matrix needs all three. The
 current per-trial ceilings are 160 provider calls, 40 official-documentation
 calls, and 1,800 seconds.
 
-Run the 32-profile, 40-task matrix for three independent repeats with fresh
-twins (3,840 scheduled trials):
+Run the 37-configuration, 40-task matrix for three independent repeats with fresh
+twins (4,440 scheduled trials):
 
 ```bash
 uv run python scripts/run_argabench_model_repeats.py \

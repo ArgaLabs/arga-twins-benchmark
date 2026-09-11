@@ -255,7 +255,7 @@ def test_classifier_uses_selected_matrix_tasks(tmp_path: Path) -> None:
         {
             "task_ids": selected,
             "scenarios_per_profile": 2,
-            "total_trials": 64,
+            "total_trials": 74,
         }
     )
     _write_json(matrix_dir / "matrix-config.json", config)
@@ -276,7 +276,7 @@ def test_classifier_uses_selected_matrix_tasks(tmp_path: Path) -> None:
 
     assert report["task_ids"] == selected
     assert report["task_count"] == 2
-    assert len(report["attempts"]) == 64
+    assert len(report["attempts"]) == 74
     assert {attempt["task_id"] for attempt in report["attempts"]} == set(selected)
 
 

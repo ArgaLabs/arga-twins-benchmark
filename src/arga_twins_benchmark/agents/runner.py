@@ -20,9 +20,11 @@ SUPPORTED_MODEL_IDS = (
     "gpt-5.6-sol",
     "gpt-5.6-terra",
     "gpt-5.6-luna",
+    "gpt-6-astra",
     "gemini-3.1-pro-preview",
     "gemini-3.5-flash",
     "gemini-3.7-flash",
+    "gemini-3.8-flash",
 )
 
 
@@ -63,7 +65,7 @@ async def invoke_model(
             thinking_mode=cast(Literal["adaptive", "model_default"], thinking),
             endpoint=os.environ.get("ANTHROPIC_MESSAGES_URL", "https://api.anthropic.com/v1/messages"),
         )
-    elif model_id in {"gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"}:
+    elif model_id in {"gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-6-astra"}:
         if api_effort not in {"low", "medium", "high", "xhigh", "max"}:
             raise ValueError(f"unsupported OpenAI effort {api_effort!r}")
         api_key = os.environ.get("OPENAI_API_KEY", "")
@@ -72,13 +74,13 @@ async def invoke_model(
         adapter = OpenAIResponsesAdapter(
             api_key=api_key,
             model_id=cast(
-                Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"],
+                Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-6-astra"],
                 model_id,
             ),
             effort=cast(Literal["low", "medium", "high", "xhigh", "max"], api_effort),
             endpoint=os.environ.get("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses"),
         )
-    elif model_id in {"gemini-3.1-pro-preview", "gemini-3.5-flash", "gemini-3.7-flash"}:
+    elif model_id in {"gemini-3.1-pro-preview", "gemini-3.5-flash", "gemini-3.7-flash", "gemini-3.8-flash"}:
         if api_effort != "default" or thinking != "model_default":
             raise ValueError("Gemini benchmark profiles must use provider-default thinking")
         api_key = os.environ.get("GEMINI_API_KEY", "")
@@ -91,6 +93,7 @@ async def invoke_model(
                     "gemini-3.1-pro-preview",
                     "gemini-3.5-flash",
                     "gemini-3.7-flash",
+                    "gemini-3.8-flash",
                 ],
                 model_id,
             ),

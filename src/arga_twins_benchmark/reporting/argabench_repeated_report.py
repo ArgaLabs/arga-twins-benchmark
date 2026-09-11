@@ -19,7 +19,7 @@ from arga_twins_benchmark.reporting.argabench_semantic_report import (
 ARGABENCH_REPEATED_REPORT_PROTOCOL = "argabench-repeated-semantic-report/1"
 ARGABENCH_REPEATED_PUBLICATION_MANIFEST_PROTOCOL = "argabench-repeated-publication-manifest/1"
 
-_EXPECTED_PROFILE_COUNT = 32
+_EXPECTED_PROFILE_COUNT = 37
 _EXPECTED_REPEATS = (1, 2, 3)
 _SEMANTIC_OUTCOMES = frozenset({"pass", "fail", "unsafe"})
 _USAGE_FIELDS = (

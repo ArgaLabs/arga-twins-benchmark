@@ -5,6 +5,8 @@ multiple software services while producing the required outcome and avoiding
 unsafe side effects. ArgaBench v1 contains 40 deterministic tasks across IT,
 CRM, marketing, developer, and e-commerce workflows, executed against
 Arga-hosted service twins and graded from trusted before-and-after state.
+The published release covers **37 configurations × 40 tasks × 3 repeats = 4,440 trials**.
+Each configuration is a model paired with its reasoning or thinking settings.
 
 The task index is in
 [`benchmark/argabench_40/TASKS.md`](benchmark/argabench_40/TASKS.md), and the
@@ -24,7 +26,7 @@ uv run pytest -q
 ## Reproduce the results
 
 Install and authenticate the Arga CLI, then provide an Arga API key and the
-model-provider keys required by the 32-profile matrix:
+model-provider keys required by the 37-configuration matrix:
 
 ```bash
 arga login
@@ -37,7 +39,7 @@ export GEMINI_API_KEY='<gemini-key>'
 ```
 
 Stage and verify the exact benchmark Scenarios, preflight the model profiles,
-and run three independent repeats. The full run schedules 3,840 trials and
+and run three independent repeats. The full run schedules 4,440 trials and
 incurs Arga and model-provider usage:
 
 ```bash
