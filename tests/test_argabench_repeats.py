@@ -40,14 +40,14 @@ def test_repeat_plan_contains_two_independent_trials_for_all_profiles() -> None:
     profiles = runner.matrix.load_profiles()
     plan = runner.build_job_plan(profiles, runner.repeat_numbers(2, 2))
 
-    assert len(plan) == 64
+    assert len(plan) == 74
     assert {repeat for repeat, _profile in plan} == {2, 3}
     counts: dict[str, int] = {}
     for _repeat, profile in plan:
         profile_id = str(profile["id"])
         counts[profile_id] = counts.get(profile_id, 0) + 1
     assert set(counts.values()) == {2}
-    assert sum(profile["provider"] == "google" for _repeat, profile in plan) == 6
+    assert sum(profile["provider"] == "google" for _repeat, profile in plan) == 8
 
 
 def test_matrix_includes_gemini_3_7_flash_default_profile() -> None:
@@ -81,7 +81,7 @@ def test_repeat_roots_record_identity_and_reject_changed_resume(tmp_path: Path) 
 
     payload = runner.json.loads((root / "matrix-config.json").read_text())
     assert payload["benchmark_repeat"] == 2
-    assert payload["total_trials"] == 1_280
+    assert payload["total_trials"] == 1_480
     assert payload["google_profile_concurrency_across_repeats"] == 1
 
     resume_args = _args(args.output, resume=True)
@@ -116,4 +116,4 @@ def test_repeat_config_counts_selected_tasks(tmp_path: Path) -> None:
 
     assert payload["task_ids"] == ["it-03", "it-06"]
     assert payload["scenarios_per_profile"] == 2
-    assert payload["total_trials"] == 64
+    assert payload["total_trials"] == 74

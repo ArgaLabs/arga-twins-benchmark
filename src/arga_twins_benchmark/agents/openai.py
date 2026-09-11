@@ -32,7 +32,7 @@ class OpenAIResponsesAdapter:
         self,
         *,
         api_key: str,
-        model_id: Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] = "gpt-5.6-sol",
+        model_id: Literal["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-6-astra"] = "gpt-5.6-sol",
         effort: Literal["low", "medium", "high", "xhigh", "max"] = "high",
         client: httpx.AsyncClient | None = None,
         endpoint: str = OPENAI_RESPONSES_URL,
@@ -203,9 +203,9 @@ class OpenAIResponsesAdapter:
                                 and not isinstance(cached_tokens, bool)
                                 and cached_tokens > 0
                             ):
-                                usage["cache_read_input_tokens"] = int(
-                                    usage.get("cache_read_input_tokens", 0) or 0
-                                ) + cached_tokens
+                                usage["cache_read_input_tokens"] = (
+                                    int(usage.get("cache_read_input_tokens", 0) or 0) + cached_tokens
+                                )
                     if not isinstance(response_status, str) or not isinstance(output_value, list):
                         events.append({"type": "invalid_response", "reason": "missing_status_or_output"})
                         return result(
