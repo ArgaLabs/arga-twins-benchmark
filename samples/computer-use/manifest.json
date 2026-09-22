@@ -105,5 +105,6 @@
     "All prompts encourage Computer Use and permit APIs; outcomes do not require an API-call sequence."
   ],
   "companion_twin_pr": "https://github.com/ArgaLabs/validation-server/pull/1083",
-  "companion_twin_commit": "c1653022"
+  "companion_twin_commit": "c1653022",
+  "sample_source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14"
 }

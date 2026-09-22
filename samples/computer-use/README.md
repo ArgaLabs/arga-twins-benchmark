@@ -12,6 +12,8 @@ Five synthetic, multi-step ArgaBench tasks with browser workspaces and provider 
 
 The prompts encourage Computer Use for exploration and visual confirmation, and permit APIs for precise work. They do not prescribe API routes or a hidden call sequence. You can evaluate a browser-only, API-only, or mixed agent against the same state-based outcome checks. Modality is an experiment setting, not a bonus added to task scores.
 
+Source: [sample PR #14](https://github.com/ArgaLabs/arga-twins-benchmark/pull/14), paired with [twin PR #1083](https://github.com/ArgaLabs/validation-server/pull/1083).
+
 ## Run
 
 Install Python 3.12+, [uv](https://docs.astral.sh/uv/), and the authenticated Arga CLI. From the extracted package root:
