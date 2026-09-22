@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "clean_locked_install": "pass",
+    "focused_tests_clean_environment": {
+      "passed": 93
+    },
+    "full_benchmark_tests": {
+      "passed": 1069,
+      "skipped": 26
+    },
+    "package_source_secret_scan": {
+      "passed": true,
+      "files_scanned": 108
+    },
+    "final_zip_created": false
+  },
+  "limits": "Frontend parity and deployment of subsequent frontend changes remain separate gates."
+}

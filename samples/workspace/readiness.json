@@ -53,32 +53,57 @@
     {
       "id": "rollout.WKS-01",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "5a4701026cd2f4d82289501e5f3d676c6f8852fc0735036d84c862551e844dbf"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-02",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "5a4701026cd2f4d82289501e5f3d676c6f8852fc0735036d84c862551e844dbf"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-03",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "5a4701026cd2f4d82289501e5f3d676c6f8852fc0735036d84c862551e844dbf"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-04",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "5a4701026cd2f4d82289501e5f3d676c6f8852fc0735036d84c862551e844dbf"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-05",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "5a4701026cd2f4d82289501e5f3d676c6f8852fc0735036d84c862551e844dbf"
+        }
+      ]
     },
     {
       "id": "deployment",
@@ -93,5 +118,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": null
+  "sample_tree_sha256": "7a198d3444691a32393a09f2d4b0273bb30096887092d112467c36828bc4f138"
 }

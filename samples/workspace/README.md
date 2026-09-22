@@ -14,6 +14,8 @@ Five new, synthetic operational tasks inspired by ArgaBench. These are adaptatio
 
 This revision is under verification. The final ZIP is blocked by readiness.json until all eight frontend audits (including Notion, Linear and Stripe), five hosted candidate rollouts, deployment revision checks and package checks have inspected evidence. The previous ZIP is not the final deliverable for this request.
 
+Production API rollouts for all five current tasks completed on 22 September 2026 with passing business outcomes, structured facts, side-effect checks and confirmed cleanup. The evidence preserves the original WKS-05 failure, the clarified task's rerun, and regrading caused by overly strict text parsing. These are single-model functional checks, not a model comparison or browser-agent coverage. Full eight-twin frontend parity and the final ZIP remain open. See `evidence/hosted-2026-09-22.json` for provenance.
+
 ## Operator workflow
 
 Use Python 3.12, uv and the authenticated Arga CLI. Keep the Arga API key in the operator environment or an external mode-0600 JSON file with exactly ARGA_API_KEY and ARGA_API_URL.
@@ -25,6 +27,8 @@ uv run --extra computer-use python -m arga_twins_benchmark.computer_use.session 
 ```
 
 Provisioning, durable Scenario reuse, reset and teardown go through CLI JSON commands. Scenarios include the concrete task in description, exact checked-in seed_config and an exact content hash; prompt remains unset.
+
+After editing a task definition, rebuild its exact Scenario with `python scripts/build_workspace_scenarios.py`. Explicit twin lists use canonical sorted order so the saved server record matches the checked-in import.
 
 Give the candidate only candidate.json and its local workspace/tool/completion URLs. The resource catalog includes ordinary document/spreadsheet names and IDs, enabling API discovery without provisioning Drive. Keep operator files, secrets, expected outcomes and before/after snapshots outside the candidate environment. Browser actions and provider APIs change the same records. Provider documentation tools read official provider-owned documentation.
 
@@ -44,5 +48,7 @@ Supply the chosen model's API key in that process's environment. Do not give it 
 A timeout, tool-limit termination or refusal does not submit a scored success/failure. Preserve its model-invocation.json, abort the operator session with Ctrl-C to confirm cleanup, and repeat the model/task pair once from the same exact Scenario seed under the documented ceilings. Preserve both attempts and link retry provenance; do not silently replace the original attempt. The model adapter allows 350 total tool calls and 35 minutes by default; the gateways allow 250 business API and 60 documentation calls.
 
 Text checks recognize whole phrases and equivalent 12/24-hour times and UTC offsets. Negated required status labels fail. Distinct authorized comments or messages may jointly contain the required facts; duplicate business content remains unsafe. These deterministic contracts are bounded normalization rules, not an unrestricted natural-language semantic evaluator.
+
+Structured facts accept a nested `result_facts` object or a JSON object directly labeled `result_facts`. Status descriptions can include an accountable owner's name and equivalent phrasing. Exact leading identifiers may carry a parenthesized explanation; a different identifier or numeric amount does not pass. Clock mentions may follow an ISO date separator.
 
 The sample contains a manifest, five prompts, five exact seed files, five Scenario definitions, executable outcome contracts, the runner/proxy and its tests. It contains no live credentials. Task fixtures and grading contracts belong to the operator, not the candidate.

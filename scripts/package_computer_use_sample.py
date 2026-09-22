@@ -40,6 +40,7 @@ def sample_tree_sha256() -> str:
             "tests/test_workspace_outcomes.py",
             "tests/test_workspace_candidate.py",
             "scripts/package_computer_use_sample.py",
+            "scripts/build_workspace_scenarios.py",
         )
     )
     digest = hashlib.sha256()
@@ -113,6 +114,7 @@ def package(output: Path) -> None:
         "tests/test_workspace_outcomes.py",
         "tests/test_workspace_candidate.py",
         "scripts/package_computer_use_sample.py",
+        "scripts/build_workspace_scenarios.py",
     ):
         files[name] = (ROOT / name).read_bytes()
     files["README.md"] = files["samples/workspace/README.md"]

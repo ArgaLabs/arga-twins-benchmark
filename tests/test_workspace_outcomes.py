@@ -229,6 +229,8 @@ def test_negated_blocker_does_not_pass_keyword_contract(text: str) -> None:
 
 def test_equivalent_clock_and_offset_representations() -> None:
     assert _satisfies({"text": "Readiness review at 7 PM UTC."}, {"contains_all": ["19:00"]})
+    assert _satisfies({"text": "Readiness review: 2026-09-24T19:00-19:30 UTC."}, {"contains_all": ["19:00"]})
+    assert not _satisfies({"text": "Readiness review: 2026-09-24T119:00 UTC."}, {"contains_all": ["19:00"]})
     assert _equal("2026-09-24 7:00 PM UTC", "2026-09-24 19:00")
     assert _equal("2026-09-24T12:00:00-07:00", "2026-09-24T19:00:00Z")
     assert not _equal("2026-09-24T19:00:00-07:00", "2026-09-24T19:00:00Z")

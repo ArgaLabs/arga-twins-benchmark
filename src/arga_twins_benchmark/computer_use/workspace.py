@@ -289,6 +289,8 @@ def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
         alternatives += [f"{hour % 12 or 12}:{minute:02d} {suffix}", f"{hour % 12 or 12}:{minute:02d}{suffix}"]
         if minute == 0:
             alternatives += [f"{hour % 12 or 12} {suffix}", f"{hour % 12 or 12}{suffix}"]
+    if clock:
+        text = re.sub(r"(\b\d{4}-\d{2}-\d{2})[Tt](?=\d{2}:\d{2}\b)", r"\1 ", text)
     normalized = _normal(text)
     for alternative in alternatives:
         phrase = _normal(alternative)
