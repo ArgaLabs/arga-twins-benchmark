@@ -26,7 +26,7 @@ def sample_tree_sha256() -> str:
             for path in (ROOT / folder).rglob("*")
             if path.is_file()
             and not path.is_symlink()
-            and path.suffix in {".py", ".yaml", ".json", ".md", ".txt", ".png", ".jpg", ".webp"}
+            and path.suffix in {".py", ".yaml", ".json", ".md", ".txt"}
             and "__pycache__" not in path.parts
             and path.name != "readiness.json"
             and not any(part.endswith(".egg-info") for part in path.parts)
@@ -56,7 +56,7 @@ def package_inputs() -> dict[str, bytes]:
             if (
                 path.is_file()
                 and not path.is_symlink()
-                and path.suffix in {".py", ".yaml", ".json", ".md", ".txt", ".png", ".jpg", ".webp"}
+                and path.suffix in {".py", ".yaml", ".json", ".md", ".txt"}
                 and "__pycache__" not in path.parts
                 and not any(p.endswith(".egg-info") for p in path.parts)
             ):
@@ -122,7 +122,7 @@ def package(output: Path) -> None:
                 not path.is_relative_to(evidence_root)
                 or not path.is_file()
                 or path.is_symlink()
-                or path.suffix not in {".json", ".md", ".txt", ".png", ".jpg", ".webp"}
+                or path.suffix not in {".json", ".md", ".txt"}
             ):
                 raise ValueError(f"Missing release evidence for {check['id']}")
             if hashlib.sha256(path.read_bytes()).hexdigest() != evidence["sha256"]:

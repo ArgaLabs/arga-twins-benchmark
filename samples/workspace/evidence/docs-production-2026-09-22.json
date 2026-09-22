@@ -46,11 +46,7 @@
       }
     }
   },
-  "artifacts_sha256": {
-    "docs-production-desktop.png": "a5debc4357d5eba7118d3f029449715b55470294cbf92ee82a540ea8201574c3",
-    "docs-production-mobile.png": "1d1b9d7a984d3306ac09831f015a091103e64649aa64d4a93f0c51bf9ead1593",
-    "docs-production-mobile-link.png": "ca6d5840ec8e66d6b0e36fd0ee0ee9288a5f013032e84944bbb3a082d2f0acf4"
-  },
+  "artifacts_sha256": {},
   "cleanup_confirmed": true,
   "operator_evidence_directory": "runs/hosted/docs-production-cua-smoke",
   "operator_artifacts_sha256": {
