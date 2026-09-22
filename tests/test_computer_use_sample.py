@@ -1,0 +1,235 @@
+from __future__ import annotations
+
+import argparse
+import asyncio
+import json
+from pathlib import Path
+from typing import Any
+from unittest.mock import AsyncMock
+
+import httpx
+import pytest
+
+from arga_twins_benchmark.computer_use.proxy import BrowserProxy, allowed_path
+from arga_twins_benchmark.computer_use.session import SAMPLES, load_task
+
+
+@pytest.mark.parametrize("cleanup_fails", [False, True])
+def test_session_handoff_submission_and_cleanup(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, cleanup_fails: bool
+) -> None:
+    """Exercise real local HTTP workspaces without provisioning or paid model calls."""
+    from arga_twins_benchmark.arga_cli import ProvisionedTwin, TwinRun
+    from arga_twins_benchmark.computer_use import session
+    from arga_twins_benchmark.evaluation.state_capture import TrustedStateSnapshot
+    from arga_twins_benchmark.lifecycle import SavedScenario
+
+    run = TwinRun(
+        "synthetic-run",
+        "ready",
+        {p: ProvisionedTwin(p, "https://synthetic.invalid") for p in load_task("DEV-01")["twins"]},
+        True,
+        raw={"run_id": "synthetic-run", "status": "ready", "twins": {}},
+    )
+    cli = AsyncMock()
+    cli.__aenter__.return_value = cli
+    cli.create_twin_run.return_value = run
+    monkeypatch.setattr(session, "SubprocessArgaCli", lambda: cli)
+    monkeypatch.setattr(
+        session,
+        "_save_compiled_scenario",
+        AsyncMock(return_value=SavedScenario("DEV-01", "synthetic-scenario", "Sample", "Sample", "synthetic", False)),
+    )
+    monkeypatch.setattr(session, "_wait_for_twin_run", AsyncMock(return_value=run))
+    capture = AsyncMock(return_value=TrustedStateSnapshot(providers={}, queries={}))
+    capturer = AsyncMock()
+    capturer.capture = capture
+
+    def make_capturer(**_: object) -> AsyncMock:
+        return capturer
+
+    monkeypatch.setattr(session, "TrustedStateCapturer", make_capturer)
+    cleanup = AsyncMock(side_effect=RuntimeError("Synthetic cleanup failure") if cleanup_fails else None)
+    cleanup.return_value = {"confirmation": {"outcome": "terminal_without_twins"}}
+    monkeypatch.setattr(session, "cleanup_twin_run", cleanup)
+
+    def fake_grade(*_: object) -> dict[str, Any]:
+        return {"assertions": []}
+
+    monkeypatch.setattr(session, "grade_argabench_fair_attempt", fake_grade)
+
+    def make_proxy(provider: str, access: dict[str, object]) -> BrowserProxy:
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(200, text="<html>Search issues</html>", headers={"content-type": "text/html"})
+            )
+        )
+        proxy = BrowserProxy(provider, access, client=client)
+        proxy.owns_client = True
+        return proxy
+
+    monkeypatch.setattr(session, "BrowserProxy", make_proxy)
+    output = tmp_path / "attempt"
+
+    async def exercise() -> None:
+        running = asyncio.create_task(
+            session.run(
+                argparse.Namespace(task="DEV-01", credentials=None, output=output, minutes=1, reset_check=False)
+            )
+        )
+        try:
+            for _ in range(100):
+                if (output / "candidate.json").exists():
+                    break
+                if running.done():
+                    await running
+                await asyncio.sleep(0.05)
+            candidate = json.loads((output / "candidate.json").read_text())
+            assert set(candidate["workspaces"]) == {"github", "linear", "slack"}
+            assert "synthetic.invalid" not in json.dumps(candidate)
+            async with httpx.AsyncClient() as client:
+                assert (await client.get(candidate["workspaces"]["linear"])).status_code == 200
+                blocked = await client.post(
+                    candidate["tool_endpoint"],
+                    json={
+                        "name": "provider_api",
+                        "arguments": {"provider": "linear", "method": "GET", "path": "/admin/state"},
+                    },
+                )
+                assert blocked.status_code == 200
+                assert "error" in blocked.json()
+                response = await client.post(candidate["completion_endpoint"], json={"final_text": "Fixture complete"})
+                assert response.status_code == 200
+            if cleanup_fails:
+                with pytest.raises(RuntimeError, match="Synthetic cleanup"):
+                    await running
+            else:
+                await running
+            assert capture.await_count == 2
+            cleanup.assert_awaited_once_with("synthetic-run", arga=cli)
+            verdict = json.loads((output / "verifier.json").read_text())
+            assert verdict["outcome"] == ("infrastructure_invalid" if cleanup_fails else "pass")
+            assert verdict["reward"] == (None if cleanup_fails else 1)
+            invocation = json.loads((output / "invocation.json").read_text())
+            assert invocation["final_text"] == "Fixture complete"
+            assert len(invocation["events"]) == 1
+        finally:
+            if not running.done():
+                running.cancel()
+                await asyncio.gather(running, return_exceptions=True)
+
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/admin/state",
+        "/%61dmin/state",
+        "/%2561dmin/state",
+        "/_ui/scenarios/export",
+        "/docs",
+        "//external.test",
+        "/foo/../admin/state",
+        "/mcp",
+        "/openapi.json",
+        "/foo\\admin",
+    ],
+)
+def test_browser_boundary_rejects_control_and_discovery_paths(path: str) -> None:
+    assert not allowed_path(path)
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/",
+        "/issue/ENG-1",
+        "/ui/issues/issue-1/comments",
+        "/billing/meters",
+        "/graphql",
+        "/_ui/repos/acme/platform/pull/2/reviewers",
+        "/api/chat.postMessage",
+    ],
+)
+def test_browser_boundary_accepts_frontend_and_provider_routes(path: str) -> None:
+    assert allowed_path(path)
+
+
+def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(
+                200,
+                headers={"content-type": "text/html"},
+                text=(
+                    '<a href="https://twin.example/issue/ENG-1">Issue</a>'
+                    '<script>var token="secret-synthetic-key"</script>'
+                    "<style data-twin-control-plane>.tcp-panel{display:block}</style>"
+                    "<button data-tcp-toggle>Controls</button>"
+                    '<aside data-twin-control-plane><a href="/admin/state">State</a></aside>'
+                    '<script data-twin-control-plane>fetch("/admin/state")</script>'
+                ),
+            )
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(
+            "linear",
+            {"base_url": "https://twin.example", "env": {"LINEAR_API_KEY": "secret-synthetic-key"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.post("/ui/issues/one/comments", data={"body": "From browser"})
+            assert response.status_code == 200
+            assert seen[0].url == "https://twin.example/ui/issues/one/comments"
+            assert seen[0].headers["authorization"] == "secret-synthetic-key"
+            assert "secret-synthetic-key" not in response.text and "https://twin.example" not in response.text
+            assert "http://local.test/issue/ENG-1" in response.text
+            assert "Controls" not in response.text and "/admin/state" not in response.text
+            assert (await browser.get("/admin/state")).status_code == 403
+            assert (await browser.post("/graphql", json={"query": "{__schema{types{name}}}"})).status_code == 403
+            assert (await browser.post("/ui/issues", headers={"origin": "http://attacker.test"})).status_code == 403
+            assert len(seen) == 1
+            proxy.accepting = False
+            assert (await browser.get("/")).status_code == 410
+
+    asyncio.run(exercise())
+
+
+def test_five_real_argabench_tasks_have_both_modalities_and_exact_seed_files() -> None:
+    manifest = json.loads((SAMPLES / "manifest.json").read_text())
+    assert len(manifest["tasks"]) == 5
+    assert all(t["source_task"] == t["id"] and t["id"] != "SMOKE-01" for t in manifest["tasks"])
+    for item in manifest["tasks"]:
+        task = load_task(item["id"])
+        folder = SAMPLES / "tasks" / item["id"].lower()
+        assert task["minimum_semantic_steps"] >= 6
+        assert "Computer Use" in task["prompt"] and "provider APIs" in task["prompt"]
+        assert "through the provisioned provider_api" not in task["prompt"]
+        assert task["interaction_modes"] == ["computer_use", "api", "mixed"]
+        assert task["seed_config"] == json.loads((folder / "seed_config.json").read_text())
+        scenario = json.loads((folder / "scenario.json").read_text())
+        assert scenario["seed_config"] == task["seed_config"] and "prompt" not in scenario
+        assert scenario["description"] == task["prompt"] and len(scenario["name"]) <= 80
+
+
+def test_unknown_task_does_not_read_arbitrary_paths() -> None:
+    with pytest.raises(ValueError):
+        load_task("../../anything")
+
+
+def test_scenario_hash_matches_seed_and_description() -> None:
+    import hashlib
+
+    for path in (SAMPLES / "tasks").glob("*/scenario.json"):
+        scenario = json.loads(path.read_text())
+        tags = scenario.pop("tags")
+        digest = hashlib.sha256(json.dumps(scenario, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        assert "content-sha256:" + digest in tags

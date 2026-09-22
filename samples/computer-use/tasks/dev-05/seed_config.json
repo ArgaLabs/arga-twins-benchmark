@@ -1,0 +1,227 @@
+{
+  "github": {
+    "orgs": [
+      {
+        "login": "acme",
+        "name": "Acme"
+      }
+    ],
+    "repos": [
+      {
+        "default_branch": "main",
+        "description": "Operational service configuration and change history",
+        "files": [
+          {
+            "content": "# Platform services\n\nCurrent release artifact: settlement-state release batch paycore-2026.08-r17.\n",
+            "path": "README.md"
+          },
+          {
+            "content": "/db/migrations/** @data-platform\n",
+            "path": "CODEOWNERS"
+          },
+          {
+            "content": "* @platform-reviewers\n/db/migrations/** @data-platform\n/db/migrations/billing/** @billing-storage\n/db/migrations/archive/** @schema-archive\n/db/generated/** @sdk-automation\n",
+            "path": ".github/CODEOWNERS"
+          },
+          {
+            "content": "/docs/** @docs-reviewers\n",
+            "path": "docs/CODEOWNERS"
+          },
+          {
+            "content": "{\"batch\":\"paycore-2026.08-r17\",\"artifact_class\":\"migration\",\"fingerprint\":\"c91d-7a40\",\"tracker\":\"ENG-1\"}\n",
+            "path": "release/batches/paycore-2026.08-r17.json"
+          },
+          {
+            "content": "{\"batch\":\"paycore-2026.08-r16\",\"artifact_class\":\"migration\",\"fingerprint\":\"c91d-7a40\",\"tracker\":\"ENG-9\"}\n",
+            "path": "release/batches/paycore-2026.08-r16.json"
+          }
+        ],
+        "issues": [
+          {
+            "body": "Deployment handoff for artifact class migration; tracker ENG-1.",
+            "title": "Release batch paycore-2026.08-r17"
+          },
+          {
+            "body": "Prior deployment handoff; tracker ENG-9.",
+            "state": "closed",
+            "title": "Release batch paycore-2026.08-r16"
+          }
+        ],
+        "name": "platform-services",
+        "owner": "acme",
+        "private": true,
+        "prs": [
+          {
+            "base": "main",
+            "body": "Tracker ENG-1. Rollout batch paycore-2026.08-r17. Artifact class migration. Fingerprint c91d-7a40.",
+            "files": [
+              {
+                "content": "ALTER TYPE settlement_state ADD VALUE 'pending_review';\n",
+                "path": "db/migrations/billing/20260813_settlement_hold.sql"
+              }
+            ],
+            "head": "change/settlement-lifecycle-r17",
+            "merged": false,
+            "state": "open",
+            "title": "Extend settlement lifecycle"
+          },
+          {
+            "base": "main",
+            "body": "Tracker ENG-1. Rollout batch paycore-2026.08-r17. Artifact class generated-schema. Fingerprint c91d-7a40.",
+            "files": [
+              {
+                "content": "-- generated settlement types\n",
+                "path": "db/generated/billing/settlement_types.sql"
+              }
+            ],
+            "head": "change/settlement-sdk-r17",
+            "merged": false,
+            "state": "open",
+            "title": "Regenerate settlement SDK types"
+          },
+          {
+            "base": "main",
+            "body": "Tracker ENG-1. Rollout batch paycore-2026.08-r17. Artifact class migration. Fingerprint c91d-7a04.",
+            "files": [
+              {
+                "content": "ALTER TYPE settlement_state ADD VALUE 'memo_pending';\n",
+                "path": "db/migrations/billing/20260813_settlement_memo.sql"
+              }
+            ],
+            "head": "change/settlement-memo-r17",
+            "merged": false,
+            "state": "open",
+            "title": "Add settlement memo state"
+          },
+          {
+            "base": "main",
+            "body": "Tracker ENG-9. Rollout batch paycore-2026.08-r16. Artifact class migration. Fingerprint c91d-7a40.",
+            "files": [
+              {
+                "content": "-- archived migration\n",
+                "path": "db/migrations/archive/20260701_settlement.sql"
+              }
+            ],
+            "head": "change/settlement-archive-r16",
+            "merged": false,
+            "state": "open",
+            "title": "Archive legacy settlement state"
+          },
+          {
+            "base": "main",
+            "body": "Tracker ENG-1. Rollout batch paycore-2026.08-r17. Documentation only.",
+            "files": [
+              {
+                "content": "# Settlement rollout\n",
+                "path": "docs/settlement-rollout.md"
+              }
+            ],
+            "head": "docs/settlement-r17",
+            "merged": false,
+            "state": "open",
+            "title": "Document settlement rollout"
+          }
+        ]
+      }
+    ],
+    "users": [
+      {
+        "email": "ops-maintainer@acme.example",
+        "login": "ops-maintainer",
+        "name": "Operations Maintainer"
+      },
+      {
+        "email": "release-reviewer@acme.example",
+        "login": "release-reviewer",
+        "name": "Release Reviewer"
+      }
+    ]
+  },
+  "linear": {
+    "comments": [],
+    "issues": [
+      {
+        "description": "Release batch paycore-2026.08-r17 is waiting at merge readiness. The deployment handoff records artifact class migration and fingerprint c91d-7a40. Last CI status: green. No code-owner review was observed at handoff.",
+        "priority": 2,
+        "project": "Current operations",
+        "team_key": "ENG",
+        "title": "Settlement-state rollout gate"
+      },
+      {
+        "description": "Release batch paycore-2026.08-r17 also carries a generated-schema artifact with fingerprint c91d-7a40.",
+        "priority": 3,
+        "project": "Current operations",
+        "team_key": "ENG",
+        "title": "Settlement SDK regeneration"
+      },
+      {
+        "description": "Release batch paycore-2026.08-r16 used migration fingerprint c91d-7a40 and is complete.",
+        "priority": 4,
+        "project": "Current operations",
+        "team_key": "ENG",
+        "title": "Prior settlement rollout"
+      }
+    ],
+    "projects": [
+      {
+        "name": "Current operations",
+        "state": "started",
+        "team_key": "ENG"
+      }
+    ],
+    "teams": [
+      {
+        "key": "ENG",
+        "name": "Developer Team"
+      }
+    ]
+  },
+  "slack": {
+    "channels": [
+      {
+        "messages": [
+          {
+            "text": "the settlement-state rollout for release batch paycore-2026.08-r17 is green, but its review request keeps bouncing between data-platform and billing storage. Several open pull requests mention the same tracker, and the team cannot afford to block the wrong one.",
+            "user": "morgan-yu"
+          },
+          {
+            "text": "paycore-2026.08-r17 handoff: artifact class=migration; fingerprint=c91d-7a40; tracker=ENG-1; CI=green.",
+            "user": "release-bot"
+          },
+          {
+            "text": "The records system completed its nightly archival at 02:00 UTC.",
+            "user": "operations-coordinator"
+          },
+          {
+            "text": "The generated-schema artifact for paycore-2026.08-r17 shares tracker ENG-1 and fingerprint c91d-7a40 but is handled separately from the migration handoff.",
+            "user": "operations-coordinator"
+          }
+        ],
+        "name": "eng-reviews"
+      },
+      {
+        "messages": [
+          {
+            "text": "Facilities testing will briefly interrupt the fourth-floor guest network at 18:30.",
+            "user": "operations-coordinator"
+          }
+        ],
+        "name": "company-updates"
+      }
+    ],
+    "users": [
+      {
+        "name": "morgan-yu",
+        "real_name": "Morgan Yu"
+      },
+      {
+        "name": "operations-coordinator",
+        "real_name": "Operations Coordinator"
+      },
+      {
+        "name": "release-bot",
+        "real_name": "Release Bot"
+      }
+    ]
+  }
+}

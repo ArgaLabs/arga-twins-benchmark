@@ -1,0 +1,5 @@
+Samira Khan from on-call engineering just posted in the #eng-incidents Slack channel: checkout requests began failing after the latest payments-api deployment. Two pull requests mention the same error code, and one Linear incident is already linked to a resolved staging failure.
+
+You're the software incident responder. Pick this up and handle it in the systems we operate. Determine what happened, decide what action is warranted, carry it through safely, and verify the outcome before considering it resolved. Do not merge, deploy, or rewrite source unless the available evidence clearly authorizes it. Keep the people relying on the result informed.
+
+Use the available Computer Use tools to inspect the service frontends, follow the evidence, and verify the result visually. You can also use the provider APIs when useful for precise lookups or changes. Browser and API actions operate on the same records; choose either or combine them. Stay within the provisioned services and the authorized business scope.
