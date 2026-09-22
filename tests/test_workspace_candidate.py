@@ -91,3 +91,11 @@ def test_candidate_requires_one_portal_origin(tmp_path: Path):
     payload["completion_endpoint"] = "http://127.0.0.1:8002/complete"
     with pytest.raises(ValueError, match="share one portal"):
         asyncio.run(candidate.run_candidate(payload, model="gpt-5.6-sol", output=tmp_path / "candidate"))
+
+
+def test_local_codec_preserves_mime_unicode_and_rejects_invalid_data() -> None:
+    message = "To: owner@example.test\r\nSubject: Résumé\r\n\r\nReviewed ✓"
+    encoded = candidate.text_codec({"operation": "encode_base64url", "text": message})["text"]
+    assert candidate.text_codec({"operation": "decode_base64url", "text": encoded}) == {"text": message}
+    assert "error" in candidate.text_codec({"operation": "decode_base64url", "text": "!invalid"})
+    assert "error" in candidate.text_codec({"operation": "read_file", "text": "/etc/passwd"})
