@@ -14,6 +14,7 @@ from contextlib import contextmanager
 from html import escape
 from pathlib import Path
 from typing import Any, cast
+from urllib.parse import parse_qs
 
 import httpx
 import uvicorn
@@ -23,7 +24,7 @@ from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import Route
 
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli, TwinRun
-from arga_twins_benchmark.computer_use.proxy import BrowserProxy
+from arga_twins_benchmark.computer_use.proxy import BrowserProxy, bounded_body
 from arga_twins_benchmark.computer_use.workspace import (
     ROLES,
     grade_workspace_attempt,
@@ -228,10 +229,20 @@ async def run(args: argparse.Namespace) -> None:
             async def tool(request: Request) -> Response:
                 if not same_origin(request) or done.is_set():
                     return JSONResponse({"error": "Forbidden"}, status_code=403)
-                body = await request.json()
+                try:
+                    body = json.loads(await bounded_body(request, 1024 * 1024))
+                except (ValueError, UnicodeError):
+                    return JSONResponse({"error": "Invalid JSON"}, status_code=400)
+                if done.is_set():
+                    return JSONResponse({"error": "Rollout finished"}, status_code=410)
+                if not isinstance(body, dict):
+                    return JSONResponse({"error": "Tool request must be an object"}, status_code=400)
+                body = cast(dict[str, Any], body)
+                if not isinstance(body.get("arguments", {}), dict):
+                    return JSONResponse({"error": "Tool arguments must be an object"}, status_code=400)
                 name = body.get("name")
                 arguments = body.get("arguments", {})
-                selected = {"provider_api": gateway, "provider_docs": docs}.get(name)
+                selected = {"provider_api": gateway, "provider_docs": docs}.get(str(name))
                 if selected is None:
                     return JSONResponse({"error": "Unknown tool"}, status_code=400)
                 result = await selected.execute(arguments)
@@ -242,14 +253,23 @@ async def run(args: argparse.Namespace) -> None:
                 nonlocal final_text, finished
                 if not same_origin(request) or done.is_set():
                     return JSONResponse({"error": "Forbidden"}, status_code=403)
-                body = (
-                    await request.json()
-                    if "application/json" in request.headers.get("content-type", "")
-                    else dict(await request.form())
-                )
+                raw = await bounded_body(request, 1024 * 1024)
+                try:
+                    body = (
+                        json.loads(raw)
+                        if "application/json" in request.headers.get("content-type", "")
+                        else {key: values[-1] for key, values in parse_qs(raw.decode()).items()}
+                    )
+                except (ValueError, UnicodeError):
+                    return JSONResponse({"error": "Invalid final report"}, status_code=400)
+                if done.is_set():
+                    return JSONResponse({"error": "Rollout finished"}, status_code=410)
+                if not isinstance(body, dict):
+                    return JSONResponse({"error": "Final report must be an object"}, status_code=400)
+                body = cast(dict[str, Any], body)
                 text = body.get("final_text")
-                if not isinstance(text, str) or not text.strip():
-                    return JSONResponse({"error": "Final report required"}, status_code=400)
+                if not isinstance(text, str) or not text.strip() or len(text) > 100000:
+                    return JSONResponse({"error": "Final report must contain 1–100000 characters"}, status_code=400)
                 final_text = text
                 finished = True
                 done.set()
@@ -281,11 +301,14 @@ async def run(args: argparse.Namespace) -> None:
             try:
                 await asyncio.wait_for(done.wait(), args.minutes * 60)
             except TimeoutError:
-                pass
+                done.set()
+            # Stop every listener together, then drain all already accepted
+            # handlers before disabling proxies or taking the final snapshot.
+            for server in servers:
+                server.server.should_exit = True
+            await asyncio.gather(*(server.close() for server in servers))
             for proxy in proxies:
                 proxy.accepting = False
-            for server in reversed(servers):
-                await server.close()
             servers.clear()
             final_queries = snapshot_queries(task)
             final = await capturer.capture(payload, roles=roles, snapshot_queries=final_queries)

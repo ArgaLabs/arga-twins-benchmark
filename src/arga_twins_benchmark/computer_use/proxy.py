@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
 import re
 from typing import Any, cast
 from urllib.parse import unquote, urlsplit
 
 import httpx
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
@@ -35,8 +37,49 @@ BLOCKED = frozenset(
         "fidelity",
         "control-plane",
         "control_plane",
+        "schema",
+        "schemas",
     }
 )
+
+MAX_REQUEST_BYTES = 4 * 1024 * 1024
+MAX_RESPONSE_BYTES = 32 * 1024 * 1024
+
+
+async def bounded_body(request: Request, limit: int = MAX_REQUEST_BYTES) -> bytes:
+    length = request.headers.get("content-length")
+    if length is not None:
+        try:
+            count = int(length)
+        except ValueError as exc:
+            raise HTTPException(400, "Invalid Content-Length") from exc
+        if count < 0:
+            raise HTTPException(400, "Invalid Content-Length")
+        if count > limit:
+            raise HTTPException(413, "Request too large")
+    chunks: list[bytes] = []
+    size = 0
+    async for chunk in request.stream():
+        size += len(chunk)
+        if size > limit:
+            raise HTTPException(413, "Request too large")
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
+def introspection_query(request: Request, body: bytes) -> bool:
+    queries = request.query_params.getlist("query")
+    try:
+        payload = json.loads(body)
+    except (ValueError, UnicodeError):
+        queries.append(body.decode(errors="replace"))
+    else:
+        for item in cast(list[Any], payload) if isinstance(payload, list) else [payload]:
+            if isinstance(item, dict):
+                query = cast(dict[str, Any], item).get("query")
+                if isinstance(query, str):
+                    queries.append(query)
+    return any(re.search(r"\b__(?:schema|type)\b", query) for query in queries)
 
 
 def allowed_path(path: str) -> bool:
@@ -105,10 +148,8 @@ class BrowserProxy:
         if not allowed_path(path):
             self.events.append({"provider": self.provider, "method": request.method, "path": path, "blocked": True})
             return JSONResponse({"error": "This route is outside the provider workspace"}, status_code=403)
-        body = await request.body()
-        if len(body) > 4 * 1024 * 1024:
-            return JSONResponse({"error": "Request too large"}, status_code=413)
-        if path == "/graphql" and re.search(rb"__schema|__type\b", body):
+        body = await bounded_body(request)
+        if path.rstrip("/") == "/graphql" and introspection_query(request, body):
             return JSONResponse({"error": "Use official provider documentation"}, status_code=403)
         headers = provider_request_headers(self.provider, self.env)
         for name in ("content-type", "accept", "if-match", "idempotency-key", "notion-version"):
@@ -118,7 +159,26 @@ class BrowserProxy:
         if request.url.query:
             target += "?" + request.url.query
         try:
-            upstream = await self.client.request(request.method, target, content=body, headers=headers)
+            async with self.client.stream(request.method, target, content=body, headers=headers) as upstream:
+                chunks: list[bytes] = []
+                size = 0
+                async for chunk in upstream.aiter_bytes():
+                    size += len(chunk)
+                    if size > MAX_RESPONSE_BYTES:
+                        self.events.append(
+                            {
+                                "provider": self.provider,
+                                "method": request.method,
+                                "path": path,
+                                "status": 502,
+                                "error": "response_limit",
+                            }
+                        )
+                        return JSONResponse(
+                            {"error": "Provider response exceeds browser transfer limit"}, status_code=502
+                        )
+                    chunks.append(chunk)
+                content = b"".join(chunks)
         except httpx.HTTPError:
             self.events.append({"provider": self.provider, "method": request.method, "path": path, "status": 502})
             return JSONResponse({"error": "Provider unavailable; retry this action"}, status_code=502)
@@ -142,7 +202,6 @@ class BrowserProxy:
                 return JSONResponse({"error": "Redirect outside workspace"}, status_code=403)
             response_headers["location"] = location
         content_type = upstream.headers.get("content-type", "")
-        content = upstream.content
         if any(t in content_type for t in ("text/", "json", "javascript", "xml")):
-            content = self.sanitized(upstream.text).encode()
+            content = self.sanitized(content.decode(upstream.encoding or "utf-8", errors="replace")).encode()
         return Response(content, status_code=upstream.status_code, headers=response_headers)

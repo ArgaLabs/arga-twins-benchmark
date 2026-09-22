@@ -55,7 +55,10 @@ computer-use = [
 dev = [
     { name = "pyright" },
     { name = "pytest" },
+    { name = "python-multipart" },
     { name = "ruff" },
+    { name = "starlette" },
+    { name = "uvicorn" },
 ]
 
 [package.metadata]
@@ -74,7 +77,10 @@ provides-extras = ["computer-use"]
 dev = [
     { name = "pyright", specifier = ">=1.1.400" },
     { name = "pytest", specifier = ">=8.3.0" },
+    { name = "python-multipart", specifier = ">=0.0.20" },
     { name = "ruff", specifier = ">=0.9.0" },
+    { name = "starlette", specifier = ">=0.45" },
+    { name = "uvicorn", specifier = ">=0.34" },
 ]
 
 [[package]]

@@ -112,6 +112,16 @@ def test_package_is_blocked_before_readiness(tmp_path: Path) -> None:
     assert not destination.exists()
 
 
+@pytest.mark.parametrize("prefix", ["arga_sk_", "sk-proj-", "sk-ant-", "sk-", "ghp_", "github_pat_", "AIza"])
+def test_package_secret_scan_covers_supported_credential_formats(prefix: str) -> None:
+    source = Path(__file__).parents[1] / "scripts/package_computer_use_sample.py"
+    spec = importlib.util.spec_from_file_location("package_secret_scan", source)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.SECRET.search(prefix + "x" * 80)
+
+
 def test_html_email_has_the_same_business_meaning(tmp_path: Path) -> None:
     import base64
     from email import policy
