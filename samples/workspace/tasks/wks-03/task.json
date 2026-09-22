@@ -192,7 +192,13 @@
           "semantic_groups": [
             [
               "annual",
-              "annually"
+              "annually",
+              "12 months",
+              "twelve months",
+              "one year",
+              "1 year",
+              "12 month",
+              "twelve month"
             ]
           ]
         }
@@ -205,14 +211,22 @@
         },
         "expected": {
           "contains_all": [
+            "RN-204",
             "24",
             "30",
-            "8,640"
+            "8,640",
+            "2026-10-01"
           ],
           "semantic_groups": [
             [
               "annual",
-              "annually"
+              "annually",
+              "12 months",
+              "twelve months",
+              "one year",
+              "1 year",
+              "12 month",
+              "twelve month"
             ]
           ]
         }

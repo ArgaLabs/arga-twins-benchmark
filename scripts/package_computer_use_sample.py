@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package only the five-task sample and required runner source; never account files."""
+"""Build the operator-only five-task kit; never distribute it to candidates."""
 
 from __future__ import annotations
 
@@ -136,6 +136,8 @@ def package(output: Path) -> None:
         json.dumps(
             {
                 "name": "ArgaBench Computer Use + API sample",
+                "audience": "benchmark_operator_only",
+                "candidate_handoff": "candidate.json and the local workspace/tool/completion URLs only",
                 "contains_live_credentials": False,
                 "task_count": len(json.loads(files["manifest.json"])["tasks"]),
                 "files": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items())},

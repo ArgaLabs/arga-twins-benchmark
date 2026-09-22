@@ -288,12 +288,21 @@ def _affirmed_span(text: str, start: int, end: int) -> bool:
 
 
 def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
-    """Match whole normalized phrases; recognize equivalent clock notation.
+    """Match whole phrases, including equivalent date and clock notation.
 
     This is a deterministic text contract, not an unrestricted semantic judge.
     Negated required labels must not pass just because they contain a keyword.
     """
     alternatives = [str(term)]
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(term)):
+        try:
+            date = datetime.strptime(str(term), "%Y-%m-%d")
+        except ValueError:
+            pass
+        else:
+            for month in (date.strftime("%B"), date.strftime("%b")):
+                alternatives += [f"{month} {date.day}, {date.year}", f"{date.day} {month} {date.year}"]
+            alternatives += [date.strftime("%m/%d/%Y"), f"{date.month}/{date.day}/{date.year}"]
     clock = re.fullmatch(r"(\d{1,2}):(\d{2})", str(term))
     if clock:
         hour, minute = map(int, clock.groups())

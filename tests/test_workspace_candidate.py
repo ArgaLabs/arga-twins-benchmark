@@ -32,6 +32,17 @@ def test_candidate_boundaries_trace_and_completion(
     requests: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        assert "MUST_NOT_REACH_MODEL" not in request.content.decode()
+        assert "HIDDEN_EXPECTATIONS" not in request.content.decode()
+        assert "operator_secret" not in payload and "expected_outcomes" not in payload
+        if request.url.path == "/tools":
+            assert payload == {
+                "name": "provider_api",
+                "arguments": {"provider": "github", "method": "GET", "path": "/user"},
+            }
+        elif request.url.path == "/complete":
+            assert payload == {"final_text": '{"result_facts":{}}'}
         requests.append(request)
         return httpx.Response(200, json={"ok": True})
 

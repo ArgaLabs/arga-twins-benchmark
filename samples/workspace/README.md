@@ -16,6 +16,8 @@ This revision is under verification. The final ZIP is blocked by readiness.json 
 
 Production API rollouts for all five current tasks completed on 22 September 2026 with passing business outcomes, structured facts, side-effect checks and confirmed cleanup. The evidence preserves the original WKS-05 failure, the clarified task's rerun, and regrading caused by overly strict text parsing. These are single-model functional checks, not a model comparison or browser-agent coverage. Full eight-twin frontend parity and the final ZIP remain open. See `evidence/hosted-2026-09-22.json` for provenance.
 
+The eventual ZIP is an **operator-only benchmark kit**. It includes seeds, outcome contracts, verifier source and regression fixtures with expected state. Do not give the archive or its extracted directory to a candidate. The runner creates the separate `candidate.json` handoff for candidate access.
+
 ## Operator workflow
 
 Use Python 3.12, uv and the authenticated Arga CLI. Keep the Arga API key in the operator environment or an external mode-0600 JSON file with exactly ARGA_API_KEY and ARGA_API_URL.
