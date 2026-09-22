@@ -262,8 +262,7 @@
         "kind": "draft",
         "selector": {
           "to": "purchasing@northstar.example"
-        },
-        "maximum": 1
+        }
       }
     ],
     "forbidden_outcomes": [

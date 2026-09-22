@@ -35,6 +35,7 @@ def sample_tree_sha256() -> str:
             "uv.lock",
             "tests/test_computer_use_sample.py",
             "tests/test_workspace_outcomes.py",
+            "tests/test_workspace_candidate.py",
             "scripts/package_computer_use_sample.py",
         )
     )
@@ -107,6 +108,7 @@ def package(output: Path) -> None:
         "uv.lock",
         "tests/test_computer_use_sample.py",
         "tests/test_workspace_outcomes.py",
+        "tests/test_workspace_candidate.py",
         "scripts/package_computer_use_sample.py",
     ):
         files[name] = (ROOT / name).read_bytes()

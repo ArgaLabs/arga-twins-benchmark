@@ -292,8 +292,7 @@
         "kind": "issue_comment",
         "selector": {
           "issue_title": "Northstar production PAY-409"
-        },
-        "maximum": 1
+        }
       },
       {
         "provider": "google_sheets",
@@ -325,8 +324,7 @@
         "kind": "sent_message",
         "selector": {
           "to": "samira@acme.example"
-        },
-        "maximum": 1
+        }
       }
     ],
     "forbidden_outcomes": [

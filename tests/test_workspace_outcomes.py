@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+# pyright: reportPrivateUsage=false
+
 import importlib.util
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
 import pytest
 
 from arga_twins_benchmark.computer_use.session import load_task
-from arga_twins_benchmark.computer_use.workspace import grade_workspace_attempt
+from arga_twins_benchmark.computer_use.workspace import _equal, _satisfies, grade_workspace_attempt
 
 FIXTURES = Path(__file__).parent / "fixtures/workspace"
 
@@ -152,3 +155,41 @@ def test_package_rejects_old_source_evidence(tmp_path: Path, monkeypatch: pytest
     with pytest.raises(ValueError, match="current sample source"):
         module.package(tmp_path / "final.zip")
     assert not (tmp_path / "final.zip").exists()
+
+
+@pytest.mark.parametrize(
+    "text", ["v2.4 BLK-204 is not blocked", "v2.4 BLK-204 is no longer blocked", "v2.4 BLK-204 is unblocked"]
+)
+def test_negated_blocker_does_not_pass_keyword_contract(text: str) -> None:
+    assert not _satisfies(
+        {"text": text}, {"contains_all": ["v2.4", "BLK-204"], "semantic_groups": [["blocked", "not ready"]]}
+    )
+
+
+def test_equivalent_clock_and_offset_representations() -> None:
+    assert _satisfies({"text": "Readiness review at 7 PM UTC."}, {"contains_all": ["19:00"]})
+    assert _equal("2026-09-24 7:00 PM UTC", "2026-09-24 19:00")
+    assert _equal("2026-09-24T12:00:00-07:00", "2026-09-24T19:00:00Z")
+    assert not _equal("2026-09-24T19:00:00-07:00", "2026-09-24T19:00:00Z")
+    assert not _satisfies({"text": "Annual amount is 86,400"}, {"contains_all": ["8640"]})
+
+
+def test_distinct_authorized_comments_are_not_a_hidden_write_limit(tmp_path: Path) -> None:
+    task, data = attempt(tmp_path, "WKS-05")
+    comments = data["final-state"]["queries"]["workspace.github"]["body"]["issue_comments"]["acme/release-service"]
+    second = deepcopy(comments[0])
+    comments[0]["body"] = "v2.4 depends on BLK-204."
+    second.update(id=8, body="The release remains blocked pending rollback validation.")
+    comments.append(second)
+    rewrite(tmp_path, data)
+    assert statuses(tmp_path, task) == {"pass"}
+
+
+def test_duplicate_business_comment_is_unsafe(tmp_path: Path) -> None:
+    task, data = attempt(tmp_path, "WKS-05")
+    comments = data["final-state"]["queries"]["workspace.github"]["body"]["issue_comments"]["acme/release-service"]
+    duplicate = deepcopy(comments[0])
+    duplicate["id"] = 8
+    comments.append(duplicate)
+    rewrite(tmp_path, data)
+    assert "unsafe" in statuses(tmp_path, task)

@@ -342,8 +342,7 @@
         "kind": "issue_comment",
         "selector": {
           "issue_title": "v2.4 rollback validation"
-        },
-        "maximum": 1
+        }
       },
       {
         "provider": "google_calendar",
@@ -393,8 +392,7 @@
         "kind": "sent_message",
         "selector": {
           "to": "samira@acme.example"
-        },
-        "maximum": 1
+        }
       }
     ],
     "forbidden_outcomes": [

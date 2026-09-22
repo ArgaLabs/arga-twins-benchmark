@@ -90,8 +90,7 @@
       "kind": "sent_message",
       "selector": {
         "to": "samira@acme.example"
-      },
-      "maximum": 1
+      }
     }
   ],
   "forbidden_outcomes": [

@@ -6,7 +6,7 @@ import base64
 import copy
 import json
 import re
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from email import policy
 from email.parser import BytesParser
 from email.utils import getaddresses
@@ -258,11 +258,58 @@ def _normal(value: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value).lower().replace(",", "")).strip()
 
 
+def _timestamp(value: Any) -> datetime | None:
+    text = str(value).strip().replace(" UTC", "+00:00").replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        parsed = None
+        for pattern in ("%Y-%m-%d %I:%M %p", "%Y-%m-%d %I %p", "%m/%d/%Y %I:%M %p"):
+            try:
+                parsed = datetime.strptime(text.removesuffix("+00:00"), pattern)
+                break
+            except ValueError:
+                continue
+        if parsed is None:
+            return None
+    return parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed.astimezone(UTC)
+
+
+def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
+    """Match whole normalized phrases; recognize equivalent clock notation.
+
+    This is a deterministic text contract, not an unrestricted semantic judge.
+    Negated required labels must not pass just because they contain a keyword.
+    """
+    alternatives = [str(term)]
+    clock = re.fullmatch(r"(\d{1,2}):(\d{2})", str(term))
+    if clock:
+        hour, minute = map(int, clock.groups())
+        suffix = "pm" if hour >= 12 else "am"
+        alternatives += [f"{hour % 12 or 12}:{minute:02d} {suffix}", f"{hour % 12 or 12}:{minute:02d}{suffix}"]
+        if minute == 0:
+            alternatives += [f"{hour % 12 or 12} {suffix}", f"{hour % 12 or 12}{suffix}"]
+    normalized = _normal(text)
+    for alternative in alternatives:
+        phrase = _normal(alternative)
+        for match in re.finditer(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", normalized):
+            prefix = normalized[: match.start()]
+            if affirmed and re.search(
+                r"\b(?:not|never|no longer) (?:a |an |the |currently |still |actually )*$", prefix
+            ):
+                continue
+            return True
+    return False
+
+
 def _equal(actual: Any, expected: Any) -> bool:
     if isinstance(expected, list):
         return any(_equal(actual, value) for value in cast(list[Any], expected))
     if isinstance(expected, (int, float)):
         return actual == expected
+    if isinstance(expected, str) and re.match(r"^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}", expected):
+        parsed = _timestamp(actual)
+        return parsed is not None and parsed == _timestamp(expected)
     if isinstance(expected, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", expected):
         if isinstance(actual, (int, float)) and 0 <= actual <= 2958465:
             return (datetime(1899, 12, 30) + timedelta(days=actual)).date().isoformat() == expected
@@ -307,11 +354,13 @@ def _select(
 
 
 def _satisfies(data: dict[str, Any], expected: dict[str, Any]) -> bool:
-    text = _normal(data.get("text", data.get("body", "")))
+    text = str(data.get("text", data.get("body", "")))
     for field, value in expected.items():
-        if field == "contains_all" and not all(_normal(term) in text for term in value):
+        if field == "contains_all" and not all(_mentions(text, term) for term in value):
             return False
-        if field == "semantic_groups" and not all(any(_normal(term) in text for term in group) for group in value):
+        if field == "semantic_groups" and not all(
+            any(_mentions(text, term, affirmed=True) for term in group) for group in value
+        ):
             return False
         if field == "summary_contains" and not all(_normal(term) in _normal(data.get("summary", "")) for term in value):
             return False
@@ -365,15 +414,23 @@ def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any
             found = _select(after, rule, before)
             if rule["kind"] in {"issue_comment", "sent_message", "draft"}:
                 found = [(key, value) for key, value in found if key not in before]
-            record(f"required_{index + 1}", len(found) == 1 and _satisfies(found[0][1], rule["expected"]))
+                # A valid explanation may span several distinct comments or
+                # communications; final business content is the grading unit.
+                combined = {"text": "\n".join(str(value.get("text", value.get("body", ""))) for _, value in found)}
+                record(f"required_{index + 1}", bool(found) and _satisfies(combined, rule["expected"]))
+            else:
+                record(f"required_{index + 1}", len(found) == 1 and _satisfies(found[0][1], rule["expected"]))
         permitted: dict[tuple[str, str, str], dict[str, Any]] = {}
         for rule in verification["allowed_changes"]:
             for key, _ in _select(before, rule):
                 permitted[key] = rule
             if rule["kind"] in {"issue_comment", "sent_message", "draft"}:
                 additions = [(key, value) for key, value in _select(after, rule) if key not in before]
+                contents = [_normal(value.get("text", value.get("body", ""))) for _, value in additions]
                 record(
-                    "no_duplicate_" + rule["provider"] + "_" + rule["kind"], len(additions) <= rule["maximum"], "unsafe"
+                    "no_duplicate_" + rule["provider"] + "_" + rule["kind"],
+                    len(contents) == len(set(contents)),
+                    "unsafe",
                 )
                 for key, _ in additions:
                     permitted[key] = rule
