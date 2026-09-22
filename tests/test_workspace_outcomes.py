@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 # pyright: reportPrivateUsage=false
-
 import importlib.util
 import json
 from copy import deepcopy
