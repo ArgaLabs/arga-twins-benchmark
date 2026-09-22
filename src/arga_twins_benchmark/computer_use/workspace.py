@@ -304,7 +304,7 @@ def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
 
 def _equal(actual: Any, expected: Any) -> bool:
     if isinstance(expected, list):
-        return any(_equal(actual, value) for value in cast(list[Any], expected))
+        return any(_label_equal(actual, value) for value in cast(list[Any], expected))
     if isinstance(expected, (int, float)):
         return actual == expected
     if isinstance(expected, str) and re.match(r"^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}", expected):
@@ -319,6 +319,32 @@ def _equal(actual: Any, expected: Any) -> bool:
             except ValueError:
                 continue
     return _normal(actual) == _normal(expected)
+
+
+def _label_equal(actual: Any, expected: Any) -> bool:
+    if _equal(actual, expected):
+        return True
+    if not isinstance(actual, str) or not isinstance(expected, str):
+        return False
+    if _mentions(actual, expected, affirmed=True):
+        return True
+    # Owner qualifiers and ordinary word order do not change an approval state.
+    phrases = {
+        "pending review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
+        "unsent for review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
+        "awaiting approval": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,3}approval",
+        "pending mitigation": r"mitigation (?:is )?(?:pending|awaiting) approval",
+        "open pending approval": r"open (?:[a-z0-9]+ ){0,3}(?:pending|awaiting) approval",
+        "awaiting mitigation approval": r"(?:mitigation (?:is )?)?(?:pending|awaiting) (?:mitigation )?approval",
+    }
+    pattern = phrases.get(_normal(expected))
+    if not pattern:
+        return False
+    text = _normal(actual)
+    return any(
+        not re.search(r"\b(?:not|never|no longer) (?:currently |still |actually )*$", text[: match.start()])
+        for match in re.finditer(r"(?<!\w)" + pattern + r"(?!\w)", text)
+    )
 
 
 def _matches(data: dict[str, Any], selector: dict[str, Any]) -> bool:
@@ -406,7 +432,13 @@ def _fact_equal(actual: Any, expected: Any) -> bool:
     # Status alternatives describe business meaning, not a hidden output enum.
     # Explicit IDs, amounts and dates retain the stricter scalar comparison.
     if isinstance(expected, list) and isinstance(actual, str):
-        return any(_mentions(actual, label, affirmed=True) for label in cast(list[Any], expected))
+        return _equal(actual, expected)
+    if (
+        isinstance(expected, str)
+        and isinstance(actual, str)
+        and re.fullmatch(r"(?:[A-Z]+-\d+|v\d+(?:\.\d+)+)", expected)
+    ):
+        return actual == expected or re.fullmatch(re.escape(expected) + r"\s+\([^\n]*\)", actual) is not None
     return _equal(actual, expected)
 
 

@@ -10,7 +10,7 @@ from typing import Any
 import pytest
 
 from arga_twins_benchmark.computer_use.session import load_task
-from arga_twins_benchmark.computer_use.workspace import _equal, _satisfies, grade_workspace_attempt
+from arga_twins_benchmark.computer_use.workspace import _equal, _fact_equal, _satisfies, grade_workspace_attempt
 
 FIXTURES = Path(__file__).parent / "fixtures/workspace"
 
@@ -76,6 +76,31 @@ def test_negative_structured_status_does_not_pass(tmp_path: Path, status: str) -
     )
     rewrite(tmp_path, data)
     assert statuses(tmp_path, task) == {"pass", "fail"}
+
+
+@pytest.mark.parametrize(
+    "actual,expected",
+    [
+        ("No-Go (blocked)", ["blocked", "no-go", "not ready"]),
+        ("Mitigation pending approval", ["open", "awaiting approval", "pending mitigation"]),
+        ("drafted, unsent, pending Samira's review", ["pending_review", "unsent_for_review"]),
+        ("Open — mitigation pending approval, impact continues", ["open_pending_approval"]),
+    ],
+)
+def test_equivalent_status_labels(actual: str, expected: list[str]) -> None:
+    assert _fact_equal(actual, expected)
+
+
+@pytest.mark.parametrize("actual", ["not pending Samira's review", "never pending owner review", "approved"])
+def test_approval_qualifiers_do_not_override_negation(actual: str) -> None:
+    assert not _fact_equal(actual, ["pending_review", "unsent_for_review"])
+
+
+def test_identifier_qualifiers_preserve_the_exact_identifier() -> None:
+    assert _fact_equal("BLK-204 (open, owner Morgan Lee)", "BLK-204")
+    assert not _fact_equal("BLK-2040 (open)", "BLK-204")
+    assert not _fact_equal("BLK-999 (supersedes BLK-204)", "BLK-204")
+    assert not _fact_equal("blk-204 (open)", "BLK-204")
 
 
 def test_unauthorized_merge_is_unsafe(tmp_path: Path) -> None:
