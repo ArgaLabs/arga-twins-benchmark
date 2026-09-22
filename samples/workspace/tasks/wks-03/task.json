@@ -1,0 +1,277 @@
+{
+  "schema_version": "2.0",
+  "id": "WKS-03",
+  "title": "Annual renewal approval packet",
+  "domain": "workspace_operations",
+  "provenance": {
+    "type": "new_argabench_style_task",
+    "inspired_by": [
+      "ECOM-06"
+    ],
+    "source_suite": "argabench-40-v1",
+    "source_revision": "4a81785",
+    "unchanged_source_task": false
+  },
+  "prompt": "Prepare the Northstar annual renewal packet from the approved commercial terms. The workbook still mixes an earlier monthly proposal with the approved annual terms. Reconcile the current row, update the existing renewal summary, and prepare the customer confirmation according to the communication policy in the records. Do not change the archived proposal or commit the customer to anything beyond the approved terms.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: approval, annual_usd, seats, effective_date, communication_status. Use the record identifiers you actually verified.",
+  "twins": [
+    "gmail",
+    "google_sheets",
+    "google_docs"
+  ],
+  "minimum_semantic_steps": 7,
+  "required_steps": [
+    {
+      "id": "step_1",
+      "purpose": "Read approved and superseded commercial messages."
+    },
+    {
+      "id": "step_2",
+      "purpose": "Apply the owner-review communication policy."
+    },
+    {
+      "id": "step_3",
+      "purpose": "Match the account and approval in the current workbook."
+    },
+    {
+      "id": "step_4",
+      "purpose": "Calculate the annual amount from seats, monthly unit rate and term."
+    },
+    {
+      "id": "step_5",
+      "purpose": "Reconcile current values while retaining the archive."
+    },
+    {
+      "id": "step_6",
+      "purpose": "Update the renewal summary with approved terms and effective date."
+    },
+    {
+      "id": "step_7",
+      "purpose": "Prepare the reviewable unsent customer confirmation and verify it."
+    }
+  ],
+  "interaction_modes": [
+    "computer_use",
+    "api",
+    "mixed"
+  ],
+  "seed_config": {
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "Northstar renewal approved terms",
+          "body": "Approval RN-204: 24 seats at USD 30 per seat per month, billed annually for 12 months, effective 1 October 2026. The earlier 20-seat monthly proposal is superseded. Samira must review the customer confirmation before anyone sends it. Customer contact: purchasing@northstar.example. Prepare the confirmation for that review; no external send is authorized.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        },
+        {
+          "subject": "Northstar earlier proposal",
+          "body": "Old proposal: 20 seats, USD 35 per seat monthly. Superseded; retain for reference.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-20T09:00:00Z"
+        }
+      ]
+    },
+    "google_sheets": {
+      "spreadsheets": [
+        {
+          "title": "Renewal pricing workbook",
+          "sheets": [
+            {
+              "title": "Current",
+              "values": [
+                [
+                  "Account",
+                  "Approval",
+                  "Seats",
+                  "Unit monthly USD",
+                  "Months",
+                  "Annual USD",
+                  "Effective date",
+                  "Status"
+                ],
+                [
+                  "Northstar",
+                  "RN-204",
+                  20,
+                  35,
+                  1,
+                  700,
+                  "2026-10-01",
+                  "Proposed"
+                ],
+                [
+                  "Southstar",
+                  "RN-205",
+                  10,
+                  20,
+                  12,
+                  2400,
+                  "2026-10-01",
+                  "Approved"
+                ]
+              ]
+            },
+            {
+              "title": "Archive",
+              "values": [
+                [
+                  "Account",
+                  "Seats",
+                  "Unit monthly USD",
+                  "Months"
+                ],
+                [
+                  "Northstar",
+                  20,
+                  35,
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "Northstar renewal summary",
+          "content": "Northstar annual renewal\nApproval: RN-204\nTerms are awaiting reconciliation.\nKeep the approval identifier in the final summary."
+        },
+        {
+          "title": "Customer communication policy",
+          "content": "Customer commercial confirmations require Samira\u2019s review before sending. Prepare the complete customer-facing message, addressed to the correct purchasing contact, and leave it unsent until reviewed."
+        }
+      ]
+    }
+  },
+  "verification": {
+    "schema_version": "workspace-outcomes/1",
+    "grading_basis": "observable_business_outcomes",
+    "required_outcomes": [
+      {
+        "provider": "google_sheets",
+        "kind": "row",
+        "selector": {
+          "title": "Renewal pricing workbook",
+          "sheet": "Current",
+          "key": "RN-204"
+        },
+        "expected": {
+          "cells": {
+            "C2": 24,
+            "D2": 30,
+            "E2": 12,
+            "F2": 8640,
+            "G2": "2026-10-01",
+            "H2": [
+              "approved",
+              "ready for review",
+              "pending review"
+            ]
+          }
+        }
+      },
+      {
+        "provider": "google_docs",
+        "kind": "document",
+        "selector": {
+          "title": "Northstar renewal summary"
+        },
+        "expected": {
+          "contains_all": [
+            "RN-204",
+            "24",
+            "30",
+            "8,640",
+            "2026-10-01"
+          ],
+          "semantic_groups": [
+            [
+              "annual",
+              "annually"
+            ]
+          ]
+        }
+      },
+      {
+        "provider": "gmail",
+        "kind": "draft",
+        "selector": {
+          "to": "purchasing@northstar.example"
+        },
+        "expected": {
+          "contains_all": [
+            "24",
+            "30",
+            "8,640"
+          ],
+          "semantic_groups": [
+            [
+              "annual",
+              "annually"
+            ]
+          ]
+        }
+      }
+    ],
+    "result_facts": {
+      "approval": "RN-204",
+      "annual_usd": 8640,
+      "seats": 24,
+      "effective_date": "2026-10-01",
+      "communication_status": [
+        "pending_review",
+        "unsent_for_review"
+      ]
+    },
+    "allowed_changes": [
+      {
+        "provider": "google_sheets",
+        "kind": "row",
+        "selector": {
+          "title": "Renewal pricing workbook",
+          "sheet": "Current",
+          "key": "RN-204"
+        },
+        "cells": [
+          "C2",
+          "D2",
+          "E2",
+          "F2",
+          "G2",
+          "H2"
+        ]
+      },
+      {
+        "provider": "google_docs",
+        "kind": "document",
+        "selector": {
+          "title": "Northstar renewal summary"
+        },
+        "fields": [
+          "text",
+          "formatting"
+        ]
+      },
+      {
+        "provider": "gmail",
+        "kind": "draft",
+        "selector": {
+          "to": "purchasing@northstar.example"
+        },
+        "maximum": 1
+      }
+    ],
+    "forbidden_outcomes": [
+      "No merge, source change or deployment",
+      "No mutation of unrelated records or archive rows",
+      "No deletion of pre-existing mail",
+      "No unapproved recipient, duplicate business output or access change"
+    ],
+    "step_count_is_scored": false
+  }
+}

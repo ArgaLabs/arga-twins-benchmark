@@ -14,9 +14,85 @@ ROOT = Path(__file__).resolve().parents[1]
 SECRET = re.compile(r"arga_sk_[A-Za-z0-9_-]{40,}|sk-proj-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{25,}")
 
 
+def sample_tree_sha256() -> str:
+    """Bind release evidence to the source, fixtures, contracts and dependencies."""
+    names: list[str] = []
+    for folder in ("src", "samples/workspace", "tests/fixtures/workspace"):
+        names.extend(
+            str(path.relative_to(ROOT))
+            for path in (ROOT / folder).rglob("*")
+            if path.is_file()
+            and not path.is_symlink()
+            and path.suffix in {".py", ".yaml", ".json", ".md", ".txt"}
+            and "__pycache__" not in path.parts
+            and "evidence" not in path.parts
+            and path.name != "readiness.json"
+            and not any(part.endswith(".egg-info") for part in path.parts)
+        )
+    names.extend(
+        (
+            "pyproject.toml",
+            "uv.lock",
+            "tests/test_computer_use_sample.py",
+            "tests/test_workspace_outcomes.py",
+            "scripts/package_computer_use_sample.py",
+        )
+    )
+    digest = hashlib.sha256()
+    for name in sorted(set(names)):
+        digest.update(name.encode() + b"\0" + hashlib.sha256((ROOT / name).read_bytes()).digest())
+    return digest.hexdigest()
+
+
 def package(output: Path) -> None:
-    files: dict[str, bytes] = {}
-    for folder in ("src", "samples/computer-use"):
+    readiness = json.loads((ROOT / "samples/workspace/readiness.json").read_text())
+    checks = readiness.get("checks", [])
+    required = (
+        {
+            "frontend." + provider
+            for provider in (
+                "github",
+                "google_calendar",
+                "gmail",
+                "google_sheets",
+                "google_docs",
+                "notion",
+                "linear",
+                "stripe",
+            )
+        }
+        | {f"rollout.WKS-{i:02}" for i in range(1, 6)}
+        | {"deployment", "package"}
+    )
+    if (
+        readiness.get("release_allowed") is not True
+        or {check.get("id") for check in checks} != required
+        or len(checks) != len(required)
+        or any(check.get("status") != "verified" or not check.get("evidence") for check in checks)
+    ):
+        raise ValueError(
+            "Release blocked: all eight frontend audits, five hosted rollouts, "
+            "deployment and packaging must have verified evidence"
+        )
+    if readiness.get("sample_tree_sha256") != sample_tree_sha256():
+        raise ValueError("Release blocked: evidence does not match the current sample source")
+    evidence_files: dict[str, bytes] = {}
+    evidence_root = (ROOT / "samples/workspace/evidence").resolve()
+    for check in checks:
+        for evidence in check["evidence"]:
+            path = (ROOT / evidence["path"]).resolve()
+            if (
+                not path.is_relative_to(evidence_root)
+                or not path.is_file()
+                or path.is_symlink()
+                or path.suffix not in {".json", ".md", ".txt", ".png", ".jpg", ".webp"}
+            ):
+                raise ValueError(f"Missing release evidence for {check['id']}")
+            if hashlib.sha256(path.read_bytes()).hexdigest() != evidence["sha256"]:
+                raise ValueError(f"Stale release evidence for {check['id']}")
+            evidence_files[str(path.relative_to(ROOT))] = path.read_bytes()
+    files: dict[str, bytes] = dict(evidence_files)
+    for folder in ("src", "samples/workspace", "tests/fixtures/workspace"):
         for path in (ROOT / folder).rglob("*"):
             if (
                 path.is_file()
@@ -26,17 +102,23 @@ def package(output: Path) -> None:
                 and not any(p.endswith(".egg-info") for p in path.parts)
             ):
                 files[str(path.relative_to(ROOT))] = path.read_bytes()
-    for name in ("pyproject.toml", "uv.lock", "tests/test_computer_use_sample.py"):
+    for name in (
+        "pyproject.toml",
+        "uv.lock",
+        "tests/test_computer_use_sample.py",
+        "tests/test_workspace_outcomes.py",
+        "scripts/package_computer_use_sample.py",
+    ):
         files[name] = (ROOT / name).read_bytes()
-    files["README.md"] = files["samples/computer-use/README.md"]
-    files["fidelity.md"] = files["samples/computer-use/fidelity.md"]
-    files["manifest.json"] = files["samples/computer-use/manifest.json"]
+    files["README.md"] = files["samples/workspace/README.md"]
+    files["fidelity.md"] = files["samples/workspace/fidelity.md"]
+    files["manifest.json"] = files["samples/workspace/manifest.json"]
     files["quickstart.sh"] = (
         b'#!/bin/sh\nset -eu\ncd "$(dirname "$0")"\n'
         b'exec uv run --extra computer-use python -m arga_twins_benchmark.computer_use.session "$@"\n'
     )
     for name, data in files.items():
-        if SECRET.search(data.decode()):
+        if SECRET.search(data.decode(errors="ignore")):
             raise ValueError(f"Possible credential in {name}; value suppressed")
     files["PACKAGE-MANIFEST.json"] = (
         json.dumps(

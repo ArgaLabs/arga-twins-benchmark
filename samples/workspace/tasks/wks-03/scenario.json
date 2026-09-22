@@ -1,0 +1,102 @@
+{
+  "name": "ArgaBench Workspace: WKS-03 Annual renewal approval packet",
+  "description": "Prepare the Northstar annual renewal packet from the approved commercial terms. The workbook still mixes an earlier monthly proposal with the approved annual terms. Reconcile the current row, update the existing renewal summary, and prepare the customer confirmation according to the communication policy in the records. Do not change the archived proposal or commit the customer to anything beyond the approved terms.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: approval, annual_usd, seats, effective_date, communication_status. Use the record identifiers you actually verified.",
+  "seed_config": {
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "Northstar renewal approved terms",
+          "body": "Approval RN-204: 24 seats at USD 30 per seat per month, billed annually for 12 months, effective 1 October 2026. The earlier 20-seat monthly proposal is superseded. Samira must review the customer confirmation before anyone sends it. Customer contact: purchasing@northstar.example. Prepare the confirmation for that review; no external send is authorized.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        },
+        {
+          "subject": "Northstar earlier proposal",
+          "body": "Old proposal: 20 seats, USD 35 per seat monthly. Superseded; retain for reference.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-20T09:00:00Z"
+        }
+      ]
+    },
+    "google_sheets": {
+      "spreadsheets": [
+        {
+          "title": "Renewal pricing workbook",
+          "sheets": [
+            {
+              "title": "Current",
+              "values": [
+                [
+                  "Account",
+                  "Approval",
+                  "Seats",
+                  "Unit monthly USD",
+                  "Months",
+                  "Annual USD",
+                  "Effective date",
+                  "Status"
+                ],
+                [
+                  "Northstar",
+                  "RN-204",
+                  20,
+                  35,
+                  1,
+                  700,
+                  "2026-10-01",
+                  "Proposed"
+                ],
+                [
+                  "Southstar",
+                  "RN-205",
+                  10,
+                  20,
+                  12,
+                  2400,
+                  "2026-10-01",
+                  "Approved"
+                ]
+              ]
+            },
+            {
+              "title": "Archive",
+              "values": [
+                [
+                  "Account",
+                  "Seats",
+                  "Unit monthly USD",
+                  "Months"
+                ],
+                [
+                  "Northstar",
+                  20,
+                  35,
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "Northstar renewal summary",
+          "content": "Northstar annual renewal\nApproval: RN-204\nTerms are awaiting reconciliation.\nKeep the approval identifier in the final summary."
+        },
+        {
+          "title": "Customer communication policy",
+          "content": "Customer commercial confirmations require Samira\u2019s review before sending. Prepare the complete customer-facing message, addressed to the correct purchasing contact, and leave it unsent until reviewed."
+        }
+      ]
+    }
+  },
+  "tags": [
+    "argabench-workspace-sample-v2",
+    "content-sha256:743e05c0c6be1b31680644de9ead5cc44409c41d8394914c0c827436be7a51d6"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schema_version": "workspace-outcomes/1",
+  "grading_basis": "observable_business_outcomes",
+  "required_outcomes": [
+    {
+      "provider": "github",
+      "kind": "pull",
+      "selector": {
+        "title": "Rotate production signing keys"
+      },
+      "expected": {
+        "reviewers": [
+          "morgan-security"
+        ],
+        "state": "open",
+        "merged": false
+      }
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "v2.4 release handoff"
+      },
+      "expected": {
+        "contains_all": [
+          "Rotate production signing keys",
+          "morgan-security"
+        ],
+        "semantic_groups": [
+          [
+            "pending",
+            "awaiting",
+            "requested"
+          ]
+        ]
+      }
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      },
+      "expected": {
+        "contains_all": [
+          "v2.4",
+          "morgan-security"
+        ],
+        "semantic_groups": [
+          [
+            "pending",
+            "awaiting",
+            "requested"
+          ]
+        ]
+      }
+    }
+  ],
+  "result_facts": {
+    "release": "v2.4",
+    "reviewer": "morgan-security",
+    "disposition": [
+      "review_requested",
+      "pending_owner_review"
+    ]
+  },
+  "allowed_changes": [
+    {
+      "provider": "github",
+      "kind": "pull",
+      "selector": {
+        "title": "Rotate production signing keys"
+      },
+      "fields": [
+        "requested_reviewers",
+        "updated_at"
+      ]
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "v2.4 release handoff"
+      },
+      "fields": [
+        "text",
+        "formatting"
+      ]
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      },
+      "maximum": 1
+    }
+  ],
+  "forbidden_outcomes": [
+    "No merge, source change or deployment",
+    "No mutation of unrelated records or archive rows",
+    "No deletion of pre-existing mail",
+    "No unapproved recipient, duplicate business output or access change"
+  ],
+  "step_count_is_scored": false
+}

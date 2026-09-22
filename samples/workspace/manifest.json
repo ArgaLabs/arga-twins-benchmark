@@ -1,0 +1,148 @@
+{
+  "schema_version": "2",
+  "name": "ArgaBench-style Workspace sample",
+  "data_classification": "synthetic",
+  "scored_sample_count": 5,
+  "smoke_tasks": 0,
+  "source_revision": "4a81785",
+  "tasks": [
+    {
+      "id": "WKS-01",
+      "title": "Authentication release review handoff",
+      "path": "tasks/wks-01",
+      "twins": [
+        "github",
+        "google_docs",
+        "gmail"
+      ],
+      "minimum_semantic_steps": 7,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ],
+      "provenance": {
+        "type": "new_argabench_style_task",
+        "inspired_by": [
+          "DEV-05"
+        ],
+        "source_suite": "argabench-40-v1",
+        "source_revision": "4a81785",
+        "unchanged_source_task": false
+      },
+      "seed_sha256": "4d794bc13e13e3df5861da75c6b8bfc66b1363a9389d8a23b001afc989ccabce"
+    },
+    {
+      "id": "WKS-02",
+      "title": "Customer readiness meeting reschedule",
+      "path": "tasks/wks-02",
+      "twins": [
+        "gmail",
+        "google_calendar",
+        "google_sheets"
+      ],
+      "minimum_semantic_steps": 7,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ],
+      "provenance": {
+        "type": "new_argabench_style_task",
+        "inspired_by": [
+          "IT-06"
+        ],
+        "source_suite": "argabench-40-v1",
+        "source_revision": "4a81785",
+        "unchanged_source_task": false
+      },
+      "seed_sha256": "b9775a0827670e13e89b0f4e1fb77266a3aa7608dcdcf2d9dfd9cdaeb567ab38"
+    },
+    {
+      "id": "WKS-03",
+      "title": "Annual renewal approval packet",
+      "path": "tasks/wks-03",
+      "twins": [
+        "gmail",
+        "google_sheets",
+        "google_docs"
+      ],
+      "minimum_semantic_steps": 7,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ],
+      "provenance": {
+        "type": "new_argabench_style_task",
+        "inspired_by": [
+          "ECOM-06"
+        ],
+        "source_suite": "argabench-40-v1",
+        "source_revision": "4a81785",
+        "unchanged_source_task": false
+      },
+      "seed_sha256": "f34c80cea23bb4485937a7eb54005bc5e5518a1dfe85b2f3c2aa1efc414799b8"
+    },
+    {
+      "id": "WKS-04",
+      "title": "Incident evidence and customer handoff",
+      "path": "tasks/wks-04",
+      "twins": [
+        "github",
+        "google_sheets",
+        "google_docs",
+        "gmail"
+      ],
+      "minimum_semantic_steps": 8,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ],
+      "provenance": {
+        "type": "new_argabench_style_task",
+        "inspired_by": [
+          "DEV-01"
+        ],
+        "source_suite": "argabench-40-v1",
+        "source_revision": "4a81785",
+        "unchanged_source_task": false
+      },
+      "seed_sha256": "e55e7033c595567fbc722ab869be77eba9cffefc8ebc8c0a045733f95fe7539e"
+    },
+    {
+      "id": "WKS-05",
+      "title": "Launch readiness decision across workspaces",
+      "path": "tasks/wks-05",
+      "twins": [
+        "github",
+        "gmail",
+        "google_docs",
+        "google_sheets",
+        "google_calendar"
+      ],
+      "minimum_semantic_steps": 9,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ],
+      "provenance": {
+        "type": "new_argabench_style_task",
+        "inspired_by": [
+          "DEV-01",
+          "DEV-05"
+        ],
+        "source_suite": "argabench-40-v1",
+        "source_revision": "4a81785",
+        "unchanged_source_task": false
+      },
+      "seed_sha256": "8678e393992932cc7bb441479dfc23b1a7789c0aebccd3b49cb3d8d5e6be5747"
+    }
+  ],
+  "provenance_note": "New tasks inspired by ArgaBench operational episodes; these are not unchanged published ArgaBench episodes.",
+  "companion_twin_pr": "https://github.com/ArgaLabs/validation-server/pull/1083",
+  "sample_source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14",
+  "release_status": "blocked_pending_verification"
+}

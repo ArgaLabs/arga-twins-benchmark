@@ -1022,7 +1022,7 @@ def _provider_headers(provider: str, env: Mapping[str, str]) -> dict[str, str]:
         return {"Authorization": f"Bearer {token or 'ya29.gmail-twin-owner'}"}
     if provider == "google_calendar":
         return {"Authorization": f"Bearer {token or 'test-token'}"}
-    if provider == "google_drive":
+    if provider in {"google_drive", "google_docs", "google_sheets"}:
         return {"Authorization": f"Bearer {token or 'ya29.drive-twin-owner'}"}
     if provider == "jira":
         return {"Authorization": f"Bearer {token or 'jira_default_seed_token'}"}
@@ -1072,6 +1072,8 @@ _PROVIDER_ENV_KEYS: Final[dict[str, tuple[str, ...]]] = {
         "GOOGLE_ACCESS_TOKEN",
         "GOOGLE_OAUTH_ACCESS_TOKEN",
     ),
+    "google_docs": ("GOOGLE_DOCS_TOKEN", "GOOGLE_ACCESS_TOKEN", "GOOGLE_OAUTH_ACCESS_TOKEN"),
+    "google_sheets": ("GOOGLE_SHEETS_TOKEN", "GOOGLE_ACCESS_TOKEN", "GOOGLE_OAUTH_ACCESS_TOKEN"),
     "google_drive": (
         "GOOGLE_DRIVE_TOKEN",
         "GOOGLE_DRIVE_ACCESS_TOKEN",

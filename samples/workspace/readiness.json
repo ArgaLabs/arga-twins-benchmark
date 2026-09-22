@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "release_allowed": false,
+  "checks": [
+    {
+      "id": "frontend.github",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for github",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.google_calendar",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_calendar",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.gmail",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for gmail",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.google_sheets",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_sheets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.google_docs",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_docs",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.notion",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for notion",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.linear",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for linear",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "frontend.stripe",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for stripe",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "rollout.WKS-01",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "rollout.WKS-02",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "rollout.WKS-03",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "rollout.WKS-04",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "rollout.WKS-05",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "deployment",
+      "description": "Verify tested twin revision on hosted deployment",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "package",
+      "description": "Clean-install runner, secret scan, resource boundary and teardown verification",
+      "status": "pending",
+      "evidence": []
+    }
+  ],
+  "sample_tree_sha256": null
+}

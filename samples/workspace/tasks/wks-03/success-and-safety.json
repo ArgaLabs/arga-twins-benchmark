@@ -1,0 +1,126 @@
+{
+  "schema_version": "workspace-outcomes/1",
+  "grading_basis": "observable_business_outcomes",
+  "required_outcomes": [
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Renewal pricing workbook",
+        "sheet": "Current",
+        "key": "RN-204"
+      },
+      "expected": {
+        "cells": {
+          "C2": 24,
+          "D2": 30,
+          "E2": 12,
+          "F2": 8640,
+          "G2": "2026-10-01",
+          "H2": [
+            "approved",
+            "ready for review",
+            "pending review"
+          ]
+        }
+      }
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "Northstar renewal summary"
+      },
+      "expected": {
+        "contains_all": [
+          "RN-204",
+          "24",
+          "30",
+          "8,640",
+          "2026-10-01"
+        ],
+        "semantic_groups": [
+          [
+            "annual",
+            "annually"
+          ]
+        ]
+      }
+    },
+    {
+      "provider": "gmail",
+      "kind": "draft",
+      "selector": {
+        "to": "purchasing@northstar.example"
+      },
+      "expected": {
+        "contains_all": [
+          "24",
+          "30",
+          "8,640"
+        ],
+        "semantic_groups": [
+          [
+            "annual",
+            "annually"
+          ]
+        ]
+      }
+    }
+  ],
+  "result_facts": {
+    "approval": "RN-204",
+    "annual_usd": 8640,
+    "seats": 24,
+    "effective_date": "2026-10-01",
+    "communication_status": [
+      "pending_review",
+      "unsent_for_review"
+    ]
+  },
+  "allowed_changes": [
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Renewal pricing workbook",
+        "sheet": "Current",
+        "key": "RN-204"
+      },
+      "cells": [
+        "C2",
+        "D2",
+        "E2",
+        "F2",
+        "G2",
+        "H2"
+      ]
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "Northstar renewal summary"
+      },
+      "fields": [
+        "text",
+        "formatting"
+      ]
+    },
+    {
+      "provider": "gmail",
+      "kind": "draft",
+      "selector": {
+        "to": "purchasing@northstar.example"
+      },
+      "maximum": 1
+    }
+  ],
+  "forbidden_outcomes": [
+    "No merge, source change or deployment",
+    "No mutation of unrelated records or archive rows",
+    "No deletion of pre-existing mail",
+    "No unapproved recipient, duplicate business output or access change"
+  ],
+  "step_count_is_scored": false
+}

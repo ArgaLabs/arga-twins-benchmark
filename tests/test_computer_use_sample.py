@@ -5,7 +5,7 @@ import asyncio
 import json
 from pathlib import Path
 from typing import Any
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock
 
 import httpx
 import pytest
@@ -27,7 +27,7 @@ def test_session_handoff_submission_and_cleanup(
     run = TwinRun(
         "synthetic-run",
         "ready",
-        {p: ProvisionedTwin(p, "https://synthetic.invalid") for p in load_task("DEV-01")["twins"]},
+        {p: ProvisionedTwin(p, "https://synthetic.invalid") for p in load_task("WKS-01")["twins"]},
         True,
         raw={"run_id": "synthetic-run", "status": "ready", "twins": {}},
     )
@@ -38,10 +38,14 @@ def test_session_handoff_submission_and_cleanup(
     monkeypatch.setattr(
         session,
         "_save_compiled_scenario",
-        AsyncMock(return_value=SavedScenario("DEV-01", "synthetic-scenario", "Sample", "Sample", "synthetic", False)),
+        AsyncMock(return_value=SavedScenario("WKS-01", "synthetic-scenario", "Sample", "Sample", "synthetic", False)),
     )
     monkeypatch.setattr(session, "_wait_for_twin_run", AsyncMock(return_value=run))
-    capture = AsyncMock(return_value=TrustedStateSnapshot(providers={}, queries={}))
+    reference = json.loads((Path(__file__).parent / "fixtures/workspace/wks-01.json").read_text())["baseline-state"]
+    snapshot = Mock(spec=TrustedStateSnapshot)
+    snapshot.artifact_payload.return_value = reference
+    snapshot.providers = reference["providers"]
+    capture = AsyncMock(return_value=snapshot)
     capturer = AsyncMock()
     capturer.capture = capture
 
@@ -56,12 +60,16 @@ def test_session_handoff_submission_and_cleanup(
     def fake_grade(*_: object) -> dict[str, Any]:
         return {"assertions": []}
 
-    monkeypatch.setattr(session, "grade_argabench_fair_attempt", fake_grade)
+    monkeypatch.setattr(session, "grade_workspace_attempt", fake_grade)
 
     def make_proxy(provider: str, access: dict[str, object]) -> BrowserProxy:
         client = httpx.AsyncClient(
             transport=httpx.MockTransport(
-                lambda _: httpx.Response(200, text="<html>Search issues</html>", headers={"content-type": "text/html"})
+                lambda _: httpx.Response(
+                    200,
+                    text='<html><button id="open-comments">Comments</button></html>',
+                    headers={"content-type": "text/html"},
+                )
             )
         )
         proxy = BrowserProxy(provider, access, client=client)
@@ -74,7 +82,7 @@ def test_session_handoff_submission_and_cleanup(
     async def exercise() -> None:
         running = asyncio.create_task(
             session.run(
-                argparse.Namespace(task="DEV-01", credentials=None, output=output, minutes=1, reset_check=False)
+                argparse.Namespace(task="WKS-01", credentials=None, output=output, minutes=1, reset_check=False)
             )
         )
         try:
@@ -85,15 +93,15 @@ def test_session_handoff_submission_and_cleanup(
                     await running
                 await asyncio.sleep(0.05)
             candidate = json.loads((output / "candidate.json").read_text())
-            assert set(candidate["workspaces"]) == {"github", "linear", "slack"}
+            assert set(candidate["workspaces"]) == {"github", "google_docs", "gmail"}
             assert "synthetic.invalid" not in json.dumps(candidate)
             async with httpx.AsyncClient() as client:
-                assert (await client.get(candidate["workspaces"]["linear"])).status_code == 200
+                assert (await client.get(candidate["workspaces"]["google_docs"])).status_code == 200
                 blocked = await client.post(
                     candidate["tool_endpoint"],
                     json={
                         "name": "provider_api",
-                        "arguments": {"provider": "linear", "method": "GET", "path": "/admin/state"},
+                        "arguments": {"provider": "google_docs", "method": "GET", "path": "/admin/state"},
                     },
                 )
                 assert blocked.status_code == 200
@@ -203,10 +211,17 @@ def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
     asyncio.run(exercise())
 
 
-def test_five_real_argabench_tasks_have_both_modalities_and_exact_seed_files() -> None:
+def test_five_argabench_style_tasks_have_all_modalities_and_exact_seed_files() -> None:
     manifest = json.loads((SAMPLES / "manifest.json").read_text())
     assert len(manifest["tasks"]) == 5
-    assert all(t["source_task"] == t["id"] and t["id"] != "SMOKE-01" for t in manifest["tasks"])
+    assert all(t["provenance"]["type"] == "new_argabench_style_task" for t in manifest["tasks"])
+    assert {p for task in manifest["tasks"] for p in task["twins"]} == {
+        "github",
+        "google_docs",
+        "google_sheets",
+        "gmail",
+        "google_calendar",
+    }
     for item in manifest["tasks"]:
         task = load_task(item["id"])
         folder = SAMPLES / "tasks" / item["id"].lower()

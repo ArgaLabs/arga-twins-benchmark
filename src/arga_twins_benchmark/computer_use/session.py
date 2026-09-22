@@ -24,6 +24,13 @@ from starlette.routing import Route
 
 from arga_twins_benchmark.arga_cli import SubprocessArgaCli, TwinRun
 from arga_twins_benchmark.computer_use.proxy import BrowserProxy
+from arga_twins_benchmark.computer_use.workspace import (
+    ROLES,
+    grade_workspace_attempt,
+    resource_catalog,
+    resources,
+    snapshot_queries,
+)
 from arga_twins_benchmark.evaluation.state_capture import TrustedStateCapturer
 from arga_twins_benchmark.lifecycle import (
     _save_compiled_scenario,
@@ -32,21 +39,10 @@ from arga_twins_benchmark.lifecycle import (
     write_private_json,
 )
 from arga_twins_benchmark.providers import OfficialDocsGateway, ProviderGateway
-from arga_twins_benchmark.reporting.argabench_fair import (
-    grade_argabench_fair_attempt,
-    snapshot_queries_for_task,
-)
 
 ROOT = Path(__file__).resolve().parents[3]
-SAMPLES = ROOT / "samples/computer-use"
-ROLES = {
-    "github": "code_host",
-    "linear": "linear_tracker",
-    "slack": "team_chat",
-    "stripe": "payments",
-    "notion": "knowledge_base",
-}
-START_PATHS = {"github": "/", "linear": "/", "slack": "/", "stripe": "/dashboard", "notion": "/"}
+SAMPLES = ROOT / "samples/workspace"
+START_PATHS = {provider: "/" for provider in ROLES}
 
 
 def read(path: Path) -> dict[str, Any]:
@@ -150,9 +146,18 @@ async def run(args: argparse.Namespace) -> None:
             gateway = ProviderGateway(access, provider_roles=roles, max_calls=250)
             docs = OfficialDocsGateway(access.keys(), provider_roles=roles, max_calls=60)
             capturer = TrustedStateCapturer(timeout_seconds=60)
-            queries = snapshot_queries_for_task(task)
+            queries = snapshot_queries(task)
             baseline = await capturer.capture(payload, roles=roles, snapshot_queries=queries)
+            expanded_queries = snapshot_queries(task, baseline.artifact_payload())
+            if expanded_queries != queries:
+                queries = expanded_queries
+                baseline = await capturer.capture(payload, roles=roles, snapshot_queries=queries)
             write_private_json(output / "baseline-state.json", baseline.artifact_payload())
+            # Fail before handing an agent a workspace if the deployed twins lack
+            # the state needed to verify its outcomes and side effects.
+            if set(baseline.providers) != set(task["twins"]):
+                raise RuntimeError("Incomplete baseline provider evidence")
+            resources(baseline.artifact_payload())
             workspaces: dict[str, str] = {}
             for provider in task["twins"]:
                 proxy = BrowserProxy(provider, access[provider])
@@ -166,11 +171,14 @@ async def run(args: argparse.Namespace) -> None:
                     response = await probe.get(url)
                     if response.status_code != 200 or "text/html" not in response.headers.get("content-type", ""):
                         raise RuntimeError(f"{provider} frontend is not ready")
-                    if provider == "linear" and "Search issues" not in response.text:
-                        raise RuntimeError("Deploy the companion twin PR: this Linear frontend is still read-only")
+                    if provider in {"google_docs", "google_sheets"} and 'id="open-comments"' not in response.text:
+                        raise RuntimeError(
+                            f"Deploy the companion twin PR: {provider} collaboration controls are missing"
+                        )
                 workspaces[provider] = url
             candidate = {
                 "task_id": args.task,
+                "resources": resource_catalog(baseline.artifact_payload()),
                 "prompt": task["prompt"],
                 "workspaces": workspaces,
                 "tools": [gateway.tool_definition, docs.tool_definition],
@@ -279,7 +287,11 @@ async def run(args: argparse.Namespace) -> None:
             for server in reversed(servers):
                 await server.close()
             servers.clear()
-            final = await capturer.capture(payload, roles=roles, snapshot_queries=queries)
+            final_queries = snapshot_queries(task)
+            final = await capturer.capture(payload, roles=roles, snapshot_queries=final_queries)
+            expanded_final_queries = snapshot_queries(task, final.artifact_payload())
+            if expanded_final_queries != final_queries:
+                final = await capturer.capture(payload, roles=roles, snapshot_queries=expanded_final_queries)
             write_private_json(output / "final-state.json", final.artifact_payload())
             write_private_json(
                 output / "invocation.json",
@@ -290,7 +302,7 @@ async def run(args: argparse.Namespace) -> None:
                     "events": events,
                 },
             )
-            verdict = grade_argabench_fair_attempt(output, task)
+            verdict = grade_workspace_attempt(output, task)
             # Blocked probes are not actual prohibited mutations. Keep them in diagnostics.
             verdict["assertions"] = [a for a in verdict["assertions"] if a["id"] != "control_plane_access"]
             statuses = {a["status"] for a in verdict["assertions"]}
@@ -363,7 +375,7 @@ async def run(args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["list", "start"], nargs="?", default="list")
-    parser.add_argument("--task", default="DEV-01")
+    parser.add_argument("--task", default="WKS-01")
     parser.add_argument("--output", type=Path, default=Path("runs/computer-use"))
     parser.add_argument("--credentials", type=Path)
     parser.add_argument("--minutes", type=int, default=40, choices=range(1, 46), metavar="1..45")

@@ -1,0 +1,104 @@
+{
+  "schema_version": "workspace-outcomes/1",
+  "grading_basis": "observable_business_outcomes",
+  "required_outcomes": [
+    {
+      "provider": "google_calendar",
+      "kind": "event",
+      "selector": {
+        "summary": "Northstar readiness"
+      },
+      "expected": {
+        "start": "2026-09-24T17:00:00Z",
+        "end": "2026-09-24T17:30:00Z"
+      }
+    },
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Customer readiness tracker",
+        "sheet": "Current",
+        "key": "NS-204"
+      },
+      "expected": {
+        "cells": {
+          "C2": "2026-09-24 17:00",
+          "D2": [
+            "confirmed",
+            "rescheduled"
+          ]
+        }
+      }
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      },
+      "expected": {
+        "contains_all": [
+          "Northstar",
+          "17:00"
+        ],
+        "semantic_groups": [
+          [
+            "UTC",
+            "Z"
+          ]
+        ]
+      }
+    }
+  ],
+  "result_facts": {
+    "reference": "NS-204",
+    "start_utc": "2026-09-24T17:00:00Z",
+    "end_utc": "2026-09-24T17:30:00Z"
+  },
+  "allowed_changes": [
+    {
+      "provider": "google_calendar",
+      "kind": "event",
+      "selector": {
+        "summary": "Northstar readiness"
+      },
+      "fields": [
+        "start",
+        "end",
+        "updated",
+        "etag",
+        "sequence",
+        "_sync_version"
+      ]
+    },
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Customer readiness tracker",
+        "sheet": "Current",
+        "key": "NS-204"
+      },
+      "cells": [
+        "C2",
+        "D2"
+      ]
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      },
+      "maximum": 1
+    }
+  ],
+  "forbidden_outcomes": [
+    "No merge, source change or deployment",
+    "No mutation of unrelated records or archive rows",
+    "No deletion of pre-existing mail",
+    "No unapproved recipient, duplicate business output or access change"
+  ],
+  "step_count_is_scored": false
+}

@@ -396,3 +396,35 @@ providers:
           - "GET /rest/socialActions/{post_urn}"
           - "GET /rest/socialActions/{post_urn}/comments"
           - "POST /rest/socialActions/{post_urn}/comments"
+
+  google_docs:
+    owner: Google
+    api_version: v1
+    allowed_hosts: [developers.google.com]
+    allowed_paths:
+      developers.google.com: [/workspace/docs/api/]
+    documents:
+      - id: rest-reference
+        title: Google Docs API v1 REST reference
+        url: https://developers.google.com/workspace/docs/api/reference/rest
+        operations: [documents.get, documents.create, documents.batchUpdate]
+      - id: document-batch-update
+        title: Update document content and formatting
+        url: https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/batchUpdate
+        operations: [documents.batchUpdate]
+
+  google_sheets:
+    owner: Google
+    api_version: v4
+    allowed_hosts: [developers.google.com]
+    allowed_paths:
+      developers.google.com: [/workspace/sheets/api/]
+    documents:
+      - id: rest-reference
+        title: Google Sheets API v4 REST reference
+        url: https://developers.google.com/workspace/sheets/api/reference/rest
+        operations: [spreadsheets.get, spreadsheets.create, spreadsheets.batchUpdate]
+      - id: values-resource
+        title: Spreadsheet values reference
+        url: https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values
+        operations: [values.get, values.update, values.batchUpdate]

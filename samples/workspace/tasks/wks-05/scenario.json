@@ -1,0 +1,161 @@
+{
+  "name": "ArgaBench Workspace: WKS-05 Launch readiness decision across workspaces",
+  "description": "Prepare the v2.4 launch decision for Samira across the release workspaces. The planned launch is on 24 September, but a release-blocking issue may still be open. Determine whether the recorded launch criteria are met. Reconcile the release tracker, launch brief and existing decision meeting, record the dependency on the issue, and send Samira the verified decision. Do not merge, deploy, close issues, cancel unrelated meetings, or announce a customer launch.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: release, blocker, decision, review_utc. Use the record identifiers you actually verified.",
+  "seed_config": {
+    "github": {
+      "users": [
+        {
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer",
+          "email": "ops@acme.example"
+        },
+        {
+          "login": "morgan-security",
+          "name": "Morgan Lee",
+          "email": "morgan@acme.example"
+        }
+      ],
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "owner": "acme",
+          "name": "release-service",
+          "private": true,
+          "default_branch": "main",
+          "files": [
+            {
+              "path": "README.md",
+              "content": "Release service. No code changes or merges are authorized by the operations workflows."
+            },
+            {
+              "path": "CODEOWNERS",
+              "content": "/auth/ @morgan-security\n"
+            }
+          ],
+          "issues": [
+            {
+              "title": "v2.4 rollback validation",
+              "body": "Release blocker BLK-204: rollback validation has not passed. Owner Morgan Lee; next verification ETA 2026-09-24 18:00 UTC. Keep open until the owner attaches passing evidence.",
+              "state": "open"
+            },
+            {
+              "title": "v2.3 rollback validation",
+              "body": "Prior release blocker BLK-103 passed and was closed.",
+              "state": "closed"
+            }
+          ],
+          "prs": []
+        }
+      ]
+    },
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "v2.4 launch readiness decision",
+          "body": "Review the release criteria and current blocker evidence. If blocked, convert the existing 15:00 UTC launch decision meeting to a readiness review at the earliest Operations-calendar slot after the owner\u2019s verification ETA. Slots available to participants are 18:00-18:30 or 19:00-19:30 UTC on 24 September. Preserve the attendee list and keep the review linked to the same release. Reply only to me.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "v2.4 launch brief",
+          "content": "Release v2.4\nDecision: pending.\nRecord the blocker, accountable owner, and revised readiness review."
+        },
+        {
+          "title": "Release go/no-go criteria",
+          "content": "A launch is blocked while any release blocker is open. A historical closed blocker is not current evidence. An ETA is not a passing result. Schedule a readiness review after the ETA and around existing calendar conflicts; do not announce a launch."
+        }
+      ]
+    },
+    "google_sheets": {
+      "spreadsheets": [
+        {
+          "title": "Release readiness tracker",
+          "sheets": [
+            {
+              "title": "Current",
+              "values": [
+                [
+                  "Release",
+                  "Blocker",
+                  "Decision",
+                  "Owner",
+                  "Review UTC"
+                ],
+                [
+                  "v2.4",
+                  "",
+                  "Pending",
+                  "",
+                  "2026-09-24 15:00"
+                ],
+                [
+                  "v2.3",
+                  "BLK-103",
+                  "Launched",
+                  "Alex",
+                  "2026-08-20 15:00"
+                ]
+              ]
+            },
+            {
+              "title": "Archive",
+              "values": [
+                [
+                  "Reference",
+                  "Status"
+                ],
+                [
+                  "Previous cycle",
+                  "Closed"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "google_calendar": {
+      "calendars": [
+        {
+          "name": "Operations",
+          "timeZone": "UTC",
+          "events": [
+            {
+              "summary": "v2.4 launch decision",
+              "start": "2026-09-24T15:00:00Z",
+              "end": "2026-09-24T15:30:00Z",
+              "description": "Release v2.4. Decision meeting; launch not yet authorized."
+            },
+            {
+              "summary": "Support rotation",
+              "start": "2026-09-24T18:00:00Z",
+              "end": "2026-09-24T18:45:00Z",
+              "description": "Fixed staffing meeting. Do not move."
+            },
+            {
+              "summary": "v2.3 retrospective",
+              "start": "2026-09-24T16:00:00Z",
+              "end": "2026-09-24T17:00:00Z",
+              "description": "Historical release; unrelated."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "argabench-workspace-sample-v2",
+    "content-sha256:3d50cd6e3637a1f0db9d7e691dbfe7ba5e68cd9438aa8736ca9c3b998ba6aec1"
+  ]
+}
