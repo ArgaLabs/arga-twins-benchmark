@@ -39,6 +39,7 @@ BLOCKED = frozenset(
         "control_plane",
         "schema",
         "schemas",
+        "export-scenario",
     }
 )
 
@@ -89,10 +90,17 @@ def allowed_path(path: str) -> bool:
         if updated == decoded:
             break
         decoded = updated
-    if "%" in decoded or "\\" in decoded or not decoded.startswith("/") or decoded.startswith("//"):
+    if "%" in decoded or "\\" in decoded or not decoded.startswith("/") or "//" in decoded:
         return False
     segments = decoded.casefold().split("/")
-    return not any(segment in BLOCKED or segment in {".", ".."} for segment in segments)
+    if any(segment in {".", ".."} for segment in segments):
+        return False
+    # Control endpoints live at the twin root (or its UI control prefix).
+    # Provider data may legitimately be named "docs", "admin" or "schema",
+    # and document export is an ordinary frontend feature.
+    if segments[1] in BLOCKED:
+        return False
+    return not (segments[1] in {"ui", "_ui"} and len(segments) > 2 and segments[2] in BLOCKED)
 
 
 class BrowserProxy:
