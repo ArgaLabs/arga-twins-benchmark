@@ -9,7 +9,7 @@ import json
 import os
 import signal
 import socket
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 from contextlib import contextmanager
 from html import escape
 from pathlib import Path
@@ -19,6 +19,7 @@ from urllib.parse import parse_qs
 import httpx
 import uvicorn
 from starlette.applications import Starlette
+from starlette.formparsers import MultiPartException, MultiPartParser
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import Route
@@ -255,12 +256,24 @@ async def run(args: argparse.Namespace) -> None:
                     return JSONResponse({"error": "Forbidden"}, status_code=403)
                 raw = await bounded_body(request, 1024 * 1024)
                 try:
-                    body = (
-                        json.loads(raw)
-                        if "application/json" in request.headers.get("content-type", "")
-                        else {key: values[-1] for key, values in parse_qs(raw.decode()).items()}
-                    )
-                except (ValueError, UnicodeError):
+                    content_type = request.headers.get("content-type", "").split(";", 1)[0].strip().lower()
+                    if content_type == "application/json":
+                        body = json.loads(raw)
+                    elif content_type == "multipart/form-data":
+
+                        async def parts() -> AsyncGenerator[bytes, None]:
+                            yield raw
+
+                        form = await MultiPartParser(
+                            request.headers, parts(), max_files=0, max_fields=1, max_part_size=1024 * 1024
+                        ).parse()
+                        body = dict(form)
+                        await form.close()
+                    elif content_type in {"", "application/x-www-form-urlencoded"}:
+                        body = {key: values[-1] for key, values in parse_qs(raw.decode()).items()}
+                    else:
+                        return JSONResponse({"error": "Unsupported final report format"}, status_code=415)
+                except (ValueError, UnicodeError, MultiPartException):
                     return JSONResponse({"error": "Invalid final report"}, status_code=400)
                 if done.is_set():
                     return JSONResponse({"error": "Rollout finished"}, status_code=410)

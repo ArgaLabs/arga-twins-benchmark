@@ -1,6 +1,11 @@
 {
   "name": "ArgaBench Workspace: WKS-01 Authentication release review handoff",
   "description": "Samira asked for the v2.4 authentication release review to be unblocked. Two open changes look similar. Determine which one needs the missing owner review, arrange the review, reconcile the release handoff notes, and respond to Samira with the verified disposition. This is coordination work; do not approve, merge, close, or change source.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: release, reviewer, disposition. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "gmail",
+    "google_docs"
+  ],
   "seed_config": {
     "github": {
       "users": [
@@ -98,6 +103,6 @@
   },
   "tags": [
     "argabench-workspace-sample-v2",
-    "content-sha256:315474a9e7bc5fad2fee965ebf8464842288e2719e7fd4ae0b8f1ebe97e2ad79"
+    "content-sha256:5c4b328edda56bd6c0f05542d674e8f5312c40b6711e6bf76b50fa1c55686871"
   ]
 }

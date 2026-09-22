@@ -12,8 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SECRET = re.compile(
-    r"arga_sk_[A-Za-z0-9_-]{40,}|sk-(?:proj-|ant-)?[A-Za-z0-9_-]{20,}|"
-    r"ghp_[A-Za-z0-9]{25,}|github_pat_[A-Za-z0-9_]{20,}|AIza[A-Za-z0-9_-]{30,}"
+    r"(?<![A-Za-z0-9])(?:arga_sk_[A-Za-z0-9_-]{40,}|sk-(?:proj-|ant-)?[A-Za-z0-9_-]{20,}|"
+    r"ghp_[A-Za-z0-9]{25,}|github_pat_[A-Za-z0-9_]{20,}|AIza[A-Za-z0-9_-]{30,})"
 )
 
 

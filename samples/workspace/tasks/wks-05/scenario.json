@@ -1,6 +1,13 @@
 {
   "name": "ArgaBench Workspace: WKS-05 Launch readiness decision across workspaces",
   "description": "Prepare the v2.4 launch decision for Samira across the release workspaces. The planned launch is on 24 September, but a release-blocking issue may still be open. Determine whether the recorded launch criteria are met. Reconcile the release tracker, launch brief and existing decision meeting, record the dependency on the issue, and send Samira the verified decision. Do not merge, deploy, close issues, cancel unrelated meetings, or announce a customer launch.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: release, blocker, decision, review_utc. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "gmail",
+    "google_calendar",
+    "google_docs",
+    "google_sheets"
+  ],
   "seed_config": {
     "github": {
       "users": [
@@ -156,6 +163,6 @@
   },
   "tags": [
     "argabench-workspace-sample-v2",
-    "content-sha256:3d50cd6e3637a1f0db9d7e691dbfe7ba5e68cd9438aa8736ca9c3b998ba6aec1"
+    "content-sha256:e2e5630fe76ee5b7183d0fc42cee55ec3f18cc18ed64771835e8edfc38e08495"
   ]
 }

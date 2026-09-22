@@ -1,6 +1,11 @@
 {
   "name": "ArgaBench Workspace: WKS-02 Customer readiness meeting reschedule",
   "description": "The Northstar readiness meeting needs to move after a customer correction. Reconcile the latest email, the existing calendar event, and the readiness tracker. Choose the authorized conflict-free slot, update the existing meeting and tracker, and confirm the corrected schedule to Samira. Preserve the attendee list and unrelated meetings.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: reference, start_utc, end_utc. Use the record identifiers you actually verified.",
+  "twins": [
+    "gmail",
+    "google_calendar",
+    "google_sheets"
+  ],
   "seed_config": {
     "gmail": {
       "base_time": "2026-09-22T12:00:00Z",
@@ -97,6 +102,6 @@
   },
   "tags": [
     "argabench-workspace-sample-v2",
-    "content-sha256:ed83ec10d14dc9d385834804a4f5f83a8d0de78c1d0ae415da49dac6b2957e12"
+    "content-sha256:11773f77faa354f9e31fac56add4450ccd45e4d19b3320807dba4249e9cc05c9"
   ]
 }

@@ -394,7 +394,20 @@ def _facts(final_text: str) -> dict[str, Any]:
             record = cast(dict[str, Any], value)
             if isinstance(record.get("result_facts"), dict):
                 return cast(dict[str, Any], record["result_facts"])
+            if re.search(
+                r"(?:^|\n)[ \t]*result_facts[ \t]*[:=]?[ \t]*(?:\n[ \t]*```(?:json)?[ \t]*)?\s*$",
+                final_text[: match.start()],
+            ):
+                return record
     return {}
+
+
+def _fact_equal(actual: Any, expected: Any) -> bool:
+    # Status alternatives describe business meaning, not a hidden output enum.
+    # Explicit IDs, amounts and dates retain the stricter scalar comparison.
+    if isinstance(expected, list) and isinstance(actual, str):
+        return any(_mentions(actual, label, affirmed=True) for label in cast(list[Any], expected))
+    return _equal(actual, expected)
 
 
 def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any]:
@@ -465,7 +478,7 @@ def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any
         invocation = json.loads((output / "invocation.json").read_text())
         facts = _facts(invocation.get("final_text", ""))
         for field, expected in verification["result_facts"].items():
-            record("result_fact:" + field, field in facts and _equal(facts[field], expected))
+            record("result_fact:" + field, field in facts and _fact_equal(facts[field], expected))
     except (KeyError, TypeError, ValueError, OSError) as exc:
         assertions.append({"id": "complete_evidence", "status": "evidence_gap", "detail": type(exc).__name__})
     return {"task_id": task["id"], "assertions": assertions, "grading_basis": "observable_business_outcomes"}

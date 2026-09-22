@@ -1,6 +1,12 @@
 {
   "name": "ArgaBench Workspace: WKS-04 Incident evidence and customer handoff",
   "description": "Samira needs a reliable handoff for the Northstar production incident PAY-409. A historical staging issue uses the same error code. Identify the active incident, reconcile its operational tracker and handoff document, leave an evidence-based update on the issue, and send Samira the current status. Do not mark the incident resolved or change code.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: incident, deployment, disposition. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "gmail",
+    "google_docs",
+    "google_sheets"
+  ],
   "seed_config": {
     "github": {
       "users": [
@@ -128,6 +134,6 @@
   },
   "tags": [
     "argabench-workspace-sample-v2",
-    "content-sha256:63777f761179e447eec6ea8d8153910d95575cdd29e01ee1f8d3a2cceee8bfc0"
+    "content-sha256:5efc43376345e996f7034eef387df3897664b29bef1fb2f78ee5f1461d66d6f7"
   ]
 }

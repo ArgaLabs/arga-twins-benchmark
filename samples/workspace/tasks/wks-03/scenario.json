@@ -1,6 +1,11 @@
 {
   "name": "ArgaBench Workspace: WKS-03 Annual renewal approval packet",
   "description": "Prepare the Northstar annual renewal packet from the approved commercial terms. The workbook still mixes an earlier monthly proposal with the approved annual terms. Reconcile the current row, update the existing renewal summary, and prepare the customer confirmation according to the communication policy in the records. Do not change the archived proposal or commit the customer to anything beyond the approved terms.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: approval, annual_usd, seats, effective_date, communication_status. Use the record identifiers you actually verified.",
+  "twins": [
+    "gmail",
+    "google_docs",
+    "google_sheets"
+  ],
   "seed_config": {
     "gmail": {
       "base_time": "2026-09-22T12:00:00Z",
@@ -97,6 +102,6 @@
   },
   "tags": [
     "argabench-workspace-sample-v2",
-    "content-sha256:743e05c0c6be1b31680644de9ead5cc44409c41d8394914c0c827436be7a51d6"
+    "content-sha256:cced5a6f09c4b1dafd5ba83e453b8f7e8cf763fb743aff148a36e1132fc47b94"
   ]
 }

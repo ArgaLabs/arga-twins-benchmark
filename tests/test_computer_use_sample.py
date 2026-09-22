@@ -14,7 +14,7 @@ from arga_twins_benchmark.computer_use.proxy import BrowserProxy, allowed_path
 from arga_twins_benchmark.computer_use.session import SAMPLES, load_task
 
 
-@pytest.mark.parametrize("mode", ["pass", "fail", "unsafe", "evidence_gap", "cleanup", "timeout", "drain"])
+@pytest.mark.parametrize("mode", ["pass", "fail", "unsafe", "evidence_gap", "cleanup", "timeout", "drain", "multipart"])
 def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
     """Exercise real local HTTP workspaces without provisioning or paid model calls."""
     from arga_twins_benchmark.arga_cli import ProvisionedTwin, TwinRun
@@ -96,7 +96,7 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
                     task="WKS-01",
                     credentials=None,
                     output=output,
-                    minutes=0.005 if mode == "timeout" else 1,
+                    minutes=0.05 if mode == "timeout" else 1,
                     reset_check=False,
                 )
             )
@@ -126,7 +126,7 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
 
                     async def slow_report():
                         yield b'{"final_text": "'
-                        await asyncio.sleep(0.5)
+                        await asyncio.sleep(3.5)
                         yield b'Late report"}'
 
                     response = await client.post(
@@ -151,9 +151,19 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
                             client.post(candidate["workspaces"]["google_docs"] + "ui/edit")
                         )
                         await asyncio.wait_for(write_started.wait(), 2)
-                    response = await client.post(
-                        candidate["completion_endpoint"], json={"final_text": "Fixture complete"}
-                    )
+                    if mode == "multipart":
+                        assert (
+                            await client.post(
+                                candidate["completion_endpoint"], files={"final_text": ("report.txt", "bad")}
+                            )
+                        ).status_code == 400
+                        response = await client.post(
+                            candidate["completion_endpoint"], files={"final_text": (None, "Fixture complete")}
+                        )
+                    else:
+                        response = await client.post(
+                            candidate["completion_endpoint"], json={"final_text": "Fixture complete"}
+                        )
                     assert response.status_code == 200
                     if pending_write is not None:
                         assert (await pending_write).status_code == 200
@@ -169,7 +179,7 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
                 "infrastructure_invalid"
                 if mode in {"cleanup", "timeout", "evidence_gap"}
                 else "pass"
-                if mode == "drain"
+                if mode in {"drain", "multipart"}
                 else mode
             )
             assert verdict["outcome"] == outcome
@@ -344,6 +354,7 @@ def test_five_argabench_style_tasks_have_all_modalities_and_exact_seed_files() -
         assert task["interaction_modes"] == ["computer_use", "api", "mixed"]
         assert task["seed_config"] == json.loads((folder / "seed_config.json").read_text())
         scenario = json.loads((folder / "scenario.json").read_text())
+        assert scenario["twins"] == sorted(task["twins"])
         assert scenario["seed_config"] == task["seed_config"] and "prompt" not in scenario
         assert scenario["description"] == task["prompt"] and len(scenario["name"]) <= 80
 
