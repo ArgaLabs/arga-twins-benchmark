@@ -26,9 +26,8 @@ def sample_tree_sha256() -> str:
             for path in (ROOT / folder).rglob("*")
             if path.is_file()
             and not path.is_symlink()
-            and path.suffix in {".py", ".yaml", ".json", ".md", ".txt"}
+            and path.suffix in {".py", ".yaml", ".json", ".md", ".txt", ".png", ".jpg", ".webp"}
             and "__pycache__" not in path.parts
-            and "evidence" not in path.parts
             and path.name != "readiness.json"
             and not any(part.endswith(".egg-info") for part in path.parts)
         )
@@ -47,6 +46,39 @@ def sample_tree_sha256() -> str:
     for name in sorted(set(names)):
         digest.update(name.encode() + b"\0" + hashlib.sha256((ROOT / name).read_bytes()).digest())
     return digest.hexdigest()
+
+
+def package_inputs() -> dict[str, bytes]:
+    """Use the same input set for packaging and credential-scan evidence."""
+    files: dict[str, bytes] = {}
+    for folder in ("src", "samples/workspace", "tests/fixtures/workspace"):
+        for path in (ROOT / folder).rglob("*"):
+            if (
+                path.is_file()
+                and not path.is_symlink()
+                and path.suffix in {".py", ".yaml", ".json", ".md", ".txt", ".png", ".jpg", ".webp"}
+                and "__pycache__" not in path.parts
+                and not any(p.endswith(".egg-info") for p in path.parts)
+            ):
+                files[str(path.relative_to(ROOT))] = path.read_bytes()
+    for name in (
+        "pyproject.toml",
+        "uv.lock",
+        "tests/test_computer_use_sample.py",
+        "tests/test_workspace_outcomes.py",
+        "tests/test_workspace_candidate.py",
+        "scripts/package_computer_use_sample.py",
+        "scripts/build_workspace_scenarios.py",
+    ):
+        files[name] = (ROOT / name).read_bytes()
+    files["README.md"] = files["samples/workspace/README.md"]
+    files["fidelity.md"] = files["samples/workspace/fidelity.md"]
+    files["manifest.json"] = files["samples/workspace/manifest.json"]
+    files["quickstart.sh"] = (
+        b'#!/bin/sh\nset -eu\ncd "$(dirname "$0")"\n'
+        b'exec uv run --extra computer-use python -m arga_twins_benchmark.computer_use.session "$@"\n'
+    )
+    return files
 
 
 def package(output: Path) -> None:
@@ -96,34 +128,7 @@ def package(output: Path) -> None:
             if hashlib.sha256(path.read_bytes()).hexdigest() != evidence["sha256"]:
                 raise ValueError(f"Stale release evidence for {check['id']}")
             evidence_files[str(path.relative_to(ROOT))] = path.read_bytes()
-    files: dict[str, bytes] = dict(evidence_files)
-    for folder in ("src", "samples/workspace", "tests/fixtures/workspace"):
-        for path in (ROOT / folder).rglob("*"):
-            if (
-                path.is_file()
-                and not path.is_symlink()
-                and path.suffix in {".py", ".yaml", ".json", ".md", ".txt"}
-                and "__pycache__" not in path.parts
-                and not any(p.endswith(".egg-info") for p in path.parts)
-            ):
-                files[str(path.relative_to(ROOT))] = path.read_bytes()
-    for name in (
-        "pyproject.toml",
-        "uv.lock",
-        "tests/test_computer_use_sample.py",
-        "tests/test_workspace_outcomes.py",
-        "tests/test_workspace_candidate.py",
-        "scripts/package_computer_use_sample.py",
-        "scripts/build_workspace_scenarios.py",
-    ):
-        files[name] = (ROOT / name).read_bytes()
-    files["README.md"] = files["samples/workspace/README.md"]
-    files["fidelity.md"] = files["samples/workspace/fidelity.md"]
-    files["manifest.json"] = files["samples/workspace/manifest.json"]
-    files["quickstart.sh"] = (
-        b'#!/bin/sh\nset -eu\ncd "$(dirname "$0")"\n'
-        b'exec uv run --extra computer-use python -m arga_twins_benchmark.computer_use.session "$@"\n'
-    )
+    files = {**package_inputs(), **evidence_files}
     for name, data in files.items():
         if SECRET.search(data.decode(errors="ignore")):
             raise ValueError(f"Possible credential in {name}; value suppressed")
@@ -132,13 +137,18 @@ def package(output: Path) -> None:
             {
                 "name": "ArgaBench Computer Use + API sample",
                 "contains_live_credentials": False,
-                "task_count": 5,
+                "task_count": len(json.loads(files["manifest.json"])["tasks"]),
                 "files": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items())},
             },
             indent=2,
         )
         + "\n"
     ).encode()
+    # Never let an output path overwrite any reviewed source or evidence input.
+    inputs = {(ROOT / name).resolve() for name in files}
+    destinations = (output.resolve(), output.with_suffix(output.suffix + ".sha256").resolve())
+    if any(path in inputs for path in destinations):
+        raise ValueError("Package output overlaps a source or evidence input")
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for name, data in sorted(files.items()):

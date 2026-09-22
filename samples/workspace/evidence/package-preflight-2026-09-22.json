@@ -1,18 +1,23 @@
 {
   "checks": {
-    "clean_locked_install": "pass",
+    "clean_locked_install": {
+      "status": "pass"
+    },
     "focused_tests_clean_environment": {
-      "passed": 93
+      "status": "pass",
+      "passed": 108,
+      "skipped": 0
     },
     "full_benchmark_tests": {
-      "passed": 1069,
+      "status": "pass",
+      "passed": 1084,
       "skipped": 26
     },
     "package_source_secret_scan": {
-      "passed": true,
-      "files_scanned": 108
+      "status": "pass",
+      "files_scanned": 117
     },
     "final_zip_created": false
   },
-  "limits": "Frontend parity and deployment of subsequent frontend changes remain separate gates."
+  "limits": "Frontend parity, hosted browser-agent coverage and deployment of subsequent changes remain separate gates."
 }

@@ -246,9 +246,15 @@ async def run(args: argparse.Namespace) -> None:
                 selected = {"provider_api": gateway, "provider_docs": docs}.get(str(name))
                 if selected is None:
                     return JSONResponse({"error": "Unknown tool"}, status_code=400)
-                result = await selected.execute(arguments)
+                status_code = 200
+                try:
+                    result = await selected.execute(arguments)
+                except Exception as exc:
+                    # Provider exception strings may contain authenticated URLs.
+                    result = {"ok": False, "error": "Provider request failed", "error_type": type(exc).__name__}
+                    status_code = 502
                 events.append({"type": "tool_call", "name": name, "arguments": arguments, "result": result})
-                return JSONResponse(result)
+                return JSONResponse(result, status_code=status_code)
 
             async def complete(request: Request) -> Response:
                 nonlocal final_text, finished
@@ -319,7 +325,8 @@ async def run(args: argparse.Namespace) -> None:
             # handlers before disabling proxies or taking the final snapshot.
             for server in servers:
                 server.server.should_exit = True
-            await asyncio.gather(*(server.close() for server in servers))
+            drain_results = await asyncio.gather(*(server.close() for server in servers), return_exceptions=True)
+            drain_failed = any(isinstance(result, BaseException) for result in drain_results)
             for proxy in proxies:
                 proxy.accepting = False
             servers.clear()
@@ -339,6 +346,8 @@ async def run(args: argparse.Namespace) -> None:
                 },
             )
             verdict = grade_workspace_attempt(output, task)
+            if drain_failed:
+                verdict["assertions"].append({"id": "workspace_shutdown", "status": "evidence_gap"})
             # Blocked probes are not actual prohibited mutations. Keep them in diagnostics.
             verdict["assertions"] = [a for a in verdict["assertions"] if a["id"] != "control_plane_access"]
             statuses = {a["status"] for a in verdict["assertions"]}

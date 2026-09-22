@@ -14,7 +14,10 @@ from arga_twins_benchmark.computer_use.proxy import BrowserProxy, allowed_path
 from arga_twins_benchmark.computer_use.session import SAMPLES, load_task
 
 
-@pytest.mark.parametrize("mode", ["pass", "fail", "unsafe", "evidence_gap", "cleanup", "timeout", "drain", "multipart"])
+@pytest.mark.parametrize(
+    "mode",
+    ["pass", "fail", "unsafe", "evidence_gap", "cleanup", "timeout", "drain", "multipart", "drain_error", "tool_error"],
+)
 def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
     """Exercise real local HTTP workspaces without provisioning or paid model calls."""
     from arga_twins_benchmark.arga_cli import ProvisionedTwin, TwinRun
@@ -87,6 +90,14 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
         return proxy
 
     monkeypatch.setattr(session, "BrowserProxy", make_proxy)
+    if mode == "drain_error":
+        original_close = session.Server.close
+
+        async def failed_close(server: session.Server) -> None:
+            await original_close(server)
+            raise TimeoutError("Synthetic drain timeout")
+
+        monkeypatch.setattr(session.Server, "close", failed_close)
     output = tmp_path / "attempt"
 
     async def exercise() -> None:
@@ -102,12 +113,15 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
             )
         )
         try:
-            for _ in range(100):
+            for _ in range(240):
                 if (output / "candidate.json").exists():
                     break
                 if running.done():
                     await running
                 await asyncio.sleep(0.05)
+            assert (output / "candidate.json").exists(), (
+                "Session did not publish the candidate handoff within 12 seconds"
+            )
             candidate = json.loads((output / "candidate.json").read_text())
             assert set(candidate["workspaces"]) == {"github", "google_docs", "gmail"}
             assert "synthetic.invalid" not in json.dumps(candidate)
@@ -145,6 +159,22 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
                     assert (
                         await client.post(candidate["tool_endpoint"], content=b"x" * (1024 * 1024 + 1))
                     ).status_code == 413
+                    if mode == "tool_error":
+                        monkeypatch.setattr(
+                            session.ProviderGateway,
+                            "execute",
+                            AsyncMock(side_effect=RuntimeError("Private authenticated URL must not escape")),
+                        )
+                        failed = await client.post(
+                            candidate["tool_endpoint"],
+                            json={
+                                "name": "provider_api",
+                                "arguments": {"provider": "github", "method": "GET", "path": "/user"},
+                            },
+                        )
+                        assert failed.status_code == 502
+                        assert failed.json()["error_type"] == "RuntimeError"
+                        assert "Private authenticated" not in failed.text
                     pending_write = None
                     if mode == "drain":
                         pending_write = asyncio.create_task(
@@ -177,16 +207,16 @@ def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pyt
             verdict = json.loads((output / "verifier.json").read_text())
             outcome = (
                 "infrastructure_invalid"
-                if mode in {"cleanup", "timeout", "evidence_gap"}
+                if mode in {"cleanup", "timeout", "evidence_gap", "drain_error"}
                 else "pass"
-                if mode in {"drain", "multipart"}
+                if mode in {"drain", "multipart", "tool_error"}
                 else mode
             )
             assert verdict["outcome"] == outcome
             assert verdict["reward"] == {"pass": 1, "fail": 0, "unsafe": -1, "infrastructure_invalid": None}[outcome]
             invocation = json.loads((output / "invocation.json").read_text())
             assert invocation["final_text"] == ("" if mode == "timeout" else "Fixture complete")
-            assert len(invocation["events"]) == 1
+            assert len(invocation["events"]) == (2 if mode == "tool_error" else 1)
         finally:
             if not running.done():
                 running.cancel()

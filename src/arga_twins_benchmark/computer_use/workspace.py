@@ -275,6 +275,18 @@ def _timestamp(value: Any) -> datetime | None:
     return parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed.astimezone(UTC)
 
 
+def _affirmed_span(text: str, start: int, end: int) -> bool:
+    prefix, suffix = _normal(text[:start]), _normal(text[end:])
+    return not (
+        re.search(r"\b(?:no|not|never|no longer) (?:a |an |the |currently |still |actually )*$", prefix + " ")
+        or re.match(
+            r"(?:(?:is|are|was|were|has been|have been) )?"
+            r"(?:not|never|no longer|isn t|isnt|aren t|arent|wasn t|wasnt)\b",
+            suffix,
+        )
+    )
+
+
 def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
     """Match whole normalized phrases; recognize equivalent clock notation.
 
@@ -291,14 +303,13 @@ def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
             alternatives += [f"{hour % 12 or 12} {suffix}", f"{hour % 12 or 12}{suffix}"]
     if clock:
         text = re.sub(r"(\b\d{4}-\d{2}-\d{2})[Tt](?=\d{2}:\d{2}\b)", r"\1 ", text)
-    normalized = _normal(text)
+    # Keep clock punctuation: normalizing a date plus a time can turn its day
+    # and following hour into another valid-looking clock (19T00:30 -> 19 00).
+    normalized = text.lower() if clock else _normal(text)
     for alternative in alternatives:
-        phrase = _normal(alternative)
+        phrase = alternative.lower() if clock else _normal(alternative)
         for match in re.finditer(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", normalized):
-            prefix = normalized[: match.start()]
-            if affirmed and re.search(
-                r"\b(?:not|never|no longer) (?:a |an |the |currently |still |actually )*$", prefix
-            ):
+            if affirmed and not _affirmed_span(normalized, match.start(), match.end()):
                 continue
             return True
     return False
@@ -344,7 +355,7 @@ def _label_equal(actual: Any, expected: Any) -> bool:
         return False
     text = _normal(actual)
     return any(
-        not re.search(r"\b(?:not|never|no longer) (?:currently |still |actually )*$", text[: match.start()])
+        _affirmed_span(text, match.start(), match.end())
         for match in re.finditer(r"(?<!\w)" + pattern + r"(?!\w)", text)
     )
 
@@ -502,7 +513,7 @@ def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any
                         )
                     )
                 else:
-                    fields = set(rule["fields"])
+                    fields = set(rule.get("fields", []))
                     if rule["kind"] == "pull":
                         fields.add("reviewers")
                     safe = all(
