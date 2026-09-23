@@ -7,10 +7,11 @@
     "Keep the selected rows or columns selected after movement and refresh dependent values.",
     "Rewrite same-sheet and cross-sheet cell/range references while preserving absolute markers, quoted strings and unrelated reversed ranges.",
     "Move intact merged cells and reject operations splitting a merge with atomic rollback.",
-    "Use sparse coordinate mapping so moving rows does not allocate an index table for the entire sheet."
+    "Use sparse coordinate mapping so moving rows does not allocate an index table for the entire sheet.",
+    "Move named range bindings with the cells; evaluate them in formulas and native values reads/writes, with case-insensitive lookup and atomic input validation."
   ],
   "validation": {
-    "regressions": 252,
+    "regressions": 269,
     "ruff": "passed",
     "git_diff_check": "passed",
     "type_check_comparison": {
@@ -30,7 +31,9 @@
       "Reload and cross-sheet dependent formula readback",
       "Sheet-edge action disabled",
       "ArrowRight/ArrowLeft submenu navigation and Escape dismissal",
-      "Partial-merge error leaves whole native spreadsheet unchanged"
+      "Partial-merge error leaves whole native spreadsheet unchanged",
+      "Named-range formula recalculation after a desktop row move, cross-sheet mobile rendering, and native binding/value readback",
+      "Whole-row/column named ranges remain unbounded when moving an edge dimension"
     ],
     "native_readback": "passed",
     "unrelated_merges_unchanged": true,
@@ -46,23 +49,26 @@
     }
   },
   "reference": {
-    "source": "Current Google Sheets frontend inspected in Chrome using two disposable private fixtures; both moved to Trash after export.",
+    "source": "Current Google Sheets frontend inspected in Chrome using three disposable private fixtures; all moved to Trash after export; exports removed.",
     "checked_in_results": "twins/tests/fixtures/google_sheets_move_reference.json",
     "flows": [
       "Edit > Move > Rows down for rows 2:3",
       "Edit > Move > Rows up for rows 3:4"
     ],
-    "verification": "Exact formulas and calculated values from the provider XLSX exports match executable native regression fixtures."
+    "verification": "Exact formulas and calculated values from the provider XLSX exports match executable native regression fixtures.",
+    "named_range_results": "twins/tests/fixtures/google_sheets_named_move_reference.json"
   },
   "references": [
     "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request#MoveDimensionRequest",
-    "https://support.google.com/docs/answer/54813?hl=en&co=GENIE.Platform%3DDesktop"
+    "https://support.google.com/docs/answer/54813?hl=en&co=GENIE.Platform%3DDesktop",
+    "https://support.google.com/docs/answer/63175?hl=en"
   ],
   "limits": [
     "CI, deployment and hosted validation remain pending.",
     "Pointer dragging of row/column headers, frozen-boundary dragging, noncontiguous selections and undo/redo remain open.",
     "The reference comparison covers the inspected row-move cases, not every formula syntax or pixel-level Sheets parity.",
-    "Movement of named ranges, chart/pivot/filter/protection bindings and embedded data-validation formula references still needs reference comparison and coverage.",
-    "The first local browser helper shutdown cancelled its final capture; native readback before shutdown was preserved, and a fresh run completed with a full before/after capture and normal shutdown."
+    "Movement of chart/pivot/filter/protection bindings and embedded data-validation formula references still needs reference comparison and coverage.",
+    "The first local browser helper shutdown cancelled its final capture; native readback before shutdown was preserved, and a fresh run completed with a full before/after capture and normal shutdown.",
+    "Name-box whole-row shorthand such as 2:3 and named-range management UI remain open; full-width cell ranges and header selection support moves."
   ]
 }
