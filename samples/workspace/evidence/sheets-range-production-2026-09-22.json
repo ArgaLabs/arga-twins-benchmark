@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "source_revision": "39258e9b53b36af9027de500ef5ba43688d1ec41",
+  "tested_head": "481cad8b5d88da3a7ae2b9f8d5979349207123a5",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35806142223",
+  "deployment_status": "success",
+  "exact_head_checks_passed": 29,
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "deployed_range_and_clipboard_scripts_match_tested_source": "pass",
+    "native_range_formatting": "pass",
+    "copy_formula_relocation": "pass",
+    "cut_formula_and_dependent_reference_relocation": "pass",
+    "copy_and_cut_preserve_formatting": "pass",
+    "cut_clears_source_values": "pass",
+    "quoted_tsv_unicode_multiline_paste": "pass",
+    "name_box_distant_range": "pass",
+    "shift_keyboard_selection_across_window_boundary": "pass",
+    "typing_returns_to_original_active_cell": "pass",
+    "native_api_readback": "pass",
+    "protected_sheet_unchanged": "pass",
+    "narrow_viewport_menu_bounds": "pass"
+  },
+  "responsive_measurements": {
+    "width": 390,
+    "document_scroll_width": 390,
+    "edit_menu": {
+      "left": 12,
+      "right": 242,
+      "top": 152.5,
+      "bottom": 460.5
+    }
+  },
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/sheets-range-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "frontend-source-check.json": "66cb782f06818648f34dbbf9ca94a686f6e44a3c4a4405563db8ac4b9b33c338",
+    "manual-native-readback.json": "64bc8dfeffd2239c4146762097cc5fb66da05b2d9ec6d989e139eff0f950bb64",
+    "google_sheets-browser-trace.json": "03b382ac2459bd634c92c645904b9740e43f64e45a622002db5be39b738401f8",
+    "cleanup.json": "d39fb10112493ad6e934ca7597be35be46283dd1c6bc91be1cfe50e3f9a09451",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous candidate rollout or complete Sheets parity.",
+    "Per-container digest is not exposed; hosted source fingerprints and deployment provenance are recorded.",
+    "Native full-sheet viewport, dimension controls, frozen panes, merged cells, history and advanced spreadsheet workflows require separate verification.",
+    "No screenshot files retained."
+  ]
+}

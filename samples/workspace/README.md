@@ -58,3 +58,5 @@ Text checks recognize whole phrases and equivalent 12/24-hour times and UTC offs
 Structured facts accept a nested `result_facts` object or a JSON object directly labeled `result_facts`. Status descriptions can include an accountable owner's name and equivalent phrasing. Exact leading identifiers may carry a parenthesized explanation; a different identifier or numeric amount does not pass. Clock mentions may follow an ISO date separator.
 
 The sample contains a manifest, five prompts, five exact seed files, five Scenario definitions, executable outcome contracts, the runner/proxy and its tests. It contains no live credentials. Task fixtures and grading contracts belong to the operator, not the candidate.
+
+Production Chrome checks verified Sheets range formatting, formula-preserving copy/cut, dependent reference updates, quoted multiline paste, keyboard navigation across a rendered-window boundary, and the 390px Edit menu. Native readback and teardown passed. These are manual feature checks; see `evidence/sheets-range-production-2026-09-22.json`. Full eight-twin parity and the final ZIP remain gated.
