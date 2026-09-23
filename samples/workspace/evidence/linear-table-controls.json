@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-22",
+  "scope": "Linear description/comment table structure editing and mobile submit access",
+  "full_parity": false,
+  "reference": "https://linear.app/docs/editor",
+  "tests": {
+    "passed": 73,
+    "failed": 0,
+    "duration_seconds": 3.45,
+    "log": "/tmp/lab-linear-table-tests.txt",
+    "scope": "Linear table controls, rich blocks, native twin and lab frontend regressions"
+  },
+  "browser": {
+    "driver": "Google Chrome via CUA",
+    "viewports": [
+      "default desktop",
+      "390x844"
+    ],
+    "verified": [
+      "Insert rows above/below and columns left/right, delete rows/columns, move rows/columns, and align columns without losing rich cell content.",
+      "Tab and Shift+Tab move between cells; Tab in the last cell adds a row and focuses its first cell.",
+      "Structural edits and table deletion support native Chrome undo/redo.",
+      "Row/Column/Alignment menus support arrow keys, Escape, and Shift+F10 from a cell; focus leaving the editor hides the table controls.",
+      "Native description and comment Markdown retains column order/alignment, bold text and surrounding paragraphs. Protected issue is unchanged.",
+      "Mobile alignment menu fits x=153.05..333.05 and y=443.89..563.89; document width equals 390px.",
+      "Compact menus visually inspected; no screenshot files retained. Footer spacing keeps Comment clear of the floating Controls toggle; pointer submission was verified."
+    ],
+    "javascript_errors": 0
+  },
+  "native_readback": {
+    "path": "/tmp/lab-linear-table-native-readback.json",
+    "sha256": "ef94c2a012799b30a859465de193328bc9b4ca203dd98a3fb4eefa580cabe97a",
+    "note": "Description/table-comment readback precedes a local restart for the footer/focus fix; pointer comment submission was checked afterward."
+  },
+  "source_sha256": {
+    "twins/linear/rich_editor.py": "b532f438aa8c35cc4320448da4007ae0e6ea7dc696b106d2349fdefc365e3cf6",
+    "twins/linear/table_editor.py": "154c919be532a5c9853f9d2681c28de2cef300bee3cb0b0f7d5272cc686c9934",
+    "twins/linear/frontend.py": "58775495c5ac499b6fc7c26d2f6078c57adb5d1ff498b2fdab64321ad55bb375"
+  },
+  "remaining": [
+    "Column resize/drag handles, table multi-selection and authenticated provider visual comparison remain open.",
+    "Mentions, uploads, full workspace/collaboration/settings/admin/billing/analytics/AI scope and complete responsive/reference inventory remain open.",
+    "CI, production deployment and hosted validation remain pending. This manual feature check is not a full hosted agent rollout."
+  ]
+}
