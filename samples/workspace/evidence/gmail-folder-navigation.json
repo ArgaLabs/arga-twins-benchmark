@@ -17,5 +17,17 @@
   "limitations": [
     "CI/deployment/hosted validation pending",
     "Broader Gmail parity remains open"
-  ]
+  ],
+  "production": {
+    "revision": "166c8f2a4086f2fe6ed1710b59b166fa0b915b18",
+    "deploy_twins": {
+      "run": 35830097608,
+      "status": "success"
+    },
+    "deploy_runtime": {
+      "run": 35830097618,
+      "status": "success"
+    },
+    "hosted_followup": "pending"
+  }
 }

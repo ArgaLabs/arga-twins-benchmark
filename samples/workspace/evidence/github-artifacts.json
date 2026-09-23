@@ -1,0 +1,45 @@
+{
+  "status": "local_verified_with_browser_download_gap",
+  "date": "2026-09-23",
+  "screenshots_retained": false,
+  "features": [
+    "ZIP archive bytes and exact digest/size",
+    "60-second signed download redirects",
+    "artifact deletion and run-deletion cascade",
+    "repository/run pagination and name filter",
+    "public metadata, OAuth and installation Actions grants",
+    "text/base64 Scenario seed and snapshot replay",
+    "responsive artifact table and deletion confirmation"
+  ],
+  "checks": {
+    "github_regression_tests": 320,
+    "ruff": "passed",
+    "desktop_chrome": "artifact table inspected",
+    "mobile_chrome": {
+      "width": 390,
+      "height": 844,
+      "scroll_width": 390,
+      "deletion_reload": "passed"
+    },
+    "native_readback": {
+      "protected_repository": "unchanged",
+      "sha256": "2758fe9b92bbd7668669485e45ee9eb73e90630334dc1315327ce2499f5f24f5"
+    },
+    "candidate_adapters": {
+      "kind": "in_process_gateway_proxy_check",
+      "candidate_api_status": 200,
+      "candidate_browser_proxy_status": 200,
+      "same_archive_bytes": true,
+      "admin_denied": true,
+      "archive_sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+      "not_a_browser_agent_rollout": true
+    }
+  },
+  "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
+  "remaining": [
+    "Chrome download click returned ERR_BLOCKED_BY_CLIENT; native archive retrieval passes",
+    "hosted deployment and browser validation",
+    "complete Actions/review/project settings, collaboration and visual parity"
+  ],
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1106"
+}
