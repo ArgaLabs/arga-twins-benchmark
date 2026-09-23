@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_smoke",
+  "scored_candidate": false,
+  "status": "infrastructure_invalid",
+  "run_id": "9e180c43-59ab-4f18-a8ca-54b6a0a1af34",
+  "seed": "samples/workspace/evidence/gmail-folder-hosted-seed.json",
+  "provisioning": "Timed out after 1200 seconds; no provider endpoints became available.",
+  "cleanup": "Teardown accepted; confirmation timed out while status remained tearing_down. Follow-up pending.",
+  "browser_actions": 0,
+  "screenshots_retained": false
+}

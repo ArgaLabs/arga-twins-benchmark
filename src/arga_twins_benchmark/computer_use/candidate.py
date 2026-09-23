@@ -1,8 +1,4 @@
-"""Run an API-capable candidate using only the public sample handoff.
-
-This adapter exercises one permitted interaction mode. Browser and mixed agents
-can use the same handoff with their own Computer Use tools.
-"""
+"""Run a candidate with API tools and an optional external Computer Use relay."""
 
 from __future__ import annotations
 
@@ -11,6 +7,7 @@ import asyncio
 import base64
 import binascii
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, cast
 from urllib.parse import urlsplit
@@ -18,6 +15,7 @@ from urllib.parse import urlsplit
 import httpx
 
 from arga_twins_benchmark.agents import SUPPORTED_MODEL_IDS, ModelInvocationResult, invoke_model
+from arga_twins_benchmark.computer_use.browser_relay import BrowserRelay
 from arga_twins_benchmark.lifecycle import write_private_json
 
 SYSTEM_PROMPT = (
@@ -85,6 +83,8 @@ async def run_candidate(
     model: str,
     output: Path,
     minutes: int = 35,
+    browser_relay: bool = False,
+    browser_timeout_seconds: float = 120,
     client: httpx.AsyncClient | None = None,
 ) -> ModelInvocationResult:
     tools_url = _endpoint(handoff.get("tool_endpoint"), "/tools")
@@ -105,11 +105,25 @@ async def run_candidate(
         + json.dumps(handoff.get("resources", {}), ensure_ascii=False)
     )
     output.mkdir(parents=True, exist_ok=False, mode=0o700)
+    relay = (
+        BrowserRelay(output / "browser-relay", handoff.get("workspaces"), timeout_seconds=browser_timeout_seconds)
+        if browser_relay
+        else None
+    )
+    system_prompt = SYSTEM_PROMPT
+    if relay:
+        system_prompt += (
+            " You also have browser_ui for the provisioned frontends. Computer Use is encouraged for navigating "
+            "and editing their visible workflows; choose API or mixed steps wherever useful. "
+            "Read the returned page before acting, use fresh element indices, and verify saved changes."
+        )
     owns_client = client is None
     http = client or httpx.AsyncClient(timeout=120, follow_redirects=False)
     try:
 
         async def execute(name: str, arguments: dict[str, Any]) -> object:
+            if name == "browser_ui" and relay:
+                return await relay.execute(arguments)
             if name == "text_codec":
                 return text_codec(arguments)
             if name not in {"provider_api", "provider_docs"}:
@@ -120,24 +134,29 @@ async def run_candidate(
 
         result = await invoke_model(
             model,
-            SYSTEM_PROMPT,
+            system_prompt,
             user_prompt,
-            [*schemas, CODEC_TOOL],
+            [*schemas, CODEC_TOOL, *([relay.tool] if relay else [])],
             execute,
             max_tool_calls=350,
             timeout_seconds=minutes * 60,
         )
+        if relay and relay.infrastructure_error:
+            result = replace(result, status="incomplete", stop_reason="browser_driver_infrastructure_error")
         write_private_json(output / "model-invocation.json", result.as_dict())
         write_private_json(
             output / "adapter.json",
             {
-                "interaction_mode": "api",
+                "interaction_mode": "mixed" if relay else "api",
                 "model": model,
                 "status": result.status,
                 "task_id": handoff["task_id"],
                 "timeout_seconds": minutes * 60,
                 "tool_limit": 350,
-                "has_browser_tool": False,
+                "has_browser_tool": relay is not None,
+                "browser_calls": relay.calls if relay else 0,
+                "completed_browser_calls": relay.completed_calls if relay else 0,
+                "browser_infrastructure_error": relay.infrastructure_error if relay else None,
             },
         )
         if result.status == "completed" and result.final_text.strip():
@@ -157,9 +176,18 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", choices=SUPPORTED_MODEL_IDS, required=True)
     parser.add_argument("--minutes", type=int, default=35, choices=range(1, 40))
+    parser.add_argument(
+        "--browser-relay",
+        action="store_true",
+        help="Connect an external Computer Use driver using the output/browser-relay queue",
+    )
     args = parser.parse_args()
     handoff = json.loads(args.handoff.read_text())
-    result = asyncio.run(run_candidate(handoff, model=args.model, output=args.output, minutes=args.minutes))
+    result = asyncio.run(
+        run_candidate(
+            handoff, model=args.model, output=args.output, minutes=args.minutes, browser_relay=args.browser_relay
+        )
+    )
     print(json.dumps({"status": result.status, "model": result.response_model, "tool_calls": result.tool_calls}))
     raise SystemExit(0 if result.status == "completed" else 2)
 

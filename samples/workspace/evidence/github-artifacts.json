@@ -33,7 +33,8 @@
       "admin_denied": true,
       "archive_sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
       "not_a_browser_agent_rollout": true
-    }
+    },
+    "root_compatibility_runner_tests": 107
   },
   "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
   "remaining": [
@@ -41,5 +42,11 @@
     "hosted deployment and browser validation",
     "complete Actions/review/project settings, collaboration and visual parity"
   ],
-  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1106"
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1106",
+  "ci_followup": {
+    "initial_failure": "Compatibility runner cleared artifact records but retained initialization flags and expected legacy JSON downloads",
+    "fix": "Reset both local Actions resource and singleton fixtures; validate documented redirect, ZIP bytes, size and digest",
+    "local_result": "107 passed",
+    "ci_rerun": "pending"
+  }
 }
