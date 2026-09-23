@@ -34,7 +34,15 @@
       "archive_sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
       "not_a_browser_agent_rollout": true
     },
-    "root_compatibility_runner_tests": 107
+    "root_compatibility_runner_tests": 107,
+    "contract_matrix_regressions": 45,
+    "full_github_contract_matrix": {
+      "status": "pass_at_high_severity_threshold",
+      "high": 0,
+      "medium": 122,
+      "low": 0,
+      "unexpected_5xx": 0
+    }
   },
   "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
   "remaining": [
@@ -47,6 +55,14 @@
     "initial_failure": "Compatibility runner cleared artifact records but retained initialization flags and expected legacy JSON downloads",
     "fix": "Reset both local Actions resource and singleton fixtures; validate documented redirect, ZIP bytes, size and digest",
     "local_result": "107 passed",
-    "ci_rerun": "pending"
+    "ci_rerun": {
+      "workflow": "Twin Fidelity",
+      "run": 35834526925,
+      "commit": "629274f3",
+      "conclusion": "success",
+      "scope": "Manual full fidelity workflow; root PR CI remains skipped while draft."
+    },
+    "manual_workflow_failure": "Public artifact metadata was incorrectly required to reject missing authentication by the contract harness",
+    "manual_workflow_fix": "Allow anonymous metadata GETs only on public repositories; retain private, invalid-token, archive-download and write auth checks"
   }
 }
