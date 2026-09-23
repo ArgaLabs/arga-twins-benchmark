@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-22",
+  "provider": "gmail",
+  "pr": 1103,
+  "status": "local_verified_hosted_pending",
+  "checks": {
+    "tests": 22,
+    "Chrome_desktop": "Search to Drafts clears query and selection, renders two reply drafts, returns Inbox to page one; repeated Inbox navigation resets page two",
+    "Chrome_mobile_390px": "Search to Drafts clears query and renders both drafts",
+    "native_mail_mutations": 0,
+    "screenshots_retained": false
+  },
+  "source_sha256": {
+    "twins/gmail/labels_ui.py": "8ef6b30f4009ad929b25f710b38f26cc4aa05636312f268080209ab57b25aefb",
+    "twins/tests/test_gmail_labels_ui.py": "ec70a468cb8d6be91e66758dee4ea37d4187e7eae581af02b914907827325f25"
+  },
+  "limitations": [
+    "CI/deployment/hosted validation pending",
+    "Broader Gmail parity remains open"
+  ]
+}

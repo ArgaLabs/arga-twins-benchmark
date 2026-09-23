@@ -4,17 +4,22 @@
   "full_parity": false,
   "reference": "https://linear.app/docs/editor",
   "tests": {
-    "passed": 73,
+    "passed": 100,
     "failed": 0,
-    "duration_seconds": 3.45,
-    "log": "/tmp/lab-linear-table-tests.txt",
-    "scope": "Linear table controls, rich blocks, native twin and lab frontend regressions"
+    "scope": "77 focused table/seed-ID/native/frontend tests, 17 golden fidelity tests and 6 SDK contracts",
+    "logs": [
+      "/tmp/lab-linear-seed-id-tests.txt",
+      "/tmp/lab-linear-id-sdk-tests.txt",
+      "/tmp/lab-linear-id-sdk-retry-tests.txt"
+    ],
+    "environment_note": "Initial SDK setup could not bind a local port in the sandbox. All six SDK tests passed with local-server permission."
   },
   "browser": {
     "driver": "Google Chrome via CUA",
     "viewports": [
       "default desktop",
-      "390x844"
+      "390x844",
+      "844x390"
     ],
     "verified": [
       "Insert rows above/below and columns left/right, delete rows/columns, move rows/columns, and align columns without losing rich cell content.",
@@ -23,7 +28,9 @@
       "Row/Column/Alignment menus support arrow keys, Escape, and Shift+F10 from a cell; focus leaving the editor hides the table controls.",
       "Native description and comment Markdown retains column order/alignment, bold text and surrounding paragraphs. Protected issue is unchanged.",
       "Mobile alignment menu fits x=153.05..333.05 and y=443.89..563.89; document width equals 390px.",
-      "Compact menus visually inspected; no screenshot files retained. Footer spacing keeps Comment clear of the floating Controls toggle; pointer submission was verified."
+      "Compact menus visually inspected; no screenshot files retained. Footer spacing keeps Comment clear of the floating Controls toggle; pointer submission was verified.",
+      "Short landscape Row menu fits x=266..446 and y=213.89..365.89; Tab closes the Row menu and focuses Column options.",
+      "After replaying an explicit comment ID, a pointer-submitted mobile comment keeps the existing table comment intact and receives a distinct ID."
     ],
     "javascript_errors": 0
   },
@@ -35,11 +42,18 @@
   "source_sha256": {
     "twins/linear/rich_editor.py": "b532f438aa8c35cc4320448da4007ae0e6ea7dc696b106d2349fdefc365e3cf6",
     "twins/linear/table_editor.py": "154c919be532a5c9853f9d2681c28de2cef300bee3cb0b0f7d5272cc686c9934",
-    "twins/linear/frontend.py": "58775495c5ac499b6fc7c26d2f6078c57adb5d1ff498b2fdab64321ad55bb375"
+    "twins/linear/frontend.py": "58775495c5ac499b6fc7c26d2f6078c57adb5d1ff498b2fdab64321ad55bb375",
+    "twins/linear/store.py": "3feebe8e4e52caa3d7a300eb8db54bbf85cb6c06faa254454853412e5e80fbef"
   },
   "remaining": [
     "Column resize/drag handles, table multi-selection and authenticated provider visual comparison remain open.",
     "Mentions, uploads, full workspace/collaboration/settings/admin/billing/analytics/AI scope and complete responsive/reference inventory remain open.",
     "CI, production deployment and hosted validation remain pending. This manual feature check is not a full hosted agent rollout."
-  ]
+  ],
+  "seed_id_followup": {
+    "problem": "A generated ID could overwrite a record restored with an explicit seed ID.",
+    "fix": "Reserve all explicit seed IDs before seeding and skip already allocated or live dictionary IDs during deterministic UUID allocation.",
+    "native_readback_sha256": "9f5a1ee3260304f99e2eb34b10b18c30f2967dbaa6bc105d8182036c6583bd4f",
+    "native_readback_path": "/tmp/lab-linear-table-replay-readback.json"
+  }
 }
