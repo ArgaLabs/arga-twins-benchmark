@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-23",
+  "task_id": "WKS-01",
+  "kind": "hosted_browser_enabled_candidate",
+  "screenshots_retained": false,
+  "status": "retry_in_progress",
+  "scored": false,
+  "original_attempt": {
+    "run_id": "ec2b1a3d-29e3-447e-a7bd-15c050744a48",
+    "scenario_id": "c696f658-6052-4616-9c6b-58e3a4838e1e",
+    "model": "claude-sonnet-5",
+    "adapter_status": "api_error",
+    "verifier_outcome": "infrastructure_invalid",
+    "reason": "Malformed tool input was rejected, but replaying its string input in assistant history caused HTTP 400.",
+    "business_api_calls": 0,
+    "documentation_calls": 1,
+    "browser_calls": 0,
+    "provider_state_exactly_unchanged": true,
+    "cleanup": "torn_down",
+    "raw_model_evidence_retained_privately": true
+  },
+  "fix": {
+    "commit": "ce3312a",
+    "behavior": "Replay object-valued arguments while validating the original call and preserving raw response events.",
+    "regressions_passed": 183,
+    "ruff": "passed",
+    "targeted_pyright": "passed"
+  },
+  "retry": {
+    "ordinal": 1,
+    "same_scenario_id": true,
+    "same_checked_in_seed": true,
+    "max_tool_calls": 350,
+    "timeout_seconds": 2100,
+    "browser_tools_enabled": true,
+    "counts_as_browser_coverage": false
+  },
+  "limits": [
+    "A completed browser or mixed rollout is still required; enabling the relay alone is not coverage."
+  ]
+}

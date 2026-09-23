@@ -1,5 +1,5 @@
 {
-  "status": "local_verified_hosted_pending",
+  "status": "review_fixed_ci_hosted_pending",
   "date": "2026-09-23",
   "screenshots_retained": false,
   "features": [
@@ -12,7 +12,7 @@
     "responsive artifact table and deletion confirmation"
   ],
   "checks": {
-    "github_regression_tests": 320,
+    "github_regression_tests": 326,
     "ruff": "passed",
     "desktop_chrome": "Artifact table inspected and native ZIP download verified",
     "mobile_chrome": {
@@ -58,6 +58,7 @@
   },
   "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
   "remaining": [
+    "Authenticated browser-proxy download completion in Chrome",
     "hosted deployment and browser validation",
     "complete Actions/review/project settings, collaboration and visual parity"
   ],
@@ -70,17 +71,25 @@
     "manual_workflow_failure": "Public artifact metadata was incorrectly required to reject missing authentication by the contract harness",
     "manual_workflow_fix": "Allow anonymous metadata GETs only on public repositories; retain private, invalid-token, archive-download and write auth checks"
   },
-  "browser_download_followup": {
-    "date": "2026-09-23",
-    "status": "verified_archive_despite_driver_event_failure",
-    "observation": "A fresh CUA click plus download-event observation stalled in the browser tool and returned that the paused download response was no longer available. The browser stayed on the artifact page. No security settings were changed and no browser download was verified.",
-    "screenshots_retained": false,
-    "resolution": "The fresh Chrome click produced the expected 213-byte artifact ZIP in Downloads; SHA-256 and run.json match the native artifact exactly."
-  },
-  "integration": {
-    "head": "57d84df3",
-    "github_tests_passed": 320,
-    "ci": "pending",
-    "draft": false
+  "review_followup": {
+    "branch_sha": "A branch override derives its current commit SHA unless an explicit SHA is provided.",
+    "browser_authorization": "Artifact handlers now resolve real request credentials and enforce OAuth scopes, repository membership and installation Actions grants; anonymous private metadata, downloads and deletes are rejected.",
+    "tests": {
+      "artifact_regressions": 22,
+      "all_github_regressions": 326,
+      "ruff": "passed",
+      "artifacts_pyright": "passed",
+      "expanded_typecheck": "93 existing decorator-return diagnostics reproduced on the prior PR head; no new diagnostics after the fix."
+    },
+    "chrome_via_cua": {
+      "private_repository_navigation": "passed",
+      "authenticated_adapter": "actual sample BrowserProxy",
+      "mobile_width": 390,
+      "deletion_after_reload": "passed",
+      "protected_artifact_state": "unchanged",
+      "download": "Chrome blocked this authenticated-proxy download with ERR_BLOCKED_BY_CLIENT; no new file was saved. Prior direct-twin download success remains recorded separately.",
+      "screenshots_retained": false
+    },
+    "deployment": "pending new PR CI and review"
   }
 }
