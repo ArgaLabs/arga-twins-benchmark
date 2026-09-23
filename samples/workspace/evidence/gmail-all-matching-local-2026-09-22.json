@@ -46,5 +46,12 @@
       "/tmp/lab-gmail-all-matching-network-tests.txt"
     ],
     "note": "Initial run passed 109; five socket-dependent tests passed with local networking, and the updated label-view test plus all 54 UI/date cases passed. This is 115 distinct passing tests across the runs."
+  },
+  "review_followup": {
+    "search_debounce_stale_selection": "fixed",
+    "synchronous_input_clear": "pass",
+    "stale_archive_trash_label_mutation_rejection": "pass",
+    "focused_regressions_passed": 29,
+    "log": "/tmp/lab-gmail-all-matching-review-tests.txt"
   }
 }
