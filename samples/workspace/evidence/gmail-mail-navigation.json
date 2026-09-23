@@ -1,7 +1,7 @@
 {
   "date": "2026-09-23",
   "provider": "gmail",
-  "status": "merged_production_deployment_pending",
+  "status": "production_deployed_hosted_pending",
   "reference": "https://support.google.com/mail/answer/6576?hl=en",
   "changes": [
     "All Mail available under More without a synthetic Gmail label",
@@ -52,6 +52,14 @@
   "production": {
     "merge_sha": "fa0dc188f017ecc5d770f4bf636933bd247e2e27",
     "checked_head": "cdaa131cb2d213359391c05787e5d67c70da00d4",
-    "checks": "All applicable latest checks passed before merge"
+    "checks": "All applicable latest checks passed before merge",
+    "deploy_twins": {
+      "run": 35914416046,
+      "status": "success"
+    },
+    "deploy_runtime": {
+      "run": 35914416039,
+      "status": "success"
+    }
   }
 }

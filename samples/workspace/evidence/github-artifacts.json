@@ -1,5 +1,5 @@
 {
-  "status": "local_verified_with_browser_download_gap",
+  "status": "local_verified_hosted_pending",
   "date": "2026-09-23",
   "screenshots_retained": false,
   "features": [
@@ -14,7 +14,7 @@
   "checks": {
     "github_regression_tests": 320,
     "ruff": "passed",
-    "desktop_chrome": "artifact table inspected",
+    "desktop_chrome": "Artifact table inspected and native ZIP download verified",
     "mobile_chrome": {
       "width": 390,
       "height": 844,
@@ -42,11 +42,22 @@
       "medium": 122,
       "low": 0,
       "unexpected_5xx": 0
+    },
+    "browser_download": {
+      "status": "passed",
+      "file": "artifact-35676634226106.zip",
+      "size_bytes": 213,
+      "sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+      "members": [
+        "run.json"
+      ],
+      "workflow_run_id": 2700049846,
+      "downloaded_at": "2026-09-23T19:00:36.496263+00:00",
+      "verification": "File absent before the fresh Chrome download click and present afterward; size and digest equal the native artifact. Browser event delivery stalled and returned a stale paused-response error, so the downloaded file was independently inspected."
     }
   },
   "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
   "remaining": [
-    "Chrome download click returned ERR_BLOCKED_BY_CLIENT; native archive retrieval passes",
     "hosted deployment and browser validation",
     "complete Actions/review/project settings, collaboration and visual parity"
   ],
@@ -55,20 +66,21 @@
     "initial_failure": "Compatibility runner cleared artifact records but retained initialization flags and expected legacy JSON downloads",
     "fix": "Reset both local Actions resource and singleton fixtures; validate documented redirect, ZIP bytes, size and digest",
     "local_result": "107 passed",
-    "ci_rerun": {
-      "workflow": "Twin Fidelity",
-      "run": 35834526925,
-      "commit": "629274f3",
-      "conclusion": "success",
-      "scope": "Manual full fidelity workflow; root PR CI remains skipped while draft."
-    },
+    "ci_rerun": "Previous feature-head full GitHub Twin Fidelity workflow 35834526925 succeeded; latest main integration pending current PR CI",
     "manual_workflow_failure": "Public artifact metadata was incorrectly required to reject missing authentication by the contract harness",
     "manual_workflow_fix": "Allow anonymous metadata GETs only on public repositories; retain private, invalid-token, archive-download and write auth checks"
   },
   "browser_download_followup": {
     "date": "2026-09-23",
-    "status": "inconclusive_driver_failure",
+    "status": "verified_archive_despite_driver_event_failure",
     "observation": "A fresh CUA click plus download-event observation stalled in the browser tool and returned that the paused download response was no longer available. The browser stayed on the artifact page. No security settings were changed and no browser download was verified.",
-    "screenshots_retained": false
+    "screenshots_retained": false,
+    "resolution": "The fresh Chrome click produced the expected 213-byte artifact ZIP in Downloads; SHA-256 and run.json match the native artifact exactly."
+  },
+  "integration": {
+    "head": "57d84df3",
+    "github_tests_passed": 320,
+    "ci": "pending",
+    "draft": false
   }
 }
