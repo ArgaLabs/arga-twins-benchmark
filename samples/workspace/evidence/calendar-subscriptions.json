@@ -76,5 +76,45 @@
     "This focused check is not exhaustive Calendar feature or pixel parity.",
     "The original browser JavaScript confirmation stalled automation and was cancelled through native Chrome; the replacement in-page confirmation passed. Extension screenshots later showed stale frames; the landscape form was verified in the actual Chrome window instead."
   ],
+  "review_followup": {
+    "finding": "Unsubscribed entries were excluded from restore discovery, causing display preferences to reset.",
+    "fix": "Include showDeleted=true and restore the saved entry through native PATCH.",
+    "validation": {
+      "calendar_regressions": 67,
+      "chrome_unsubscribe_resubscribe": "passed",
+      "preserved_preferences": {
+        "summaryOverride": "On-call shared",
+        "backgroundColor": "#188038",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 30
+          }
+        ]
+      },
+      "calendar_metadata_unchanged": true,
+      "event_state_unchanged": true,
+      "native_writes": [
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "DELETE",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 204
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 200
+        }
+      ]
+    }
+  },
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1114"
 }
