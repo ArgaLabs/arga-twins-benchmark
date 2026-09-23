@@ -20,7 +20,10 @@
       "low": 0,
       "unexpected_5xx": 0
     },
-    "github_regressions_before_review_fix": 310
+    "github_regressions_before_review_fix": 310,
+    "github_cases_covered": 323,
+    "loopback_scenario_rerun_passed": 32,
+    "sandbox_failures": "31 local server binds denied in the broad run; all 32 scenario cases passed with loopback access."
   },
   "reference": "https://docs.github.com/en/rest/pulls/pulls#check-if-a-pull-request-has-been-merged",
   "limits": [

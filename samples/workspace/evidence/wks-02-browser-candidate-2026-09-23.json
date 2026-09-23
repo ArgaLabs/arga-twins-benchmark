@@ -3,7 +3,7 @@
   "task_id": "WKS-02",
   "kind": "hosted_browser_enabled_candidate",
   "screenshots_retained": false,
-  "status": "infrastructure_invalid",
+  "status": "retry_passed_api_only",
   "scored": false,
   "original_attempt": {
     "run_id": "8e8a9384-a7fe-427a-9a90-45c589716288",
@@ -25,14 +25,27 @@
     "raw_model_evidence_retained_privately": true
   },
   "retry": {
-    "status": "not_started",
-    "allowed_retries": 1,
-    "same_scenario_seed_required": true,
+    "ordinal": 1,
+    "run_id": "fb88b844-d7e8-4de5-9c70-2918938ad202",
+    "same_scenario_id": true,
+    "same_checked_in_seed": true,
     "max_tool_calls": 350,
-    "timeout_seconds": 2100
+    "timeout_seconds": 2100,
+    "browser_tools_enabled": true,
+    "adapter_status": "completed",
+    "tool_calls": 16,
+    "browser_calls": 0,
+    "interaction_mode_used": "api",
+    "verifier_outcome": "pass",
+    "required_provider_outcomes_passed": 3,
+    "result_facts_passed": 3,
+    "prohibited_provider_mutations": 0,
+    "cleanup": "torn_down",
+    "counts_as_browser_coverage": false
   },
   "limits": [
     "This attempt exercised Calendar UI alongside provider APIs but does not count as a complete hosted browser-agent episode.",
-    "The three result-fact failures in the preserved raw verifier reflect an aborted operator session without final submission; this infrastructure-invalid attempt is not scored as model failure."
+    "The three result-fact failures in the preserved raw verifier reflect an aborted operator session without final submission; this infrastructure-invalid attempt is not scored as model failure.",
+    "The single retry passed using APIs only; it does not establish browser-agent coverage. No further retry is planned for this pair."
   ]
 }
