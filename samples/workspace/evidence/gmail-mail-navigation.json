@@ -1,7 +1,7 @@
 {
   "date": "2026-09-23",
   "provider": "gmail",
-  "status": "local_verified_ci_and_hosted_pending",
+  "status": "merged_production_deployment_pending",
   "reference": "https://support.google.com/mail/answer/6576?hl=en",
   "changes": [
     "All Mail available under More without a synthetic Gmail label",
@@ -48,5 +48,10 @@
     "twins/tests/test_gmail_labels_ui.py": "5dc0dc48efdf7770c170b3b735c320195498a5674a5b611b4b536ca4c5680f25"
   },
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1109",
-  "commit": "cfb7a41e"
+  "commit": "cfb7a41e",
+  "production": {
+    "merge_sha": "fa0dc188f017ecc5d770f4bf636933bd247e2e27",
+    "checked_head": "cdaa131cb2d213359391c05787e5d67c70da00d4",
+    "checks": "All applicable latest checks passed before merge"
+  }
 }

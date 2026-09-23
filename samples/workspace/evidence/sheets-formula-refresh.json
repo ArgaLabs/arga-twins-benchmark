@@ -1,7 +1,7 @@
 {
   "date": "2026-09-22",
   "provider": "google_sheets",
-  "status": "local_verified_hosted_pending",
+  "status": "local_and_hosted_verified",
   "tests": {
     "passed": 92,
     "log": "/tmp/lab-sheets-recalculation-tests.txt",
@@ -29,7 +29,6 @@
     "twins/tests/test_google_sheets_grid_format_ui.py": "678c482bb5ef1a6e5394515f281bb2c2e7099d0659b9e5b9ec8a378cb045c31c"
   },
   "limitations": [
-    "Hosted validation after deployment pending",
     "Full provider and exhaustive mobile/visual audits remain open"
   ],
   "review_followup": {
@@ -51,5 +50,6 @@
       "run": 35835722816,
       "status": "success"
     }
-  }
+  },
+  "hosted_evidence": "samples/workspace/evidence/sheets-formula-production-2026-09-23.json"
 }

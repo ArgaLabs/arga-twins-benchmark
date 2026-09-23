@@ -64,5 +64,11 @@
     },
     "manual_workflow_failure": "Public artifact metadata was incorrectly required to reject missing authentication by the contract harness",
     "manual_workflow_fix": "Allow anonymous metadata GETs only on public repositories; retain private, invalid-token, archive-download and write auth checks"
+  },
+  "browser_download_followup": {
+    "date": "2026-09-23",
+    "status": "inconclusive_driver_failure",
+    "observation": "A fresh CUA click plus download-event observation stalled in the browser tool and returned that the paused download response was no longer available. The browser stayed on the artifact page. No security settings were changed and no browser download was verified.",
+    "screenshots_retained": false
   }
 }
