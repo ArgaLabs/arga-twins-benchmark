@@ -52,5 +52,17 @@
     "Full provider pixel parity, theme-color resolution and exhaustive device coverage remain unverified.",
     "Merged-cell borders depend on the remaining merged-cell frontend work.",
     "No screenshot files retained."
-  ]
+  ],
+  "review_followup": {
+    "issue": "Shared edges and adjacent default gridlines were rendered twice",
+    "resolution": "Resolve visible neighboring border edges to one canonical side, remove its duplicate stroke, and suppress adjacent header gridlines.",
+    "focused_regressions_passed": 62,
+    "log": "/tmp/lab-sheets-borders-review-tests.txt",
+    "chrome_double_border_width_pixels": 3,
+    "chrome_duplicate_stroke_width_pixels": 0,
+    "chrome_transient_visual_inspection": "pass",
+    "screenshots_retained": false,
+    "full_regressions_passed": 178,
+    "full_log": "/tmp/lab-sheets-borders-final-tests.txt"
+  }
 }
