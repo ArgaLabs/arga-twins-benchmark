@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_hosted_pending",
+  "screenshots_retained": false,
+  "trigger": "Hosted WKS-01 candidate read GET /pulls/1/merge to verify an unmerged pull request; the generic fallback created a singleton and returned fabricated metadata.",
+  "changes": [
+    "Native read-only merge status returns empty 204 for merged PRs and empty 404 for unmerged or missing PRs.",
+    "PR detail responses preserve null closed_at, merged_at and merged_by until the matching transition.",
+    "Reopening an unmerged PR clears closed_at; merged PRs cannot be reopened.",
+    "Public merge-status reads remain anonymous; private reads require native OAuth scope."
+  ],
+  "validation": {
+    "focused_tests": 7,
+    "github_regressions": 310,
+    "ruff": "passed",
+    "full_contract_matrix": {
+      "status": "passed_at_high_severity_threshold",
+      "high": 0,
+      "medium": 122,
+      "low": 0,
+      "unexpected_5xx": 0
+    }
+  },
+  "reference": "https://docs.github.com/en/rest/pulls/pulls#check-if-a-pull-request-has-been-merged",
+  "limits": [
+    "CI, deployment and fresh hosted readback pending",
+    "Broader GitHub frontend parity remains incomplete"
+  ],
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1111"
+}

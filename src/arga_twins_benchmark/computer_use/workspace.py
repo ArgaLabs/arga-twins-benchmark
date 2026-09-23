@@ -352,6 +352,8 @@ def _label_equal(actual: Any, expected: Any) -> bool:
         return True
     # Owner qualifiers and ordinary word order do not change an approval state.
     phrases = {
+        "review requested": r"review (?:has been |is |was )?requested",
+        "pending owner review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "pending review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "unsent for review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "awaiting approval": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,3}approval",

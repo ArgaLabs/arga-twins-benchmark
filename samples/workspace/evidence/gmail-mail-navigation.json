@@ -1,7 +1,7 @@
 {
   "date": "2026-09-23",
   "provider": "gmail",
-  "status": "production_deployed_hosted_pending",
+  "status": "local_and_hosted_verified",
   "reference": "https://support.google.com/mail/answer/6576?hl=en",
   "changes": [
     "All Mail available under More without a synthetic Gmail label",
@@ -38,7 +38,6 @@
     "screenshots_retained": false
   },
   "limits": [
-    "Hosted validation of this change awaits CI and deployment",
     "Exhaustive Gmail/provider/mobile parity remains incomplete"
   ],
   "source_sha256": {
@@ -61,5 +60,6 @@
       "run": 35914416039,
       "status": "success"
     }
-  }
+  },
+  "hosted_evidence": "gmail-mail-navigation-production-2026-09-23.json"
 }

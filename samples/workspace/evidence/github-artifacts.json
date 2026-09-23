@@ -79,7 +79,8 @@
       "all_github_regressions": 326,
       "ruff": "passed",
       "artifacts_pyright": "passed",
-      "expanded_typecheck": "93 existing decorator-return diagnostics reproduced on the prior PR head; no new diagnostics after the fix."
+      "expanded_typecheck": "passed for artifact, Actions UI, compatibility handlers and registry after preserving decorated handler types",
+      "typing_followup_regressions": 26
     },
     "chrome_via_cua": {
       "private_repository_navigation": "passed",

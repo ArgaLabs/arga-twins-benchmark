@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 156,
+      "files_scanned": 158,
       "image_files": 0
     },
     "final_zip_created": false,
@@ -27,6 +27,11 @@
     "browser_relay_candidate_runner_outcomes": {
       "status": "pass",
       "passed": 183
+    },
+    "passive_fact_normalization": {
+      "passed": 85,
+      "ruff": "passed",
+      "pyright": "passed"
     }
   },
   "limits": "Frontend parity, hosted browser-agent coverage and deployment of subsequent changes remain separate gates."

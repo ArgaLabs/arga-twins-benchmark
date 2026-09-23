@@ -90,6 +90,9 @@ def test_negative_structured_status_does_not_pass(tmp_path: Path, status: str) -
         ("Mitigation pending approval", ["open", "awaiting approval", "pending mitigation"]),
         ("drafted, unsent, pending Samira's review", ["pending_review", "unsent_for_review"]),
         ("Open — mitigation pending approval, impact continues", ["open_pending_approval"]),
+        ("Owner review has been requested and is now pending their approval.", ["review_requested"]),
+        ("Review was requested from morgan-security.", ["review_requested"]),
+        ("Awaiting Morgan's security review", ["pending_owner_review"]),
     ],
 )
 def test_equivalent_status_labels(actual: str, expected: list[str]) -> None:
@@ -110,6 +113,21 @@ def test_equivalent_status_labels(actual: str, expected: list[str]) -> None:
 )
 def test_approval_qualifiers_do_not_override_negation(actual: str) -> None:
     assert not _fact_equal(actual, ["pending_review", "unsent_for_review"])
+
+
+@pytest.mark.parametrize(
+    "actual",
+    [
+        "No review has been requested",
+        "Review has not been requested",
+        "Review was never requested",
+        "Review has been requested: no longer required",
+        "Review is not requested",
+        "Not awaiting owner review",
+    ],
+)
+def test_passive_review_status_does_not_override_negation(actual: str) -> None:
+    assert not _fact_equal(actual, ["review_requested", "pending_owner_review"])
 
 
 def test_identifier_qualifiers_preserve_the_exact_identifier() -> None:
