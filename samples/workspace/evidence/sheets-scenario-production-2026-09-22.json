@@ -1,0 +1,107 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "scored_candidate": false,
+  "provider": "google_sheets",
+  "browser": "Google Chrome via CUA",
+  "deployment": {
+    "revision": "29c90bfe0d7b75452128170780afa123fc79f791",
+    "twins_run": 35818784973,
+    "runtime_run": 35818784972,
+    "conclusions": "success"
+  },
+  "scenario_seed_only": true,
+  "operator_fixture_augmentation": false,
+  "checks": {
+    "initial": {
+      "properties": true,
+      "stable_sheet_ids": [
+        42,
+        99
+      ],
+      "rows": 5000,
+      "columns": 100,
+      "frozen_rows": 1,
+      "row_height": 48,
+      "column_width": 180,
+      "hidden_dimensions": true,
+      "header_bold": true,
+      "B2": 7,
+      "B3": 14,
+      "CV5000": 21,
+      "formula_preserved": true,
+      "protected_sheet_unchanged": true
+    },
+    "edited": {
+      "properties": true,
+      "stable_sheet_ids": [
+        42,
+        99
+      ],
+      "rows": 5000,
+      "columns": 100,
+      "frozen_rows": 1,
+      "row_height": 48,
+      "column_width": 180,
+      "hidden_dimensions": true,
+      "header_bold": true,
+      "B2": 11,
+      "B3": 22,
+      "CV5000": 33,
+      "formula_preserved": true,
+      "protected_sheet_unchanged": true
+    },
+    "reset": {
+      "properties": true,
+      "stable_sheet_ids": [
+        42,
+        99
+      ],
+      "rows": 5000,
+      "columns": 100,
+      "frozen_rows": 1,
+      "row_height": 48,
+      "column_width": 180,
+      "hidden_dimensions": true,
+      "header_bold": true,
+      "B2": 7,
+      "B3": 14,
+      "CV5000": 21,
+      "formula_preserved": true,
+      "protected_sheet_unchanged": true
+    }
+  },
+  "browser_checks": {
+    "native_title": "Native layout",
+    "rows": 5000,
+    "columns": 100,
+    "row_1_height": 48,
+    "column_A_width": 180,
+    "hidden_rows_3_4_and_columns_C_D": true,
+    "header_bold": true,
+    "B2_edit": 11,
+    "CV5000_result_after_edit": 33,
+    "CV5000_formula": "=B2*3",
+    "B2_after_CLI_reset": 7,
+    "responsive_width": 390,
+    "document_width": 390
+  },
+  "cleanup": "torn_down",
+  "artifacts_sha256": {
+    "initial-native.json": "c8a4555622b5765899eda9a31655ddeaf533f1a87826394ac5f4d4a5544278e0",
+    "cleanup.json": "7d300e176eb74b20a7d51057f5a7d3e7c8c12bdc05ca4d4b2ed3aa9558f12720",
+    "reset-native.json": "c8a4555622b5765899eda9a31655ddeaf533f1a87826394ac5f4d4a5544278e0",
+    "edited-native.json": "d02f0501fcb33bbbd49c7bf47bdc4da528b6748eef256c2518ccef6dfaa845c8",
+    "scenario.json": "e07506d73812510d464de0e076976c7ef7c22fbcc3541115b77698b0457a0fe3",
+    "google_sheets-browser-trace.json": "fe3392b75a55fb8a07f6cbc547ccc78a5e30dea5658260fdc8b902a25a4eb963",
+    "baseline-state.json": "ae43f6bea99f8cabdc1f1322664876ddbfb60d18bc5d46ca4432cca43bfcfaa2",
+    "final-state.json": "ae43f6bea99f8cabdc1f1322664876ddbfb60d18bc5d46ca4432cca43bfcfaa2",
+    "reset.json": "1661ece50a42c240c7fe2cb4a877ac152d715ce6263f6b768d4f1b08d4bba22e"
+  },
+  "limitations": [
+    "Manual feature validation, not an autonomous browser rollout or full provider audit.",
+    "Native frozen-row metadata is verified; visible frozen panes require PR #1098 deployment.",
+    "390px desktop Chrome emulation does not establish exhaustive device or pixel parity.",
+    "No screenshot files retained."
+  ]
+}
