@@ -7,11 +7,11 @@
     "Native read-only merge status returns empty 204 for merged PRs and empty 404 for unmerged or missing PRs.",
     "PR detail responses preserve null closed_at, merged_at and merged_by until the matching transition.",
     "Reopening an unmerged PR clears closed_at; merged PRs cannot be reopened.",
-    "Public merge-status reads remain anonymous; private reads require native OAuth scope."
+    "Public merge-status reads remain anonymous; private reads require native OAuth scope.",
+    "Malformed public merge-status IDs reach native validation and return 404 anonymously on both API prefixes."
   ],
   "validation": {
-    "focused_tests": 7,
-    "github_regressions": 310,
+    "focused_tests": 20,
     "ruff": "passed",
     "full_contract_matrix": {
       "status": "passed_at_high_severity_threshold",
@@ -19,7 +19,8 @@
       "medium": 122,
       "low": 0,
       "unexpected_5xx": 0
-    }
+    },
+    "github_regressions_before_review_fix": 310
   },
   "reference": "https://docs.github.com/en/rest/pulls/pulls#check-if-a-pull-request-has-been-merged",
   "limits": [
