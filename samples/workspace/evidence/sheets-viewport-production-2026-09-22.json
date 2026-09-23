@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "source_revision": "a8794a31b81420aa5c235b37a5cdbac528fef938",
+  "tested_head": "9110d17cea01f246d019493d88848a701e3d2be4",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35815189283",
+  "deployment_status": "success",
+  "exact_head_checks": 30,
+  "browser": "Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "deployed_viewport_script_matches_source": "pass",
+    "grid_5000_rows_100_columns": "pass",
+    "native_row_and_column_sizes": "pass",
+    "hidden_rows_and_columns_omitted": "pass",
+    "vertical_and_horizontal_native_wheel_scroll": "pass",
+    "last_native_cell_CV5000_reachable": "pass",
+    "pending_edit_survives_scroll": "pass",
+    "hidden_C3_edit_preserves_A1": "pass",
+    "formulas_preserved": "pass",
+    "protected_sheet_unchanged": "pass",
+    "390px_scroll_without_document_overflow": "pass",
+    "native_api_readback": "pass"
+  },
+  "measurements": {
+    "desktop_scroll": {
+      "top": 2586,
+      "left": 2710,
+      "first_cell": "Z116",
+      "last_cell": "AO160",
+      "rendered_cells": 720
+    },
+    "narrow_scroll": {
+      "width": 390,
+      "document_scroll_width": 390,
+      "top": 913,
+      "first_cell": "A36",
+      "last_cell": "J79",
+      "rendered_cells": 352
+    },
+    "first_row_height": 48,
+    "first_column_width": 180
+  },
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/sheets-viewport-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "operator-setup.json": "271339b26d1fda32092269026058e1f2ec0f02b44a7fefbadcee8fe78903ee4d",
+    "frontend-source-check.json": "d1001eb27910d506c7d4831e1c1727f68a53375946d2d8ff684aa5e50aae5482",
+    "manual-native-readback.json": "32c8efbb234e4350cf437f859ce57738e5c542010699191fd563bb89e6f21999",
+    "google_sheets-browser-trace.json": "cb883cd4bf50e2c83d44939cdefd995baefaaee5baf5d3c51b69ef6115c9b6ea",
+    "cleanup.json": "a205de52874cbcef348abf81f9ced4e532f45b1b1acc4f828b6a1895c8cfdd62",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous candidate rollout or complete Sheets parity.",
+    "The Scenario runner seeds values; this manual fixture used recorded native API setup for grid dimensions, hidden cells and the distant marker. Scenario dimension seeding remains open.",
+    "Per-container digest is not exposed; exact hosted script and deployment provenance were verified.",
+    "390px desktop Chrome is a responsive check, not exhaustive mobile-device coverage.",
+    "No screenshot files retained."
+  ]
+}

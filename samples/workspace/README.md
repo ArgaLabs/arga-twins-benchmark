@@ -60,3 +60,5 @@ Structured facts accept a nested `result_facts` object or a JSON object directly
 The sample contains a manifest, five prompts, five exact seed files, five Scenario definitions, executable outcome contracts, the runner/proxy and its tests. It contains no live credentials. Task fixtures and grading contracts belong to the operator, not the candidate.
 
 Production Chrome checks verified Sheets range formatting, formula-preserving copy/cut, dependent reference updates, quoted multiline paste, keyboard navigation across a rendered-window boundary, and the 390px Edit menu. Native readback and teardown passed. These are manual feature checks; see `evidence/sheets-range-production-2026-09-22.json`. Full eight-twin parity and the final ZIP remain gated.
+
+The deployed Sheets viewport also passed a fresh production Chrome check of a 5,000-row × 100-column grid, native sizes/hidden dimensions, wheel scrolling, final-cell navigation, pending edits and hidden-cell editing. Native readback and teardown passed; the manual API setup and limitations are recorded in `evidence/sheets-viewport-production-2026-09-22.json`.
