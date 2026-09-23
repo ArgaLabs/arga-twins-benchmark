@@ -15,9 +15,15 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 117
+      "files_scanned": 132,
+      "image_files": 0
     },
-    "final_zip_created": false
+    "final_zip_created": false,
+    "release_gate_regressions": {
+      "status": "pass",
+      "passed": 11,
+      "log": "/tmp/lab-sample-package-gate-tests.txt"
+    }
   },
   "limits": "Frontend parity, hosted browser-agent coverage and deployment of subsequent changes remain separate gates."
 }

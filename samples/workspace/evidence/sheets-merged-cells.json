@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-22",
+  "kind": "local_frontend_feature_verification",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "merge_all_warning_and_cancel": "pass; cancelled B2:C3 retained 7, formula 14 and 9",
+    "merge_all_and_unmerge": "pass; upper-left retained and discarded values not restored",
+    "horizontal_and_vertical_merges": "pass; each row/column anchor retained",
+    "keyboard_navigation": "pass; arrow navigation skips the entire merged area and hidden dimensions",
+    "selection_inside_merged_cell": "pass; maps to native upper-left anchor",
+    "hidden_anchor_edit_then_unmerge": "pass; pending D11 edit preserved",
+    "frozen_row_merge_and_mobile_unmerge": "pass",
+    "offscreen_anchor_and_sparse_viewport": "pass; J100:K400 rendered while viewing I300, with 509 cells",
+    "full_selection_after_unmerge": "pass; F8 inside C6:F9 remains selected as C6:F9 after unmerge",
+    "mobile_toolbar_and_menu": "pass; 390px document, nonwrapping button and menu inside viewport",
+    "protected_sheet_unchanged": "pass"
+  },
+  "automated_regressions": {
+    "passed": 162,
+    "log": "/tmp/lab-sheets-merge-final-tests.txt",
+    "coverage": [
+      "Native ALL/ROWS/COLUMNS merge semantics and formula recalculation",
+      "Partial overlap rejection and atomic batch rollback",
+      "Enclosing unmerge and preservation of formats/validation",
+      "Frozen boundary rejection",
+      "Sparse geometry, hidden/offscreen anchors and transitive selection",
+      "Keyboard navigation from merged ranges and discard-value warnings",
+      "Existing viewport, frozen-pane, dimension, clipboard and range-format behavior"
+    ]
+  },
+  "javascript_syntax": "pass",
+  "ruff": "pass",
+  "native_readback_sha256": "83c2a652c50243e6327a88c9bbdb1664249a3c2bef11f5677a8aad66829046fd",
+  "sources": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request#MergeCellsRequest",
+    "https://support.google.com/docs/answer/46973?hl=en&co=GENIE.Platform%3DDesktop"
+  ],
+  "limitations": [
+    "Hosted merge-cell deployment and validation remain pending.",
+    "Border-control integration must be verified after the independent border PR merges.",
+    "Feature checks do not establish exhaustive provider, mobile-device or pixel parity.",
+    "No screenshot files retained."
+  ]
+}
