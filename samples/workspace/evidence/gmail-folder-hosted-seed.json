@@ -1,0 +1,671 @@
+{
+  "gmail": {
+    "base_time": "2026-09-22T13:00:00Z",
+    "messages": [
+      {
+        "subject": "Combined conversation 01",
+        "body": "Synthetic combined check 01.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-01",
+        "date": "2026-09-22T12:01:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD",
+          "Folder QA"
+        ]
+      },
+      {
+        "subject": "Combined conversation 02",
+        "body": "Synthetic combined check 02.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-02",
+        "date": "2026-09-22T12:02:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 03",
+        "body": "Synthetic combined check 03.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-03",
+        "date": "2026-09-22T12:03:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 04",
+        "body": "Synthetic combined check 04.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-04",
+        "date": "2026-09-22T12:04:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 05",
+        "body": "Synthetic combined check 05.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-05",
+        "date": "2026-09-22T12:05:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 06",
+        "body": "Synthetic combined check 06.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-06",
+        "date": "2026-09-22T12:06:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 07",
+        "body": "Synthetic combined check 07.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-07",
+        "date": "2026-09-22T12:07:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 08",
+        "body": "Synthetic combined check 08.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-08",
+        "date": "2026-09-22T12:08:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 09",
+        "body": "Synthetic combined check 09.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-09",
+        "date": "2026-09-22T12:09:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 10",
+        "body": "Synthetic combined check 10.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-10",
+        "date": "2026-09-22T12:10:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 11",
+        "body": "Synthetic combined check 11.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-11",
+        "date": "2026-09-22T12:11:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 12",
+        "body": "Synthetic combined check 12.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-12",
+        "date": "2026-09-22T12:12:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 13",
+        "body": "Synthetic combined check 13.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-13",
+        "date": "2026-09-22T12:13:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 14",
+        "body": "Synthetic combined check 14.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-14",
+        "date": "2026-09-22T12:14:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 15",
+        "body": "Synthetic combined check 15.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-15",
+        "date": "2026-09-22T12:15:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 16",
+        "body": "Synthetic combined check 16.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-16",
+        "date": "2026-09-22T12:16:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 17",
+        "body": "Synthetic combined check 17.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-17",
+        "date": "2026-09-22T12:17:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 18",
+        "body": "Synthetic combined check 18.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-18",
+        "date": "2026-09-22T12:18:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 19",
+        "body": "Synthetic combined check 19.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-19",
+        "date": "2026-09-22T12:19:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 20",
+        "body": "Synthetic combined check 20.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-20",
+        "date": "2026-09-22T12:20:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 21",
+        "body": "Synthetic combined check 21.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-21",
+        "date": "2026-09-22T12:21:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 22",
+        "body": "Synthetic combined check 22.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-22",
+        "date": "2026-09-22T12:22:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 23",
+        "body": "Synthetic combined check 23.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-23",
+        "date": "2026-09-22T12:23:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 24",
+        "body": "Synthetic combined check 24.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-24",
+        "date": "2026-09-22T12:24:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 25",
+        "body": "Synthetic combined check 25.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-25",
+        "date": "2026-09-22T12:25:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 26",
+        "body": "Synthetic combined check 26.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-26",
+        "date": "2026-09-22T12:26:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 27",
+        "body": "Synthetic combined check 27.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-27",
+        "date": "2026-09-22T12:27:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 28",
+        "body": "Synthetic combined check 28.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-28",
+        "date": "2026-09-22T12:28:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 29",
+        "body": "Synthetic combined check 29.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-29",
+        "date": "2026-09-22T12:29:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 30",
+        "body": "Synthetic combined check 30.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-30",
+        "date": "2026-09-22T12:30:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 31",
+        "body": "Synthetic combined check 31.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-31",
+        "date": "2026-09-22T12:31:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 32",
+        "body": "Synthetic combined check 32.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-32",
+        "date": "2026-09-22T12:32:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 33",
+        "body": "Synthetic combined check 33.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-33",
+        "date": "2026-09-22T12:33:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 34",
+        "body": "Synthetic combined check 34.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-34",
+        "date": "2026-09-22T12:34:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 35",
+        "body": "Synthetic combined check 35.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-35",
+        "date": "2026-09-22T12:35:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 36",
+        "body": "Synthetic combined check 36.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-36",
+        "date": "2026-09-22T12:36:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 37",
+        "body": "Synthetic combined check 37.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-37",
+        "date": "2026-09-22T12:37:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 38",
+        "body": "Synthetic combined check 38.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-38",
+        "date": "2026-09-22T12:38:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 39",
+        "body": "Synthetic combined check 39.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-39",
+        "date": "2026-09-22T12:39:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 40",
+        "body": "Synthetic combined check 40.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-40",
+        "date": "2026-09-22T12:40:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 41",
+        "body": "Synthetic combined check 41.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-41",
+        "date": "2026-09-22T12:41:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 42",
+        "body": "Synthetic combined check 42.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-42",
+        "date": "2026-09-22T12:42:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 43",
+        "body": "Synthetic combined check 43.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-43",
+        "date": "2026-09-22T12:43:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 44",
+        "body": "Synthetic combined check 44.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-44",
+        "date": "2026-09-22T12:44:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 45",
+        "body": "Synthetic combined check 45.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-45",
+        "date": "2026-09-22T12:45:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 46",
+        "body": "Synthetic combined check 46.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-46",
+        "date": "2026-09-22T12:46:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 47",
+        "body": "Synthetic combined check 47.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-47",
+        "date": "2026-09-22T12:47:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 48",
+        "body": "Synthetic combined check 48.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-48",
+        "date": "2026-09-22T12:48:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 49",
+        "body": "Synthetic combined check 49.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-49",
+        "date": "2026-09-22T12:49:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 50",
+        "body": "Synthetic combined check 50.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-50",
+        "date": "2026-09-22T12:50:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 51",
+        "body": "Synthetic combined check 51.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-51",
+        "date": "2026-09-22T12:51:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Combined conversation 52",
+        "body": "Synthetic combined check 52.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "combined-52",
+        "date": "2026-09-22T12:52:00Z",
+        "labels": [
+          "INBOX",
+          "UNREAD"
+        ]
+      },
+      {
+        "subject": "Protected archived conversation",
+        "body": "Keep this archived fixture untouched.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "protected-archive",
+        "date": "2026-09-22T10:00:00Z",
+        "labels": []
+      },
+      {
+        "subject": "Protected spam fixture",
+        "body": "Keep this spam fixture unchanged.",
+        "from": "fixture@example.test",
+        "to": "owner@gmail-twin.local",
+        "thread_id": "folder-spam",
+        "date": "2026-09-22T12:58:00Z",
+        "labels": [
+          "SPAM"
+        ]
+      }
+    ],
+    "drafts": [
+      {
+        "subject": "Combined conversation 52",
+        "body": "Protected first unsent reply",
+        "to": "fixture@example.test",
+        "thread_id": "combined-52"
+      },
+      {
+        "subject": "Combined conversation 52",
+        "body": "Protected second unsent reply",
+        "to": "fixture@example.test",
+        "thread_id": "combined-52"
+      }
+    ],
+    "labels": [
+      {
+        "name": "Folder QA"
+      }
+    ]
+  }
+}
