@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Add Edit > Move rows up/down and columns left/right using native moveDimension requests.",
+    "Keep the selected rows or columns selected after movement and refresh dependent values.",
+    "Rewrite same-sheet and cross-sheet cell/range references while preserving absolute markers, quoted strings and unrelated reversed ranges.",
+    "Move intact merged cells and reject operations splitting a merge with atomic rollback.",
+    "Use sparse coordinate mapping so moving rows does not allocate an index table for the entire sheet."
+  ],
+  "validation": {
+    "regressions": 252,
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "type_check_comparison": {
+      "baseline_errors": 60,
+      "current_errors": 58,
+      "new_diagnostics": 0,
+      "scope": "Additional direct pyright invocation of shared Workspace editing module; pre-existing diagnostics remain."
+    },
+    "browser": "Google Chrome through CUA with the actual sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "Desktop two-row move and selection update",
+      "Mobile column move with disabled incompatible actions",
+      "Reload and cross-sheet dependent formula readback",
+      "Sheet-edge action disabled",
+      "ArrowRight/ArrowLeft submenu navigation and Escape dismissal",
+      "Partial-merge error leaves whole native spreadsheet unchanged"
+    ],
+    "native_readback": "passed",
+    "unrelated_merges_unchanged": true,
+    "protected_text_cell_unchanged": true,
+    "console_errors": 0,
+    "contract_matrix": {
+      "checks": 164,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "unexpected_5xx": 0,
+      "status": "passed"
+    }
+  },
+  "reference": {
+    "source": "Current Google Sheets frontend inspected in Chrome using two disposable private fixtures; both moved to Trash after export.",
+    "checked_in_results": "twins/tests/fixtures/google_sheets_move_reference.json",
+    "flows": [
+      "Edit > Move > Rows down for rows 2:3",
+      "Edit > Move > Rows up for rows 3:4"
+    ],
+    "verification": "Exact formulas and calculated values from the provider XLSX exports match executable native regression fixtures."
+  },
+  "references": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request#MoveDimensionRequest",
+    "https://support.google.com/docs/answer/54813?hl=en&co=GENIE.Platform%3DDesktop"
+  ],
+  "limits": [
+    "CI, deployment and hosted validation remain pending.",
+    "Pointer dragging of row/column headers, frozen-boundary dragging, noncontiguous selections and undo/redo remain open.",
+    "The reference comparison covers the inspected row-move cases, not every formula syntax or pixel-level Sheets parity.",
+    "Movement of named ranges, chart/pivot/filter/protection bindings and embedded data-validation formula references still needs reference comparison and coverage.",
+    "The first local browser helper shutdown cancelled its final capture; native readback before shutdown was preserved, and a fresh run completed with a full before/after capture and normal shutdown."
+  ]
+}
