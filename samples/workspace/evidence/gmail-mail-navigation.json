@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-23",
+  "provider": "gmail",
+  "status": "local_verified_ci_and_hosted_pending",
+  "reference": "https://support.google.com/mail/answer/6576?hl=en",
+  "changes": [
+    "All Mail available under More without a synthetic Gmail label",
+    "Mail rail returns to Inbox and clears search, page and selection",
+    "Folder navigation leaves Settings; Back to inbox opens Inbox",
+    "System folder names remain readable in conversation headers"
+  ],
+  "tests": {
+    "gmail_suite_passed": 138,
+    "pyright": "passed",
+    "ruff": "passed",
+    "regression_scope": [
+      "native archived/sent versus spam/trash membership",
+      "virtual All Mail reachability and label-application exclusion",
+      "folder, rail and Settings navigation with pending searches and selected later pages",
+      "folder and pagination handlers loaded in production order"
+    ]
+  },
+  "browser": {
+    "tool": "Google Chrome via CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "More reveals All Mail",
+      "All Mail lists 54 conversations including archived and sent mail, excluding Spam and Trash",
+      "Older page lists 51\u201354 of 54",
+      "Mail returns from selected page two to 1\u201350 of 52 Inbox conversations with zero selected",
+      "All Mail clears an unmatched mobile search",
+      "Mail and Back to inbox leave Settings",
+      "390px viewport has 390px document scroll width"
+    ],
+    "screenshots_retained": false
+  },
+  "limits": [
+    "Hosted validation of this change awaits CI and deployment",
+    "Exhaustive Gmail/provider/mobile parity remains incomplete"
+  ],
+  "source_sha256": {
+    "twins/gmail/ui.py": "99b8ab1a20a0ebf5353541f142f568c6f8238bf93fb4532ebe666823415cd777",
+    "twins/gmail/labels_ui.py": "cff88b5d807f7c143d25baf714d69515cd16e90be4134fbe35d9748f08578720",
+    "twins/gmail/settings_ui.py": "ecc5e0c59d3852cd09ca23c10b0bb44114259db7a06c7ca9250855ff6f7db314",
+    "twins/tests/test_gmail_labels_ui.py": "5dc0dc48efdf7770c170b3b735c320195498a5674a5b611b4b536ca4c5680f25"
+  },
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1109",
+  "commit": "cfb7a41e"
+}

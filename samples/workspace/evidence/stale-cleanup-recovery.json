@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1108",
+  "head": "392a8cc7bb479e6f95186fce5dec7e7dcafffde0",
+  "fix": "Reconcile old deployments only after Compute Engine proves the recorded VM absent or replaced; fence worker claims and heartbeat identity to preserve live replacements.",
+  "review_followup": "Retry missing immutable VM identity up to three times and fail before heartbeat if discovery is exhausted; preserve existing lease and identity, close resources on startup failure.",
+  "tests": {
+    "combined_regressions_passed": 108,
+    "new_identity_regressions": 3,
+    "pyright": "passed",
+    "ruff": "passed"
+  },
+  "production": "Await complete CI, merge, Deploy Runtime and Deploy Workers",
+  "screenshots_retained": false
+}

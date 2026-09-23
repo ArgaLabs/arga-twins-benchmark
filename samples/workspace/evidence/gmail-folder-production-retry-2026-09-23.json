@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_smoke",
+  "scored_candidate": false,
+  "status": "covered_checks_passed_additional_navigation_gaps_found",
+  "run_id": "840b6c2a-4e11-4aa4-b05a-b29e7e927652",
+  "seed": "samples/workspace/evidence/gmail-folder-hosted-seed.json",
+  "retry": {
+    "kind": "manual_hosted_smoke_not_candidate_rollout",
+    "original_attempt": "../gmail-folder-production-cua-smoke",
+    "reason": "Provisioning timeout; original cleanup confirmed after recovery scheduler deployment",
+    "recovery_revision": "7e320c953afbff494e793fc77e3315fafebe36c9",
+    "retry": 1
+  },
+  "deployed_folder_fix": {
+    "pull_request": 1103,
+    "merge_sha": "166c8f2a4086f2fe6ed1710b59b166fa0b915b18"
+  },
+  "browser": {
+    "tool": "Google Chrome via CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "52 Inbox conversations paginate to 51\u201352 of 52",
+      "Drafts navigation clears search, page and selection; two reply drafts remain separate",
+      "Custom-label navigation clears unmatched search",
+      "Mobile Spam navigation clears unmatched search and shows only the protected Spam fixture",
+      "Inbox clears pending search debounce and returns to 1\u201350 of 52 with no selection"
+    ],
+    "screenshots_retained": false
+  },
+  "state_readback": {
+    "unchanged": true,
+    "scope": "Entire captured Gmail provider state: messages, drafts, labels, history, settings, watches and Pub/Sub state",
+    "messages_including_drafts": 56,
+    "drafts": 2,
+    "labels": 15,
+    "sha256": "cfd5a0580b8eaa3965ee9254fb67a7c6362741fecf5cd1ccfe0ace61e1944fed"
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "additional_gaps": [
+    {
+      "gap": "All Mail absent from navigation",
+      "followup_pr": "https://github.com/ArgaLabs/validation-server/pull/1109"
+    },
+    {
+      "gap": "Mail rail button inert",
+      "followup_pr": "https://github.com/ArgaLabs/validation-server/pull/1109"
+    }
+  ],
+  "limits": [
+    "Manual smoke is not an independent candidate rollout",
+    "All Mail and Mail rail followup needs its own hosted validation",
+    "Exhaustive provider and mobile/visual parity remain unverified"
+  ]
+}
