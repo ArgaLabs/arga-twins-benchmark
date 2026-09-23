@@ -69,5 +69,22 @@
     "390px desktop Chrome emulation is a responsive check, not exhaustive mobile-device coverage.",
     "Full provider parity and reference visual audit remain open.",
     "No screenshot files retained."
-  ]
+  ],
+  "review_followup": {
+    "issue": "Hidden frozen dimensions could expand the data read across a huge invisible region",
+    "resolution": "Split pinned and scrolling reads into visible native runs; use getByDataFilter to avoid oversized query strings and skip empty filter sets.",
+    "regressions_passed": 168,
+    "log": "/tmp/lab-sheets-frozen-review-regressions.txt",
+    "hidden_900000_row_prefix": "bounded helper regression pass",
+    "chrome_hidden_frozen_4000_rows": {
+      "first_visible_row": 4001,
+      "rendered_cells": 570,
+      "frozen_intersection_cells": 0
+    },
+    "chrome_entirely_hidden_grid": {
+      "rendered_cells": 0,
+      "status": "Saved to this twin"
+    },
+    "normal_frozen_AE120_readback": 21
+  }
 }
