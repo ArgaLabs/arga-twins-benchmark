@@ -1,0 +1,54 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "source_revision": "a763a2b2b31d86c040f442562dd177d85166cfbc",
+  "tested_head": "81ca2cd15ef0a96cfe6da5d98d20bec452774500",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35804450715",
+  "deployment_status": "success",
+  "exact_head_checks_passed": 27,
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "deployed_mailbox_scripts_match_tested_source": "pass",
+    "native_50_conversation_page_boundary": "pass",
+    "conversation_navigation_crosses_page_boundary": "pass",
+    "mixed_conversation_opens_received_message": "pass",
+    "bulk_archive_two_selected_conversations": "pass",
+    "two_drafts_remain_separate_rows": "pass",
+    "draft_resources_byte_for_byte_unchanged": "pass",
+    "search_from_inbox_finds_archived_conversation": "pass",
+    "unselected_conversation_unchanged": "pass",
+    "mobile_bulk_controls_within_viewport": "pass",
+    "native_api_readback": "pass"
+  },
+  "responsive_measurements": {
+    "width": 390,
+    "document_scroll_width": 390,
+    "bulk_buttons_left_min": 128,
+    "bulk_buttons_right_max": 249
+  },
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/gmail-mailbox-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "frontend-source-check.json": "735ab6eeb48aaea6328e516d8c7d5a1276c8fb0723d65d7bb8e843a3bbcc3701",
+    "native-drafts-before.json": "bea56ded41dd7c9beb13e713ffe38434f870d88ae152eab08ebf78059a9fdbfb",
+    "manual-native-readback.json": "f147c6de113f95941feb573c52bd4fbcdbdb50681b85378c93e5e4663d5298f3",
+    "gmail-browser-trace.json": "5b3462c297789824907c505ed3d0f4910fe9bd4291537eb79e7f0693f367df3d",
+    "cleanup.json": "04dd53e530887c0179b4f7e94116f7654d21316517f36d1593103e446144c655",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous candidate rollout or full Gmail parity.",
+    "Per-container digest is not exposed; hosted source fingerprints and deployment provenance are recorded.",
+    "An empty seed label list currently defaults to INBOX; archive/search was verified using explicitly archived conversations. Exact empty-label import/seeding semantics remain open.",
+    "Rich composing, select-all-matching, filter delivery, complete settings/admin/AI and collaboration parity remain open.",
+    "No screenshot files retained."
+  ]
+}
