@@ -48,7 +48,7 @@
   "remaining": [
     "Column resize/drag handles, table multi-selection and authenticated provider visual comparison remain open.",
     "Mentions, uploads, full workspace/collaboration/settings/admin/billing/analytics/AI scope and complete responsive/reference inventory remain open.",
-    "CI, production deployment and hosted validation remain pending. This manual feature check is not a full hosted agent rollout."
+    "CI and both production deployments succeeded. Hosted pointer Save failed due to toolbar layout shift; PR #1105 fixes it locally and awaits hosted validation. This is not a full hosted agent rollout."
   ],
   "seed_id_followup": {
     "problem": "A generated ID could overwrite a record restored with an explicit seed ID.",
