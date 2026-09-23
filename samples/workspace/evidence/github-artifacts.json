@@ -1,5 +1,5 @@
 {
-  "status": "review_fixed_ci_hosted_pending",
+  "status": "local_browser_verified_deployment_pending",
   "date": "2026-09-23",
   "screenshots_retained": false,
   "features": [
@@ -58,7 +58,6 @@
   },
   "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
   "remaining": [
-    "Authenticated browser-proxy download completion in Chrome",
     "hosted deployment and browser validation",
     "complete Actions/review/project settings, collaboration and visual parity"
   ],
@@ -91,6 +90,60 @@
       "download": "Chrome blocked this authenticated-proxy download with ERR_BLOCKED_BY_CLIENT; no new file was saved. Prior direct-twin download success remains recorded separately.",
       "screenshots_retained": false
     },
-    "deployment": "pending new PR CI and review"
+    "deployment": "Source-head CI passed; hosted deployment and readback pending.",
+    "download_link_followup": {
+      "behavior": "Use native HTML download semantics to keep the Actions run page open.",
+      "chrome_via_cua": "Passed after recovering the blocked Chrome confirmation: the native download link emitted a download event, kept the run page open and saved a new verified ZIP through the actual authenticated sample BrowserProxy.",
+      "browser_manager_inspection": "Chrome internal downloads URL was blocked by Browser Use URL policy; no workaround attempted.",
+      "artifact_tests_passed": 22,
+      "ruff": "passed",
+      "verification": {
+        "source_commit": "d4602281213075b2cdf01a80d75e44dc887a0a1d",
+        "new_file_verified": true,
+        "size_bytes": 213,
+        "sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+        "members": [
+          "run.json"
+        ],
+        "archive_integrity": "passed",
+        "protected_artifact_state": "unchanged",
+        "native_readback": {
+          "protected_unchanged": true,
+          "demo_artifacts_remaining": 1,
+          "proxy_statuses": [
+            {
+              "method": "GET",
+              "path": "/",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions/runs/2700049846",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions/artifacts/35676634226106/download",
+              "status": 302
+            },
+            {
+              "method": "GET",
+              "path": "/__artifacts/test-org/demo-repo/35676634226106",
+              "status": 200
+            }
+          ]
+        }
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "date": "2026-09-23",
-  "status": "local_verified_ci_hosted_pending",
+  "status": "production_verified",
   "screenshots_retained": false,
   "trigger": "Hosted WKS-01 candidate read GET /pulls/1/merge to verify an unmerged pull request; the generic fallback created a singleton and returned fabricated metadata.",
   "changes": [
@@ -27,8 +27,107 @@
   },
   "reference": "https://docs.github.com/en/rest/pulls/pulls#check-if-a-pull-request-has-been-merged",
   "limits": [
-    "CI, deployment and fresh hosted readback pending",
-    "Broader GitHub frontend parity remains incomplete"
+    "Broader GitHub frontend parity and complete browser-agent coverage remain incomplete."
   ],
-  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1111"
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1111",
+  "hosted_validation": {
+    "checks": [
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/1/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/2/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/3/merge",
+        "status": 204
+      },
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/999/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/0/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/repos/fixture-lab/merge-readback/pulls/-1/merge",
+        "status": 404
+      },
+      {
+        "empty_body": false,
+        "path": "/repos/fixture-lab/merge-readback/pulls/not-a-number/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/1/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/2/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/3/merge",
+        "status": 204
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/999/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/0/merge",
+        "status": 404
+      },
+      {
+        "empty_body": true,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/-1/merge",
+        "status": 404
+      },
+      {
+        "empty_body": false,
+        "path": "/api/v3/repos/fixture-lab/merge-readback/pulls/not-a-number/merge",
+        "status": 404
+      }
+    ],
+    "cleanup_confirmed": true,
+    "kind": "manual_hosted_api_smoke",
+    "native_state_unchanged": true,
+    "open_pr_lifecycle_fields_null": true,
+    "run_id": "28c5fcff-78c5-4bda-a211-9d7ec96533e7",
+    "scenario_id": "e5b63a63-6f0f-4eab-a010-92016ccdce12",
+    "scored_candidate": false,
+    "source_commit": "d4c669f14fcd953dcd6cbcefbf5a3cfda0c40952",
+    "status": "passed",
+    "deployments": [
+      {
+        "workflow": "Deploy Runtime",
+        "run_id": 35928687908,
+        "status": "success"
+      },
+      {
+        "workflow": "Deploy Twins",
+        "run_id": 35928687947,
+        "status": "success"
+      }
+    ],
+    "prior_manual_attempt": {
+      "status": "incomplete",
+      "cleanup_confirmed": true,
+      "reason": "Harness incorrectly required an empty body for a malformed nonnumeric PR identifier. The 404 status was correct; the corrected check only requires empty bodies for valid lifecycle fixtures."
+    }
+  }
 }
