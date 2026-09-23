@@ -116,5 +116,46 @@
       ]
     }
   },
-  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1114"
+  "cross_account_review_followup": {
+    "finding": "The original form could only discover calendars already present in the active account state.",
+    "fixes": [
+      "Resolve user, domain, group and public ACL grants within the same workspace on every native request.",
+      "Keep owner calendar/event records shared and subscription preferences account-local.",
+      "Resolve shared primary calendars by owner email without automatically subscribing.",
+      "Apply role updates and revocation to existing tokens and CalendarList incremental sync.",
+      "Redact private event details for reader roles and enforce writer/private restrictions.",
+      "Seed account identities, owner calendars, ACLs and subscriptions through exact Scenario configuration; reset clears previous owners.",
+      "Preserve private-event incremental sync while hiding details, retain free/busy caller aliases, and protect the data owner primary calendar from shared-manager deletion."
+    ],
+    "validation": {
+      "calendar_regressions": 81,
+      "pyright": "passed",
+      "ruff": "passed",
+      "chrome_cua": [
+        "Desktop subscription by another owner email",
+        "Other calendars placement and disabled owner settings",
+        "390px unsubscribe and resubscribe by ID",
+        "Reload preserves nickname, color, popup reminder and shared event visibility"
+      ],
+      "all_owner_calendar_metadata_unchanged": true,
+      "all_owner_event_state_unchanged": true,
+      "owner_account_state_unchanged": true,
+      "sdk_and_scenario_generator_tests": 145,
+      "contract_matrix": {
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "unexpected_5xx": 0,
+        "status": "passed"
+      }
+    },
+    "references": [
+      "https://developers.google.com/workspace/calendar/api/concepts/sharing",
+      "https://developers.google.com/workspace/calendar/api/v3/reference/acl"
+    ],
+    "limits": [
+      "Cross-owner event transfer and shared MCP collaboration remain outside this focused subscription correction.",
+      "CI, production deployment and hosted cross-account validation are pending."
+    ]
+  }
 }
