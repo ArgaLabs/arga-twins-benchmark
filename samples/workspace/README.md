@@ -18,7 +18,9 @@ Production API rollouts for all five current tasks completed on 22 September 202
 
 Production Chrome checks also verified Docs native image/table preservation with concurrent title edits, Linear rich table editing and slash-menu comments, and Sheets tab lifecycle controls at desktop and 390px width. Native API readback and teardown passed. These are manual feature checks, not additional candidate rollouts or complete frontend parity. Text/JSON results are in `evidence/linear-workspace-production-2026-09-22.json`; screenshot files are excluded from the kit.
 
-Gmail label visibility and conversation/draft count changes also passed a fresh production Chrome check with native readback and confirmed teardown. See `evidence/gmail-production-2026-09-22.json`. Conversation paging remains a separately recorded gap.
+Gmail label visibility and conversation/draft count changes also passed a fresh production Chrome check with native readback and confirmed teardown. See `evidence/gmail-production-2026-09-22.json`. A subsequent saved-Scenario production check verified native paging, a searchable archived message with an explicit empty label list, exactly 52 Inbox conversations and two distinct draft rows at 390px. Native state was unchanged and teardown confirmed; see `evidence/gmail-empty-labels-production-2026-09-22.json`. Select-all-matching deployment and hosted validation remain open.
+
+Docs document tab navigation/lifecycle, nesting, duplication, drag reordering, outlines, deep links and tab-specific edits/exports are implemented in twin PR #1100, with 186 unique regressions and local Chrome desktop/390px checks. Hosted validation is pending; see `evidence/docs-document-tabs.json`. These feature checks do not complete the Docs or eight-twin frontend audits.
 
 The eventual ZIP is an **operator-only benchmark kit**. It includes seeds, outcome contracts, verifier source and regression fixtures with expected state. Do not give the archive or its extracted directory to a candidate. The runner creates the separate `candidate.json` handoff for candidate access.
 

@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-22",
+  "kind": "local_frontend_feature_verification",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "tab_navigation_and_pending_edit_save": "pass",
+    "deep_link_and_browser_back": "pass",
+    "rename_and_emoji": "pass",
+    "subtree_duplication_preserves_rich_content": "pass",
+    "parent_and_position_move_dialog": "pass",
+    "desktop_drag_reorder_preserves_subtree": "pass",
+    "tab_creation_and_deletion": "pass",
+    "outline_navigation": "pass",
+    "copy_tab_link": "pass",
+    "native_table_insert_in_selected_nonfirst_tab": "pass",
+    "first_tab_text_and_structure_unchanged": "pass",
+    "current_and_all_tab_export": "pass",
+    "mobile_sidebar_and_editor_bounds": "pass"
+  },
+  "automated_regressions": {
+    "full_suite_passed": 185,
+    "subsequent_focused_suite_passed": 23,
+    "unique_tests": 186,
+    "logs": [
+      "/tmp/lab-docs-tabs-final-regressions.txt",
+      "/tmp/lab-docs-tabs-shared-tests.txt"
+    ],
+    "coverage": [
+      "Three-level tree rendering, sibling order and default first-tab writes",
+      "Atomic invalid moves, cycles, depth and 100-tab limits",
+      "Primary-tab deletion and rich survivor promotion",
+      "Duplicate subtree independence, writer permissions and stale revisions",
+      "All-tab and selected-tab replacement semantics",
+      "Selected/all-tab export and existing Drive export compatibility",
+      "Unicode emoji sequences and invalid input rejection",
+      "Pending edit and title/body revision queues",
+      "Run-scoped Docs/Drive rename, duplication and reset"
+    ]
+  },
+  "native_readback_sha256": "f15b64b26c20b6144ff6e45770ea5007a5a63357ecd1dac2ed92f3535fb1bef6",
+  "sources": [
+    "https://support.google.com/docs/answer/15499791?co=GENIE.Platform%3DDesktop&hl=en",
+    "https://developers.google.com/workspace/docs/api/how-tos/tabs",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents#TabProperties"
+  ],
+  "limitations": [
+    "Local feature checks do not establish exhaustive visual or provider feature parity.",
+    "Hosted deployment and validation of these new controls remain pending.",
+    "Full Docs menus, suggesting/history, image upload/Drive picker, table merge/resize/properties and collaboration/AI remain open.",
+    "No screenshot files retained."
+  ]
+}
