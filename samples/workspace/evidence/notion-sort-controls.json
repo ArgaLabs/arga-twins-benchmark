@@ -44,5 +44,15 @@
     "Advanced nested-filter editing",
     "Provider-wide visual/settings/collaboration parity",
     "Physical-touch mobile checks"
-  ]
+  ],
+  "review_followup": {
+    "passed": 98,
+    "scope": "Native sort creation/update/query, browser database controls and Notion fidelity regressions",
+    "log_sha256": "4271e30075023cbcbbc4d522d58f5c4af24fd019a0a2e0263df8a44b30b3dfa9",
+    "ruff": "pass",
+    "fixes": [
+      "Reject explicitly supplied null/false/zero/object/empty-string sorts without creating a view or event",
+      "Resolve hyphenless parent source IDs before select/status/multi-select schema ordering"
+    ]
+  }
 }
