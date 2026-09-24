@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Accept full-row and full-column name-box ranges, absolute markers and open-ended column ranges.",
+    "Match real Sheets A:B5 normalization to A5:B1000 on a 1000-row sheet.",
+    "Keep whole-row/column labels compact and avoid scrolling when the selected anchor is already visible.",
+    "Reject invalid and out-of-bounds addresses before changing the selection."
+  ],
+  "validation": {
+    "regressions": 72,
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "browser": "Google Chrome through CUA with the actual sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "2:3 selects complete rows without shifting an already visible anchor",
+      "B:C selects complete columns on mobile",
+      "A:B5 normalizes to A5:B1000",
+      "2:1001 rejects and restores the last valid selection"
+    ],
+    "entire_native_workbook_unchanged": true,
+    "console_errors": 0,
+    "native_browser_capture_sha256": "7114d0e8d7bda0c9a74c0bcd33932b3b0e4c8a200f920443a0a77dd83c5642d6"
+  },
+  "provider_reference": {
+    "workbook_id": "1aLYV0-fEdL7xPZMW-Tn2XqsrS1FW8JeZ4S1NrvRDWzE",
+    "fixture": "New private disposable workbook; moved to Trash and confirmed after inspection.",
+    "observed_labels": {
+      "2:3": "2:3",
+      "B:C": "B:C",
+      "A5:A": "A5:A1000",
+      "A:B5": "A5:B1000"
+    }
+  },
+  "references": [
+    "https://developers.google.com/workspace/sheets/api/guides/concepts#cell"
+  ],
+  "limits": [
+    "CI, deployment and hosted validation remain pending.",
+    "Named-range management/navigation, sheet-qualified addresses and the complete eight-twin frontend audit remain open.",
+    "The frontend reference convention for A:B5 is verified separately from REST A1 parsing."
+  ]
+}

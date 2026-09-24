@@ -144,5 +144,11 @@
   "provenance_note": "New tasks inspired by ArgaBench operational episodes; these are not unchanged published ArgaBench episodes.",
   "companion_twin_pr": "https://github.com/ArgaLabs/validation-server/pull/1083",
   "sample_source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14",
-  "release_status": "blocked_pending_verification"
+  "release_status": "blocked_pending_verification",
+  "companion_twin_followup_prs": [
+    "https://github.com/ArgaLabs/validation-server/pull/1115",
+    "https://github.com/ArgaLabs/validation-server/pull/1116",
+    "https://github.com/ArgaLabs/validation-server/pull/1117",
+    "https://github.com/ArgaLabs/validation-server/pull/1118"
+  ]
 }
