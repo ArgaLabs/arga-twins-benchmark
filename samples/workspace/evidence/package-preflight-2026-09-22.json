@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 240,
+      "files_scanned": 242,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -64,6 +64,13 @@
       "skipped": 26,
       "log_sha256": "52437ba98ebfefb0106b3286f63f4c8ba151cfba677d73ba1edd29996a3d4d4d",
       "command": "PYTHONPATH=src .venv/bin/python -m pytest -q"
+    },
+    "current_package_readiness_tests": {
+      "date": "2026-09-24",
+      "passed": 18,
+      "deselected": 110,
+      "command": "PYTHONPATH=src python -m pytest -q tests/test_workspace_outcomes.py -k 'package or readiness or release'",
+      "log_sha256": "4f3bf190f05e0dff6f30c1571de0a8b39ef9a6e54fc34bb2f8af4d151e11cf3b"
     }
   },
   "limits": "All five current hosted candidate rollout gates pass. Full eight-twin frontend parity, outstanding changes, deployed-image attestation and final package release remain separate open gates."

@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-24",
+  "kind": "bounded_frontend_and_native_validation",
+  "status": "pass",
+  "provider": "google_sheets",
+  "screenshots_retained": false,
+  "implemented": [
+    "Data validation sidebar: list/add/edit/remove rules; list/range dropdowns, checkbox custom values, text/numeric/date and formula predicates; selected-cell help and warning/rejection.",
+    "Native setDataValidation state remains readable and writable through provider APIs. Proposed values are evaluated without committing them; reader scope and revoked grants are enforced.",
+    "Checkbox mouse/Space interaction, keyboard dropdown opening, source-range option refresh, invalid-value markers and restoration after rejection.",
+    "Relative predicate formulas follow each target row/column while preserving absolute references; grouped rules reopen without changing their meaning.",
+    "Validation conditions reject malformed arities/union fields atomically; filteredRowsIncluded is honored.",
+    "Reopening one-item dropdowns preserves the item count; custom checkbox rules support a blank unchecked value."
+  ],
+  "tests": {
+    "final_focused_regressions": 85,
+    "counts_overlap": true,
+    "ruff": "pass",
+    "pyright": "0 errors, 0 warnings",
+    "contract_matrix": {
+      "status": "passed",
+      "high": 0,
+      "medium": 122,
+      "unexpected_5xx": 0,
+      "note": "Medium findings retained by the existing full matrix; this is not a zero-findings claim."
+    },
+    "before_date_filter_integration_regressions": 542,
+    "combined_sheets_workspace_scenario_regressions": 571
+  },
+  "browser_checks": [
+    "Desktop list/range dropdown create/edit/choose; Alt+Down opens choices; invalid typed input is rejected.",
+    "Checkbox click/Space saves native booleans; removing the rule preserves values.",
+    "Warning mode accepts an out-of-range value; strict mode rejects a later invalid input.",
+    "390x844 reload preserves range/criterion/help/strict state; staged edits cancel without writes.",
+    "Row-relative custom formula =H2>C2 applied to H2:H5 accepts H3=35 and rejects 25 against C3=30, preserving 35. Mobile grouping/reopen/cancel retains the original range/formula.",
+    "Transient desktop/mobile images inspected; 390px viewport has 390px document width."
+  ],
+  "native_checks": [
+    "All original A:D values, formulas and formatting are unchanged.",
+    "Protected sheet and unrelated workbook state are exactly unchanged.",
+    "Only expected validation rules and E2=Active, F2/F3=TRUE, G2=5 exist after the first flow; removed checkbox rules and rejected G3 value do not persist.",
+    "The relative-formula flow adds only H2:H5 rules and H3=35; no other cells change."
+  ],
+  "provider_reference": "../../../../twins/tests/fixtures/google_sheets_validation_reference.json",
+  "capture_sha256s": {
+    "browser_native": "a00729d74c2c9057e493b3951b13b23b92419d343949fe18d7f3871ccd2219e0",
+    "relative_browser_native": "f3278df447c5bcd04a3655225b0ed1e20396967a123cf2377f2d1ec4d12c5221",
+    "regressions": "a2086d04739593c3e715b11bc3a968c228f613fdff65fb8bd8a6c579cb72bdda",
+    "focused": "33969cf45c678a8f949182b3c3733777b1266b8ac1b2626cb0bcf718b9037c6f",
+    "combined_regressions": "bb59cd6f92df541a3773c56efb6c29090c4a08e1af309b71d89ac1475c900d1f"
+  },
+  "cleanup": "Both local servers stopped; both disposable live Google reference files moved to trash with confirmation inspected; tabs closed; viewport reset.",
+  "limits": [
+    "CI, production deployment and hosted replay are pending.",
+    "Not a full Sheets or eight-provider parity claim.",
+    "Colored/multiple-selection chips, full clipboard and structural formula-reference behavior, exhaustive condition fidelity and collaboration remain open.",
+    "Native Google API readback was unavailable for the live references; relative predicate behavior was verified through the provider UI.",
+    "No exhaustive pixel or physical-mobile audit."
+  ]
+}
