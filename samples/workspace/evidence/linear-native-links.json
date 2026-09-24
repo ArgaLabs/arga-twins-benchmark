@@ -42,9 +42,9 @@
     "snapshot_sha256": "80f73e5cb3da11e36c5a04af3f7c4fc40f1b33072d07607a4e9e33a7fbdce69a",
     "screenshots_retained": false
   },
-  "ci": "pending",
-  "deployment": "pending",
-  "hosted_validation": "pending",
+  "ci": "passed",
+  "deployment": "both production workflows passed on retry",
+  "hosted_validation": "passed; see linear-native-links-production-2026-09-24.json",
   "limits": [
     "Project path opens existing issue list; full project overview remains separate",
     "Does not establish full Linear visual/feature/mobile parity"

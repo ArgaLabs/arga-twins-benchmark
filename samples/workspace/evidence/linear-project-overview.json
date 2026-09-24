@@ -51,5 +51,13 @@
   "limits": [
     "External resource links, inline project comments, project graphs and configurable statuses remain incomplete",
     "This bounded check does not establish full Linear feature/visual/mobile parity"
-  ]
+  ],
+  "review_followup": {
+    "combined_linear_and_scenario_tests_passed": 278,
+    "counts_include_previous_linear_suite": true,
+    "disabled_project_updates": "History remains readable; create/edit/delete controls absent; direct writes still rejected",
+    "natural_language_scenario_schema": "Advertises independent description/content/member_ids; exact generator example seeds through native runner",
+    "ruff": "pass",
+    "log_sha256": "f9ce3ca5f24dd9bcb6982c3a9f8b0322d52261336a58bfbf94ee17f5b5705c3e"
+  }
 }

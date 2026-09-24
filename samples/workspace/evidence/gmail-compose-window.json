@@ -66,5 +66,17 @@
     "Spell check, compose labels, pop-out windows, scheduling, image/Drive pickers, confidential mode and AI compose flows remain open.",
     "This is not full Gmail visual or feature parity."
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "current_main_integration": {
+    "base": "47243201b66741787d87bfa78379ccf67faf5a2e",
+    "all_gmail_passed": 217,
+    "log_sha256": "77b5c6c2d6b7a8efd89926fb6435cbd5a038330198a45e82ea2ac7defb8ab8fd",
+    "ruff": "pass",
+    "browser": "Chrome CUA desktop: reopen native rich draft, minimize/restore, full screen, menu Escape, save/reload, reply-all uses merged native MIME path and updates the header/recipients",
+    "protected_message_and_settings": "unchanged",
+    "rich_draft_recipients_and_binary_attachments": "preserved",
+    "sent_messages": 0,
+    "snapshot_sha256": "0792dc860c8e4f5f790b19149001ab2ca1e50ce9e37901604a6779bdcda0d1d6",
+    "native_print": "Still blocked by locked Mac on 24 September; no print job submitted"
+  }
 }
