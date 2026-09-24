@@ -3,7 +3,7 @@
   "scope": "Notion database view frontend; bounded local verification, not full provider parity",
   "tests": {
     "command": "UV_NO_SYNC=1 uv run pytest twins/tests/test_notion*.py -q",
-    "passed": 62,
+    "passed": 74,
     "ruff": "pass"
   },
   "browser": {
@@ -307,6 +307,26 @@
             "status": 200
           }
         ]
+      },
+      {
+        "case": "email-url-filters-and-sort-review",
+        "surface": "Chrome CUA desktop and 390px",
+        "email_filter_result": "BETA@ matches only Beta",
+        "url_filter_result": "/gamma matches only Gamma after mobile reload",
+        "native_filter": {
+          "property": "Link",
+          "url": {
+            "contains": "/gamma"
+          }
+        },
+        "native_sorts": [
+          {
+            "property": "Contact",
+            "direction": "descending"
+          }
+        ],
+        "all_seeded_pages_and_sources_unchanged": true,
+        "unsupported_complex_sort_option_absent": true
       }
     ],
     "visual_inspection": "Transient desktop and mobile screenshots inspected; none retained",
@@ -320,12 +340,20 @@
   "references": [
     "https://developers.notion.com/reference/create-view",
     "https://developers.notion.com/reference/update-a-view",
-    "https://www.notion.com/help/views-filters-and-sorts"
+    "https://www.notion.com/help/views-filters-and-sorts",
+    "https://raw.githubusercontent.com/makenotion/notion-sdk-js/main/src/api-endpoints/common.ts"
   ],
   "open": [
     "CI, production deployment and hosted checks",
     "Authenticated provider pixel comparison and physical mobile touch",
-    "Advanced/nested filter editor, calendar/timeline/chart/form/dashboard layouts, inline database cell editing and full collaboration"
+    "Advanced/nested filter editor, calendar/timeline/chart/form/dashboard layouts, inline database cell editing and full collaboration",
+    "Complex-property sorting and filter/sort editor preselection; unsupported sort choices are absent rather than persisting unusable views."
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "review_regressions": {
+    "disabled_capabilities": "Existing bearer tokens respect disabled read/update/insert capabilities in browser routes.",
+    "text_property_filters": "URL/email/phone number filters use native text comparisons, including empty values and case-insensitive matches.",
+    "atomic_query_changes": "Complex sort choices are omitted and rejected before mutation; malformed seed values cannot persist a broken query.",
+    "focused_tests_passed": 21
+  }
 }

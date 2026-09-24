@@ -1,0 +1,381 @@
+{
+  "date": "2026-09-24",
+  "scope": "Gmail reply/forward MIME and recipient workflows",
+  "tests": {
+    "gmail_suite_passed": 193,
+    "ruff": "pass"
+  },
+  "browser": {
+    "surface": "Chrome through CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Reply all preserves Reply-To, original To and separate Cc; excludes self and hidden Bcc",
+      "HTML quote and signature retain bold, Unicode and CID inline image",
+      "Reply draft preserves In-Reply-To and References without copying the regular file",
+      "Forward starts with empty recipients and no reply-thread headers; includes inline image and regular attachment",
+      "Saved forward reopens after reload on mobile with exact content and files",
+      "Mobile Send creates one message only inside the local twin"
+    ],
+    "protected_source_and_other_message_unchanged": true,
+    "native_outcome": {
+      "unsent_reply_drafts": 1,
+      "twin_sent_forwards": 1,
+      "forward_attachment_bytes": 4,
+      "forward_attachment_sha256": "dfb8b48c3a682a28b07b529062dbcf4b24bff460c9516d2cc68c857601ba99fb",
+      "inline_content_id": "<test-image>"
+    },
+    "requests": [
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/profile",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/favicon.ico",
+        "status": 404
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/protected",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/settings/sendAs",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "POST",
+        "path": "/gmail/v1/users/me/drafts",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "PUT",
+        "path": "/gmail/v1/users/me/drafts/r-2745392677842257996",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/protected",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_086bbd384159d1",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/ece1997cb4577190/attachments/att_a3bd77f25dba77",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/settings/sendAs",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "POST",
+        "path": "/gmail/v1/users/me/drafts",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "PUT",
+        "path": "/gmail/v1/users/me/drafts/r-9114822619151332390",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/protected",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/profile",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/ece1997cb4577190",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/protected",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/3393fe751916fa8b",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/1c30d29afea6ad9f",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/3393fe751916fa8b",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/drafts",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/drafts/r-9114822619151332390",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/3393fe751916fa8b/attachments/att_ca876870909c1c",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/messages/3393fe751916fa8b/attachments/att_35504b817bccec",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "PUT",
+        "path": "/gmail/v1/users/me/drafts/r-9114822619151332390",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "POST",
+        "path": "/gmail/v1/users/me/drafts/send",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/labels",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads",
+        "status": 200
+      },
+      {
+        "provider": "gmail",
+        "method": "GET",
+        "path": "/gmail/v1/users/me/threads/d087601ae5b2bc6c",
+        "status": 200
+      }
+    ]
+  },
+  "provider_reference": {
+    "service": "real Gmail, uniquely prefixed disposable fixture",
+    "prefix": "ARGA-FORWARD-20260924T063524-e6c5e6",
+    "checks": [
+      "Real Gmail Forward includes the source file automatically",
+      "Native saved forward retains the exact 4-byte attachment and original HTML bold text"
+    ],
+    "sent_messages": 0,
+    "preexisting_messages_touched": 0,
+    "cleanup": {
+      "fixture_trashed": true,
+      "unsent_reference_draft_trashed": true
+    },
+    "official_docs": [
+      "https://support.google.com/mail/answer/6585?hl=en",
+      "https://support.google.com/mail/answer/15162918?hl=en"
+    ]
+  },
+  "screenshots_retained": false,
+  "open": [
+    "CI, deployment and hosted validation",
+    "Full reply/forward menus, inline compose placement and pixel parity",
+    "Native print dialog and broader admin/AI/settings scope"
+  ]
+}
