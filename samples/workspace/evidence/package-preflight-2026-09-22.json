@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 179,
+      "files_scanned": 180,
       "image_files": 0
     },
     "final_zip_created": false,
@@ -40,5 +40,5 @@
       "offline_regrade": "WKS-04 passed; original verdict preserved"
     }
   },
-  "limits": "Frontend parity, hosted browser-agent coverage and deployment of subsequent changes remain separate gates."
+  "limits": "Full eight-twin frontend parity and deployment of subsequent changes remain separate gates. One complete hosted mixed browser/API candidate now passes."
 }

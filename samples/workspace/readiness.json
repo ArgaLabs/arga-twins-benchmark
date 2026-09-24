@@ -102,6 +102,10 @@
         {
           "path": "samples/workspace/evidence/hosted-2026-09-22.json",
           "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-browser-candidate-2026-09-24.json",
+          "sha256": "5a3e7d944805ddab0904692aab8ebe176e5b3c624b1e9ca13c17c06e7dcf0aee"
         }
       ]
     },
@@ -118,5 +122,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "8b47958bb1ba77d1e2277cf38c29ae53a3a5bb7dd5c1527363cc6fbc731c22e4"
+  "sample_tree_sha256": "1154322dae459cabf4476db40fd71dfb693144abab0833ff2d40f06f259b18bc"
 }
