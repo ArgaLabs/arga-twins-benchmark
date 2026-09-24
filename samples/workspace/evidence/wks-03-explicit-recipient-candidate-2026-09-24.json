@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-03",
+  "kind": "hosted_candidate_episode",
+  "environment": "production",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 23,
+  "official_docs_calls": 3,
+  "model_tool_calls": 27,
+  "assertion_count": 12,
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "sample_revision": "18573f07a7ddafbcccddd38052d2a498be2b3345",
+  "scenario_content_tag": "content-sha256:2e391fe5bc3b7e8747631040b48ac19908ff6b2078ad2a2aa996afab691714b1",
+  "scenario_file_sha256": "d5f6617b4d1efda526b2bb82d4572013dfef21e545ca5bfdac735f2258ad4238",
+  "operator_evidence_directory": "lab-wks03-explicit-recipient-browser-2026-09-24-r1",
+  "candidate_evidence_directory": "lab-wks03-explicit-recipient-browser-2026-09-24-r1-candidate",
+  "artifacts_sha256": {
+    "candidate.json": "f29579356b00774b43e36c54480dc81f2aeb05e48011421feedb65645716ce94",
+    "baseline-state.json": "9d221c640dbb7e7dd79764cfac6c10ff722557a28dbe9c3d1d3dd9354e0b4c5c",
+    "final-state.json": "a7052482fa15c933f114480c8e0c302b686d2db9c55b891040e2aec2bab289f3",
+    "invocation.json": "2d49d9cfddc4dc76d38d40d0740f4b7b6c7bae64795f9b524f77f01c53b0f488",
+    "provider-trace.json": "72682d4ef9cf49493f1bd0dfee3f26f51a08aea3c7240e552af6d02b8c441d06",
+    "official-docs-trace.json": "df07748475fbaca3ef7b6238e74487ef726067c0a0114e65242b1c41ede212eb",
+    "browser-trace.json": "9dc4b76dee7319f38b2fe5be5a1c9181fa688869af9103707c9c8ef92711c938",
+    "verifier.json": "94fa272ff4e10428468ede0e42d89751248b3e5a723aece49728595d247c91b2",
+    "cleanup.json": "234c9b4f445001371fdfcae919cc4e20c42c254afbc5ed5f84cde460c4ba71b2"
+  },
+  "candidate_artifacts_sha256": {
+    "model-invocation.json": "ddd058762eab8ebd82a44366d80b07ac29cfa6fec8b533a73ec13772646cdeae",
+    "adapter.json": "9bfe95d3dae279ea4150a715066342dbf5b8746a153dda57eefff4bd1c6608e0"
+  },
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "limits": [
+    "Single functional trial, not a model comparison",
+    "API-only trajectory does not establish browser-agent coverage"
+  ],
+  "contract_change_provenance": {
+    "previous_attempt": "wks-03-reviewed-contract-candidate-2026-09-24.json",
+    "reason": "Fresh trial under explicit customer-only recipient policy after the previous seed left internal-reviewer CC behavior ambiguous",
+    "previous_outcome_preserved": true,
+    "model_comparison": false
+  }
+}

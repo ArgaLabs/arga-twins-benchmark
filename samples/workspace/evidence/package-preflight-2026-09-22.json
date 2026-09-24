@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 224,
+      "files_scanned": 226,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -56,6 +56,14 @@
       "pyright": "pass",
       "ruff": "pass",
       "log_sha256": "2c7f180f35ed967e0861b3034f93ba91b9560d7645c9b7acc55a3e0b2bca16ff"
+    },
+    "current_full_benchmark_tests": {
+      "date": "2026-09-24",
+      "source_revision": "18573f07a7ddafbcccddd38052d2a498be2b3345",
+      "passed": 1185,
+      "skipped": 26,
+      "log_sha256": "52437ba98ebfefb0106b3286f63f4c8ba151cfba677d73ba1edd29996a3d4d4d",
+      "command": "PYTHONPATH=src .venv/bin/python -m pytest -q"
     }
   },
   "limits": "Full eight-twin frontend parity and deployment of subsequent changes remain separate gates. One complete hosted mixed browser/API candidate now passes."

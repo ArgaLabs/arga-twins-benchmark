@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-24",
+  "scope": "Linear project overview and native content/membership state",
+  "provider_reference": [
+    "https://linear.app/docs/project-overview",
+    "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql"
+  ],
+  "implemented": [
+    "Native and sidebar project links open Overview with Issues and Updates navigation",
+    "Project name, summary, Markdown content, state, priority, lead, teams, members, dates, color and icon persist through GraphQL",
+    "Project content and memberIds are independent native fields and exact Scenario seed fields",
+    "Create project documents; create/edit/reorder/delete milestones; create/edit/delete own project updates",
+    "Revision checks reject stale writes; invalid fields and foreign resources are rejected before updates"
+  ],
+  "tests": {
+    "all_linear_passed": 133,
+    "ruff": "pass",
+    "log_sha256": "bfa4fc2c483dd8e061f8c7bf69c3dad71d1ec63138275dc7282fcea2d8d64be6",
+    "cases": [
+      "Native/UI readback and protected record preservation",
+      "Summary/content/membership independence",
+      "Invalid and stale forms, invalid native members/content",
+      "Existing inactive members and archived teams retained",
+      "Exact Markdown whitespace retained",
+      "Foreign project milestones and other authors updates protected",
+      "Duplicate project names and stable native/mention links"
+    ]
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "flows": [
+      "Save summary, paused state and two members",
+      "Create resource document",
+      "Create milestone and move it above seeded milestone",
+      "Post and edit project update at 390px, reload persisted text"
+    ],
+    "mobile_document_scroll_width": 390,
+    "mobile_viewport_width": 390,
+    "offscreen_visible_controls": 0,
+    "native_protected_records": "unchanged",
+    "snapshot_sha256": "389f5b8898ac969a2698a3a324bdb2d494bf744225296de08f44e7691d363752",
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "External resource links, inline project comments, project graphs and configurable statuses remain incomplete",
+    "This bounded check does not establish full Linear feature/visual/mobile parity"
+  ]
+}

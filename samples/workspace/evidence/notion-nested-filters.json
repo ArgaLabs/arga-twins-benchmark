@@ -79,5 +79,12 @@
   "limits": [
     "No hosted validation yet",
     "Desktop and 390px Chrome checks cover this filter workflow; not exhaustive provider or physical mobile-device parity"
-  ]
+  ],
+  "review_followup": {
+    "comment": 4091560925,
+    "detail": "Preserve native emptiness-key precedence and inactive sibling operators when opening and saving; display false emptiness predicates as their equivalent inverse without mutating the native rule.",
+    "notion_suite_passed": 158,
+    "new_native_and_browser_model_cases": 5,
+    "counts_overlap": true
+  }
 }
