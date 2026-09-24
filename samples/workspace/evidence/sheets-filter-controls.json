@@ -12,8 +12,8 @@
     "Header-aware multi-column range sorting and filter sorting preserve formulas; empty cells sort last in both directions."
   ],
   "tests": {
-    "passed": 342,
-    "log_sha256": "b95161d0714f0c6de773ac10a36cdc5d387b37646a0b7dfaa2cbc53fbbc0439a",
+    "passed": 489,
+    "log_sha256": "8dbb6849744e3bcf4b1d070c7dc82232b2be765773f86aa84fed91fa1c052fab",
     "ruff": "pass",
     "contract_matrix": "all four layers passed with zero findings or unexpected 5xx"
   },
@@ -39,12 +39,12 @@
     "screenshots_retained": false
   },
   "provider_reference": "twins/tests/fixtures/google_sheets_filter_reference.json",
-  "ci": "pending",
+  "ci": "Current head pending; earlier Linux ARG_MAX syntax-test failure fixed by passing generated JavaScript over stdin.",
   "deployment": "pending",
   "hosted_validation": "pending",
   "limits": [
     "Filter views and saved/temporary per-user views remain open.",
-    "Color, data-validation and relative-date filter controls and condition-dependent value-choice narrowing remain open.",
+    "Color, data-validation and relative-date filter controls remain open.",
     "A complete reference/mobile audit, charts, protection, undo and broader Sheets parity remain open."
   ],
   "review_followup": {
