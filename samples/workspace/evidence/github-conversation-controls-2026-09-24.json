@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-24",
+  "status": "local_desktop_pass_hosted_mobile_pending",
+  "parent_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+  "change_revision": "112bb0002bab61fe4878c3f2882619d86ac62eb0",
+  "real_reference": {
+    "url": "https://github.com/ArgaLabs/validation-server/pull/1150",
+    "mode": "read_only",
+    "observed_comment_menu": [
+      "Copy link",
+      "Copy Markdown",
+      "Quote reply",
+      "Reference in new issue",
+      "Edit",
+      "Hide",
+      "Delete",
+      "Block user"
+    ],
+    "mutations": 0
+  },
+  "observed_gap": "A native API-created issue comment existed on the PR but was not rendered anywhere on its conversation page.",
+  "implemented": [
+    "Shared issue/PR conversation renders native API comments and sanitized Markdown.",
+    "Browser create/edit/delete use native handlers and maintain comment identity and independent unsent composition.",
+    "Copy link/Markdown, Quote reply, edit Cancel, delete confirmation/Cancel/Escape.",
+    "Whitespace validation, pending field protection and modal-local error recovery."
+  ],
+  "desktop": {
+    "actual_viewport": {
+      "width": 1063,
+      "height": 806
+    },
+    "horizontal_overflow": false,
+    "checks": [
+      "API sentinel visible on PR.",
+      "Cancel edit leaves complete native state unchanged and preserves independent unsent composer.",
+      "Edit changes native body while preserving ID and created_at.",
+      "Delete Cancel and Escape leave complete native state unchanged.",
+      "Copy Markdown and link return exact expected content; previously empty clipboard cleared afterward.",
+      "Quote appends native Markdown to existing unsent text.",
+      "Confirmed delete removes disposable native comment without clearing independent composer.",
+      "Whitespace-only comment rejected.",
+      "Browser-created Markdown reply survives reload.",
+      "Protected native collections and generic fallback state unchanged; repository differences limited to native comment aliases.",
+      "After review fix: invalid edit Cancel/reopen/save succeeds.",
+      "After review fix: invalid compose then Quote submits successfully.",
+      "Held local request makes submitting textarea non-settable and disables submission, restoring both after success.",
+      "Injected local deletion 403 appears visibly and accessibly within dialog; comment remains native."
+    ]
+  },
+  "review": {
+    "initial_disposition": "fix",
+    "findings": [
+      "Clear validity on Cancel/Quote.",
+      "Protect text from changes during pending save.",
+      "Show deletion failures inside modal."
+    ],
+    "verdict": "All three findings resolved; scoped code can proceed to PR. Mobile/full visual finish remains pending."
+  },
+  "tests": {
+    "initial_provider_passed": 373,
+    "recovery_focused_passed": 7,
+    "focused_pyright": "0 errors",
+    "existing_frontend_pyright": "19 diagnostics identical to parent baseline",
+    "detector_findings": [],
+    "final_github_and_frontend_passed": 383
+  },
+  "limits": [
+    "Local synthetic fixture only; hosted verification is pending deployment.",
+    "Viewport override remained ineffective; no current mobile or physical-touch pass.",
+    "No retained screenshot artifacts; desktop screenshots inspected transiently.",
+    "Reference in new issue, Hide, Block user, reactions, richer editor, full permissions and advanced review flows remain open.",
+    "No exhaustive GitHub or eight-provider fidelity claim."
+  ],
+  "source_hashes": {
+    "twins/github/conversation_ui.py": "50bebc7331724d62a5c9590e34dfed4c685674fc8e6f50f6c927970dfd4895db",
+    "twins/github/frontend.py": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+    "twins/github/operations_ui.py": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+    "twins/tests/test_github_conversation_ui.py": "7a642b7090c55d0d77cd1117b8ec8e33e9e029bf8ca570e7c528f8593c1bbe30"
+  },
+  "private_evidence_sha256": {
+    "lab-final-github-conversation-audit-native.json": "7a171e1f6a44b866924d5acbeb90d24c16b3d2678d07967d6d5d7b7e1e89ab77",
+    "lab-final-github-conversation-edited-native.json": "f7582009fd1a6b6065d5efb242decc09a2556ffd18be668021a27d0d292ee601",
+    "lab-final-github-conversation-deleted-native.json": "7633da3fc4111e51bb05aadfd125536732f0a84282ecd060ebc7b5f85991b341",
+    "lab-final-github-conversation-final-native.json": "45ff7355a3766c70ea9bd3b5a691486482338d5897118377ba3459c62e9dd980",
+    "lab-final-github-conversation-review-native.json": "d6a0e9d032bdda024c4ac6d4d871a95a2e7d43111b97033ceb445331c9189caf",
+    "lab-final-github-conversation-recovery-tests.log": "8c98746ac5a18b445d0a2e7a9bfdda4a14cd9ec307c4a535483d11f31d9f7162",
+    "lab-final-github-conversation-focused-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-github-conversation-provider-tests.log": "514b17aae2a30fc33f43b268af9e624871435971c14b0614312b31fb2464fd6c",
+    "lab-final-github-conversation-design-detect.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-final-github-conversation-provider-tests-v2.log": "faf94fb114ba07893226a398c631b5e296fd994c44465ab436f4e39a416baced"
+  },
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1151",
+  "documentation_review": {
+    "status": "complete_read_only",
+    "finding": "Ordinary extension preserves incumbent GitHub twin palette, typography, shared buttons and Markdown rendering; no new design world or system files created.",
+    "limits": "Source comparison only; full visual/mobile parity not established."
+  },
+  "tested_revision_before_rebase": "b1ae06d75aaad9c2bfb753bb53dc1bb924cfaeb0",
+  "ci": "running"
+}

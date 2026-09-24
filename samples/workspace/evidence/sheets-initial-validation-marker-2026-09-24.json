@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-24",
+  "status": "local_desktop_pass_ci_hosted_mobile_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1153",
+  "revision": "1ff88b10254fdf70f83c223bcbb2f5a3eae0af60",
+  "base_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+  "observed_gap": "Invalid native seeded cell values were not marked after load/reload until focused.",
+  "changes": [
+    "Batch read-only validation statuses before grid render without saving proposed values.",
+    "Share one isolated snapshot and common formula engine where possible; bound batches to 500 targets.",
+    "Discard delayed grid/validation results after switching sheets; update named ranges atomically with current grid.",
+    "A stored dropdown criterion whose source sheet was deleted returns per-cell unavailable state, leaving healthy cells and workbook readable."
+  ],
+  "checks": {
+    "google_sheets_frontend_regressions_passed": 439,
+    "make_fix": "pass",
+    "changed_file_pyright": "0 errors",
+    "desktop_viewport": {
+      "width": 1063,
+      "height": 806
+    },
+    "before_focus_invalid_marker": "pass",
+    "valid_formula_cell_unmarked": "pass",
+    "sheet_switch_reload": "pass",
+    "deleted_source_workbook_load": "pass",
+    "unavailable_rule_title_and_aria_description": "pass",
+    "complete_before_after_native_equality_both_fixtures": "pass"
+  },
+  "review": {
+    "initial": "fix: deleted dropdown source must not block loading readable grid",
+    "verdict": "Resolved, independently reproduced: grid/batch return 200, broken rule unavailable, healthy rule valid, malformed target 400, native state unchanged.",
+    "documentation": "Read-only incumbent comparison complete; no design files initialized."
+  },
+  "original_regression_failure": "Existing isolated loadSheet harness lacked the added preview helper. Expanded it to test delayed grid and delayed validation responses; final 439-test suite passes.",
+  "detector": "One inherited unchanged validation-hint border-left warning; no CSS/layout changes.",
+  "limits": [
+    "CI, production deployment and fresh hosted checks pending.",
+    "Mobile/physical-touch checks remain pending because viewport override ineffective.",
+    "Formula criteria still build separate engines; reviewer measured 101 engine builds for 100 formula-rule cells in a 10,000-cell workbook, about 0.60s locally.",
+    "No retained screenshots; transient desktop images inspected.",
+    "No exhaustive provider or eight-twin parity claim."
+  ],
+  "source_hashes": {
+    "twins/google_drive/sheet_validation.py": "7ac2d24fa1267b744b31191fda56e3f27904bba6eeeb233e907a09be671b94a0",
+    "twins/google_sheets/ui.py": "2f5c5470ad731cfedb4d7902510ea82afdd2e11b906955c58704794150914516",
+    "twins/google_sheets/validation_ui.py": "c411bd42ad3175649fdb99536691212b864cebc2151df2fd437ab9929a93bf98",
+    "twins/tests/test_google_sheets_validation_controls.py": "2ec7fe25f9058239a4bd4578c87e643089ab3e5c5034261c1597fd921801904d",
+    "twins/tests/test_google_sheets_grid_format_ui.py": "41c0de418af3ce4556db75d2690287f2546839eed33ed3611e97ec4533bb1163"
+  },
+  "private_evidence_sha256": {
+    "lab-final-sheets-initial-marker-local/result.json": "895e5a2b22e1ee98e3cb064ee6f4b82db2b89a5eb8c0f6ad60b4f2596e0557ab",
+    "lab-final-sheets-initial-marker-broken-local/result.json": "b671c2676acb301f2a8308f6334791f09cafd5fe399ad107d37e73b8805dd1b5",
+    "lab-final-sheets-initial-marker-focused-tests.log": "44a0280dc774bfca79be83429ad0913701bf798c6719ccc9d4a2eaee34801423",
+    "lab-final-sheets-initial-marker-provider-tests.log": "40c17162601d91cc674f4f28d6499a44acb839cd1effe2d82811220136480754",
+    "lab-final-sheets-initial-marker-provider-tests-v3.log": "e736de8801feacad2d42a67d081a02851bdcae050627c9e87cb51e005d9d051d",
+    "lab-final-sheets-initial-marker-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-initial-marker-design-detect.json": "a429f071a0bcc9b82f00d7ab81c5464426947693f33ad0f0dc5ae2575f1b33db"
+  }
+}

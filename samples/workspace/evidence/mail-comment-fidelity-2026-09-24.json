@@ -1,8 +1,8 @@
 {
   "date": "2026-09-24",
-  "status": "pr_open_ci_pending",
+  "status": "merged_production_deployment_running",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1150",
-  "revision": "60aff4b69992824ba15d0f139f61d348e951923c",
+  "revision": "ac83f0e8256061f984d944097e2a584594a55bbe",
   "observed_gaps": [
     "Gmail accepted malformed outbound raw MIME and created an extra sent artifact in WKS-04.",
     "GitHub comment GET/PATCH by ID returned fallback 404 and allocated an empty internal collection in WKS-05."
@@ -12,7 +12,7 @@
     "Implement native GitHub issue/PR comment GET/PATCH/DELETE/repository listing, parent state, pagination and edited/deleted webhooks.",
     "Apply OAuth scope checks and installation repository/issue-or-PR permission checks."
   ],
-  "focused_tests_passed": 45,
+  "focused_tests_passed": 50,
   "make_fix": "pass",
   "changed_file_pyright": "pass",
   "logs_sha256": {
@@ -20,10 +20,15 @@
     "lab-final-mail-comment-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
     "lab-final-mail-comment-focused-tests-v2.log": "cfe02486c506bbbb12347e94a89fadd5f4d23bb46d026f4125eb44ab09941487",
     "lab-final-mail-comment-pyright-v2.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
-    "lab-final-mail-comment-provider-tests-final.log": "bc8c3de320f9e8379c44b33d85fe725342d047f23e937521cf8eea57100c7ccd"
+    "lab-final-mail-comment-provider-tests-final.log": "bc8c3de320f9e8379c44b33d85fe725342d047f23e937521cf8eea57100c7ccd",
+    "lab-final-mail-comment-focused-tests-v3.log": "31f35a21f3071176bd96102bd10e4bf996efd80912a4602f7e54c6e44432d8f7",
+    "lab-final-mail-comment-auth-tests.log": "a4cb7cd59b4b1a39419f1ee172470629f86dd7e2979561151d2367c920c82fa8",
+    "lab-final-mail-comment-pyright-v4.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-mail-comment-ci-final.log": "13b49bcf4407f483d7faa4fb21bf03d736cca9a5860f560c5d2e09d44550f988"
   },
   "limits": [
-    "Wider regressions, CI, review, deployment and affected hosted revalidation remain pending.",
+    "Both production deployments and affected hosted revalidation are pending.",
+    "Direct current-container attestation needs GCP reauthentication.",
     "No exhaustive frontend or permission parity claim."
   ],
   "wider_provider_tests": {
@@ -35,5 +40,26 @@
     "original_failure": "gws 0.22.5 attachment helper emits an ordinary final MIME boundary without closing --; strict rejection of all parser defects broke this supported helper.",
     "fix": "Tolerate CloseBoundaryNotFoundDefect only, preserving valid parsed parts and exact attachment bytes. Other malformed messages remain rejected.",
     "reproduction": "The exact Google Workspace CLI binary contract and focused tests pass locally."
+  },
+  "auth_send_followup_tests_passed": 45,
+  "review": {
+    "resolved_threads": [
+      "PRRT_kwDORfWyzM6lyO2z",
+      "PRRT_kwDORfWyzM6lyO24"
+    ],
+    "changes": [
+      "Permit unauthenticated public repository comment reads while keeping private repositories hidden.",
+      "Ignore empty RFC recipient groups and optional empty address fields when a valid deliverable recipient exists."
+    ]
+  },
+  "merged_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+  "ci": {
+    "workflow": 36065848630,
+    "status": "success",
+    "twins_passed": 5268,
+    "twins_skipped": 145,
+    "twins_deselected": 3,
+    "root_passed": 2106,
+    "root_skipped": 2
   }
 }

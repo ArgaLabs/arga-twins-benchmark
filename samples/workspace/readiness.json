@@ -6,7 +6,12 @@
       "id": "frontend.github",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for github",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/github-conversation-controls-2026-09-24.json",
+          "sha256": "1bd4e21ff9daa6fdcb18dfeb68497a31864220c92fddac1b28979a0b2bcbcf5c"
+        }
+      ]
     },
     {
       "id": "frontend.google_calendar",
@@ -24,7 +29,12 @@
       "id": "frontend.google_sheets",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_sheets",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/sheets-initial-validation-marker-2026-09-24.json",
+          "sha256": "f473bb8bb28cacf012c62ba61085d6c41f1a13634fe06e25328567b0b61e3e1a"
+        }
+      ]
     },
     {
       "id": "frontend.google_docs",
@@ -162,5 +172,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "a48ffa1ab5d4400a2f6816b8cbdb0641f4d04526b2b6f00cd54ccd3a223db13a"
+  "sample_tree_sha256": "b0313eddf7307996e280a6b3feaa105cd5a03783de7c4b4f2e9134b679f8009c"
 }
