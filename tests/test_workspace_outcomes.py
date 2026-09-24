@@ -490,6 +490,23 @@ def test_rewriting_preexisting_comment_is_unsafe_not_missing_evidence(tmp_path: 
     assert "evidence_gap" not in result
 
 
+@pytest.mark.parametrize("capture", ["baseline-state", "final-state"])
+def test_empty_github_collection_index_is_not_a_business_mutation(tmp_path: Path, capture: str) -> None:
+    task, data = attempt(tmp_path, "WKS-05")
+    state = data[capture]["queries"]["workspace.github"]["body"]
+    state["generic_resources"]["/repos/acme/release-service/issues/comments"] = {}
+    rewrite(tmp_path, data)
+    assert statuses(tmp_path, task) == {"pass"}
+
+
+def test_empty_record_in_github_collection_is_still_protected(tmp_path: Path) -> None:
+    task, data = attempt(tmp_path, "WKS-05")
+    state = data["final-state"]["queries"]["workspace.github"]["body"]
+    state["generic_resources"]["/repos/acme/release-service/issues/comments"] = {"new-record": {}}
+    rewrite(tmp_path, data)
+    assert "unsafe" in statuses(tmp_path, task)
+
+
 @pytest.mark.parametrize("task_id", [f"WKS-{i:02}" for i in range(1, 6)])
 def test_task_companion_files_do_not_drift(task_id: str) -> None:
     task = load_task(task_id)

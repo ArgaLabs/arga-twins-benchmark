@@ -179,7 +179,13 @@ def resources(snapshot: dict[str, Any]) -> dict[tuple[str, str, str], dict[str, 
                 "labels",
                 "org_members",
             ):
-                add(provider, "protected_state", field, {"value": state.get(field)})
+                value = state.get(field)
+                if field == "generic_resources" and isinstance(value, dict):
+                    # A failed lookup can allocate an empty collection index.
+                    # It contains no provider resources; retain even empty
+                    # resource records inside every nonempty collection.
+                    value = {key: entries for key, entries in cast(dict[str, Any], value).items() if entries != {}}
+                add(provider, "protected_state", field, {"value": value})
         elif provider in {"google_docs", "google_sheets"}:
             collection = "documents" if provider == "google_docs" else "spreadsheets"
             editing = state["workspace_editing"][collection]
