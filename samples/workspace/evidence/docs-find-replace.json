@@ -1,6 +1,6 @@
 {
   "date": "2026-09-23",
-  "status": "local_verified_ci_deployment_hosted_pending",
+  "status": "production_hosted_verified",
   "screenshots_retained": false,
   "changes": [
     "Edit > Find and replace and keyboard shortcuts.",
@@ -77,7 +77,6 @@
     "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request#InsertTextRequest"
   ],
   "limits": [
-    "CI, deployment and hosted validation remain pending.",
     "Search covers body paragraphs and tables; headers/footnotes and exact regex-engine/zero-width parity remain open.",
     "Full Docs and eight-twin feature/visual parity remain open."
   ],
@@ -88,8 +87,9 @@
       1120
     ],
     "tests": 570,
-    "status": "local_passed_ci_pending",
+    "status": "ci_deployed_hosted_passed",
     "scope": "Docs, Sheets, Workspace and Calendar sharing integration",
     "ruff": "passed"
-  }
+  },
+  "production_validation": "workspace-find-named-production-2026-09-24.json"
 }

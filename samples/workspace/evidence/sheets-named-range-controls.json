@@ -1,6 +1,6 @@
 {
   "date": "2026-09-23",
-  "status": "local_verified_ci_hosted_pending",
+  "status": "production_hosted_verified",
   "screenshots_retained": false,
   "changes": [
     "Data > Named ranges and name-box dropdown provide creation, edit, navigation and confirmed removal.",
@@ -88,7 +88,6 @@
     "https://support.google.com/docs/answer/12508718?hl=en"
   ],
   "limits": [
-    "CI, deployment and hosted checks remain pending.",
     "Chart, conditional-format and data-validation named-reference rewrite coverage, realtime collaboration and full eight-twin frontend parity remain open."
   ],
   "review_fix": {
@@ -108,8 +107,9 @@
       1120
     ],
     "tests": 570,
-    "status": "local_passed_ci_pending",
+    "status": "ci_deployed_hosted_passed",
     "scope": "Docs, Sheets, Workspace and Calendar sharing integration",
     "ruff": "passed"
-  }
+  },
+  "production_validation": "workspace-find-named-production-2026-09-24.json"
 }

@@ -7,10 +7,12 @@
     "Column width, minimum row height, cell padding/alignment, borders and background use native field-masked batch updates scoped to selected cells and document tab.",
     "Native rendering includes column widths, row height, padding, borders, alignment and background. Cell styles do not leak into text formatting.",
     "Enter/blur commits deduplicate changes; invalid input restores saved values with actionable feedback.",
-    "Desktop sidebar and mobile bottom panel retain a visible close button; switching tabs closes stale controls."
+    "Desktop sidebar and mobile bottom panel retain a visible close button; switching tabs closes stale controls.",
+    "Width validation enforces the documented 5-point minimum in UI and API, with atomic rollback of an invalid native batch.",
+    "Border writes propagate to the neighboring shared edge, preserve unrelated border fields, follow Right/Left/Bottom/Top precedence and skip invisible merged-cell boundaries."
   ],
   "validation": {
-    "regressions": 269,
+    "regressions": 278,
     "ruff": "passed",
     "browser": "Google Chrome through CUA and the sample BrowserProxy",
     "viewports": [
@@ -24,27 +26,19 @@
       "Cell padding and Middle alignment",
       "Border color and width",
       "Cell background and Transparent",
-      "Invalid zero column width leaves state unchanged and restores saved value",
+      "Invalid subminimum column width leaves state unchanged and restores saved value",
       "Reload persistence",
       "Close button after scrolling mobile panel",
-      "Switch to protected tab closes panel"
+      "Switch to protected tab closes panel",
+      "Reject 0.069 inch without writing; exact 5/72-inch width succeeds",
+      "Native shared-edge update and protected text/formatting readback"
     ],
     "captures": [
       {
-        "sha256": "bc560913ad3d0d38a86967e0d8d10c22b300bb682f4da231bbc8950999fcd1bb",
-        "protected_tabs_and_neighbor_cell": "exactly unchanged",
-        "cell_text_and_formatting": "exactly unchanged",
-        "native_width_pt": 108,
-        "native_minimum_height_pt": 43.2,
-        "native_padding_pt": 7.2,
-        "native_alignment": "MIDDLE",
-        "native_border_width_pt": 2.25,
-        "native_background": {}
-      },
-      {
-        "sha256": "69c0e7365e7bc47b90bd2d0c611396fc0659a3123117efd54547995c22186134",
-        "protected_tabs_and_neighbor_cell": "exactly unchanged",
-        "cell_text_and_formatting": "exactly unchanged",
+        "sha256": "670f4cf9f4c117d1e8f83228c97a8bc4c6de19bc18ddeb4ce961394254f03999",
+        "protected_tabs": "exactly unchanged",
+        "all_cell_text_and_formatting": "exactly unchanged",
+        "neighbor_cell": "only the shared left border changed; all other fields exactly unchanged",
         "native_width_pt": 108,
         "native_minimum_height_pt": 43.2,
         "native_padding_pt": 7.2,
@@ -52,7 +46,8 @@
         "native_border_width_pt": 2.25,
         "native_background": {}
       }
-    ]
+    ],
+    "review_focused_regressions": 28
   },
   "provider_reference": {
     "date": "2026-09-24",
