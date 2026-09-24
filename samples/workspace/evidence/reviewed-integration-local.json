@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-24",
+  "scope": "Combined reviewed Gmail, Notion, Linear, Docs and shared Workspace regression run",
+  "source_pull_requests": [
+    1129,
+    1130,
+    1131,
+    1132
+  ],
+  "additional_change": "Provider-measured Docs row minimum and border geometry",
+  "tests": {
+    "command": "UV_NO_SYNC=1 uv run pytest twins/tests/test_gmail*.py twins/tests/test_linear*.py twins/tests/test_notion*.py twins/tests/test_google_docs*.py twins/tests/test_google_workspace*.py -q",
+    "passed": 685,
+    "warnings": 3,
+    "log_sha256": "4730ae1744d6d2f92bebd5fe52fb70bd8d9e96009fe58b14f430dd8156a3df26"
+  },
+  "ruff": "pass",
+  "ci": "pending",
+  "production_deployment": "pending",
+  "hosted_validation": "pending",
+  "full_eight_twin_parity": "not established",
+  "screenshots_retained": false,
+  "review_followup": {
+    "scope": "Reject invalid native Notion view filters before persistence, including empty databases and every compound branch; return controlled errors for legacy invalid filters.",
+    "tests_passed": 100,
+    "test_log_sha256": "ed8467eecbdabfe619dee1168049b286abf2754633686a62aaa6e19f11e6111d",
+    "reference": "https://developers.notion.com/reference/filter-data-source-entries",
+    "ruff": "pass"
+  }
+}

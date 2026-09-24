@@ -327,6 +327,22 @@
         ],
         "all_seeded_pages_and_sources_unchanged": true,
         "unsupported_complex_sort_option_absent": true
+      },
+      {
+        "case": "saved-filter-sort-preselection",
+        "surface": "Chrome CUA desktop and 390px reload",
+        "filter_controls": [
+          "Phone",
+          "Contains",
+          "0103"
+        ],
+        "sort_controls": [
+          "Count",
+          "Descending"
+        ],
+        "native_state_matches": true,
+        "seeded_pages_and_sources_unchanged": true,
+        "email_and_phone_display": "plain text without JSON quotes"
       }
     ],
     "visual_inspection": "Transient desktop and mobile screenshots inspected; none retained",
@@ -347,7 +363,7 @@
     "CI, production deployment and hosted checks",
     "Authenticated provider pixel comparison and physical mobile touch",
     "Advanced/nested filter editor, calendar/timeline/chart/form/dashboard layouts, inline database cell editing and full collaboration",
-    "Complex-property sorting and filter/sort editor preselection; unsupported sort choices are absent rather than persisting unusable views."
+    "Complex-property sorting; unsupported sort choices are absent rather than persisting unusable views."
   ],
   "screenshots_retained": false,
   "review_regressions": {

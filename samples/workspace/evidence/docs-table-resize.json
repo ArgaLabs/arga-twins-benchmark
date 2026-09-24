@@ -54,5 +54,18 @@
     "Cancelled drags compare the actual body snapshot to its saved baseline instead of the shared title/body status label.",
     "Editable tables negotiate touch-action: pinch-zoom before pointerdown. Physical-device testing remains pending.",
     "A completed title save preserves the unsaved-body indicator."
-  ]
+  ],
+  "deployment": {
+    "commit": "93f4c45d48469c3e49fc3b952541be31de268719",
+    "deploy_runtime": {
+      "run_id": 35966218902,
+      "status": "success"
+    },
+    "deploy_twins": {
+      "run_id": 35966218903,
+      "status": "success"
+    },
+    "hosted_resize": "pending",
+    "row_metrics_followup": "docs-row-metrics.json"
+  }
 }
