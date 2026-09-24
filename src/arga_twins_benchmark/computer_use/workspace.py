@@ -352,7 +352,7 @@ def _label_equal(actual: Any, expected: Any) -> bool:
     if _mentions(actual, expected, affirmed=True):
         return True
     # Owner qualifiers and ordinary word order do not change an approval state.
-    approval_owner = r"(?:(?:the )?(?:incident commander|commander|owner)(?: s)? )?"
+    approval_owner = r"(?:(?:the )?(?:incident commander|commander|ic|owner)(?: s)? )?"
     pending_approval = r"(?:pending|awaiting) " + approval_owner + r"(?:mitigation )?approval"
     phrases = {
         "review requested": (
@@ -368,7 +368,7 @@ def _label_equal(actual: Any, expected: Any) -> bool:
             r"(?:(?:mitigation (?:is )?)?"
             + pending_approval
             + r"|approval (?:is |remains )?(?:still )?pending"
-            + r"|mitigation (?:is |has been )?(?:(?:drafted|proposed) (?:but )?)?not (?:yet )?approved)"
+            + r"|mitigation (?:is |has been )?(?:(?:drafted|proposed) (?:but )?(?:is )?)?not (?:yet )?approved)"
         ),
     }
     pattern = phrases.get(_normal(expected))

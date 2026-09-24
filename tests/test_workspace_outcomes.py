@@ -508,6 +508,9 @@ def test_task_companion_files_do_not_drift(task_id: str) -> None:
         "Mitigation is drafted but NOT yet approved by the incident commander. Impact continues.",
         "Mitigation is not yet approved. The incident remains open.",
         "Mitigation proposed but not approved; commander review is outstanding.",
+        "Mitigation has been drafted but is NOT yet approved by the incident commander. Impact continues.",
+        "Mitigation proposed but is not approved; the incident remains open.",
+        "Active - mitigation drafted, awaiting IC approval.",
     ],
 )
 def test_unapproved_mitigation_is_an_outstanding_approval(text: str) -> None:
@@ -523,6 +526,9 @@ def test_unapproved_mitigation_is_an_outstanding_approval(text: str) -> None:
         "No mitigation is not yet approved.",
         "Mitigation is not yet approved is no longer the current status.",
         "Mitigation is drafted but not yet approved is not required.",
+        "No mitigation has been drafted but is not yet approved.",
+        "Mitigation has been drafted but is not yet approved is no longer the current status.",
+        "No longer awaiting IC approval.",
     ],
 )
 def test_unapproved_mitigation_does_not_override_contradiction(text: str) -> None:
