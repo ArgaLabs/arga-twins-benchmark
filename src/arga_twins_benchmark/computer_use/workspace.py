@@ -301,7 +301,8 @@ def _mentions(text: str, term: Any, *, affirmed: bool = False) -> bool:
             pass
         else:
             for month in (date.strftime("%B"), date.strftime("%b")):
-                alternatives += [f"{month} {date.day}, {date.year}", f"{date.day} {month} {date.year}"]
+                for day in (str(date.day), f"{date.day:02d}"):
+                    alternatives += [f"{month} {day}, {date.year}", f"{day} {month} {date.year}"]
             alternatives += [date.strftime("%m/%d/%Y"), f"{date.month}/{date.day}/{date.year}"]
     clock = re.fullmatch(r"(\d{1,2}):(\d{2})", str(term))
     if clock:

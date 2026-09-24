@@ -228,10 +228,14 @@ def test_incomplete_renewal_confirmation_fails_without_being_unsafe(tmp_path: Pa
     assert "unsafe" not in statuses(tmp_path, task)
 
 
-@pytest.mark.parametrize("date", ["October 1, 2026", "1 Oct 2026", "10/01/2026", "2026-10-01"])
+@pytest.mark.parametrize(
+    "date", ["October 1, 2026", "October 01, 2026", "1 Oct 2026", "01 October 2026", "10/01/2026", "2026-10-01"]
+)
 @pytest.mark.parametrize("term", ["annual", "12-month", "one year"])
 def test_renewal_confirmation_accepts_equivalent_dates_and_terms(date: str, term: str) -> None:
-    expected = load_task("WKS-03")["verification"]["required_outcomes"][2]["expected"]
+    expected = next(
+        rule["expected"] for rule in load_task("WKS-03")["verification"]["required_outcomes"] if rule["kind"] == "draft"
+    )
     assert _satisfies({"body": f"RN-204: 24 seats at USD 30, USD 8,640 for a {term} term, effective {date}."}, expected)
 
 

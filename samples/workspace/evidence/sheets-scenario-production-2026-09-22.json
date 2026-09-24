@@ -8,7 +8,7 @@
     "revision": "29c90bfe0d7b75452128170780afa123fc79f791",
     "twins_run": 35818784973,
     "runtime_run": 35818784972,
-    "conclusions": "success"
+    "conclusion": "success"
   },
   "scenario_seed_only": true,
   "operator_fixture_augmentation": false,

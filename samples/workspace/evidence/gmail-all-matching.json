@@ -38,20 +38,34 @@
     "No screenshot files retained."
   ],
   "automated_regressions": {
-    "passed": 115,
     "new_selection_regressions": 8,
     "logs": [
-      "/tmp/lab-gmail-all-matching-tests.txt",
-      "/tmp/lab-gmail-all-matching-ui-tests.txt",
-      "/tmp/lab-gmail-all-matching-network-tests.txt"
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-tests.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-ui-tests.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-network-tests.txt"
     ],
-    "note": "Initial run passed 109; five socket-dependent tests passed with local networking, and the updated label-view test plus all 54 UI/date cases passed. This is 115 distinct passing tests across the runs."
+    "note": "The initial 109 passing tests plus six failures were followed by socket and UI/date fixes. Follow-up invocations overlap the original tests; do not add the counts. The eight new selection regressions are included in those invocations, not an additional total.",
+    "invocation_results": {
+      "initial": {
+        "passed": 109,
+        "failed": 6
+      },
+      "socket_retry": {
+        "passed": 5
+      },
+      "ui_date_followup": {
+        "passed": 54
+      },
+      "review_followup": {
+        "passed": 29
+      }
+    }
   },
   "review_followup": {
     "search_debounce_stale_selection": "fixed",
     "synchronous_input_clear": "pass",
     "stale_archive_trash_label_mutation_rejection": "pass",
     "focused_regressions_passed": 29,
-    "log": "/tmp/lab-gmail-all-matching-review-tests.txt"
+    "log": "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-review-tests.txt"
   }
 }

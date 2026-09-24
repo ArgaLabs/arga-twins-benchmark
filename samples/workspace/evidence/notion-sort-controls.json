@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-24",
+  "scope": "Notion ordered sort editor and select/multi-select schema ordering; bounded verification",
+  "reference": [
+    "https://www.notion.com/help/views-filters-and-sorts",
+    "https://developers.notion.com/reference/sort-data-source-entries"
+  ],
+  "implemented": [
+    "Add, remove, move up/down and persist multiple sort rules",
+    "Saved timestamp and property sorts reopen without dropping secondary rules",
+    "Native select, status and multi-select option order; empty values stay last",
+    "Reject invalid sorts before native or browser view mutation, including empty sources",
+    "Sort native data-source rows before projecting requested properties"
+  ],
+  "tests": {
+    "passed": 121,
+    "ruff": "pass",
+    "log_sha256": "85b5d252517493ba95311846b0007233f6d431b4489910618babf692d3c0b711"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Schema Status then Count ordering: Gamma, Alpha, Beta",
+      "Move Count to first priority: Beta, Gamma, Alpha",
+      "Mobile remove keeps editor open; add Name descending and save/reload: Gamma, Alpha, Beta",
+      "Move Name to first priority: Gamma, Beta, Alpha"
+    ],
+    "captures_sha256": {
+      "lab-notion-sorts-before-menu-fix.json": "c631810bf5bd26429ae7e799b3963d84df3dc451108dc71cd2e9194524f4bec5",
+      "lab-notion-sorts-browser-result.json": "54f74e4e3ee3c2c0cd548d2117303f7ae4cf3192bf4fa092df56e4009e9a8009"
+    },
+    "all_seeded_pages_databases_and_sources_unchanged": true,
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "remaining": [
+    "Relation/formula/rollup/files sorting",
+    "Advanced nested-filter editing",
+    "Provider-wide visual/settings/collaboration parity",
+    "Physical-touch mobile checks"
+  ]
+}

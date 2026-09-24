@@ -27,11 +27,10 @@
   "automated_regressions": {
     "full_suite_passed": 185,
     "subsequent_focused_suite_passed": 23,
-    "unique_tests": 190,
     "logs": [
-      "/tmp/lab-docs-tabs-final-regressions.txt",
-      "/tmp/lab-docs-tabs-shared-tests.txt",
-      "/tmp/lab-docs-tabs-review-tests.txt"
+      "samples/workspace/evidence/regression-log-summaries.json#lab-docs-tabs-final-regressions.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-docs-tabs-shared-tests.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-docs-tabs-review-tests.txt"
     ],
     "coverage": [
       "Three-level tree rendering, sibling order and default first-tab writes",
@@ -45,7 +44,8 @@
       "Run-scoped Docs/Drive rename, duplication and reset",
       "Document-wide named-range IDs, duplicate subtree ID/tab remapping, isolated replace/delete by ID, and no reuse after primary-tab deletion"
     ],
-    "review_fix_suite_passed": 35
+    "review_fix_suite_passed": 35,
+    "count_semantics": "The 185-test full suite is the earlier invocation. The later 23-test and 35-test focused suites overlap it and each other. These are separate historical invocation counts; no distinct-test union is asserted."
   },
   "native_readback_sha256": "f15b64b26c20b6144ff6e45770ea5007a5a63357ecd1dac2ed92f3535fb1bef6",
   "sources": [

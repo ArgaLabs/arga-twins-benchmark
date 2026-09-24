@@ -24,8 +24,8 @@
       "Sheets viewport",
       "Scenario generator"
     ],
-    "before_log": "/tmp/lab-sheets-scenario-layout-before.txt",
-    "after_log": "/tmp/lab-sheets-scenario-layout-tests.txt"
+    "before_log": "samples/workspace/evidence/regression-log-summaries.json#lab-sheets-scenario-layout-before.txt",
+    "after_log": "samples/workspace/evidence/regression-log-summaries.json#lab-sheets-scenario-layout-tests.txt"
   },
   "limitations": [
     "Local API/runner and Chrome verification only; CI, deployment and hosted Scenario replay remain pending.",

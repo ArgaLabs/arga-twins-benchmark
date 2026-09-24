@@ -22,7 +22,7 @@
     "release_gate_regressions": {
       "status": "pass",
       "passed": 11,
-      "log": "/tmp/lab-sample-package-gate-tests.txt"
+      "log": "samples/workspace/evidence/regression-log-summaries.json#lab-sample-package-gate-tests.txt"
     },
     "browser_relay_candidate_runner_outcomes": {
       "status": "pass",
@@ -38,6 +38,17 @@
       "ruff": "passed",
       "pyright": "passed",
       "offline_regrade": "WKS-04 passed; original verdict preserved"
+    },
+    "padded_date_normalization": {
+      "passed": 102,
+      "ruff": "pass",
+      "pyright": "pass",
+      "log_sha256": "c5c3c129896f1558e8bd0c1dfe32a51753b219b04ca64635890cf906752c0a03"
+    },
+    "current_sample_cleanup_regressions": {
+      "passed": 159,
+      "scope": "Runner, candidate and workspace outcome tests after obsolete-kit removal and padded-date normalization",
+      "log_sha256": "028aca98767059fb584ecbe04e0de3bea09b47a6f7ed6dcd22b6444733013cdf"
     }
   },
   "limits": "Full eight-twin frontend parity and deployment of subsequent changes remain separate gates. One complete hosted mixed browser/API candidate now passes."
