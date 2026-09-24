@@ -9,13 +9,16 @@
     "Date presets for today/tomorrow/yesterday, past week/month/year and exact dates.",
     "Native relativeDate operands and formula operands derive filter visibility and value choices.",
     "TODAY/NOW and relative filters share the controllable twin clock and spreadsheet time zone; quoted strings and sheet names remain intact.",
-    "Date-is windows use native custom formulas and reopen as their corresponding preset."
+    "Date-is windows use native custom formulas and reopen as their corresponding preset.",
+    "Explicit Scenario base_time is applied once across selected Google file twins; conflicting sibling clocks fail before reset or seeding."
   ],
   "tests": {
-    "passed": 517,
-    "log_sha256": "837f087d4399572c748b81f91e516bb9f52bcebe4adc6bb62ba24a3261b0730b",
+    "passed": 545,
+    "log_sha256": "9aea23871bc76cb8e1b00e328176790d056823fd99da8a5d91cb4aa3d1a5051f",
     "ruff": "pass",
-    "contract_matrix": "All four layers pass for Docs, Drive and Sheets, zero findings and unexpected 5xx."
+    "contract_matrix": "All four layers pass for Docs, Drive and Sheets, zero findings and unexpected 5xx.",
+    "scope": "Sheets/Workspace/split Scenario runners and root Scenario dispatch tests",
+    "pyright": "0 errors, 0 warnings"
   },
   "browser": {
     "surface": "Chrome CUA",
