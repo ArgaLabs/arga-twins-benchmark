@@ -1,0 +1,107 @@
+{
+  "date": "2026-09-24",
+  "task_id": "WKS-04",
+  "kind": "hosted_browser_enabled_candidate",
+  "screenshots_retained": false,
+  "status": "infrastructure_invalid_verifier_semantics",
+  "scored": false,
+  "run_id": "37f0b474-6792-4453-ad7f-bde9601f89b1",
+  "scenario_id": "6d8d21ee-1a51-4f4d-a305-7632c468c2e5",
+  "model": "claude-sonnet-5",
+  "model_tool_calls": 23,
+  "mediated_business_api_calls": 20,
+  "documentation_calls": 2,
+  "browser_calls": 0,
+  "browser_tools_enabled": true,
+  "interaction_mode_used": "api",
+  "original_verifier_outcome": "fail",
+  "original_assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "required_4",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_github_issue_comment",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:github:issue_comment:7",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:Rg6lRzyK0g_oNXbi889GiGyaaNY",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:MAF6w9_q0O2VwEJC2lPFk-tChpM/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:incident",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:deployment",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:disposition",
+      "status": "fail"
+    }
+  ],
+  "required_provider_outcomes_passed": 4,
+  "result_facts_passed": 2,
+  "result_facts_rejected": 1,
+  "unauthorized_changes": 0,
+  "reason": "The result correctly states that the incident is open, mitigation awaits incident commander approval, and it is not resolved. The status matcher rejects the owner qualifier and also incorrectly treats the following not-resolved clause as negating pending approval. All required provider outcomes and authorized-change checks pass. This is a reproduced verifier defect, not a scored candidate failure.",
+  "normalizer_reproductions": [
+    {
+      "actual": "open \u2014 mitigation pending incident commander approval",
+      "matched": false
+    },
+    {
+      "actual": "open \u2014 mitigation pending approval",
+      "matched": true
+    },
+    {
+      "actual": "open \u2014 mitigation pending approval; not resolved",
+      "matched": false
+    }
+  ],
+  "cleanup": "torn_down",
+  "counts_as_browser_coverage": false,
+  "raw_model_evidence_retained_privately": true,
+  "capture_sha256s": {
+    "verifier.json": "b714c2c2c236d4461f13998c32a0e92ab99bbe2274d088a6fb9c53f72a0c51f2",
+    "invocation.json": "11d87776396ce1930f1f5708233770f4715d3077a670f37f576b32870318850d",
+    "baseline-state.json": "6a2f1c623eaba5c5e74640b4940b8c73b35f6eebcd99fae31cfd073867d33d70",
+    "final-state.json": "564a8e9cf9c05f5a85a5298a3b454b8cec32e8a5d08c4899e56b29452cb211d5",
+    "cleanup.json": "4f7377157d4258850c79888d260179136f8b11efd9d91861b8f0b9da8a0e591a"
+  },
+  "follow_up": "Fix semantic status normalization with positive and negative regression cases, then replay the preserved states and report without rerunning the candidate. Preserve the original verifier output.",
+  "limits": [
+    "The prior successful API rollout remains separate.",
+    "No browser tool was used; this attempt does not establish autonomous browser coverage.",
+    "No corrected verifier result has been produced yet."
+  ]
+}
