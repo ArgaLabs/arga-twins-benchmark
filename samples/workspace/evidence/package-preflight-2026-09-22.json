@@ -32,6 +32,12 @@
       "passed": 85,
       "ruff": "passed",
       "pyright": "passed"
+    },
+    "incident_fact_normalization": {
+      "passed": 96,
+      "ruff": "passed",
+      "pyright": "passed",
+      "offline_regrade": "WKS-04 passed; original verdict preserved"
     }
   },
   "limits": "Frontend parity, hosted browser-agent coverage and deployment of subsequent changes remain separate gates."

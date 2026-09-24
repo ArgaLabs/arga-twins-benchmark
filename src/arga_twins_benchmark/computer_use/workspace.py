@@ -351,19 +351,26 @@ def _label_equal(actual: Any, expected: Any) -> bool:
     if _mentions(actual, expected, affirmed=True):
         return True
     # Owner qualifiers and ordinary word order do not change an approval state.
+    approval_owner = r"(?:(?:the )?(?:incident commander|commander|owner)(?: s)? )?"
+    pending_approval = r"(?:pending|awaiting) " + approval_owner + r"(?:mitigation )?approval"
     phrases = {
         "review requested": r"review (?:has been |is |was )?requested",
         "pending owner review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "pending review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "unsent for review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
         "awaiting approval": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,3}approval",
-        "pending mitigation": r"mitigation (?:is )?(?:pending|awaiting) approval",
-        "open pending approval": r"open (?:[a-z0-9]+ ){0,3}(?:pending|awaiting) approval",
-        "awaiting mitigation approval": r"(?:mitigation (?:is )?)?(?:pending|awaiting) (?:mitigation )?approval",
+        "pending mitigation": r"mitigation (?:is )?" + pending_approval,
+        "open pending approval": r"open (?:mitigation (?:is )?)?" + pending_approval,
+        "awaiting mitigation approval": r"(?:mitigation (?:is )?)?" + pending_approval,
     }
     pattern = phrases.get(_normal(expected))
     if not pattern:
         return False
+    if _normal(expected) in {"pending mitigation", "open pending approval", "awaiting mitigation approval"}:
+        # A following nonresolution statement reinforces this disposition. It
+        # must not be mistaken for a negation of approval itself. Keep phrases
+        # such as "approval is not required" outside this compatible suffix.
+        pattern += r"(?: (?:and )?(?:(?:it|the incident) is )?(?:still )?not (?:yet )?resolved)?"
     text = _normal(actual)
     return any(
         _affirmed_span(text, match.start(), match.end())

@@ -100,6 +100,40 @@ def test_equivalent_status_labels(actual: str, expected: list[str]) -> None:
 
 
 @pytest.mark.parametrize(
+    "disposition",
+    [
+        "open — mitigation pending incident commander approval; not resolved",
+        "Open — mitigation pending the incident commander's approval; not yet resolved.",
+        "Mitigation is awaiting owner approval and the incident is still not resolved.",
+        "Awaiting mitigation approval; not resolved. Historical staging issue is closed.",
+        "open — mitigation pending approval; not resolved",
+    ],
+)
+def test_incident_approval_qualifiers_and_nonresolution_pass(tmp_path: Path, disposition: str) -> None:
+    task, data = attempt(tmp_path, "WKS-04")
+    data["invocation"]["final_text"] = json.dumps(
+        {"result_facts": {"incident": "INC-204", "deployment": "DEP-9842", "disposition": disposition}}
+    )
+    rewrite(tmp_path, data)
+    assert statuses(tmp_path, task) == {"pass"}
+
+
+@pytest.mark.parametrize(
+    "disposition",
+    [
+        "Mitigation is not pending incident commander approval; not resolved",
+        "Never awaiting mitigation approval; not resolved",
+        "Mitigation pending incident commander approval is not required",
+        "Mitigation pending owner approval is no longer necessary; not resolved",
+        "Mitigation pending incident commander approval was never required",
+        "Mitigation is approved and the incident is resolved",
+    ],
+)
+def test_incident_nonresolution_cannot_hide_negated_approval(disposition: str) -> None:
+    assert not _fact_equal(disposition, ["open_pending_approval", "awaiting_mitigation_approval"])
+
+
+@pytest.mark.parametrize(
     "actual",
     [
         "not pending Samira's review",
