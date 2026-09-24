@@ -1,0 +1,111 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-01",
+  "kind": "hosted_candidate_revalidation",
+  "environment": "production",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 20,
+  "official_docs_calls": 6,
+  "model_tool_calls": 30,
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:github:pull:acme/release-service#1",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:uxumqDdFL6GhcOGnZpTEp_L_ceI",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:release",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:reviewer",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:disposition",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "previous_outcomes_preserved": true,
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "sample_code_revision": "5de0cd1281b86735685c8ab6cdbc19b126d3845f",
+  "deployment_provenance": {
+    "gmail": {
+      "revision": "94ab59654534b22747af9b50a86ea63a13fd52c4",
+      "runtime_workflow": 36058896495,
+      "twins_workflow": 36058896553,
+      "both": "success",
+      "published_images": {
+        "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:402a12a9d260aa489ecc1d41309a211f974fe405613853e785ad0772c9e7fbc4",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:a839ed4f6e0615d53853368df20df3f7a99396e6fb701214b9d48967a6a16914",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:679d060cbac403cfd8bb6380f3af9623958f425837a3c242bb2efd58ca5c2058"
+      },
+      "runtime_revisions_at_deployment": {
+        "arga-api": "arga-api-00629-gd9",
+        "preview-proxy": "preview-proxy-00259-fdd"
+      },
+      "log_sha256s": {
+        "lab-final-gmail-runtime-deploy.log": "fb492dceaa62a5e3f585352b40c6f52eb25a9fd88bc0c75ebd93d01cdde9866c",
+        "lab-final-gmail-twins-deploy.log": "053e8f4c741b08d855c19ee4f8b461cdc6964102016496e2ce465d3d206f06f9"
+      },
+      "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+    },
+    "limits": [
+      "Published image/deploy logs are not direct running-container attestation.",
+      "Sheets #1149 and complete final release verification remain pending."
+    ]
+  },
+  "artifact_sha256s": {
+    "candidate.json": "d140bf6b9a70069e86ec4f1f7a0910852571187d6ee9b7b418bf20bfc378acd4",
+    "baseline-state.json": "93596927b4ee7114741faf634d796422bb53cf4d5cca60c93a5b9b7f3ce00e5f",
+    "final-state.json": "ba2a1058807296606358d56fa1ece94b70facb23805b15193d77c409bcbc5d5b",
+    "invocation.json": "7f5e67ad3e3405d6bd368bfac6214eeea2b077730ce004e16185a4bd7bc489c8",
+    "provider-trace.json": "1bb426a651689c6d7410487de22e4039f92435736861289b1b03a5a9ff816e19",
+    "official-docs-trace.json": "d1c8aa328bf36f56ae2b53bf01b58a784157aebc94595c72829657c05d5d555a",
+    "browser-trace.json": "23751574b3e82d89da55d090d62371f5ccf71e321c96d0e9984cb004e23f59eb",
+    "verifier.json": "4c5fdbaf0c935670b9cf6ffe0d1703a1e3db2babf2e5c19781839d0d21ec05f1",
+    "cleanup.json": "e1c2ec97dbe7496796c081775ecf5a2446c7efa012a50ceb75c769fbbf65dd97"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "303ac61d31a7114f4b18aa766439c61e810bd5600e8401c82864bccc109526d1",
+    "adapter.json": "8c029df533dbb731206d05e76f2894ea4df15bea2288738c865a9a7b12eb93f9"
+  },
+  "limits": [
+    "Single functional trial, not a model comparison.",
+    "The actual interaction mode is reported; tool availability alone does not establish browser-agent coverage."
+  ]
+}

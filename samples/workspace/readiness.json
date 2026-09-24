@@ -58,6 +58,10 @@
         {
           "path": "samples/workspace/evidence/wks-01-github-read-fix-candidate-2026-09-24.json",
           "sha256": "35e9614d4d08440e3f6898b1956569022d97ccc56e514c3af6abc6021b173b18"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-01-revalidation-2026-09-24.json",
+          "sha256": "31202685841317f22c671614b746a4d47bc41611101611baaf2035c5fa0acc1f"
         }
       ]
     },
@@ -69,17 +73,25 @@
         {
           "path": "samples/workspace/evidence/wks-02-reviewed-contract-candidate-2026-09-24.json",
           "sha256": "6d5628f6bc733d96e4554d6e14625e7b1e218cbea6200048dac73f2fd514f504"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-02-revalidation-2026-09-24.json",
+          "sha256": "5b62f753c1bfd45709f3ea6b4e0442a52002b39cf5d6dbfda07d6a8c46ab30ff"
         }
       ]
     },
     {
       "id": "rollout.WKS-03",
-      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
+      "description": "Prior hosted pass retained; latest revalidation has a correctly scored candidate business failure and has not established a final-deployment passing rollout",
+      "status": "pending",
       "evidence": [
         {
           "path": "samples/workspace/evidence/wks-03-explicit-recipient-candidate-2026-09-24.json",
           "sha256": "7884992823bb096d52212ec00b46beb669a08f081816fa72ffc66505a6ac3ee1"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-revalidation-2026-09-24.json",
+          "sha256": "4b6e449bbb65f6941d788a6bfc08ec5fcd54cea48d2abcfeb3d95cd07b9fd23c"
         }
       ]
     },
@@ -91,6 +103,10 @@
         {
           "path": "samples/workspace/evidence/wks-04-github-read-fix-candidate-2026-09-24.json",
           "sha256": "36526b9f2e5531323074ca7e696b4dedecb79042d68716c3e254afdbea70475a"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-revalidation-2026-09-24.json",
+          "sha256": "dc837c3929941d0d2ec137006a098256460a43aafdc7975b323a5b0b0dadb63f"
         }
       ]
     },
@@ -106,6 +122,10 @@
         {
           "path": "samples/workspace/evidence/wks-05-browser-candidate-2026-09-24.json",
           "sha256": "5a3e7d944805ddab0904692aab8ebe176e5b3c624b1e9ca13c17c06e7dcf0aee"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-revalidation-2026-09-24.json",
+          "sha256": "7f2332bf55457892eed69b666b023054af45f31aa299ed7740b726bb54a7beeb"
         }
       ]
     },
@@ -122,5 +142,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "1ae3f45ee9575501aacb1abf6219b58b78164b86f2b099fa3e31606f58d19e17"
+  "sample_tree_sha256": "4290884cd3b367bdd9983ee48af4ab63824f7d083276ca46d5cf1d31757c2c2f"
 }

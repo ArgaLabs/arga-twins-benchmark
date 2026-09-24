@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 242,
+      "files_scanned": 256,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -73,5 +73,12 @@
       "log_sha256": "4f3bf190f05e0dff6f30c1571de0a8b39ef9a6e54fc34bb2f8af4d151e11cf3b"
     }
   },
-  "limits": "All five current hosted candidate rollout gates pass. Full eight-twin frontend parity, outstanding changes, deployed-image attestation and final package release remain separate open gates."
+  "limits": "Earlier passing candidate runs are preserved; fresh WKS-03 revalidation failed and its gate is pending. Full eight-twin frontend parity, hosted native Print, deployed-container attestation and final package release remain open.",
+  "latest_package_checks": {
+    "date": "2026-09-24",
+    "passed": 18,
+    "deselected": 116,
+    "log_sha256": "159eff7e9964b27c6bda497bc98297b7e0b631c71aec2f6ca8194b9b5731d791",
+    "release_allowed": false
+  }
 }

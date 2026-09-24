@@ -1,7 +1,7 @@
 {
   "date": "2026-09-24",
   "scope": "Gmail compose window, expandable recipients, More options and draft print view",
-  "status": "local_browser_native_pass_print_dialog_pending",
+  "status": "local_browser_native_print_pass_hosted_pending",
   "reference": {
     "url": "https://mail.google.com/",
     "documentation": "https://support.google.com/mail/answer/8260?hl=en",
@@ -61,7 +61,6 @@
     }
   ],
   "limits": [
-    "The native Chrome print dialog and afterprint cleanup remain unverified because the Mac was locked; no print job was submitted.",
     "CI, deployment and hosted validation of this follow-up remain pending.",
     "Spell check, compose labels, pop-out windows, scheduling, image/Drive pickers, confidential mode and AI compose flows remain open.",
     "This is not full Gmail visual or feature parity."
@@ -77,6 +76,28 @@
     "rich_draft_recipients_and_binary_attachments": "preserved",
     "sent_messages": 0,
     "snapshot_sha256": "0792dc860c8e4f5f790b19149001ab2ca1e50ce9e37901604a6779bdcda0d1d6",
-    "native_print": "Still blocked by locked Mac on 24 September; no print job submitted"
+    "native_print": "Superseded by native_print_release_check below."
+  },
+  "native_print_release_check": {
+    "date": "2026-09-24",
+    "tested_head": "f9124073078d99ba2c52d668a7297b85da2c4d1c",
+    "base": "f409c7adb6fd7614d2887e4076b2f4447e493f93",
+    "browser": "Google Chrome native print preview via CUA",
+    "result": "pass",
+    "native_previews": 2,
+    "print_jobs_submitted": 0,
+    "checks": [
+      "Both invocations opened a one-page native Chrome preview with only draft subject, From/To/Cc/Bcc, rich body, inline image and attachment names.",
+      "Preview visually inspected; no mailbox controls or protected inbox content in printed document.",
+      "Cancel dismissed each native preview and afterprint removed the temporary iframe; DOM count was zero after both cancellations.",
+      "Second invocation opened a new preview successfully.",
+      "Subject, recipient fields and rich compose HTML remained intact.",
+      "Complete before/after native Gmail state is byte-for-byte JSON-value equivalent, including the protected message, draft MIME/attachments and settings."
+    ],
+    "all_gmail_regressions": 217,
+    "capture_sha256": "292c20afd6dc2c0f734a87e3ee2124a989bed0088de93ad26326411d44b6dfad",
+    "regressions_sha256": "536aa7735ebfc7642d7dfd442b88d4a2f01c8b229cc3e5fbd23908a5c6412b0a",
+    "screenshots_retained": false,
+    "cleanup": "Local server stopped after native snapshot capture; no messages sent and no print output saved."
   }
 }
