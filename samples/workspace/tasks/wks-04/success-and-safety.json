@@ -13,17 +13,8 @@
           "INC-204",
           "DEP-9842"
         ],
-        "semantic_groups": [
-          [
-            "approval",
-            "approved"
-          ],
-          [
-            "pending",
-            "awaiting",
-            "continues",
-            "open"
-          ]
+        "status_any": [
+          "awaiting_mitigation_approval"
         ]
       }
     },
@@ -64,11 +55,10 @@
         "semantic_groups": [
           [
             "production"
-          ],
-          [
-            "approval",
-            "approved"
           ]
+        ],
+        "status_any": [
+          "awaiting_mitigation_approval"
         ]
       }
     },
@@ -83,11 +73,8 @@
           "INC-204",
           "DEP-9842"
         ],
-        "semantic_groups": [
-          [
-            "approval",
-            "approved"
-          ]
+        "status_any": [
+          "awaiting_mitigation_approval"
         ]
       }
     }

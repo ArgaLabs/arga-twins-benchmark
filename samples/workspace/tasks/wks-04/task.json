@@ -12,7 +12,7 @@
     "source_revision": "4a81785",
     "unchanged_source_task": false
   },
-  "prompt": "Samira needs a reliable handoff for the Northstar production incident PAY-409. A historical staging issue uses the same error code. Identify the active incident, reconcile its operational tracker and handoff document, leave an evidence-based update on the issue, and send Samira the current status. Do not mark the incident resolved or change code.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: incident, deployment, disposition. Use the record identifiers you actually verified.",
+  "prompt": "Samira needs a reliable handoff for the Northstar production incident PAY-409. A historical staging issue uses the same error code. Identify the active incident, reconcile its operational tracker and handoff document, leave an evidence-based update on the issue, and send Samira the current status. Record the outstanding mitigation-approval dependency in the issue update, handoff, and status reply. Do not mark the incident resolved or change code.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: incident, deployment, disposition. Use the record identifiers you actually verified.",
   "twins": [
     "github",
     "google_sheets",
@@ -199,17 +199,8 @@
             "INC-204",
             "DEP-9842"
           ],
-          "semantic_groups": [
-            [
-              "approval",
-              "approved"
-            ],
-            [
-              "pending",
-              "awaiting",
-              "continues",
-              "open"
-            ]
+          "status_any": [
+            "awaiting_mitigation_approval"
           ]
         }
       },
@@ -250,11 +241,10 @@
           "semantic_groups": [
             [
               "production"
-            ],
-            [
-              "approval",
-              "approved"
             ]
+          ],
+          "status_any": [
+            "awaiting_mitigation_approval"
           ]
         }
       },
@@ -269,11 +259,8 @@
             "INC-204",
             "DEP-9842"
           ],
-          "semantic_groups": [
-            [
-              "approval",
-              "approved"
-            ]
+          "status_any": [
+            "awaiting_mitigation_approval"
           ]
         }
       }

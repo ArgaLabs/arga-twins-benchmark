@@ -12,7 +12,7 @@
     "source_revision": "4a81785",
     "unchanged_source_task": false
   },
-  "prompt": "The Northstar readiness meeting needs to move after a customer correction. Reconcile the latest email, the existing calendar event, and the readiness tracker. Choose the authorized conflict-free slot, update the existing meeting and tracker, and confirm the corrected schedule to Samira. Preserve the attendee list and unrelated meetings.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: reference, start_utc, end_utc. Use the record identifiers you actually verified.",
+  "prompt": "The Northstar readiness meeting needs to move after a customer correction. Reconcile the latest email, the existing calendar event, and the readiness tracker. Choose the authorized conflict-free slot, update the existing meeting and tracker, and confirm the corrected schedule to Samira. Preserve the attendee list and unrelated meetings. Reply only to Samira; do not create a second event, delete existing mail, or add other recipients.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: reference, start_utc, end_utc. Use the record identifiers you actually verified.",
   "twins": [
     "gmail",
     "google_calendar",
@@ -84,7 +84,19 @@
               "summary": "Northstar readiness",
               "start": "2026-09-24T15:00:00Z",
               "end": "2026-09-24T15:30:00Z",
-              "description": "NS-204. Agenda: rollout readiness. Preserve this agenda."
+              "description": "NS-204. Agenda: rollout readiness. Preserve this agenda.",
+              "attendees": [
+                {
+                  "email": "samira@acme.example",
+                  "displayName": "Samira",
+                  "responseStatus": "accepted"
+                },
+                {
+                  "email": "morgan@acme.example",
+                  "displayName": "Morgan Lee",
+                  "responseStatus": "accepted"
+                }
+              ]
             },
             {
               "summary": "Finance close",

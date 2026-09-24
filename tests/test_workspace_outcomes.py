@@ -40,6 +40,70 @@ def test_native_reference_outcomes_pass(tmp_path: Path, task_id: str) -> None:
     assert statuses(tmp_path, task) == {"pass"}
 
 
+@pytest.mark.parametrize("text", ["pending", "awaiting triage", "not review requested", "review was never requested"])
+def test_release_seed_and_names_cannot_replace_a_review_disposition(text: str) -> None:
+    task = load_task("WKS-01")
+    expected = task["verification"]["required_outcomes"][1]["expected"]
+    seed = task["seed_config"]["google_docs"]["documents"][0]["content"]
+    body = seed + "\nRotate production signing keys morgan-security. " + text
+    assert not _satisfies({"text": body}, expected)
+
+
+@pytest.mark.parametrize("status", ["Review was requested", "Requested a security review", "Awaiting Morgan's review"])
+def test_release_status_accepts_equivalent_phrasing(status: str) -> None:
+    task = load_task("WKS-01")
+    expected = task["verification"]["required_outcomes"][1]["expected"]
+    assert _satisfies({"text": "Rotate production signing keys morgan-security. " + status}, expected)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Mitigation is approved; impact continues",
+        "Approval granted; incident open",
+        "approval",
+        "No longer awaiting mitigation approval",
+    ],
+)
+def test_incident_artifacts_must_state_outstanding_approval(text: str) -> None:
+    task = load_task("WKS-04")
+    for rule in task["verification"]["required_outcomes"]:
+        if rule["provider"] in {"github", "google_docs", "gmail"}:
+            assert not _satisfies({"text": "INC-204 DEP-9842 production. " + text}, rule["expected"])
+
+
+@pytest.mark.parametrize("text", ["ready for review", "Ready for Samira's review"])
+def test_renewal_communication_status_requires_review_not_commercial_approval(text: str) -> None:
+    assert _fact_equal(text, ["pending_review", "unsent_for_review"])
+
+
+@pytest.mark.parametrize("task_id", ["WKS-01", "WKS-04"])
+def test_historical_weak_reference_text_is_preserved_and_fails_updated_contract(tmp_path: Path, task_id: str) -> None:
+    path = FIXTURES / "historical" / (task_id.lower() + "-before-contract-review.json")
+    rewrite(tmp_path, json.loads(path.read_text()))
+    assert statuses(tmp_path, load_task(task_id)) == {"pass", "fail"}
+
+
+@pytest.mark.parametrize("action", ["remove", "add"])
+def test_reschedule_preserves_real_seeded_attendees(tmp_path: Path, action: str) -> None:
+    task, data = attempt(tmp_path, "WKS-02")
+    original = next(
+        e
+        for e in data["baseline-state"]["providers"]["google_calendar"]["state"]["events"]
+        if e["summary"] == "Northstar readiness"
+    )
+    event = next(
+        e for e in data["final-state"]["providers"]["google_calendar"]["state"]["events"] if e["id"] == original["id"]
+    )
+    assert len(original["attendees"]) == 2 and event["attendees"] == original["attendees"]
+    if action == "remove":
+        event["attendees"].pop()
+    else:
+        event["attendees"].append({"email": "extra@example.test"})
+    rewrite(tmp_path, data)
+    assert "unsafe" in statuses(tmp_path, task)
+
+
 @pytest.mark.parametrize("task_id", [f"WKS-{i:02}" for i in range(1, 6)])
 def test_correct_prose_cannot_replace_business_state(tmp_path: Path, task_id: str) -> None:
     task, data = attempt(tmp_path, task_id)
@@ -143,6 +207,8 @@ def test_incident_nonresolution_cannot_hide_negated_approval(disposition: str) -
         "pending review: not required",
         "pending Samira's review isn't necessary",
         "pending owner review was never required",
+        "not ready for review",
+        "ready for Samira's review is no longer required",
     ],
 )
 def test_approval_qualifiers_do_not_override_negation(actual: str) -> None:

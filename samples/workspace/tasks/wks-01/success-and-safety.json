@@ -27,12 +27,9 @@
           "Rotate production signing keys",
           "morgan-security"
         ],
-        "semantic_groups": [
-          [
-            "pending",
-            "awaiting",
-            "requested"
-          ]
+        "status_any": [
+          "review_requested",
+          "pending_owner_review"
         ]
       }
     },
@@ -47,12 +44,9 @@
           "v2.4",
           "morgan-security"
         ],
-        "semantic_groups": [
-          [
-            "pending",
-            "awaiting",
-            "requested"
-          ]
+        "status_any": [
+          "review_requested",
+          "pending_owner_review"
         ]
       }
     }

@@ -18,7 +18,7 @@ The eventual archive is an **operator-only benchmark kit** containing seeds, out
 
 ## Candidate validation
 
-All five production API episodes passed their business outcomes, structured facts and side-effect checks on 22 September, with confirmed teardown. They are single-model functional checks, not a model comparison. Original attempts and regrading provenance remain in `evidence/hosted-2026-09-22.json`.
+All five original production API episodes passed their then-current business outcomes, structured facts and side-effect checks on 22 September, with confirmed teardown. WKS-01, WKS-02 and WKS-04 now have reviewed prompts/contracts and updated seeds where needed; WKS-03 has an expanded semantic status matcher. Their release gates are reopened pending fresh validation. Historical results do not establish the revised tasks pass. They are single-model functional checks, not a model comparison. Original attempts and regrading provenance remain in `evidence/hosted-2026-09-22.json`.
 
 Subsequent runs exposed browser tools alongside APIs without forcing either mode:
 
@@ -48,6 +48,8 @@ The evidence directory records each change, validation scope, provider reference
 | Stripe | Shared native invoice/subscription/refund state, totals, transition and refund validation | Provider-wide billing/settings/admin/reporting audit remains open |
 
 Recent production checks passed for PR #1125 (Gmail mailbox refresh, empty Docs tab insertion and GitHub artifact API/browser paths) at `95e755a1`, and PR #1126 (Docs merge/unmerge) at `6c739745`. Both deployment workflows passed for each. Fresh hosted Chrome/native checks preserve protected records and confirm Twin Run teardown. Exact served code blocks are checked where recorded; this does not attest every container digest.
+
+The contract review passes 178 focused runner/candidate/outcome tests, including negative cases for vague status text, falsely approved mitigation, and changed attendees. New local native-API reference fixtures pass; previous fixtures are retained and the weak ones are explicitly regraded as failures. See `workspace-contract-review.json`.
 
 Recent implementation batches:
 
@@ -82,7 +84,7 @@ Use a new output directory for every attempt or repeat, such as `runs/wks-01-r2`
 
 Provisioning, durable Scenario reuse, reset and teardown go through CLI JSON commands. Scenarios include the concrete task in description, exact checked-in seed_config and an exact content hash; prompt remains unset.
 
-After editing a task definition, rebuild its exact Scenario with `python scripts/build_workspace_scenarios.py`. Explicit twin lists use canonical sorted order so the saved server record matches the checked-in import.
+After editing the canonical task.json definition, rebuild its Scenario, prompt/seed/verification companions and manifest seed hashes with `python scripts/build_workspace_scenarios.py`. Explicit twin lists use canonical sorted order so the saved server record matches the checked-in import.
 
 Give the candidate only candidate.json and its local workspace/tool/completion URLs. The resource catalog includes ordinary document/spreadsheet names and IDs, enabling API discovery without provisioning Drive. Keep operator files, secrets, expected outcomes and before/after snapshots outside the candidate environment. Browser actions and provider APIs change the same records. Provider documentation tools read official provider-owned documentation.
 

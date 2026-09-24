@@ -28,7 +28,19 @@
             "summary": "Northstar readiness",
             "start": "2026-09-24T15:00:00Z",
             "end": "2026-09-24T15:30:00Z",
-            "description": "NS-204. Agenda: rollout readiness. Preserve this agenda."
+            "description": "NS-204. Agenda: rollout readiness. Preserve this agenda.",
+            "attendees": [
+              {
+                "email": "samira@acme.example",
+                "displayName": "Samira",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "morgan@acme.example",
+                "displayName": "Morgan Lee",
+                "responseStatus": "accepted"
+              }
+            ]
           },
           {
             "summary": "Finance close",

@@ -355,14 +355,18 @@ def _label_equal(actual: Any, expected: Any) -> bool:
     approval_owner = r"(?:(?:the )?(?:incident commander|commander|owner)(?: s)? )?"
     pending_approval = r"(?:pending|awaiting) " + approval_owner + r"(?:mitigation )?approval"
     phrases = {
-        "review requested": r"review (?:has been |is |was )?requested",
-        "pending owner review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
-        "pending review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
-        "unsent for review": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,4}review",
+        "review requested": (
+            r"(?:review (?:has been |is |was )?requested|requested (?:a |the )?(?:owner |security )?review)"
+        ),
+        "pending owner review": r"(?:pending|awaiting|ready for) (?:[a-z0-9]+ ){0,4}review",
+        "pending review": r"(?:pending|awaiting|ready for) (?:[a-z0-9]+ ){0,4}review",
+        "unsent for review": r"(?:pending|awaiting|ready for) (?:[a-z0-9]+ ){0,4}review",
         "awaiting approval": r"(?:pending|awaiting) (?:[a-z0-9]+ ){0,3}approval",
         "pending mitigation": r"mitigation (?:is )?" + pending_approval,
         "open pending approval": r"open (?:mitigation (?:is )?)?" + pending_approval,
-        "awaiting mitigation approval": r"(?:mitigation (?:is )?)?" + pending_approval,
+        "awaiting mitigation approval": (
+            r"(?:(?:mitigation (?:is )?)?" + pending_approval + r"|approval (?:is |remains )?(?:still )?pending)"
+        ),
     }
     pattern = phrases.get(_normal(expected))
     if not pattern:
@@ -419,6 +423,8 @@ def _satisfies(data: dict[str, Any], expected: dict[str, Any]) -> bool:
         if field == "semantic_groups" and not all(
             any(_mentions(text, term, affirmed=True) for term in group) for group in value
         ):
+            return False
+        if field == "status_any" and not any(_label_equal(text, status) for status in value):
             return False
         if field == "summary_contains" and not all(_normal(term) in _normal(data.get("summary", "")) for term in value):
             return False

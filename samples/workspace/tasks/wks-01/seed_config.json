@@ -72,7 +72,7 @@
     "documents": [
       {
         "title": "v2.4 release handoff",
-        "content": "Release v2.4\nAuth workstream: awaiting triage.\nRecord the production change, required owner and pending-review status here. Preserve this header."
+        "content": "Release v2.4\nAuth workstream: assessment incomplete.\nRecord the production change, accountable code owner, and verified disposition. Preserve this header."
       },
       {
         "title": "Release review policy",

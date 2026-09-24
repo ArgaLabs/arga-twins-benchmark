@@ -53,46 +53,26 @@
     {
       "id": "rollout.WKS-01",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
-      "evidence": [
-        {
-          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
-          "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
-        }
-      ]
+      "status": "pending",
+      "evidence": []
     },
     {
       "id": "rollout.WKS-02",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
-      "evidence": [
-        {
-          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
-          "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
-        }
-      ]
+      "status": "pending",
+      "evidence": []
     },
     {
       "id": "rollout.WKS-03",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
-      "evidence": [
-        {
-          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
-          "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
-        }
-      ]
+      "status": "pending",
+      "evidence": []
     },
     {
       "id": "rollout.WKS-04",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
-      "evidence": [
-        {
-          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
-          "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
-        }
-      ]
+      "status": "pending",
+      "evidence": []
     },
     {
       "id": "rollout.WKS-05",
@@ -122,5 +102,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "41f257c3e32aaac24f824071d7b628bd3619eb10b5abbd285a05fff3cb14da07"
+  "sample_tree_sha256": "2fc468ba2311324fff0060f8c9b2543d1ac3ae5b0a8b1a55f36730d0b3287b66"
 }
