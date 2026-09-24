@@ -25,7 +25,9 @@
       "note": "Medium findings retained by the existing full matrix; this is not a zero-findings claim."
     },
     "before_date_filter_integration_regressions": 542,
-    "combined_sheets_workspace_scenario_regressions": 571
+    "before_review_combined_regressions": 571,
+    "review_focused_regressions": 139,
+    "reviewed_combined_regressions": 584
   },
   "browser_checks": [
     "Desktop list/range dropdown create/edit/choose; Alt+Down opens choices; invalid typed input is rejected.",
@@ -47,7 +49,8 @@
     "relative_browser_native": "f3278df447c5bcd04a3655225b0ed1e20396967a123cf2377f2d1ec4d12c5221",
     "regressions": "a2086d04739593c3e715b11bc3a968c228f613fdff65fb8bd8a6c579cb72bdda",
     "focused": "33969cf45c678a8f949182b3c3733777b1266b8ac1b2626cb0bcf718b9037c6f",
-    "combined_regressions": "bb59cd6f92df541a3773c56efb6c29090c4a08e1af309b71d89ac1475c900d1f"
+    "combined_regressions": "bb59cd6f92df541a3773c56efb6c29090c4a08e1af309b71d89ac1475c900d1f",
+    "reviewed_combined_regressions": "67367c65bf32a68c5776462e45bb7646b462ed1be3fb93be7ac4d9c3f22351b3"
   },
   "cleanup": "Both local servers stopped; both disposable live Google reference files moved to trash with confirmation inspected; tabs closed; viewport reset.",
   "limits": [
@@ -56,5 +59,11 @@
     "Colored/multiple-selection chips, full clipboard and structural formula-reference behavior, exhaustive condition fidelity and collaboration remain open.",
     "Native Google API readback was unavailable for the live references; relative predicate behavior was verified through the provider UI.",
     "No exhaustive pixel or physical-mobile audit."
-  ]
+  ],
+  "review_followup": {
+    "source_ranges": "All setDataValidation/repeatCell/updateCells/appendCells and partial rule writes validate against current batch state; nonexistent or out-of-grid sources reject atomically.",
+    "keyboard": "Only the grid capture handler processes validation shortcuts. Fresh Chrome Space checks once, Space unchecks once, and FALSE persists after reload; native state shows only that expected value change.",
+    "native_capture_sha256": "7a2fc4296242b2d0251d331c94d845ec50718b6471e58c53993d339a206b1f79",
+    "focused_log_sha256": "683d0dc33854456ba085de7247abe64883229165395632d5590ae0fc574df796"
+  }
 }
