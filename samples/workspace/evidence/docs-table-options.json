@@ -1,0 +1,80 @@
+{
+  "date": "2026-09-24",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Table > Table options opens provider-shaped Column, Row, Cell and Color sections.",
+    "Column width, minimum row height, cell padding/alignment, borders and background use native field-masked batch updates scoped to selected cells and document tab.",
+    "Native rendering includes column widths, row height, padding, borders, alignment and background. Cell styles do not leak into text formatting.",
+    "Enter/blur commits deduplicate changes; invalid input restores saved values with actionable feedback.",
+    "Desktop sidebar and mobile bottom panel retain a visible close button; switching tabs closes stale controls."
+  ],
+  "validation": {
+    "regressions": 269,
+    "ruff": "passed",
+    "browser": "Google Chrome through CUA and the sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "Enable and change column width",
+      "Enable and change minimum row height",
+      "Enter and blur commit",
+      "Cell padding and Middle alignment",
+      "Border color and width",
+      "Cell background and Transparent",
+      "Invalid zero column width leaves state unchanged and restores saved value",
+      "Reload persistence",
+      "Close button after scrolling mobile panel",
+      "Switch to protected tab closes panel"
+    ],
+    "captures": [
+      {
+        "sha256": "bc560913ad3d0d38a86967e0d8d10c22b300bb682f4da231bbc8950999fcd1bb",
+        "protected_tabs_and_neighbor_cell": "exactly unchanged",
+        "cell_text_and_formatting": "exactly unchanged",
+        "native_width_pt": 108,
+        "native_minimum_height_pt": 43.2,
+        "native_padding_pt": 7.2,
+        "native_alignment": "MIDDLE",
+        "native_border_width_pt": 2.25,
+        "native_background": {}
+      },
+      {
+        "sha256": "69c0e7365e7bc47b90bd2d0c611396fc0659a3123117efd54547995c22186134",
+        "protected_tabs_and_neighbor_cell": "exactly unchanged",
+        "cell_text_and_formatting": "exactly unchanged",
+        "native_width_pt": 108,
+        "native_minimum_height_pt": 43.2,
+        "native_padding_pt": 7.2,
+        "native_alignment": "MIDDLE",
+        "native_border_width_pt": 2.25,
+        "native_background": {}
+      }
+    ]
+  },
+  "provider_reference": {
+    "date": "2026-09-24",
+    "document_id": "1mDAXhm9_hXtuHyrbVasA9AdHw7-Ci0eOOZR5C8-Nbfw",
+    "title": "Arga fidelity disposable 2026-09-24 table options",
+    "cleanup": "Moved to Trash; File moved to trash confirmed; tab closed.",
+    "observations": [
+      "Format > Table > Table options opens right sidebar with collapsed Quick layouts/Table/Column/Row/Cell/Color sections.",
+      "Column width and minimum row height checkboxes initially unchecked, values 0 inches.",
+      "Changed column width to 1.5 inches, minimum row height to 0.6 inches, padding to 0.1 inches and alignment to Middle; changes autosaved.",
+      "Default padding 0.069 inches, alignment Top, border Black 1pt, cell background Transparent.",
+      "Native Table section additionally exposes inline/wrap and table alignment/indent controls."
+    ]
+  },
+  "references": [
+    "https://support.google.com/docs/answer/1696711?hl=EN",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request"
+  ],
+  "limits": [
+    "CI, deployment and hosted validation pending.",
+    "Quick layouts, table positioning/wrapping, mixed-value selection display, pinned header rows, cell merge and drag resize are not covered by this change.",
+    "Full Docs/eight-twin functionality, visual/mobile parity and candidate rollouts remain open."
+  ]
+}

@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 176,
+      "files_scanned": 177,
       "image_files": 0
     },
     "final_zip_created": false,
