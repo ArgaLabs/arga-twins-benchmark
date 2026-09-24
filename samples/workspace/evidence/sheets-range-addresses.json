@@ -44,5 +44,12 @@
     "CI, deployment and hosted validation remain pending.",
     "Named-range management/navigation, sheet-qualified addresses and the complete eight-twin frontend audit remain open.",
     "The frontend reference convention for A:B5 is verified separately from REST A1 parsing."
-  ]
+  ],
+  "production": {
+    "merge_sha": "0277430adefe07da892323e9f4c2bdcb61f7ef88",
+    "twins_workflow": 35938353981,
+    "runtime_workflow": 35938354040,
+    "both_deployments": "success",
+    "hosted": "pending"
+  }
 }

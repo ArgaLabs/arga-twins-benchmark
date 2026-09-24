@@ -28,5 +28,12 @@
     "range": "Sheet1!B1",
     "created_without_sidebar_confirmation": true
   },
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "range_picker": {
+    "mode": "Inline sidebar; name, delete, cancel and Done disabled while selecting",
+    "grid_selection_updates_range_input": true,
+    "ok_accepts_without_saving": true,
+    "done_commits": true,
+    "cancel_after_ok_preserves_original_range": true
+  }
 }

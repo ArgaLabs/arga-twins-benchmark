@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Edit > Find and replace and keyboard shortcuts.",
+    "All/current-tab matches, previous/next, case sensitivity, optional diacritic folding and regular expressions.",
+    "Native indexed replacements retain first-character style and preserve unrelated cells, tables and tabs.",
+    "Unchanged formatted saves no longer generate writes or advance revisions."
+  ],
+  "validation": {
+    "regressions": 95,
+    "full_contract_matrix": "passed",
+    "findings": 0,
+    "unexpected_5xx": 0,
+    "ruff": "passed",
+    "browser": "Google Chrome through CUA and sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "Menu and keyboard opening",
+      "All/current tab counts",
+      "Single and all replacements",
+      "Regex and invalid-regex feedback",
+      "Ignore-diacritics enabled/disabled",
+      "Previous/next cross-tab navigation",
+      "Enter activation and Escape/Close",
+      "Reload persistence"
+    ],
+    "native_protected_tab_exactly_unchanged": true,
+    "first_browser_session_intended_writes": 3,
+    "console_errors": 0,
+    "capture_sha256s": [
+      "286c198f217f950b1b95cf35b078672076761d95b07b6d9b7658df7b63a0dbea",
+      "57659603b2eead995ae1b996c6253ec975951139bfebd0ca3ae369c2048e1c17"
+    ]
+  },
+  "provider_reference": {
+    "date": "2026-09-23",
+    "document_id": "1CQpDNEVotA447LntfW4bYSAP8YNgs_xjgrOJ9mOOm5w",
+    "fixture": "New uniquely named private disposable Google Doc; moved to Trash and confirmed.",
+    "observations": {
+      "default_ignore_diacritics": true,
+      "cafe_matches_accented_and_plain": 2,
+      "budget_all_tabs_matches": 3,
+      "budget_current_second_tab_matches": 1,
+      "regex_query": "A[0-9]+",
+      "regex_replace_all_completed": true,
+      "buttons": [
+        "Replace",
+        "Replace all",
+        "Previous",
+        "Next",
+        "Close"
+      ],
+      "search_scopes": [
+        "All tabs",
+        "Current tab"
+      ]
+    },
+    "screenshots_retained": false
+  },
+  "references": [
+    "https://support.google.com/docs/answer/62754?hl=en",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request#DeleteContentRangeRequest",
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request#InsertTextRequest"
+  ],
+  "limits": [
+    "CI, deployment and hosted validation remain pending.",
+    "Search covers body paragraphs and tables; headers/footnotes and exact regex-engine/zero-width parity remain open.",
+    "Full Docs and eight-twin feature/visual parity remain open."
+  ]
+}
