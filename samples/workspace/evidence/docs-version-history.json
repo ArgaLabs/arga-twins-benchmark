@@ -12,11 +12,11 @@
     "Persist history only in run-scoped shared state and clear it on reset/permanent file deletion"
   ],
   "tests": {
-    "docs_and_workspace_passed": 174,
-    "history_cases": 6,
+    "docs_and_workspace_passed": 175,
+    "history_cases": 7,
     "counts_overlap": true,
     "ruff": "pass",
-    "log_sha256": "0cdc9a572c7bd2d671c2e04c28ea413433429bfb492b64503d7709ebee60e7e6"
+    "log_sha256": "8848f86030d311348913c9bc5ed98152ff231b518c3fe44a81a13012344b5f21"
   },
   "browser": {
     "surface": "Chrome CUA",
@@ -43,5 +43,9 @@
     "Historical edits before rich snapshots were introduced cannot reconstruct lost rich content",
     "Detailed author-colored text differences, grouped version expansion, history deletion, and copy destination/sharing selectors remain open",
     "No full Docs feature or exhaustive visual/mobile parity claim"
+  ],
+  "review_followup": [
+    "Reject malformed/non-object bodies atomically through shared Drive validation",
+    "Clear stale selected version and disable restore/copy/name while preview loads; ignore stale response errors"
   ]
 }
