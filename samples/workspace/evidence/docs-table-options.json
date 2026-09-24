@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "local_verified_ci_deployment_hosted_pending",
+  "status": "production_native_verified_visual_layout_fix_pending",
   "screenshots_retained": false,
   "changes": [
     "Table > Table options opens provider-shaped Column, Row, Cell and Color sections.",
@@ -68,8 +68,9 @@
     "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request"
   ],
   "limits": [
-    "CI, deployment and hosted validation pending.",
+    "CI and production deployment passed. Hosted native checks pass; the discovered page-compression issue is fixed locally in docs-page-geometry.json and awaits deployment/recheck.",
     "Quick layouts, table positioning/wrapping, mixed-value selection display, pinned header rows, cell merge and drag resize are not covered by this change.",
     "Full Docs/eight-twin functionality, visual/mobile parity and candidate rollouts remain open."
-  ]
+  ],
+  "production_evidence": "docs-table-options-production-2026-09-24.json"
 }
