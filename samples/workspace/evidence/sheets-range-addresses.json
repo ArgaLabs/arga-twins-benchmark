@@ -51,5 +51,11 @@
     "runtime_workflow": 35938354040,
     "both_deployments": "success",
     "hosted": "pending"
+  },
+  "hosted_validation": {
+    "status": "passed",
+    "evidence": "sheets-calendar-production-2026-09-24.json",
+    "run_id": "4f86415a-3c0f-41b7-96ab-1840e46119cf",
+    "cleanup": "torn_down"
   }
 }

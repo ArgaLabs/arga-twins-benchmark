@@ -70,5 +70,11 @@
     "Movement of chart/pivot/filter/protection bindings and embedded data-validation formula references still needs reference comparison and coverage.",
     "The first local browser helper shutdown cancelled its final capture; native readback before shutdown was preserved, and a fresh run completed with a full before/after capture and normal shutdown.",
     "Name-box whole-row shorthand such as 2:3 and named-range management UI remain open; full-width cell ranges and header selection support moves."
-  ]
+  ],
+  "hosted_validation": {
+    "status": "passed",
+    "evidence": "sheets-calendar-production-2026-09-24.json",
+    "run_id": "4f86415a-3c0f-41b7-96ab-1840e46119cf",
+    "cleanup": "torn_down"
+  }
 }

@@ -91,14 +91,6 @@
     "CI, deployment and hosted checks remain pending.",
     "Chart, conditional-format and data-validation named-reference rewrite coverage, realtime collaboration and full eight-twin frontend parity remain open."
   ],
-  "integration_validation": {
-    "head": "000a430599226209506e33f59cd082bddb7ba4e2",
-    "merged_main": "0277430adefe07da892323e9f4c2bdcb61f7ef88",
-    "regressions": 306,
-    "browser": "Whole-row label 2:3, named Budget, open-ended A:B5 => A5:B1000, Enter stages picker and Cancel retains native A1:A3.",
-    "console_errors": 0,
-    "ci": "pending"
-  },
   "review_fix": {
     "issue": "Rename converted omitted row/column bounds to fixed coordinates.",
     "fix": "An unchanged sidebar address writes only the name field; range changes still write native coordinates.",
@@ -108,5 +100,16 @@
     "protected_cells_and_merges_unchanged": true,
     "console_errors": 0,
     "capture_sha256": "a8704d9eda32bdfdb70bea98d9b6c0ae0cc0f077f07093a3bd3452f9d181b3d7"
+  },
+  "combined_editor_validation": {
+    "pr": 1119,
+    "component_prs": [
+      1119,
+      1120
+    ],
+    "tests": 570,
+    "status": "local_passed_ci_pending",
+    "scope": "Docs, Sheets, Workspace and Calendar sharing integration",
+    "ruff": "passed"
   }
 }
