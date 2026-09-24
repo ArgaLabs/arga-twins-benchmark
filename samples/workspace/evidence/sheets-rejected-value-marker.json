@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "production_deployed_hosted_desktop_pass_mobile_pending",
+  "status": "production_deployed_hosted_desktop_and_390px_pass",
   "trigger": "Rejecting an invalid edit restored the committed value but incorrectly marked that restored value as invalid.",
   "change": "Accepted proposals update their marker; rejecting a proposal revalidates the last committed value and restores its value, formula field and validity marker.",
   "validation": {
@@ -24,7 +24,7 @@
   "screenshots_retained": false,
   "design_scan": "One pre-existing warning for the validation hint border; unchanged and outside the marker logic fix.",
   "limits": [
-    "Full CI, review and both production workflows passed. Hosted queued desktop replay passed; mobile replay pending because viewport override did not take effect.",
+    "Full CI, review and both production workflows passed. Hosted queued desktop and fresh 390px replays pass; actual touch-device and exhaustive parity remain pending.",
     "Not a complete frontend parity audit."
   ],
   "review_followup": "A failed preceding PUT may have cleared a marker without changing native state. Recompute validity for savedEnteredValue before displaying the rejected edit restoration.",

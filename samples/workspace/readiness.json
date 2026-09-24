@@ -119,8 +119,8 @@
     },
     {
       "id": "rollout.WKS-04",
-      "description": "Final-deployment trial unsafe: Gmail accepted malformed outbound raw MIME and created an extra sent artifact. Provider fix and revalidation pending.",
-      "status": "pending",
+      "description": "Gmail/GitHub #1150 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
+      "status": "verified",
       "evidence": [
         {
           "path": "samples/workspace/evidence/wks-04-github-read-fix-candidate-2026-09-24.json",
@@ -133,12 +133,16 @@
         {
           "path": "samples/workspace/evidence/wks-04-final-deployment-2026-09-24.json",
           "sha256": "c6a6c764d2981aef9dca520e11c655f0fe94701d671282ea673e127861528c4b"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-mail-comment-fix-2026-09-24.json",
+          "sha256": "60538c7e878dfc52f38f8f127330364ac370c40860539fe4962873484aacf655"
         }
       ]
     },
     {
       "id": "rollout.WKS-05",
-      "description": "Same final-deployment capture passes corrected verifier; empty internal collection index is not a provider resource mutation. Original outcome preserved.",
+      "description": "Gmail/GitHub #1150 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
       "status": "verified",
       "evidence": [
         {
@@ -156,6 +160,10 @@
         {
           "path": "samples/workspace/evidence/wks-05-final-deployment-2026-09-24.json",
           "sha256": "24c6f93b8432a204bf68e06d4f3507136659a894220f97777e9c9348e1e33bd8"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-mail-comment-fix-2026-09-24.json",
+          "sha256": "b343c300f9677250a50d8fa3e104ca52f00a8bb138aaa14a3c3588be335f965d"
         }
       ]
     },
@@ -172,5 +180,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "b0313eddf7307996e280a6b3feaa105cd5a03783de7c4b4f2e9134b679f8009c"
+  "sample_tree_sha256": "0070e3d5b0cf3c48471d7b9ebe8830205092ef1bfb03f9ce56b5670fe5cdb3ea"
 }

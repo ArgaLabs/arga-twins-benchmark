@@ -1,7 +1,7 @@
 {
   "date": "2026-09-24",
   "scope": "PR #1124 hosted compose window and menu verification",
-  "status": "hosted_compose_controls_pass_native_print_pending",
+  "status": "hosted_compose_and_native_print_pass",
   "deployment": {
     "revision": "94ab59654534b22747af9b50a86ea63a13fd52c4",
     "runtime_workflow": 36058896495,
@@ -39,10 +39,85 @@
   ],
   "native_state_note": "Save and close rewrites native draft MIME, adds the account From header, advances draft message/history metadata and normalizes HTML/trailing whitespace. This report does not claim complete before/after state equality.",
   "native_print": {
-    "status": "pending_host_access",
-    "attempt": "Opened Print from the fresh hosted draft; the native Mac accessibility tool reported the Mac was locked and could not be unlocked automatically. Closed the test tab and continued other compose checks.",
-    "print_jobs_submitted": 0,
-    "local_native_result": "Two successful native preview/cancel/afterprint cycles are recorded in gmail-compose-window.json; this does not substitute for hosted native preview verification."
+    "status": "pass",
+    "previous_blocked_attempt": {
+      "status": "pending_host_access",
+      "attempt": "Opened Print from the fresh hosted draft; the native Mac accessibility tool reported the Mac was locked and could not be unlocked automatically. Closed the test tab and continued other compose checks.",
+      "print_jobs_submitted": 0,
+      "local_native_result": "Two successful native preview/cancel/afterprint cycles are recorded in gmail-compose-window.json; this does not substitute for hosted native preview verification."
+    },
+    "deployment_provenance": {
+      "revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+      "runtime_workflow": 36068186587,
+      "twins_workflow": 36068186452,
+      "both": "success",
+      "published_images": {
+        "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
+        "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:d253aabb27ef219cebbd461af9d632e7b02273eb836f37201bb1b15f6a8ef7f3",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:6d8cc76a46b76a3a79b15afc18d806c25eb956a937f05c797eae58d201ac62b7"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": [
+          "preview-proxy-00261-57l"
+        ],
+        "arga-api": [
+          "arga-api-00631-cm9"
+        ]
+      },
+      "log_sha256s": {
+        "lab-final-mail-comment-twins-deploy.log": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
+        "lab-final-mail-comment-runtime-deploy.log": "66b74136d21529977a0bc0335c67d06c17f1122f011f2788947f30042af3af39"
+      },
+      "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains blocked by GCP reauthentication."
+    },
+    "observations": {
+      "scope": "Fresh hosted Gmail native Print/afterprint",
+      "desktop_viewport": [
+        1063,
+        806
+      ],
+      "preview_cycles": [
+        {
+          "trigger": "More options > Print pointer",
+          "native_preview": "one page with rich subject, From, To, Cc, Bcc, bold Unicode body, link and attachment names",
+          "action": "Cancel",
+          "print_frames_after_cleanup": 0
+        },
+        {
+          "trigger": "More options > End > Return keyboard",
+          "native_preview": "one page with same subject and recipients",
+          "action": "Cancel",
+          "print_frames_immediately_after_cancel": 1,
+          "print_frames_after_deferred_cleanup": 0
+        }
+      ],
+      "print_jobs_submitted": 0,
+      "pdf_files_saved": 0,
+      "screenshots_retained": false,
+      "compose_fields_preserved": true,
+      "inline_image_and_binary_attachment_preserved_in_composer": true
+    },
+    "complete_native_state_equal": true,
+    "cleanup_confirmation": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "frontend_fingerprints": {
+      "matched": {
+        "twins/gmail/compose_window_ui.py:SCRIPT": "1060b21c76f36cdff44f7593ef61a3366c492a555df076d531a2aa1b90d7dd1c"
+      },
+      "scope": "Complete served code block; not container digest attestation."
+    },
+    "artifact_sha256s": {
+      "scenario.json": "00b44ba62e914ab1a2a4776c7a83fe32c31f4dd36ea0b118c3ff5342a8537450",
+      "baseline-state.json": "5db823559f33515cc97aa294cf4733b97de915a14bb5f808bc5fcff2479ac5d1",
+      "final-state.json": "5db823559f33515cc97aa294cf4733b97de915a14bb5f808bc5fcff2479ac5d1",
+      "browser-trace.json": "587c35b74e53e72ad43c672fffc2e316efc59bff712559ae6051e2751151b714",
+      "browser-observations.json": "078efddadb473d3a6a7ebd4c5598c5d6fe37776c0d75a5866423dee34abdf9cf",
+      "frontend-code-fingerprints.json": "989119f78d6a6790cbfb112751aa89d8fcd5b81c59c3a73bddb7506a457a5840",
+      "cleanup.json": "9d107055182cf96dcf03199b7bc2a559efb1e29b1c7bf3fc5e26f2c7f323cbcd"
+    }
   },
   "cleanup": {
     "confirmed_status": "torn_down",
@@ -58,7 +133,6 @@
   },
   "screenshots_retained": false,
   "limits": [
-    "Hosted native Print remains pending until the Mac can be unlocked.",
     "Running-container attestation, real touch-device coverage and complete Gmail reference/feature parity remain pending."
   ]
 }

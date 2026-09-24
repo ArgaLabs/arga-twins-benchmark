@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "merged_production_deployment_running",
+  "status": "production_conformance_and_affected_candidates_pass",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1150",
   "revision": "ac83f0e8256061f984d944097e2a584594a55bbe",
   "observed_gaps": [
@@ -27,9 +27,8 @@
     "lab-final-mail-comment-ci-final.log": "13b49bcf4407f483d7faa4fb21bf03d736cca9a5860f560c5d2e09d44550f988"
   },
   "limits": [
-    "Both production deployments and affected hosted revalidation are pending.",
     "Direct current-container attestation needs GCP reauthentication.",
-    "No exhaustive frontend or permission parity claim."
+    "Native conformance passes do not establish exhaustive frontend or permission parity."
   ],
   "wider_provider_tests": {
     "revision": "4056fd71f942d6465dd41990468af915cb8fe3ab",
@@ -61,5 +60,102 @@
     "twins_deselected": 3,
     "root_passed": 2106,
     "root_skipped": 2
+  },
+  "deployment": {
+    "revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+    "runtime_workflow": 36068186587,
+    "twins_workflow": 36068186452,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
+      "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:d253aabb27ef219cebbd461af9d632e7b02273eb836f37201bb1b15f6a8ef7f3",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:6d8cc76a46b76a3a79b15afc18d806c25eb956a937f05c797eae58d201ac62b7"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": [
+        "preview-proxy-00261-57l"
+      ],
+      "arga-api": [
+        "arga-api-00631-cm9"
+      ]
+    },
+    "log_sha256s": {
+      "lab-final-mail-comment-twins-deploy.log": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
+      "lab-final-mail-comment-runtime-deploy.log": "66b74136d21529977a0bc0335c67d06c17f1122f011f2788947f30042af3af39"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains blocked by GCP reauthentication."
+  },
+  "hosted_conformance": {
+    "checks": [
+      "Malformed direct sends return 400 and leave complete native Gmail state unchanged.",
+      "Recipient-less draft remains intact after rejected send, with no history/counter change.",
+      "Valid synthetic mail creates one SENT message.",
+      "GitHub comment GET/PATCH/list/timeline/delete share one native record; invalid PATCH and missing reads preserve state without fallback collection allocation.",
+      "Protected issue remains byte-for-byte equal in native REST readback.",
+      "Every pre-existing Gmail message remains unchanged."
+    ],
+    "seed_config_sha256": "1ca8cf6620bb39597fa02d061a98d1abd7935428ee4220292d205d70be8d2f75",
+    "status": "pass",
+    "cleanup_confirmation": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "original_probe": {
+      "status": "harness_assertion_invalid",
+      "reason": "List-issues and single-issue GET representations differ; corrected probe compares single-issue GET before and after.",
+      "same_scenario_id": true,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "artifact_sha256s": {
+        "scenario.json": "6dcf70f2920ea78aeaf46c495e884c22a39abdb76cb449d4da24070732a369be",
+        "baseline-state.json": "fe1074edf201e5ecd73cb494441ba5ce8f0281c3ed735aad7632a871f5538b41",
+        "operator-api-trace.json": "bc8dee882af75eeabbf10ad1debcc56b9a297b52731781b24c6b77952cd64129",
+        "cleanup.json": "d4527c303b74f52185c864e93aaca78f3ba7cb0797d13b184fd2be9cb55ecc91"
+      }
+    },
+    "artifact_sha256s": {
+      "scenario.json": "6dcf70f2920ea78aeaf46c495e884c22a39abdb76cb449d4da24070732a369be",
+      "baseline-state.json": "8454c460c03954932f075c6fb76ee1643655953a49eb52cf49aedb77a7ed52f2",
+      "final-state.json": "714b767ed58cfb504a6d0c15e073bb8267bc1743b807fa688dbf912ba414ab43",
+      "operator-api-trace.json": "8d5bfaf72a763959141c7f4cf3cfd7729dd5ace6bf14df7ecbda4eec2c0f26b5",
+      "checks.json": "5c05321a54334f7358b29baf1181f6a1ef9a9b0fbcd21e6e3371c44a45b270bb",
+      "cleanup.json": "34138e2489f095bf8d47086a86ad79bb0da3463d5363b1d360383ab77b9e3ea8"
+    },
+    "probe_script_sha256": "bea30e90f78511793e51fe9b5e2ca2eefb37763bbb1104aaab4dd7c5c11884a3"
+  },
+  "candidate_revalidation": {
+    "WKS-04": {
+      "outcome": "pass",
+      "candidate_model": "claude-sonnet-5",
+      "actual_interaction_mode": "api",
+      "model_tool_calls": 22,
+      "business_api_calls": 17,
+      "official_docs_calls": 3,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "sample_evidence_file": "wks-04-mail-comment-fix-2026-09-24.json",
+      "sample_evidence_sha256": "60538c7e878dfc52f38f8f127330364ac370c40860539fe4962873484aacf655",
+      "previous_outcomes_preserved": true
+    },
+    "WKS-05": {
+      "outcome": "pass",
+      "candidate_model": "claude-sonnet-5",
+      "actual_interaction_mode": "api",
+      "model_tool_calls": 39,
+      "business_api_calls": 30,
+      "official_docs_calls": 8,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "sample_evidence_file": "wks-05-mail-comment-fix-2026-09-24.json",
+      "sample_evidence_sha256": "b343c300f9677250a50d8fa3e104ca52f00a8bb138aaa14a3c3588be335f965d",
+      "previous_outcomes_preserved": true
+    }
   }
 }
