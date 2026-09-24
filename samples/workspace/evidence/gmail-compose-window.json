@@ -1,0 +1,70 @@
+{
+  "date": "2026-09-24",
+  "scope": "Gmail compose window, expandable recipients, More options and draft print view",
+  "status": "local_browser_native_pass_print_dialog_pending",
+  "reference": {
+    "url": "https://mail.google.com/",
+    "documentation": "https://support.google.com/mail/answer/8260?hl=en",
+    "inspection": "Chrome CUA: opened and closed an empty compose without typing, sending, or changing pre-existing mail. Inspected window controls and More options.",
+    "observed": [
+      "Minimize",
+      "Full screen",
+      "Save and close",
+      "Cc/Bcc expansion",
+      "Default to full screen",
+      "Plain text mode",
+      "Print",
+      "Spell check",
+      "Label"
+    ]
+  },
+  "checks": {
+    "gmail_regressions": {
+      "passed": 145
+    },
+    "generated_javascript_syntax": "pass",
+    "ruff": "pass",
+    "desktop_and_390px": [
+      "Minimize and restore retain draft content; title tracks edits and replies.",
+      "Default fullscreen persists through save, reload and reopen.",
+      "Cc/Bcc expansion, visible recipient labels and populated fields survive reopen.",
+      "More menu stays within viewport; arrows, End and Escape work; outside click dismisses it.",
+      "Plain-text checkbox and disabled formatting state survive reload.",
+      "Rich send preserves HTML, CID image identity, image bytes and binary attachment bytes.",
+      "Plain draft remains text/plain with exact To/Cc/Bcc and Unicode body.",
+      "Protected message and account settings remain exactly unchanged."
+    ],
+    "mobile_menu_rect": {
+      "x": 8,
+      "y": 606,
+      "width": 230,
+      "height": 131.5,
+      "viewport_width": 390,
+      "viewport_height": 844,
+      "body_width": 390
+    },
+    "focus_followup": {
+      "result": "pass",
+      "active_element_after_action": "composeMoreOptions",
+      "menu_hidden": true
+    },
+    "print_view": "AX inspection contains only draft subject, From/To/Cc/Bcc, body, inline image and attachment names; no inbox content."
+  },
+  "artifacts": [
+    {
+      "kind": "local_native_before_after",
+      "sha256": "ae6edddbf914c11d280197f35ed29ff90a2a387b242377873a009ac2b22bb2b3"
+    },
+    {
+      "kind": "focus_followup_native_capture",
+      "sha256": "deaca94c76644ef58136ce0927f931fda35776bfb5c7335400c4209931d15be7"
+    }
+  ],
+  "limits": [
+    "The native Chrome print dialog and afterprint cleanup remain unverified because the Mac was locked; no print job was submitted.",
+    "CI, deployment and hosted validation of this follow-up remain pending.",
+    "Spell check, compose labels, pop-out windows, scheduling, image/Drive pickers, confidential mode and AI compose flows remain open.",
+    "This is not full Gmail visual or feature parity."
+  ],
+  "screenshots_retained": false
+}
