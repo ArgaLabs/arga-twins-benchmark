@@ -28,5 +28,5 @@
       "conclusion": "success"
     }
   },
-  "hosted_validation": "WKS-01 fresh candidate passed; WKS-04 rerun in progress"
+  "hosted_validation": "Fresh WKS-01 and WKS-04 candidates passed; teardown confirmed"
 }

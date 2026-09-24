@@ -86,8 +86,13 @@
     {
       "id": "rollout.WKS-04",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-04-github-read-fix-candidate-2026-09-24.json",
+          "sha256": "36526b9f2e5531323074ca7e696b4dedecb79042d68716c3e254afdbea70475a"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-05",
@@ -117,5 +122,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "fcfce8c9b5f15f9c829b82b1c5403fe9f28293b1351317614409c040dffe66fc"
+  "sample_tree_sha256": "af40ea875b9a06bef16b738e9111c787737a02ef45648f5470ca36cb4e4a1c42"
 }

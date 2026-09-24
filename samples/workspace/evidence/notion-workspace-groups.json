@@ -13,13 +13,13 @@
     "Scenario users are deterministic from seed/email, available in the native user list and group picker, and cleared exactly between scenarios; guests excluded from groups"
   ],
   "tests": {
-    "all_notion_passed": 171,
-    "focused_group_tests": 9,
+    "all_notion_passed": 172,
+    "focused_group_tests": 10,
     "counts_overlap": true,
     "ruff": "pass",
-    "log_sha256": "f78b8ca274037107785ed3c6c1a291721c223cdaf3715ce0d74dc04c21eb0904",
+    "log_sha256": "9c19e1e82fbe3dffdedb2ef887046062513265c7de3fecafd61008ecea10d361",
     "backend_schema_integration_passed": 1,
-    "combined_passed": 172,
+    "combined_passed": 173,
     "scenario_people_cases": 4
   },
   "browser": {
@@ -51,8 +51,9 @@
     "checks": [
       "Case-insensitive Bearer schemes",
       "Hide navigation when token lacks effective group-read capability",
-      "Keep Settings in empty ordinary member views"
+      "Keep Settings in empty ordinary member views",
+      "Group-read-only integrations see memberships without unusable write controls"
     ],
-    "regressions": 3
+    "regressions": 4
   }
 }
