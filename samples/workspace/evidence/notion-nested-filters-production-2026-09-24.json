@@ -1,0 +1,103 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_api_conformance",
+  "scored_candidate": false,
+  "environment": "production",
+  "pr": "https://github.com/ArgaLabs/validation-server/pull/1138",
+  "source_revision": "98d5960d705a536e57c32c0fc7496cefae004c98",
+  "deployment": {
+    "twins": {
+      "run": 35979509273,
+      "conclusion": "success"
+    },
+    "runtime": {
+      "run": 35979509245,
+      "conclusion": "success"
+    }
+  },
+  "outcome": "pass",
+  "checks": [
+    "Create saved view and native Count >= 2 AND (Name Gamma OR Name Beta) in desktop Chrome; exact two rows returned",
+    "At 390px remove Beta condition, save and reload; only Gamma remains",
+    "Native saved view contains the exact nested filter",
+    "All seeded pages, properties, schemas, blocks, comments, permissions and other protected state unchanged",
+    "Both Twin Runs torn down"
+  ],
+  "browser": {
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "mobile_width": 390,
+    "mobile_document_scroll_width": 390,
+    "screenshots_retained": false
+  },
+  "expected_filter": {
+    "and": [
+      {
+        "property": "Count",
+        "number": {
+          "greater_than_or_equal_to": 2
+        }
+      },
+      {
+        "or": [
+          {
+            "property": "Name",
+            "title": {
+              "equals": "Gamma"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "changed_state_collections": [
+    "counters",
+    "events",
+    "request_counter",
+    "views"
+  ],
+  "served_code": {
+    "matched": {
+      "twins/notion/database_filters_ui.py:SCRIPT": "58be23d6042bf69babe8c13b05ef2bb4cc11b9762c037078819261e3d40b0e53"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "operator_directory": "lab-notion-nested-filters-hosted-2026-09-24-r2",
+  "artifacts_sha256": {
+    "scenario.json": "a10d7e8f012ea0342ce44805cf3ec71758ca4d284da567d0bf71b2361e506df9",
+    "baseline-state.json": "5f6ae6b293c4ab7ad7ffb32752fc224826228bc8b92e92cfc5a59014663ad318",
+    "final-state.json": "34fd9ec88a542fdac2b7757b1d3bb40ea31f7fdb6129014236f6752b8fe9cf26",
+    "native-before.json": "886ad1d0fe8c96644b2746c7030d66f288b5ba0b9157dc531b2d4188f08e82be",
+    "native-after.json": "6c813656fd5968519eb48dab32b87c6bb529825e04dd4c9a68827de90e801e0e",
+    "operator-api-trace.json": "efcc5f26ad1b0f4d7eeb08c963d2b0fc5d0051ad18f9ec591aca551707596df3",
+    "browser-trace.json": "553d2b07b70ece50284ab27e61779f42b002cb808aaf116751a6a36408232525",
+    "cleanup.json": "be2f4865f18ef392e7fed57305183d611397c8717f09feffa816ff1bd67fc530"
+  },
+  "initial_attempt": {
+    "operator_directory": "lab-notion-nested-filters-hosted-2026-09-24-r1",
+    "outcome": "harness_failure_before_browser",
+    "cause": "AST literal evaluation did not handle composed SCRIPT assignment; helper now imports local module for reference fingerprint",
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifacts_sha256": {
+      "browser-trace.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+      "cleanup.json": "0c7b323d80648b6e87aed0681c8ec21cda29b54ac45d37e7242a4d1b2a28abbf",
+      "native-before.json": "886ad1d0fe8c96644b2746c7030d66f288b5ba0b9157dc531b2d4188f08e82be",
+      "scenario.json": "a10d7e8f012ea0342ce44805cf3ec71758ca4d284da567d0bf71b2361e506df9",
+      "baseline-state.json": "5f6ae6b293c4ab7ad7ffb32752fc224826228bc8b92e92cfc5a59014663ad318",
+      "operator-api-trace.json": "613b246aa282df7fd56b0797aa48e9b6fb5afed2f554d8bc5641764bf3bbd8e0",
+      "control.json": "ebcf287af6032f512f4fcc9b4b2fdbcaf3c1fd639d3a9af1bf68cb0b111e4321"
+    }
+  },
+  "limits": [
+    "Does not establish full Notion feature/visual/mobile parity"
+  ]
+}

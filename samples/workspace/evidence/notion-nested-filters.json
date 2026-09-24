@@ -86,5 +86,8 @@
     "notion_suite_passed": 158,
     "new_native_and_browser_model_cases": 5,
     "counts_overlap": true
-  }
+  },
+  "ci": "passed",
+  "deployment": "both production workflows passed",
+  "hosted_validation": "passed; see notion-nested-filters-production-2026-09-24.json"
 }

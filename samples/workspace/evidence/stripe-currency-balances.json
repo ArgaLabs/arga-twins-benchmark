@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-24",
+  "scope": "Stripe currency balances, dashboard selection and minor-unit formatting",
+  "references": [
+    "https://docs.stripe.com/currencies",
+    "https://docs.stripe.com/api/balance/object"
+  ],
+  "changes": [
+    "Balance transactions update their own currency bucket, including refunds and payouts",
+    "Dashboard revenue and current MRR aggregates are scoped to an explicit selectable currency; partial captures use captured gross",
+    "Shared catalog/dashboard formatter covers zero-decimal API currencies and the two-decimal ISK/UGX exceptions",
+    "Mobile transaction tables scroll horizontally instead of wrapping identifiers one character per line"
+  ],
+  "tests": {
+    "passed": 78,
+    "command": ".venv/bin/python -m pytest -q twins/tests/test_stripe*.py twins/stripe/tests",
+    "log_sha256": "81621d8ecda3da390aa04297653868b28887bfd79df21131e1bdb50e4806a858",
+    "ruff": "pass"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "USD to EUR shows 45 EUR revenue and 20 EUR monthly recurring total",
+      "Mobile ISK selection and reload retain 5 ISK revenue",
+      "Balances show five currencies independently",
+      "Ledger scrollLeft reaches 362 in 358px container with 720px table; page remains 390px"
+    ],
+    "protected_native_state": "unchanged",
+    "snapshot_sha256": "69a1f321d800d24f0061fcd0192e43a5914b0e33049bfee1f33270ed983d39b6",
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "No settlement FX conversion or fees; balances retain transaction currency",
+    "Complete Stripe analytics including metric definition settings, discounts, tax, usage-based metrics and historical charts remain open",
+    "Full provider settings/admin/billing/AI/collaboration and exhaustive visual/mobile parity remain open"
+  ],
+  "ci_schema_followup": {
+    "baseline": "12 failures across PaymentIntent.payment_record, Product.tax_details, Checkout.Session.allowed_payment_method_types; reproduced on unchanged Stripe baseline",
+    "resolution": "Add documented required nullable fields; preserve explicit Checkout payment method types",
+    "official_spec_sha256": "43612f34a6b279e2025d49028eb1b614caa12372623466a8ab8978e2193eb29d",
+    "checked_endpoints": 55,
+    "passed": 55,
+    "failed": 0,
+    "unexercised_endpoints": 504,
+    "baseline_log_sha256": "3bffe58997f2eea263a1fabb875ebff15f32914943da2e56b01bf27b7df27752",
+    "fixed_log_sha256": "10669f1e547af2d4941740062719451bc7e0b9ee8783c01a47efe5976a466d1b"
+  }
+}
