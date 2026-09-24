@@ -15,8 +15,9 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 211,
-      "image_files": 0
+      "files_scanned": 224,
+      "image_files": 0,
+      "scanned_at": "2026-09-24"
     },
     "final_zip_created": false,
     "release_gate_regressions": {
@@ -49,6 +50,12 @@
       "passed": 159,
       "scope": "Runner, candidate and workspace outcome tests after obsolete-kit removal and padded-date normalization",
       "log_sha256": "028aca98767059fb584ecbe04e0de3bea09b47a6f7ed6dcd22b6444733013cdf"
+    },
+    "reviewed_contract_followup": {
+      "passed": 185,
+      "pyright": "pass",
+      "ruff": "pass",
+      "log_sha256": "2c7f180f35ed967e0861b3034f93ba91b9560d7645c9b7acc55a3e0b2bca16ff"
     }
   },
   "limits": "Full eight-twin frontend parity and deployment of subsequent changes remain separate gates. One complete hosted mixed browser/API candidate now passes."

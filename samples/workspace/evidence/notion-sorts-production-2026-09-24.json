@@ -1,0 +1,106 @@
+{
+  "date": "2026-09-24",
+  "status": "passed",
+  "kind": "manual_hosted_cua_and_api_conformance",
+  "scored_candidate": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1134",
+  "production_deployments": [
+    {
+      "conclusion": "success",
+      "databaseId": 35972676729,
+      "headSha": "4b5739a30a4d93afa8abf79f2406da62338464da",
+      "status": "completed",
+      "url": "https://github.com/ArgaLabs/validation-server/actions/runs/35972676729",
+      "workflowName": "Deploy Twins"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 35972676758,
+      "headSha": "4b5739a30a4d93afa8abf79f2406da62338464da",
+      "status": "completed",
+      "url": "https://github.com/ArgaLabs/validation-server/actions/runs/35972676758",
+      "workflowName": "Deploy Runtime"
+    }
+  ],
+  "native_sort_checks": {
+    "count-status": [
+      "Beta",
+      "Gamma",
+      "Alpha"
+    ],
+    "status-count": [
+      "Gamma",
+      "Alpha",
+      "Beta"
+    ]
+  },
+  "malformed_sort_payloads_rejected": [
+    null,
+    false,
+    0,
+    "",
+    {}
+  ],
+  "browser": {
+    "surface": "Google Chrome via CUA",
+    "viewports": [
+      "default desktop",
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "checks": [
+      "Created persistent view",
+      "Status ascending then Count descending yields Gamma Alpha Beta",
+      "Moving Count first yields Beta Gamma Alpha",
+      "Mobile removal keeps editor open; replacement Name descending moved first yields Gamma Beta Alpha",
+      "Reload preserves sort rules and order"
+    ],
+    "screenshots_retained": false
+  },
+  "native_final_sorts": [
+    {
+      "direction": "descending",
+      "property": "Name"
+    },
+    {
+      "direction": "ascending",
+      "property": "Status"
+    }
+  ],
+  "protected_state": "Every native page/database/source and every trusted snapshot field except views/events/counters/request_counter is unchanged",
+  "expected_view_mutation_events": 4,
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/notion/database_sorts_ui.py:SCRIPT": "9abb42efe0220acb2f8ab8a3b678559c2033ae29220770851f2a1f442e651d18"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "prior_attempt": {
+    "kind": "harness_error",
+    "reason": "Fingerprint request inspected the 303 redirect without following it; native sort checks passed, browser actions did not run",
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "preserved_directory": "lab-notion-sorts-hosted-2026-09-24-r1"
+  },
+  "artifact_sha256": {
+    "scenario.json": "cc28b7ee0115c1eff319f5fed365a1721135509190efeccb45e228c331ec193f",
+    "native-before.json": "886ad1d0fe8c96644b2746c7030d66f288b5ba0b9157dc531b2d4188f08e82be",
+    "native-after.json": "bb0b801499a2b0855ea44d5b5d00a3161cb6344eda5477dda3b2a20e0c167b06",
+    "baseline-state.json": "5f6ae6b293c4ab7ad7ffb32752fc224826228bc8b92e92cfc5a59014663ad318",
+    "final-state.json": "41926016f2b0a4baf5d7be31309a802c4706c2b4f5244b96ed8f2fa63727c895",
+    "browser-trace.json": "510b80fe3367c467337fc51b1904389d9831d8d4029fc2cd4f56d588ad7a064e",
+    "operator-api-trace.json": "669adfae21289ca9fa35be33a34c18631db8df34173e17903e4fc6152abec514"
+  },
+  "limits": [
+    "Bounded sort feature validation, not full Notion or eight-twin parity",
+    "Viewport check is not a physical-touch test"
+  ]
+}

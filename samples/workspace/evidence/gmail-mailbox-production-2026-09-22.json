@@ -50,5 +50,15 @@
     "An empty seed label list currently defaults to INBOX; archive/search was verified using explicitly archived conversations. Exact empty-label import/seeding semantics remain open.",
     "Rich composing, select-all-matching, filter delivery, complete settings/admin/AI and collaboration parity remain open.",
     "No screenshot files retained."
-  ]
+  ],
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
 }

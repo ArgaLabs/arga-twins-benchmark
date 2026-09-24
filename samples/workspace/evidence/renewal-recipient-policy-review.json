@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-24",
+  "kind": "task_contract_clarification",
+  "task": "WKS-03",
+  "detail": "Visible seeded communication policy explicitly identifies purchasing as the only recipient and says Samira reviews the unsent message within the workspace. This exposes the already enforced recipient restriction without prescribing an API or draft tool.",
+  "original_trial": "samples/workspace/evidence/wks-03-reviewed-contract-candidate-2026-09-24.json",
+  "local_conformance": {
+    "kind": "native_provider_api",
+    "scored_candidate": false,
+    "outcome": "all assertions pass",
+    "source_twin_revision": "a2134ac3",
+    "fixture_sha256": "414bf28a04a54c8001f34f4eab9e4765b7010ed92c8b48d590bc06259e3fc39f",
+    "historical_fixture_sha256": "f88b28a5d74f10b05ceb4415a697d1be6887fdc6c91e9f685929dd906d2c911f"
+  },
+  "hosted_candidate": "pending fresh revised-contract trial"
+}

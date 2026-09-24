@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-02",
+  "kind": "hosted_candidate_episode",
+  "environment": "production",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 11,
+  "official_docs_calls": 3,
+  "model_tool_calls": 15,
+  "assertion_count": 10,
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "sample_revision": "3c8d1bc533116c49113d5dd15dd58eba8e458f4b",
+  "scenario_content_tag": "content-sha256:dbfb9685c3d159e808fb9f607aab84a29d035c529f2f15575679f3278a54e807",
+  "scenario_file_sha256": "0e66b435b7a78bfeea61f1f7badcac943da7e842fe2ddf55e64841f0d0adda5f",
+  "operator_evidence_directory": "lab-wks02-contract-browser-2026-09-24-r1",
+  "candidate_evidence_directory": "lab-wks02-contract-browser-2026-09-24-r1-candidate",
+  "artifacts_sha256": {
+    "candidate.json": "5df5708b37cbfa97efacaf4bbda3c1372988d77af719df0967422cdf61ac6c50",
+    "baseline-state.json": "3a94aaf73a574d06e5d1c882684892b46ea637dba5a8f91b79f4dd77fbf3894e",
+    "final-state.json": "c9af74ab1ba7dd9ff46c50f8faeb652fd73588a71181f4449c620108d0865864",
+    "invocation.json": "6b973fd8fc7ba2c9773b414a94359191284b6001dd55d1eb5496ef2ba3c82e72",
+    "provider-trace.json": "a8db59546af875dad63a53ab481df021e32207a84765fa4fc9a1dfcde2496082",
+    "official-docs-trace.json": "06bcb2c4904e49575a4aadd8777b95341d1c58797da8b5bfe987c29a01ae8e4f",
+    "browser-trace.json": "3d446402edf582843daf7fb22f697c0a4b6fdd258a014fd9388265fec77006f4",
+    "verifier.json": "dac8b3de011fd204878cad47ed29d8fe4f7d2c0c2e736d98297ab17b66db0eda",
+    "cleanup.json": "66bdc05fb5e96f0bac08eb591dfd08f0495629bea60a89adda6f125c2e190462"
+  },
+  "candidate_artifacts_sha256": {
+    "model-invocation.json": "f7e2176c7f914f2ff21b77e4730dcdca9a119b65955e0e1b035b7b465cdf8708",
+    "adapter.json": "e0002e5495c3305297c395f2ba4792d284bcb4e99b52e8bb4e104a325b908424"
+  },
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "limits": [
+    "Single functional trial, not a model comparison",
+    "API-only trajectory does not establish browser-agent coverage"
+  ],
+  "both_seeded_attendees_unchanged": true
+}

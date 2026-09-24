@@ -365,7 +365,10 @@ def _label_equal(actual: Any, expected: Any) -> bool:
         "pending mitigation": r"mitigation (?:is )?" + pending_approval,
         "open pending approval": r"open (?:mitigation (?:is )?)?" + pending_approval,
         "awaiting mitigation approval": (
-            r"(?:(?:mitigation (?:is )?)?" + pending_approval + r"|approval (?:is |remains )?(?:still )?pending)"
+            r"(?:(?:mitigation (?:is )?)?"
+            + pending_approval
+            + r"|approval (?:is |remains )?(?:still )?pending"
+            + r"|mitigation (?:is |has been )?(?:(?:drafted|proposed) (?:but )?)?not (?:yet )?approved)"
         ),
     }
     pattern = phrases.get(_normal(expected))

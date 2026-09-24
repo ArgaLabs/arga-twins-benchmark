@@ -6,7 +6,6 @@
   "tested_head": "cd7766b782dbb57404f46f43fb27e78b08c998e4",
   "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35802548861",
   "deployment_status": "success",
-  "exact_head_checks_passed": 30,
   "browser": "Google Chrome via CUA",
   "viewports": [
     "default desktop",
@@ -48,5 +47,33 @@
     "Per-container image digest is not exposed; exact hosted script fingerprints and deployment provenance are recorded.",
     "Image upload/Drive picker, table resize/merge/properties, document tabs, history/suggesting, full menus, admin, AI and complete collaboration remain open.",
     "No screenshot files retained."
-  ]
+  ],
+  "ci_check_summary": {
+    "verified_at": "2026-09-24",
+    "revision": "cd7766b782dbb57404f46f43fb27e78b08c998e4",
+    "check_runs_total": 29,
+    "check_run_conclusions": {
+      "success": 21,
+      "skipped": 8
+    },
+    "legacy_statuses": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "url": "https://vercel.com/argalabs/validation-server/GGz9WHZpjwadMX3FWCr5LmM73rjn"
+      }
+    ],
+    "scope": "GitHub CI and deployment statuses, separate from the feature assertions in checks. Skipped jobs are not passed feature checks.",
+    "previous_ambiguous_count": 30
+  },
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
 }

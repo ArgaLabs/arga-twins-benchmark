@@ -59,8 +59,13 @@
     {
       "id": "rollout.WKS-02",
       "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-02-reviewed-contract-candidate-2026-09-24.json",
+          "sha256": "6d5628f6bc733d96e4554d6e14625e7b1e218cbea6200048dac73f2fd514f504"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-03",
@@ -102,5 +107,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "2fc468ba2311324fff0060f8c9b2543d1ac3ae5b0a8b1a55f36730d0b3287b66"
+  "sample_tree_sha256": "3cd2caabf5d9cddf62ce7ac353376c60779a3ee743ffa417dd64b1ab5c7a0f74"
 }

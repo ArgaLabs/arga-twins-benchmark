@@ -500,3 +500,32 @@ def test_task_companion_files_do_not_drift(task_id: str) -> None:
     scenario = json.loads((folder / "scenario.json").read_text())
     assert scenario["description"] == task["prompt"]
     assert scenario["seed_config"] == task["seed_config"]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Mitigation is drafted but NOT yet approved by the incident commander. Impact continues.",
+        "Mitigation is not yet approved. The incident remains open.",
+        "Mitigation proposed but not approved; commander review is outstanding.",
+    ],
+)
+def test_unapproved_mitigation_is_an_outstanding_approval(text: str) -> None:
+    from arga_twins_benchmark.computer_use.workspace import _satisfies
+
+    assert _satisfies({"text": text}, {"status_any": ["awaiting_mitigation_approval"]})
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Mitigation is approved. The historical draft was not yet approved last week.",
+        "No mitigation is not yet approved.",
+        "Mitigation is not yet approved is no longer the current status.",
+        "Mitigation is drafted but not yet approved is not required.",
+    ],
+)
+def test_unapproved_mitigation_does_not_override_contradiction(text: str) -> None:
+    from arga_twins_benchmark.computer_use.workspace import _satisfies
+
+    assert not _satisfies({"text": text}, {"status_any": ["awaiting_mitigation_approval"]})

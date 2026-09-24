@@ -28,7 +28,7 @@
     "after_log": "samples/workspace/evidence/regression-log-summaries.json#lab-sheets-scenario-layout-tests.txt"
   },
   "limitations": [
-    "Local API/runner and Chrome verification only; CI, deployment and hosted Scenario replay remain pending.",
+    "Historical local evidence; subsequent deployment and hosted Scenario replay are recorded in sheets-scenario-production-2026-09-22.json.",
     "Native property seeding does not establish frontend feature parity.",
     "No screenshot files retained."
   ],
@@ -66,5 +66,16 @@
       0
     ],
     "passed": 5
-  }
+  },
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1096",
+  "source_revision": "29c90bfe0d7b75452128170780afa123fc79f791",
+  "implementation_pr_head": "172774989d825c406d01dfd1cdf9ca2ae920618f",
+  "operator_evidence_directory": "runs/local/sheets-scenario-layout-2026-09-22",
+  "operator_artifacts_sha256": {
+    "native-readback.json": "305f4f3a95c29c7673cbd4c5874443c0b00d5ee81db0a2ec88bd6064960eca86",
+    "before.txt": "70b194d92ed0e922a26763873a49daad6f7a2ec9015e0dd6f3757e522ca7a8dc",
+    "tests.txt": "f554e3266a62156f7b6fb1eed98a54ad6e3d384aad812937e713501ca0ca1db6",
+    "fixture.json": "b316aaad07c29cb9d9007a686f30f9f2b27cd7279ebda0f9c934cf6d509640c5"
+  },
+  "source_provenance_limit": "The implementation PR head and merge revision are known, but the exact working-tree hash for the original 196-test invocation was not captured. It is not attested as a test of the final PR head; the later 5-case review followup is separate."
 }

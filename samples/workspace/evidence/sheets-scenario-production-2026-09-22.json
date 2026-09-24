@@ -8,7 +8,8 @@
     "revision": "29c90bfe0d7b75452128170780afa123fc79f791",
     "twins_run": 35818784973,
     "runtime_run": 35818784972,
-    "conclusion": "success"
+    "conclusion": "success",
+    "run": "https://github.com/ArgaLabs/validation-server/actions/runs/35818784973"
   },
   "scenario_seed_only": true,
   "operator_fixture_augmentation": false,
@@ -103,5 +104,11 @@
     "Native frozen-row metadata is verified; visible frozen panes require PR #1098 deployment.",
     "390px desktop Chrome emulation does not establish exhaustive device or pixel parity.",
     "No screenshot files retained."
-  ]
+  ],
+  "source": {
+    "revision": "29c90bfe0d7b75452128170780afa123fc79f791",
+    "module": "twins/google_sheets/scenario_runner.py",
+    "served_script_sha256": null,
+    "attestation": "Deployment revision and native Scenario/reset behavior were recorded. No served module fingerprint was captured for this historical run; a local source hash would not establish served-code identity."
+  }
 }

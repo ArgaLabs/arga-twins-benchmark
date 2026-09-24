@@ -143,7 +143,7 @@
         },
         {
           "title": "Customer communication policy",
-          "content": "Customer commercial confirmations require Samira\u2019s review before sending. Prepare the complete customer-facing message, addressed to the correct purchasing contact, and leave it unsent until reviewed."
+          "content": "Customer commercial confirmations require Samira\u2019s review before sending. Prepare the complete customer-facing message, addressed to the correct purchasing contact, and leave it unsent until reviewed. Only purchasing@northstar.example belongs in the confirmation recipient fields; Samira reviews the unsent message within this workspace and must not be added as a recipient."
         }
       ]
     }

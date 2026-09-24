@@ -77,5 +77,15 @@
     "Linear relative-image retention was checked; the fixture has no diagram.png asset, so image loading was not claimed.",
     "No pixel-by-pixel reference comparison or complete mobile feature inventory was performed.",
     "The Arga CLI does not expose the running container digest; source fingerprints and behavior corroborate the deployment without per-container attestation."
-  ]
+  ],
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
 }
