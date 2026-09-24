@@ -6643,7 +6643,7 @@
         },
         {
           "path": "twins/google_sheets/validation_ui.py",
-          "sha256": "fb4ea5c6449b9599cb70868d8b8534377c71ede362236f01af10c75000a579c5",
+          "sha256": "48bb8db6b9daf32993ca382ce6656102a1c1e4016d51c4e1d92990366f268a62",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {

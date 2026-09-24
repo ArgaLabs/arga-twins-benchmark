@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-24",
+  "kind": "read_only_provider_reference_entry_check",
+  "browser": "Chrome",
+  "providers": {
+    "notion": {
+      "status": "authentication_required",
+      "observed": "Login form with email, Google, ChatGPT, Apple, Microsoft, passkey and SSO controls.",
+      "workspace_permissions_and_ai": "not inspected; intended test workspace and sign-in requested"
+    },
+    "linear": {
+      "status": "authentication_required",
+      "observed": "Login with Google, email, SAML SSO and passkey controls.",
+      "workspace_permissions_and_ai": "not inspected; intended test workspace and sign-in requested"
+    },
+    "stripe": {
+      "status": "authenticated_entry_controls_inspected",
+      "reporting_navigation": [
+        "Reports",
+        "Custom metrics",
+        "Sigma (activation entry)",
+        "Revenue Recognition",
+        "Data management"
+      ],
+      "assistant_entry": "Help opens a panel titled Assistant with an empty text composer, attachment control, disabled send control and AI disclaimer.",
+      "assistant_request_submitted": false,
+      "account_data_mutated": false,
+      "account_admin_and_permissions": "not audited"
+    }
+  },
+  "privacy": "Account identifiers, live balances, revenue and other financial record values are excluded from this report.",
+  "limits": [
+    "Entry controls only; no complete provider parity, AI-response, permission, admin, visual or mobile certification.",
+    "Notion and Linear login tabs remain available for the user; the Stripe reference tab was closed.",
+    "Native Print remains blocked by the locked Mac; direct container attestation requires GCP reauthentication."
+  ],
+  "screenshots_retained": false
+}

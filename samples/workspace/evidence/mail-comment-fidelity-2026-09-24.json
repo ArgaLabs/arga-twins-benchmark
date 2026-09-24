@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-24",
+  "status": "pr_open_ci_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1150",
+  "revision": "60aff4b69992824ba15d0f139f61d348e951923c",
+  "observed_gaps": [
+    "Gmail accepted malformed outbound raw MIME and created an extra sent artifact in WKS-04.",
+    "GitHub comment GET/PATCH by ID returned fallback 404 and allocated an empty internal collection in WKS-05."
+  ],
+  "changes": [
+    "Validate outbound MIME and recipients before message allocation or draft deletion.",
+    "Implement native GitHub issue/PR comment GET/PATCH/DELETE/repository listing, parent state, pagination and edited/deleted webhooks.",
+    "Apply OAuth scope checks and installation repository/issue-or-PR permission checks."
+  ],
+  "focused_tests_passed": 45,
+  "make_fix": "pass",
+  "changed_file_pyright": "pass",
+  "logs_sha256": {
+    "lab-final-mail-comment-focused-tests.log": "f17620e98460f6cf360238e7fd44257781bae7f60bae102a9bb32800e92d7137",
+    "lab-final-mail-comment-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-mail-comment-focused-tests-v2.log": "cfe02486c506bbbb12347e94a89fadd5f4d23bb46d026f4125eb44ab09941487",
+    "lab-final-mail-comment-pyright-v2.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-mail-comment-provider-tests-final.log": "bc8c3de320f9e8379c44b33d85fe725342d047f23e937521cf8eea57100c7ccd"
+  },
+  "limits": [
+    "Wider regressions, CI, review, deployment and affected hosted revalidation remain pending.",
+    "No exhaustive frontend or permission parity claim."
+  ],
+  "wider_provider_tests": {
+    "revision": "4056fd71f942d6465dd41990468af915cb8fe3ab",
+    "passed": 650,
+    "skipped": 3
+  },
+  "ci_followup": {
+    "original_failure": "gws 0.22.5 attachment helper emits an ordinary final MIME boundary without closing --; strict rejection of all parser defects broke this supported helper.",
+    "fix": "Tolerate CloseBoundaryNotFoundDefect only, preserving valid parsed parts and exact attachment bytes. Other malformed messages remain rejected.",
+    "reproduction": "The exact Google Workspace CLI binary contract and focused tests pass locally."
+  }
+}

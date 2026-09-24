@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 256,
+      "files_scanned": 265,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -73,7 +73,7 @@
       "log_sha256": "4f3bf190f05e0dff6f30c1571de0a8b39ef9a6e54fc34bb2f8af4d151e11cf3b"
     }
   },
-  "limits": "Earlier passing candidate runs are preserved; fresh WKS-03 revalidation failed and its gate is pending. Full eight-twin frontend parity, hosted native Print, deployed-container attestation and final package release remain open.",
+  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 is pending a Gmail provider fix. Full eight-twin frontend parity, hosted native Print, deployed-container attestation and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 18,

@@ -67,7 +67,7 @@
     },
     {
       "id": "rollout.WKS-02",
-      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "description": "Final Sheets #1149 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
       "status": "verified",
       "evidence": [
         {
@@ -77,12 +77,16 @@
         {
           "path": "samples/workspace/evidence/wks-02-revalidation-2026-09-24.json",
           "sha256": "5b62f753c1bfd45709f3ea6b4e0442a52002b39cf5d6dbfda07d6a8c46ab30ff"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-02-final-deployment-2026-09-24.json",
+          "sha256": "f47fe93d9c2438edf017fe071a313915c7556ef30a980c9e0befa64095fe5aa0"
         }
       ]
     },
     {
       "id": "rollout.WKS-03",
-      "description": "Prior hosted pass retained; latest revalidation has a correctly scored candidate business failure and has not established a final-deployment passing rollout",
+      "description": "Final-deployment exact-Scenario retry completed with a business failure (superseded 20-seat terms, approved Gmail message never read); no unsafe side effects, teardown confirmed. Original infrastructure timeout preserved.",
       "status": "pending",
       "evidence": [
         {
@@ -92,13 +96,21 @@
         {
           "path": "samples/workspace/evidence/wks-03-revalidation-2026-09-24.json",
           "sha256": "4b6e449bbb65f6941d788a6bfc08ec5fcd54cea48d2abcfeb3d95cd07b9fd23c"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-final-deployment-2026-09-24.json",
+          "sha256": "a2a0d9305af93fd3aba8c27f7900dcb59fc836091ffe8755c7383a4f8ef00e3b"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-final-deployment-retry1-2026-09-24.json",
+          "sha256": "f06d890c7dfae2b531ac2b1f0915c4516a0cbe84ccaafaf406a600515989ee2c"
         }
       ]
     },
     {
       "id": "rollout.WKS-04",
-      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
-      "status": "verified",
+      "description": "Final-deployment trial unsafe: Gmail accepted malformed outbound raw MIME and created an extra sent artifact. Provider fix and revalidation pending.",
+      "status": "pending",
       "evidence": [
         {
           "path": "samples/workspace/evidence/wks-04-github-read-fix-candidate-2026-09-24.json",
@@ -107,12 +119,16 @@
         {
           "path": "samples/workspace/evidence/wks-04-revalidation-2026-09-24.json",
           "sha256": "dc837c3929941d0d2ec137006a098256460a43aafdc7975b323a5b0b0dadb63f"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-final-deployment-2026-09-24.json",
+          "sha256": "c6a6c764d2981aef9dca520e11c655f0fe94701d671282ea673e127861528c4b"
         }
       ]
     },
     {
       "id": "rollout.WKS-05",
-      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "description": "Same final-deployment capture passes corrected verifier; empty internal collection index is not a provider resource mutation. Original outcome preserved.",
       "status": "verified",
       "evidence": [
         {
@@ -126,6 +142,10 @@
         {
           "path": "samples/workspace/evidence/wks-05-revalidation-2026-09-24.json",
           "sha256": "7f2332bf55457892eed69b666b023054af45f31aa299ed7740b726bb54a7beeb"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-final-deployment-2026-09-24.json",
+          "sha256": "24c6f93b8432a204bf68e06d4f3507136659a894220f97777e9c9348e1e33bd8"
         }
       ]
     },
@@ -142,5 +162,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "4290884cd3b367bdd9983ee48af4ab63824f7d083276ca46d5cf1d31757c2c2f"
+  "sample_tree_sha256": "a48ffa1ab5d4400a2f6816b8cbdb0641f4d04526b2b6f00cd54ccd3a223db13a"
 }

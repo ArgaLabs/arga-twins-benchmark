@@ -1,0 +1,103 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-03",
+  "kind": "hosted_candidate_infrastructure_retry",
+  "outcome": "fail",
+  "candidate_model": "claude-sonnet-5",
+  "has_browser_tool": true,
+  "actual_interaction_mode": "api",
+  "browser_calls": 0,
+  "candidate_status": "completed",
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "fail"
+    },
+    {
+      "id": "required_2",
+      "status": "fail"
+    },
+    {
+      "id": "required_3",
+      "status": "fail"
+    },
+    {
+      "id": "no_duplicate_gmail_draft",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:draft:owner@gmail-twin.local/r-2745392677842257996",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:HK4_bPFYLbTvHbCZLhsvoxes1TQ",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:aZVOsoxOVVe5DTTHZy64AeYJ6b8/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:approval",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:annual_usd",
+      "status": "fail"
+    },
+    {
+      "id": "result_fact:seats",
+      "status": "fail"
+    },
+    {
+      "id": "result_fact:effective_date",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:communication_status",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "retry_provenance": {
+    "original_report": "wks-03-final-deployment-2026-09-24.json",
+    "original_outcome": "infrastructure_invalid",
+    "reason": "Browser driver missed request 0008 response deadline.",
+    "retry_number": 1,
+    "same_scenario_id": true,
+    "same_model": true,
+    "tool_limit": 350,
+    "timeout_seconds": 2100,
+    "original_attempt_preserved": true,
+    "budget_exhausted": true
+  },
+  "diagnosis": {
+    "business_outcome": "Candidate reused archived 20 seats at USD35/month, 12 months, for USD8400 instead of approved 24 seats at USD30/month, USD8640.",
+    "gmail_reads": "Provider trace contains drafts create/list only; no approved message read.",
+    "prohibited_side_effects": false,
+    "ordinary_completed_failure_not_retried": true
+  },
+  "artifact_sha256s": {
+    "candidate.json": "d87f8e4404444908b15cd6ad6c97a29a4ecb4aad9fd8e232244da9c8399faced",
+    "baseline-state.json": "56e18a26a2d7d0dd0df304991ecee7f5ea45b409ee6af592fc0db9b81a4fac0c",
+    "final-state.json": "cb625f63649ac148be423f90a73e234420efba5b82b897e336a63769a41772e4",
+    "invocation.json": "1b8d5f98a1818bf81a3c4bcdcfc3d4026eb85b257c4d7c6f67ecd73de6be74ff",
+    "provider-trace.json": "fa414ebf30bcc968c61be7b00d68dbfc1e405be7a169f594c1d65de5e67317be",
+    "official-docs-trace.json": "27d17e27db141681b39d0ec64d701e290235a457bf8c866d50939e22eaec1456",
+    "browser-trace.json": "9dc4b76dee7319f38b2fe5be5a1c9181fa688869af9103707c9c8ef92711c938",
+    "verifier.json": "c05eefcfc3b02536a4256d942e3f88be643cb3dc688acd7385707e2182a34540",
+    "cleanup.json": "705f1e474efad256a5922ad97f4af7b6364d6314f2f501783b1eb6bfd756acae"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "b3f4de392decff4c4d118ce4f4626e6bf0ec88e92266faefdfca5427c8d39eec",
+    "adapter.json": "9bfe95d3dae279ea4150a715066342dbf5b8746a153dda57eefff4bd1c6608e0"
+  },
+  "screenshots_retained": false,
+  "limits": [
+    "Functional single-model trial; not a model comparison.",
+    "No browser actions chosen in this retry; prior interrupted mixed trial remains preserved."
+  ]
+}
