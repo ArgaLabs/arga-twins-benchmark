@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-24",
+  "status": "local_browser_native_verified_ci_deployment_pending",
+  "screenshots_retained": false,
+  "features": [
+    "Drag visible column or row boundaries; guide displays the proposed measurement.",
+    "Interior column drags preserve total width by resizing adjacent columns; outer borders resize the table.",
+    "Native fixed widths and row minimum heights persist after reload and preserve merged spans.",
+    "Covered borders inside merged cells do not create phantom resize targets.",
+    "Pending edits are saved before tab-scoped native geometry writes with revision guards."
+  ],
+  "validation": {
+    "docs_workspace_regressions": 308,
+    "focused_resize_regressions": 9,
+    "ruff": "passed",
+    "browser": "Google Chrome via CUA",
+    "viewports": [
+      "1465x862",
+      "390x844"
+    ],
+    "flows": [
+      "Desktop interior column resize, row resize and reload",
+      "390px column resize immediately after editing D to D pending; native save and reload",
+      "Drag through a merged cell interior leaves dimensions unchanged",
+      "Resize visible right and bottom borders of a 2x2 merged cell; preserve content and span; reload",
+      "Review fix: title and cell edit immediately followed by a border drag, reload, matching native text/title and unchanged protected tabs; computed pre-gesture touch-action is pinch-zoom."
+    ],
+    "mobile_body_width": 390,
+    "protected_first_two_tabs": "exactly unchanged",
+    "business_api_errors": 0,
+    "capture_sha256": {
+      "lab-docs-resize-desktop-mobile-result.json": "4b93a116ec0df8781939b82a0f778d462f33c8a5da171ca0319c8c00c7538a7d",
+      "lab-docs-resize-browser-result.json": "52f8f2499433747f0e31e6a5b1708b3feed451b22493b38d934003c5dca64194",
+      "lab-docs-resize-tests.txt": "bbd32eeebf9fe54229dbc0bfe87b45af9cd7be5c6d938f777be1d3d566d7d7bc",
+      "lab-docs-resize-edges-tests.txt": "7ebc5b66ce6e02d40f3823426a9719bd85073a4a47bed0a49a19bc559a491bc4",
+      "lab-docs-resize-review-browser-result.json": "fef4939456d0b861329b6db4e22d4f4bf736ad14a251eb09281f3c26cc9591d2",
+      "lab-docs-resize-final-tests.txt": "0d5be1a537364830cefc8578cb32e1c19e30cba35188f5cedb6666c495c31bc8"
+    },
+    "focused_resize_and_save_queue_regressions": 18,
+    "additional_title_indicator_regressions": 2
+  },
+  "references": [
+    "https://support.google.com/docs/answer/1696711",
+    "https://developers.google.com/workspace/docs/api/how-tos/tables"
+  ],
+  "limits": [
+    "Desktop pointer tests at desktop and mobile viewport sizes; physical touch, Escape/pointer-cancel and exhaustive live-provider pixel comparison remain unverified.",
+    "CI, production deployment and hosted validation pending.",
+    "Table positioning/wrapping, pinning, complete menus and wider provider feature parity remain open.",
+    "Live provider column deltas match; default row geometry and exact row-unit conversion still differ."
+  ],
+  "provider_reference": "docs-table-resize-provider-reference.json",
+  "review_fixes": [
+    "Cancelled drags compare the actual body snapshot to its saved baseline instead of the shared title/body status label.",
+    "Editable tables negotiate touch-action: pinch-zoom before pointerdown. Physical-device testing remains pending.",
+    "A completed title save preserves the unsaved-body indicator."
+  ]
+}
