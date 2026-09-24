@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "8bf88766-eb70-4837-a876-7ef77fb41f0c",
+  "scenario_id": "e21d672b-e181-4d45-aadb-9579761dfb86",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "runtime_workflow": 35986499616,
+    "twins_workflow": 35986499613,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_docs/version_history_ui.py:HISTORY_SCRIPT": "865c16a942595a51455e1a7c57146b85f9c314705b69fea53740d9e844e351cb"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "viewports": [
+    "1465x862",
+    "390x844"
+  ],
+  "native_checks": [
+    "Restored document and new copy have exactly the earlier rich native tabs, including bold text and 2x2 table.",
+    "Named version persists; precisely one copy created.",
+    "Protected document, its native history and complete file metadata are exactly unchanged.",
+    "Source permissions, ownership, parents, sharing and trash state are unchanged; unrelated captured collections unchanged."
+  ],
+  "browser_checks": [
+    "Desktop rich preview, name version and restore confirmation.",
+    "390px named-only filtering, historical Evidence tab selection and in-page copy dialog.",
+    "Copied document opens and retains rich content after reload; mobile page width remains 390px."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "0e9be01515ab457d19df0ee18eeb8b9a9be63461d3dc45e5bf83b8e0ba9d9dda",
+    "native-after.json": "052a92bcbc1e5c1f6aa698d666330f42c28ce959199a0cc853dc8c6a6e7839fd",
+    "baseline-state.json": "9d59248c0793f407d9613f6353cd06f3232a09d8fa1563247f234eab852a9c28",
+    "final-state.json": "0059cedcbb6d38097e1aa22d4f3524e8f64817c29b7990b5587ca9654d39e198",
+    "browser-trace.json": "60f6a88a58748a0d4cf431497ba8285461223cd7a4fa0e808e21b018fc478b7a",
+    "operator-api-trace.json": "bfa2ef35b70fd86e832cae1a8cbae226374c65206f12fb4fcaa7c3c4fe47f0c4",
+    "cleanup.json": "04562ed3396526e77ccaf077e6b3c753bb0c00cd3581210b63941c7e17ea215f"
+  },
+  "limits": [
+    "This is a bounded manual hosted flow, not full provider parity or an additional scored candidate rollout.",
+    "Successful exact-commit deployment plus served block fingerprints are not per-container digest attestation.",
+    "No complete pixel comparison or physical-touch/mobile device audit."
+  ]
+}

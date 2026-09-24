@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "7d53de78-2030-43a9-bf17-606ae812729d",
+  "scenario_id": "a96782d4-cd34-4eb3-bfac-5bdde9c7c3ad",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "runtime_workflow": 35986499616,
+    "twins_workflow": 35986499613,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/linear/project_ui.py:STYLE": "54c3548488a4af18ce56b578ac587b974bdfae6830cce1c5b648678d16caef1f"
+    },
+    "scope": "Complete served style block; not container digest attestation."
+  },
+  "viewports": [
+    "1465x862",
+    "390x844"
+  ],
+  "native_checks": [
+    "Project summary, rich description, paused status and both memberships match the browser edits.",
+    "One document and one milestone were created; milestone order matches the UI.",
+    "The existing document, all issues/comments/users and every unrelated captured collection are unchanged.",
+    "The single at-risk update contains the final mobile edit."
+  ],
+  "browser_checks": [
+    "Desktop edit/save, document creation and milestone creation/reordering.",
+    "Post an at-risk update, edit it at 390px and reload.",
+    "Both widths visually inspected; mobile page width remains 390px."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "f42a79b7268d77cb331475580e4ea8354c3e537f6e49d7168fffb09d17cba27c",
+    "native-after.json": "d9f95b00d597072e86fd6704200e29a03f4513986782b75a8810a9a267ccf635",
+    "baseline-state.json": "8a18b780e03121a038faada721635aea7c0b30170f98a734d049de013e13fd4f",
+    "final-state.json": "48631dc1ad5e506e3d25dcf214299cd71551cac4d88dc72f72a3a2a7aac99ed5",
+    "browser-trace.json": "fbbe940d4a33e0131ab1723c6c902236964608805a57855c63068bfe3d5e4f94",
+    "operator-api-trace.json": "084970306f8a929f3baf04b723e5131a83772a2b3b59542e3b22cfee02a0a1c5",
+    "cleanup.json": "6ff86216dd77d26e017bdc09a573c09c81e9655e2aba78571915a3159f1acd5e"
+  },
+  "limits": [
+    "This is a bounded manual hosted flow, not full provider parity or an additional scored candidate rollout.",
+    "Successful exact-commit deployment plus served block fingerprints are not per-container digest attestation.",
+    "No complete pixel comparison or physical-touch/mobile device audit."
+  ]
+}

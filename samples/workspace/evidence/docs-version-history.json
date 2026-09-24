@@ -36,9 +36,17 @@
     "screenshots_retained": false,
     "initial_attempt": "Native confirm dialog stalled while Mac was locked; replaced with accessible in-page confirmation, rerun passed"
   },
-  "ci": "pending",
-  "deployment": "pending",
-  "hosted_validation": "pending",
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "docs-history-production-2026-09-24.json"
+  },
   "limits": [
     "Historical edits before rich snapshots were introduced cannot reconstruct lost rich content",
     "Detailed author-colored text differences, grouped version expansion, history deletion, and copy destination/sharing selectors remain open",

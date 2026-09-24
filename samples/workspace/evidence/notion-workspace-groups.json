@@ -39,9 +39,17 @@
     "snapshot_sha256": "a766ebd7bd731ba160f8f8c7c5210cae64a568dfe3aea1c92e78a83495d9965c",
     "screenshots_retained": false
   },
-  "ci": "pending",
-  "deployment": "pending",
-  "hosted_validation": "pending",
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "notion-groups-production-2026-09-24.json"
+  },
   "limits": [
     "Membership-admin workspace roles, configurable group-creation policy, teamspace creation/associations, group icons and SCIM sync warnings remain open",
     "Workspace billing/settings/AI/full collaboration parity remains open",

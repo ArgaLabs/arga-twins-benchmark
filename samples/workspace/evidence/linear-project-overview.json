@@ -45,9 +45,17 @@
     "snapshot_sha256": "389f5b8898ac969a2698a3a324bdb2d494bf744225296de08f44e7691d363752",
     "screenshots_retained": false
   },
-  "ci": "pending",
-  "deployment": "pending",
-  "hosted_validation": "pending",
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "linear-project-production-2026-09-24.json"
+  },
   "limits": [
     "External resource links, inline project comments, project graphs and configurable statuses remain incomplete",
     "This bounded check does not establish full Linear feature/visual/mobile parity"

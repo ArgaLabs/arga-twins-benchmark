@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 233,
+      "files_scanned": 238,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -66,5 +66,5 @@
       "command": "PYTHONPATH=src .venv/bin/python -m pytest -q"
     }
   },
-  "limits": "Full eight-twin frontend parity and deployment of subsequent changes remain separate gates. One complete hosted mixed browser/API candidate now passes."
+  "limits": "All five current hosted candidate rollout gates pass. Full eight-twin frontend parity, outstanding changes, deployed-image attestation and final package release remain separate open gates."
 }

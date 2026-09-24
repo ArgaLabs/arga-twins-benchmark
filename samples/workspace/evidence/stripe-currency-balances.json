@@ -33,9 +33,17 @@
     "snapshot_sha256": "69a1f321d800d24f0061fcd0192e43a5914b0e33049bfee1f33270ed983d39b6",
     "screenshots_retained": false
   },
-  "ci": "pending",
-  "deployment": "pending",
-  "hosted_validation": "pending",
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "stripe-currencies-production-2026-09-24.json"
+  },
   "limits": [
     "No settlement FX conversion or fees; balances retain transaction currency",
     "Complete Stripe analytics including metric definition settings, discounts, tax, usage-based metrics and historical charts remain open",
