@@ -1,0 +1,125 @@
+{
+  "date": "2026-09-24",
+  "status": "bounded_hosted_checks_passed",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "ced3df0f-035c-4a48-86d4-78623a47b1f2",
+  "scenario_id": "3adb3dd7-b5a5-4104-8d27-b6780bc26f29",
+  "source": {
+    "mailbox_cursor_pr": 1125,
+    "merge_commit": "95e755a1e5201b7d3ea09ffb3a0b47ac6e03af61",
+    "deploy_twins": 35959101229,
+    "deploy_runtime": 35959101228,
+    "deployments": "both succeeded before provisioning",
+    "code_fingerprints": {
+      "matched": {
+        "twins/gmail/compose_formatting_ui.py:SCRIPT": "1298d68b4c97abcad3826279fbd6af4e53ec455aa1beca17fd9512a42b79b197",
+        "twins/gmail/mailbox_ui.py:SCRIPT": "a8a66ec8469b13945b06c9f1eb74eac2e3eb1c673869355b6736263d7cbe9882",
+        "twins/google_docs/document_actions_ui.py:ACTION_SCRIPT": "068e6d5b199265e972820d0108dd036ce838f6e0dfdb919fd61a0361770d6187",
+        "twins/google_docs/ui.py:fixed-canvas": "35ce9fd25af71c6135cef4f8d0db67f14dfc986857f15ff85de23f4a0730b11f"
+      },
+      "scope": "Served frontend blocks, not per-container digest attestation."
+    },
+    "github_artifacts_merged_in_pr": 1115
+  },
+  "browser": {
+    "driver": "Chrome CUA via sample BrowserProxy",
+    "desktop": true,
+    "mobile": [
+      390,
+      844
+    ],
+    "gmail": {
+      "draft_sent_and_correct_sent_row_opened": true,
+      "no_message_not_found": true,
+      "mobile_reader_width": 390,
+      "attachments_preserved": true,
+      "protected_message_exactly_unchanged": true,
+      "forced_delayed_refresh": "covered by the earlier local 6-second delay regression, not repeated on hosted production"
+    },
+    "docs": {
+      "direct_empty_tab_insertion_desktop_and_mobile": true,
+      "tables": [
+        {
+          "rows": 1,
+          "columns": 2
+        },
+        {
+          "rows": 1,
+          "columns": 2
+        }
+      ],
+      "mobile_reload_cells": 2,
+      "mobile_body_width": 390,
+      "mobile_page_width": 816,
+      "protected_first_tab_and_document_exactly_unchanged": true
+    },
+    "github": {
+      "download": {
+        "download_event": true,
+        "new_file_verified": true,
+        "size_bytes": 244,
+        "sha256": "a0f562efde8fc817c66b645acf7c45ea1a1690ab60b102d43c0c37efabdf41ac",
+        "members": [
+          "binary.bin",
+          "report.txt"
+        ],
+        "native_digest_and_bytes_match": true,
+        "binary_payload_preserved": true,
+        "file": "artifact-51001.zip"
+      },
+      "mobile_deleted_artifact": 51002,
+      "retained_artifact": 51001,
+      "mobile_reload_width": 390,
+      "protected_repo_artifact_exactly_unchanged": true
+    },
+    "business_request_errors": {
+      "gmail": [],
+      "google_docs": [],
+      "github": []
+    }
+  },
+  "github_provider_api": {
+    "archive_sha256": "a0f562efde8fc817c66b645acf7c45ea1a1690ab60b102d43c0c37efabdf41ac",
+    "archive_size_bytes": 244,
+    "archive_status": 200,
+    "artifact_metadata_unchanged": true,
+    "cleanup_confirmed": true,
+    "redirect_status": 302,
+    "run_id": "b510c1c6-7632-4a79-aacb-1530383a2cf0",
+    "same_seed_api_browser_bytes_match": true,
+    "scenario_id": "163ad410-6bca-4e50-96bf-2bc0749f3222",
+    "scored_candidate": false,
+    "status": "passed"
+  },
+  "cleanup_confirmed": true,
+  "harness_corrections": [
+    {
+      "run_id": "a0d88e6b-bc40-4613-a26d-0ea2a15b723f",
+      "classification": "operator_harness_check_error",
+      "reason": "Initial source fingerprint looked for literal aria-disabled; source correctly uses the ariaDisabled property. Replaced with complete exact script matching.",
+      "cleanup_confirmed": true
+    },
+    {
+      "classification": "operator_harness_check_error",
+      "reason": "An extra API archive probe expected a direct 200 despite the documented 302. A separate read-only hosted check followed the provider-relative Location with a second provider_api call and passed. Not scored as a candidate or product failure."
+    }
+  ],
+  "hashes": {
+    "native-after.json": "f2aa385b0b00fcda7ebad725eb5d639b85bd6a1f7d5e19aa5103c30a9f77bf7f",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d",
+    "google_docs-browser-trace.json": "1a42f7f69411b2397d28b2116bbcdd219350f282debe45886071c70c8c125ca7",
+    "cleanup.json": "908c14e107341e9add093647d9b9edc5eb9cc96a80885b2c44c0c2b8511976ac",
+    "native-before.json": "cecb0c0a376006408a681b47696176b879a28d5136578eef685b3921350aa792",
+    "gmail-browser-trace.json": "a1f0b4a95d0a576c623fb4f8b51e6fbc0a9eef731078ced7cbed949e9463cf34",
+    "github-browser-trace.json": "211a9a6f8c9c4844d0a3eb170b3da97db766126f0181fdfd20a2fbdddfde50ae",
+    "scenario.json": "ebad1ca819d2b7a24dfd792d7d62d2ff35d63058143d9e345440701107386b48",
+    "baseline-state.json": "456f4cbac9c922e34c170cd2c1b656e65bfb7727ee474009a29a42e5ac1daa45",
+    "final-state.json": "a6df553f68277945abeaaa4fbfe06c39bf719e3382dc6c6b1fa7cce6b2a13248",
+    "frontend-code-fingerprints.json": "fc5cf81088c8221c9cbf7b4e7dbfacdc119f66855981f439e04b9a6e3a951d8d"
+  },
+  "limitations": [
+    "This closes the specific mailbox/cursor regression and GitHub artifact hosted checks, not full provider feature or visual parity.",
+    "Full eight-provider settings/admin/billing/analytics/AI/collaboration coverage remains open."
+  ]
+}

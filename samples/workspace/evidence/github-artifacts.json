@@ -147,5 +147,12 @@
       }
     },
     "main_integration": "Combined anonymous public artifact metadata and public merge-status matching; all 346 GitHub regressions passed."
+  },
+  "production_followup": {
+    "integrated_pr": 1115,
+    "merged_revision": "46938097",
+    "evidence": "mailbox-cursor-artifacts-production-2026-09-24.json",
+    "status": "native_and_browser_download_delete_checks_passed",
+    "full_actions_parity": false
   }
 }
