@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-24",
+  "scope": "Google Docs rich version preview, naming, restore, and copy synchronized with Drive",
+  "references": [
+    "https://support.google.com/docs/answer/190843?hl=en"
+  ],
+  "changes": [
+    "Capture complete document structures including tabs, formatting, tables and inline objects on native Docs edits and Drive updates",
+    "Preview any tab without mutating current editor state; name versions and filter named versions; enforce 40 named versions",
+    "Restore as a new revision while retaining current metadata and prior versions; copy a selected rich version into a new document",
+    "Require edit permission and write scopes even for history reads; stale revisions and invalid mutations rejected",
+    "Persist history only in run-scoped shared state and clear it on reset/permanent file deletion"
+  ],
+  "tests": {
+    "docs_and_workspace_passed": 174,
+    "history_cases": 6,
+    "counts_overlap": true,
+    "ruff": "pass",
+    "log_sha256": "0cdc9a572c7bd2d671c2e04c28ea413433429bfb492b64503d7709ebee60e7e6"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Preview version 2 retaining bold release text, table and two document tabs",
+      "Save named version and restore it with in-page confirmation",
+      "Reload at 390px, filter named versions and switch historical tab previews",
+      "Copy version 2 into Mobile approved copy; reload retains content and table",
+      "Document width and scroll width both 390"
+    ],
+    "protected_state": "Complete stored rich document state equals selected version except new revision number; copied state also matches; protected document unchanged",
+    "snapshot_sha256": "f4fc68a3c103b3d3037d580fe18371adb1589a07b6423af26f16e0469c367c38",
+    "screenshots_retained": false,
+    "initial_attempt": "Native confirm dialog stalled while Mac was locked; replaced with accessible in-page confirmation, rerun passed"
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "Historical edits before rich snapshots were introduced cannot reconstruct lost rich content",
+    "Detailed author-colored text differences, grouped version expansion, history deletion, and copy destination/sharing selectors remain open",
+    "No full Docs feature or exhaustive visual/mobile parity claim"
+  ]
+}

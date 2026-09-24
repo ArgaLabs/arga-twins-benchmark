@@ -59,5 +59,11 @@
     "natural_language_scenario_schema": "Advertises independent description/content/member_ids; exact generator example seeds through native runner",
     "ruff": "pass",
     "log_sha256": "f9ce3ca5f24dd9bcb6982c3a9f8b0322d52261336a58bfbf94ee17f5b5705c3e"
+  },
+  "ci_dependency_followup": {
+    "failure": "Cross-package generator test imported backend anthropic dependency in the lightweight twin environment",
+    "resolution": "Move generator-to-runner integration test into backend tests; do not add backend dependencies to the twin runtime",
+    "combined_tests_passed": 278,
+    "log_sha256": "b91096adf70b6d02f0beca22101539cd12a56e1a1483f40adcf32f886b99b149"
   }
 }
