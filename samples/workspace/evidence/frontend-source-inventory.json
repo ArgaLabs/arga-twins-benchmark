@@ -4364,7 +4364,7 @@
         },
         {
           "path": "twins/google_calendar/workspace_ui.py",
-          "sha256": "5b5d6e5dd709d107eaf0cc531b5079e76968db94bb0d35a4418eb46fc7b70d40",
+          "sha256": "5992911b1b9d88b5146ceb3a475aa22179ac7e8eb31f41be46dacdc795e166a0",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {

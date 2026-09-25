@@ -6,7 +6,14 @@
     "notion": {
       "status": "authentication_required",
       "observed": "Login form with email, Google, ChatGPT, Apple, Microsoft, passkey and SSO controls.",
-      "workspace_permissions_and_ai": "not inspected; intended test workspace and sign-in requested"
+      "workspace_permissions_and_ai": "not inspected; intended test workspace and sign-in requested",
+      "latest_entry_check": {
+        "date": "2026-09-25",
+        "status": "authentication_required",
+        "entry": "Official notion.so redirected to notion.com; Log in opened the app.notion.com login form.",
+        "handoff": "Chrome sign-in tab left available; user asked to sign in while other release work continues.",
+        "workspace_mutated": false
+      }
     },
     "linear": {
       "status": "authenticated_bounded_desktop_reference_inspected",
