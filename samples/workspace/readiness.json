@@ -50,7 +50,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
-          "sha256": "0f864d23fb611891bf7942b5d0f20271c38bd3733e97e2094a37143bdfdb4707"
+          "sha256": "d02eb4bb73b714d908955974d3e5f66dfd1ad298172572ea9dcc24b3d1b92e18"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
@@ -235,5 +235,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "577ce0c8e156536357df3fd678fa5ae19a156c532ee8c5e6827a480469ab3b56"
+  "sample_tree_sha256": "d1194795785e9f7bb96d137d3d465d200456fcfe5cabed690068152284b57bab"
 }

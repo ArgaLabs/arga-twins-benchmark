@@ -1,14 +1,15 @@
 {
   "date": "2026-09-24",
-  "status": "native_and_source_checks_pass_browser_pending",
+  "status": "native_and_bounded_color_gui_pass_filter_view_gui_pending",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1158",
-  "source_revision": "6d796c6a7e318ef37815e74ef6fc43903fa14145",
+  "source_revision": "a653fdb9a3c5663865a0df7a067dee925404ca4c",
   "scope": [
     "Native saved/temporary filter view validation, atomic lifecycle and read-only visibility/source-row-order preview, with viewer scopes and immediate permission revocation.",
     "Fill/text color criteria and column-filter controls; effective manual/theme/conditional colors, relative formulas, native ROW/COLUMN context, first-matching rule priority and gradient interpolation.",
     "Basic and view filterSpecs precedence; UI criteria updates cannot be silently overridden by stale filterSpecs.",
     "Native range and filter-view color sorting uses effective colors, stable secondary sort keys, source-row projections and atomic malformed-color rejection.",
-    "Spreadsheet themes reload under native properties.spreadsheetTheme; custom theme field masks agree with effective grid/filter colors without read-time mutations."
+    "Spreadsheet themes reload under native properties.spreadsheetTheme; custom theme field masks agree with effective grid/filter colors without read-time mutations.",
+    "Column-filter fill/text color sort buttons, preserved failure drafts, cancellation, keyboard activation and bounded desktop/390px controls. Gradient domains include calculated spill targets and deduplicate overlapping ranges."
   ],
   "verification": {
     "regressions": 536,
@@ -56,9 +57,30 @@
       {
         "name": "lab-final-sheets-theme-fidelity-tests.log",
         "sha256": "31705a678998a3fc4ece4e7a81a24c959dc207faa7329246fe89f720c9f4e9da"
+      },
+      {
+        "name": "lab-final-sheets-spill-colors-tests.log",
+        "sha256": "b3a1d2dc42da901fb9bf6dc827f03da6ba02368ec8f15e9188ec5013241cfee7"
+      },
+      {
+        "name": "lab-final-sheets-spill-colors-makefix.log",
+        "sha256": "0999a55d836ded96e2c44dc35dbeb608e1d37bc8fc2c5cc8ff090d76662b6b4a"
+      },
+      {
+        "name": "lab-final-sheets-spill-colors-pyright.log",
+        "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+      },
+      {
+        "name": "lab-final-sheets-color-ui-design-detect.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
       }
     ],
-    "ci": {
+    "fidelity_harness": {
+      "passed": 22,
+      "skipped": 24,
+      "note": "Live external-account tests skipped; no live parity claim."
+    },
+    "prior_ci": {
       "status": "success",
       "head": "6d796c6a7e318ef37815e74ef6fc43903fa14145",
       "run": 36082740067,
@@ -74,25 +96,96 @@
       "log_sha256": "f1bd2796b3f132d55c5096a484e363081f28cbbe0b051e396205c861100aab54",
       "scope": "Remote PR head before local main merge33717199; subsequent source changes need fresh CI."
     },
-    "fidelity_harness": {
-      "passed": 22,
-      "skipped": 24,
-      "note": "Live external-account tests skipped; no live parity claim."
-    }
+    "ci": {
+      "status": "pending",
+      "head": "a653fdb9a3c5663865a0df7a067dee925404ca4c",
+      "lint_test_run": 36092106766,
+      "docker_run": 36092106831,
+      "fidelity_run": 36092106800
+    },
+    "latest_focused_tests": 115,
+    "local_color_browser": {
+      "status": "pass",
+      "scope": "Local isolated operator Chrome CUA checks; not hosted or exhaustive Sheets parity.",
+      "desktop": [
+        1465,
+        806
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "screenshots_retained": false,
+      "physical_touch": false,
+      "checks": [
+        "Red fill filtering shows Alpha/Gamma and persists after reload",
+        "Blue text filtering shows Beta/Delta; None clears the native color criterion",
+        "390px cancel and reload preserve complete native state",
+        "Injected503 color-sort failure preserves complete native state and leaves controls usable",
+        "Retry sorts blue text first: Beta/Delta/Alpha/Gamma/Empty; reload persists",
+        "390px Enter activation sorts red fill first: Alpha/Gamma/Beta/Delta/Empty; reload persists",
+        "390px document width equals viewport width; color swatches and action controls inspected at both widths"
+      ],
+      "protected_state": "Only allowed native sort permutation in A2:C6 and basic-filter criteria, plus revision/time/change bookkeeping. Exact source-cell/formula/format permutation verified; header, column D, all other ranges, protected tab, row/column metadata and permissions unchanged.",
+      "comparison_exclusions": "File iconLink/webViewLink/exportLinks reflect TestClient versus local host URL; revision/time fields and source_version change for authorized writes. No business-state exclusions.",
+      "captures": [
+        {
+          "name": "lab-final-sheets-color-ui-r2/after-cancel.json",
+          "sha256": "ace8cd00612691b56ee7562c09a4c342708f6d9b5d45bd519b38247c4b4d7e70"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/after-failed-sort.json",
+          "sha256": "e1e09563d9e823f7cdf51fb4a4e762b25840b39ee17f8bf711a58590e4e33c0f"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/after-red-filter.json",
+          "sha256": "a7db93ec2ac73dd590e52085b1d0f43968a91094e93bfa7ce3032987e9c25b8c"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/after-text-sort.json",
+          "sha256": "3236093f13325a2d8838629770d3e91bee0aa95650012fe3b3e3b3bc83a852e0"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/baseline-state.json",
+          "sha256": "fc63930a3879e02fdb98517d0766662c9471da87f2f9faf783c2f3ca4cc2f503"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/baseline-workspace.json",
+          "sha256": "00a70b5d09bcec544658552784cd32442ec7a70c9c69d527173aa108a8c3246d"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/before-cancel.json",
+          "sha256": "ace8cd00612691b56ee7562c09a4c342708f6d9b5d45bd519b38247c4b4d7e70"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/before-failed-sort.json",
+          "sha256": "e1e09563d9e823f7cdf51fb4a4e762b25840b39ee17f8bf711a58590e4e33c0f"
+        },
+        {
+          "name": "lab-final-sheets-color-ui-r2/final-state.json",
+          "sha256": "a42b0a72560e67810dfda631ed543bcf4b7c2ec1b779d3584cf0a0f238eb19bd"
+        }
+      ]
+    },
+    "independent_review": {
+      "disposition": "ship",
+      "scope": "Verdict pass scored the sole spill-gradient domain finding resolved. Source/native review only; no independent visuals or full Sheets parity certification."
+    },
+    "documentation": "Read-only ordinary-extension handoff complete. README matches bounded source/native behavior; incumbent dialog appearance preserved, no design-system edits."
   },
   "sources": {
     "twins/google_drive/sheet_filter_views.py": "1cafb02fc1d2f56e30efa521afaaaf8bd864d3b2a5a8e679d4938e074659e4c9",
     "twins/google_drive/sheet_filter_colors.py": "7c6bc32ad08ce0b46f5ced1017d2c939277e1f199161af18aa79a95e70fb39f5",
-    "twins/google_drive/sheet_conditional_colors.py": "7aadca59cfdff46c4499d31d459d2bb02efcdeca2c1252a9eb8a48b85f8c9599",
+    "twins/google_drive/sheet_conditional_colors.py": "c4b08ef0e15db2d66d034f9d2da8eb86eef466bdb1a99a109595d3c9de25a229",
     "twins/google_drive/sheet_filters.py": "4655e3d9fd968f2c6f364eeeeec8f9e565285bef458527cbd5aa079f8c34b79c",
     "twins/google_drive/workspace_editing.py": "ac21e0d95e244187280c5ba4d7446dca68028c0459d90e6b9b497c3e6846eec3",
-    "twins/google_sheets/filters_ui.py": "decb3c2ee19b6ebfc10428e1d3f55cf5759e3f1544b88062b96bfd76086ceb65",
+    "twins/google_sheets/filters_ui.py": "8d55cdc152b690dc09f954483c4d5f1386d5cb3268c01e5d0846c1f379c017bf",
     "twins/google_sheets/grid_format_ui.py": "d159de42a885141883beeec5eb2c6de748f155f1123b6bd0e2113e37d4c9757f",
     "twins/tests/test_google_sheets_filter_views.py": "600ea0c50c8a67e15f702101bc75e8015a622909678f16963adea5e6e7ff5ec0",
-    "twins/tests/test_google_sheets_filter_colors.py": "41d85b7fe6a6b23d6e84c5c45a027851c391d466610675ed1acbdfe011a9586a",
+    "twins/tests/test_google_sheets_filter_colors.py": "a854d2fcc0262579f0824811c95cf1583c4ed254289a861c767618a9d2ae0c4c",
     "twins/google_drive/sheet_sorting.py": "e2b5a1282ebbdc95546e9cbd62cc0bc33d85487eeb7077d153d430527be3d268",
     "twins/tests/test_google_sheets_color_sort.py": "9901bb0d89ffa0b8939eeb34e7be346ad2f52b612b16a961ab1bbce9c5a6e6f1",
-    "twins/google_sheets/README.md": "6880320dd1b3bbf7aa2afb91e378c9ebedc56fd5b295db656b73c79f7c911e94",
+    "twins/google_sheets/README.md": "3bc7a9ac08b96be4cdc8e49a351531c8b63e46265104559747da88dfd8aba359",
     "twins/tests/test_google_real_service_fidelity.py": "5884e46d15c471acab27fa3a8bff262060fb5c581a100c4c7fad03ae2a9368a7"
   },
   "official_references": [
@@ -105,16 +198,15 @@
     "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets#SpreadsheetProperties"
   ],
   "limits": [
-    "Filter-view frontend lifecycle and safe sorted-view editing/clipboard projection are unfinished.",
-    "Real-account filter-view reference observations are recorded; twin desktop/390px success/error/cancellation/reload and visual comparisons remain pending.",
-    "Independent finish review and documentation handoff remain pending; this is an incomplete UI checkpoint, not a completed release.",
-    "Color-sort controls, broader conditional-format editing and full Sheets fidelity remain open.",
-    "The pull request is ready for review and CI passed its6d796c6a head. Local main merge and further UI changes require fresh checks; no production deployment or hosted verification is claimed.",
+    "Saved/temporary filter-view frontend lifecycle and safe sorted-view editing/formula/clipboard projection remain unfinished.",
+    "Color controls pass bounded local desktop/390px checks and native-state assertions; hosted verification remains pending.",
+    "Current a653fdb9 CI is running; no production deployment is claimed.",
+    "Broader conditional-format editing, full Sheets/AI/collaboration fidelity and complete audits remain open.",
     "No retained screenshots or physical touch verification."
   ],
   "screenshots_retained": false,
   "release_allowed": false,
-  "pull_request_state": "open_ready_for_review",
+  "pull_request_state": "merged_deployment_held_for_full_ci",
   "provider_reference": {
     "date": "2026-09-25",
     "browser": "Authenticated Google Chrome through CUA",
@@ -126,9 +218,20 @@
       "Column filter menu includes Sort A to Z, Sort Z to A, Sort by color, Filter by color, condition and value filtering.",
       "A1:C4 native order Beta, Alpha, Gamma becomes visible Alpha, Beta, Gamma when sorted; exiting restores native order.",
       "Editing visible A2 from Alpha to Alpha edited changes original stored row3, confirmed by exiting and copying A1:D4.",
-      "Formula =A2 entered at D2 outside view range displays Alpha while view active and Beta after exit. Formula references therefore require view-aware presentation, beyond merely reordering rendered values."
+      "Formula =A2 entered at D2 outside view range displays Alpha while view active and Beta after exit. Formula references therefore require view-aware presentation, beyond merely reordering rendered values.",
+      "Additional disposable-fixture probe: C2:C4 contain =ROW()*100+LEN(A2), =ROW()*100+LEN(A3), =ROW()*100+LEN(A4). In the A1:C4 sorted view, visible C2 shows 312 and its formula bar shows =ROW()*100+LEN(A2), while original C3 is the source row. Values follow underlying evaluation rather than evaluating the displayed formula at its visible row.",
+      "A cross-row relative formula stored at B3 as =A2&\"/\"&$A$3&\"/\"&ROW($A$2) is displayed at view B2 as =A1&\"/\"&$A$3&\"/\"&ROW($A$2), with #REF! and an error explaining that references in a sorted view must refer to the same row or have an absolute row number. Exiting the view removes this view-only error.",
+      "Entering =$A$3&\"/\"&ROW($A$3) at view B2 displays Alpha edited/3 while visible A3 is Beta: absolute rows retain underlying-sheet references.",
+      "Entering =LEN(A2)+ROW()*1000 at visible C2 stores =LEN(A3)+ROW()*1000 in underlying C3. After exiting the view and reloading, C3 retains the translated formula and value3012; native row order and D2=Beta remain intact."
     ],
-    "cleanup": "Own uniquely prefixed fixture moved to recoverable trash; File moved to trash alert verified and tab closed. No sharing or outbound notification.",
+    "cleanup": "The same own uniquely prefixed fixture was temporarily restored for formula probes, then moved back to recoverable trash. File moved to trash alert verified and its tab closed. No sharing or outbound notification.",
     "limits": "GUI and clipboard observations only; real-account native API readback unavailable, physical touch not exercised."
+  },
+  "merge_commit": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+  "deployment_hold": {
+    "reason": "GitHub --auto merged immediately with the optional twins-tests job still running. Both push-triggered production workflows were cancelled before deployment; rerun only after the full source CI passes.",
+    "runtime_run": 36092921488,
+    "twins_run": 36092921447,
+    "status": "cancellation_requested"
   }
 }
