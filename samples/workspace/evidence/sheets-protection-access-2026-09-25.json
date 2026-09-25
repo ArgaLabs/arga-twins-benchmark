@@ -1,0 +1,100 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_drive",
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1168",
+  "source_head": "c5453ef71f9a2ba33b410feb1c0a861f14642a63",
+  "status": "local_native_regressions_and_scoped_review_pass_ci_pending",
+  "release_allowed": false,
+  "scope": [
+    "Request-principal protected-range metadata and edit enforcement",
+    "Native values, batch and sorted-view mapped edit rollback",
+    "Blank and merged-cell structural affected-range authorization",
+    "Warning-to-restriction editor field masks and exact reference validation",
+    "Dimension visibility and automatic sizing honor cell protections",
+    "Inherited folder grants apply across Workspace surfaces; direct roles cannot reduce inherited grants; parent ownership does not bypass child cell protection"
+  ],
+  "tests": {
+    "initial_reproduced_failures": 11,
+    "review_correction_reproduced_failures": 15,
+    "grid_shrink_reproduced_failures": 2,
+    "focused_passed": 134,
+    "broad_passed": 1227,
+    "broad_skipped": 0,
+    "broad_warnings": 3,
+    "make_fix": "pass",
+    "independent_finish_review": "pass_source_and_in_process_api_only",
+    "dimension_metadata_reproduced_failures": 6,
+    "inheritance_reproduced_failures": 15
+  },
+  "source_files": {
+    "twins/google_drive/sheet_protection.py": "8b04d1d6e34c06860f6a411a01115b6b8478bdeedfc69f8f56249a1dfbc6d429",
+    "twins/google_drive/sheet_view_clipboard.py": "a73ac89bae8bd3df11f35485342e94467f8779178465a5145c868db640d46acb",
+    "twins/google_drive/sheet_view_edits.py": "81f0497817f320ae656073a0c29c4c3cf735b789c067cd7f9797b2817ac987b4",
+    "twins/google_drive/workspace_editing.py": "3ba56662bfbffa185e4b3910127516cf940ae92e56deadcb1370a14d1ac3fe92",
+    "twins/google_sheets/README.md": "9b5484e17a753a3857bbcaf54c9a19142d5c0266abcfe8b746b58c29f1d32df0",
+    "twins/tests/test_google_sheets_protection_access.py": "e75f2ac33f696d044d1cf007277b0acd3cb8d8ec3c6745a15aad1a0884e421eb",
+    "twins/google_drive/store.py": "e9546cb3cdd61db9f2ae3509e2db2c516d1e2e60572e0970e803d1f007f7613b",
+    "twins/tests/test_google_workspace_inherited_permissions.py": "2ee869acdf4de89b64aec02211c519018d029899a15dece800a69f38db811c05"
+  },
+  "artifacts": {
+    "lab-sheets-protection-access-before.log": "e995070f1c4e9c3fec1b647cbe15724d7f910d58ce5c8bd0214229b0f1c24a78",
+    "lab-sheets-protection-view-before.log": "2d74b848ed41805ffb7fe9f22f54621d69b5b4c896bb5d783f966b20432bd22a",
+    "lab-sheets-protection-noop-before.log": "7e5587b3d674e3718bd1f95c0cf93aa3b87b8008c7b1638da9c1cdae45120524",
+    "lab-sheets-protection-metadata-before.log": "78007f774a6be313502137a4d609398f53b49e32acbf8121695fd65cb1a05903",
+    "lab-sheets-protection-review-before.log": "2bec65059189bce750041ca523ddd3569d5c50ca99943ca2a9f9e0d60e6f4fb2",
+    "lab-sheets-protection-grid-before.log": "109c9891c3b87d5d020ed246d92c1a255045ee7832e53deea60f18955c514f3f",
+    "lab-sheets-protection-access-focused-final.log": "949a642492f98932f1fbecbf0c6a0cf2b62130db5a27d3ca0e8a6f652f79df1f",
+    "lab-sheets-protection-access-regressions-final.log": "442319796380bf2aa73adcf2441bb1aba28a12fb4094eba292180e3843ae0700",
+    "lab-sheets-protection-access-makefix-final.log": "c4a4d1513cef046cd0a83e57f442c3d3519d8e08459ca71f51046b5c214394ee",
+    "lab-workspace-protection-combined-focused.log": "7512752009b3040138402e7899849b86c017debe1f85416e56fd022ffb9be00a",
+    "lab-workspace-protection-combined-regressions.log": "0204b427a147aedfef83b7941377650930dcc66222b6ce465ed6ffb125fa3841",
+    "lab-workspace-protection-combined-makefix.log": "4484e34a8b19e470dadc4629d196232c8beb2fe029a6efe7a3023c65ba72054b",
+    "lab-sheets-protection-dimension-before.log": "59b72cbfdfad06f1a1c86808d8dda701486b293be4f98a921c1433b7d08c181e",
+    "lab-workspace-inheritance-original-method-reproduction.log": "a6898b35159e4fc1917d36b679212c5f77569beeded7a3329d9778bb0e8a6842"
+  },
+  "references": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/sheets#ProtectedRange",
+    "https://support.google.com/docs/answer/1218656?hl=en"
+  ],
+  "verification": {
+    "ci": "pending",
+    "production": "pending",
+    "fresh_hosted_native": "pending",
+    "hosted_gui": "pending",
+    "visual_or_touch_approval": false
+  },
+  "limits": [
+    "Group editor membership and complete protection dialogs remain pending.",
+    "Exact provider error status/wording and comprehensive structural/reference parity require live comparison.",
+    "Local native checks are not hosted/browser/candidate evidence.",
+    "All eight frontend gates, WKS-03 and final package release remain open.",
+    "Inherited permission listing/details, limited-access folders, shared Drive/group membership remain outside this correction."
+  ],
+  "initial_source_head": "aae500d7f1ccc903616da92f8e7ef6c788e65530",
+  "review_comment": "https://github.com/ArgaLabs/validation-server/pull/1168#discussion_r4108891776",
+  "provider_reference": {
+    "date": "2026-09-25",
+    "surface": "Real Google Sheets in Chrome, native CUA",
+    "fixture": "Arga fidelity 2026-09-25 formula continuation",
+    "observed": [
+      "Data > Protect sheets and ranges opens Range/Sheet tabs with description, selected range, Cancel and Set permissions.",
+      "Sheet mode exposes a sheet selector, Except certain cells, and Add another range.",
+      "Set permissions opens Range editing permissions with warning/restrict radio choices and Only you, Custom, Copy permissions from another range.",
+      "Custom exposes current owner and an Add editors input; no additional recipients were entered or granted access.",
+      "Warning-only protection covers Sheet1 except B2:B3. Editing A2 prompts Heads up with Cancel, OK and a five-minute suppression checkbox.",
+      "Cancel preserved Beta at A2. OK changed A2 to Beta edited and the dependent B2 formula recalculated to Beta edited/2.",
+      "Chrome toolbar reload retained Beta edited, Beta edited/2 and the Protected Sheet1 tab.",
+      "Data > Sort sheet performs native whole-sheet sorting while a filter view is open; the probe was undone. The separate filter-popup sort command was not completed in this continuation."
+    ],
+    "cleanup": "File moved to trash verified for the owned fixture; no sharing or outbound notifications.",
+    "screenshots_retained": false,
+    "limits": [
+      "Owner-only reference; no second-user denial, physical touch or comprehensive formula matrix claim.",
+      "Reference observations are not hosted-twin GUI verification."
+    ]
+  }
+}

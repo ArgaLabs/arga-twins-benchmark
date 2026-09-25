@@ -1,0 +1,76 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1169",
+  "source_head": "4e90a4548fe0559cea8c3e6d5b3bd655baef3490",
+  "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1168",
+  "status": "draft_local_source_api_checks_pass_browser_checks_incomplete",
+  "release_allowed": false,
+  "scope": [
+    "Permission-aware protected sheets/ranges sidebar with native range/named/table targets and sheet exceptions",
+    "Only you/Custom editor and native warningOnly policy configuration",
+    "Atomic revision-checked writes, denied/stale preservation and body-read revocation",
+    "Untouched native open bounds and exceptions survive description edits; pending form fields stay frozen"
+  ],
+  "tests": {
+    "focused_passed": 45,
+    "workspace_regressions_passed": 1246,
+    "skipped": 0,
+    "warnings": 3,
+    "make_fix": "pass",
+    "rendered_javascript_syntax": "pass",
+    "diff_check": "pass",
+    "independent_source_review": "Both reproduced open-bounds and pending-textarea findings resolved; source-scoped pass.",
+    "documentation_review": "Verification wording corrected to distinguish pre-fix Chrome from corrected source/API checks."
+  },
+  "local_desktop": {
+    "status": "pass",
+    "scope": "one local desktop named-range protection created using Chrome CUA",
+    "native_allowlist": [
+      "one protection bound to prices with owner editor",
+      "one source revision and protection-id counter increment"
+    ],
+    "all_other_native_state_unchanged": true,
+    "post_fix_gui_verified": false,
+    "mobile_verified": false,
+    "screenshots_retained": false,
+    "artifact_sha256": "2f1c0e45dcdd1452c73e23f7129661abc1c4b601660ab552fc8717f278b10f91"
+  },
+  "provider_reference_evidence": "sheets-protection-access-2026-09-25.json",
+  "source_files": {
+    "twins/google_drive/app.py": "eff717d7311e7a233c3581165192c0504b148ec9f73b7d964368781f8cc09976",
+    "twins/google_drive/runtime.py": "7da052401ff61cf084354b6feae029d9ef381bcd62e23731116ccd7b3c4f6957",
+    "twins/google_drive/sheet_protection_ui.py": "0477740a1d297fa732e6585b73c55b5a8c513fad6b1464778d488348705e1a46",
+    "twins/google_drive/workspace_editing.py": "c10e25717389f6bdc0b287f5c9bea65319ecb329c2c3d0d497a0fff85f57b4c4",
+    "twins/google_sheets/README.md": "a384abe117d0eaa0135b93f877d6282e258c950663f8ea5a30c71f9889cbeac5",
+    "twins/google_sheets/filters_ui.py": "79a82a4c0a78457a34d601a9228b8f4ec8c067963cf43b307cf0c3dfee82dd85",
+    "twins/google_sheets/named_ranges_ui.py": "7f9a7ab616eb1448aef5ad6d9f680b9df221ea37a18cfd01a8ef4d94fe181fd4",
+    "twins/google_sheets/protection_ui.py": "d6e9c15365f8ea7f9ad06e0a04371d51087238e70aa4974c5ee44602d7eeefd1",
+    "twins/google_sheets/ui.py": "6207cfd20e328e5d9147b9ea4750a20780a76a72c4ec3112bb5036025e5d3e9a",
+    "twins/google_sheets/validation_ui.py": "83ff7cf7bf6bf2740ad4d0c5f32d43f9e9eb70d079bb4be6ccf843ae6ddfd465",
+    "twins/tests/test_google_sheets_protection_ui.py": "6faae4b03602c36c5ad3c71d2963a10ba186e0d0ab0a08783fb83bc996c8a485",
+    "twins/tests/test_google_sheets_tabs.py": "0538f39076d0659f43ea496a247f24daf99262a14a9f1e3a2f6d1eb79d052342",
+    "twins/tests/test_google_workspace_request_revocation.py": "e0771ba400029372efd7054ce2a909177d773100fbfdd4fa97cc5b218150be33"
+  },
+  "artifacts": {
+    "lab-sheets-protection-ui-focused-final.log": "ad0f807f73eddebd57b4cf0ddc94c2135e0b457f5c7c621ee7ac43503e829e36",
+    "lab-sheets-protection-ui-reviewed-focused.log": "aae0bc67455b9c41bdc6537559bb93e56657086e664a77f3075607f4933bdca7",
+    "lab-sheets-protection-ui-final-focused.log": "437e53fb5a85fe245d06413673fd9f18a635b412f1f276640630c8a9debaca30",
+    "lab-sheets-protection-ui-reviewed-regressions.log": "c2fbaa753e2f207d9a353bb3532010c5b2c47049f1415e2e1b1b2ee25f2fbff5",
+    "lab-sheets-protection-ui-makefix-final.log": "7b01e2ecb87dabe137a41613917d396239ba91dd7e8efbfd2168883f4322e32d",
+    "lab-sheets-protection-ui-browser-result.json": "2f1c0e45dcdd1452c73e23f7129661abc1c4b601660ab552fc8717f278b10f91",
+    "lab-sheets-protection-ui-desktop-checks.json": "0f43ea47f86b4e917e76a4d9f4b685cc63e7215fbbfeec35af10fbf3c865256f",
+    "lab-sheets-protection-ui-desktop-native.json": "d09ecbd9cd2c792ad66673abfd1d324760b00beb9d7a8325d0a8de61acbf989e"
+  },
+  "limits": [
+    "Warning-only grid confirmation remains unimplemented; the sidebar currently configures native policy only.",
+    "Post-correction Chrome, hosted, responsive/mobile and physical-touch verification remain pending. Native Chrome stopped exposing a usable tree/screenshot during responsive controls.",
+    "Group/copy-permission management, selection pickers, active filter-view protection edits and exhaustive visual/provider parity remain open.",
+    "Initial test failures included invalid test assumptions about native state eviction and permission-store internals; a broad mock required the new navigation dependency. They are not claimed as reproduced product failures.",
+    "All eight frontend/AI/collaboration gates, WKS-03 and final sample release remain open."
+  ],
+  "screenshots_retained": false
+}

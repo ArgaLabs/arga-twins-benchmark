@@ -1,8 +1,10 @@
 # Remaining work after the Sheets validation PR
 
+PR #1169 (draft, depends on #1168) adds the native protected-ranges sidebar. All 45 focused and 1,246 Workspace regressions pass; independent source review confirms corrected open bounds and pending-editor fields. One pre-correction local Chrome creation has exact native readback; the real Sheets owner reference and fixture cleanup pass. Warning-only grid confirmation, post-fix browser/hosted/mobile/touch checks and broader protection fidelity remain open. See `sheets-protection-sidebar-2026-09-25.json`.
+
 This is the handoff checklist after PR #1147. It is not a claim of eight-provider parity. The five tasks retain earlier passing hosted candidate episodes; later WKS-03 attempts include a business failure and a separately preserved browser-driver infrastructure timeout, while final WKS-04 exposed malformed Gmail send acceptance and now passes fresh #1150 revalidation; WKS-03 remains pending; the remaining frontend, final-deployment revalidation and package gates still prevent a final ZIP. Retain text/JSON evidence; do not restore screenshot files.
 
-An uncommitted Sheets protection prototype now passes 56 focused tests. The prior 32-case source passed 1,170 broad checks; subsequent review reproduced append-row shifting, blank-cell structural edits, warning-to-restriction editor masks and grid shrinking, with corrections now covered locally. Final broad validation and re-review are running. Frontend controls and live-provider error/visual comparison remain pending; this is not deployed release evidence.
+PR #1168 adds request-principal protection enforcement for native and mapped Sheets writes. All 134 focused and 1,227 broader Workspace checks pass after reproducing and correcting structural, editor-mask and grid-shrink bypasses; independent source/API review passes. CI, production, hosted checks, protection dialogs and live-provider error/visual comparison remain pending. See `sheets-protection-access-2026-09-25.json`.
 
 ## Release the reviewed changes
 
@@ -17,7 +19,7 @@ An uncommitted Sheets protection prototype now passes 56 focused tests. The prio
 
 PR #1166 combines #1164 and #1165 with a fix for access revocation during request-body reads. All 91 focused and 1,138 broader combined checks and full CI (5,824 twin/2,130 root) pass. Merged as `5f67b252`; production, fresh hosted native/HTTP bootstrap, all five Workspace-run worker images and a subsequent fresh eight-provider ten-container attestation pass, with teardown confirmed. PRs #1164/#1165 are closed as incorporated. Browser GUI checks remain pending.
 
-PR #1167 fixes access revoked during Notion saved-view and group form submission. All 15 reproduced failures and 187 Notion regressions now pass; CI, production and hosted checks remain pending. See `notion-form-revocation-2026-09-25.json`.
+PR #1167 fixes access revoked during Notion saved-view and group form submission. All 15 reproduced failures and 187 Notion regressions pass. Full CI passes (5,839 twin/2,130 root); merged as `7854c3c7`. Both production workflows, fresh hosted form success/denial/stale-revision/native reload checks and all three container images pass; teardown is confirmed. See `notion-form-revocation-2026-09-25.json`.
 
 ## Complete the eight frontend surfaces
 

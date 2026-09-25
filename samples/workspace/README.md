@@ -83,7 +83,11 @@ PR #1165 fixes Docs/Sheets principal-filtered initial catalogs and previews, dee
 
 PR #1166 combines #1164 and #1165 with post-body-read access checks for editors, browser helpers and Docs history. All 91 focused and 1,138 broader combined checks and full CI (5,824 twin/2,130 root) pass. Merged as `5f67b252`; production, fresh hosted native/HTTP bootstrap, all five Workspace-run worker images and a subsequent fresh eight-provider ten-container attestation pass, with teardown confirmed. PRs #1164/#1165 are closed as incorporated; browser GUI checks remain pending. See `workspace-permissions-combined-2026-09-25.json`.
 
-PR #1167 fixes access revoked during Notion saved-view and group form submission. All 15 reproduced failures and 187 Notion regressions now pass; CI, production and hosted checks remain pending. See `notion-form-revocation-2026-09-25.json`.
+PR #1167 fixes access revoked during Notion saved-view and group form submission. All 15 reproduced failures and 187 Notion regressions pass. Full CI passes (5,839 twin/2,130 root); merged as `7854c3c7`. Both production workflows, fresh hosted form success/denial/stale-revision/native reload checks and all three container images pass; teardown is confirmed. See `notion-form-revocation-2026-09-25.json`.
+
+PR #1168 adds request-principal protected-range enforcement for native values/batches and mapped filter-view writes, including structural rollback and warning/editor-mask corrections. All 134 focused and 1,227 broader Workspace checks and independent source/API review pass. CI, production and hosted verification remain pending; full protection dialogs and provider/browser parity remain open. See `sheets-protection-access-2026-09-25.json`.
+
+PR #1169 (draft, depends on #1168) adds the native protected-ranges sidebar. All 45 focused and 1,246 Workspace regressions pass; independent source review confirms corrected open bounds and pending-editor fields. One pre-correction local Chrome creation has exact native readback; the real Sheets owner reference and fixture cleanup pass. Warning-only grid confirmation, post-fix browser/hosted/mobile/touch checks and broader protection fidelity remain open. See `sheets-protection-sidebar-2026-09-25.json`.
 
 ## Package validation
 

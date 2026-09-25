@@ -83,6 +83,14 @@
         {
           "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
           "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-protection-access-2026-09-25.json",
+          "sha256": "cf373edcb4892ae965eee1b6877c6fe8b2be957a8a942b29daa798950b4fbf4e"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-protection-sidebar-2026-09-25.json",
+          "sha256": "0f6bde41511fc907df1510802a4084a8a43178dd0e4bfb6ab25c64653a75e4bf"
         }
       ]
     },
@@ -124,7 +132,7 @@
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
-          "sha256": "9a0b293160844ee9beb7867f11c98ae4f331f2fd342c8b50587d15ac4d3245a8"
+          "sha256": "e455438b46dd38e3fd6f76c2c132068e079e57184994272028c8645ee73c54a5"
         }
       ]
     },
@@ -283,5 +291,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "f6267c9a9ba4bf249810f88e0260c647f65eaa7f6cd174497dd012dc114944ef"
+  "sample_tree_sha256": "5947e5edf8c8bcc1f5c322c995b36283e1ec4a95b0818a058ea7518161ee5c6a"
 }
