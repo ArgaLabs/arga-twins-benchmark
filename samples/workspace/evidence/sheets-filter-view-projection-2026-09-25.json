@@ -2,8 +2,8 @@
   "schema": "sheets-private-view-projection/1",
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
-  "head": "df14eafdc6d355567c8548e02a17d3c762dc47ad",
-  "status": "incomplete_local_browser_and_api_checks_pass_new_head_full_ci_pending",
+  "head": "2aa332249268b2606c0e137a9709b691a48a858e",
+  "status": "incomplete_temporary_sessions_local_tests_pass_browser_blocked_locked_mac_full_ci_pending",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
@@ -14,15 +14,17 @@
     "Saved and temporary view bar/menu, selected or inferred range, private column filtering/sorting, save/rename/range/duplicate/delete/exit and URL reload integration",
     "Internal copy translates visible source and native destination formulas; external TSV retains literal formulas; independent source/destination views, cross-sheet copy, tiling, transpose and paste types",
     "Typed view writes serialize across cells to retain exact source revisions; strict rejection restores the rejected draft only; revision conflicts preserve drafts with explicit discard/reload recovery",
-    "Saved Options match observed inline Rename/Update range and native saved Duplicate; committed-copy preview/grid-read failure restores complete original view before controls unlock"
+    "Saved Options match observed inline Rename/Update range and native saved Duplicate; committed-copy preview/grid-read failure restores complete original view before controls unlock",
+    "Window-local temporary-view registry, manual naming and singular/plural Exit prompts, retained unsaved entries, bulk native save, saved-sort refresh and post-commit recovery"
   ],
   "tests": {
     "focused_passed": 63,
-    "sheets_workspace_regressions_passed": 619,
+    "sheets_workspace_regressions_passed": 629,
     "make_fix": "pass",
     "focused_pyright": "0 errors",
-    "full_ci": "pending_on_df14eafd",
-    "duplication_recovery_ui_passed": 58
+    "full_ci": "pending_on_2aa33224",
+    "duplication_recovery_ui_passed": 58,
+    "temporary_view_and_related_ui_passed": 68
   },
   "sources": {
     "twins/google_drive/app.py": "9c41c6995e0df063c0e9e838397ed09a194f8abdf853ff455ef177535b60bfa9",
@@ -33,15 +35,17 @@
     "twins/google_drive/sheet_view_formulas.py": "805ffa97ae07dc6a860b6fbed09b234d84ca98c3b9fab075af4bd7ba596c63aa",
     "twins/google_drive/sheet_view_rendering.py": "be4c4cb4aed030024e5c8f7c63e074191db2687ac16d7205572a741aef68bc90",
     "twins/google_drive/workspace_editing.py": "dd8fca36eba575b0ae55cc921efb4fa1b47812688d748b0bfdd982f2f413fb30",
-    "twins/google_sheets/README.md": "49561ceb25f2c42f25485d2751a370a68dc9209888af899a7c55a91aaa366b9e",
+    "twins/google_sheets/README.md": "2fcaa287a41ec0b36b2dc45e62a0742df87dfb4dffb7131cf995f56420e2e82e",
     "twins/google_sheets/clipboard_ui.py": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
-    "twins/google_sheets/filter_views_ui.py": "ce6d2fc210e2a1e04429b9d8f6f4b8ffa8627b8cd46f16498cec368a69922430",
+    "twins/google_sheets/filter_view_sessions_ui.py": "d6136bdedcc84007f3107a24ad64cecbc31e186f275175e18467929bf9515847",
+    "twins/google_sheets/filter_views_ui.py": "6667c28ab09c9ece9c5411262ba0c87ece16998c9308f000f55b7da43463d10e",
     "twins/google_sheets/filters_ui.py": "f3c55c9e83ed51cdc10eceeedcfb5e96940f82dd2d282c7e1ce4bb5541111a72",
     "twins/google_sheets/grid_format_ui.py": "7c35bfaf750dd2a387d722451fd5596816ac40a7247ce78e8241558a2552d7f8",
     "twins/google_sheets/recalculation_ui.py": "632aab646dd77d7368ba2f165f83f91738f452e8d82361a3f33b61bf78218956",
-    "twins/google_sheets/ui.py": "686e5ac6d7c20cea6c2fa10d4f4147535e7929ca9097bceb7fb286c61ac1a059",
+    "twins/google_sheets/ui.py": "91e35a27c802198dc5c6752497e824225f877d2965f63076c6b27bb6467b8907",
     "twins/google_sheets/validation_ui.py": "64518d3b543ceb60b2a84609ceb7afa02a5c86c94c3d8559a5c453233125efc4",
     "twins/google_sheets/viewport_ui.py": "b79ff3d9caaab21c6f4388b76cf985c5423e8bab9937741cc4e77a680bd02c58",
+    "twins/tests/test_google_sheets_filter_view_sessions_ui.py": "680894ca7c0fa8384ee5ce43b4756ef4c84c61b767526fb094bca8d6429bcee5",
     "twins/tests/test_google_sheets_filter_view_ui.py": "3b536a93db07a1c1fb34e8bb57f22b82a543fa790f9b7c61790f6b5355ef9221",
     "twins/tests/test_google_sheets_filter_views.py": "e380e5563b0f741203e727dc10b7330922003801f004302f0652fcd11c392d97",
     "twins/tests/test_google_sheets_grid_format_ui.py": "9f15f20b8d6c006bfa046ea2209cb62ac4682a916c070beef0a7c1228c9be2e6",
@@ -70,14 +74,18 @@
     "lab-final-sheets-view-duplicate-regression.log": "fb34823064bbf1962984d367dff22003187898514aa6448f5f9c6dcad16e5a2b",
     "lab-final-sheets-view-duplicate-makefix.log": "d6530d8a2c43072144baa16d73194455f681fdf2d23bc976742ee18dbe2cd194",
     "lab-final-sheets-view-duplicate-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
-    "lab-final-sheets-view-duplicate-native-check.json": "b5448a7dc89db446cdcfbf5f92824890545425d5a8057c46665a760cd9ff179d"
+    "lab-final-sheets-view-duplicate-native-check.json": "b5448a7dc89db446cdcfbf5f92824890545425d5a8057c46665a760cd9ff179d",
+    "lab-final-sheets-view-sessions-tests.log": "e6e2998a39bc79bc2da3936baad60c394b313114db6e8367f13ec2ea29aac4bb",
+    "lab-final-sheets-view-sessions-regression.log": "37280470e34454ba324f0e039bd823baba48babb731dcd49b0983ecf873159f0",
+    "lab-final-sheets-view-sessions-makefix.log": "ec57932aba64be6126251dc57f2a4dedbe6b75491c05c077bf47b1daf18f3f31",
+    "lab-final-sheets-view-sessions-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "#1161 is open for review but incomplete; the new head has no completed full CI, merge, production deployment or hosted verification.",
+    "#1161 is open for review but incomplete. New source head has no completed full CI, merge, production deployment or hosted verification.",
     "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, protected-range enforcement and remaining named/dynamic references remain unfinished.",
     "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
-    "Native temporary-view registry and naming/Save/Exit dialogs, remaining menu details and complete permission/error/cancellation paths remain incomplete.",
+    "Temporary-view registry and naming/Save/Exit prompts have source/test coverage but their desktop/mobile browser verification is pending host unlock. Protected-overlap save enforcement, remaining menu details and complete permission/error/cancellation paths remain incomplete.",
     "Selected local desktop/390px checks do not establish exhaustive visual, mobile, physical-touch, collaboration or provider parity."
   ],
   "release_allowed": false,
@@ -206,7 +214,18 @@
       "limits": [
         "No new mobile or physical-touch certification",
         "No hosted1161 verification"
-      ]
+      ],
+      "verified_source_head": "df14eafdc6d355567c8548e02a17d3c762dc47ad"
+    },
+    "temporary_view_sessions": {
+      "status": "pending_host_unlock",
+      "source_head": "2aa332249268b2606c0e137a9709b691a48a858e",
+      "attempt": "Native Chrome CUA reported Mac locked and automatic unlock unavailable before opening fixture. User asked to unlock. No browser behavior or visual pass claimed.",
+      "desktop": "pending",
+      "mobile": "pending",
+      "physical_touch": "pending",
+      "native_fixture": "Local before/after snapshots exactly equal; server stopped.",
+      "screenshots_retained": false
     }
   },
   "provider_clipboard_reference": {
@@ -231,6 +250,16 @@
       "resolution": "Complete preview before activation, original full state and layout restored before unlock, fresh committed revision retained, distinct saved-copy error",
       "independently_rerun_tests": 58,
       "visual_certification": "excluded"
+    },
+    "temporary_view_sessions": {
+      "disposition": "ship_manual_save_sort_correction_only",
+      "resolved": "Manual save previews saved identity without held rowOrder; actual prepareFilterView then preserves newly sorted order; read failure restores original complete projection with committed identity/revision and avoids duplicate submission",
+      "independently_rerun_tests": 68,
+      "limits": [
+        "Browser confirmation blocked by locked host",
+        "Protected-overlap enforcement not implemented",
+        "No visual, exhaustive fidelity or release readiness certification"
+      ]
     }
   },
   "github_state": {
