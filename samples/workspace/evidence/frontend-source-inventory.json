@@ -2956,7 +2956,7 @@
       "files": [
         {
           "path": "twins/gmail/app.py",
-          "sha256": "dab6ea4c6d4b09ccaa2277c6df4f1c3938c98873563eec7529f396f54840fe58",
+          "sha256": "76b0d6f3adb0a2aa5250663e601b690bc0baaf67dc940f898cdbbf7835c7744c",
           "frontend_route_candidates": [
             {
               "method": "GET",
@@ -3491,7 +3491,7 @@
         },
         {
           "path": "twins/gmail/mailbox_ui.py",
-          "sha256": "89597704f3741517ab887a9488f9ef951dcf8e3a79d62e617f54efd053089d48",
+          "sha256": "42b29b2e117556e86c0ba854765f72b2e35d9e4b3d0be73227d24510a95053c3",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -3687,11 +3687,11 @@
         },
         {
           "path": "twins/gmail/ui.py",
-          "sha256": "13481f7eac73308b1b75db88f2a80ee3d8d96fb3f96a1db19d7f020c199dd50e",
+          "sha256": "5365f47232702f3d9a8009f0dbc8c454a08024ed513730a00199e1851e329e5f",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 31,
+              "line": 32,
               "dynamic": true,
               "controls": [
                 {
@@ -5138,11 +5138,11 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "bccc66858474f4c8832bf9a4601d613a887a738ce8f89c163e756a72dac3fa6d",
+          "sha256": "669671463c9e5e5981bc54b4a080fb5f7fd97cdaa94bf22614f15562a71865c7",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 410,
+              "line": 411,
               "dynamic": false,
               "controls": [
                 {
@@ -5640,7 +5640,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 168,
+      "markup_control_occurrences": 181,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -5736,7 +5736,7 @@
         },
         {
           "path": "twins/google_sheets/clipboard_ui.py",
-          "sha256": "c273eb67bf99eff22862c32e0b9210ce83208fe7ce3afe7881cfd2a3c8c80b3b",
+          "sha256": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5875,8 +5875,142 @@
           ]
         },
         {
+          "path": "twins/google_sheets/filter_view_sessions_ui.py",
+          "sha256": "030ac6a2908201db46aee025569c82b807183172963528333969108c1f8377ee",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 13,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "filter-view-save-dialog",
+                    "aria-labelledby": "filter-view-save-heading"
+                  }
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "filter-view-save-form"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-save-close",
+                    "type": "button",
+                    "aria-label": "Close"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "filter-view-save-name",
+                    "aria-label": "View name",
+                    "value": "Filter 1"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-save-skip",
+                    "type": "button"
+                  },
+                  "text": "Don\u2019t save"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-save-submit",
+                    "type": "submit"
+                  },
+                  "text": "Save"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_sheets/filter_views_ui.py",
+          "sha256": "4aca61c7ab616e4d3ad999e7de618228694e6721c04a14691edd60522501bfee",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 14,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "filter-view-title",
+                    "aria-label": "Filter view name",
+                    "value": "Temporary filter"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "filter-view-range",
+                    "aria-label": "Filter view range"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-save",
+                    "type": "button"
+                  },
+                  "text": "Save view"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-options",
+                    "type": "button",
+                    "aria-label": "Filter view options"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-exit",
+                    "type": "button",
+                    "aria-label": "Exit filter view"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-view-reload",
+                    "type": "button"
+                  },
+                  "text": "Reload spreadsheet"
+                }
+              ]
+            },
+            {
+              "line": 26,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "filter-views-button"
+                  },
+                  "text": "Filter views"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_sheets/filters_ui.py",
-          "sha256": "8d55cdc152b690dc09f954483c4d5f1386d5cb3268c01e5d0846c1f379c017bf",
+          "sha256": "f3c55c9e83ed51cdc10eceeedcfb5e96940f82dd2d282c7e1ce4bb5541111a72",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6146,7 +6280,7 @@
         },
         {
           "path": "twins/google_sheets/grid_format_ui.py",
-          "sha256": "d159de42a885141883beeec5eb2c6de748f155f1123b6bd0e2113e37d4c9757f",
+          "sha256": "7c35bfaf750dd2a387d722451fd5596816ac40a7247ce78e8241558a2552d7f8",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6652,11 +6786,11 @@
         },
         {
           "path": "twins/google_sheets/ui.py",
-          "sha256": "2f5c5470ad731cfedb4d7902510ea82afdd2e11b906955c58704794150914516",
+          "sha256": "6c88bd2ece4f68c0619ffd0836cf24416f3e22032b01827cdb68bf0e187cbd76",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 290,
+              "line": 298,
               "dynamic": false,
               "controls": [
                 {
@@ -6864,7 +6998,7 @@
         },
         {
           "path": "twins/google_sheets/validation_ui.py",
-          "sha256": "c411bd42ad3175649fdb99536691212b864cebc2151df2fd437ab9929a93bf98",
+          "sha256": "64518d3b543ceb60b2a84609ceb7afa02a5c86c94c3d8559a5c453233125efc4",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -11146,132 +11280,132 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "a63f4665c7759354169aa69f1ee7c31799b22f0c78991b9e824ddef5b360d03d",
+      "sha256": "1c1fb39c7c3bfb4d21b812b97aa0cbcb5af03ae4ef90abf867cd7af2a1c1dfa8",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 731
+          "line": 758
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1015
+          "line": 1044
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1041
+          "line": 1070
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1206
+          "line": 1235
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1717
+          "line": 1746
         },
         {
           "method": "GET",
           "path": "/document/d/{document_id}/edit",
           "handler": "docs_editor",
-          "line": 549
+          "line": 569
         },
         {
           "method": "GET",
           "path": "/spreadsheets/d/{spreadsheet_id}/edit",
           "handler": "sheets_editor",
-          "line": 567
+          "line": 590
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1254
+          "line": 1283
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1289
+          "line": 1318
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1334
+          "line": 1363
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1345
+          "line": 1374
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1366
+          "line": 1395
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1386
+          "line": 1415
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1405
+          "line": 1434
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1416
+          "line": 1445
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1428
+          "line": 1457
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1446
+          "line": 1475
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1457
+          "line": 1486
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1475
+          "line": 1504
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1499
+          "line": 1528
         }
       ],
       "markup_expressions": [
         {
-          "line": 791,
+          "line": 820,
           "dynamic": false,
           "controls": [
             {
@@ -11284,7 +11418,7 @@
           ]
         },
         {
-          "line": 907,
+          "line": 936,
           "dynamic": true,
           "controls": [
             {
@@ -11349,7 +11483,7 @@
           ]
         },
         {
-          "line": 819,
+          "line": 848,
           "dynamic": true,
           "controls": [
             {
@@ -11360,7 +11494,7 @@
           ]
         },
         {
-          "line": 833,
+          "line": 862,
           "dynamic": false,
           "controls": [
             {
@@ -11373,7 +11507,7 @@
           ]
         },
         {
-          "line": 878,
+          "line": 907,
           "dynamic": true,
           "controls": [
             {
@@ -11384,7 +11518,7 @@
           ]
         },
         {
-          "line": 814,
+          "line": 843,
           "dynamic": true,
           "controls": [
             {
@@ -11397,7 +11531,7 @@
           ]
         },
         {
-          "line": 816,
+          "line": 845,
           "dynamic": true,
           "controls": [
             {
@@ -11410,7 +11544,7 @@
           ]
         },
         {
-          "line": 855,
+          "line": 884,
           "dynamic": true,
           "controls": [
             {
@@ -11423,7 +11557,7 @@
           ]
         },
         {
-          "line": 859,
+          "line": 888,
           "dynamic": true,
           "controls": [
             {
@@ -11436,7 +11570,7 @@
           ]
         },
         {
-          "line": 869,
+          "line": 898,
           "dynamic": true,
           "controls": [
             {
@@ -11466,7 +11600,7 @@
           ]
         },
         {
-          "line": 897,
+          "line": 926,
           "dynamic": true,
           "controls": [
             {
@@ -11479,7 +11613,7 @@
           ]
         },
         {
-          "line": 902,
+          "line": 931,
           "dynamic": true,
           "controls": [
             {

@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         }
       ]
     },
@@ -24,7 +24,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         },
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
@@ -39,11 +39,11 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
-          "sha256": "d8f025a12cfa3f27fe8b7b18717ccf7acc8fd6825e5e3abf8d1865d056d207ba"
+          "sha256": "000b3dad49dca8fb7813f96c33bfabb8dd17f0e2096c00aff23b3e1ca80ffda8"
         }
       ]
     },
@@ -62,7 +62,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
@@ -70,11 +70,19 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-values-batch-atomicity-2026-09-25.json",
-          "sha256": "b9bdf484b8d2d2bbb970268483537117ba2b6a2fa9cbe14521ff9751f2286214"
+          "sha256": "a67e6bc205e2decbb4653b88c150be9e95661e815095310d86db816f1aa9b1b9"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
-          "sha256": "ef3bb1d7834d1ff4eff9afd0222755d8497df41d98d7b820f4ca9bd8a9b45a16"
+          "sha256": "bfa2467b95fdd2685f5c10ff8053748eac4f597a238575ec7279c5e420fd17e7"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
+          "sha256": "985c160444a482784685e8162164d855e3f161866b7cdb6d603bc54c74985d9a"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
+          "sha256": "56771e9ec0ef28c4f2430b92eec663f15cbc37f51f8316dd37f53e714ca6417c"
         }
       ]
     },
@@ -89,11 +97,19 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
-          "sha256": "ef3bb1d7834d1ff4eff9afd0222755d8497df41d98d7b820f4ca9bd8a9b45a16"
+          "sha256": "bfa2467b95fdd2685f5c10ff8053748eac4f597a238575ec7279c5e420fd17e7"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
+          "sha256": "985c160444a482784685e8162164d855e3f161866b7cdb6d603bc54c74985d9a"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
+          "sha256": "56771e9ec0ef28c4f2430b92eec663f15cbc37f51f8316dd37f53e714ca6417c"
         }
       ]
     },
@@ -104,7 +120,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         }
       ]
     },
@@ -119,7 +135,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         }
       ]
     },
@@ -130,7 +146,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
         }
       ]
     },
@@ -263,5 +279,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "3c99f080f02f6ce49f3778639b44fce8446ee717bf21e50da6ddaf9ab3a21697"
+  "sample_tree_sha256": "765f20b837ab6a058b9c6a9c3ba52f64fa41879a4cec4d20a01518e12eec70be"
 }

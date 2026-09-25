@@ -1,0 +1,65 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_drive",
+    "google_docs",
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1166",
+  "source_head": "2a4810686eb4d410c3597b8055b1e6544cf306ea",
+  "status": "combined_local_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "incorporates": [
+    "https://github.com/ArgaLabs/validation-server/pull/1164",
+    "https://github.com/ArgaLabs/validation-server/pull/1165"
+  ],
+  "scope": [
+    "Effective active grants and expiration including removeExpiration query semantics",
+    "Initial editor file visibility and bearer principal preservation",
+    "Post-body-read access checks for native editors, browser helpers and Docs history"
+  ],
+  "tests": {
+    "combined_focused_passed": 91,
+    "request_revocation_before_failed": 7,
+    "request_revocation_focused_passed": 11,
+    "request_revocation_preintegration_regressions_passed": 1058,
+    "combined_broad": {
+      "passed": 1138,
+      "warnings": 3,
+      "skipped": 0
+    },
+    "make_fix": "pass"
+  },
+  "source_files": {
+    "twins/google_docs/README.md": "64ca38bafe81d5764ead0f8ebd040d6869a42d1db84ebab8d7a3369f70dd6fa0",
+    "twins/google_docs/ui.py": "669671463c9e5e5981bc54b4a080fb5f7fd97cdaa94bf22614f15562a71865c7",
+    "twins/google_drive/README.md": "4595227f6742472655699843a9a39d819813d2b00411c54dfd032049aba92a7a",
+    "twins/google_drive/app.py": "1c1fb39c7c3bfb4d21b812b97aa0cbcb5af03ae4ef90abf867cd7af2a1c1dfa8",
+    "twins/google_drive/config.py": "6ac975adbf9b719e80c1827146e6efb3658a847ad4fc7486c3dd90a1d2dcf717",
+    "twins/google_drive/document_history.py": "8b55bdb9b8e500c5364511304b72232230d71e36db997a8cca04834da110c912",
+    "twins/google_drive/models.py": "5ea1d45a2a1e7869812c507b578d19de42f510e5148d2dffb002c7b9b99f1ece",
+    "twins/google_drive/runtime.py": "0be2df2a80111d213cecef3918872935ef389d7830c1eb7d0179bd6baee428a7",
+    "twins/google_drive/store.py": "b131fc5be21f96ef2fed23740c78e9f88b6946b9ba4cb076e8f7d9527c774a58",
+    "twins/google_drive/workspace_editing.py": "d695f10c3b72ff86448427cc9a624d04ce6b1e2addaa6825249b7816528b4e59",
+    "twins/google_sheets/README.md": "af00a3ad6d80e85350690d698eb3e0d68853f6de4145aca90c48b86a0061e367",
+    "twins/google_sheets/ui.py": "6c88bd2ece4f68c0619ffd0836cf24416f3e22032b01827cdb68bf0e187cbd76",
+    "twins/tests/test_google_workspace_effective_permissions.py": "b90ad127654074ba7f13a1a6a2b941733a1c69387bfdeb96fef1c89caf44dc90",
+    "twins/tests/test_google_workspace_request_revocation.py": "5987e1c677e52f03a126874452222e50bcc53f51b78bf332facf86be79a130c5",
+    "twins/tests/test_google_workspace_ui_principals.py": "b64417073f5d84c4a772f52ac84f74e1209d147b2460dd1bff041d2ad0f9c6fa"
+  },
+  "artifacts": {
+    "lab-workspace-request-revocation-before.log": "ad60178b65b80ab316a691e90fc76707ca25aad8e4cbffa9ec91c286b96f7ad2",
+    "lab-workspace-request-revocation-focused.log": "5c7b705e854762da820a4b372568cfff2c4c7dbcf66596ffd88f8758ff2a3683",
+    "lab-workspace-request-revocation-regressions.log": "0451c425c83e8200fc76e84e1486fa451467e7ed432106daa6089a689451be5b",
+    "lab-workspace-permissions-combined-focused.log": "0d25a6714a5150f7864e118db72f84b3f87203ca51903266f41a6b78e8e43c50",
+    "lab-workspace-permissions-combined-makefix.log": "e7ee35ea2d320f4cd898f452e14e2e7228e716663351202d2544bfb3cedc3040",
+    "lab-workspace-permissions-combined-regressions.log": "d3840adf3cdc04337c7ef6f45fa576d40f6384215e9b6737f7655bcb625b9725"
+  },
+  "limits": [
+    "New exact-head CI, production rollout and fresh hosted native/image/UI checks remain pending.",
+    "No hosted GUI or touch claim while the Mac is locked.",
+    "Group membership, inherited/shared-drive permissions, reader-mode controls and access requests remain open.",
+    "Full eight-provider parity and WKS-03 sample gates remain open; no final ZIP."
+  ]
+}

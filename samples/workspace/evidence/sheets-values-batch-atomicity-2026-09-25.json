@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1163",
   "head": "1052a747ce043d09f4f32e3c1facb7558b38de95",
-  "status": "local_pass_ci_and_hosted_pending",
+  "status": "merged_full_ci_pass_deployment_pending",
   "release_allowed": false,
   "scope": [
     "Atomic values update and clear batches, including data-filter variants",
@@ -32,10 +32,32 @@
     "lab-sheets-value-batches-unicode-before.log": "e2f12f7d785f78fef49ed5b410bd9e3c977575f1c40ea7fa11f40a5270bdb173",
     "lab-sheets-value-batches-focused-final.log": "c56215d5deb7b10e5c2016c5c0c2c2f95ca97c8a45d800ac387928275abd9c6e",
     "lab-sheets-value-batches-regressions-unicode-final.log": "3ace0c3052c96b21b61dc454625de6817199ecc57d6755f05b0ae35b54e6875b",
-    "lab-sheets-value-batches-makefix-final.log": "c4bab5476f3e4d95cf8950ff18cbdfd62db40456f155d79439770aa2243fae2d"
+    "lab-sheets-value-batches-makefix-final.log": "c4bab5476f3e4d95cf8950ff18cbdfd62db40456f155d79439770aa2243fae2d",
+    "lab-final-sheets-values-current-pr.json": "a2e6337433ad2b46d96748465230f2744feddd4e10a9d7aa5a30e7798fda38bc",
+    "lab-final-sheets-values-full-ci.log": "3ddd2237c579c5f6582b07dc28bbfd27de97f29af9b96fb0bdb82552afed7201"
   },
   "limits": [
-    "CI, production rollout and hosted native verification remain pending.",
+    "Exact-head CI passed before merge. Both production workflows and fresh hosted verification remain pending.",
     "This correction does not complete protected-range enforcement, broad permission/AI/collaboration or browser fidelity coverage."
-  ]
+  ],
+  "current_ci_head": "cced67b4fd26a51d459723cf5665f5945ba799e5",
+  "base_update": "Updated with main3f91765b; exact-head CI passed before merge.",
+  "merge_commit": "c04ee6aaa3d7bdf2c2bcd2488caff8ab92ec6d89",
+  "ci": {
+    "head": "cced67b4fd26a51d459723cf5665f5945ba799e5",
+    "status": "pass",
+    "twins_passed": 5748,
+    "twins_skipped": 145,
+    "twins_deselected": 3,
+    "root_passed": 2130,
+    "root_skipped": 2,
+    "lint_test_run": 36187136750,
+    "docker_run": 36187136854,
+    "fidelity_run": 36187136820
+  },
+  "deployment_workflows": {
+    "runtime": 36189086245,
+    "twins": 36189086413,
+    "status": "running"
+  }
 }
