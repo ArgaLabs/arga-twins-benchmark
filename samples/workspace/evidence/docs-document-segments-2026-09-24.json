@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "local_native_and_bounded_desktop_mobile_verified_release_pending",
+  "status": "deployed_hosted_native_exports_pass_gui_pending",
   "screenshots_retained": false,
   "scope": "Default inline headers, footers and numbered footnotes in independent document tabs. This is not complete Google Docs fidelity.",
   "changes": [
@@ -137,10 +137,223 @@
         "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.footnotereference?view=openxml-3.0.1"
       ],
       "broad_regressions": 379
+    },
+    "ci": {
+      "run": 36077357838,
+      "head": "8919ced05ef985cd4663e2dc3c03fbfb5ca0af95",
+      "result": "success",
+      "twins": {
+        "passed": 5362,
+        "skipped": 145,
+        "deselected": 3
+      },
+      "root": {
+        "passed": 2106,
+        "skipped": 2
+      },
+      "log_sha256": "cb77cdd9c0b221afdddcd5fca928b7c8b30bda953a54c8040ec4c9b564112cc9"
+    },
+    "deployment": {
+      "revision": "c8324b19119107e4422881fbaf76642c8a12de4f",
+      "runtime_workflow": 36079238202,
+      "twins_workflow": 36079238244,
+      "both": "success",
+      "published_images": {
+        "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+        "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+        "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4dab07ebe5c37455efdf3bd434d23909e9056bbb8ad4844bba5aa2d1e575ed35",
+        "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:88bcd3de7be3f996668de8a62fa0512decb4adc4b28358048c2ce66492e3968b",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4b0e6d852fa2148699aa3ad8280050c002d0af8bfa553b9053c220bc92725e33",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:1b3cdd93529f8e7a87f0badc7e3fe7348d107a48d0edcba4a139f30614006d7b"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": "preview-proxy-00265-hrb",
+        "arga-api": "arga-api-00635-87f"
+      },
+      "log_sha256s": {
+        "lab-final-docs-segments-twins-deploy.log": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
+        "lab-final-docs-segments-runtime-deploy.log": "66475f9aea5ffe4b2687e20c8b1506572dd56fe065bf69ae201d48220c9d6ba4"
+      },
+      "attestation_limit": "Successful build/push/deployment logs; complete current-container attestation remains pending runtime evidence PR #1157 rollout."
+    },
+    "hosted": {
+      "scope": "Fresh CLI-provisioned durable Scenario; operator native API checks and HTTP exports through BrowserProxy. These are not GUI checks.",
+      "native_segments": "Default header/footer/footnote creation and text readback, 36pt margins, unchanged body text, exact protected document/tab equality.",
+      "atomic_failure": {
+        "http_status": 400,
+        "complete_document_unchanged": true
+      },
+      "exports": {
+        "status": "pass",
+        "exports": [
+          {
+            "filename": "active-tab.txt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.md",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.xmd",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.html",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.rtf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.docx",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "pass"
+          },
+          {
+            "filename": "active-tab.odt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.epub",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.zip",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.pdf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.txt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.md",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.xmd",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.html",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.rtf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.docx",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "pass"
+          },
+          {
+            "filename": "all-tabs.odt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.epub",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.zip",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.pdf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          }
+        ],
+        "limits": [
+          "PDF and text-like exports include segments in reading order; this is not page-exact PDF or full rich export parity."
+        ],
+        "full_native_state_unchanged": true,
+        "render_inspection": {
+          "pages": 2,
+          "header_body_note_footer_separate": true,
+          "second_tab_does_not_inherit_segments": true,
+          "follow_up": "Footnote marker-to-text spacing is tight in the native DOCX rendering; richer export typography remains pending.",
+          "screenshots_retained": false
+        }
+      },
+      "served_source": {
+        "matched": {
+          "twins/google_docs/document_segments_ui.py:SEGMENT_SCRIPT": "0214e8507115b6ba4de55bc3d28ceb42a1d7afd970e0c99c323ede78563d844f",
+          "twins/google_docs/table_options_ui.py:TABLE_OPTIONS_SCRIPT": "8c817e482e93fb63599ca1acb3f531f2a0925364fa0716a0cd96da164feb3ef5"
+        },
+        "scope": "Complete served code blocks; not container digest attestation."
+      },
+      "cleanup": "torn_down confirmed",
+      "browser": "pending: host locked and Chrome debugger unattached",
+      "captures": [
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-before.json",
+          "sha256": "56bbae59c212391fc2e1566f451dc085cf4e2351f273b2f8ead0da275fa17680"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-after.json",
+          "sha256": "94a9df50ef66c1f9e58c0fdc8203bf78ec866654267acdf8439c9f1bd3026fa9"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-after-api-segments.json",
+          "sha256": "f737607b1e2b2e7ebc319f0194b888e71d3599d18a4094e15e96ea0c68240073"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-segment-operator-trace.json",
+          "sha256": "dc32eafb695eb6e4e5da5dafd81dacd21b5094fbd490869e19077164b7678325"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/before-fixed-exports.json",
+          "sha256": "682139ff40286d41ae450c35870da7b0fba3f7c03b9ee44b521b6c1183d81733"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/after-fixed-exports.json",
+          "sha256": "682139ff40286d41ae450c35870da7b0fba3f7c03b9ee44b521b6c1183d81733"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/hosted-export-checks.json",
+          "sha256": "a4c58b4696c6b4238e31976c1503eaf7eba3be6dafa57a231ef94a9ae1b34ce3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/frontend-code-fingerprints.json",
+          "sha256": "97b58547822544ab0c3d1caeff45c0dc4201f029839d611c3ee1c799f6c580a3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/cleanup.json",
+          "sha256": "f4ac0178d6d692019e582e1ecf7bc22f533cda962a5a17ee91dbff97290024c1"
+        }
+      ],
+      "operator_attempts": [
+        "First run: local Starlette middleware compatibility error; no product failure inferred; teardown confirmed.",
+        "Second run: native checks and 20 exports pass after BrowserProxy binary MIME fix. Original corrupted exports retained privately."
+      ]
     }
   },
   "limits": [
-    "PR, CI, production deployment and fresh hosted segment checks pending.",
+    "Both production deployments, fresh hosted native segment checks and 20 export variants pass. Hosted GUI/draft-recovery/mobile/keyboard checks remain pending while the host is locked.",
     "First-page/odd-even/section-specific and repeated paginated headers/footers remain pending.",
     "Find searches bodies only; segment-inclusive search and rich history previews remain pending.",
     "Footnote reference deletion is verified through the native backend; browser keyboard removal remains unverified because the attempted CUA selection did not remove its atom.",
@@ -152,6 +365,8 @@
     "number": 1155,
     "url": "https://github.com/ArgaLabs/validation-server/pull/1155",
     "tested_source_revision": "8919ced05ef985cd4663e2dc3c03fbfb5ca0af95",
-    "status": "ci_pending"
+    "status": "merged",
+    "merge_commit": "c8324b19119107e4422881fbaf76642c8a12de4f",
+    "merged_at": "2026-09-25T00:48:34Z"
   }
 }

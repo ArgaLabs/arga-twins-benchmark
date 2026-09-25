@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-24",
+  "kind": "deployed_image_evidence_implementation",
+  "status": "local_verified_ci_and_hosted_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1157",
+  "tested_head": "35ceaff37d417b7d237ca9683af2797c83e65b0b",
+  "scope": [
+    "Deployment-scoped Docker Compose service/container identities, actual image IDs and registry digests exposed through existing owner-scoped worker logs.",
+    "Cloud Run latest ready and traffic-bearing/tagged revisions, their ready state and resolved image digests."
+  ],
+  "verification": {
+    "targeted_tests": 68,
+    "ruff": "passed",
+    "focused_pyright": "0 errors",
+    "real_docker_compose": "Complete evidence from actual Docker templates; private environment sentinel excluded; exact owned fixture teardown confirmed."
+  },
+  "limits": [
+    "Hosted worker rollout, Cloud Run verification and fresh eight-provider runtime evidence are still pending.",
+    "Timestamped observations do not establish continuous runtime identity.",
+    "Multi-container Cloud Run revisions require an individually resolved image for every container; one status.imageDigest is never assigned to sidecars.",
+    "This does not establish frontend parity or physical touch coverage."
+  ],
+  "sources": {
+    "cluster_deploy/shared/image_attestation.py": "6123c78e4d620358a8435d6d770765a7b88c23d6d12826e662740ec05dd06e8c",
+    "cluster_deploy/warm/runner.py": "2cafd9cb0b8d631445a8f789121a59a3ffba02758c282e6234261db6fca53d36",
+    ".github/actions/update-cloud-run-service/action.yml": "f236348df71fe562a5a7d093b27a7f87e1012e01bb87bbc92d48d716b0c510aa",
+    ".github/actions/update-cloud-run-service/image_evidence.py": "9c0dce0d47c859e6341bfb62655ddfb15835ff891e304c857dbdadf70f1ba9c5",
+    "tests/test_runtime_image_evidence.py": "f553b61dd3db5831637633b2dfbae8b838199663f86f669d03737c90d0d7612f",
+    "tests/test_cloud_run_image_evidence.py": "fac6fcd2cb9782964162ed5539bc56f67324e2deaa57f4e2cd63022d360a0e8f"
+  },
+  "local_evidence": [
+    {
+      "name": "lab-final-runtime-image-evidence-tests-v2.log",
+      "sha256": "1befea0456ba964696934f0d6170aa3e6765023fdae5b0a5b687cf85ae3d0aae"
+    },
+    {
+      "name": "lab-final-runtime-image-evidence-pyright.log",
+      "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+    },
+    {
+      "name": "lab-final-runtime-image-smoke.json",
+      "sha256": "9d4e96501b97fe6aca5252408c716146c39a96da3880c00b921ab6b2bc3dd7b9"
+    }
+  ],
+  "current_head": "958d82b41f09bd2ec213f296d5a60852e549771f",
+  "current_ci_run": 36079285098
+}

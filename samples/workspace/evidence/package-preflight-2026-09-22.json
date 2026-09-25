@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 271,
+      "files_scanned": 273,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -59,10 +59,10 @@
     },
     "current_full_benchmark_tests": {
       "date": "2026-09-24",
-      "source_revision": "18573f07a7ddafbcccddd38052d2a498be2b3345",
-      "passed": 1185,
+      "source_revision": "5bf2ce3",
+      "passed": 1203,
       "skipped": 26,
-      "log_sha256": "52437ba98ebfefb0106b3286f63f4c8ba151cfba677d73ba1edd29996a3d4d4d",
+      "log_sha256": "606651863743ac4bee2a119101a039f1e1f181cae02968d1e5d800d42c5dc385",
       "command": "PYTHONPATH=src .venv/bin/python -m pytest -q"
     },
     "current_package_readiness_tests": {
@@ -71,15 +71,50 @@
       "deselected": 110,
       "command": "PYTHONPATH=src python -m pytest -q tests/test_workspace_outcomes.py -k 'package or readiness or release'",
       "log_sha256": "4f3bf190f05e0dff6f30c1571de0a8b39ef9a6e54fc34bb2f8af4d151e11cf3b"
+    },
+    "browser_export_proxy": {
+      "new_regressions": 9,
+      "scoped_regressions": 186,
+      "full_benchmark": {
+        "passed": 1203,
+        "skipped": 26
+      },
+      "ruff": "pass",
+      "pyright": {
+        "baseline_errors": 1196,
+        "current_errors": 1196,
+        "normalized_added": 0,
+        "normalized_removed": 0,
+        "status": "unchanged existing baseline, not clean"
+      },
+      "hosted": "20 Docs exports pass content/tab isolation and archive checks through patched proxy; complete captured native state unchanged.",
+      "source_hashes": {
+        "src/arga_twins_benchmark/computer_use/proxy.py": "ceb22a23ef60f33479592483d8d6849d15851ee7ae2a2fda49dfcb5960ebc6aa",
+        "tests/test_computer_use_sample.py": "d3fc92e313b2e9f6ac847f27af175f80138924163ffbb5483ff8c5db427f2d3b"
+      },
+      "logs": [
+        {
+          "name": "lab-final-sample-gates-v7.log",
+          "sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a"
+        },
+        {
+          "name": "lab-final-sample-full-regression-v8.log",
+          "sha256": "606651863743ac4bee2a119101a039f1e1f181cae02968d1e5d800d42c5dc385"
+        },
+        {
+          "name": "lab-final-sample-pyright-v8-comparison.json",
+          "sha256": "1a94bdd315e43f2e41191db460c6e1549982c9ed4874cf6714fd6f08b168ae9f"
+        }
+      ]
     }
   },
   "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. Full eight-twin frontend parity, deployed-container attestation and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
-    "passed": 177,
-    "scope": "Complete workspace-outcome and sample tests, including release gates, after evidence reconciliation",
+    "passed": 186,
+    "scope": "Complete workspace-outcome and sample tests after binary Office export fix",
     "command": "PYTHONPATH=src python -m pytest tests/test_workspace_outcomes.py tests/test_computer_use_sample.py -q",
-    "log_sha256": "cb7ec1c9dcaeb18a3ea5fa85b3bc0a423ce7523383e19f16149bbed179277f65",
+    "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   }
 }

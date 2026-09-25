@@ -164,6 +164,68 @@
           "Unread first"
         ],
         "checked": "Opened display options and cancelled; opened an already-read issue notification to inspect Activity/Subscribe/attachments/comment composer. Unread count remained one; no comments, subscription or notification state changed."
+      },
+      "member_administration": {
+        "route": "/settings/members",
+        "controls": [
+          "Search by name or email",
+          "Member filter",
+          "Export CSV",
+          "Invite",
+          "Sort Name/Email/Status/Joined/Last seen",
+          "Member menu"
+        ],
+        "filters": [
+          "All",
+          "Admins",
+          "Members",
+          "Guests",
+          "Applications",
+          "Pending invites",
+          "Suspended",
+          "Left workspace"
+        ],
+        "invite_dialog": {
+          "fields": [
+            "Email",
+            "Role"
+          ],
+          "roles": [
+            "Guest: limited access to teams",
+            "Member: full access with limited permissions",
+            "Admin: full administrative access"
+          ],
+          "checked": "Opened role selector, selected Guest in the unsent draft, then Escape closed the dialog and returned focus to Invite. No email entered or invitation sent."
+        },
+        "filter_cancel": "Escape retains All and returns focus to Member filter."
+      },
+      "team_administration": {
+        "routes": [
+          "/settings/teams",
+          "/settings/new-team"
+        ],
+        "list_controls": [
+          "Filter by name",
+          "Team status",
+          "Export CSV",
+          "Create new team",
+          "Sort Name/Visibility/Members/Issues/Created",
+          "Team menu"
+        ],
+        "create_fields": [
+          "Icon & Name",
+          "Identifier",
+          "Parent team",
+          "Team access",
+          "Timezone",
+          "Copy settings from existing team"
+        ],
+        "visibility_options": [
+          "Public to workspace",
+          "Private to team members"
+        ],
+        "observed_policy": "Private teams are visible to team members and workspace admins. Parent teams supply inherited settings/workflows; subteams must copy parent settings. Copying settings excludes team members and Slack notification settings.",
+        "checked": "Opened visibility options and cancelled with Escape, then used Back without entering fields or creating a team. Existing active-team count unchanged."
       }
     },
     "stripe": {

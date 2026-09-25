@@ -40,7 +40,12 @@
       "id": "frontend.google_docs",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_docs",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/docs-document-segments-2026-09-24.json",
+          "sha256": "17436a9d38a6833fb0c04d66568f0ae8479c2765883d0263bd1437072b001cb3"
+        }
+      ]
     },
     {
       "id": "frontend.notion",
@@ -52,7 +57,12 @@
       "id": "frontend.linear",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for linear",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/linear-comment-threads-2026-09-24.json",
+          "sha256": "0b0a1da5d175a11144b3ead294e29fd7d455bd33e0783024137f53957e71c119"
+        }
+      ]
     },
     {
       "id": "frontend.stripe",
@@ -171,7 +181,12 @@
       "id": "deployment",
       "description": "Verify tested twin revision on hosted deployment",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
+          "sha256": "d07042fc9015f7a1cb903405dce1f73f389bd6b386b53658a62aeba3696f9909"
+        }
+      ]
     },
     {
       "id": "package",
@@ -180,5 +195,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "0561986a1738b2138b190a618846f550bf11dec72fbf0c8d810417c17e63d3fb"
+  "sample_tree_sha256": "507f4ec049f7d4c736755a7f6f96d01838af06de963632bb870998ee2f217651"
 }

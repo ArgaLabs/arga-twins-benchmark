@@ -117,6 +117,8 @@
     "number": 1156,
     "url": "https://github.com/ArgaLabs/validation-server/pull/1156",
     "tested_source_revision": "f3bc038ba1a8b8deeb3bf0031ceb49b301d5bb33",
-    "status": "ci_pending"
+    "status": "ci_pending_after_main_sync",
+    "current_head": "37c02d8316dd56b54ae87121a62504d202be3cde",
+    "current_ci_run": 36079290401
   }
 }
