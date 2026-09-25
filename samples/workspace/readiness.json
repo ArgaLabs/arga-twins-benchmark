@@ -10,6 +10,10 @@
         {
           "path": "samples/workspace/evidence/github-conversation-controls-2026-09-24.json",
           "sha256": "c859262f689caaa5acfe88a90aac76877377f28bafeb73908ff54d7edbd613fc"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
         }
       ]
     },
@@ -17,13 +21,23 @@
       "id": "frontend.google_calendar",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_calendar",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+        }
+      ]
     },
     {
       "id": "frontend.gmail",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for gmail",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+        }
+      ]
     },
     {
       "id": "frontend.google_sheets",
@@ -37,6 +51,10 @@
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
           "sha256": "9c85efe9dc95c378fff5ba9d24a31ec801de3584a289a9f715057b98c6f0319d"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
         }
       ]
     },
@@ -48,6 +66,10 @@
         {
           "path": "samples/workspace/evidence/docs-document-segments-2026-09-24.json",
           "sha256": "17436a9d38a6833fb0c04d66568f0ae8479c2765883d0263bd1437072b001cb3"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
         }
       ]
     },
@@ -55,7 +77,12 @@
       "id": "frontend.notion",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for notion",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+        }
+      ]
     },
     {
       "id": "frontend.linear",
@@ -65,6 +92,10 @@
         {
           "path": "samples/workspace/evidence/linear-comment-threads-2026-09-24.json",
           "sha256": "eecd0964f958608f4c6dd77378c2b7aee35c28f6f07bc3e9dc6a1f5f3681c534"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
         }
       ]
     },
@@ -72,7 +103,12 @@
       "id": "frontend.stripe",
       "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for stripe",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+        }
+      ]
     },
     {
       "id": "rollout.WKS-01",
@@ -188,7 +224,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
-          "sha256": "72b5bb5bf3f538a63918090ba6b1ca78345795356fe29cfc9c7dd0258ee0cfcb"
+          "sha256": "e4f65af5d8d51fe0b0d0ec8f64f31379bbcd84b6d87957a0d6e70bc4db2afffe"
         }
       ]
     },
@@ -199,5 +235,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "ee9d2f62b357fc88f05ff00981832d4a40e14261dfb733389eef0e4816713b6a"
+  "sample_tree_sha256": "452af244858a46724883e0a77722891407927d21ac86a19707182b07f54066bd"
 }

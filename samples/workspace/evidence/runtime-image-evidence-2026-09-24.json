@@ -1,7 +1,7 @@
 {
   "date": "2026-09-24",
   "kind": "deployed_image_evidence_implementation",
-  "status": "local_verified_ci_and_hosted_pending",
+  "status": "merged_ci_pass_production_rollouts_pending",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1157",
   "tested_head": "35ceaff37d417b7d237ca9683af2797c83e65b0b",
   "scope": [
@@ -18,6 +18,17 @@
       "run": 36079285098,
       "result": "success",
       "note": "Superseded by current-head checks after merging Linear main."
+    },
+    "current_ci": {
+      "head": "e02fb21f8a5cd22dd839f733e7330fa121f513ea",
+      "run": 36081199691,
+      "result": "success",
+      "twins_passed": 5392,
+      "twins_skipped": 145,
+      "twins_deselected": 3,
+      "root_passed": 2130,
+      "root_skipped": 2,
+      "log_sha256": "904520fd8e6dda5cb84c8288d5aeb78d3213b87e6a864a75a163207d7bd9f06b"
     }
   },
   "limits": [
@@ -49,5 +60,12 @@
     }
   ],
   "current_head": "e02fb21f8a5cd22dd839f733e7330fa121f513ea",
-  "current_ci_run": 36081199691
+  "current_ci_run": 36081199691,
+  "merge_commit": "19518bc12b971a51dacce3acf84778da487acb59",
+  "merged_at": "2026-09-25T01:40:31Z",
+  "production_workflows": {
+    "runtime": 36083051785,
+    "workers": 36083051794,
+    "status": "in_progress"
+  }
 }
