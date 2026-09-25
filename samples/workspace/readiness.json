@@ -86,11 +86,11 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-protection-access-2026-09-25.json",
-          "sha256": "cf373edcb4892ae965eee1b6877c6fe8b2be957a8a942b29daa798950b4fbf4e"
+          "sha256": "e721699586413fab1809849412eae9a56b73c9012ab60e131ba4afce546b463b"
         },
         {
           "path": "samples/workspace/evidence/sheets-protection-sidebar-2026-09-25.json",
-          "sha256": "0f6bde41511fc907df1510802a4084a8a43178dd0e4bfb6ab25c64653a75e4bf"
+          "sha256": "e4a0b277d9fbc7aaaa659807b9a384461e837d891960289b3b1586e72b106096"
         }
       ]
     },
@@ -291,5 +291,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "5947e5edf8c8bcc1f5c322c995b36283e1ec4a95b0818a058ea7518161ee5c6a"
+  "sample_tree_sha256": "6941d0e834b9523fbe532157ffca244ea642760eeb39e6c96d991705194bd73f"
 }

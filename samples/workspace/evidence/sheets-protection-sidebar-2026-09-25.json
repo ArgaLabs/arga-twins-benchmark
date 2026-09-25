@@ -5,26 +5,32 @@
     "google_sheets"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1169",
-  "source_head": "4e90a4548fe0559cea8c3e6d5b3bd655baef3490",
-  "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1168",
-  "status": "draft_local_source_api_checks_pass_browser_checks_incomplete",
+  "source_head": "5fc6e82d8ac0b911732d7e601c5b7bb75e21e0ab",
+  "depends_on": "PR #1168 merged/deployed at 625a11b3",
+  "status": "local_source_api_checks_pass_ci_and_browser_checks_pending",
   "release_allowed": false,
   "scope": [
     "Permission-aware protected sheets/ranges sidebar with native range/named/table targets and sheet exceptions",
     "Only you/Custom editor and native warningOnly policy configuration",
     "Atomic revision-checked writes, denied/stale preservation and body-read revocation",
-    "Untouched native open bounds and exceptions survive description edits; pending form fields stay frozen"
+    "Untouched native open bounds and exceptions survive description edits; pending form fields stay frozen",
+    "Warning-only grid confirmation with Cancel/OK, page-session workbook-scoped five-minute suppression and revision-bound consent",
+    "Existing API protections cover typed, clipboard, formatted, structural and sorted-view edits; native API semantics unchanged"
   ],
   "tests": {
-    "focused_passed": 45,
-    "workspace_regressions_passed": 1246,
+    "focused_passed": 102,
+    "workspace_regressions_passed": 1270,
     "skipped": 0,
     "warnings": 3,
     "make_fix": "pass",
     "rendered_javascript_syntax": "pass",
     "diff_check": "pass",
-    "independent_source_review": "Both reproduced open-bounds and pending-textarea findings resolved; source-scoped pass.",
-    "documentation_review": "Verification wording corrected to distinguish pre-fix Chrome from corrected source/API checks."
+    "independent_source_review": "Open-bound and frozen-field corrections plus warning controls, request context isolation and stale-body consent preservation independently verified; source/API-only pass.",
+    "documentation_review": "Scope and limitations match current source; no visual approval.",
+    "warning_javascript_passed": 10,
+    "warning_initial_attempt_limits": "Initial warning tests included incorrect runtime fixture attribute and missing gridRange in filter preview. Corrected tests subsequently verify all 16 API cases; these fixture errors are not claimed as product defects.",
+    "warning_review_correction": "Bulk grid actions initially disabled warning dialog buttons. Fixed by excluding confirmation controls from the frozen grid controls; independent exact-script execution passed.",
+    "additional_regressions_after_broad_pass": 3
   },
   "local_desktop": {
     "status": "pass",
@@ -41,19 +47,23 @@
   },
   "provider_reference_evidence": "sheets-protection-access-2026-09-25.json",
   "source_files": {
-    "twins/google_drive/app.py": "eff717d7311e7a233c3581165192c0504b148ec9f73b7d964368781f8cc09976",
+    "twins/google_drive/app.py": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
     "twins/google_drive/runtime.py": "7da052401ff61cf084354b6feae029d9ef381bcd62e23731116ccd7b3c4f6957",
     "twins/google_drive/sheet_protection_ui.py": "0477740a1d297fa732e6585b73c55b5a8c513fad6b1464778d488348705e1a46",
-    "twins/google_drive/workspace_editing.py": "c10e25717389f6bdc0b287f5c9bea65319ecb329c2c3d0d497a0fff85f57b4c4",
-    "twins/google_sheets/README.md": "a384abe117d0eaa0135b93f877d6282e258c950663f8ea5a30c71f9889cbeac5",
+    "twins/google_drive/workspace_editing.py": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+    "twins/google_sheets/README.md": "446247a0237697d319905361a09a5ca52eed6b658cbd4eabe3e56c7e0bdaeea7",
     "twins/google_sheets/filters_ui.py": "79a82a4c0a78457a34d601a9228b8f4ec8c067963cf43b307cf0c3dfee82dd85",
     "twins/google_sheets/named_ranges_ui.py": "7f9a7ab616eb1448aef5ad6d9f680b9df221ea37a18cfd01a8ef4d94fe181fd4",
     "twins/google_sheets/protection_ui.py": "d6e9c15365f8ea7f9ad06e0a04371d51087238e70aa4974c5ee44602d7eeefd1",
-    "twins/google_sheets/ui.py": "6207cfd20e328e5d9147b9ea4750a20780a76a72c4ec3112bb5036025e5d3e9a",
+    "twins/google_sheets/ui.py": "42549e9862cefbc8d8d1033cbc3aa2f5172d6834f92cdc12462980733fdd8123",
     "twins/google_sheets/validation_ui.py": "83ff7cf7bf6bf2740ad4d0c5f32d43f9e9eb70d079bb4be6ccf843ae6ddfd465",
-    "twins/tests/test_google_sheets_protection_ui.py": "6faae4b03602c36c5ad3c71d2963a10ba186e0d0ab0a08783fb83bc996c8a485",
+    "twins/tests/test_google_sheets_protection_ui.py": "a176e428513b4f25cbd970f29c1388a629dde320e0d4837b90e8617a21f6ef2e",
     "twins/tests/test_google_sheets_tabs.py": "0538f39076d0659f43ea496a247f24daf99262a14a9f1e3a2f6d1eb79d052342",
-    "twins/tests/test_google_workspace_request_revocation.py": "e0771ba400029372efd7054ce2a909177d773100fbfdd4fa97cc5b218150be33"
+    "twins/tests/test_google_workspace_request_revocation.py": "e0771ba400029372efd7054ce2a909177d773100fbfdd4fa97cc5b218150be33",
+    "twins/google_drive/sheet_protection.py": "4d85fb49fa66b440963be873809e67367fec77b483e7e7b76209fad28fee90aa",
+    "twins/google_sheets/grid_format_ui.py": "547a0b02b7537515a0a7481fb2939def1e8892816b571baf8123608a9262907e",
+    "twins/google_sheets/protection_warning_ui.py": "d3f972f147d9cfe1d2f7d4acfa376189eb7eb4c6f34e80c0a81de088d52a9973",
+    "twins/tests/test_google_sheets_protection_warnings_ui.py": "d7bd3c6034bdde1997b25f5fdf3cb8a5fd7d5caf57f190cf4ca6a07e3b6f25be"
   },
   "artifacts": {
     "lab-sheets-protection-ui-focused-final.log": "ad0f807f73eddebd57b4cf0ddc94c2135e0b457f5c7c621ee7ac43503e829e36",
@@ -63,14 +73,23 @@
     "lab-sheets-protection-ui-makefix-final.log": "7b01e2ecb87dabe137a41613917d396239ba91dd7e8efbfd2168883f4322e32d",
     "lab-sheets-protection-ui-browser-result.json": "2f1c0e45dcdd1452c73e23f7129661abc1c4b601660ab552fc8717f278b10f91",
     "lab-sheets-protection-ui-desktop-checks.json": "0f43ea47f86b4e917e76a4d9f4b685cc63e7215fbbfeec35af10fbf3c865256f",
-    "lab-sheets-protection-ui-desktop-native.json": "d09ecbd9cd2c792ad66673abfd1d324760b00beb9d7a8325d0a8de61acbf989e"
+    "lab-sheets-protection-ui-desktop-native.json": "d09ecbd9cd2c792ad66673abfd1d324760b00beb9d7a8325d0a8de61acbf989e",
+    "lab-sheets-protection-warning-reproduced.log": "f87ea9c6ef9b3c89f6806bea8f15ef055a92fa9ab1bbe94dda0fdb7e00223541",
+    "lab-sheets-protection-warning-after-v2.log": "d19f8ee5f104bcbf573f8988660267f496e8888cf5d5cc53b8b46bb7b1cb308b",
+    "lab-sheets-protection-warning-js.log": "24ad8f3778b08d2cce8c6fc099a794bf11913562b5a015fe47b7f89662408c4f",
+    "lab-sheets-protection-warning-regressions.log": "7e28e653ccfc0f2ce723da9d01fb7ce001c69a3d34a797f9e9bf9a475d00c2fe",
+    "lab-sheets-protection-warning-final-focused.log": "c3917a1f08589c9a9b2a2617a6a6873522f9b1f5dcfb64ca4c3970114d5c1397",
+    "lab-sheets-protection-warning-makefix-v2.log": "74df7d68b87875b6d71f6e1e3fbafa2fda0a739637d9e4ae78db88230c89d422",
+    "lab-sheets-protection-warning-final-review.log": "e467acf2cffdad120b7e7abfb82f7625bbdaebd0d0aebf55db5f3cd0efd76f71",
+    "lab-sheets-protection-warning-makefix-final.log": "1ee56975d8eee9dfe679267eef767921d2fd5857fb091d05306f72738a154dda"
   },
   "limits": [
-    "Warning-only grid confirmation remains unimplemented; the sidebar currently configures native policy only.",
+    "Warning confirmation has source/API and JavaScript behavior checks; corrected Chrome and hosted GUI verification remain pending.",
     "Post-correction Chrome, hosted, responsive/mobile and physical-touch verification remain pending. Native Chrome stopped exposing a usable tree/screenshot during responsive controls.",
     "Group/copy-permission management, selection pickers, active filter-view protection edits and exhaustive visual/provider parity remain open.",
     "Initial test failures included invalid test assumptions about native state eviction and permission-store internals; a broad mock required the new navigation dependency. They are not claimed as reproduced product failures.",
     "All eight frontend/AI/collaboration gates, WKS-03 and final sample release remain open."
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "prior_source_head": "4e90a4548fe0559cea8c3e6d5b3bd655baef3490"
 }
