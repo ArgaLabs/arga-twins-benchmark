@@ -224,7 +224,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
-          "sha256": "e4f65af5d8d51fe0b0d0ec8f64f31379bbcd84b6d87957a0d6e70bc4db2afffe"
+          "sha256": "e16703c3dcee9cf4b0c8da6485f68a6332fc443746b23773ce78dbffafb64b01"
         }
       ]
     },
@@ -235,5 +235,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "452af244858a46724883e0a77722891407927d21ac86a19707182b07f54066bd"
+  "sample_tree_sha256": "6334ee7abcd92eef2b7a2968bf66c68c3716f227b47ce7b7ab1bb8f530c487a4"
 }

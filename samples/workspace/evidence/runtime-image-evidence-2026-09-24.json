@@ -1,9 +1,9 @@
 {
   "date": "2026-09-24",
   "kind": "deployed_image_evidence_implementation",
-  "status": "merged_ci_pass_production_rollouts_pending",
+  "status": "deployed_cloud_run_and_fresh_all_container_attestation_pass",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1157",
-  "tested_head": "35ceaff37d417b7d237ca9683af2797c83e65b0b",
+  "tested_head": "e02fb21f8a5cd22dd839f733e7330fa121f513ea",
   "scope": [
     "Deployment-scoped Docker Compose service/container identities, actual image IDs and registry digests exposed through existing owner-scoped worker logs.",
     "Cloud Run latest ready and traffic-bearing/tagged revisions, their ready state and resolved image digests."
@@ -29,10 +29,688 @@
       "root_passed": 2130,
       "root_skipped": 2,
       "log_sha256": "904520fd8e6dda5cb84c8288d5aeb78d3213b87e6a864a75a163207d7bd9f06b"
-    }
+    },
+    "cloud_run": {
+      "revision": "19518bc12b971a51dacce3acf84778da487acb59",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00267-q59",
+          "observed_at": "2026-09-25T01:41:43.890831+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:19518bc12b971a51dacce3acf84778da487acb59",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00267-q59"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00267-q59",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b",
+            "sha256:98538e815d3ed1543b70da66d5cda9793fe578bb7bd1d473fe5d0aaf43f8dba7"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00637-4ts",
+          "observed_at": "2026-09-25T01:46:41.921819+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:19518bc12b971a51dacce3acf84778da487acb59",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:83fd734445aa5cb64d7b627ef440b371bcd9c21e2b3eceecb1f8fabdf982f617",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:83fd734445aa5cb64d7b627ef440b371bcd9c21e2b3eceecb1f8fabdf982f617"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00637-4ts"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00637-4ts",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:83fd734445aa5cb64d7b627ef440b371bcd9c21e2b3eceecb1f8fabdf982f617",
+            "sha256:bfee0667b9af4fed02dcb51247bf881b916fa1605b258b742067a10980869da8"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "bfdaa778bcfcc8915d34d6134be8c015937f2665d24c1da7c9a6480f7b5ae854",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    },
+    "hosted": {
+      "runtime_images": {
+        "compose_project": "cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5",
+        "containers": [
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main",
+            "container_id": "5d672ad5f369142d3360c8c63b866da2972b18227dba90921622929bc486d615",
+            "image_id": "sha256:5bdec0922dd2fca4b1ad683c4822fdb6136059e9ef8530e34895881c327b3935",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-app-1",
+            "service": "app",
+            "status": "running"
+          },
+          {
+            "configured_image": "caddy:2.8.4-alpine",
+            "container_id": "df689120d3a4e34c28ecb2cb8777d2a52a9dfa2821b9281466be020cd9107e02",
+            "image_id": "sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-gateway-1",
+            "service": "twin-gateway",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:latest",
+            "container_id": "405b458d594e4fb65bde7e2eb725564a3b375c7e596af219b49c53c633801190",
+            "image_id": "sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-github-1",
+            "service": "twin-github",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:latest",
+            "container_id": "51523983089ba9a7b45a97996b385ec56c43c68f3af6335d217cc1c3e25191d6",
+            "image_id": "sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-gmail-1",
+            "service": "twin-gmail",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:latest",
+            "container_id": "d4f3188add49d2385a3a9793aeef965d8d0337ccb89b0f621464471c4a8958a4",
+            "image_id": "sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-google_calendar-1",
+            "service": "twin-google_calendar",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:latest",
+            "container_id": "cf8a470bbbbe780493f89f8539365ecb876f469fa56bd2fec58c9622a3cc5c05",
+            "image_id": "sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-google_docs-1",
+            "service": "twin-google_docs",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:latest",
+            "container_id": "58a7cb1f297064b7c530cffc4cadccbbd0e2c8f74aa229d33e46e293d293c8f9",
+            "image_id": "sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-google_sheets-1",
+            "service": "twin-google_sheets",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:latest",
+            "container_id": "77891c281e69bef811b906c7e8ed3e3566a193738536bb33fd2aa31669cd513d",
+            "image_id": "sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-linear-1",
+            "service": "twin-linear",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion:latest",
+            "container_id": "6d76b5bb681aa11b207955a17ba3ab4cdc477f7f6e2b5a35e0dd0cd7c40c1aef",
+            "image_id": "sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-notion-1",
+            "service": "twin-notion",
+            "status": "running"
+          },
+          {
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe:latest",
+            "container_id": "ae8cc0db0a5f7d3d908a6c1facceb63e4e8855ed5b8a6028ad0acafde80d3b12",
+            "image_id": "sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+            "name": "/cd-8cd1a0c8-875b-4d7d-8db6-1fa4511e01a5-twin-stripe-1",
+            "service": "twin-stripe",
+            "status": "running"
+          }
+        ],
+        "expected_services": [
+          "app",
+          "twin-gateway",
+          "twin-github",
+          "twin-gmail",
+          "twin-google_calendar",
+          "twin-google_docs",
+          "twin-google_sheets",
+          "twin-linear",
+          "twin-notion",
+          "twin-stripe"
+        ],
+        "images": [
+          {
+            "image_id": "sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+            ]
+          },
+          {
+            "image_id": "sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136"
+            ]
+          },
+          {
+            "image_id": "sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc"
+            ]
+          },
+          {
+            "image_id": "sha256:5bdec0922dd2fca4b1ad683c4822fdb6136059e9ef8530e34895881c327b3935",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:5bdec0922dd2fca4b1ad683c4822fdb6136059e9ef8530e34895881c327b3935"
+            ]
+          },
+          {
+            "image_id": "sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c"
+            ]
+          },
+          {
+            "image_id": "sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f"
+            ]
+          },
+          {
+            "image_id": "sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11"
+            ]
+          },
+          {
+            "image_id": "sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17",
+            "repo_digests": [
+              "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+            ]
+          },
+          {
+            "image_id": "sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8"
+            ]
+          },
+          {
+            "image_id": "sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632",
+            "repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632"
+            ]
+          }
+        ],
+        "missing_repo_digests": [],
+        "missing_services": [],
+        "nonrunning_containers": [],
+        "observed_at": "2026-09-25T01:51:13.183390+00:00",
+        "schema": "arga.runtime-images/1",
+        "status": "complete",
+        "unexpected_services": []
+      },
+      "provider_publication_comparison": {
+        "providers": [
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:015bf9f35d7ef062e20f55fe3af368be118994e44c4df24529fe17a24c235191",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+            "image_id": "sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+            ],
+            "provider": "github",
+            "published_revision": "8b40448d06afcde6fead75dc16dddbf54a428886"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:993107249307a0caaab39f6a982232acaec36752dc5babcf476176168c9c2ec1"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+            "image_id": "sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136"
+            ],
+            "provider": "gmail",
+            "published_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:446ee7133690fee2092193165c06d21456b27ced2a3e237ed9725c38ffd2dba0",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632",
+            "image_id": "sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f2c5ddbd7ce0bc309d356019f0c80dd201d2af5eb2428c5c67be3d0fa7213632"
+            ],
+            "provider": "google_calendar",
+            "published_revision": "eb05493164d5622159c5d781826cd6d66c5fc054"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a23591b6063f0732005690817de3cfa61e37a1f06ca14e5b191abd4b9a386acb",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+            "image_id": "sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11"
+            ],
+            "provider": "google_docs",
+            "published_revision": "c8324b19119107e4422881fbaf76642c8a12de4f"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:6ea6a10946dd9c45214eb5a6013bd38132e84184dd34e53fd666028654ea1e81"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+            "image_id": "sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc"
+            ],
+            "provider": "google_sheets",
+            "published_revision": "c8324b19119107e4422881fbaf76642c8a12de4f"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:eb254451085ac48ddb38c27f7eac7cbb5d9600f3d20730205a78a98dabe2be14"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+            "image_id": "sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c"
+            ],
+            "provider": "linear",
+            "published_revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:4f1d94437f96e68608e6c286e7e3e4c39d8aa4649a2310db4e4191246e798f3e",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8",
+            "image_id": "sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8"
+            ],
+            "provider": "notion",
+            "published_revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12"
+          },
+          {
+            "accepted_published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:d9dfca40180eb86e43bf5af7a122aa8348c9e63fe4dcdcf8e22d32b8180afb8a"
+            ],
+            "expected_repo_digest": "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+            "image_id": "sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+            "matched": true,
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f"
+            ],
+            "provider": "stripe",
+            "published_revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12"
+          }
+        ],
+        "publication_sha256": "671dc55a2d16cee193fa31c5ba2b7670f577da33ee78f1450854fef4434eebd6"
+      },
+      "cleanup": "torn_down",
+      "checks": [
+        "Every expected Compose service is present, owned by this deployment and running.",
+        "Every container has a resolved image ID and registry digest.",
+        "All eight provider repository/digests match immutable published manifest-list or platform manifests.",
+        "Read-only image inspection; all provider lifecycle operations use Arga CLI.",
+        "Fresh Twin Run teardown confirmed.",
+        "The quickstart application digest matches this run\u2019s successful builder record; the Caddy gateway digest matches its official Docker Hub release manifest."
+      ],
+      "captures": [
+        {
+          "name": "runtime-image-evidence.json",
+          "sha256": "c744a817859617b9c015149dd2331b33463275f6a06a0a3ca8929d08064307f3"
+        },
+        {
+          "name": "published-image-comparison.json",
+          "sha256": "3877107a40b10395c3364aefa0f64f60b3096574baa640d84cf187c9e088ea76"
+        },
+        {
+          "name": "worker-logs.json",
+          "sha256": "2e6a61d9de072968a6f61f4208b3e6c1ff7dedd31bf3287f8081d2c666eeccd2"
+        },
+        {
+          "name": "cleanup.json",
+          "sha256": "7805307e950ae30f510e7d334297a3e9d655cc3070cc2fd8a96b55d82c29de65"
+        },
+        {
+          "name": "scenario.json",
+          "sha256": "8c75fb3151dc7e555b2066abedb00490bb016118debf22e5fdf168219b7e4a25"
+        },
+        {
+          "name": "supporting-image-comparison.json",
+          "sha256": "bfc0eb0f11e58e4225289888d6054720fbc5fd8712cc614772421db6d94a39ee"
+        },
+        {
+          "name": "publication-catalog.json",
+          "sha256": "671dc55a2d16cee193fa31c5ba2b7670f577da33ee78f1450854fef4434eebd6"
+        }
+      ],
+      "supporting_image_comparison": {
+        "app": {
+          "matched": true,
+          "published_manifest_digests": [
+            "sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "sha256:5bdec0922dd2fca4b1ad683c4822fdb6136059e9ef8530e34895881c327b3935"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:5bdec0922dd2fca4b1ad683c4822fdb6136059e9ef8530e34895881c327b3935"
+          ],
+          "source": "Current-run successful builder job; full log content hash",
+          "source_sha256": "83588d0f7bce06a4b30cc5251ba50936c98d0bc9c3dd8c955dd7cfbb50cb919d"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "registry_manifest_sha256": "sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17",
+          "registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "source": "Docker Buildx imagetools inspect --raw; manifest-list and per-platform digests",
+          "manifest_media_type": "application/vnd.oci.image.index.v1+json",
+          "platform_manifests": [
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "amd64",
+                "org.opencontainers.image.base.digest": "sha256:4a3cab1bc39fb70fa37e0a1cd4513060116c1dc98aeabd318916102f2d9119ae",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T03:33:03Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:b95ed06fbc6d74d24a40902090c8cc6086ce7d08ba60a3a7e8e62bf164a9d7bb",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+              },
+              "size": 1914
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "amd64",
+                "vnd.docker.reference.digest": "sha256:b95ed06fbc6d74d24a40902090c8cc6086ce7d08ba60a3a7e8e62bf164a9d7bb",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:3a7ef598506e913513fbd32a138c01ef86fd4c1dc1f96c4be572eecc2b5b4baa",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm32v6",
+                "org.opencontainers.image.base.digest": "sha256:b771e8cacb7e7d99e01c8868b6f507c2384390f8dfcb096c38814846fb4d522b",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T18:10:00Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:c15bc3678d5f0c127a07d06bd56e6f993a0172a127488ca39541930447df9056",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "arm",
+                "os": "linux",
+                "variant": "v6"
+              },
+              "size": 1916
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm32v6",
+                "vnd.docker.reference.digest": "sha256:c15bc3678d5f0c127a07d06bd56e6f993a0172a127488ca39541930447df9056",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:976eac6cdbaa639555fae3ef35a38eedca83e0fd6599878e40f50b5a677cb1e3",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 567
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm32v7",
+                "org.opencontainers.image.base.digest": "sha256:f2828b133756d59ac1d0a2c3ff6b7cafe23fefb8efef902ccf7f54b73db0e33c",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T18:02:02Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:e6b0d674849e83830e802a07ca1065e5b864ef2438c3c73febe0b51e6735d0a3",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "arm",
+                "os": "linux",
+                "variant": "v7"
+              },
+              "size": 1916
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm32v7",
+                "vnd.docker.reference.digest": "sha256:e6b0d674849e83830e802a07ca1065e5b864ef2438c3c73febe0b51e6735d0a3",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:3fb64809bd1e8244f7bea0c9d329f0c26d2910cd02a8b988927c6abd0922b785",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm64v8",
+                "org.opencontainers.image.base.digest": "sha256:aecd12b654fd11b0c9b727949e9d322ca2011fd96493d8472eae8df78c3f11f6",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T15:32:52Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:5657118a3d299143bc752384baae7324472946ce650c4ad923c010a1f781b1ae",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "arm64",
+                "os": "linux",
+                "variant": "v8"
+              },
+              "size": 1916
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "arm64v8",
+                "vnd.docker.reference.digest": "sha256:5657118a3d299143bc752384baae7324472946ce650c4ad923c010a1f781b1ae",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:47b0b28886df8ba75888966ab5dc81c7bc9f95f23c3dd8d9070bbf104abd9cdc",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "ppc64le",
+                "org.opencontainers.image.base.digest": "sha256:bf660caa8eb7c9876bf4886a6254b66f76fa7430fda778c6bef2323f7b3c2324",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T09:40:26Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:a7dcd724affeadc40e5ef1fd2e390e333f9f7a6381e2a78cf10e0354ae8cafa1",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "ppc64le",
+                "os": "linux"
+              },
+              "size": 1916
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "ppc64le",
+                "vnd.docker.reference.digest": "sha256:a7dcd724affeadc40e5ef1fd2e390e333f9f7a6381e2a78cf10e0354ae8cafa1",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:9a4b9438826e47c8d28df681b56c8495a02b1539bb6c5f91f3b8f55498ae1948",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "riscv64",
+                "org.opencontainers.image.base.digest": "sha256:d76e6fbe348ff20c2931bb7f101e49379648e026de95dd37f96e00ce1909dcf7",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2024-11-13T11:40:15Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:f70704a0c9b4084b305b581c3a123df1e333782a5724a474a82fca9e223f4656",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "riscv64",
+                "os": "linux"
+              },
+              "size": 1916
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "riscv64",
+                "vnd.docker.reference.digest": "sha256:f70704a0c9b4084b305b581c3a123df1e333782a5724a474a82fca9e223f4656",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:e512d9e3dcfdfc8eaefc5fd9e4d36efc271021f1f32f26df279c06c42cb45341",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "s390x",
+                "org.opencontainers.image.base.digest": "sha256:8a2db9e968ef4aa4b7edf9db26d4af6c280cd79cb9ab57273bd7774389b10125",
+                "org.opencontainers.image.base.name": "alpine:3.20",
+                "org.opencontainers.image.created": "2025-01-07T15:22:41Z",
+                "org.opencontainers.image.revision": "645721b4b87b6c3a692641213853ce064eb82fe2",
+                "org.opencontainers.image.source": "https://github.com/caddyserver/caddy-docker.git#645721b4b87b6c3a692641213853ce064eb82fe2:2.8/alpine",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/caddy",
+                "org.opencontainers.image.version": "2.8.4-alpine"
+              },
+              "digest": "sha256:8d7d5c4e5cfe38c53bcc5e847c8a45f2b6c8eead064debea454713f1dfc2aff2",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "s390x",
+                "os": "linux"
+              },
+              "size": 1914
+            },
+            {
+              "annotations": {
+                "com.docker.official-images.bashbrew.arch": "s390x",
+                "vnd.docker.reference.digest": "sha256:8d7d5c4e5cfe38c53bcc5e847c8a45f2b6c8eead064debea454713f1dfc2aff2",
+                "vnd.docker.reference.type": "attestation-manifest"
+              },
+              "digest": "sha256:6c293f9356c44565f9e68224d87a776d5df60e340fbbb5366c998a10a529103f",
+              "mediaType": "application/vnd.oci.image.manifest.v1+json",
+              "platform": {
+                "architecture": "unknown",
+                "os": "unknown"
+              },
+              "size": 840
+            }
+          ],
+          "raw_manifest_file_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17",
+          "descriptor_sha256": "e65e814ecd9649449b1b4827234fc894f4fd3ecd19103cbba574dcc6f8ced4f7"
+        }
+      },
+      "current_publication_catalog": {
+        "name": "published-provider-images-2026-09-24.json",
+        "sha256": "4a40d783d2454bd75a1e29911652a9d67d06131ea86f6470132eeda1707a88ac",
+        "provider_records_unchanged_from_observation": true,
+        "note": "The original catalog and its hash remain preserved with the private capture; this refreshed catalog changes runtime/status metadata only."
+      }
+    },
+    "workers": {
+      "status": "success",
+      "workflow": 36083051794,
+      "builder_image": "arga-cluster-builder-19518bc12b97",
+      "warm_image": "arga-cluster-warm-19518bc12b97",
+      "log_sha256": "52de484b13241b75edca9bf4ccc2fcd8eb48c9d88c18934f02026b38578b5b84"
+    },
+    "targeted_test_head": "35ceaff37d417b7d237ca9683af2797c83e65b0b"
   },
   "limits": [
-    "Hosted worker rollout, Cloud Run verification and fresh eight-provider runtime evidence are still pending.",
+    "Complete timestamped observations cover the 10-container fresh eight-provider deployment and the two serving API/proxy Cloud Run revisions. This is not an inventory of unrelated production workloads.",
     "Timestamped observations do not establish continuous runtime identity.",
     "Multi-container Cloud Run revisions require an individually resolved image for every container; one status.imageDigest is never assigned to sidecars.",
     "This does not establish frontend parity or physical touch coverage."
@@ -66,6 +744,6 @@
   "production_workflows": {
     "runtime": 36083051785,
     "workers": 36083051794,
-    "status": "in_progress"
+    "status": "success"
   }
 }
