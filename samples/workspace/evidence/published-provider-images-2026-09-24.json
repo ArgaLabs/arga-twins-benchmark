@@ -1,7 +1,7 @@
 {
   "date": "2026-09-24",
   "kind": "published_container_image_provenance",
-  "status": "latest_sheets_publications_verified_fresh_runtime_observation_pending",
+  "status": "published_images_and_timestamped_fresh_running_containers_verified",
   "providers": {
     "google_docs": {
       "databaseId": 36092921447,
@@ -90,12 +90,134 @@
     }
   },
   "limits": [
-    "Each provider retains its own immutable publication revision; the runtime-only #1157 release did not rebuild provider images.",
+    "Each provider retains its immutable publication revision; #1158 rebuilt the Google Workspace family. All eight actual fresh-run provider images and both supporting images match their publications.",
     "Manifest-list and platform manifest digests are extracted from the exact successful provider build/push jobs. All eight actual fresh-run RepoDigests match those records.",
     "Attestation covers every container in one fresh eight-provider deployment (eight twins, quickstart app and gateway), plus the serving API and proxy Cloud Run revisions. It does not inventory unrelated production workloads or establish continuous identity.",
     "Refresh actual runtime observations after subsequent deployments before final release. Frontend parity and physical touch verification remain separate gates."
   ],
   "latest_runtime_deployment": {
+    "revision": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+    "runtime_workflow": 36092921488,
+    "twins_workflow": 36092921447,
+    "both": "success",
+    "published_images": {
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:74df3dd7b905945b2f4a20a8ac5ba38202cbc3de81be32cc308998a0c950ad7e",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:00059c9c343cf1ddb871f93963da6e9a26712f78ddcc3297c33606ff4a4356cc",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:7c7e9f1657d42e1acc5f2a89cbf7bb698f8722948c4f894f789b8f2ef4860d5e",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:36613790bc8d57fc4af81848c4d297438cf8c3687f1f3a3d2bfed2456389ab97",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:ab42c38bb65d4676be4e885d46012aeb4ad25e243b11d67c68859786d517bf11",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:3cdfd4a76e8b085a7a85c3f8a026de88ec11fad576013390b1fd66708205903a"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00268-zhj",
+      "arga-api": "arga-api-00638-bpv"
+    },
+    "log_sha256s": {
+      "lab-final-sheets-colors-twins-deploy.log": "0f782263e6d2d6cf18610b162aa57b01b93b91415c37d6527432b1baf45a0ca8",
+      "lab-final-sheets-colors-runtime-deploy.log": "717d865f57f2bec292e2e48d09d2b5a7ecca551e372ba2629bbffc7358140165"
+    },
+    "attempt": 2,
+    "cloud_run_observations": [
+      {
+        "latest_ready_revision": "preview-proxy-00268-zhj",
+        "observed_at": "2026-09-25T04:17:23.369420+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00268-zhj"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00268-zhj",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b",
+          "sha256:ab42c38bb65d4676be4e885d46012aeb4ad25e243b11d67c68859786d517bf11"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00638-bpv",
+        "observed_at": "2026-09-25T04:21:31.307627+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:9e0fa0c65047b33e05bb42a0775834fe453f4c97ee8eae683a20493570b19a2b",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:9e0fa0c65047b33e05bb42a0775834fe453f4c97ee8eae683a20493570b19a2b"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00638-bpv"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00638-bpv",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:3cdfd4a76e8b085a7a85c3f8a026de88ec11fad576013390b1fd66708205903a",
+          "sha256:9e0fa0c65047b33e05bb42a0775834fe453f4c97ee8eae683a20493570b19a2b"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "fresh_run": {
+      "containers": 10,
+      "expected_services": 10,
+      "matched_provider_images": 8,
+      "matched_supporting_images": 2,
+      "cleanup": "torn_down",
+      "observed_at": "2026-09-25T04:23:14.169693+00:00"
+    },
+    "attestation_evidence": "sheets-filter-views-colors-2026-09-24.json"
+  },
+  "authentication_checks": {
+    "local_cli": "reauthentication_required",
+    "application_default_credentials": "refresh_failed",
+    "cloud_console": "Google Verify it\u2019s you challenge for the authorized production account",
+    "resolution": "Direct user-session GCP authentication remains unavailable; successful deployment CI and owner-scoped Arga CLI worker logs provide the complete bounded image observations."
+  },
+  "latest_provider_publication": {
+    "revision": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+    "workflow": 36092921447,
+    "attempt": 2,
+    "rebuilt_eight_provider_subset": [
+      "google_docs",
+      "google_sheets"
+    ],
+    "other_rebuilt": [
+      "google_drive",
+      "google_workspace"
+    ],
+    "fresh_runtime_status": "complete"
+  },
+  "prior_runtime_deployment": {
     "revision": "19518bc12b971a51dacce3acf84778da487acb59",
     "runtime_workflow": 36083051785,
     "workers_workflow": 36083051794,
@@ -199,25 +321,5 @@
       "workers": "52de484b13241b75edca9bf4ccc2fcd8eb48c9d88c18934f02026b38578b5b84"
     },
     "attestation_evidence": "runtime-image-evidence-2026-09-24.json"
-  },
-  "authentication_checks": {
-    "local_cli": "reauthentication_required",
-    "application_default_credentials": "refresh_failed",
-    "cloud_console": "Google Verify it\u2019s you challenge for the authorized production account",
-    "resolution": "Direct user-session GCP authentication remains unavailable; successful deployment CI and owner-scoped Arga CLI worker logs provide the complete bounded image observations."
-  },
-  "latest_provider_publication": {
-    "revision": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
-    "workflow": 36092921447,
-    "attempt": 2,
-    "rebuilt_eight_provider_subset": [
-      "google_docs",
-      "google_sheets"
-    ],
-    "other_rebuilt": [
-      "google_drive",
-      "google_workspace"
-    ],
-    "fresh_runtime_status": "pending"
   }
 }
