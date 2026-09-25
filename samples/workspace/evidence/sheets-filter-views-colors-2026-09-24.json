@@ -232,6 +232,28 @@
     "reason": "GitHub --auto merged immediately with the optional twins-tests job still running. Both push-triggered production workflows were cancelled before deployment; rerun only after the full source CI passes.",
     "runtime_run": 36092921488,
     "twins_run": 36092921447,
-    "status": "cancellation_requested"
+    "status": "source_ci_passed_production_attempt_2_running",
+    "cancelled_attempt_1": {
+      "runtime": "cancelled before API build/push, migration or deployment; proxy deployment not started",
+      "twins": "cancelled before provider image publication; no build/publish job started"
+    },
+    "release_condition": "All source CI checks passed at a653fdb9; merged twins tree exact match verified before rerunning both original workflows."
+  },
+  "latest_source_ci": {
+    "head": "a653fdb9a3c5663865a0df7a067dee925404ca4c",
+    "lint_test_workflow": 36092106766,
+    "fidelity_workflow": 36092106800,
+    "docker_workflow": 36092106831,
+    "all": "success",
+    "twin_tests": {
+      "passed": 5478,
+      "skipped": 145,
+      "deselected": 3
+    },
+    "root_tests": {
+      "passed": 2130,
+      "skipped": 2
+    },
+    "log_sha256": "d8516df84f0524b73e01ab641a0526c3a320085917f85dce262954ef78b54cc1"
   }
 }

@@ -5640,7 +5640,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 166,
+      "markup_control_occurrences": 168,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -5876,11 +5876,11 @@
         },
         {
           "path": "twins/google_sheets/filters_ui.py",
-          "sha256": "382258b1a3e9d9f9d428937685327dc65709d00a435e361a787a70f0f53cb0b7",
+          "sha256": "8d55cdc152b690dc09f954483c4d5f1386d5cb3268c01e5d0846c1f379c017bf",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 12,
+              "line": 14,
               "dynamic": false,
               "controls": [
                 {
@@ -5911,6 +5911,16 @@
                     "id": "filter-sort-desc"
                   },
                   "text": "Sort Z to A"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Sort by color"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Filter by color"
                 },
                 {
                   "tag": "summary",
@@ -6136,7 +6146,7 @@
         },
         {
           "path": "twins/google_sheets/grid_format_ui.py",
-          "sha256": "c7e25380c9e8b8fa32ff4dfdcc22504075712a7b7f634e42d301f02e7ea3f43c",
+          "sha256": "d159de42a885141883beeec5eb2c6de748f155f1123b6bd0e2113e37d4c9757f",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -11136,37 +11146,37 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "57610d16ec51b78f10ab8ff6a4e4451771a2b4b0cc4cdbf2757a0e9c00da8593",
+      "sha256": "a63f4665c7759354169aa69f1ee7c31799b22f0c78991b9e824ddef5b360d03d",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 730
+          "line": 731
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1014
+          "line": 1015
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1040
+          "line": 1041
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1205
+          "line": 1206
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1716
+          "line": 1717
         },
         {
           "method": "GET",
@@ -11184,84 +11194,84 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1253
+          "line": 1254
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1288
+          "line": 1289
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1333
+          "line": 1334
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1344
+          "line": 1345
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1365
+          "line": 1366
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1385
+          "line": 1386
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1404
+          "line": 1405
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1415
+          "line": 1416
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1427
+          "line": 1428
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1445
+          "line": 1446
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1456
+          "line": 1457
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1474
+          "line": 1475
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1498
+          "line": 1499
         }
       ],
       "markup_expressions": [
         {
-          "line": 790,
+          "line": 791,
           "dynamic": false,
           "controls": [
             {
@@ -11274,7 +11284,7 @@
           ]
         },
         {
-          "line": 906,
+          "line": 907,
           "dynamic": true,
           "controls": [
             {
@@ -11339,7 +11349,7 @@
           ]
         },
         {
-          "line": 818,
+          "line": 819,
           "dynamic": true,
           "controls": [
             {
@@ -11350,7 +11360,7 @@
           ]
         },
         {
-          "line": 832,
+          "line": 833,
           "dynamic": false,
           "controls": [
             {
@@ -11363,7 +11373,7 @@
           ]
         },
         {
-          "line": 877,
+          "line": 878,
           "dynamic": true,
           "controls": [
             {
@@ -11374,7 +11384,7 @@
           ]
         },
         {
-          "line": 813,
+          "line": 814,
           "dynamic": true,
           "controls": [
             {
@@ -11387,7 +11397,7 @@
           ]
         },
         {
-          "line": 815,
+          "line": 816,
           "dynamic": true,
           "controls": [
             {
@@ -11400,7 +11410,7 @@
           ]
         },
         {
-          "line": 854,
+          "line": 855,
           "dynamic": true,
           "controls": [
             {
@@ -11413,7 +11423,7 @@
           ]
         },
         {
-          "line": 858,
+          "line": 859,
           "dynamic": true,
           "controls": [
             {
@@ -11426,7 +11436,7 @@
           ]
         },
         {
-          "line": 868,
+          "line": 869,
           "dynamic": true,
           "controls": [
             {
@@ -11456,7 +11466,7 @@
           ]
         },
         {
-          "line": 896,
+          "line": 897,
           "dynamic": true,
           "controls": [
             {
@@ -11469,7 +11479,7 @@
           ]
         },
         {
-          "line": 901,
+          "line": 902,
           "dynamic": true,
           "controls": [
             {
@@ -11483,8 +11493,5 @@
         }
       ]
     }
-  ],
-  "source_revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
-  "observed_at": "2026-09-25T01:35:37.535892+00:00",
-  "source_note": "Twins sources match merged main at the Linear thread release. Source-only inventory; no runtime state or parity certification."
+  ]
 }

@@ -1,0 +1,112 @@
+{
+  "schema": "calendar-notification-preferences/1",
+  "date": "2026-09-25",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1159",
+  "head": "f67f71f8b30645b1d760282957aa8105baf8042e",
+  "status": "local_verified_ci_and_hosted_pending",
+  "scope": "Five native CalendarList email notification preferences with atomic validation and personal subscription permissions. Does not implement timed delivery.",
+  "local_browser": {
+    "schema": "calendar-notification-controls-local/1",
+    "status": "pass",
+    "provider_reference": {
+      "url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList",
+      "authenticated_reference_inspected": "2026-09-25",
+      "native_types": [
+        "eventCreation",
+        "eventChange",
+        "eventCancellation",
+        "eventResponse",
+        "agenda"
+      ],
+      "methods": [
+        "email"
+      ],
+      "live_account_changed": false
+    },
+    "desktop": {
+      "viewport": [
+        1465,
+        806
+      ],
+      "cancel_exact_state": true,
+      "synthetic_503_exact_state": true,
+      "failed_draft_retained": true,
+      "retry_all_five_saved": true
+    },
+    "mobile": {
+      "viewport": [
+        390,
+        844
+      ],
+      "four_email_daily_agenda_none_saved": true,
+      "reload_verified": true,
+      "physical_touch_verified": false
+    },
+    "protected_state": {
+      "calendar_metadata": true,
+      "events": true,
+      "acl": true,
+      "sibling_calendar_preferences": true,
+      "default_reminders": true,
+      "no_delivery": true,
+      "expected_calendar_list_sync_events": 2
+    },
+    "limits": [
+      "Local browser test only; hosted verification pending.",
+      "Notification delivery, general settings, side apps, AI and exhaustive parity remain open.",
+      "No independent pixel or physical-touch certification."
+    ],
+    "artifact_sha256": {
+      "after-save-state.json": "322f0d6f8b0546f72f06cb1183657714053cadd0c9811daf9aa23c22365fd468",
+      "after-cancel-state.json": "cc8efdfb89c5858403fb722edfab78c0658315873e68ae6d9ce2850fe12194cd",
+      "baseline-state.json": "cc8efdfb89c5858403fb722edfab78c0658315873e68ae6d9ce2850fe12194cd",
+      "final-state.json": "e4cb9e457d1072637a93b95bfd9ff8ab7adbc981740095d29ea5fac81518f2b7",
+      "after-failure-state.json": "cc8efdfb89c5858403fb722edfab78c0658315873e68ae6d9ce2850fe12194cd"
+    }
+  },
+  "review_fixes": {
+    "status": "pass",
+    "corrected_busy_state": {
+      "all_five_disabled_during_delayed_save": true,
+      "controls_restored_after_success": true,
+      "all_five_disabled_during_delayed_failure": true,
+      "controls_restored_after_failure_draft_retained": true,
+      "failure_exact_state": true,
+      "mobile_retry_reload_verified": true
+    },
+    "review": {
+      "disposition": "ship",
+      "scope": "Both listed findings resolved: freeze pending controls and neutral preference wording; source/semantics review only."
+    },
+    "documenter": "Ordinary extension preserves incumbent; README accurate; no documentation changes needed.",
+    "artifact_sha256": {
+      "after-delayed-save-state.json": "ca24b4f6771997219dbfce1b3f6fccda5315cd1736f8939c290bf4d1a466a22a",
+      "after-delayed-failure-state.json": "ca24b4f6771997219dbfce1b3f6fccda5315cd1736f8939c290bf4d1a466a22a",
+      "baseline-state.json": "cc8efdfb89c5858403fb722edfab78c0658315873e68ae6d9ce2850fe12194cd",
+      "final-state.json": "5d360f640bea7af42768fd3d6da73e4c5c49b8a2e834450724070bd5bc986d8c"
+    }
+  },
+  "tests": {
+    "calendar": 117,
+    "ruff": "pass",
+    "focused_pyright": "0 errors",
+    "assembled_js": "pass"
+  },
+  "sources": {
+    "twins/google_calendar/workspace_ui.py": "5992911b1b9d88b5146ceb3a475aa22179ac7e8eb31f41be46dacdc795e166a0",
+    "twins/google_calendar/store.py": "7b6d580b3dd3dbc0b530806cb827b863d305bea971ed5d6e2158ed264a81b14d",
+    "twins/google_calendar/README.md": "73c8690f903df803aeeaadd772c893e68a08e6ebbdde6e9bd74c4c1ab841374a",
+    "twins/tests/test_google_calendar_workspace_ui.py": "428b7905082f4d6351db8e3c65d644c7ce384e970ab8354e8275c418e7a8165f",
+    "twins/tests/test_google_calendar_sharing.py": "b6bf0f4bf0859a167655126141a4bac793f43c7b96c2562e9c548cec4ec2d65f"
+  },
+  "logs": {
+    "lab-final-calendar-notifications-tests.log": "8e95346a5db8642969dbfbbae16e43da97818b70cbc161a6053c85b14f6bdbbc",
+    "lab-final-calendar-notifications-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-calendar-notifications-makefix.log": "0999a55d836ded96e2c44dc35dbeb608e1d37bc8fc2c5cc8ff090d76662b6b4a"
+  },
+  "limits": [
+    "CI, production deployment and hosted preference checks pending.",
+    "Timed delivery, broader settings, access requests, side apps, AI and collaborative parity remain open.",
+    "Inline desktop and 390px checks are bounded; no screenshot files retained, independent pixel certification or physical touch checks."
+  ]
+}

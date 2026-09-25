@@ -1,26 +1,28 @@
 {
   "date": "2026-09-24",
   "kind": "published_container_image_provenance",
-  "status": "published_images_and_timestamped_fresh_running_containers_verified",
+  "status": "latest_sheets_publications_verified_fresh_runtime_observation_pending",
   "providers": {
     "google_docs": {
-      "databaseId": 36079238244,
-      "headSha": "c8324b19119107e4422881fbaf76642c8a12de4f",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
-      "log_sha256": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36079238244",
+      "databaseId": 36092921447,
+      "attempt": 2,
+      "headSha": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:74df3dd7b905945b2f4a20a8ac5ba38202cbc3de81be32cc308998a0c950ad7e",
+      "log_sha256": "0f782263e6d2d6cf18610b162aa57b01b93b91415c37d6527432b1baf45a0ca8",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36092921447/attempts/2",
       "platform_manifest_digests": [
-        "sha256:a23591b6063f0732005690817de3cfa61e37a1f06ca14e5b191abd4b9a386acb"
+        "sha256:2b4de23ba7fd682f6abb2c8de2c13b8f430005ab5cd1556d72cc7ddfb7995bdf"
       ]
     },
     "google_sheets": {
-      "databaseId": 36079238244,
-      "headSha": "c8324b19119107e4422881fbaf76642c8a12de4f",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
-      "log_sha256": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36079238244",
+      "databaseId": 36092921447,
+      "attempt": 2,
+      "headSha": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:281d979bbb0cbbe5f5963d0af423883ea2a4c834@sha256:7c7e9f1657d42e1acc5f2a89cbf7bb698f8722948c4f894f789b8f2ef4860d5e",
+      "log_sha256": "0f782263e6d2d6cf18610b162aa57b01b93b91415c37d6527432b1baf45a0ca8",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36092921447/attempts/2",
       "platform_manifest_digests": [
-        "sha256:6ea6a10946dd9c45214eb5a6013bd38132e84184dd34e53fd666028654ea1e81"
+        "sha256:18c181487cc47abd52b36f3c7ec4895401a5e161d72653e62d416fedd191db1e"
       ]
     },
     "stripe": {
@@ -203,5 +205,19 @@
     "application_default_credentials": "refresh_failed",
     "cloud_console": "Google Verify it\u2019s you challenge for the authorized production account",
     "resolution": "Direct user-session GCP authentication remains unavailable; successful deployment CI and owner-scoped Arga CLI worker logs provide the complete bounded image observations."
+  },
+  "latest_provider_publication": {
+    "revision": "281d979bbb0cbbe5f5963d0af423883ea2a4c834",
+    "workflow": 36092921447,
+    "attempt": 2,
+    "rebuilt_eight_provider_subset": [
+      "google_docs",
+      "google_sheets"
+    ],
+    "other_rebuilt": [
+      "google_drive",
+      "google_workspace"
+    ],
+    "fresh_runtime_status": "pending"
   }
 }

@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -24,7 +24,11 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
+          "sha256": "9b87da540ba6ad4bdba7aaf003858934058da091d0ac76e182d8f3e9262087dc"
         }
       ]
     },
@@ -35,7 +39,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -50,11 +54,11 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
-          "sha256": "d02eb4bb73b714d908955974d3e5f66dfd1ad298172572ea9dcc24b3d1b92e18"
+          "sha256": "5790693d73df1dcb2ce20fa4dabd776c8540af9e881b87143928e3579aae5749"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -69,7 +73,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -80,7 +84,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -95,7 +99,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -106,7 +110,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "585a0e3a93e7722c57479b24a57f2b02b54fbb5b109e97852dd9c72fd5b0963e"
+          "sha256": "25fde7337610c989b228c15f183d30cf37ddd0befbcd89148b49f76723bf96f5"
         }
       ]
     },
@@ -235,5 +239,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "d1194795785e9f7bb96d137d3d465d200456fcfe5cabed690068152284b57bab"
+  "sample_tree_sha256": "0ca6cb27520d03ec3fed0063d1500a1ae833c59b25662589f5e92ceb51086161"
 }
