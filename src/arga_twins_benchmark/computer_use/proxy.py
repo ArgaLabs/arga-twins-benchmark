@@ -210,6 +210,18 @@ class BrowserProxy:
                 return JSONResponse({"error": "Redirect outside workspace"}, status_code=403)
             response_headers["location"] = location
         content_type = upstream.headers.get("content-type", "")
-        if any(t in content_type for t in ("text/", "json", "javascript", "xml")):
+        media_type = content_type.partition(";")[0].strip().lower()
+        # Office archives contain "openxml" in their media type, but their
+        # response body is a ZIP container. Decode only actual text formats.
+        if (
+            media_type.startswith("text/")
+            or media_type
+            in {"application/json", "application/javascript", "application/x-javascript", "application/xml"}
+            or media_type.endswith(("+json", "+xml"))
+        ):
             content = self.sanitized(content.decode(upstream.encoding or "utf-8", errors="replace")).encode()
+            parameters = [
+                part.strip() for part in content_type.split(";")[1:] if not part.strip().lower().startswith("charset=")
+            ]
+            response_headers["content-type"] = "; ".join([media_type, *parameters, "charset=utf-8"])
         return Response(content, status_code=upstream.status_code, headers=response_headers)

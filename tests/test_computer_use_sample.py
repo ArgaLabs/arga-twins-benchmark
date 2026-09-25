@@ -402,3 +402,79 @@ def test_scenario_hash_matches_seed_and_description() -> None:
         tags = scenario.pop("tags")
         digest = hashlib.sha256(json.dumps(scenario, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         assert "content-sha256:" + digest in tags
+
+
+@pytest.mark.parametrize(
+    "mime",
+    [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/zip",
+        "application/octet-stream",
+    ],
+)
+def test_browser_exports_preserve_archive_bytes(mime: str) -> None:
+    import io
+    import zipfile
+
+    archive_bytes = io.BytesIO()
+    with zipfile.ZipFile(archive_bytes, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", "<document>Résumé</document>")
+        archive.writestr("media/content.bin", bytes(range(256)))
+    original = archive_bytes.getvalue()
+
+    async def exercise() -> None:
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(
+                    200,
+                    content=original,
+                    headers={"content-type": mime, "content-disposition": 'attachment; filename="document.docx"'},
+                )
+            )
+        )
+        proxy = BrowserProxy("google_docs", {"base_url": "https://twin.example"}, client=client)
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.get("/ui/documents/doc-1/export")
+            assert response.content == original
+            assert response.headers["content-type"] == mime
+            assert response.headers["content-disposition"] == 'attachment; filename="document.docx"'
+            with zipfile.ZipFile(io.BytesIO(response.content)) as exported:
+                assert exported.testzip() is None
+                assert exported.read("media/content.bin") == bytes(range(256))
+
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize("mime", ["text/html", "application/xml", "image/svg+xml", "application/problem+json"])
+def test_browser_text_redaction_preserves_declared_decoding(mime: str) -> None:
+    async def exercise() -> None:
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(
+                    200,
+                    content=b"caf\xe9 secret-synthetic-key",
+                    headers={"content-type": mime + "; charset=iso-8859-1"},
+                )
+            )
+        )
+        proxy = BrowserProxy(
+            "linear",
+            {"base_url": "https://twin.example", "env": {"LINEAR_API_KEY": "secret-synthetic-key"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.get("/ui/content")
+            assert response.text == "café twin-browser-session"
+            assert response.headers["content-type"] == mime + "; charset=utf-8"
+
+    asyncio.run(exercise())
