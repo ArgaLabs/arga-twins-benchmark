@@ -75,13 +75,15 @@ PR #1161 merged as `c4f07362` after full CI passed; both production workflows an
 
 PR #1162 corrects Gmail historical-message date labels found while checking WKS-03. Live Gmail read-only reference and local desktop/390px Chrome checks confirm today/month-day/prior-year labels, full-year details and reload. The complete native state is unchanged across 27 GET-only browser events. All 252 Gmail regressions pass, including local midnight/year boundaries, invalid dates, locale formatting and clock provenance through startup and Scenario reset. Independent review approved the corrected provenance behavior. Full CI passes (5,733 twin and 2,130 root tests); merged as `3f91765b`. Both production workflows and serving API/proxy images pass. Two fresh hosted runs verify fixed/live clock provenance, unchanged native Gmail dates, exact served formatter source, HTTP reload and all ten worker images; both runs were torn down. Fresh hosted Chrome actions remain blocked by the locked Mac. These operator checks do not retry or close the WKS-03 candidate failure. See `gmail-message-dates-2026-09-25.json`.
 
-PR #1163 fixes partial values batches, sharing revocation during body reads and invalid-Unicode rollback. All 1,022 local regressions and independent review pass; full CI passes (5748 twin/2130 root tests) and merged as `c04ee6aa`. Production workflows and hosted verification remain pending. See `sheets-values-batch-atomicity-2026-09-25.json`.
+PR #1163 fixes partial values batches, sharing revocation during body reads and invalid-Unicode rollback. All 1,022 local regressions and independent review pass; full CI passes (5748 twin/2130 root tests) and merged as `c04ee6aa`. Both production workflows and fresh hosted native verification pass: four atomic rejection paths, ordered updates/formulas and all five container images. Browser comparison remains pending. See `sheets-values-batch-atomicity-2026-09-25.json`.
 
 PR #1164 fixes effective file grants and expiration across Drive, Docs and Sheets. All 45 focused and 1,092 broader local checks pass; CI and hosted verification remain pending. Full inherited/group/admin and browser permission coverage remains open. See `workspace-effective-permissions-2026-09-25.json`.
 
 PR #1165 fixes Docs/Sheets principal-filtered initial catalogs and previews, deep-link authorization and browser token preservation. All 20 focused and 1,027 broader editor checks plus scoped source review pass. CI, hosted browser verification and deployment remain pending; full reader-mode and access-request controls remain open. See `workspace-ui-principals-2026-09-25.json`.
 
 PR #1166 combines #1164 and #1165 with post-body-read access checks for editors, browser helpers and Docs history. All 91 focused and 1,138 broader combined checks pass; final CI and hosted delivery remain pending. See `workspace-permissions-combined-2026-09-25.json`.
+
+PR #1167 fixes access revoked during Notion saved-view and group form submission. All 14 reproduced failures and 186 Notion regressions now pass; CI, production and hosted checks remain pending. See `notion-form-revocation-2026-09-25.json`.
 
 ## Package validation
 

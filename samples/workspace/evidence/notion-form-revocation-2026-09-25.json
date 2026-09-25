@@ -1,0 +1,41 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "notion"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1167",
+  "source_head": "c74103ada4693aa629a161fb5d858180bf2200b9",
+  "status": "local_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Recheck current token capabilities and page grants after database-view form reads",
+    "Recheck group ownership and capabilities after group form reads",
+    "Handle groups removed during pending form submission without mutation or unhandled exception"
+  ],
+  "tests": {
+    "before_failed": 14,
+    "focused_passed": 14,
+    "all_notion_passed": 186,
+    "warnings": 3,
+    "make_fix": "pass",
+    "source_review": "ship; no concrete blockers"
+  },
+  "source_files": {
+    "twins/notion/README.md": "83013496a4d2241c8c0525f29c12a36260dfd81b9fd8cbc1e6f5288f3a2c9629",
+    "twins/notion/database_ui.py": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+    "twins/notion/groups_ui.py": "9f697c2d9f878ddd7d01da885cc89036530d66df767208b9668d6f410626a199",
+    "twins/tests/test_notion_form_revocation.py": "7bd5093418b16fedf64a147074dcb75e28c6fe1e7718c7629ed3bd92e375082d"
+  },
+  "artifacts": {
+    "lab-notion-form-revocation-before.log": "12786ae4262be7c6ba538f22ca4adfa275958b115c35ac292ecc02c7355f8d67",
+    "lab-notion-form-revocation-focused.log": "e0424771a4fdcb0496f94b42abb79e6d8c140ef08b78194e095edcfcbe95c883",
+    "lab-notion-form-revocation-regressions.log": "b56b98ba71411759d9b67b025e7eec11b3d94a52f38a32594c42f66c35075035",
+    "lab-notion-form-revocation-makefix.log": "11424e9c3d38e499ff6036c42eeff74b65b6519b629367a38a59bd0e09b74651"
+  },
+  "limits": [
+    "CI, production deployment and hosted checks remain pending.",
+    "No browser or provider-reference fidelity claim; Mac is locked and the real Notion reference requires sign-in.",
+    "Teamspaces, guests, advanced properties, AI/collaboration and full Notion audit remain open."
+  ]
+}

@@ -70,7 +70,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-values-batch-atomicity-2026-09-25.json",
-          "sha256": "a67e6bc205e2decbb4653b88c150be9e95661e815095310d86db816f1aa9b1b9"
+          "sha256": "6f840972bf38a20c858a9b07d9a6879a77b6154623c1a371393489a016884085"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
@@ -121,6 +121,10 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+        },
+        {
+          "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
+          "sha256": "6424c3865b6bc272c9d86be01284fb096ba613d9b9fbb04b7c69e86310567921"
         }
       ]
     },
@@ -279,5 +283,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "765f20b837ab6a058b9c6a9c3ba52f64fa41879a4cec4d20a01518e12eec70be"
+  "sample_tree_sha256": "7505c021d4673816169e2bd96922982fda03d2908330c323591f425c8097b045"
 }

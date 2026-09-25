@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1163",
   "head": "1052a747ce043d09f4f32e3c1facb7558b38de95",
-  "status": "merged_full_ci_pass_deployment_pending",
+  "status": "deployed_fresh_hosted_native_and_all_five_container_images_pass",
   "release_allowed": false,
   "scope": [
     "Atomic values update and clear batches, including data-filter variants",
@@ -34,10 +34,20 @@
     "lab-sheets-value-batches-regressions-unicode-final.log": "3ace0c3052c96b21b61dc454625de6817199ecc57d6755f05b0ae35b54e6875b",
     "lab-sheets-value-batches-makefix-final.log": "c4bab5476f3e4d95cf8950ff18cbdfd62db40456f155d79439770aa2243fae2d",
     "lab-final-sheets-values-current-pr.json": "a2e6337433ad2b46d96748465230f2744feddd4e10a9d7aa5a30e7798fda38bc",
-    "lab-final-sheets-values-full-ci.log": "3ddd2237c579c5f6582b07dc28bbfd27de97f29af9b96fb0bdb82552afed7201"
+    "lab-final-sheets-values-full-ci.log": "3ddd2237c579c5f6582b07dc28bbfd27de97f29af9b96fb0bdb82552afed7201",
+    "lab-final-sheets-values-hosted-c04ee6aa/native-checks.json": "4aefec8c3cf5e9c8cb06963cc873077385c25e125e22061e67b4820089fc0333",
+    "lab-final-sheets-values-hosted-c04ee6aa/image-comparison.json": "c9d7b9783046a57e28eab7211af09841467f3dc3ff898cef1d544d66a46c91b7",
+    "lab-final-sheets-values-hosted-c04ee6aa/runtime-image-evidence.json": "e9e0c0ad9a578b520277b6e8139beaa630033e453fe609568bd8857a97194ae0",
+    "lab-final-sheets-values-hosted-c04ee6aa/final-state.json": "a5806ca9ffacf1167e01fccf30783349f7695549edf06a3bcf7703ba31f63db7",
+    "lab-final-sheets-values-hosted-c04ee6aa/operator-api-trace.json": "0c237d2d2f747c07a15f13f010c5c06cc542df24e120481386eb69359994957c",
+    "lab-final-sheets-values-hosted-c04ee6aa/cleanup.json": "e5efa16b9f0bcde38fc52b414c46a2891406d961336aeee391417ac3c73276ed",
+    "lab-final-sheets-values-deployment.json": "fc6992cc3e61ae8690d87b9d088136575cef6806f8101bc3ca44b419aec59bf9",
+    "lab-final-sheets-values-runtime-attestation.json": "97486bec4180aaa92abbd53b71763d2eb2ef3d2afc985a3fd9f50149ea43e6b0",
+    "lab-final-sheets-values-runtime-deploy.log": "bb62bbe1c8b82a5e9deb94c67a92895ce1f8f0669e5543ec2cb7a7b9e2231ae5",
+    "lab-final-sheets-values-twins-deploy.log": "2d369f05ec9157079da46da79b6fbc6f9e3ffc0b41790565e4305a8a39c77944"
   },
   "limits": [
-    "Exact-head CI passed before merge. Both production workflows and fresh hosted verification remain pending.",
+    "Both production workflows and the bounded fresh hosted native/image verification passed. Browser comparison remains pending while the Mac is locked.",
     "This correction does not complete protected-range enforcement, broad permission/AI/collaboration or browser fidelity coverage."
   ],
   "current_ci_head": "cced67b4fd26a51d459723cf5665f5945ba799e5",
@@ -58,6 +68,107 @@
   "deployment_workflows": {
     "runtime": 36189086245,
     "twins": 36189086413,
-    "status": "running"
+    "status": "success"
+  },
+  "hosted": {
+    "native_checks": {
+      "checks": [
+        {
+          "actor": "owner",
+          "all_three_native_states_unchanged": true,
+          "path": "/v4/spreadsheets/XKiSkzmPOh_D3tZ05aCJsooNX8M/values:batchUpdate",
+          "status": 400
+        },
+        {
+          "actor": "owner",
+          "all_three_native_states_unchanged": true,
+          "path": "/v4/spreadsheets/XKiSkzmPOh_D3tZ05aCJsooNX8M/values:batchUpdateByDataFilter",
+          "status": 400
+        },
+        {
+          "actor": "owner",
+          "all_three_native_states_unchanged": true,
+          "path": "/v4/spreadsheets/XKiSkzmPOh_D3tZ05aCJsooNX8M/values:batchClear",
+          "status": 400
+        },
+        {
+          "actor": "owner",
+          "all_three_native_states_unchanged": true,
+          "path": "/v4/spreadsheets/XKiSkzmPOh_D3tZ05aCJsooNX8M/values:batchClearByDataFilter",
+          "status": 400
+        },
+        {
+          "ordered_batch_responses_and_formula": "pass"
+        }
+      ],
+      "protected_reference_unchanged": true,
+      "scope": "Four atomic batch rejection paths and ordered successful batch/formula result; no permission or GUI claim",
+      "status": "pass"
+    },
+    "images": {
+      "status": "complete",
+      "observed_at": "2026-09-25T21:07:24.124043+00:00",
+      "publication_sha256": "2f250cfe412bc267527099878ccfd82fe283b52f350596e9a75c00a412eead2f",
+      "containers": {
+        "google_docs": {
+          "published_revision": "c04ee6aaa3d7bdf2c2bcd2488caff8ab92ec6d89",
+          "image_id": "sha256:839ab0c3f529866a81574cd8433a51eebe2b8477d340d9f0579f9f6c4de5b2fb",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:839ab0c3f529866a81574cd8433a51eebe2b8477d340d9f0579f9f6c4de5b2fb",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:e528ec69159647ba2ab1f8c3492bf6ad7880758e876dd2be4c35ff50235c740e"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:839ab0c3f529866a81574cd8433a51eebe2b8477d340d9f0579f9f6c4de5b2fb"
+          ],
+          "matched": true
+        },
+        "google_drive": {
+          "published_revision": "c04ee6aaa3d7bdf2c2bcd2488caff8ab92ec6d89",
+          "image_id": "sha256:6691873ebac25d30e5f1d259a2c56c2c38411f081b37966f18a6cb15449655aa",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:232c8c43e2ccd1ffc13b0059a6e7a4735a99e4e2a350747e62f53978a60c905e",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:6691873ebac25d30e5f1d259a2c56c2c38411f081b37966f18a6cb15449655aa"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:6691873ebac25d30e5f1d259a2c56c2c38411f081b37966f18a6cb15449655aa"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "c04ee6aaa3d7bdf2c2bcd2488caff8ab92ec6d89",
+          "image_id": "sha256:119632003d0545e6f55edeae9fee1e4e150850774473608ac6651ee6a6ec961a",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:119632003d0545e6f55edeae9fee1e4e150850774473608ac6651ee6a6ec961a",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:5b5348e47cf841378f553f58af2baba1e8cb74c442b90e409e253c5a4a106040"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:119632003d0545e6f55edeae9fee1e4e150850774473608ac6651ee6a6ec961a"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:45596f690515ddc2c79afa652504a2f0f97624be5de9e2b83ba24e3174c288e7"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:45596f690515ddc2c79afa652504a2f0f97624be5de9e2b83ba24e3174c288e7"
+          ],
+          "builder_log_sha256": "a1b393604dd4be316dbb9fa294ccd015b35994c4c90fbc6bd5490a5eba8ce43d"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "cleanup": "torn_down",
+    "gui": "pending_locked_mac",
+    "scope": "Three independently provisioned Workspace providers, app and gateway; not a new eight-provider observation."
   }
 }
