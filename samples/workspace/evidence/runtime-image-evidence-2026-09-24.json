@@ -12,7 +12,13 @@
     "targeted_tests": 68,
     "ruff": "passed",
     "focused_pyright": "0 errors",
-    "real_docker_compose": "Complete evidence from actual Docker templates; private environment sentinel excluded; exact owned fixture teardown confirmed."
+    "real_docker_compose": "Complete evidence from actual Docker templates; private environment sentinel excluded; exact owned fixture teardown confirmed.",
+    "prior_ci": {
+      "head": "958d82b41f09bd2ec213f296d5a60852e549771f",
+      "run": 36079285098,
+      "result": "success",
+      "note": "Superseded by current-head checks after merging Linear main."
+    }
   },
   "limits": [
     "Hosted worker rollout, Cloud Run verification and fresh eight-provider runtime evidence are still pending.",
@@ -42,6 +48,6 @@
       "sha256": "9d4e96501b97fe6aca5252408c716146c39a96da3880c00b921ab6b2bc3dd7b9"
     }
   ],
-  "current_head": "958d82b41f09bd2ec213f296d5a60852e549771f",
-  "current_ci_run": 36079285098
+  "current_head": "e02fb21f8a5cd22dd839f733e7330fa121f513ea",
+  "current_ci_run": 36081199691
 }

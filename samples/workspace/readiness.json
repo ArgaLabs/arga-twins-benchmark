@@ -33,6 +33,10 @@
         {
           "path": "samples/workspace/evidence/sheets-initial-validation-marker-2026-09-24.json",
           "sha256": "09e46ba0281d18fa17ac58f78de9b172506965240c67641de5bbf5525aca09b3"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
+          "sha256": "14181ef351edde8b3e4406e2f04b66ccf67375a6780add7a3df8d349e031cda1"
         }
       ]
     },
@@ -60,7 +64,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/linear-comment-threads-2026-09-24.json",
-          "sha256": "0b0a1da5d175a11144b3ead294e29fd7d455bd33e0783024137f53957e71c119"
+          "sha256": "eecd0964f958608f4c6dd77378c2b7aee35c28f6f07bc3e9dc6a1f5f3681c534"
         }
       ]
     },
@@ -184,7 +188,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
-          "sha256": "d07042fc9015f7a1cb903405dce1f73f389bd6b386b53658a62aeba3696f9909"
+          "sha256": "72b5bb5bf3f538a63918090ba6b1ca78345795356fe29cfc9c7dd0258ee0cfcb"
         }
       ]
     },
@@ -195,5 +199,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "507f4ec049f7d4c736755a7f6f96d01838af06de963632bb870998ee2f217651"
+  "sample_tree_sha256": "213ffc26630a0f858a0e7476e1c64386e3f4cea55a8cb63d3783bc98f5ce6a14"
 }

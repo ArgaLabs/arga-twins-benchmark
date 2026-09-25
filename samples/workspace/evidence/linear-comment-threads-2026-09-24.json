@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "local_native_and_bounded_desktop_mobile_verified_release_pending",
+  "status": "deployed_hosted_native_forms_pass_gui_pending",
   "scope": "Native issue comment threads, author editing, resolution and Scenario seed relationships. Not complete Linear fidelity.",
   "screenshots_retained": false,
   "provider_reference": {
@@ -105,10 +105,146 @@
     "pr_review": {
       "scenario_atomicity": "Nine malformed graph cases reject before client construction and preserve full existing store/config.",
       "introspection": "Native type and argument checks cover Comment, connections, payload, scalar and input types."
+    },
+    "ci": {
+      "run": 36079290401,
+      "head": "37c02d8316dd56b54ae87121a62504d202be3cde",
+      "result": "success",
+      "twins": {
+        "passed": 5392,
+        "skipped": 145,
+        "deselected": 3
+      },
+      "root": {
+        "passed": 2106,
+        "skipped": 2
+      },
+      "log_sha256": "c124b0e05e6d6b6968d295b6fa178762dbe1ae65551665b1ea4a612a8cb816d9"
+    },
+    "deployment": {
+      "revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+      "runtime_workflow": 36081085263,
+      "twins_workflow": 36081085359,
+      "both": "success",
+      "published_images": {
+        "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:0d4dba324733076a24b5c28305f220d2a22a6beeee4a9feef3c1726e0d8c19e8",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:cda863ec594e61d39af563aef0b4746c0f87f8487a5ac8c8df82afa5147b3165"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": "preview-proxy-00266-x7l",
+        "arga-api": "arga-api-00636-8t7"
+      },
+      "log_sha256s": {
+        "lab-final-linear-threads-twins-deploy.log": "cef48adb56c69fe92eb587e792d9a01f9c9a50f6935668192cab0f57cbea21d9",
+        "lab-final-linear-threads-runtime-deploy.log": "177d547f11d3e583626ddee3e473209c5a6d2392b5432bb3f5a9f77f69f04c0d"
+      },
+      "attestation_limit": "Publication/deployment logs and revision readiness; complete live-container attestation remains pending PR #1157."
+    },
+    "hosted": {
+      "checks": [
+        "reply parent linkage",
+        "author edit",
+        "stale edit409 with exact captured-state equality",
+        "resolve using reply and native readback",
+        "HTML reload resolved controls",
+        "reopen clears resolution metadata",
+        "invalid parent and non-descendant resolver rejected with exact captured-state equality",
+        "protected issue/project/comments unchanged"
+      ],
+      "comparison_exclusion": "Only state.logical_now is excluded because the unfrozen hosted clock advances between read-only captures. All other captured fields are compared exactly.",
+      "scope": "Operator HTTP forms/native GraphQL and trusted native snapshots; not GUI interaction.",
+      "screenshots_retained": false,
+      "status": "pass",
+      "baseline_business_state": {
+        "exactly_unchanged_fields": [
+          "attachments",
+          "base_time",
+          "documents",
+          "failure_rules",
+          "initiatives",
+          "issues",
+          "organization",
+          "project_milestones",
+          "projects",
+          "rate_limiting_enabled",
+          "seed",
+          "status_updates",
+          "teams",
+          "users",
+          "webhooks"
+        ],
+        "edited_existing_comments": 1,
+        "created_operator_replies": 2,
+        "allowed_bookkeeping_changes": [
+          "counts",
+          "sync_id"
+        ],
+        "clock_exclusion": "logical_now"
+      },
+      "operator_attempts": [
+        "Initial stale-write capture differed only in the naturally advancing logical_now clock. Original snapshots preserved.",
+        "Corrected comparison excludes only logical_now; replay created a second operator reply. This is conformance, not a scored candidate retry."
+      ],
+      "served_source": {
+        "matched": {
+          "twins/linear/comment_ui.py:SCRIPT": "b6996bab4e2c67784262fdf1acac158cc65467c8557f9ddf8a4aa159c4b6ca54",
+          "twins/linear/comment_ui.py:STYLES": "cb809d95a06e2e4107594a08fcaa81af1d8cbe46c43a9c97395009e8d594ae6a"
+        },
+        "scope": "Complete served code blocks, not container digest attestation."
+      },
+      "cleanup": "torn_down confirmed",
+      "browser": "pending while Mac is locked and Chrome debugger is unattached",
+      "captures": [
+        {
+          "name": "lab-final-linear-threads-hosted-r1/baseline-state.json",
+          "sha256": "95bacdbc622a1614fa5ffb159841d991076c2528319706735cde1240416b03b4"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/native-after.json",
+          "sha256": "a8d85009f7d19e3a48d2daa3507e426b26a13eddb86a66384c03cd24d41bf33a"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/before-stale-edit-initial-attempt.json",
+          "sha256": "4497248e7ca074f71ad8dbf6ededd0d6b33dbf4eee7742d8088fbb019ad70b00"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/after-stale-edit-initial-attempt.json",
+          "sha256": "9922a4a7b8c9f8486166669b53d05556df43016e33c682574ee5f0d5698834fe"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/before-stale-edit.json",
+          "sha256": "b5eb94f0c1582ecea929f92e5bcc9f6819c04ad2b364a8f19aa7b67eac814a46"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/after-stale-edit.json",
+          "sha256": "2dd8f7ffb24d7478825b367d8a14aba58a7bb4a51824bfd8248be20c3999711a"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/before-invalid-mutations.json",
+          "sha256": "7896619769681813445fad41b5a6de6ed660c9f1678cae09a4ae42b15fd38b4f"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/after-invalid-mutations.json",
+          "sha256": "4f872d11447efbaf0f50b82145f70014f2f20cf61db2f1274e918de14f81e025"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/native-checks.json",
+          "sha256": "0e6aa0a0df09f9b41fdf0c3062df4c779ba4bd72a2ad2eafba7a179bbb90c40f"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/frontend-code-fingerprints.json",
+          "sha256": "280ec0ee4dc340d3c897feb2c1c5c040be1e6b8a3322b5a23b6b00045c60e6c2"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-r1/cleanup.json",
+          "sha256": "78eb681d99cc497063803b6411d135bb2e739b407ab927654a8c9f53a6a7173f"
+        }
+      ]
     }
   },
   "limits": [
-    "PR/CI/deployment/fresh hosted checks pending.",
+    "Full CI, both production deployments and fresh hosted native/form conformance pass. Hosted desktop/mobile GUI and failure-recovery checks remain pending.",
     "Notifications, realtime, broader workflows/settings, project graphs/uploads, AI and other collaboration paths remain open.",
     "No retained screenshots, physical touch or exhaustive visual/mobile parity claim.",
     "Release gates and final ZIP remain pending."
@@ -117,8 +253,10 @@
     "number": 1156,
     "url": "https://github.com/ArgaLabs/validation-server/pull/1156",
     "tested_source_revision": "f3bc038ba1a8b8deeb3bf0031ceb49b301d5bb33",
-    "status": "ci_pending_after_main_sync",
+    "status": "merged",
     "current_head": "37c02d8316dd56b54ae87121a62504d202be3cde",
-    "current_ci_run": 36079290401
+    "current_ci_run": 36079290401,
+    "merge_commit": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+    "merged_at": "2026-09-25T01:13:37Z"
   }
 }

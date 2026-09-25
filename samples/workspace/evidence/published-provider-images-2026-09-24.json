@@ -26,12 +26,11 @@
       "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/35986499613"
     },
     "linear": {
-      "databaseId": 35986499613,
-      "headSha": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
-      "createdAt": "2026-09-24T10:19:00Z",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:229a7b50f0e5837d8047a84cc66cab3ebfff7d12@sha256:8e7e96c78a80cebac5cb88ad2bb3c19acc4385ce488fd85514284e4cf29feaec",
-      "log_sha256": "b08d30108191fe50b4b2948ba64b63f9dc5272f364149177dd3c4ab671d117e8",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/35986499613"
+      "databaseId": 36081085359,
+      "headSha": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+      "log_sha256": "cef48adb56c69fe92eb587e792d9a01f9c9a50f6935668192cab0f57cbea21d9",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36081085359"
     },
     "notion": {
       "databaseId": 35986499613,

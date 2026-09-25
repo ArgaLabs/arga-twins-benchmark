@@ -1,0 +1,66 @@
+{
+  "date": "2026-09-24",
+  "status": "native_and_source_checks_pass_browser_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1158",
+  "source_revision": "a4ec6f38b0d8a88af61f8027ec480022b2e013ef",
+  "scope": [
+    "Native saved/temporary filter view validation, atomic lifecycle and read-only visibility/source-row-order preview, with viewer scopes and immediate permission revocation.",
+    "Fill/text color criteria and column-filter controls; effective manual/theme/conditional colors, relative formulas, native ROW/COLUMN context, first-matching rule priority and gradient interpolation.",
+    "Basic and view filterSpecs precedence; UI criteria updates cannot be silently overridden by stale filterSpecs."
+  ],
+  "verification": {
+    "regressions": 509,
+    "make_fix": "pass",
+    "focused_pyright": "0 errors",
+    "assembled_javascript": "syntax pass; color draft helpers preserve other criteria and native source objects",
+    "native": "Native/protected-state equality, malformed-batch rollback and read-only previews tested locally.",
+    "logs": [
+      {
+        "name": "lab-final-sheets-filter-colors-broad-tests-v4.log",
+        "sha256": "8805aaeb5893c93f68ba9f03c4ac78280f8ed5c6534e77acf5e1ff76af85d7ba"
+      },
+      {
+        "name": "lab-final-sheets-filter-colors-makefix-v5.log",
+        "sha256": "a5ec3ba6a3bfbf962cf487a54f94bc479fc7bb46d4f876737cd44127da2125c0"
+      },
+      {
+        "name": "lab-final-sheets-filter-colors-pyright-v5.log",
+        "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+      }
+    ],
+    "ci": {
+      "run_id": 36081969122,
+      "status": "in_progress",
+      "head": "a4ec6f38b0d8a88af61f8027ec480022b2e013ef"
+    }
+  },
+  "sources": {
+    "twins/google_drive/sheet_filter_views.py": "f81afb3ff2041132aa6b318f43eabacc193f331826944893a6c8f5afcbf93e1f",
+    "twins/google_drive/sheet_filter_colors.py": "7c6bc32ad08ce0b46f5ced1017d2c939277e1f199161af18aa79a95e70fb39f5",
+    "twins/google_drive/sheet_conditional_colors.py": "7aadca59cfdff46c4499d31d459d2bb02efcdeca2c1252a9eb8a48b85f8c9599",
+    "twins/google_drive/sheet_filters.py": "4655e3d9fd968f2c6f364eeeeec8f9e565285bef458527cbd5aa079f8c34b79c",
+    "twins/google_drive/workspace_editing.py": "3a3a917ae7b8133089f1b6643f9bfecddcffbddf27d172a4bfcc17e8afc6eef8",
+    "twins/google_sheets/filters_ui.py": "decb3c2ee19b6ebfc10428e1d3f55cf5759e3f1544b88062b96bfd76086ceb65",
+    "twins/google_sheets/grid_format_ui.py": "d159de42a885141883beeec5eb2c6de748f155f1123b6bd0e2113e37d4c9757f",
+    "twins/tests/test_google_sheets_filter_views.py": "600ea0c50c8a67e15f702101bc75e8015a622909678f16963adea5e6e7ff5ec0",
+    "twins/tests/test_google_sheets_filter_colors.py": "89fa5c36920dec5f8196f34617b28aa408521cde045f44aa6fa375d069d01253"
+  },
+  "official_references": [
+    "https://developers.google.com/workspace/sheets/api/guides/filters",
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/other#FilterCriteria",
+    "https://developers.google.com/workspace/sheets/api/guides/conditional-format",
+    "https://developers.google.com/workspace/sheets/api/samples/conditional-formatting",
+    "https://support.google.com/docs/answer/3540681?hl=en"
+  ],
+  "limits": [
+    "Filter-view frontend lifecycle and safe sorted-view editing/clipboard projection are unfinished.",
+    "Desktop/390px browser success/error/cancellation/reload and real-account visual comparisons are pending while the Mac is locked.",
+    "Independent finish review and documentation handoff remain pending; this is an incomplete UI checkpoint, not a completed release.",
+    "Color-sort controls, broader conditional-format editing and full Sheets fidelity remain open.",
+    "The pull request was marked ready for review and current-head CI is running; no production deployment or hosted verification is claimed.",
+    "No retained screenshots or physical touch verification."
+  ],
+  "screenshots_retained": false,
+  "release_allowed": false,
+  "pull_request_state": "open_ready_for_review"
+}
