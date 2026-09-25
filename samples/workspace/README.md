@@ -65,7 +65,7 @@ PR #1155 adds native header/footer/footnote editing, segment-aware save/recovery
 
 PR #1156 adds Linear native comment threads, author editing, copy links and resolution/reopening. Scenario graph validation now rejects malformed relationships before any reset, and introspection exposes supported thread fields and arguments. All 164 Linear regressions and bounded local desktop/390px flows pass. Full CI (5,392 twin and 2,106 root tests), both production deployments and fresh hosted native/form checks pass, with protected state preserved and teardown confirmed. Hosted GUI/mobile checks remain pending while the host is locked. See `linear-comment-threads-2026-09-24.json`.
 
-PR #1158 adds native filter-view validation/preview and effective color filtering with 509 passing local Sheets/shared Workspace regressions. Filter-view frontend controls, sorted-view editing and browser checks remain unfinished; it is not deployed. See `sheets-filter-views-colors-2026-09-24.json`.
+PR #1158 adds native filter-view validation/preview and effective color filtering/sorting with 536 passing local Sheets/shared Workspace regressions. Filter-view frontend controls, sorted-view editing and browser checks remain unfinished; it is not deployed. See `sheets-filter-views-colors-2026-09-24.json`.
 
 ## Package validation
 

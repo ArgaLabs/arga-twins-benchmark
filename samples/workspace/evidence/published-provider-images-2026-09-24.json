@@ -70,27 +70,24 @@
     "Workspace images and runtime publication records refreshed after #1155. PR #1157 adds actual container and Cloud Run resolved-image observations; its rollout and fresh hosted verification remain pending."
   ],
   "latest_runtime_deployment": {
-    "revision": "c8324b19119107e4422881fbaf76642c8a12de4f",
-    "runtime_workflow": 36079238202,
-    "twins_workflow": 36079238244,
+    "revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+    "runtime_workflow": 36081085263,
+    "twins_workflow": 36081085359,
     "both": "success",
     "published_images": {
-      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
-      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
-      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4dab07ebe5c37455efdf3bd434d23909e9056bbb8ad4844bba5aa2d1e575ed35",
-      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:88bcd3de7be3f996668de8a62fa0512decb4adc4b28358048c2ce66492e3968b",
-      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4b0e6d852fa2148699aa3ad8280050c002d0af8bfa553b9053c220bc92725e33",
-      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:1b3cdd93529f8e7a87f0badc7e3fe7348d107a48d0edcba4a139f30614006d7b"
+      "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:0d4dba324733076a24b5c28305f220d2a22a6beeee4a9feef3c1726e0d8c19e8",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2@sha256:cda863ec594e61d39af563aef0b4746c0f87f8487a5ac8c8df82afa5147b3165"
     },
     "runtime_revisions_at_deployment": {
-      "preview-proxy": "preview-proxy-00265-hrb",
-      "arga-api": "arga-api-00635-87f"
+      "preview-proxy": "preview-proxy-00266-x7l",
+      "arga-api": "arga-api-00636-8t7"
     },
     "log_sha256s": {
-      "lab-final-docs-segments-twins-deploy.log": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
-      "lab-final-docs-segments-runtime-deploy.log": "66475f9aea5ffe4b2687e20c8b1506572dd56fe065bf69ae201d48220c9d6ba4"
+      "lab-final-linear-threads-twins-deploy.log": "cef48adb56c69fe92eb587e792d9a01f9c9a50f6935668192cab0f57cbea21d9",
+      "lab-final-linear-threads-runtime-deploy.log": "177d547f11d3e583626ddee3e473209c5a6d2392b5432bb3f5a9f77f69f04c0d"
     },
-    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains pending GCP reauthentication."
+    "attestation_limit": "Publication/deployment logs and revision readiness; complete live-container attestation remains pending PR #1157."
   },
   "authentication_checks": {
     "local_cli": "reauthentication_required",

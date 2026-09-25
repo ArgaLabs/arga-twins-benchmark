@@ -4428,11 +4428,11 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 148,
+      "markup_control_occurrences": 154,
       "files": [
         {
           "path": "twins/google_docs/document_actions_ui.py",
-          "sha256": "64be7fe5a1cabca363e6dbbf1c0e9601d7198b3ff6879e72e0e506881a968b8b",
+          "sha256": "734f15746a8962bf02d0b5e7a3f792f885f7f69a687d934fab514e4ce21f233e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4684,8 +4684,63 @@
           ]
         },
         {
+          "path": "twins/google_docs/document_segments_ui.py",
+          "sha256": "18c2d550a39be78f89c6d491549d1800e20dd213b2efe1ec41f765907834c282",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 28,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "segment-format-dialog",
+                    "aria-labelledby": "segment-format-title"
+                  }
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "segment-format-form"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "header-margin",
+                    "type": "number"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "footer-margin",
+                    "type": "number"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "cancel-segment-format"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Apply"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_docs/document_tabs_ui.py",
-          "sha256": "93e53dd1b24887300fc3a43f77b6d8ba65cc8d7bec85a15c79ebad6732e6f8b0",
+          "sha256": "f6a3a93941f1340236c32d4292e8233ad8ec4f24a5b384c9c47f8fb402fb0125",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4757,7 +4812,7 @@
         },
         {
           "path": "twins/google_docs/find_replace_ui.py",
-          "sha256": "806131fe28f34e10a197e74afce289fa87b1fce596d55c10589b6552ce246a96",
+          "sha256": "5f569a724b792dd5c540515bdf0edb7ca8b943d8083da963a54f56b1a341e5ec",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4880,7 +4935,7 @@
         },
         {
           "path": "twins/google_docs/table_options_ui.py",
-          "sha256": "843ed3765a887d6d0d87b29b18f7e32cfd1e2e3111c4cd2f525ca954001bcd27",
+          "sha256": "21056e32eb3496df38f4eb62838361507f35928e9684173c08a76fa4a3f37033",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5083,11 +5138,11 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "2d240d5b10804f0f2b2ca1694fb3c5418894235f8432a321cc1340f9b64f51c4",
+          "sha256": "bccc66858474f4c8832bf9a4601d613a887a738ce8f89c163e756a72dac3fa6d",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 409,
+              "line": 410,
               "dynamic": false,
               "controls": [
                 {
@@ -8608,119 +8663,291 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 26,
-      "markup_control_occurrences": 122,
+      "route_candidate_count": 27,
+      "markup_control_occurrences": 133,
       "files": [
         {
+          "path": "twins/linear/comment_ui.py",
+          "sha256": "f2a2978dfc36752385701dfd5e3e9fa382dce406aa8b3ef305c086a914fc35d3",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 61,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                }
+              ]
+            },
+            {
+              "line": 81,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Reply to comment"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {
+                    "aria-label": "Comment options"
+                  },
+                  "text": "\u2026"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Copy link"
+                }
+              ]
+            },
+            {
+              "line": 118,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/comments/{dynamic}/{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 92,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Edit"
+                }
+              ]
+            },
+            {
+              "line": 95,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/comments/{dynamic}/resolve"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "resolvingCommentId",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "Resolve with this reply"
+                }
+              ]
+            },
+            {
+              "line": 124,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "#comment-{dynamic}"
+                  },
+                  "text": "View resolution"
+                }
+              ]
+            },
+            {
+              "line": 63,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "parentId",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 62,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "expectedRevision",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/linear/frontend.py",
-          "sha256": "cbe693446c782534cae58000ba7b595c3af58aa2d6f94281661fe0443f373323",
+          "sha256": "b8db3db2d27280f8133297d0c80a8220f23b03b8ed25b8f969ccd12fca94af5b",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 93
+              "line": 94
             },
             {
               "method": "GET",
               "path": "/new",
               "handler": "new_issue",
-              "line": 137
+              "line": 138
             },
             {
               "method": "POST",
               "path": "/ui/issues",
               "handler": "create_issue",
-              "line": 150
+              "line": 151
             },
             {
               "method": "GET",
               "path": "/issue/{identifier}",
               "handler": "detail",
-              "line": 162
+              "line": 163
             },
             {
               "method": "GET",
               "path": "/profile/{user_id}",
               "handler": "profile",
-              "line": 203
+              "line": 193
             },
             {
               "method": "GET",
               "path": "/document/{document_id}",
               "handler": "document_detail",
-              "line": 220
+              "line": 210
             },
             {
               "method": "GET",
               "path": "/{workspace}/project/{reference}",
               "handler": "native_project",
-              "line": 242
+              "line": 232
             },
             {
               "method": "GET",
               "path": "/{workspace}/document/{reference}",
               "handler": "native_document",
-              "line": 250
+              "line": 240
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}",
               "handler": "native_issue",
-              "line": 259
+              "line": 249
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}/{title}",
               "handler": "native_issue",
-              "line": 259
+              "line": 249
             },
             {
               "method": "GET",
               "path": "/users/{user_id}",
               "handler": "native_user",
-              "line": 264
+              "line": 254
             },
             {
               "method": "GET",
               "path": "/{workspace}/profiles/{name}",
               "handler": "native_profile",
-              "line": 268
+              "line": 258
             },
             {
               "method": "POST",
               "path": "/ui/documents/{document_id}",
               "handler": "update_document",
-              "line": 285
+              "line": 275
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}",
               "handler": "update",
-              "line": 305
+              "line": 295
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/comments",
               "handler": "comment",
-              "line": 334
+              "line": 324
             },
             {
               "method": "POST",
               "path": "/ui/comments/{comment_id}",
               "handler": "edit_comment",
-              "line": 347
+              "line": 344
+            },
+            {
+              "method": "POST",
+              "path": "/ui/comments/{comment_id}/{action}",
+              "handler": "resolve_comment",
+              "line": 366
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/{action}",
               "handler": "archive",
-              "line": 365
+              "line": 383
             }
           ],
           "markup_expressions": [
             {
-              "line": 74,
+              "line": 75,
               "dynamic": true,
               "controls": [
                 {
@@ -8733,7 +8960,7 @@
               ]
             },
             {
-              "line": 60,
+              "line": 61,
               "dynamic": true,
               "controls": [
                 {
@@ -8794,7 +9021,7 @@
               ]
             },
             {
-              "line": 184,
+              "line": 176,
               "dynamic": true,
               "controls": [
                 {
@@ -8865,23 +9092,11 @@
                   "tag": "button",
                   "attributes": {},
                   "text": "{dynamic} issue"
-                },
-                {
-                  "tag": "form",
-                  "attributes": {
-                    "method": "post",
-                    "action": "/ui/issues/{dynamic}/comments"
-                  }
-                },
-                {
-                  "tag": "button",
-                  "attributes": {},
-                  "text": "Comment"
                 }
               ]
             },
             {
-              "line": 56,
+              "line": 57,
               "dynamic": true,
               "controls": [
                 {
@@ -8894,7 +9109,7 @@
               ]
             },
             {
-              "line": 57,
+              "line": 58,
               "dynamic": true,
               "controls": [
                 {
@@ -8907,7 +9122,7 @@
               ]
             },
             {
-              "line": 142,
+              "line": 143,
               "dynamic": true,
               "controls": [
                 {
@@ -8944,7 +9159,7 @@
               ]
             },
             {
-              "line": 229,
+              "line": 219,
               "dynamic": true,
               "controls": [
                 {
@@ -8977,7 +9192,7 @@
               ]
             },
             {
-              "line": 75,
+              "line": 76,
               "dynamic": true,
               "controls": [
                 {
@@ -8990,7 +9205,7 @@
               ]
             },
             {
-              "line": 116,
+              "line": 117,
               "dynamic": true,
               "controls": [
                 {
@@ -9003,30 +9218,7 @@
               ]
             },
             {
-              "line": 174,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "summary",
-                  "attributes": {},
-                  "text": "Edit comment"
-                },
-                {
-                  "tag": "form",
-                  "attributes": {
-                    "method": "post",
-                    "action": "/ui/comments/{dynamic}"
-                  }
-                },
-                {
-                  "tag": "button",
-                  "attributes": {},
-                  "text": "Save comment"
-                }
-              ]
-            },
-            {
-              "line": 179,
+              "line": 171,
               "dynamic": true,
               "controls": [
                 {
@@ -9039,7 +9231,7 @@
               ]
             },
             {
-              "line": 209,
+              "line": 199,
               "dynamic": true,
               "controls": [
                 {
@@ -9052,7 +9244,7 @@
               ]
             },
             {
-              "line": 128,
+              "line": 129,
               "dynamic": true,
               "controls": [
                 {
@@ -9561,7 +9753,7 @@
         },
         {
           "path": "twins/linear/rich_editor.py",
-          "sha256": "5004f9cf2ff5b08b17861d300d15a8d8545f1b34704c80c34686c2dd5edacdee",
+          "sha256": "fa1bf1c80f0ee9ba57bf1b4362ca515cae937515e1e800f7b125ffdcad6e727c",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -11291,5 +11483,8 @@
         }
       ]
     }
-  ]
+  ],
+  "source_revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+  "observed_at": "2026-09-25T01:35:37.535892+00:00",
+  "source_note": "Twins sources match merged main at the Linear thread release. Source-only inventory; no runtime state or parity certification."
 }

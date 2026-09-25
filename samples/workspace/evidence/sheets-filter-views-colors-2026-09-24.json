@@ -2,14 +2,16 @@
   "date": "2026-09-24",
   "status": "native_and_source_checks_pass_browser_pending",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1158",
-  "source_revision": "a4ec6f38b0d8a88af61f8027ec480022b2e013ef",
+  "source_revision": "6d796c6a7e318ef37815e74ef6fc43903fa14145",
   "scope": [
     "Native saved/temporary filter view validation, atomic lifecycle and read-only visibility/source-row-order preview, with viewer scopes and immediate permission revocation.",
     "Fill/text color criteria and column-filter controls; effective manual/theme/conditional colors, relative formulas, native ROW/COLUMN context, first-matching rule priority and gradient interpolation.",
-    "Basic and view filterSpecs precedence; UI criteria updates cannot be silently overridden by stale filterSpecs."
+    "Basic and view filterSpecs precedence; UI criteria updates cannot be silently overridden by stale filterSpecs.",
+    "Native range and filter-view color sorting uses effective colors, stable secondary sort keys, source-row projections and atomic malformed-color rejection.",
+    "Spreadsheet themes reload under native properties.spreadsheetTheme; custom theme field masks agree with effective grid/filter colors without read-time mutations."
   ],
   "verification": {
-    "regressions": 509,
+    "regressions": 536,
     "make_fix": "pass",
     "focused_pyright": "0 errors",
     "assembled_javascript": "syntax pass; color draft helpers preserve other criteria and native source objects",
@@ -26,31 +28,69 @@
       {
         "name": "lab-final-sheets-filter-colors-pyright-v5.log",
         "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+      },
+      {
+        "name": "lab-final-sheets-color-sort-broad-tests-v2.log",
+        "sha256": "56fe2fc37d3ae5d62fc5b30560a5ab615928011e404ddda9162754b0ce1e074e"
+      },
+      {
+        "name": "lab-final-sheets-color-sort-makefix.log",
+        "sha256": "1f99ba4facd8cec90747e0f6db357957ee9e7c4fbd6f1198a252cedbbe009c1a"
+      },
+      {
+        "name": "lab-final-sheets-color-sort-pyright.log",
+        "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+      },
+      {
+        "name": "lab-final-sheets-theme-broad-tests-v1.log",
+        "sha256": "775677e937ae7e3151a1cd6e0bf451bd81cc344b146804b839cd70d3e751581f"
+      },
+      {
+        "name": "lab-final-sheets-theme-makefix-v2.log",
+        "sha256": "e9eec827d20a32a10a2e4b9c01fdad7e49728618316b2959851d994c602c4668"
+      },
+      {
+        "name": "lab-final-sheets-theme-pyright.log",
+        "sha256": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+      },
+      {
+        "name": "lab-final-sheets-theme-fidelity-tests.log",
+        "sha256": "31705a678998a3fc4ece4e7a81a24c959dc207faa7329246fe89f720c9f4e9da"
       }
     ],
     "ci": {
-      "run_id": 36081969122,
-      "status": "in_progress",
-      "head": "a4ec6f38b0d8a88af61f8027ec480022b2e013ef"
+      "status": "pending_current_head_checks",
+      "head": "6d796c6a7e318ef37815e74ef6fc43903fa14145"
+    },
+    "fidelity_harness": {
+      "passed": 22,
+      "skipped": 24,
+      "note": "Live external-account tests skipped; no live parity claim."
     }
   },
   "sources": {
-    "twins/google_drive/sheet_filter_views.py": "f81afb3ff2041132aa6b318f43eabacc193f331826944893a6c8f5afcbf93e1f",
+    "twins/google_drive/sheet_filter_views.py": "1cafb02fc1d2f56e30efa521afaaaf8bd864d3b2a5a8e679d4938e074659e4c9",
     "twins/google_drive/sheet_filter_colors.py": "7c6bc32ad08ce0b46f5ced1017d2c939277e1f199161af18aa79a95e70fb39f5",
     "twins/google_drive/sheet_conditional_colors.py": "7aadca59cfdff46c4499d31d459d2bb02efcdeca2c1252a9eb8a48b85f8c9599",
     "twins/google_drive/sheet_filters.py": "4655e3d9fd968f2c6f364eeeeec8f9e565285bef458527cbd5aa079f8c34b79c",
-    "twins/google_drive/workspace_editing.py": "3a3a917ae7b8133089f1b6643f9bfecddcffbddf27d172a4bfcc17e8afc6eef8",
+    "twins/google_drive/workspace_editing.py": "ac21e0d95e244187280c5ba4d7446dca68028c0459d90e6b9b497c3e6846eec3",
     "twins/google_sheets/filters_ui.py": "decb3c2ee19b6ebfc10428e1d3f55cf5759e3f1544b88062b96bfd76086ceb65",
     "twins/google_sheets/grid_format_ui.py": "d159de42a885141883beeec5eb2c6de748f155f1123b6bd0e2113e37d4c9757f",
     "twins/tests/test_google_sheets_filter_views.py": "600ea0c50c8a67e15f702101bc75e8015a622909678f16963adea5e6e7ff5ec0",
-    "twins/tests/test_google_sheets_filter_colors.py": "89fa5c36920dec5f8196f34617b28aa408521cde045f44aa6fa375d069d01253"
+    "twins/tests/test_google_sheets_filter_colors.py": "41d85b7fe6a6b23d6e84c5c45a027851c391d466610675ed1acbdfe011a9586a",
+    "twins/google_drive/sheet_sorting.py": "e2b5a1282ebbdc95546e9cbd62cc0bc33d85487eeb7077d153d430527be3d268",
+    "twins/tests/test_google_sheets_color_sort.py": "9901bb0d89ffa0b8939eeb34e7be346ad2f52b612b16a961ab1bbce9c5a6e6f1",
+    "twins/google_sheets/README.md": "6880320dd1b3bbf7aa2afb91e378c9ebedc56fd5b295db656b73c79f7c911e94",
+    "twins/tests/test_google_real_service_fidelity.py": "5884e46d15c471acab27fa3a8bff262060fb5c581a100c4c7fad03ae2a9368a7"
   },
   "official_references": [
     "https://developers.google.com/workspace/sheets/api/guides/filters",
     "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/other#FilterCriteria",
     "https://developers.google.com/workspace/sheets/api/guides/conditional-format",
     "https://developers.google.com/workspace/sheets/api/samples/conditional-formatting",
-    "https://support.google.com/docs/answer/3540681?hl=en"
+    "https://support.google.com/docs/answer/3540681?hl=en",
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/other#SortSpec",
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets#SpreadsheetProperties"
   ],
   "limits": [
     "Filter-view frontend lifecycle and safe sorted-view editing/clipboard projection are unfinished.",

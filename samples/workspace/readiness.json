@@ -36,7 +36,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
-          "sha256": "14181ef351edde8b3e4406e2f04b66ccf67375a6780add7a3df8d349e031cda1"
+          "sha256": "9c85efe9dc95c378fff5ba9d24a31ec801de3584a289a9f715057b98c6f0319d"
         }
       ]
     },
@@ -199,5 +199,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "213ffc26630a0f858a0e7476e1c64386e3f4cea55a8cb63d3783bc98f5ce6a14"
+  "sample_tree_sha256": "ee9d2f62b357fc88f05ff00981832d4a40e14261dfb733389eef0e4816713b6a"
 }
