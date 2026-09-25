@@ -17,7 +17,7 @@
       "status": "pass",
       "files_scanned": 277,
       "image_files": 0,
-      "scanned_at": "2026-09-24"
+      "scanned_at": "2026-09-25"
     },
     "final_zip_created": false,
     "release_gate_regressions": {
@@ -108,7 +108,7 @@
       ]
     }
   },
-  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. Current deployment image attestation passes; full eight-twin frontend parity and final package release remain open.",
+  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The last recorded deployment image attestation passes and must be refreshed after subsequent deployments; full eight-twin frontend parity and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,

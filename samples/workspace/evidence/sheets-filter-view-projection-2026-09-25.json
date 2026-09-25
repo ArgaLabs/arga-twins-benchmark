@@ -2,8 +2,8 @@
   "schema": "sheets-private-view-projection/1",
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
-  "head": "2aa332249268b2606c0e137a9709b691a48a858e",
-  "status": "incomplete_temporary_sessions_local_tests_pass_browser_blocked_locked_mac_full_ci_pending",
+  "head": "587c4dea1add1d242aa1c033ea8351b544537370",
+  "status": "incomplete_selected_local_sessions_and_names_pass_fresh_full_ci_pending",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
@@ -15,16 +15,30 @@
     "Internal copy translates visible source and native destination formulas; external TSV retains literal formulas; independent source/destination views, cross-sheet copy, tiling, transpose and paste types",
     "Typed view writes serialize across cells to retain exact source revisions; strict rejection restores the rejected draft only; revision conflicts preserve drafts with explicit discard/reload recovery",
     "Saved Options match observed inline Rename/Update range and native saved Duplicate; committed-copy preview/grid-read failure restores complete original view before controls unlock",
-    "Window-local temporary-view registry, manual naming and singular/plural Exit prompts, retained unsaved entries, bulk native save, saved-sort refresh and post-commit recovery"
+    "Window-local temporary-view registry, manual naming and singular/plural Exit prompts, retained unsaved entries, bulk native save, saved-sort refresh and post-commit recovery",
+    "Lowest unused per-sheet saved/default names, reusable temporary labels with monotonic identities, and async creation reentry/workbook/sheet guards"
   ],
   "tests": {
     "focused_passed": 63,
-    "sheets_workspace_regressions_passed": 629,
+    "sheets_workspace_regressions_passed": 632,
     "make_fix": "pass",
     "focused_pyright": "0 errors",
-    "full_ci": "pending_on_2aa33224",
+    "full_ci": "pending_on_587c4dea",
     "duplication_recovery_ui_passed": 58,
-    "temporary_view_and_related_ui_passed": 68
+    "temporary_view_and_related_ui_passed": 71,
+    "previous_head_full_ci": {
+      "head": "2aa332249268b2606c0e137a9709b691a48a858e",
+      "status": "pass",
+      "lint_test_run": 36104425217,
+      "docker_run": 36104425276,
+      "fidelity_run": 36104425262,
+      "twins_passed": 5618,
+      "twins_skipped": 145,
+      "twins_deselected": 3,
+      "root_passed": 2130,
+      "root_skipped": 2,
+      "scope": "Prior head only; new head requires its own checks."
+    }
   },
   "sources": {
     "twins/google_drive/app.py": "9c41c6995e0df063c0e9e838397ed09a194f8abdf853ff455ef177535b60bfa9",
@@ -35,17 +49,17 @@
     "twins/google_drive/sheet_view_formulas.py": "805ffa97ae07dc6a860b6fbed09b234d84ca98c3b9fab075af4bd7ba596c63aa",
     "twins/google_drive/sheet_view_rendering.py": "be4c4cb4aed030024e5c8f7c63e074191db2687ac16d7205572a741aef68bc90",
     "twins/google_drive/workspace_editing.py": "dd8fca36eba575b0ae55cc921efb4fa1b47812688d748b0bfdd982f2f413fb30",
-    "twins/google_sheets/README.md": "2fcaa287a41ec0b36b2dc45e62a0742df87dfb4dffb7131cf995f56420e2e82e",
+    "twins/google_sheets/README.md": "2e4235247c7d090b562e6e3080dcb98defd9ee337c54a42f8d9931bcd350a11c",
     "twins/google_sheets/clipboard_ui.py": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
-    "twins/google_sheets/filter_view_sessions_ui.py": "d6136bdedcc84007f3107a24ad64cecbc31e186f275175e18467929bf9515847",
-    "twins/google_sheets/filter_views_ui.py": "6667c28ab09c9ece9c5411262ba0c87ece16998c9308f000f55b7da43463d10e",
+    "twins/google_sheets/filter_view_sessions_ui.py": "030ac6a2908201db46aee025569c82b807183172963528333969108c1f8377ee",
+    "twins/google_sheets/filter_views_ui.py": "4aca61c7ab616e4d3ad999e7de618228694e6721c04a14691edd60522501bfee",
     "twins/google_sheets/filters_ui.py": "f3c55c9e83ed51cdc10eceeedcfb5e96940f82dd2d282c7e1ce4bb5541111a72",
     "twins/google_sheets/grid_format_ui.py": "7c35bfaf750dd2a387d722451fd5596816ac40a7247ce78e8241558a2552d7f8",
     "twins/google_sheets/recalculation_ui.py": "632aab646dd77d7368ba2f165f83f91738f452e8d82361a3f33b61bf78218956",
     "twins/google_sheets/ui.py": "91e35a27c802198dc5c6752497e824225f877d2965f63076c6b27bb6467b8907",
     "twins/google_sheets/validation_ui.py": "64518d3b543ceb60b2a84609ceb7afa02a5c86c94c3d8559a5c453233125efc4",
     "twins/google_sheets/viewport_ui.py": "b79ff3d9caaab21c6f4388b76cf985c5423e8bab9937741cc4e77a680bd02c58",
-    "twins/tests/test_google_sheets_filter_view_sessions_ui.py": "680894ca7c0fa8384ee5ce43b4756ef4c84c61b767526fb094bca8d6429bcee5",
+    "twins/tests/test_google_sheets_filter_view_sessions_ui.py": "94adcf9c4c8bb730fb8518fac67c200dcff7528ebe92ebc20b350ae6860f9525",
     "twins/tests/test_google_sheets_filter_view_ui.py": "3b536a93db07a1c1fb34e8bb57f22b82a543fa790f9b7c61790f6b5355ef9221",
     "twins/tests/test_google_sheets_filter_views.py": "e380e5563b0f741203e727dc10b7330922003801f004302f0652fcd11c392d97",
     "twins/tests/test_google_sheets_grid_format_ui.py": "9f15f20b8d6c006bfa046ea2209cb62ac4682a916c070beef0a7c1228c9be2e6",
@@ -78,14 +92,21 @@
     "lab-final-sheets-view-sessions-tests.log": "e6e2998a39bc79bc2da3936baad60c394b313114db6e8367f13ec2ea29aac4bb",
     "lab-final-sheets-view-sessions-regression.log": "37280470e34454ba324f0e039bd823baba48babb731dcd49b0983ecf873159f0",
     "lab-final-sheets-view-sessions-makefix.log": "ec57932aba64be6126251dc57f2a4dedbe6b75491c05c077bf47b1daf18f3f31",
-    "lab-final-sheets-view-sessions-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb"
+    "lab-final-sheets-view-sessions-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-view-name-tests.log": "338152c06916596e5e1ff417cb6670a35c2d77d5af5f6d11c898397767d95511",
+    "lab-final-sheets-view-name-regression.log": "650ef966918027ab694a18b14d57561186e91c5fcb4bf53e74ef56a0ebef1bc4",
+    "lab-final-sheets-view-name-makefix.log": "d8bf301a7e548d1863e4512ef225bbe987a3f8790414421b1f730184b6dc091d",
+    "lab-final-sheets-view-name-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-view-name-native-check.json": "3b2622530a995baf3a1ba74edbad0eef9a536124c6ba8d38a40ddbdb0144d4a8",
+    "lab-final-sheets-view-sessions-native-check.json": "45de87ca26c398eee8db86253340152ae0665575c2e8361b63a4fb43a4e48a4a",
+    "lab-final-sheets-view-ci-complete-2aa33224.json": "c2dd812cdcc6d8f2a2c98e71f875d4ae0d4c68447f09c3a564feeb48e2b861a7"
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "#1161 is open for review but incomplete. New source head has no completed full CI, merge, production deployment or hosted verification.",
-    "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, protected-range enforcement and remaining named/dynamic references remain unfinished.",
+    "#1161 is open for review but incomplete and undeployed. Full CI passed on prior head2aa33224; rebased/naming head587c4dea still requires full CI and hosted verification.",
+    "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, actor-aware protected-range enforcement and remaining named/dynamic references remain unfinished.",
     "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
-    "Temporary-view registry and naming/Save/Exit prompts have source/test coverage but their desktop/mobile browser verification is pending host unlock. Protected-overlap save enforcement, remaining menu details and complete permission/error/cancellation paths remain incomplete.",
+    "Selected temporary-view naming/Save/Exit desktop and390px checks now pass. Complete permission/error/cancellation paths, cross-sheet provider comparison and remaining menu details remain incomplete.",
     "Selected local desktop/390px checks do not establish exhaustive visual, mobile, physical-touch, collaboration or provider parity."
   ],
   "release_allowed": false,
@@ -218,14 +239,87 @@
       "verified_source_head": "df14eafdc6d355567c8548e02a17d3c762dc47ad"
     },
     "temporary_view_sessions": {
-      "status": "pending_host_unlock",
-      "source_head": "2aa332249268b2606c0e137a9709b691a48a858e",
-      "attempt": "Native Chrome CUA reported Mac locked and automatic unlock unavailable before opening fixture. User asked to unlock. No browser behavior or visual pass claimed.",
-      "desktop": "pending",
-      "mobile": "pending",
-      "physical_touch": "pending",
-      "native_fixture": "Local before/after snapshots exactly equal; server stopped.",
+      "status": "selected_local_desktop_and_390px_pass_with_excluded_adapter_contamination",
+      "verified_source_head": "2aa332249268b2606c0e137a9709b691a48a858e",
+      "prior_blocked_attempt": {
+        "status": "pending_host_unlock",
+        "source_head": "2aa332249268b2606c0e137a9709b691a48a858e",
+        "attempt": "Native Chrome CUA reported Mac locked and automatic unlock unavailable before opening fixture. User asked to unlock. No browser behavior or visual pass claimed.",
+        "desktop": "pending",
+        "mobile": "pending",
+        "physical_touch": "pending",
+        "native_fixture": "Local before/after snapshots exactly equal; server stopped.",
+        "screenshots_retained": false
+      },
+      "desktop_pass": [
+        "Temporary label has no Options; manual naming default; Don\u2019t save retains active view",
+        "Single Exit prompt; Escape cancellation; Don\u2019t save exits and menu retains temporary view",
+        "Plural Exit prompt omits name input and saves all temporary views",
+        "Blank manual name rejects inline",
+        "Manual save reapplies sort after key edit; reload retains saved identity/order",
+        "Post-save preview503 preserves complete usable grid with committed identity and actionable recovery; existing saved view reopens without extra writes",
+        "Single Exit Save commits named view and exits",
+        "Reload drops unsaved page-session entries"
+      ],
+      "mobile_390x844_pass": [
+        "Plural Exit dialog inspected inline; copy wraps and controls fit",
+        "Keyboard activation of plural Save creates both native views and exits",
+        "Manual naming dialog inspected inline; Escape cancels while retaining temporary view"
+      ],
+      "native_exact_checks": [
+        {
+          "spreadsheet_id": "x0szrzNmTiOcYrrZJcMWWQMkAeU",
+          "pass": true,
+          "expected_changes": [
+            "Plan A3 Alpha to Zebra",
+            "saved view74 Manual sorted view with ascendingA sort and all-visible columnA criterion",
+            "saved view75 Recovery view",
+            "saved view76 Exit saved view"
+          ],
+          "source_version_delta": 4,
+          "all_other_native_state_exactly_preserved": true,
+          "protected_sibling_exactly_preserved": true,
+          "cleanup": "Local server stopped"
+        }
+      ],
+      "excluded_attempt": {
+        "run": 7,
+        "spreadsheet_id": "-6M54uHRhQbKNY8-_EpI-L_c1mo",
+        "status": "adapter_contaminated_not_an_unqualified_native_state_pass",
+        "observations": [
+          "Plural Save created view74 Filter1 A1:D6 and view75 Filter2 H19",
+          "An interrupted selection had put the second view atH19",
+          "A later emulated-mobile name-box click targeted gridA1 and pasted A1:D6; excluded from selection/touch pass claims"
+        ],
+        "exact_diff_including_contamination": "Only saved views74/75, sourceVersion+2, next_filter_view_id+2 and PlanA1 Project toA1:D6; all other native state unchanged"
+      },
+      "cleanup": "Both local servers stopped; owned local window closed. No retained screenshots.",
+      "physical_touch": "not_verified",
+      "hosted": "not_verified",
       "screenshots_retained": false
+    },
+    "default_view_names": {
+      "status": "pass_bounded_local_desktop",
+      "verified_source_head": "587c4dea1add1d242aa1c033ea8351b544537370",
+      "observations": [
+        "Seeded saved Filter1,Filter2,Filter4; create Temporary filter1; manual defaultFilter3",
+        "Custom save Name gap custom creates saved fvid78",
+        "Next create reuses Temporary filter1 and still defaultsFilter3",
+        "Escape/reload removes unsaved session; menu contains original three and exactly one custom save"
+      ],
+      "native_exact_check": {
+        "spreadsheet_id": "YR69BsD39xToRfoC2ZA6SXj7p6g",
+        "pass": true,
+        "expected_changes": [
+          "Saved view78 Name gap custom A1:D6",
+          "sourceVersion +1",
+          "next_filter_view_id 78 to79"
+        ],
+        "all_other_native_state_exactly_preserved": true,
+        "cleanup": "Local server stopped; owned Chrome window closed"
+      },
+      "screenshots_retained": false,
+      "hosted": "not_verified"
     }
   },
   "provider_clipboard_reference": {
@@ -256,9 +350,20 @@
       "resolved": "Manual save previews saved identity without held rowOrder; actual prepareFilterView then preserves newly sorted order; read failure restores original complete projection with committed identity/revision and avoids duplicate submission",
       "independently_rerun_tests": 68,
       "limits": [
-        "Browser confirmation blocked by locked host",
-        "Protected-overlap enforcement not implemented",
-        "No visual, exhaustive fidelity or release readiness certification"
+        "Source/test review excludes browser certification; later bounded browser results recorded separately",
+        "Actor-aware protected-range matrix incomplete",
+        "No exhaustive fidelity or release readiness certification"
+      ]
+    },
+    "default_view_names": {
+      "disposition": "ship_label_allocation_and_creation_guards_only",
+      "independently_rerun_tests": 71,
+      "findings": "No material findings",
+      "scope": "Lowest unused gaps, monotonic internal IDs, reentry and changed-workbook/sheet guards",
+      "excludes": [
+        "browser fidelity",
+        "actor-aware protection",
+        "release readiness"
       ]
     }
   },
@@ -281,10 +386,25 @@
       "A second temporary view is Temporary filter 2. Exit with two temporary views opens Save your temporary views? with no name field. Save creates Filter 1 and Filter 2, removes temporary entries and exits."
     ],
     "limits": [
-      "Single Exit/Save outcome not separately probed",
-      "Cross-sheet registry and protected overlap behavior still unverified"
+      "Single Exit/Save outcome not separately probed on provider",
+      "Cross-sheet registry and non-owner protected-range matrix remain unverified"
     ],
     "cleanup": "Owned fixture returned to recoverable trash; File moved to trash observed and tab closed. No outbound sharing or messages.",
-    "screenshots_retained": false
+    "screenshots_retained": false,
+    "owner_protection_and_name_gap_probe": {
+      "sheet_gid": 371618094,
+      "protected_range": "Sheet2!B2:B3",
+      "permission": "Only you; fixture owner",
+      "observations": [
+        "Owner saved Arga overlap owner overA1:C4, overlapping owner-protectedB2:B3; fvid1309220080",
+        "With saved Filter1 andFilter2, naming defaultFilter3",
+        "After custom save, new temporary label reusesTemporary filter1 and default remainsFilter3",
+        "Saved Filter4 fvid483734697; next default stillFilter3, proving lowest unused gap",
+        "Final prompt Don\u2019t save; fixture returned to recoverable trash; File moved to trash verified; owned window closed"
+      ],
+      "inference": "A blanket protected-overlap save rejection is not justified; actor-specific behavior needs coverage.",
+      "no_outbound_messages": true,
+      "screenshots_retained": false
+    }
   }
 }
