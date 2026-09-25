@@ -2,49 +2,175 @@
   "schema": "sheets-private-view-projection/1",
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
-  "head": "154cf412e3eb5c0d7224c60be43cca093b24d8ea",
-  "status": "draft_local_api_checks_pass_frontend_and_release_pending",
+  "head": "6ae29f39ecc62655a783e83133e0ed8c0b16e503",
+  "status": "incomplete_local_browser_and_api_checks_pass_full_ci_running",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
     "Outside formulas evaluate against visible values; spill cells and formatting follow source rows; physical dimensions stay fixed",
     "Active row order remains stable across edits and reopening re-sorts",
     "Typed single-cell source-coordinate routing with revision conflict detection, relative formulas and source validation",
-    "Reader and read-only scope denial, writer grants and immediate revocation"
+    "Reader and read-only scope denial, writer grants and immediate revocation",
+    "Saved and temporary view bar/menu, selected or inferred range, private column filtering/sorting, save/rename/range/duplicate/delete/exit and URL reload integration",
+    "Internal copy translates visible source and native destination formulas; external TSV retains literal formulas; independent source/destination views, cross-sheet copy, tiling, transpose and paste types",
+    "Typed view writes serialize across cells to retain exact source revisions; strict rejection restores the rejected draft only; revision conflicts preserve drafts with explicit discard/reload recovery"
   ],
   "tests": {
-    "focused_passed": 77,
-    "sheets_workspace_regressions_passed": 576,
+    "focused_passed": 63,
+    "sheets_workspace_regressions_passed": 614,
     "make_fix": "pass",
     "focused_pyright": "0 errors",
-    "full_ci": "skipped_by_draft_policy"
+    "full_ci": "running_on_6ae29f39"
   },
   "sources": {
+    "twins/google_drive/app.py": "9c41c6995e0df063c0e9e838397ed09a194f8abdf853ff455ef177535b60bfa9",
     "twins/google_drive/sheet_filter_views.py": "a294abb19bb41b0c69d610086fdc0891428b39741702b0d527902c401818ef01",
+    "twins/google_drive/sheet_view_clipboard.py": "61b0bbcd9d16611b97fd4abaf958b0503fd00cef8a5aa24f2b92b7c983d37fe5",
     "twins/google_drive/sheet_view_coordinates.py": "ecf5e448aa5131d0d3633800c8eae0a52585625ef338afc85dba866c5e44c546",
+    "twins/google_drive/sheet_view_edits.py": "d0e79f066dfd7cc3568af33a3ee7d5491c10941dcb753e5d50d47e3da1499e08",
     "twins/google_drive/sheet_view_formulas.py": "805ffa97ae07dc6a860b6fbed09b234d84ca98c3b9fab075af4bd7ba596c63aa",
     "twins/google_drive/sheet_view_rendering.py": "be4c4cb4aed030024e5c8f7c63e074191db2687ac16d7205572a741aef68bc90",
-    "twins/google_drive/sheet_view_edits.py": "d029bfe8737cb85d6bc23a2d95a6068625d8101269a5702143aab4855936d7e4",
-    "twins/google_drive/workspace_editing.py": "4546fe336687f595c5f54f8efa62b4a3e1cd5864eedaf004cc80db37b9a9b3dc",
-    "twins/google_drive/app.py": "8fe17ee1137e6106c169c8d17a44eaee8d7f91349f7f56a7d57cf664cca4e8a9",
+    "twins/google_drive/workspace_editing.py": "dd8fca36eba575b0ae55cc921efb4fa1b47812688d748b0bfdd982f2f413fb30",
+    "twins/google_sheets/README.md": "d458ed2a234ed4981fe95be37699b106750d1d8cf9de34654747017d7abb38ea",
+    "twins/google_sheets/clipboard_ui.py": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
+    "twins/google_sheets/filter_views_ui.py": "6dca1bd14d9bde7cbe34f3746c2376f11335e349e8f04db5b1e38cdbd0e54aab",
+    "twins/google_sheets/filters_ui.py": "f3c55c9e83ed51cdc10eceeedcfb5e96940f82dd2d282c7e1ce4bb5541111a72",
+    "twins/google_sheets/recalculation_ui.py": "632aab646dd77d7368ba2f165f83f91738f452e8d82361a3f33b61bf78218956",
+    "twins/google_sheets/ui.py": "686e5ac6d7c20cea6c2fa10d4f4147535e7929ca9097bceb7fb286c61ac1a059",
+    "twins/google_sheets/validation_ui.py": "64518d3b543ceb60b2a84609ceb7afa02a5c86c94c3d8559a5c453233125efc4",
+    "twins/google_sheets/viewport_ui.py": "b79ff3d9caaab21c6f4388b76cf985c5423e8bab9937741cc4e77a680bd02c58",
+    "twins/tests/test_google_sheets_filter_view_ui.py": "fb267226992ddf2bdf4443ace361b07aa23e188447d2a0b5511004ba4ebd728c",
+    "twins/tests/test_google_sheets_filter_views.py": "e380e5563b0f741203e727dc10b7330922003801f004302f0652fcd11c392d97",
+    "twins/tests/test_google_sheets_grid_format_ui.py": "9f15f20b8d6c006bfa046ea2209cb62ac4682a916c070beef0a7c1228c9be2e6",
+    "twins/tests/test_google_sheets_recalculation_ui.py": "767a4936f4aaf302f5a1d92c0bf8c09653d3ed491cd709e950985f641eb70beb",
+    "twins/tests/test_google_sheets_tabs.py": "cf2b6f0ebbfaa9d44bf539e98c70f35acf27941f85fa116a9bb1f63b30627dff",
+    "twins/tests/test_google_sheets_validation_controls.py": "c0cc49e2020438937a8832de73c151a1b1ac40658735d94823850506fde9b0e7",
+    "twins/tests/test_google_sheets_view_clipboard.py": "cf0c2251272d83a925797b2e3e43b995883e2d25ace5063d8de2c13956f4a9f5",
     "twins/tests/test_google_sheets_view_coordinates.py": "be2a59d786349b1336ace859dd9aa02d183b70ac7c5efe45b5f1940bb4991397",
     "twins/tests/test_google_sheets_view_formulas.py": "5e274f1fc3283e1695372218c1bb7d7f8de678a94f08dae978c30865355fac58",
-    "twins/tests/test_google_sheets_view_rendering.py": "76c82ed1e9bd6983672179579b319ce48183ba95bd4393ccbff92fc1ae15aebc",
-    "twins/tests/test_google_sheets_filter_views.py": "50f6a4f89f6bf4d54bfd2c3ed61d9e0d56119ad574cc04b8b082f743c7727c4d"
+    "twins/tests/test_google_sheets_view_rendering.py": "76c82ed1e9bd6983672179579b319ce48183ba95bd4393ccbff92fc1ae15aebc"
   },
   "logs": {
     "lab-final-sheets-view-tests.log": "dd9645c629f437048611a81036a62a574e642a20bb4bbce52940c69430a1a1f2",
     "lab-final-sheets-view-regression.log": "b8c1980a8cce8b8e8a038ac3eb4e4b651142dbe7d89db1497e2f9e40f226c6a9",
     "lab-final-sheets-view-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
-    "lab-final-sheets-view-makefix.log": "e83652c991133268e6843f4276d486cd2e8022f0de5a8f493956ee1fc55239f5"
+    "lab-final-sheets-view-makefix.log": "e83652c991133268e6843f4276d486cd2e8022f0de5a8f493956ee1fc55239f5",
+    "lab-final-sheets-view-ui-regression-v3.log": "2647598c6c4b90dd216bbaa39e47576e389f7a794d7a818d43e7ab873f6016b4",
+    "lab-final-sheets-view-review-tests.log": "bc97345199b6af7117a422494bb7d78b43e360748fb3e51eac16a64e10b7ef6e",
+    "lab-final-sheets-view-review-makefix.log": "6b8c5cbf8d92d4a61d1f5b60c13e80d7a5fa2ff899c8e53926b536dd9de52738",
+    "lab-final-sheets-view-ui-pyright-v3.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-view-ui-detector.json": "7d802500feea6fa573f216e961bbc384753ff767924b0bb6804e0474fa2db016",
+    "lab-final-sheets-view-ui-native-check.json": "b12e4d4abab47986e95c965a56e6134fcf1684ad044d03ef044a86f7cc6b9671",
+    "lab-final-sheets-view-ui-recovery-check.json": "45c0f106ccb371fef291d5f1ecc1e00fb45767ac35b06b954892e5d4d68f985a",
+    "lab-final-sheets-view-ui-cas-check.json": "6c571cf7989765b26257edd5c6abe7d1220a0a2e65284040154eeaf5603e0149"
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "No frontend integration or hosted verification for #1161 yet.",
-    "Saved/temporary browser controls, clipboard writes, protected-range enforcement, merged-cell projection and complete named/dynamic-reference behavior remain pending.",
-    "Local operator API conformance does not establish visual, mobile, physical-touch or full provider parity.",
-    "Full CI and deployment are deferred until the feature is ready; no production merge."
+    "#1161 is open for review but incomplete. Full CI is running on the current head; no merge, production deployment or hosted verification.",
+    "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, protected-range enforcement and remaining named/dynamic references remain unfinished.",
+    "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
+    "Save/rename/range/duplicate menu fidelity still requires matching provider dialogs and complete permission/error/cancellation paths.",
+    "Selected local desktop/390px checks do not establish exhaustive visual, mobile, physical-touch, collaboration or provider parity."
   ],
   "release_allowed": false,
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "local_browser": {
+    "browser": "Authenticated Chrome through CUA; localhost isolated twin fixtures",
+    "desktop_viewport": [
+      1465,
+      806
+    ],
+    "mobile_viewport": [
+      390,
+      844
+    ],
+    "passed": [
+      "Open saved view and preserve native source order",
+      "Edit sort key without re-sorting the active view",
+      "Type a relative formula and read back translated native formula",
+      "Internal copy from view to outside range with source/destination formula translation",
+      "Save column criteria without altering shared basicFilter",
+      "Reload saved fvid and re-sort; Exit restores native row order",
+      "390px duplicate to temporary view, rename, save, reload, change range, invalid-range error, Escape cancellation and delete owned view",
+      "Rename a named-range-backed view without losing namedRangeId",
+      "Strict invalid value999 at visible C2 rejected, restored30",
+      "Concurrent native fixture update causes409; draft42 retained; native Chrome Cancel preserves draft, OK reload restores30"
+    ],
+    "native_state_checks": [
+      {
+        "status": "pass",
+        "source_version_before": 5,
+        "source_version_after": 13,
+        "native_cell_changes": [
+          "Plan!A3 = Zulu",
+          "Plan!C3 = =LEN(A3)+ROW()*100",
+          "Plan!E3 = =LEN(C3)+ROW()*100"
+        ],
+        "metadata_changes": [
+          "view 71 excludes Closed",
+          "view 72 created, renamed, resized and deleted; next_filter_view_id 73"
+        ],
+        "all_other_native_workspace_state": "exactly unchanged",
+        "protected_sheet": "exactly unchanged",
+        "screenshots_retained": false
+      },
+      {
+        "status": "pass",
+        "native_exact_allowlist": [
+          "rename view 73, retaining namedRangeId view-data",
+          "API fixture writes Protected!C1 = Concurrent edit fixture",
+          "source_version +2"
+        ],
+        "strict_rejection": "C2=999 rejected; native Plan!C3 and visible C2 remain30",
+        "conflict": "API fixture advances revision; C2=42 retained locally, not committed",
+        "cancel": "Native Chrome confirmation Cancel retains42 and recovery banner",
+        "confirmed_reload": "Native Chrome confirmation OK reloads view73 and restores C2=30",
+        "all_other_native_state": "exactly unchanged",
+        "browser_tool_limit": "Extension confirmation handling stalled; native Chrome AX completed cancel and confirm",
+        "screenshots_retained": false
+      },
+      {
+        "status": "pass",
+        "browser": "Native Chrome through CUA after extension reconnected unsuccessfully",
+        "checks": [
+          "Rename commits through revision-checked metadata endpoint",
+          "Concurrent API fixture update advances revision",
+          "Stale rename rejected with unsaved name retained and recovery visible",
+          "Reload restores committed CAS renamed view title"
+        ],
+        "exact_native_state": "Only rename73, concurrent fixture Protected!C1 and sourceVersion+2; all other native workspace state unchanged",
+        "screenshots_retained": false,
+        "local_server_teardown": "complete"
+      }
+    ],
+    "limits": [
+      "Local rendered checks, not hosted1161",
+      "No physical touch",
+      "One initial emulation attempt remained desktop and is not counted as390",
+      "Extension confirm-dialog handling stalled; native Chrome AX completed the recovery checks"
+    ]
+  },
+  "provider_clipboard_reference": {
+    "fixture": "Arga fidelity 2026-09-25 filter views",
+    "observation": "Saved sorted A1:C4 shows Alpha/Beta/Gamma. Internal copy visible C2 (=A2&ROW()) to D3 displays =B3&ROW(), value102. Exiting confirms native D2 =B2&ROW().",
+    "cleanup": "Own fixture returned to recoverable trash; File moved to trash observed; tab closed.",
+    "screenshots_retained": false
+  },
+  "review": {
+    "disposition": "ship_for_three_fix_verdict_only",
+    "resolved": [
+      "Delayed strict rejection preserves newer same-cell draft and timer/queue",
+      "External text paste ignores stale source view from a prior clipboard",
+      "Saved-view metadata comparison and mutation are atomic under sourceVersion"
+    ],
+    "independently_rerun_focused_tests": 63,
+    "visual_certification": "excluded",
+    "documenter": "README correction applied; incumbent design preserved; no design-system or raster changes"
+  },
+  "github_state": {
+    "is_draft": false,
+    "ready_for_review_at": "2026-09-25T04:54:51Z",
+    "auto_merge": false,
+    "deployment": "not_merged_or_deployed"
+  }
 }
