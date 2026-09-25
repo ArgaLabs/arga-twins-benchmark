@@ -9,7 +9,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/github-conversation-controls-2026-09-24.json",
-          "sha256": "1bd4e21ff9daa6fdcb18dfeb68497a31864220c92fddac1b28979a0b2bcbcf5c"
+          "sha256": "c859262f689caaa5acfe88a90aac76877377f28bafeb73908ff54d7edbd613fc"
         }
       ]
     },
@@ -32,7 +32,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/sheets-initial-validation-marker-2026-09-24.json",
-          "sha256": "f473bb8bb28cacf012c62ba61085d6c41f1a13634fe06e25328567b0b61e3e1a"
+          "sha256": "09e46ba0281d18fa17ac58f78de9b172506965240c67641de5bbf5525aca09b3"
         }
       ]
     },
@@ -180,5 +180,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "0070e3d5b0cf3c48471d7b9ebe8830205092ef1bfb03f9ce56b5670fe5cdb3ea"
+  "sample_tree_sha256": "0561986a1738b2138b190a618846f550bf11dec72fbf0c8d810417c17e63d3fb"
 }

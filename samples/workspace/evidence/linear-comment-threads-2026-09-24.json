@@ -1,0 +1,122 @@
+{
+  "date": "2026-09-24",
+  "status": "local_native_and_bounded_desktop_mobile_verified_release_pending",
+  "scope": "Native issue comment threads, author editing, resolution and Scenario seed relationships. Not complete Linear fidelity.",
+  "screenshots_retained": false,
+  "provider_reference": {
+    "source": "Authenticated Linear Chrome session; read-only Agent, notification settings, Inbox display options and already-read issue activity. No comments or notification state changed.",
+    "official_references": [
+      "https://linear.app/docs/comment-on-issues",
+      "https://linear.app/docs/inbox",
+      "https://linear.app/docs/notifications",
+      "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql"
+    ]
+  },
+  "changes": [
+    "Native Comment.parent/children, resolvedAt/resolvingUser/resolvingComment, commentResolve/commentUnresolve and write-scope checks.",
+    "Inline thread replies, author editing, Copy link, Resolve/Reopen and resolve with descendant reply.",
+    "Invalid bodies/parents/cross-issue links reject atomically; stale revisions reject without overwriting; synthetic failures preserve drafts.",
+    "Deletion reparents surviving children and clears dangling resolution references, preserving other authors comments.",
+    "Exact IDs, parent relationships and resolutions seed deterministically; cycles and malformed relationships reject before reset.",
+    "Scenario graph validation runs before any provider request/reset; introspection advertises supported comment thread fields, native field types, inputs and resolution mutation arguments."
+  ],
+  "verification": {
+    "regressions": 164,
+    "warnings": 3,
+    "format": "make fix passed",
+    "typecheck": "Changed targets retain 9 legacy diagnostics versus 11 at baseline; no new diagnostics. Runtime module retains its three pre-existing diagnostics; new Scenario/introspection tests have no diagnostics.",
+    "browser": "Google Chrome CUA, local isolated twin",
+    "desktop": [
+      1465,
+      806
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "physical_touch": false,
+    "flows": [
+      "Cmd+Enter creates native reply; edit Escape restores focus without mutation.",
+      "Synthetic503 reply edit preserves complete native state and draft; retry persists.",
+      "Copy link targets native comment hash; Resolve/Reopen reload visible and native state.",
+      "390px root width390 with no document overflow.",
+      "Slash-menu Escape dismisses menu without cancelling reply draft; explicit Cancel restores Reply focus; complete native state unchanged."
+    ],
+    "protected_state": "Issues, projects, documents, users, teams, attachments and other-author protected comment unchanged across browser fixtures.",
+    "independent_review": {
+      "disposition": "ship",
+      "scope": "Reviewer scored three material source/native fixes resolved; not independent visual parity."
+    },
+    "documentation": "Ordinary extension checked against incumbent source. No design-system files created or modified.",
+    "source_hashes": {
+      "app/validate/scenario_generator.py": "bfcb1f619013962eb68e43014d861571480f4738e42b2106d660a812183c2cfa",
+      "twins/linear/config.py": "9f8d6cef1de37ecf5645844416db3587916151f6813017367d57f1986bdf2833",
+      "twins/linear/frontend.py": "b8db3db2d27280f8133297d0c80a8220f23b03b8ed25b8f969ccd12fca94af5b",
+      "twins/linear/graphql/resolvers.py": "ef6f5839b84fa7ab108a23ef8c3fce24e63959ac4e708aa44683c5d0f613bf4f",
+      "twins/linear/graphql/serializers.py": "f0cba509d157aadcc78da9a63e3a9f5059a9e055f89bf88be588248165c7d7f5",
+      "twins/linear/models.py": "6e26f502dc4e0a08f7190f7d7a805c47af3d926cca67231fa69b8b1c8c3231e3",
+      "twins/linear/rich_editor.py": "fa1bf1c80f0ee9ba57bf1b4362ca515cae937515e1e800f7b125ffdcad6e727c",
+      "twins/linear/scenario_runner.py": "ce2a4561da4907d2f5e66be1d19a4471f38e1cc484516fdf126e6aac75cacd1f",
+      "twins/linear/scopes.py": "dedc24cb53de7e246508d5c0b8588cac94588380db26990bb695c53a4c759af1",
+      "twins/linear/store.py": "6f391bbaebea3bca7ee9114391fc9ba87319192bd13b02787935de8bf94d92f0",
+      "twins/tests/test_linear_scenario_runner.py": "bd29b3efa015ba90f9671dd4d825db6ec97e8b8f6130dd152b59623575871a53",
+      "twins/linear/comment_ui.py": "f2a2978dfc36752385701dfd5e3e9fa382dce406aa8b3ef305c086a914fc35d3",
+      "twins/tests/test_linear_comment_threads.py": "d1df1615d0e651f5a19e57ef909adc55441a56cd506cf1b33d3bb4d108734242",
+      "twins/linear/runtime.py": "b1f1f772168c02dc8e798e65780221c101cb5a87d565090ebf1364c49589178b"
+    },
+    "captures": [
+      {
+        "name": "lab-final-linear-comment-threads-local/before.json",
+        "sha256": "6b7ae0f651d4a33e85e49880d42ccb3fec2e0891a2423df4be728e620983888e"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local/after.json",
+        "sha256": "bf103183bfcab26acd545812e1ce46066d1c8eff1a41fe858ea68d7764bb3b02"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local/after-reply-cancel.json",
+        "sha256": "19d2a6b26c2cb176e8f30380555ca19c4c53f7258581c4fc2dcbd561621330f8"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local/after-failed-save.json",
+        "sha256": "19d2a6b26c2cb176e8f30380555ca19c4c53f7258581c4fc2dcbd561621330f8"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local-r3/before.json",
+        "sha256": "0f49682796c96d478401c5d26de0f5ef028c6401211f435fb67ee83546b38442"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local-r3/after.json",
+        "sha256": "e968968b348a6dc8296866312841693a63aeec73a1f7559c3973ed1835e90c8b"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local-r4/before.json",
+        "sha256": "0f49682796c96d478401c5d26de0f5ef028c6401211f435fb67ee83546b38442"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local-r4/after.json",
+        "sha256": "0f49682796c96d478401c5d26de0f5ef028c6401211f435fb67ee83546b38442"
+      },
+      {
+        "name": "lab-final-linear-comment-threads-local-r4/escape-observations.json",
+        "sha256": "ca0ff45b6179a725a5bb15a08f4accf612fc29bfa7beb6bac633014bc0e2afef"
+      }
+    ],
+    "pr_review": {
+      "scenario_atomicity": "Nine malformed graph cases reject before client construction and preserve full existing store/config.",
+      "introspection": "Native type and argument checks cover Comment, connections, payload, scalar and input types."
+    }
+  },
+  "limits": [
+    "PR/CI/deployment/fresh hosted checks pending.",
+    "Notifications, realtime, broader workflows/settings, project graphs/uploads, AI and other collaboration paths remain open.",
+    "No retained screenshots, physical touch or exhaustive visual/mobile parity claim.",
+    "Release gates and final ZIP remain pending."
+  ],
+  "pull_request": {
+    "number": 1156,
+    "url": "https://github.com/ArgaLabs/validation-server/pull/1156",
+    "tested_source_revision": "f3bc038ba1a8b8deeb3bf0031ceb49b301d5bb33",
+    "status": "ci_pending"
+  }
+}

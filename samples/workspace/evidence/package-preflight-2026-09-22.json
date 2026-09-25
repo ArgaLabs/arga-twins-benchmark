@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 269,
+      "files_scanned": 271,
       "image_files": 0,
       "scanned_at": "2026-09-24"
     },
@@ -76,9 +76,10 @@
   "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. Full eight-twin frontend parity, deployed-container attestation and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
-    "passed": 18,
-    "deselected": 116,
-    "log_sha256": "159eff7e9964b27c6bda497bc98297b7e0b631c71aec2f6ca8194b9b5731d791",
+    "passed": 177,
+    "scope": "Complete workspace-outcome and sample tests, including release gates, after evidence reconciliation",
+    "command": "PYTHONPATH=src python -m pytest tests/test_workspace_outcomes.py tests/test_computer_use_sample.py -q",
+    "log_sha256": "cb7ec1c9dcaeb18a3ea5fa85b3bc0a423ce7523383e19f16149bbed179277f65",
     "release_allowed": false
   }
 }

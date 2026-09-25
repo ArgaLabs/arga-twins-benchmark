@@ -4,19 +4,18 @@
   "status": "published_images_verified_running_container_attestation_pending",
   "providers": {
     "google_docs": {
-      "databaseId": 36040782678,
-      "headSha": "82b34341cf8748a4c2863fb5d4b4b32acb94ab76",
-      "createdAt": "2026-09-24T18:22:32Z",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:90f9e46a1798d0557058cb019e74d616debe7906395b2f330b58abd5ab4fde4f",
-      "log_sha256": "8120877ff0c31c55034c5d4ff4b2f3d50f62dd714bf2fa38ef6031a3fa31b59f",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36040782678"
+      "databaseId": 36074534749,
+      "headSha": "3ad66f3646ec3632ba43ea4c61b453126039f142",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:67ec42539288c363b8edbafc2b991e39a6f9bd8f581178d081ad727489019c93",
+      "log_sha256": "b0b8b311be96256d88c9b10387898cece255a7cc8ee947d1e57e601467f9d35d",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36074534749"
     },
     "google_sheets": {
-      "databaseId": 36061759415,
-      "headSha": "64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:d4b1742e8032e175bf5d0ad62c1d683fedca1602c4d93eee16cdf06c52942840",
-      "log_sha256": "e871c715c96528f8a2822600e972f696df4286c3d1fb8c6727e97a6003dc4723",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36061759415"
+      "databaseId": 36074534749,
+      "headSha": "3ad66f3646ec3632ba43ea4c61b453126039f142",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:9d04fc35283cde74ce91c6b2f7f08b428097c627cdc6072d497cb3d7ceb68c5b",
+      "log_sha256": "b0b8b311be96256d88c9b10387898cece255a7cc8ee947d1e57e601467f9d35d",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36074534749"
     },
     "stripe": {
       "databaseId": 35986499613,
@@ -43,11 +42,11 @@
       "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/35986499613"
     },
     "github": {
-      "databaseId": 36068186452,
-      "headSha": "f82d437e6d16d1d24e24311c89f48cc07581194a",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
-      "log_sha256": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36068186452"
+      "databaseId": 36070393527,
+      "headSha": "8b40448d06afcde6fead75dc16dddbf54a428886",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:8b40448d06afcde6fead75dc16dddbf54a428886@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+      "log_sha256": "41e1b8218f6d4fea7e774dd20d90c25112f703293d1a1fd3c1204e2d819bf5b7",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36070393527"
     },
     "gmail": {
       "databaseId": 36068186452,
@@ -69,31 +68,34 @@
     "The latest successful build for each provider was located across the 25 most recent main Deploy Twins runs at collection time.",
     "Published SHA tags and manifest-list digests are verified from build/push logs. This does not establish the image ID of every running worker container.",
     "Direct GCP access failed with reauthentication required; API/proxy current revisions and runtime worker image inspection remain pending.",
-    "Gmail/GitHub and runtime provenance refreshed after #1150; the other six provider-image records remain unchanged."
+    "Workspace images and runtime provenance refreshed after #1153; GitHub remains at #1151 and Gmail at #1150. These publication records do not establish current container identity."
   ],
   "latest_runtime_deployment": {
-    "revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
-    "runtime_workflow": 36068186587,
-    "twins_workflow": 36068186452,
+    "revision": "3ad66f3646ec3632ba43ea4c61b453126039f142",
+    "runtime_workflow": 36074534617,
+    "twins_workflow": 36074534749,
     "both": "success",
     "published_images": {
-      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
-      "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
-      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:d253aabb27ef219cebbd461af9d632e7b02273eb836f37201bb1b15f6a8ef7f3",
-      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:6d8cc76a46b76a3a79b15afc18d806c25eb956a937f05c797eae58d201ac62b7"
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:67ec42539288c363b8edbafc2b991e39a6f9bd8f581178d081ad727489019c93",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:c1856307315126048985585aeec479268ccd1f4df0226028ef4a27b2dc3412cc",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:b12299c733dfdd968c93ca391f0d102b5c14b9c10d6a4e922c0c8a236232eadc",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:9d04fc35283cde74ce91c6b2f7f08b428097c627cdc6072d497cb3d7ceb68c5b",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:c54bc3236b38ec3586943b6676afc6afc4b380336a0919f3c02487baf1f1be0d",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:59da58094481ca75a1ca980af0e79dc11e710f1c8d71e84f5b47d5be5db5d61b"
     },
     "runtime_revisions_at_deployment": {
-      "preview-proxy": [
-        "preview-proxy-00261-57l"
-      ],
-      "arga-api": [
-        "arga-api-00631-cm9"
-      ]
+      "preview-proxy": "preview-proxy-00264-pjn",
+      "arga-api": "arga-api-00634-jkf"
     },
     "log_sha256s": {
-      "lab-final-mail-comment-twins-deploy.log": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
-      "lab-final-mail-comment-runtime-deploy.log": "66b74136d21529977a0bc0335c67d06c17f1122f011f2788947f30042af3af39"
+      "lab-final-sheets-initial-marker-twins-deploy.log": "b0b8b311be96256d88c9b10387898cece255a7cc8ee947d1e57e601467f9d35d",
+      "lab-final-sheets-initial-marker-runtime-deploy.log": "f5711dbfc57d6c964162ad43279b06d9643701be52bce48f21c0391fb2d7b120"
     },
-    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains blocked by GCP reauthentication."
+    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains pending GCP reauthentication."
+  },
+  "authentication_checks": {
+    "local_cli": "reauthentication_required",
+    "application_default_credentials": "refresh_failed",
+    "cloud_console": "Google Verify it\u2019s you challenge for the authorized production account"
   }
 }
