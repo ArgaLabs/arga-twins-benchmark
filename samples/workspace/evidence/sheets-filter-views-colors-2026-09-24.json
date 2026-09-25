@@ -59,8 +59,20 @@
       }
     ],
     "ci": {
-      "status": "pending_current_head_checks",
-      "head": "6d796c6a7e318ef37815e74ef6fc43903fa14145"
+      "status": "success",
+      "head": "6d796c6a7e318ef37815e74ef6fc43903fa14145",
+      "run": 36082740067,
+      "twins": {
+        "passed": 5476,
+        "skipped": 145,
+        "deselected": 3
+      },
+      "root": {
+        "passed": 2106,
+        "skipped": 2
+      },
+      "log_sha256": "f1bd2796b3f132d55c5096a484e363081f28cbbe0b051e396205c861100aab54",
+      "scope": "Remote PR head before local main merge33717199; subsequent source changes need fresh CI."
     },
     "fidelity_harness": {
       "passed": 22,
@@ -94,13 +106,29 @@
   ],
   "limits": [
     "Filter-view frontend lifecycle and safe sorted-view editing/clipboard projection are unfinished.",
-    "Desktop/390px browser success/error/cancellation/reload and real-account visual comparisons are pending while the Mac is locked.",
+    "Real-account filter-view reference observations are recorded; twin desktop/390px success/error/cancellation/reload and visual comparisons remain pending.",
     "Independent finish review and documentation handoff remain pending; this is an incomplete UI checkpoint, not a completed release.",
     "Color-sort controls, broader conditional-format editing and full Sheets fidelity remain open.",
-    "The pull request was marked ready for review and current-head CI is running; no production deployment or hosted verification is claimed.",
+    "The pull request is ready for review and CI passed its6d796c6a head. Local main merge and further UI changes require fresh checks; no production deployment or hosted verification is claimed.",
     "No retained screenshots or physical touch verification."
   ],
   "screenshots_retained": false,
   "release_allowed": false,
-  "pull_request_state": "open_ready_for_review"
+  "pull_request_state": "open_ready_for_review",
+  "provider_reference": {
+    "date": "2026-09-25",
+    "browser": "Authenticated Google Chrome through CUA",
+    "fixture": "Arga fidelity 2026-09-25 filter views",
+    "observed": [
+      "Toolbar Filter views and Data menu expose Create filter view. Creation opens Temporary filter 1 with a green bar, selected/inferred range, Save view and Exit.",
+      "Save view opens Name this view? with a name input, Save and Don\u2019t save. A saved view adds fvid to the URL.",
+      "Saved-view Options includes Rename view, Update range, Duplicate view and Delete view.",
+      "Column filter menu includes Sort A to Z, Sort Z to A, Sort by color, Filter by color, condition and value filtering.",
+      "A1:C4 native order Beta, Alpha, Gamma becomes visible Alpha, Beta, Gamma when sorted; exiting restores native order.",
+      "Editing visible A2 from Alpha to Alpha edited changes original stored row3, confirmed by exiting and copying A1:D4.",
+      "Formula =A2 entered at D2 outside view range displays Alpha while view active and Beta after exit. Formula references therefore require view-aware presentation, beyond merely reordering rendered values."
+    ],
+    "cleanup": "Own uniquely prefixed fixture moved to recoverable trash; File moved to trash alert verified and tab closed. No sharing or outbound notification.",
+    "limits": "GUI and clipboard observations only; real-account native API readback unavailable, physical touch not exercised."
+  }
 }

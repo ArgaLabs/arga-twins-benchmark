@@ -50,7 +50,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
-          "sha256": "9c85efe9dc95c378fff5ba9d24a31ec801de3584a289a9f715057b98c6f0319d"
+          "sha256": "0f864d23fb611891bf7942b5d0f20271c38bd3733e97e2094a37143bdfdb4707"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
@@ -65,7 +65,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/docs-document-segments-2026-09-24.json",
-          "sha256": "17436a9d38a6833fb0c04d66568f0ae8479c2765883d0263bd1437072b001cb3"
+          "sha256": "04f670c2930bb14be376ee88b892e544e7d81f90e10b34bbfdd3e747cfd5f40e"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
@@ -91,7 +91,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/linear-comment-threads-2026-09-24.json",
-          "sha256": "eecd0964f958608f4c6dd77378c2b7aee35c28f6f07bc3e9dc6a1f5f3681c534"
+          "sha256": "34ba988674e0f08146c6933d936a617b7c062b955d5ef7de0268220abeb73f55"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
@@ -235,5 +235,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "6334ee7abcd92eef2b7a2968bf66c68c3716f227b47ce7b7ab1bb8f530c487a4"
+  "sample_tree_sha256": "577ce0c8e156536357df3fd678fa5ae19a156c532ee8c5e6827a480469ab3b56"
 }

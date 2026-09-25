@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "deployed_hosted_native_forms_pass_gui_pending",
+  "status": "deployed_hosted_native_and_bounded_gui_pass",
   "scope": "Native issue comment threads, author editing, resolution and Scenario seed relationships. Not complete Linear fidelity.",
   "screenshots_retained": false,
   "provider_reference": {
@@ -139,7 +139,7 @@
         "lab-final-linear-threads-twins-deploy.log": "cef48adb56c69fe92eb587e792d9a01f9c9a50f6935668192cab0f57cbea21d9",
         "lab-final-linear-threads-runtime-deploy.log": "177d547f11d3e583626ddee3e473209c5a6d2392b5432bb3f5a9f77f69f04c0d"
       },
-      "attestation_limit": "Publication/deployment logs and revision readiness; complete live-container attestation remains pending PR #1157."
+      "attestation_limit": "Full timestamped container attestation for the fresh eight-provider run and serving API/proxy is recorded in runtime-image-evidence-2026-09-24.json; historical rollout metadata retained here."
     },
     "hosted": {
       "checks": [
@@ -194,7 +194,7 @@
         "scope": "Complete served code blocks, not container digest attestation."
       },
       "cleanup": "torn_down confirmed",
-      "browser": "pending while Mac is locked and Chrome debugger is unattached",
+      "browser": "Fresh separate hosted Chrome desktop/390px GUI verification passes; see hosted_browser.",
       "captures": [
         {
           "name": "lab-final-linear-threads-hosted-r1/baseline-state.json",
@@ -241,10 +241,79 @@
           "sha256": "78eb681d99cc497063803b6411d135bb2e739b407ab927654a8c9f53a6a7173f"
         }
       ]
+    },
+    "hosted_browser": {
+      "status": "pass",
+      "browser": "Chrome through CUA",
+      "desktop": [
+        1465,
+        806
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "screenshots_retained": false,
+      "physical_touch": false,
+      "checks": [
+        "Cmd+Enter native reply creation",
+        "native copy-link target",
+        "503 preserves edit draft and complete captured native state",
+        "successful retry persists author edit",
+        "resolve with reply persists after reload",
+        "390px reopen clears native resolution",
+        "slash Escape dismisses menu without cancelling composer",
+        "explicit Cancel and reload preserve captured state",
+        "390px document width equals viewport width"
+      ],
+      "protected_state": "All captured business fields unchanged except one new/edited reply, root comment updated_at from resolve/reopen, counts and sync_id. Existing reply/protected comment and all issue/project resources are exactly unchanged. Only naturally advancing logical_now excluded from equality checks.",
+      "captures": [
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/baseline-state.json",
+          "sha256": "aa9dacaf59562f8bbfbe9d5cc43857bdc14220b5bd84c029d7235d4037a58009"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/before-failed-save.json",
+          "sha256": "b39b1994473dd5a026b0f057d846d2a1e8db720dcefdbe2f3fb114ed1b11bcde"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/after-failed-save.json",
+          "sha256": "646563d384534229d83a46191e61ae88881907d27259e07593cd07fa75af183a"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/after-resolve.json",
+          "sha256": "e02fb55f73292fd2511b67a3862b9e166483e5321c489eb9485622fc579279d8"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/before-mobile-cancel.json",
+          "sha256": "d72ec514a306554aa48fda5fb88ca88b7c18598081afdbc7cad30cab74e642fd"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/after-mobile-cancel.json",
+          "sha256": "9116f23bf25ffff9dd55e556ab7a6de0e40b3244a039e3ba4f899b78bed859e6"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/final-state.json",
+          "sha256": "7846b5fd744f3e41702c709075cf2c028350a12c70152a694aed935f0410b388"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/browser-trace.json",
+          "sha256": "8d565d7acd45b53343c1d42d81ba81156e09baab435b4b4025f9d40aaef0721f"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/frontend-code-fingerprints.json",
+          "sha256": "280ec0ee4dc340d3c897feb2c1c5c040be1e6b8a3322b5a23b6b00045c60e6c2"
+        },
+        {
+          "name": "lab-final-linear-threads-hosted-browser-r2/cleanup.json",
+          "sha256": "cc42cc3bdb9cb06ba740404943ca35d29340466541a5cbfe66f7360a2321d60b"
+        }
+      ],
+      "cleanup": "torn_down confirmed"
     }
   },
   "limits": [
-    "Full CI, both production deployments and fresh hosted native/form conformance pass. Hosted desktop/mobile GUI and failure-recovery checks remain pending.",
+    "Fresh hosted bounded desktop/390px GUI checks pass with native state assertions and confirmed teardown. Broader provider and physical-touch audits remain open.",
     "Notifications, realtime, broader workflows/settings, project graphs/uploads, AI and other collaboration paths remain open.",
     "No retained screenshots, physical touch or exhaustive visual/mobile parity claim.",
     "Release gates and final ZIP remain pending."

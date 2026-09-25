@@ -1,6 +1,6 @@
 {
   "date": "2026-09-24",
-  "status": "deployed_hosted_native_exports_pass_gui_pending",
+  "status": "deployed_hosted_native_and_bounded_gui_pass",
   "screenshots_retained": false,
   "scope": "Default inline headers, footers and numbered footnotes in independent document tabs. This is not complete Google Docs fidelity.",
   "changes": [
@@ -174,7 +174,7 @@
         "lab-final-docs-segments-twins-deploy.log": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
         "lab-final-docs-segments-runtime-deploy.log": "66475f9aea5ffe4b2687e20c8b1506572dd56fe065bf69ae201d48220c9d6ba4"
       },
-      "attestation_limit": "Successful build/push/deployment logs; complete current-container attestation remains pending runtime evidence PR #1157 rollout."
+      "attestation_limit": "Full timestamped container attestation for the fresh eight-provider run and serving API/proxy is recorded in runtime-image-evidence-2026-09-24.json; historical rollout metadata retained here."
     },
     "hosted": {
       "scope": "Fresh CLI-provisioned durable Scenario; operator native API checks and HTTP exports through BrowserProxy. These are not GUI checks.",
@@ -307,7 +307,7 @@
         "scope": "Complete served code blocks; not container digest attestation."
       },
       "cleanup": "torn_down confirmed",
-      "browser": "pending: host locked and Chrome debugger unattached",
+      "browser": "Fresh separate hosted Chrome desktop/390px GUI verification passes; see hosted_browser.",
       "captures": [
         {
           "name": "lab-final-docs-segments-hosted-r2/native-before.json",
@@ -350,10 +350,92 @@
         "First run: local Starlette middleware compatibility error; no product failure inferred; teardown confirmed.",
         "Second run: native checks and 20 exports pass after BrowserProxy binary MIME fix. Original corrupted exports retained privately."
       ]
+    },
+    "hosted_browser": {
+      "status": "pass",
+      "scope": "Fresh hosted Chrome CUA GUI and complete trusted native snapshots; operator conformance, not candidate replay.",
+      "desktop": [
+        1465,
+        806
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "physical_touch": false,
+      "screenshots_retained": false,
+      "checks": [
+        "Header/footer creation and save",
+        "Margin Cancel preserves complete native state and reopening restores0.5in default",
+        "Apply0.7in header and0.6in footer margins",
+        "Footnote creation at native index1 and text save",
+        "Reload retains separate header/body/footnote/footer",
+        "Protected tab content and complete protected document/tab state unchanged",
+        "390px injected503 header save preserves draft and complete native state; retry persists on reload",
+        "390px footer removal persists after reload",
+        "Original body content/styles preserved except authorized footnote marker at index1",
+        "File permissions and all unrelated file fields unchanged"
+      ],
+      "viewport_observation": {
+        "document_width": 390,
+        "viewport_width": 390,
+        "limits": "Document canvas has its own horizontal scroller. Narrow control visibility checked; not a complete mobile visual or physical-touch audit."
+      },
+      "cleanup": "torn_down confirmed",
+      "captures": [
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/baseline-state.json",
+          "sha256": "24f04dfdd27168ad138d3b20032283c69d9611d5013f92fbaeb4d481b91552fd"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/native-before.json",
+          "sha256": "fe0a97b56e39f5fd2b0ae375f5dbd9f5fa052789694792e75702aa83aae97a10"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/before-margin-cancel.json",
+          "sha256": "0732d83797a3d225fcda33889c469eb93bb7e8dfc4842032cf509ac1348da82f"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-margin-cancel.json",
+          "sha256": "0732d83797a3d225fcda33889c469eb93bb7e8dfc4842032cf509ac1348da82f"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/before-mobile-failure.json",
+          "sha256": "befa248cc0a181b017dc7b5e46a95cdb0f0edfbd15c5461e25f7aa07aed8568c"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-mobile-failure.json",
+          "sha256": "befa248cc0a181b017dc7b5e46a95cdb0f0edfbd15c5461e25f7aa07aed8568c"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-mobile-retry-removal.json",
+          "sha256": "ea6109399a3fc999080c19f859dc512603d015d1c21738760e66634be2e4d240"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/native-after.json",
+          "sha256": "fedbbd7d52f977377f821221bfd3349772e54378809868cadc11854d4bb6c41a"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/final-state.json",
+          "sha256": "ea6109399a3fc999080c19f859dc512603d015d1c21738760e66634be2e4d240"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/frontend-code-fingerprints.json",
+          "sha256": "97b58547822544ab0c3d1caeff45c0dc4201f029839d611c3ee1c799f6c580a3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/browser-trace.json",
+          "sha256": "89d2922dfead08c9899486eeac61a7a021bc59405dd82b97f2f66b6e96e4689e"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/cleanup.json",
+          "sha256": "cac4810ef115f9a628623799f1941fdee29655b3912280c49fff736ec28857dc"
+        }
+      ]
     }
   },
   "limits": [
-    "Both production deployments, fresh hosted native segment checks and 20 export variants pass. Hosted GUI/draft-recovery/mobile/keyboard checks remain pending while the host is locked.",
+    "Fresh hosted bounded desktop/390px GUI checks pass with native state assertions and confirmed teardown. Broader provider and physical-touch audits remain open.",
     "First-page/odd-even/section-specific and repeated paginated headers/footers remain pending.",
     "Find searches bodies only; segment-inclusive search and rich history previews remain pending.",
     "Footnote reference deletion is verified through the native backend; browser keyboard removal remains unverified because the attempted CUA selection did not remove its atom.",
