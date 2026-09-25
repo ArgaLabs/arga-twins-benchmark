@@ -74,15 +74,15 @@
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
-          "sha256": "bfa2467b95fdd2685f5c10ff8053748eac4f597a238575ec7279c5e420fd17e7"
+          "sha256": "2f1419ccdb2c00cfa19686d372e959b6a9966edbfce3eb750ea6bb70850b3172"
         },
         {
           "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
-          "sha256": "985c160444a482784685e8162164d855e3f161866b7cdb6d603bc54c74985d9a"
+          "sha256": "9ac27153e8003317a53db56c75a869994c9911185c42bf0fded70ed8017c06fb"
         },
         {
           "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
-          "sha256": "56771e9ec0ef28c4f2430b92eec663f15cbc37f51f8316dd37f53e714ca6417c"
+          "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
         }
       ]
     },
@@ -101,15 +101,15 @@
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
-          "sha256": "bfa2467b95fdd2685f5c10ff8053748eac4f597a238575ec7279c5e420fd17e7"
+          "sha256": "2f1419ccdb2c00cfa19686d372e959b6a9966edbfce3eb750ea6bb70850b3172"
         },
         {
           "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
-          "sha256": "985c160444a482784685e8162164d855e3f161866b7cdb6d603bc54c74985d9a"
+          "sha256": "9ac27153e8003317a53db56c75a869994c9911185c42bf0fded70ed8017c06fb"
         },
         {
           "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
-          "sha256": "56771e9ec0ef28c4f2430b92eec663f15cbc37f51f8316dd37f53e714ca6417c"
+          "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
         }
       ]
     },
@@ -124,7 +124,7 @@
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
-          "sha256": "6424c3865b6bc272c9d86be01284fb096ba613d9b9fbb04b7c69e86310567921"
+          "sha256": "9a0b293160844ee9beb7867f11c98ae4f331f2fd342c8b50587d15ac4d3245a8"
         }
       ]
     },
@@ -283,5 +283,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "7505c021d4673816169e2bd96922982fda03d2908330c323591f425c8097b045"
+  "sample_tree_sha256": "f6267c9a9ba4bf249810f88e0260c647f65eaa7f6cd174497dd012dc114944ef"
 }

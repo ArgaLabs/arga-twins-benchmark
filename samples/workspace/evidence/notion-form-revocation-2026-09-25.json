@@ -5,7 +5,7 @@
     "notion"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1167",
-  "source_head": "c74103ada4693aa629a161fb5d858180bf2200b9",
+  "source_head": "2cea0003735ad0f03c2b0a8d256ab893eca9747b",
   "status": "local_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
   "scope": [
@@ -15,27 +15,37 @@
   ],
   "tests": {
     "before_failed": 14,
-    "focused_passed": 14,
-    "all_notion_passed": 186,
+    "focused_passed": 15,
+    "all_notion_passed": 187,
     "warnings": 3,
     "make_fix": "pass",
-    "source_review": "ship; no concrete blockers"
+    "source_review": "ship; no concrete blockers",
+    "review_case_before_failed": 1,
+    "review_correction": "Source review passes: removed group returns 404 for workspace and group owners."
   },
   "source_files": {
     "twins/notion/README.md": "83013496a4d2241c8c0525f29c12a36260dfd81b9fd8cbc1e6f5288f3a2c9629",
     "twins/notion/database_ui.py": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
-    "twins/notion/groups_ui.py": "9f697c2d9f878ddd7d01da885cc89036530d66df767208b9668d6f410626a199",
-    "twins/tests/test_notion_form_revocation.py": "7bd5093418b16fedf64a147074dcb75e28c6fe1e7718c7629ed3bd92e375082d"
+    "twins/notion/groups_ui.py": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+    "twins/tests/test_notion_form_revocation.py": "db2dd2127c268f530b34f93a08552cfbdf8528a88478c12f6915fd497a7600ae"
   },
   "artifacts": {
     "lab-notion-form-revocation-before.log": "12786ae4262be7c6ba538f22ca4adfa275958b115c35ac292ecc02c7355f8d67",
     "lab-notion-form-revocation-focused.log": "e0424771a4fdcb0496f94b42abb79e6d8c140ef08b78194e095edcfcbe95c883",
     "lab-notion-form-revocation-regressions.log": "b56b98ba71411759d9b67b025e7eec11b3d94a52f38a32594c42f66c35075035",
-    "lab-notion-form-revocation-makefix.log": "11424e9c3d38e499ff6036c42eeff74b65b6519b629367a38a59bd0e09b74651"
+    "lab-notion-form-revocation-makefix.log": "11424e9c3d38e499ff6036c42eeff74b65b6519b629367a38a59bd0e09b74651",
+    "lab-notion-form-owner-removal-before.log": "135e025071e28eed6443a41678fda19b8a111fbdf955bccc5fa3c5e8c40d6d47",
+    "lab-notion-form-revocation-focused-final.log": "5c85078d8e09861df2e37aa49c90a9220ba26ca8dde37f66a5c877d69f22c0a6",
+    "lab-notion-form-revocation-regressions-final.log": "a8b98bf740fe04ef6a3d78618922a21dbe3c6fb3b4aa776dcae9d1534fffba3b",
+    "lab-notion-form-revocation-makefix-final.log": "748b77207ddf71779dd62bc817618a423d2c71d510697d7cee03c3b84c6db1ef"
   },
   "limits": [
     "CI, production deployment and hosted checks remain pending.",
     "No browser or provider-reference fidelity claim; Mac is locked and the real Notion reference requires sign-in.",
     "Teamspaces, guests, advanced properties, AI/collaboration and full Notion audit remain open."
-  ]
+  ],
+  "initial_source_head": "c74103ada4693aa629a161fb5d858180bf2200b9",
+  "review_comment": "https://github.com/ArgaLabs/validation-server/pull/1167#discussion_r4108699171",
+  "ci_head": "161daf442a5c949bd805216435d8ed7ba66b5c36",
+  "base_update": "Merged main5f67b252 after combined Workspace delivery; exact-head CI restarted."
 }

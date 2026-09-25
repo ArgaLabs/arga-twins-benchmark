@@ -81,9 +81,9 @@ PR #1164 fixes effective file grants and expiration across Drive, Docs and Sheet
 
 PR #1165 fixes Docs/Sheets principal-filtered initial catalogs and previews, deep-link authorization and browser token preservation. All 20 focused and 1,027 broader editor checks plus scoped source review pass. CI, hosted browser verification and deployment remain pending; full reader-mode and access-request controls remain open. See `workspace-ui-principals-2026-09-25.json`.
 
-PR #1166 combines #1164 and #1165 with post-body-read access checks for editors, browser helpers and Docs history. All 91 focused and 1,138 broader combined checks pass; final CI and hosted delivery remain pending. See `workspace-permissions-combined-2026-09-25.json`.
+PR #1166 combines #1164 and #1165 with post-body-read access checks for editors, browser helpers and Docs history. All 91 focused and 1,138 broader combined checks and full CI (5,824 twin/2,130 root) pass. Merged as `5f67b252`; production, fresh hosted native/HTTP bootstrap, all five Workspace-run worker images and a subsequent fresh eight-provider ten-container attestation pass, with teardown confirmed. PRs #1164/#1165 are closed as incorporated; browser GUI checks remain pending. See `workspace-permissions-combined-2026-09-25.json`.
 
-PR #1167 fixes access revoked during Notion saved-view and group form submission. All 14 reproduced failures and 186 Notion regressions now pass; CI, production and hosted checks remain pending. See `notion-form-revocation-2026-09-25.json`.
+PR #1167 fixes access revoked during Notion saved-view and group form submission. All 15 reproduced failures and 187 Notion regressions now pass; CI, production and hosted checks remain pending. See `notion-form-revocation-2026-09-25.json`.
 
 ## Package validation
 

@@ -49,5 +49,6 @@
     "This bootstrap authorization fix does not close the exhaustive AI/collaboration or full sample release gates."
   ],
   "combined_delivery_pr": "https://github.com/ArgaLabs/validation-server/pull/1166",
-  "combined_delivery_evidence": "workspace-permissions-combined-2026-09-25.json"
+  "combined_delivery_evidence": "workspace-permissions-combined-2026-09-25.json",
+  "combined_delivery_status": "Delivered in #1166 main5f67b252; production, fresh hosted native/HTTP bootstrap, five worker images and teardown pass. This PR closed as incorporated. GUI remains pending."
 }
