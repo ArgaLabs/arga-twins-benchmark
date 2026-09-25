@@ -86,5 +86,7 @@
     "Clock reference is captured at page render only for explicitly fixed Scenarios; reload reads the latest store clock.",
     "No exhaustive Gmail/menu/account/AI/collaboration or physical touch claim.",
     "WKS-03 business failure remains preserved and its rollout gate remains pending."
-  ]
+  ],
+  "current_ci_head": "ac965986cb11a859ec82861048809bbd0ebc0fa8",
+  "base_update": "GitHub merged main c4f07362 into the reviewed Gmail branch; Gmail source files are unchanged. New head CI is running."
 }

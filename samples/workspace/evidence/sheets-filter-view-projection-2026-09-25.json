@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
   "head": "555b14a35b83d725519217623f4273b3af073812",
-  "status": "reviewed_commit_revision_fix_local_pass_current_ci_pending",
+  "status": "deployed_hosted_native_and_ten_container_pass_gui_blocked",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
@@ -25,7 +25,18 @@
     "sheets_workspace_regressions_passed": 632,
     "make_fix": "pass",
     "focused_pyright": "Formula module0 errors; broader shared-editor module58 baseline/current errors with zero normalized additions/removals",
-    "full_ci": "pending_on_555b14a35b83d725519217623f4273b3af073812",
+    "full_ci": {
+      "head": "555b14a35b83d725519217623f4273b3af073812",
+      "status": "pass",
+      "lint_test_run": 36182581666,
+      "docker_run": 36182581704,
+      "fidelity_run": 36182581752,
+      "twins_passed": 5723,
+      "twins_skipped": 145,
+      "twins_deselected": 3,
+      "root_passed": 2130,
+      "root_skipped": 2
+    },
     "duplication_recovery_ui_passed": 58,
     "temporary_view_and_related_ui_passed": 71,
     "previous_head_full_ci": {
@@ -62,7 +73,7 @@
     },
     "sheets_workspace_632_verified_head": "587c4dea1add1d242aa1c033ea8351b544537370",
     "full_ci_twin_tests": {
-      "passed": 5720,
+      "passed": 5723,
       "skipped": 145,
       "deselected": 3
     },
@@ -153,11 +164,13 @@
     "lab-final-sheets-view-commit-after.log": "e5d7f73b21271830c76abd22d7f708607b72132c88c7d808911527ed6f2ab33e",
     "lab-final-sheets-view-commit-makefix.log": "faccc784b501f607d4160365422c0b0428765d74d00bda2f1a12300d7b7688ef",
     "lab-final-sheets-view-commit-type-comparison.json": "2b70a7f57c43f37be32d15b94acdd2aea511d2a30e9d095f59788f3a659842b7",
-    "lab-final-sheets-view-commit-regression.log": "ea550757f8bec9ff047ce01dcc812e1e2288a60532456f0c634c45835b170159"
+    "lab-final-sheets-view-commit-regression.log": "ea550757f8bec9ff047ce01dcc812e1e2288a60532456f0c634c45835b170159",
+    "lab-final-sheets-view-555-current-pr.json": "c92ed2660479379aed2430391896d8a1150876d68b5c23a2a1891074193e20d6",
+    "lab-final-sheets-view-555-full-ci.log": "5eca9b68bd5f63a613f8ba396a0d2b8b2350382b6a48a52fd1d8b1dd1c99640e"
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "#1161 current head 555b14a35b83d725519217623f4273b3af073812 is reviewed and passes1007 local regressions. Fresh CI and production/hosted verification remain pending; earlier fullCIpass belongs to68dc698e.",
+    "#1161 merged as c4f07362 after passing full CI. Both production workflows, serving API/proxy observations, all ten fresh worker images and hosted native view checks pass. Hosted GUI checks remain blocked by locked Mac.",
     "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, actor-aware protected-range enforcement and remaining named/dynamic references remain unfinished.",
     "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
     "Selected temporary-view naming/Save/Exit desktop and390px checks now pass. Complete permission/error/cancellation paths, cross-sheet provider comparison and remaining menu details remain incomplete.",
@@ -544,5 +557,263 @@
     ],
     "source_observation": "Current implementation stores a default requestingUserCanEdit=true without actor-specific range enforcement; this gate remains open.",
     "live_owner_observation": "Recorded provider fixture owner successfully saved an overlapping filter view."
+  },
+  "merge_commit": "c4f07362da9da896148f3724ea8cea7ae5b3d362",
+  "deployment": {
+    "revision": "c4f07362da9da896148f3724ea8cea7ae5b3d362",
+    "runtime_workflow": 36184931729,
+    "twins_workflow": 36184931750,
+    "both": "success",
+    "published_images": {
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:5169f3787a259ab76214e6bab4ec27dd0bd96cb148a4d300af07ffa219959168",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:15201fbd52ffc832e987ff79a2a43ba487ef8247616a5578d05346c91820ec60",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:cca1c0079050306e1d87db6b581fbc3ec5657c0564a46c2c106651a805fa1bf4",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:c25bc17866323bdfe6bff05c2a203b5237f8bf1f2ebf2f3ce2705ed9594f364c",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:3fb4058f0ea60c668ca0d4270d1b2e73a11c55bd2aa19b9b46850ff6f63afe23",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c4f07362da9da896148f3724ea8cea7ae5b3d362@sha256:357d3194b32920550852a77d26f2a06d7c297cd9d85dbc1eeaab0acbc6592fe1"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00271-g7r",
+      "arga-api": "arga-api-00641-rtm"
+    },
+    "log_sha256s": {
+      "lab-final-sheets-views-twins-deploy.log": "a0930b888db36f4f5b4396d44235494ebe5e00eda39d2aac55eef0c529f5c2cc",
+      "lab-final-sheets-views-runtime-deploy.log": "86b4502a1bc49e7c59498ab1090d205ad2c26a8e2fafc72fab2ddfbfd274f2d9"
+    },
+    "cloud_run_observations": [
+      {
+        "latest_ready_revision": "preview-proxy-00271-g7r",
+        "observed_at": "2026-09-25T20:19:15.935753+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c4f07362da9da896148f3724ea8cea7ae5b3d362",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00271-g7r"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00271-g7r",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:3fb4058f0ea60c668ca0d4270d1b2e73a11c55bd2aa19b9b46850ff6f63afe23",
+          "sha256:44cb3efb3ff31ff962cbb979916109a2bd9995e60f6c9dd914a10260c00cc21b"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00641-rtm",
+        "observed_at": "2026-09-25T20:24:10.791034+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:c4f07362da9da896148f3724ea8cea7ae5b3d362",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:43ea9a392086b64f37e3e194811644b2c61ed9c5cc235cea51a6746525c95433",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:43ea9a392086b64f37e3e194811644b2c61ed9c5cc235cea51a6746525c95433"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00641-rtm"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00641-rtm",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:357d3194b32920550852a77d26f2a06d7c297cd9d85dbc1eeaab0acbc6592fe1",
+          "sha256:43ea9a392086b64f37e3e194811644b2c61ed9c5cc235cea51a6746525c95433"
+        ],
+        "published_manifest_match": true
+      }
+    ]
+  },
+  "hosted": {
+    "native": {
+      "case_qualified_projection": true,
+      "mapped_write_source_row": true,
+      "readonly_preview": true,
+      "restored_workspace_except_revision": true,
+      "stale_revision_rejection_atomic": true,
+      "status": "pass",
+      "strict_rejection_atomic": true
+    },
+    "image_comparison": {
+      "status": "complete",
+      "observed_at": "2026-09-25T20:25:26.770163+00:00",
+      "publication_sha256": "a4728b4f2beb934c2556e9447996b6511cef9043c538d358afb19f9c04d854a9",
+      "containers": {
+        "google_docs": {
+          "published_revision": "c4f07362da9da896148f3724ea8cea7ae5b3d362",
+          "image_id": "sha256:15201fbd52ffc832e987ff79a2a43ba487ef8247616a5578d05346c91820ec60",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:15201fbd52ffc832e987ff79a2a43ba487ef8247616a5578d05346c91820ec60",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:4e4ae511e90118975cf6a02821351e3824ebd898e16da4dc1fb6811ebe8c4909"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:15201fbd52ffc832e987ff79a2a43ba487ef8247616a5578d05346c91820ec60"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "c4f07362da9da896148f3724ea8cea7ae5b3d362",
+          "image_id": "sha256:c25bc17866323bdfe6bff05c2a203b5237f8bf1f2ebf2f3ce2705ed9594f364c",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:c25bc17866323bdfe6bff05c2a203b5237f8bf1f2ebf2f3ce2705ed9594f364c",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:edfb6d1431ba4619b84dbc71d99437abcfcc789fc1b5980b805c9780a815b571"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:c25bc17866323bdfe6bff05c2a203b5237f8bf1f2ebf2f3ce2705ed9594f364c"
+          ],
+          "matched": true
+        },
+        "stripe": {
+          "published_revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+          "image_id": "sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:d9dfca40180eb86e43bf5af7a122aa8348c9e63fe4dcdcf8e22d32b8180afb8a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f"
+          ],
+          "matched": true
+        },
+        "linear": {
+          "published_revision": "8cc9d289f9c3c8a9ab044c3cc6d7864a11a201a2",
+          "image_id": "sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:eb254451085ac48ddb38c27f7eac7cbb5d9600f3d20730205a78a98dabe2be14"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:85c9b5f10aa6885c7834dda67b29069025b193c40a25a308813fcb302063873c"
+          ],
+          "matched": true
+        },
+        "notion": {
+          "published_revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+          "image_id": "sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:4f1d94437f96e68608e6c286e7e3e4c39d8aa4649a2310db4e4191246e798f3e",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:d6340c29c664b910b1103d7fed0e5f7965781f6ca7c760c1ffb6e95dca71edd8"
+          ],
+          "matched": true
+        },
+        "github": {
+          "published_revision": "8b40448d06afcde6fead75dc16dddbf54a428886",
+          "image_id": "sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:015bf9f35d7ef062e20f55fe3af368be118994e44c4df24529fe17a24c235191",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+          ],
+          "matched": true
+        },
+        "gmail": {
+          "published_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+          "image_id": "sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:993107249307a0caaab39f6a982232acaec36752dc5babcf476176168c9c2ec1"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136"
+          ],
+          "matched": true
+        },
+        "google_calendar": {
+          "published_revision": "7a314dac9129a69f322e2e2bc91945ee510a3c19",
+          "image_id": "sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f4404ce14ad2b8d31ea9ffe2c9749ec256c1355e01851917d0e6950a7d718c7c"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:3983c80129ea6ba62337bdb85966dd558858a9a672fa0e6f104ee55288810a66"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:3983c80129ea6ba62337bdb85966dd558858a9a672fa0e6f104ee55288810a66"
+          ],
+          "builder_log_sha256": "f2451c3309f0ff4d6bf3cc44076370e4c357af71a0d85103416316c57a655433"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "served_code": {
+      "matched": {
+        "twins/google_sheets/filter_views_ui.py:FILTER_VIEW_HTML": "9195e78a71271da13d2b645bf3fa73c1f77f9c16a2d7a885d3c056fe1c3f1b86",
+        "twins/google_sheets/filter_views_ui.py:FILTER_VIEW_SCRIPT": "67d533145be946030717fca8f24e6be3e62919c65a97bdc44364cdf296c3fb9b",
+        "twins/google_sheets/filter_views_ui.py:FILTER_VIEW_STYLES": "33b4dd31c998bd7abc70f064aedc53d2ef56333fc3baca7d06434bab7cbe7102"
+      },
+      "scope": "Complete served code blocks; runtime image identities captured separately."
+    },
+    "browser": "pending: Mac locked; no fresh hosted GUI actions performed",
+    "cleanup": "torn_down",
+    "artifacts": {
+      "runtime-image-evidence.json": "e44489e8a3db217f7b01a4de172239fe0e93075e5491eea15bb83f4f0d8ea74d",
+      "operator-api-trace.json": "1735e4e0e88a6429ad6281d79b58ef66d22fc061eb93be6a916cb1a4b7464ea2",
+      "native-before.json": "7c901f47af7bc0f317eab817ad69c686f0886dd0b4f7127766702bcbbf3adfd3",
+      "baseline-state.json": "df5bd1f80a6a0400ab4d1945bf4e51ce90708b7e8c56cc30cf9adca993e69870",
+      "frontend-code-fingerprints.json": "043cb7b64276e98af655a5f386c8d6a61878acd5bce6d718575218f84309519b",
+      "image-comparison.json": "da9ead98c714ab593e806c9ab6fe2703feeae1a01ea8468fdba93a586a0b4815",
+      "final-state.json": "424594fd33f59d471af30a947efab123c7c1bf6c167a2fef2255bacba82b4f45",
+      "native-after.json": "7c901f47af7bc0f317eab817ad69c686f0886dd0b4f7127766702bcbbf3adfd3",
+      "cleanup.json": "da2fd79fe213e47e9b432244e088f66bf501e1c56743db2b69bd8526bb025707",
+      "browser-trace.json": "9ebce41bd9fb83f9568eca774319ca613eb6ed3af335584471289f838e8043d5"
+    },
+    "native_spreadsheet_readback_identical": true,
+    "protected_state_comparison": {
+      "all_eight_provider_states_equal_except_allowlisted_clock": true,
+      "allowlisted_path": "linear.state.logical_now",
+      "reason": "Natural logical clock advancement; no provider resource mutation",
+      "clock": {
+        "before": "2026-09-25T20:25:45.205Z",
+        "after": "2026-09-25T20:33:38.508Z"
+      }
+    }
   }
 }

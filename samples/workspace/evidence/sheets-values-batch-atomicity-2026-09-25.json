@@ -1,0 +1,41 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "date": "2026-09-25",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1163",
+  "head": "1052a747ce043d09f4f32e3c1facb7558b38de95",
+  "status": "local_pass_ci_and_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Atomic values update and clear batches, including data-filter variants",
+    "Reauthorize after awaited body read so revoked editor cannot mutate cached cells",
+    "Reject invalid Unicode before cached-state replacement",
+    "Keep successful response order and one native revision; leave notification awaits outside rollback"
+  ],
+  "tests": {
+    "initial_partial_batch_failures": 5,
+    "permission_race_failures_before_fix": 4,
+    "unicode_failures_before_fix": 2,
+    "focused_passed": 18,
+    "sheets_docs_workspace_passed": 1022,
+    "skipped": 0,
+    "make_fix": "pass",
+    "review": "ship; bounded backend transaction review"
+  },
+  "source_files": {
+    "twins/google_drive/workspace_editing.py": "6b3c3ef24e05a9feefb5c6d2caa240e00b0e627dc7a4d2c2e94f6e75ed3305b5",
+    "twins/google_sheets/README.md": "f9cf7a80e8d58ab5bf6011602f70a6d6a5e244dffe4eaa1dffb9ea90389abfda",
+    "twins/tests/test_google_sheets_values_batch_atomicity.py": "d4ffe9f759c21f1ae2b4452ab4ca8b1e00f36bcb159173baee346f83bfad4140"
+  },
+  "artifacts": {
+    "lab-sheets-value-batches-before.log": "b39da92c2e70ab9194393d1accaefca8089f67e08370a9baef2e088a5edf2bfa",
+    "lab-sheets-value-batches-permissions-before.log": "ea03ed9bb56339074a8beb530c988906c9ee301b5d921e979716c51bbe877b9e",
+    "lab-sheets-value-batches-unicode-before.log": "e2f12f7d785f78fef49ed5b410bd9e3c977575f1c40ea7fa11f40a5270bdb173",
+    "lab-sheets-value-batches-focused-final.log": "c56215d5deb7b10e5c2016c5c0c2c2f95ca97c8a45d800ac387928275abd9c6e",
+    "lab-sheets-value-batches-regressions-unicode-final.log": "3ace0c3052c96b21b61dc454625de6817199ecc57d6755f05b0ae35b54e6875b",
+    "lab-sheets-value-batches-makefix-final.log": "c4bab5476f3e4d95cf8950ff18cbdfd62db40456f155d79439770aa2243fae2d"
+  },
+  "limits": [
+    "CI, production rollout and hosted native verification remain pending.",
+    "This correction does not complete protected-range enforcement, broad permission/AI/collaboration or browser fidelity coverage."
+  ]
+}

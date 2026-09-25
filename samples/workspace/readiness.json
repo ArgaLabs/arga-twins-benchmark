@@ -43,7 +43,7 @@
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
-          "sha256": "8435f1566194b934e4b2e37f1933f2a691d21732821828c5df9585b393afea13"
+          "sha256": "d8f025a12cfa3f27fe8b7b18717ccf7acc8fd6825e5e3abf8d1865d056d207ba"
         }
       ]
     },
@@ -66,7 +66,15 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
-          "sha256": "c358478a93e0eb5b62979bcc24a0d1c75d6791ad2d8c625cd9ac5aed77060d2d"
+          "sha256": "1a4162b8b8aa520ac70333df3f37c8eb8587a217895c583420169305e9764665"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-values-batch-atomicity-2026-09-25.json",
+          "sha256": "b9bdf484b8d2d2bbb970268483537117ba2b6a2fa9cbe14521ff9751f2286214"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
+          "sha256": "ef3bb1d7834d1ff4eff9afd0222755d8497df41d98d7b820f4ca9bd8a9b45a16"
         }
       ]
     },
@@ -82,6 +90,10 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
+          "sha256": "ef3bb1d7834d1ff4eff9afd0222755d8497df41d98d7b820f4ca9bd8a9b45a16"
         }
       ]
     },
@@ -251,5 +263,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "06084ecd19aca471156b5255039d454738c6126026992fb8c1e50327f9b4af0c"
+  "sample_tree_sha256": "3c99f080f02f6ce49f3778639b44fce8446ee717bf21e50da6ddaf9ab3a21697"
 }
