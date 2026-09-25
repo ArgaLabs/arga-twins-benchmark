@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 286,
+      "files_scanned": 288,
       "image_files": 0,
       "scanned_at": "2026-09-25"
     },

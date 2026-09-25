@@ -91,6 +91,10 @@
         {
           "path": "samples/workspace/evidence/sheets-protection-sidebar-2026-09-25.json",
           "sha256": "e4a0b277d9fbc7aaaa659807b9a384461e837d891960289b3b1586e72b106096"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
+          "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
         }
       ]
     },
@@ -148,6 +152,10 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
+          "sha256": "54c0aff1c1fc38786984128dee2a8700f06ea0a87e2a7a9b9096776f99d758bf"
         }
       ]
     },
@@ -288,8 +296,13 @@
       "id": "package",
       "description": "Clean-install runner, secret scan, resource boundary and teardown verification",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
+          "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
+        }
+      ]
     }
   ],
-  "sample_tree_sha256": "6941d0e834b9523fbe532157ffca244ea642760eeb39e6c96d991705194bd73f"
+  "sample_tree_sha256": "3a898f1fb2ff339ac0ea03cfc36c3d271e11f2a4a7f0c8a460ec8687df67bf7f"
 }

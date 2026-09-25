@@ -320,6 +320,98 @@ def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
     asyncio.run(exercise())
 
 
+@pytest.mark.parametrize(
+    ("method", "path"),
+    [
+        ("PUT", "/v4/spreadsheets/book/values/Sheet1!A1"),
+        ("POST", "/v4/spreadsheets/book/values:batchUpdate"),
+        ("POST", "/v4/spreadsheets/book:batchUpdate"),
+        ("POST", "/ui/spreadsheets/book/filter-cell"),
+        ("POST", "/ui/spreadsheets/book/filter-paste"),
+    ],
+)
+def test_proxy_preserves_sheet_warning_consent_and_revision(method: str, path: str) -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+        state = {"revision": "7", "value": "Original"}
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            consent = request.headers.get("x-arga-sheets-warning")
+            if consent == "prompt":
+                status = 428
+            elif consent != state["revision"]:
+                status = 409
+            else:
+                state["value"] = "Confirmed"
+                status = 200
+            return httpx.Response(
+                status,
+                json={"value": state["value"]},
+                headers={
+                    "X-Arga-Sheets-Revision": state["revision"],
+                    "set-cookie": "private-token=upstream-secret",
+                    "authorization": "upstream-secret",
+                },
+            )
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy("google_sheets", {"base_url": "https://twin.example"}, client=client)
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            prompt = await browser.request(
+                method,
+                path,
+                json={"values": [["Confirmed"]]},
+                headers={"X-Arga-Sheets-Warning": "prompt", "Cookie": "untrusted=browser"},
+            )
+            assert prompt.status_code == 428
+            assert prompt.headers["x-arga-sheets-revision"] == "7"
+            assert "set-cookie" not in prompt.headers and "authorization" not in prompt.headers
+            assert "cookie" not in seen[0].headers
+            assert state["value"] == "Original"  # Cancel sends no follow-up.
+            state["revision"] = "8"
+            for consent in ("7", "invalid"):
+                stale = await browser.request(method, path, headers={"X-Arga-Sheets-Warning": consent})
+                assert stale.status_code == 409
+                assert state["value"] == "Original"
+                assert seen[-1].headers["x-arga-sheets-warning"] == consent
+            accepted = await browser.request(method, path, headers={"X-Arga-Sheets-Warning": "8"})
+            assert accepted.status_code == 200 and state["value"] == "Confirmed"
+
+    asyncio.run(exercise())
+
+
+def test_proxy_warning_headers_do_not_expand_other_routes_or_providers() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(200, json={}, headers={"X-Arga-Sheets-Revision": "7"})
+
+        for provider in ("google_sheets", "linear"):
+            client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+            proxy = BrowserProxy(provider, {"base_url": "https://twin.example"}, client=client)
+            proxy.origin = "http://local.test"
+            async with (
+                client,
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+            ):
+                result = await browser.post("/ui/issues", headers={"X-Arga-Sheets-Warning": "prompt"})
+                assert result.status_code == (400 if provider == "google_sheets" else 200)
+                assert "x-arga-sheets-revision" not in result.headers
+                assert (
+                    await browser.get("/admin/state", headers={"X-Arga-Sheets-Warning": "prompt"})
+                ).status_code == 403
+        assert len(seen) == 1 and "x-arga-sheets-warning" not in seen[0].headers
+
+    asyncio.run(exercise())
+
+
 def test_streaming_transfer_limits_stop_before_consuming_every_chunk(monkeypatch: pytest.MonkeyPatch) -> None:
     from starlette.exceptions import HTTPException
     from starlette.requests import Request

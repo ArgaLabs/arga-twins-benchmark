@@ -1,0 +1,51 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1170",
+  "source_head": "240843fddb9c99d8cf6d9f2e0921bbc540248827",
+  "status": "local_source_api_checks_pass_ci_hosted_and_browser_pending",
+  "release_allowed": false,
+  "scope": [
+    "Explicit browser authentication uses the native token; read-only credentials cannot mutate as the default owner",
+    "Opaque run-scoped HttpOnly browser-session identity survives ordinary navigation and form submission",
+    "One-hour server authorization on the twin clock; expired/unknown sessions reject requests instead of default-viewer fallback",
+    "Revocation, session reset and scope changes during form reads reject mutations with resource state preserved",
+    "My issues, comment/document/project attribution and author controls use the request principal without changing the default user"
+  ],
+  "tests": {
+    "focused_passed": 34,
+    "linear_regressions_passed": 198,
+    "skipped": 0,
+    "warnings": 3,
+    "reproduced_old_frontend_failures": 27,
+    "make_fix": "pass",
+    "diff_check": "pass",
+    "independent_source_review": "Pass after resolving headerless-form identity loss and expiring-cookie fallback; native GraphQL cookie isolation and mid-form revocation independently checked",
+    "documentation_review": "Pass with inherited permissive-token mode and missing native OAuth expiry distinguished from browser-session expiry"
+  },
+  "source_files": {
+    "twins/linear/frontend_auth.py": "d3f376f82f5ab0940e6f366b3e4b8c7336917878b6853fd0509cc25680f76d94",
+    "twins/linear/frontend.py": "ddf18814637b38241125df454fa07857d4a79ac4a9829ffb896ce6068c8901f4",
+    "twins/linear/comment_ui.py": "a7842f2408891efa09c910f85ca5d32564eb8b2c9c2de16eb449124e34052210",
+    "twins/linear/project_ui.py": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+    "twins/linear/store.py": "ac044742cc3afd94c15ef26369ec84b3814a64c59a58836b2b26a15660f57ce0",
+    "twins/linear/README.md": "a89007b29929c0432c5d20bee0ce16b9370251ea8a32da8d6b846794542a4f73",
+    "twins/tests/test_linear_ui_principals.py": "fd6eba1c7a63c1e2bada44c0bd581f1f06b0cc7dc0abe7d18f55d1bc885b8500"
+  },
+  "artifacts": {
+    "lab-linear-ui-principals-original-reproduced.log": "9cf0d589bce3eaf21652826e72eeb65c4dd9bd670f7003433d588075f496181f",
+    "lab-linear-ui-principals-focused-final.log": "61f0b4d623b0968371d63b274c8225f25e018e89670c6897ea0eb4f3dc43c101",
+    "lab-linear-ui-principals-regressions-final.log": "de0a7eb97a35d2ecb1f2fb5a8be75ba94179a744a29472fa71408d1136c42cc7",
+    "lab-linear-ui-principals-makefix-final.log": "033834de5ecb478b63670138b3995cfd20b5090ff58dca12ca2212bf561e0d4d"
+  },
+  "limits": [
+    "CI, hosted HTTP/native verification and desktop/mobile/touch remain pending. Chrome currently exposes no usable tree or screenshot.",
+    "Existing optional allow_unknown_tokens configuration and native OAuth expiry behavior are preserved, not corrected here.",
+    "Private-team membership, workspace roles, complete read-only controls, AI, uploads, notifications and realtime remain open.",
+    "All broader frontend/sample gates, including WKS-03, remain pending; no final ZIP."
+  ],
+  "screenshots_retained": false
+}

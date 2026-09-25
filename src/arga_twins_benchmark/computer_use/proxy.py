@@ -163,6 +163,20 @@ class BrowserProxy:
         for name in ("content-type", "accept", "if-match", "idempotency-key", "notion-version"):
             if name in request.headers:
                 headers[name] = request.headers[name]
+        sheets_write = (
+            self.provider == "google_sheets"
+            and request.method in {"POST", "PUT", "PATCH", "DELETE"}
+            and bool(
+                re.match(r"^/v4/spreadsheets/[^/?]+(?::batchUpdate|/values(?:/|:))", path)
+                or re.fullmatch(r"/ui/spreadsheets/[^/]+/(?:filter-cell|filter-paste)", path)
+            )
+        )
+        if self.provider == "google_sheets" and "x-arga-sheets-warning" in request.headers:
+            if not sheets_write:
+                return JSONResponse({"error": "Protection confirmation is unsupported on this route"}, status_code=400)
+            # Preserve even invalid consent so the twin can reject it. Dropping
+            # this header would turn a guarded edit into an ordinary API write.
+            headers["x-arga-sheets-warning"] = request.headers["x-arga-sheets-warning"]
         target = self.upstream + path
         if request.url.query:
             target += "?" + request.url.query
@@ -198,6 +212,8 @@ class BrowserProxy:
             for k, v in upstream.headers.items()
             if k.lower() in {"content-type", "cache-control", "etag", "retry-after", "content-disposition"}
         }
+        if sheets_write and "x-arga-sheets-revision" in upstream.headers:
+            response_headers["x-arga-sheets-revision"] = upstream.headers["x-arga-sheets-revision"]
         response_headers["cache-control"] = "no-store"
         response_headers["x-content-type-options"] = "nosniff"
         if "location" in upstream.headers:
