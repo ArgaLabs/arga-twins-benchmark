@@ -40,6 +40,10 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
+          "sha256": "8435f1566194b934e4b2e37f1933f2a691d21732821828c5df9585b393afea13"
         }
       ]
     },
@@ -62,7 +66,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
-          "sha256": "7a9b6e485c6a466102de1c782a4021719027c07f775bf5bdf4ea2e57947a268a"
+          "sha256": "c358478a93e0eb5b62979bcc24a0d1c75d6791ad2d8c625cd9ac5aed77060d2d"
         }
       ]
     },
@@ -172,6 +176,10 @@
         {
           "path": "samples/workspace/evidence/wks-03-final-deployment-retry1-2026-09-24.json",
           "sha256": "f06d890c7dfae2b531ac2b1f0915c4516a0cbe84ccaafaf406a600515989ee2c"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-approved-terms-browser-path-2026-09-25.json",
+          "sha256": "3cbaad6e788426868e5e52581e0b283691b530c2e6bc0bb214c5000bde1d8fb5"
         }
       ]
     },
@@ -243,5 +251,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "64da2e9f3b7d7ad07eb806ff374b1b3d7b97d416d98298cff9b4e7f0f9e003e0"
+  "sample_tree_sha256": "06084ecd19aca471156b5255039d454738c6126026992fb8c1e50327f9b4af0c"
 }

@@ -1,0 +1,90 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "provider": "gmail",
+  "status": "local_bounded_pass_ci_hosted_pending",
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1162",
+  "source_head": "1aef2fe5d881ef290e644d817f5e3c505cfd17cc",
+  "release_allowed": false,
+  "change": "Browser-local calendar date labels and explicit Scenario clock provenance",
+  "provider_reference": {
+    "surface": "Live Gmail in Chrome",
+    "mode": "Read-only inbox and date-scoped search; no messages opened or mutated",
+    "observed": [
+      "Same-day rows show a time.",
+      "Earlier same-year rows show month/day.",
+      "Prior-year rows show numeric date with two-digit year, e.g. 12/31/25.",
+      "Date hover accessibility contains weekday, full year and time."
+    ],
+    "screenshots_retained": false
+  },
+  "local_validation": {
+    "make_fix": "pass",
+    "gmail_regressions": {
+      "passed": 252,
+      "warnings": 3,
+      "failed": 0
+    },
+    "initial_reproduction": {
+      "failed": 4,
+      "scope": "Old formatter fails calendar boundaries, locale/invalid dates and clock assertions"
+    },
+    "review": {
+      "first": "fix: loader/seeder lost omitted-clock provenance",
+      "final": "ship: provenance finding resolved; scoped source review only"
+    },
+    "browser": {
+      "driver": "Chrome native CUA",
+      "viewports": [
+        "desktop",
+        "Chrome DevTools responsive 390x844"
+      ],
+      "labels": [
+        "12:30 PM",
+        "Sep 22",
+        "Sep 20",
+        "12/31/25"
+      ],
+      "expanded_prior_year": "Wed, Dec 31, 2025, 2:09 PM",
+      "reload": "pass",
+      "native_state_identical": true,
+      "events": 27,
+      "screenshots_retained": false,
+      "physical_touch_tested": false
+    }
+  },
+  "source_files": {
+    "twins/gmail/README.md": "ac24b5b85f5cd0675df496f9260c2ba1d8622c331f828fc21c78ad5eef35addc",
+    "twins/gmail/app.py": "76b0d6f3adb0a2aa5250663e601b690bc0baaf67dc940f898cdbbf7835c7744c",
+    "twins/gmail/mailbox_ui.py": "42b29b2e117556e86c0ba854765f72b2e35d9e4b3d0be73227d24510a95053c3",
+    "twins/gmail/scenario_runner.py": "82ab113665eb47c3e2424283614a3650016fbf665a95d9c9629a7ffa3c2fc10c",
+    "twins/gmail/ui.py": "5365f47232702f3d9a8009f0dbc8c454a08024ed513730a00199e1851e329e5f",
+    "twins/tests/test_gmail_mailbox_ui.py": "5b95fc01d45d1d361602eb811cc2999c876966de98eb392d9473bef027293153",
+    "twins/tests/test_gmail_message_dates_ui.py": "daf1b2ff7316235790967289dcd040e1694278b5ac475ca533216065a800914a",
+    "twins/tests/test_gmail_seed_dates.py": "88e2aa195cc9d3f24accf8aae15acaca9c22a7b81932cc1c5ec0e7a4cba10ded"
+  },
+  "artifacts": {
+    "lab-gmail-dates-browser-result.json": {
+      "sha256": "beacf9828558b4eb4ebfa6c8a585d5af128289a27e8479304f8ed39a8e48da5b",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-gmail-dates-before.log": {
+      "sha256": "5d72da565b1806ad44bdec422628695824bfed3a5952c24ad2632d4c7605df2b",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-gmail-dates-regressions-final.log": {
+      "sha256": "1e9f8fb8c0c808ca89d891103da4723e5e9021608f4b317ef68587465b199c76",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-gmail-dates-makefix.log": {
+      "sha256": "b77b4b865a6064c371b0ae8e959600c4c8a303153e0afa4b32230a04066fddcd",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "Full CI, production deployment and fresh hosted checks pending.",
+    "Clock reference is captured at page render only for explicitly fixed Scenarios; reload reads the latest store clock.",
+    "No exhaustive Gmail/menu/account/AI/collaboration or physical touch claim.",
+    "WKS-03 business failure remains preserved and its rollout gate remains pending."
+  ]
+}

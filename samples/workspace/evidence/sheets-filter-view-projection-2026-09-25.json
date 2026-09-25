@@ -2,8 +2,8 @@
   "schema": "sheets-private-view-projection/1",
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
-  "head": "68dc698ea9f670021fda9cf5ff13c5a0fae73b85",
-  "status": "incomplete_local_sessions_names_and_formula_case_pass_new_case_browser_locked_full_ci_pending",
+  "head": "555b14a35b83d725519217623f4273b3af073812",
+  "status": "reviewed_commit_revision_fix_local_pass_current_ci_pending",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
@@ -17,14 +17,15 @@
     "Saved Options match observed inline Rename/Update range and native saved Duplicate; committed-copy preview/grid-read failure restores complete original view before controls unlock",
     "Window-local temporary-view registry, manual naming and singular/plural Exit prompts, retained unsaved entries, bulk native save, saved-sort refresh and post-commit recovery",
     "Lowest unused per-sheet saved/default names, reusable temporary labels with monotonic identities, and async creation reentry/workbook/sheet guards",
-    "Case-insensitive current-sheet sorted formula restrictions and qualified/unqualified native A1 lookup; preserve stored formula spelling"
+    "Case-insensitive current-sheet sorted formula restrictions and qualified/unqualified native A1 lookup; preserve stored formula spelling",
+    "Return each private write own commit revision despite concurrent native edits during notification delivery"
   ],
   "tests": {
     "focused_passed": 63,
     "sheets_workspace_regressions_passed": 632,
     "make_fix": "pass",
     "focused_pyright": "Formula module0 errors; broader shared-editor module58 baseline/current errors with zero normalized additions/removals",
-    "full_ci": "pending_on_68dc698e",
+    "full_ci": "pending_on_555b14a35b83d725519217623f4273b3af073812",
     "duplication_recovery_ui_passed": 58,
     "temporary_view_and_related_ui_passed": 71,
     "previous_head_full_ci": {
@@ -40,7 +41,7 @@
       "root_skipped": 2,
       "scope": "Prior head only; new head requires its own checks."
     },
-    "sheets_docs_workspace_regressions_passed": 1004,
+    "sheets_docs_workspace_regressions_passed": 1007,
     "sheets_docs_workspace_regressions_skipped": 0,
     "case_correction_focused_passed": 49,
     "case_correction_type_comparison": {
@@ -59,7 +60,24 @@
         "skipped": 0
       }
     },
-    "sheets_workspace_632_verified_head": "587c4dea1add1d242aa1c033ea8351b544537370"
+    "sheets_workspace_632_verified_head": "587c4dea1add1d242aa1c033ea8351b544537370",
+    "full_ci_twin_tests": {
+      "passed": 5720,
+      "skipped": 145,
+      "deselected": 3
+    },
+    "full_ci_root_tests": {
+      "passed": 2130,
+      "skipped": 2
+    },
+    "prior_full_ci_head": "68dc698ea9f670021fda9cf5ff13c5a0fae73b85",
+    "commit_revision_focused_passed": 83,
+    "commit_revision_type_comparison": {
+      "baseline_errors": 58,
+      "current_errors": 58,
+      "normalized_additions": 0,
+      "normalized_removals": 0
+    }
   },
   "sources": {
     "twins/google_drive/app.py": "9c41c6995e0df063c0e9e838397ed09a194f8abdf853ff455ef177535b60bfa9",
@@ -69,8 +87,8 @@
     "twins/google_drive/sheet_view_edits.py": "d0e79f066dfd7cc3568af33a3ee7d5491c10941dcb753e5d50d47e3da1499e08",
     "twins/google_drive/sheet_view_formulas.py": "d2d4b4bfa8cc2e01b8d03deb33e973f0d30dcce00ab5f27928e95e9b892c9b92",
     "twins/google_drive/sheet_view_rendering.py": "be4c4cb4aed030024e5c8f7c63e074191db2687ac16d7205572a741aef68bc90",
-    "twins/google_drive/workspace_editing.py": "32ed79446299e202888e6fd070018e25a9c5cf2866f689faa16fa0a3922fe9f5",
-    "twins/google_sheets/README.md": "0b26b0b43d34694d1183644849ae391f99152f0ad804be628990a761252ac615",
+    "twins/google_drive/workspace_editing.py": "99cf1de9e4cc4c537f8abf0f778c91f9704a4a8cddc71a0fbcc5f2fbcf6984a1",
+    "twins/google_sheets/README.md": "8260abafea8ae6be2a81004d3c16aff1b58a186aba667ab94488366149402ee1",
     "twins/google_sheets/clipboard_ui.py": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
     "twins/google_sheets/filter_view_sessions_ui.py": "030ac6a2908201db46aee025569c82b807183172963528333969108c1f8377ee",
     "twins/google_sheets/filter_views_ui.py": "4aca61c7ab616e4d3ad999e7de618228694e6721c04a14691edd60522501bfee",
@@ -90,7 +108,8 @@
     "twins/tests/test_google_sheets_view_clipboard.py": "cf0c2251272d83a925797b2e3e43b995883e2d25ace5063d8de2c13956f4a9f5",
     "twins/tests/test_google_sheets_view_coordinates.py": "be2a59d786349b1336ace859dd9aa02d183b70ac7c5efe45b5f1940bb4991397",
     "twins/tests/test_google_sheets_view_formulas.py": "8872de43f875ddac4c3b207bc3f1e504eb5e24860a4de7a1bc4009ee5c3bd8f0",
-    "twins/tests/test_google_sheets_view_rendering.py": "b3e77064ed08b22f67611dc487b7c6dc8b45f0e8de819fa68a9dc63e6142ff34"
+    "twins/tests/test_google_sheets_view_rendering.py": "b3e77064ed08b22f67611dc487b7c6dc8b45f0e8de819fa68a9dc63e6142ff34",
+    "twins/tests/test_google_sheets_view_commit_revision.py": "d6d5d6804d2894704b10e893ea91bc8f22a0eda9897ca600262cc48f4c184cf7"
   },
   "logs": {
     "lab-final-sheets-view-tests.log": "dd9645c629f437048611a81036a62a574e642a20bb4bbce52940c69430a1a1f2",
@@ -126,11 +145,19 @@
     "lab-final-sheets-view-case-makefix.log": "d8bf301a7e548d1863e4512ef225bbe987a3f8790414421b1f730184b6dc091d",
     "lab-final-sheets-view-case-type-comparison.json": "431cb13932f306b579c6a11f826cb079e44c5988392a716ed7552ed055a20ff1",
     "lab-final-sheets-view-case-regression.log": "959d342cf6d39f3f11950d42dab5137bb29bcf4fabbb2231ef5b429d16e1366d",
-    "lab-final-sheets-view-case-regression-with-deps.log": "2533400b7ee8cd99779722f6aaac90aa1886932860019448c74776f564b72286"
+    "lab-final-sheets-view-case-regression-with-deps.log": "2533400b7ee8cd99779722f6aaac90aa1886932860019448c74776f564b72286",
+    "lab-final-sheets-view-full-ci.log": "c93be0b6b5532df1690cd7787f3a8403f2300f08e542e762aef0c3c3511abe54",
+    "lab-sheets-view-case-browser-result.json": "7ae4cbca619b22c5386102d6430878f2e1832e3e0b4bfd56f6c79bb181aaa6b4",
+    "lab-final-sheets-view-current-pr.json": "8b5cd15aab8454522166686900f50c399a0f76301d4cf7983df59c298c19ef35",
+    "lab-final-sheets-view-commit-before.log": "922a32ff309cc5b59e8b0a6a1c048119be8b17cc1e16a7eb7e529ea76e65fc25",
+    "lab-final-sheets-view-commit-after.log": "e5d7f73b21271830c76abd22d7f708607b72132c88c7d808911527ed6f2ab33e",
+    "lab-final-sheets-view-commit-makefix.log": "faccc784b501f607d4160365422c0b0428765d74d00bda2f1a12300d7b7688ef",
+    "lab-final-sheets-view-commit-type-comparison.json": "2b70a7f57c43f37be32d15b94acdd2aea511d2a30e9d095f59788f3a659842b7",
+    "lab-final-sheets-view-commit-regression.log": "ea550757f8bec9ff047ce01dcc812e1e2288a60532456f0c634c45835b170159"
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "#1161 is open for review but incomplete and undeployed. Full CI passed on prior head2aa33224; current head68dc698e requires its own full CI and hosted verification.",
+    "#1161 current head 555b14a35b83d725519217623f4273b3af073812 is reviewed and passes1007 local regressions. Fresh CI and production/hosted verification remain pending; earlier fullCIpass belongs to68dc698e.",
     "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, actor-aware protected-range enforcement and remaining named/dynamic references remain unfinished.",
     "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
     "Selected temporary-view naming/Save/Exit desktop and390px checks now pass. Complete permission/error/cancellation paths, cross-sheet provider comparison and remaining menu details remain incomplete.",
@@ -349,9 +376,59 @@
       "hosted": "not_verified"
     },
     "formula_case_correction": {
-      "status": "pending_host_unlock",
+      "status": "bounded_desktop_pass",
       "source_head": "68dc698ea9f670021fda9cf5ff13c5a0fae73b85",
-      "attempt": "Native Chrome CUA reported Mac locked before opening the owned reference fixture. No new browser comparison claimed. Earlier completed session/naming checks remain valid for their recorded source heads.",
+      "reference": {
+        "fixture": "Arga fidelity 2026-09-25 filter views",
+        "input_formulas": [
+          "=sheet2!A2",
+          "='sHeEt2'!A3",
+          "=SHEET2!A4"
+        ],
+        "native_values": [
+          "Beta",
+          "Alpha",
+          "Gamma"
+        ],
+        "saved_view": "Arga edit order check",
+        "sorted_values": [
+          "Alpha",
+          "Beta",
+          "Gamma"
+        ],
+        "sorted_formula_bar": [
+          "=Sheet2!A2",
+          "=Sheet2!A3",
+          "=Sheet2!A4"
+        ],
+        "exit_and_actual_chrome_reload": "native order and values restored",
+        "cleanup": "File moved to trash confirmed; recoverable only"
+      },
+      "twin": {
+        "native_values": [
+          "Beta",
+          "Alpha",
+          "Gamma"
+        ],
+        "sorted_values": [
+          "Alpha",
+          "Beta",
+          "Gamma"
+        ],
+        "sorted_formula_bar": [
+          "='sHeEt2'!A2",
+          "=sheet2!A3",
+          "=SHEET2!A4"
+        ],
+        "reload_retains_saved_view": true,
+        "exit_restores_native_order": true,
+        "entire_native_snapshot_unchanged": true
+      },
+      "known_difference": "Provider normalizes qualifier spelling to Sheet2; twin preserves stored spelling while resolving the same cells. This is a remaining formula-entry fidelity difference.",
+      "excluded_adapter_probes": [
+        "Data > Sort sheet changes native rows, including header. Undone and original native order confirmed before saved-view comparison.",
+        "Cmd+R is Sheets fill-right, not browser reload. Undone; formula restored and Saved to Drive confirmed before actual Chrome Reload button."
+      ],
       "physical_touch": "not_verified",
       "screenshots_retained": false
     }
@@ -405,7 +482,15 @@
       "independently_rerun_tests": 49,
       "finding": "Different qualifier casing caused false sorted REF errors; uppercase exposed a shared native lookup failure",
       "resolution": "Normalize current-sheet comparison and qualified/unqualified A1 title matching; test native, unsorted, sorted reads and exact unchanged stored formulas/state",
-      "browser_fidelity": "not_verified_locked_host",
+      "browser_fidelity": "bounded_desktop_comparison_recorded_separately",
+      "release_readiness": "excluded"
+    },
+    "commit_revision": {
+      "disposition": "ship_P1_commit_token_correction_only",
+      "independently_rerun_tests": 3,
+      "finding": "Delayed Drive notification completion allowed a concurrent commit before response sourceVersion was read; a stale projected write could adopt the newer revision and overwrite concurrent data",
+      "resolution": "Return this operation commit revision captured before notification delivery can suspend; all three write routes tested with a delayed response and intervening native edit",
+      "regression": "Before:3failed; after:3passed; following stale write409 and exact entire state preserved",
       "release_readiness": "excluded"
     }
   },
