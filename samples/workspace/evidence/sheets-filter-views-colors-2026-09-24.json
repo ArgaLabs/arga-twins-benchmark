@@ -238,7 +238,9 @@
       "Additional Sheet2 matrix, sorted A1:I4: same-row A references and ROW() retain source-row values (Alpha/3, Beta/2, Gamma/4). Cross-row relative references produce #REF!, including qualified references to the same sheet and relative references below the view.",
       "COUNTA(A2:A3) inside all three sorted rows displays 1 rather than native 2. IFERROR can catch the sorted-view reference error. A$3 is sufficient to anchor the row; the column need not be absolute.",
       "External TSV pasted into view B2:I2 retains literal native formulas: pasted =$A2 appears as =$A1 at visible H2 and as =$A2 at native H3 after leaving the view. This differs from entering a formula by typing. Native API verification and the complete clipboard matrix remain pending.",
-      "Relative references into a column outside the view and into another sheet produce sorted-view #REF! in the tested pasted expressions. Exact mixed-row/range edge cases require further conformance."
+      "Relative references into a column outside the view and into another sheet produce sorted-view #REF! in the tested pasted expressions. Exact mixed-row/range edge cases require further conformance.",
+      "Saved-view ordering probe: changing visible Alpha to Zebra in a temporary A1:I4 sorted view preserves visible Zebra/Beta/Gamma order. Saving it as Arga edit order check reapplies ascending order, placing Zebra at A4.",
+      "Changing saved-view A4 from Zebra to Aardvark retains visible Beta/Gamma/Aardvark order after save completion. Reloading the saved fvid reapplies ascending order to Aardvark/Beta/Gamma. Active projections must retain row identity across edits and explicitly re-sort when reopening."
     ],
     "cleanup": "Own uniquely prefixed fixture temporarily restored for formula and clipboard probes, then returned to recoverable trash; File moved to trash verified and tab closed. No sharing or outbound notification.",
     "limits": "GUI and clipboard observations only; real-account native API readback unavailable, physical touch not exercised."

@@ -1,0 +1,50 @@
+{
+  "schema": "sheets-private-view-projection/1",
+  "date": "2026-09-25",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
+  "head": "154cf412e3eb5c0d7224c60be43cca093b24d8ea",
+  "status": "draft_local_api_checks_pass_frontend_and_release_pending",
+  "scope": [
+    "Read-only view grid projection with native-row formula values and translated displayed formulas",
+    "View-specific reference errors preserve IFERROR and COUNTA behavior",
+    "Outside formulas evaluate against visible values; spill cells and formatting follow source rows; physical dimensions stay fixed",
+    "Active row order remains stable across edits and reopening re-sorts",
+    "Typed single-cell source-coordinate routing with revision conflict detection, relative formulas and source validation",
+    "Reader and read-only scope denial, writer grants and immediate revocation"
+  ],
+  "tests": {
+    "focused_passed": 77,
+    "sheets_workspace_regressions_passed": 576,
+    "make_fix": "pass",
+    "focused_pyright": "0 errors",
+    "full_ci": "skipped_by_draft_policy"
+  },
+  "sources": {
+    "twins/google_drive/sheet_filter_views.py": "a294abb19bb41b0c69d610086fdc0891428b39741702b0d527902c401818ef01",
+    "twins/google_drive/sheet_view_coordinates.py": "ecf5e448aa5131d0d3633800c8eae0a52585625ef338afc85dba866c5e44c546",
+    "twins/google_drive/sheet_view_formulas.py": "805ffa97ae07dc6a860b6fbed09b234d84ca98c3b9fab075af4bd7ba596c63aa",
+    "twins/google_drive/sheet_view_rendering.py": "be4c4cb4aed030024e5c8f7c63e074191db2687ac16d7205572a741aef68bc90",
+    "twins/google_drive/sheet_view_edits.py": "d029bfe8737cb85d6bc23a2d95a6068625d8101269a5702143aab4855936d7e4",
+    "twins/google_drive/workspace_editing.py": "4546fe336687f595c5f54f8efa62b4a3e1cd5864eedaf004cc80db37b9a9b3dc",
+    "twins/google_drive/app.py": "8fe17ee1137e6106c169c8d17a44eaee8d7f91349f7f56a7d57cf664cca4e8a9",
+    "twins/tests/test_google_sheets_view_coordinates.py": "be2a59d786349b1336ace859dd9aa02d183b70ac7c5efe45b5f1940bb4991397",
+    "twins/tests/test_google_sheets_view_formulas.py": "5e274f1fc3283e1695372218c1bb7d7f8de678a94f08dae978c30865355fac58",
+    "twins/tests/test_google_sheets_view_rendering.py": "76c82ed1e9bd6983672179579b319ce48183ba95bd4393ccbff92fc1ae15aebc",
+    "twins/tests/test_google_sheets_filter_views.py": "50f6a4f89f6bf4d54bfd2c3ed61d9e0d56119ad574cc04b8b082f743c7727c4d"
+  },
+  "logs": {
+    "lab-final-sheets-view-tests.log": "dd9645c629f437048611a81036a62a574e642a20bb4bbce52940c69430a1a1f2",
+    "lab-final-sheets-view-regression.log": "b8c1980a8cce8b8e8a038ac3eb4e4b651142dbe7d89db1497e2f9e40f226c6a9",
+    "lab-final-sheets-view-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-view-makefix.log": "e83652c991133268e6843f4276d486cd2e8022f0de5a8f493956ee1fc55239f5"
+  },
+  "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
+  "limits": [
+    "No frontend integration or hosted verification for #1161 yet.",
+    "Saved/temporary browser controls, clipboard writes, protected-range enforcement, merged-cell projection and complete named/dynamic-reference behavior remain pending.",
+    "Local operator API conformance does not establish visual, mobile, physical-touch or full provider parity.",
+    "Full CI and deployment are deferred until the feature is ready; no production merge."
+  ],
+  "release_allowed": false,
+  "screenshots_retained": false
+}

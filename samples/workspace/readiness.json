@@ -54,11 +54,15 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
-          "sha256": "f1900a9cc23eaec0bde44421cfde83e5686925b9e1e36affa977369d31e47865"
+          "sha256": "d7052e576e9ab4f818d5f2d044db3e5c387630e819e38bb8be208910fed37caf"
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "a93e0406fb3d5fd5904f54b56c48a7e44f5ed8ec8c75554f2c2b8f572654e040"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
+          "sha256": "0dc3b10f74307db593ddb7e91834000fca33cd0b62416c628e5e64cf494ca379"
         }
       ]
     },
@@ -239,5 +243,5 @@
       "evidence": []
     }
   ],
-  "sample_tree_sha256": "a74080390c37a624a5f0258711c75d739665616e867799cec5ad63b93834c491"
+  "sample_tree_sha256": "36d0367a8efabf10d4c4e046284ac6781a4c3f9c81623f14153f27ff9b9074d0"
 }
