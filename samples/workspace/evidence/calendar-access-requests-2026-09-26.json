@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1194",
   "source_head": "b503e9b5f888a7a9db2f8d0fa67fa1ebdfe519fe",
-  "status": "local_browser_native_source_review_pass_ci_pending",
+  "status": "deployed_hosted_browser_native_images_pass",
   "release_allowed": false,
   "tests": {
     "integrated_passed": 586,
@@ -455,12 +455,173 @@
     "lab-calendar-access-requests-local-r2/after.json": "416eb11b8713fc9c75760f82f12dd4739f729fd73466e3e37341f807f182acfb",
     "lab-calendar-access-requests-local-r2/pending-native-state.json": "0fc06a78be94dc7f3646fb97de6000f1d9e99ee3bcce5dd1616afc8fecd32412",
     "lab-calendar-access-requests-local-r2/fixtures.json": "5f63ba5842b45e4add8f620ffd635325f695d4bf4a4b8c3007c4a907c3b4584c",
-    "lab-calendar-access-requests-local-r2/browser-native-state.json": "f673b727401bb65f89a812fce943135537e0170ba2ebfad20808dbacf89599a1"
+    "lab-calendar-access-requests-local-r2/browser-native-state.json": "f673b727401bb65f89a812fce943135537e0170ba2ebfad20808dbacf89599a1",
+    "lab-final-calendar-access-requests-d9829514/browser-trace.json": "ea5c48773b85eaa8dbe9af745142ff562e9ed8c896807edcdd5af42d2c92229b",
+    "lab-final-calendar-access-requests-d9829514/image-comparison.json": "2d0ba7bc31e4b03f675e157858f2352884663a9c833de094e3b43f3e63d01d9c",
+    "lab-final-calendar-access-requests-d9829514/workspace.json": "e6d31fe89c1b786e57d8580fc05a42ccc223afeecca4edc09fcf7e16adeab431",
+    "lab-final-calendar-access-requests-d9829514/publication-catalog.json": "671d4f290eef82bb7d9571d392cd4d6dd90827db212dbe4a3ceecfeb0ac09703",
+    "lab-final-calendar-access-requests-d9829514/browser-observations.json": "8674b222a6fc003439374e294d2243905a6384ccfaa9adfdc055ca86d0cd8e63",
+    "lab-final-calendar-access-requests-d9829514/gui-baseline-state.json": "9d901cd0804b3446cb682ed69e7640292fc8cd50acd68d9d81ca8f78f3171444",
+    "lab-final-calendar-access-requests-d9829514/browser-native-result.json": "75398759a386c01b44117e94f3962111a65405fc08a584db59b8472a97496d4b",
+    "lab-final-calendar-access-requests-d9829514/gui-final-state.json": "c0a994a2e243b2dc07ceebad241c0c11a19973d78eef072f7c629ff24b373c2e",
+    "lab-final-calendar-access-requests-d9829514/cleanup.json": "908dea0c6fde0eebde8a5211cd960774207200cdae3d45383c49e600d5aa0ad3",
+    "lab-final-calendar-access-requests-d9829514/cancel-native-result.json": "f7d8f45ebefeff07bd15269add862fc806a2fee5c58bbeca03cd714e102964b9",
+    "lab-final-calendar-access-requests-d9829514/runtime-image-evidence.json": "403d92cb3a493e0c19839587548fabac5d383c6ae3e02960b7a095dab2fff538",
+    "lab-final-calendar-access-requests-d9829514/worker-logs.json": "fa335754341330a9b09f5bef65c5df866762eede3b7c85f6a8ec63b2e8e4cfac",
+    "lab-final-calendar-access-requests-d9829514/scenario.json": "9a643d594042a5becbe65b6acadfa7cb6dba21e535d49b09c643d92777e4f3dc",
+    "lab-final-calendar-access-requests-d9829514/pending-native-state.json": "6e7f05b16d44e5e5ae54a4d6d570a5d194ae9c6b727ca91187519a5f3ae047c8",
+    "lab-final-calendar-access-requests-d9829514/operator-api-trace.json": "905a97bb8e18b6b531fbf45d98329d53a23fd708de665aa6d18798efd9f59f6d",
+    "lab-final-calendar-access-requests-d9829514/cancel-native-state.json": "3286de1734d6113a768b0d35a673c4f21f6b2d3f0dc8e3078a126b8e7d3e5bd9",
+    "lab-final-calendar-access-requests-d9829514/control.json": "941d5f9af4872956d6aba6c49c55f2b7e3743e35a45f9fa8181b6b588dc8a558",
+    "lab-final-calendar-access-requests-d9829514/pending-native-result.json": "46c28b9e8243f65335e220e50c226f3e6fe9f1d1180eda69c2813cdd3fd391bc",
+    "lab-calendar-access-requests-premerge.json": "0cb024dcc85f5449c895b078e9fd12192629607b80e3726545bfc6034c056ff9",
+    "lab-calendar-access-requests-final-ci.log": "7a8330014c52b2ab653bdcd9c5c7d38ccfcdefbba5db74059875008b4b3fabfd",
+    "lab-final-calendar-access-requests-d9829514-hosted.log": "cae2770137f0ea300657b916d75e46881c4de9e2cef1ba67de3dd01d242b0625"
   },
   "limits": [
-    "Exact-head CI, production and fresh hosted checks pending",
+    "Exact-head CI, both deployments, serving API/proxy images and fresh hosted request/approval/browser/native/container checks pass; full provider audit remains open.",
     "Native outboxes do not send real email or implement cross-Gmail notification delivery",
     "Scenario export/reseed of access-request resources, native keyboard/focus, physical touch and exhaustive Calendar/AI/collaboration audit remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merge_commit": "d98295140d14d5ce5f03928e3a57cb4cab3d847d",
+  "ci": {
+    "head": "b503e9b5f888a7a9db2f8d0fa67fa1ebdfe519fe",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6483,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "d98295140d14d5ce5f03928e3a57cb4cab3d847d",
+    "runtime_workflow": 36235906884,
+    "twins_workflow": 36235906847,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:d98295140d14d5ce5f03928e3a57cb4cab3d847d@sha256:17bed559b3e9fb44e67901b005670508e53c39fd55c5f13205742343911cda48",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d98295140d14d5ce5f03928e3a57cb4cab3d847d@sha256:b61cb30eb722e492ce471dfcf9ffb97f7092a2d82eaa1aa83166ac8988fbb5d1",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:d98295140d14d5ce5f03928e3a57cb4cab3d847d@sha256:12721ca7e697264e5d44e8c6a86b24445c5812d68528267f1bc6d7c9a1a16cbc"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00298-xjc",
+      "arga-api": "arga-api-00668-bwz"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-access-requests-d9829514-twins-deploy.log": "8683141b539089c2ee6352512011d5eeeeef41a444e19cfedfc24e317c40a0d7",
+      "lab-final-calendar-access-requests-d9829514-runtime-deploy.log": "3ce2ab1d7cbe26e08b88ba46e344e83f172bca2bccc7a6f796f90b8a8a6eafac"
+    },
+    "serving_runtime": {
+      "revision": "d98295140d14d5ce5f03928e3a57cb4cab3d847d",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00298-xjc",
+          "observed_at": "2026-09-26T10:29:55.728412+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d98295140d14d5ce5f03928e3a57cb4cab3d847d",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00298-xjc"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00298-xjc",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+            "sha256:b61cb30eb722e492ce471dfcf9ffb97f7092a2d82eaa1aa83166ac8988fbb5d1"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00668-bwz",
+          "observed_at": "2026-09-26T10:34:45.753915+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:d98295140d14d5ce5f03928e3a57cb4cab3d847d",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:3b2a987b6a9701806ec11f652bfe67ab48dc31fe83b3dceb01ee0cf5b14d3f1c",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:3b2a987b6a9701806ec11f652bfe67ab48dc31fe83b3dceb01ee0cf5b14d3f1c"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00668-bwz"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00668-bwz",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:12721ca7e697264e5d44e8c6a86b24445c5812d68528267f1bc6d7c9a1a16cbc",
+            "sha256:3b2a987b6a9701806ec11f652bfe67ab48dc31fe83b3dceb01ee0cf5b14d3f1c"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "3ce2ab1d7cbe26e08b88ba46e344e83f172bca2bccc7a6f796f90b8a8a6eafac",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "limits": [
+        "Outboxes are native notification evidence; no real email sent or Gmail twin delivery",
+        "Native touch and full provider audit remain open"
+      ],
+      "one_browser_request_and_one_owner_approval": true,
+      "outsider_complete_state_unchanged": true,
+      "owner_requester_events_and_calendars_unchanged": true,
+      "passed": true,
+      "selected_reader_acl_and_subscription": true
+    },
+    "browser": {
+      "desktop": [
+        "Requester Cancel retains email, no native change",
+        "One submitted request remains pending with no access grant",
+        "Outsider approval link unavailable",
+        "Owner Cancel leaves pending state unchanged",
+        "Owner selected reader approval persists after reload",
+        "Requester reload exposes calendar and protected event with all event mutation controls disabled"
+      ],
+      "mobile": {
+        "width": 390,
+        "height": 844,
+        "owner_approval_dialog": "Readable with permission select, Cancel and Send; approved via pointer"
+      },
+      "screenshots_retained": false,
+      "limits": [
+        "Native keyboard/focus and physical touch unverified while Mac locked",
+        "No real email or cross-Gmail delivery"
+      ]
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true
+  }
 }

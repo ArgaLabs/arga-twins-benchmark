@@ -72,7 +72,7 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-access-requests-2026-09-26.json",
-          "sha256": "b91323a3a142bbc47832d746683590ba3fe50f4baee82398076385e5920855a8"
+          "sha256": "5c0809bb961454b3912c9f3faaad7547c6e3f7fa47f9c8fc6f70cbefcd9f67e8"
         }
       ]
     },
@@ -380,7 +380,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "0c545f26bd8e3b68f687cf8b2fe18013a9a6cf8a7ae0082c1ae38ad2cf9bd1db"
+          "sha256": "e55ebfc2df0c78a1cf5d2b7eaf37932be7b5a3dff1e2ec85097b83c1c83d5ba8"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -408,5 +408,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "97972255b6fc61ef5baeaeccec612d7494f7dfd3880a8c86ae65c164e9debc9b"
+  "sample_tree_sha256": "147492b71c752ba4a2d7fdf666dba415a3a78bf99bfe6bc97d7c3b0c0e9b6121"
 }
