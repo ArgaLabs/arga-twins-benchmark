@@ -1,0 +1,103 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "github"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1186",
+  "source_head": "ba1c032c487e1d2d2196227d6f69d2c458d0cc41",
+  "merged_revision": "86b01846df16618181419a1fa8514aa20e58a50d",
+  "status": "deployed_hosted_review_connection_failure_preserved",
+  "release_allowed": false,
+  "scope": [
+    "Canonical APPROVED, CHANGES_REQUESTED and COMMENTED states across REST, GraphQL and browser forms",
+    "Lowercase webhook state serialization without native mutation",
+    "Invalid GraphQL creation actions rejected atomically"
+  ],
+  "tests": {
+    "github_passed_before_final_webhook_change": 462,
+    "affected_reviews_after_webhook_change": 86,
+    "frontend_state_after_ci_assertion_fix": 32,
+    "compatibility_runner_passed": 107,
+    "standalone_compatibility": {
+      "passed": 95,
+      "local_only": 43,
+      "failed": 0
+    },
+    "make_fix": "pass"
+  },
+  "local_browser": {
+    "status": "pass",
+    "browser": "Chrome CUA",
+    "checks": [
+      "Explicit browser outcome selections persist APPROVED, CHANGES_REQUESTED and COMMENTED",
+      "True reload displays all three results and preserves canonical native states",
+      "Exact entire native state differs only in three review states and submitted_at values"
+    ],
+    "screenshots_retained": false,
+    "limits": [
+      "Semantic browser/native verification; no new layout, exhaustive visual or physical touch claim"
+    ]
+  },
+  "deployments": {
+    "revision": "86b01846df16618181419a1fa8514aa20e58a50d",
+    "runtime_workflow": 36228762961,
+    "twins_workflow": 36228762987,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:86b01846df16618181419a1fa8514aa20e58a50d@sha256:da30c25e69b9533d9ad89fdb17f658b3d9a6e125f53811a4558f24342268e03a",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:86b01846df16618181419a1fa8514aa20e58a50d@sha256:64e8f6fa4c8e3f40f5563ec28893ec2752c3fadf0dd50551a5ee58b20cbaae9c",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:86b01846df16618181419a1fa8514aa20e58a50d@sha256:e8e9b528a8a5d4755a7d445869a593eb2ff45eabb2cfeecac3a3790aacef2d19"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00291-24g",
+      "arga-api": "arga-api-00661-mct"
+    },
+    "log_sha256s": {
+      "lab-final-github-review-states-86b01846-twins-deploy.log": "76bb3a60e292077b701a80e9e00e60d777683c45e9e3e9577de49a7a7270bad5",
+      "lab-final-github-review-states-86b01846-runtime-deploy.log": "f365e26e3da306ea0f910ab944257f1b98b4bed1522271c13d32ac599fa0bffd"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "hosted": {
+    "native_create_submit": "All three outcomes passed REST create/submit and GraphQL create/submit",
+    "invalid_action": "Exact captured full native state unchanged",
+    "failed_check": "reviews(first:100) returned only the last COMMENTED review instead of all twelve created reviews",
+    "classification": "Product fidelity defect, not operator setup error or candidate retry",
+    "follow_up": "bug/lab-github-review-connections",
+    "browser": "not reached because native query check failed",
+    "images": "all three provider/app/gateway images matched",
+    "teardown": "confirmed torn_down"
+  },
+  "source_files": {
+    "twins/github/README.md": "7a945ee5c23029ac939ec490a95c7a0cb01971def0a7ce44cbc141a62c3c4997",
+    "twins/github/handlers/graphql.py": "c58667ba9dc63418270270ac74f3536c60457b8c53f242cff69d87cb20571260",
+    "twins/github/handlers/reviews.py": "a5f1fb5772f2737f43bd47a834d35a7f07e010d999e8d782bc8a38dd7763e870",
+    "twins/github/review_states.py": "a6563c7fd894b327cb0323b6af1c0703c0ca5a7d1060c64296fdddf42a797ee3",
+    "twins/github/webhook_delivery.py": "c5f4f7512cea4ca47e49c85626866cb7d920f8161841f984bdb451308ff7150c",
+    "twins/tests/test_github_cli_mcp_compat.py": "ca2421a480f5991904b8977f7950a57ded3d62e4f20abff51a3ebf91a0f792f6",
+    "twins/tests/test_github_review_states.py": "a956b97073fa121be97d7d8a6f730c3307177c14aeb15b2534171e549a959598",
+    "twins/tests/test_lab_frontends.py": "fa005772ae0ce6b187e692c1fb37ccb738bfe03eca88716f3433d9a978b26b9f"
+  },
+  "artifacts_sha256": {
+    "image-comparison.json": "3333108a9b2cdb53dbcbc22d97ec652c88fb31a76015400abc1a0f66f7e7f003",
+    "publication-catalog.json": "a9dc7132980badc4dc98e538a9de1f17a5cada4f8d90d909647477eacfe02283",
+    "cleanup.json": "f1cb6561fa95d427986be62c0594798b1dd8e760171fc9c43865125c87cfc8f5",
+    "runtime-image-evidence.json": "348f42e520a6abf71efdc0682de18aa466eba7209afe553cf42b806316c18a1c",
+    "worker-logs.json": "eb13fbf5f29465b599a7521e434647e515784fe01e5ed527d7235609989aeef2",
+    "scenario.json": "2b8b08b0dca9f824e8f407c447cf488e9a8f87af1d427a7861bf1fd8f1e694e9",
+    "operator-api-trace.json": "ceb2fe73c75378efe3b7e67961a6b3e7de06c9556403c27d809eecb7489fd6f8",
+    "control.json": "74f7a191f6cca919f823780e5ab2a33bf8974264e06ba489b788277ed49a7a61",
+    "lab-final-hosted-github-review-states.py": "6cfd218d59569fdfae6197ea12ff70bb8e0aba4447920513364206146e5bca0e",
+    "lab-final-github-review-states-premerge-ba1c032c.json": "ef59d7fb23ce956cac5a2a8d4cb16ec112850ddb6e16266312f4e93bd8d634be",
+    "lab-github-review-states-ci-shard5.log": "8217388937d3c1212c3ddb0b2510edc50c371216df2e8fc3a94f096bfc6812f1",
+    "lab-github-review-states-ci-fix.log": "e6062eaf99867691fb8934f458d993970b32ccb161eb41f822f432411d716016",
+    "lab-final-github-review-states-86b01846-runtime-attestation.json": "53c568baa326dd7e91f008699246b082b24eeca737ae09f8ed148695c025c87f"
+  },
+  "limits": [
+    "Fresh hosted browser outcome/reload verification remains pending after the review-connection correction",
+    "GraphQL webhook delivery, broader permission/admin/AI coverage and exhaustive audits remain open",
+    "WKS-03 remains a preserved business failure; no final package release"
+  ],
+  "screenshots_retained": false
+}

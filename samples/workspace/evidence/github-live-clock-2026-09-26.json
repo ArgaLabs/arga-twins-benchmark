@@ -7,7 +7,7 @@
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1185",
   "source_head": "ee5cf913fb1b82764926a62f7ab7bc71a5d6c4f3",
   "merged_revision": "70e64aabdf6ff05f8db12831cd65d7f89a458411",
-  "status": "exact_head_ci_merged_deployments_running",
+  "status": "deployed_native_hosted_browser_images_teardown_pass",
   "release_allowed": false,
   "scope": [
     "Actual advancing UTC clock when base_time is absent/empty",
@@ -60,12 +60,118 @@
     "lab-github-live-clock-focused3.log": "bbefcd3f17e0056bcf2bf008bddc68fb83cc3198290d7633a53f32172f07051c",
     "lab-github-live-clock-integrated.log": "aa3be813c88a918e16253c0276343d9c2d273bfeaf8d218fa2000e952c109a28",
     "lab-github-live-clock-compat.log": "abf89e364d6a42b3f01ce9d0f476fa8279f782293b3beb296aef23f943eb1708",
-    "lab-final-github-clock-premerge-ee5cf913.json": "ecbe8bbacf314655cf0d7f32a940215c70d84fe046f67b86ff15737a5648d5cb"
+    "lab-final-github-clock-premerge-ee5cf913.json": "ecbe8bbacf314655cf0d7f32a940215c70d84fe046f67b86ff15737a5648d5cb",
+    "lab-final-github-clock-70e64aab/live/image-comparison.json": "a74e27b613e8c587378df1cc35e6fee94a0757e1e31cd38c513c38418738eb0e",
+    "lab-final-github-clock-70e64aab/live/cleanup.json": "43d25591c7b30b5f10e74c7ff71abd621fb277a7260b53e858592fd50a65ef40",
+    "lab-final-github-clock-70e64aab/live/runtime-image-evidence.json": "ebad7c142e12746b239e0199b3c540f6336326a43fda93deb4c285c42b311017",
+    "lab-final-github-clock-70e64aab/live/operator-api-trace.json": "0bafb45b1ebd418fa8d4b0d64494a1a4e49d28a1e610438f399a3586e2c5536b",
+    "lab-final-github-clock-70e64aab-attempt2/live/image-comparison.json": "f8f2e5e794751dad2753f8a4484b1c319c4626e965b29fb262b98589ab5231cd",
+    "lab-final-github-clock-70e64aab-attempt2/live/cleanup.json": "6e0b1980659197e4c9f1f5177567f1ee69a0abaf0aab4e7a30c0427f909742de",
+    "lab-final-github-clock-70e64aab-attempt2/live/runtime-image-evidence.json": "e9d1920e5799a0f331768e42a079bd8156f08042437f5e4435746c202d2b1850",
+    "lab-final-github-clock-70e64aab-attempt2/live/operator-api-trace.json": "f92677d2334a00ca786f77ede219ace08431c763ed8462744198821dd7ca396b",
+    "lab-final-github-clock-70e64aab-attempt3/live/image-comparison.json": "42117e43a11bd396a7a88f7b499f7e421105e63d3323073a4e831858c2409f8b",
+    "lab-final-github-clock-70e64aab-attempt3/live/cleanup.json": "131c22aceb694d560c5e55d2204bb8f17708b2e4567e78007a99a87dece50acc",
+    "lab-final-github-clock-70e64aab-attempt3/live/runtime-image-evidence.json": "0b7b3a0d14c15812210a28882494b38ba4d3a78f85effd49c489747d087634c5",
+    "lab-final-github-clock-70e64aab-attempt3/live/operator-api-trace.json": "4de8b2f148bf43fd387cff3fa3dbc194ee36f46d1f25d30389980589a4813cb8",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/browser-trace.json": "eeb2d452151adf20ff0bc1aab5bacf694ab56235d6f93df42da173f96154d775",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/image-comparison.json": "b297bf2a5a0422e6206e5834f5b054f285a5466fa2f0b6d999de91ac8f72f063",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/gui-baseline-state.json": "ad6399e62399ca33400e26d71f149bfb0e9cf766c4ef982e0ae18ed0a3e13a73",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/gui-final-state.json": "ad6399e62399ca33400e26d71f149bfb0e9cf766c4ef982e0ae18ed0a3e13a73",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/cleanup.json": "715336f96cf476e317e71317d9d4e29ee7a4849b29041d384169fde60106c932",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/runtime-image-evidence.json": "626aee14cdbd54448036c4a140bd7ffe62d095d3cd27bb7ed7674c08ec5113e3",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/native-result.json": "5c9af3d58278bc97b9d5cc15448aeb614542109bb8e1d33f841690c6b9ba7063",
+    "lab-final-github-clock-70e64aab-attempt4/fixed/operator-api-trace.json": "7d58cf51ad9f640067226e39058eed2958fae14f5553c4094fe9cf4cd227f2ee",
+    "lab-final-github-clock-70e64aab-attempt4/live/browser-trace.json": "eeb2d452151adf20ff0bc1aab5bacf694ab56235d6f93df42da173f96154d775",
+    "lab-final-github-clock-70e64aab-attempt4/live/image-comparison.json": "0a1f315ad3966104fcf2ef0e3f71a54ac329ad3b49bc1727c47b2eab75775cd9",
+    "lab-final-github-clock-70e64aab-attempt4/live/gui-baseline-state.json": "bb925cddff45c9c5a30e832964f9f787eef732578e808b8e47cdb1fb28d2416a",
+    "lab-final-github-clock-70e64aab-attempt4/live/gui-final-state.json": "8a483dabffbbd647fc4a1923f7159a3f1a216fc227c3cda800ee64cb8d52ef8c",
+    "lab-final-github-clock-70e64aab-attempt4/live/cleanup.json": "a78c77b13c4d6b953451b18e0462126e5c5c88be49eb690105b6a54431864ec2",
+    "lab-final-github-clock-70e64aab-attempt4/live/runtime-image-evidence.json": "1e83af8388924f7730675a6da88da5d05ffda08fd1d06de4a4b51ea5c3c3545d",
+    "lab-final-github-clock-70e64aab-attempt4/live/native-result.json": "d06f3fe9561b83d86294d06ec6479378789672dbbc650d9c75e01bb28ca14ca0",
+    "lab-final-github-clock-70e64aab-attempt4/live/operator-api-trace.json": "6ba883d7f6598d469082630aa200b42094d5f956bb0b2e0ade8e91413e3c83a0",
+    "lab-final-hosted-github-clock.py": "75fe6fb29dc26939ca1d36ded0760ae19f269b1d6bb58d1e0fa43c59b5266b6e",
+    "lab-final-github-clock-70e64aab-deployment.json": "2bfc5ac9c9bedc911e771b3e3314f4b5e4d4de9cf4783e58e128343ce5cb2f2a",
+    "lab-final-github-clock-70e64aab-runtime-attestation.json": "16f923303c4728aebf632cc4e98fbd0788c5189ef33abce272d4d13b48d0f619"
   },
   "limits": [
-    "Both production workflows and fresh live/fixed hosted verification pending",
     "Historical GraphQL compatibility placeholders and exhaustive date/frontend fidelity remain outside this correction",
-    "All broader provider and sample release gates remain pending"
+    "All broader provider and sample release gates remain pending",
+    "This is bounded clock coverage, not exhaustive date, visual or mobile parity; WKS-03 remains a preserved candidate business failure."
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "deployments": {
+    "twins": {
+      "run_id": 36227764921,
+      "status": "success"
+    },
+    "runtime": {
+      "run_id": 36227764877,
+      "status": "success"
+    },
+    "serving_api_and_proxy": "published_images_and_traffic_verified"
+  },
+  "hosted": {
+    "status": "pass",
+    "live": {
+      "checks": [
+        "Scenario without clock seeds current dates",
+        "Unconfigured clock advances across real requests",
+        "Clock offset applies to new writes; seeded PR unchanged except its nested repository open-issue counts reflect the one new probe issue",
+        "Exported Scenario seed preserves live/fixed clock choice"
+      ],
+      "explicit_base_time": null,
+      "mode": "live",
+      "passed": true,
+      "probe_created_at": "2026-09-26T07:59:45.805560Z",
+      "seeded_pr_created_at": "2026-09-26T07:58:12.360843Z"
+    },
+    "fixed": {
+      "checks": [
+        "Scenario preserves explicit clock",
+        "Fixed clock remains stable",
+        "Clock offset applies to new writes; seeded PR unchanged except its nested repository open-issue counts reflect the one new probe issue",
+        "Exported Scenario seed preserves live/fixed clock choice"
+      ],
+      "explicit_base_time": "2024-03-14T12:00:00Z",
+      "mode": "fixed",
+      "passed": true,
+      "probe_created_at": "2024-03-14T12:01:30Z",
+      "seeded_pr_created_at": "2024-03-14T12:00:00Z"
+    },
+    "browser": {
+      "browser": "Chrome CUA",
+      "checks": [
+        "Live and explicit fixed PR dates displayed and survived true reload",
+        "Complete captured native state unchanged through browser reads, ignoring only logical_now"
+      ],
+      "screenshots_retained": false
+    },
+    "images": {
+      "matched": 6,
+      "total": 6
+    },
+    "teardown": "both runs confirmed torn_down"
+  },
+  "operator_attempts": [
+    {
+      "attempt": 1,
+      "outcome": "operator route error",
+      "detail": "Candidate provider /admin/state intentionally returned 404; corrected operator access to CLI-returned admin URL and proxy cookie. Teardown confirmed."
+    },
+    {
+      "attempt": 2,
+      "outcome": "operator clock assertion error",
+      "detail": "Absolute Mac/worker microclock assumption was off by 6ms; corrected to worker before/after ordering and 5s current-UTC tolerance. Teardown confirmed."
+    },
+    {
+      "attempt": 3,
+      "outcome": "operator comparison assertion error",
+      "detail": "Probe issue correctly changed nested repository issue counts by one; corrected exact comparison to allow the four derived count fields. Teardown confirmed."
+    },
+    {
+      "attempt": 4,
+      "outcome": "pass",
+      "detail": "Native semantics, Chrome dates/reload, six images, full captured state and both teardowns pass."
+    }
+  ]
 }

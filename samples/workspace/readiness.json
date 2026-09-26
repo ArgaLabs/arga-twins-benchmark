@@ -25,7 +25,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-live-clock-2026-09-26.json",
-          "sha256": "972e00c9454fc385eaac6155c264731f3ef214ed7fce5752f1dc96c3f5668adb"
+          "sha256": "874d9acd2c3e423931513a91c2df7376861ed389d8d202002e3398120edb9f73"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-states-2026-09-26.json",
+          "sha256": "d91d0bd39bc0cf32b8369079ceea53939b5d8d2df704fb0c8bfb91cb62a34a48"
         }
       ]
     },
@@ -158,6 +162,10 @@
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
           "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-viewing-mode-2026-09-26.json",
+          "sha256": "af55a0d39078839edb1f6411e0013cd55c23d5ad8feb7463f5fcad4b2e97a6da"
         }
       ]
     },
@@ -344,7 +352,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "1e5e00b40c8903b974dde03339a66a749517c3f82655fea0968dbafbf222633e"
+          "sha256": "a9dc7132980badc4dc98e538a9de1f17a5cada4f8d90d909647477eacfe02283"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -372,5 +380,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "8266b7955bb039a8947a772977a9b9e071eb8d4fb2c3476d21f5f3a0c3c8f5c9"
+  "sample_tree_sha256": "ed40d05078195ff5c5002df8c09256bd78ff7d85bc2ac6c170701f025e5def49"
 }

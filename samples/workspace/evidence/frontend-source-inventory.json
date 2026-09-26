@@ -498,138 +498,138 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1155
+              "line": 1158
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1164
+              "line": 1167
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1274
+              "line": 1277
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1366
+              "line": 1369
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1580
+              "line": 1583
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1667
+              "line": 1670
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1758
+              "line": 1761
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1873
+              "line": 1876
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2062
+              "line": 2070
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2136
+              "line": 2153
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2180
+              "line": 2201
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2222
+              "line": 2243
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2265
+              "line": 2286
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2337
+              "line": 2358
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2416
+              "line": 2437
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2458
+              "line": 2479
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2471
+              "line": 2492
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2603
+              "line": 2624
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2677
+              "line": 2698
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2907
+              "line": 2928
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2959
+              "line": 2980
             }
           ],
           "markup_expressions": [
             {
-              "line": 260,
+              "line": 263,
               "dynamic": true,
               "controls": [
                 {
@@ -686,7 +686,7 @@
               ]
             },
             {
-              "line": 355,
+              "line": 358,
               "dynamic": true,
               "controls": [
                 {
@@ -714,7 +714,7 @@
               ]
             },
             {
-              "line": 671,
+              "line": 674,
               "dynamic": true,
               "controls": [
                 {
@@ -771,7 +771,7 @@
               ]
             },
             {
-              "line": 728,
+              "line": 731,
               "dynamic": true,
               "controls": [
                 {
@@ -784,7 +784,7 @@
               ]
             },
             {
-              "line": 767,
+              "line": 770,
               "dynamic": true,
               "controls": [
                 {
@@ -842,7 +842,7 @@
               ]
             },
             {
-              "line": 1097,
+              "line": 1100,
               "dynamic": true,
               "controls": [
                 {
@@ -895,7 +895,7 @@
               ]
             },
             {
-              "line": 882,
+              "line": 885,
               "dynamic": true,
               "controls": [
                 {
@@ -929,7 +929,7 @@
               ]
             },
             {
-              "line": 1203,
+              "line": 1206,
               "dynamic": true,
               "controls": [
                 {
@@ -978,7 +978,7 @@
               ]
             },
             {
-              "line": 1245,
+              "line": 1248,
               "dynamic": true,
               "controls": [
                 {
@@ -998,7 +998,7 @@
               ]
             },
             {
-              "line": 1382,
+              "line": 1385,
               "dynamic": true,
               "controls": [
                 {
@@ -1053,7 +1053,7 @@
               ]
             },
             {
-              "line": 1454,
+              "line": 1457,
               "dynamic": true,
               "controls": [
                 {
@@ -1064,7 +1064,7 @@
               ]
             },
             {
-              "line": 1465,
+              "line": 1468,
               "dynamic": true,
               "controls": [
                 {
@@ -1084,7 +1084,7 @@
               ]
             },
             {
-              "line": 1540,
+              "line": 1543,
               "dynamic": true,
               "controls": [
                 {
@@ -1125,7 +1125,7 @@
               ]
             },
             {
-              "line": 1620,
+              "line": 1623,
               "dynamic": true,
               "controls": [
                 {
@@ -1138,7 +1138,7 @@
               ]
             },
             {
-              "line": 1627,
+              "line": 1630,
               "dynamic": true,
               "controls": [
                 {
@@ -1193,7 +1193,7 @@
               ]
             },
             {
-              "line": 1648,
+              "line": 1651,
               "dynamic": true,
               "controls": [
                 {
@@ -1206,7 +1206,7 @@
               ]
             },
             {
-              "line": 1716,
+              "line": 1719,
               "dynamic": true,
               "controls": [
                 {
@@ -1219,7 +1219,7 @@
               ]
             },
             {
-              "line": 1725,
+              "line": 1728,
               "dynamic": true,
               "controls": [
                 {
@@ -1274,7 +1274,7 @@
               ]
             },
             {
-              "line": 1778,
+              "line": 1781,
               "dynamic": true,
               "controls": [
                 {
@@ -1329,7 +1329,7 @@
               ]
             },
             {
-              "line": 1802,
+              "line": 1805,
               "dynamic": true,
               "controls": [
                 {
@@ -1356,7 +1356,7 @@
               ]
             },
             {
-              "line": 1964,
+              "line": 1972,
               "dynamic": true,
               "controls": [
                 {
@@ -1411,7 +1411,7 @@
               ]
             },
             {
-              "line": 1989,
+              "line": 1997,
               "dynamic": true,
               "controls": [
                 {
@@ -1453,7 +1453,7 @@
               ]
             },
             {
-              "line": 2374,
+              "line": 2395,
               "dynamic": true,
               "controls": [
                 {
@@ -1486,7 +1486,7 @@
               ]
             },
             {
-              "line": 2393,
+              "line": 2414,
               "dynamic": true,
               "controls": [
                 {
@@ -1506,7 +1506,7 @@
               ]
             },
             {
-              "line": 2632,
+              "line": 2653,
               "dynamic": true,
               "controls": [
                 {
@@ -1577,7 +1577,7 @@
               ]
             },
             {
-              "line": 2918,
+              "line": 2939,
               "dynamic": true,
               "controls": [
                 {
@@ -1651,7 +1651,7 @@
               ]
             },
             {
-              "line": 714,
+              "line": 717,
               "dynamic": true,
               "controls": [
                 {
@@ -1679,7 +1679,7 @@
               ]
             },
             {
-              "line": 722,
+              "line": 725,
               "dynamic": true,
               "controls": [
                 {
@@ -1707,26 +1707,13 @@
               ]
             },
             {
-              "line": 1043,
+              "line": 1046,
               "dynamic": true,
               "controls": [
                 {
                   "tag": "a",
                   "attributes": {
                     "href": "{dynamic}"
-                  },
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
-              "line": 1081,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "{dynamic}"
                   },
                   "text": "{dynamic}"
                 }
@@ -1746,7 +1733,20 @@
               ]
             },
             {
-              "line": 1181,
+              "line": 1087,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 1184,
               "dynamic": true,
               "controls": [
                 {
@@ -1759,7 +1759,7 @@
               ]
             },
             {
-              "line": 1198,
+              "line": 1201,
               "dynamic": true,
               "controls": [
                 {
@@ -1772,7 +1772,7 @@
               ]
             },
             {
-              "line": 1200,
+              "line": 1203,
               "dynamic": true,
               "controls": [
                 {
@@ -1785,7 +1785,7 @@
               ]
             },
             {
-              "line": 1232,
+              "line": 1235,
               "dynamic": true,
               "controls": [
                 {
@@ -1798,7 +1798,7 @@
               ]
             },
             {
-              "line": 1423,
+              "line": 1426,
               "dynamic": true,
               "controls": [
                 {
@@ -1811,7 +1811,7 @@
               ]
             },
             {
-              "line": 1430,
+              "line": 1433,
               "dynamic": true,
               "controls": [
                 {
@@ -1824,7 +1824,7 @@
               ]
             },
             {
-              "line": 1449,
+              "line": 1452,
               "dynamic": true,
               "controls": [
                 {
@@ -1837,7 +1837,7 @@
               ]
             },
             {
-              "line": 1623,
+              "line": 1626,
               "dynamic": true,
               "controls": [
                 {
@@ -1850,7 +1850,7 @@
               ]
             },
             {
-              "line": 1701,
+              "line": 1704,
               "dynamic": true,
               "controls": [
                 {
@@ -1863,7 +1863,7 @@
               ]
             },
             {
-              "line": 1709,
+              "line": 1712,
               "dynamic": true,
               "controls": [
                 {
@@ -1876,7 +1876,7 @@
               ]
             },
             {
-              "line": 1844,
+              "line": 1847,
               "dynamic": true,
               "controls": [
                 {
@@ -1889,7 +1889,7 @@
               ]
             },
             {
-              "line": 1950,
+              "line": 1958,
               "dynamic": true,
               "controls": [
                 {
@@ -1909,7 +1909,7 @@
               ]
             },
             {
-              "line": 2358,
+              "line": 2379,
               "dynamic": true,
               "controls": [
                 {
@@ -1922,7 +1922,7 @@
               ]
             },
             {
-              "line": 2371,
+              "line": 2392,
               "dynamic": true,
               "controls": [
                 {
@@ -1935,7 +1935,7 @@
               ]
             },
             {
-              "line": 1720,
+              "line": 1723,
               "dynamic": true,
               "controls": [
                 {
@@ -2284,60 +2284,60 @@
         },
         {
           "path": "twins/github/operations_ui.py",
-          "sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/search",
               "handler": "search_workspace",
-              "line": 91
+              "line": 92
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues",
               "handler": "issue_list",
-              "line": 136
+              "line": 137
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}",
               "handler": "issue_detail",
-              "line": 167
+              "line": 168
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/edit",
               "handler": "edit_issue",
-              "line": 188
+              "line": 189
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/comments",
               "handler": "comment",
-              "line": 199
+              "line": 200
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviewers",
               "handler": "reviewers",
-              "line": 207
+              "line": 208
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews",
               "handler": "create_review",
-              "line": 220
+              "line": 221
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews/{review_id}/{action}",
               "handler": "change_review",
-              "line": 230
+              "line": 231
             }
           ],
           "markup_expressions": [
             {
-              "line": 38,
+              "line": 39,
               "dynamic": true,
               "controls": [
                 {
@@ -2374,7 +2374,7 @@
               ]
             },
             {
-              "line": 76,
+              "line": 77,
               "dynamic": true,
               "controls": [
                 {
@@ -2439,7 +2439,7 @@
               ]
             },
             {
-              "line": 129,
+              "line": 130,
               "dynamic": true,
               "controls": [
                 {
@@ -2464,7 +2464,7 @@
               ]
             },
             {
-              "line": 152,
+              "line": 153,
               "dynamic": true,
               "controls": [
                 {
@@ -2510,7 +2510,7 @@
               ]
             },
             {
-              "line": 175,
+              "line": 176,
               "dynamic": true,
               "controls": [
                 {
@@ -2553,7 +2553,7 @@
               ]
             },
             {
-              "line": 63,
+              "line": 64,
               "dynamic": true,
               "controls": [
                 {
@@ -2610,7 +2610,7 @@
               ]
             },
             {
-              "line": 33,
+              "line": 34,
               "dynamic": true,
               "controls": [
                 {
@@ -2646,7 +2646,7 @@
               ]
             },
             {
-              "line": 71,
+              "line": 72,
               "dynamic": true,
               "controls": [
                 {
@@ -2675,7 +2675,7 @@
               ]
             },
             {
-              "line": 148,
+              "line": 149,
               "dynamic": true,
               "controls": [
                 {
@@ -2688,7 +2688,7 @@
               ]
             },
             {
-              "line": 109,
+              "line": 110,
               "dynamic": true,
               "controls": [
                 {
@@ -2701,7 +2701,7 @@
               ]
             },
             {
-              "line": 126,
+              "line": 127,
               "dynamic": true,
               "controls": [
                 {
@@ -2714,7 +2714,7 @@
               ]
             },
             {
-              "line": 157,
+              "line": 158,
               "dynamic": true,
               "controls": [
                 {
@@ -5138,11 +5138,11 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "669671463c9e5e5981bc54b4a080fb5f7fd97cdaa94bf22614f15562a71865c7",
+          "sha256": "764942ef078bd34c544a56535243d497517bdeda5407226ba7f5438b6ac2393d",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 411,
+              "line": 412,
               "dynamic": false,
               "controls": [
                 {
@@ -5640,7 +5640,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 210,
+      "markup_control_occurrences": 254,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -5735,8 +5735,314 @@
           ]
         },
         {
+          "path": "twins/google_sheets/charts_ui.py",
+          "sha256": "366a32c5a71708e450845a2de39df83e049759806e91c39eef4511f578b44fe3",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 47,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "close-chart-editor",
+                    "aria-label": "Close chart editor"
+                  },
+                  "text": "\u00d7"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "role": "tab",
+                    "id": "chart-setup-tab",
+                    "aria-controls": "chart-setup"
+                  },
+                  "text": "Setup"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "role": "tab",
+                    "id": "chart-customize-tab",
+                    "aria-controls": "chart-customize"
+                  },
+                  "text": "Customize"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "retry-chart-read",
+                    "hidden": null
+                  },
+                  "text": "Reload chart"
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "id": "chart-type"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "COLUMN"
+                  },
+                  "text": "Column chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "BAR"
+                  },
+                  "text": "Bar chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "LINE"
+                  },
+                  "text": "Line chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "AREA"
+                  },
+                  "text": "Area chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "SCATTER"
+                  },
+                  "text": "Scatter chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "PIE"
+                  },
+                  "text": "Pie chart"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "DOUGHNUT"
+                  },
+                  "text": "Doughnut chart"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-range",
+                    "aria-label": "Data range"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "chart-range-picker",
+                    "type": "button",
+                    "aria-label": "Select data range"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "id": "chart-stacking"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "NOT_STACKED"
+                  },
+                  "text": "None"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "STACKED"
+                  },
+                  "text": "Standard"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "PERCENT_STACKED"
+                  },
+                  "text": "100%"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-domain",
+                    "aria-label": "X-axis range"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "add-chart-series"
+                  },
+                  "text": "Add Series"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "id": "chart-transpose"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "id": "chart-headers"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "id": "chart-labels"
+                  }
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Chart & axis titles"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-title"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-horizontal-title"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-vertical-title"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-alt-text"
+                  }
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Legend"
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "id": "chart-legend"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "TOP_LEGEND"
+                  },
+                  "text": "Top"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "BOTTOM_LEGEND"
+                  },
+                  "text": "Bottom"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "LEFT_LEGEND"
+                  },
+                  "text": "Left"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "RIGHT_LEGEND"
+                  },
+                  "text": "Right"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "NO_LEGEND"
+                  },
+                  "text": "None"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Chart style"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "color",
+                    "id": "chart-background",
+                    "value": "#ffffff"
+                  }
+                },
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "chart-range-dialog",
+                    "aria-labelledby": "chart-range-dialog-title"
+                  }
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "chart-range-form"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "chart-range-dialog-input",
+                    "aria-label": "Range"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "cancel-chart-range"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "OK"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_sheets/clipboard_ui.py",
-          "sha256": "226dbad4f29cf52b5bf24a4f24f5df2d58471be0f94fe0b5bbc0a95b7aa67e53",
+          "sha256": "4593e44e919647f89d2e93e45c1012adf0efc79b7b6f4dd52d07606baa2e6d1a",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6280,7 +6586,7 @@
         },
         {
           "path": "twins/google_sheets/grid_format_ui.py",
-          "sha256": "547a0b02b7537515a0a7481fb2939def1e8892816b571baf8123608a9262907e",
+          "sha256": "3c937c76cdfba2612ef37aac2ae913842ac33afca124b67457bf3e3e05297916",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6547,6 +6853,39 @@
                     "aria-label": "Clear formatting"
                   },
                   "text": "Clear format"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_sheets/history_ui.py",
+          "sha256": "54911a8f369392028c8130088fe8c388832a4e11458d64c63ff14ec5cdd603a5",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 3,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-undo",
+                    "aria-label": "Undo",
+                    "disabled": null
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-redo",
+                    "aria-label": "Redo",
+                    "disabled": null
+                  },
+                  "text": ""
                 }
               ]
             }
@@ -6914,7 +7253,7 @@
         },
         {
           "path": "twins/google_sheets/protection_warning_ui.py",
-          "sha256": "f85a0e884afb06eb2c7c17dcda1329d60125f763baddad0dcde59a88b4ed29d2",
+          "sha256": "4ba00c13d77efd62e3e7fdcb96bde13288be6d4a63d2833f451a79e87389a66b",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -7030,11 +7369,11 @@
         },
         {
           "path": "twins/google_sheets/ui.py",
-          "sha256": "42549e9862cefbc8d8d1033cbc3aa2f5172d6834f92cdc12462980733fdd8123",
+          "sha256": "6714997f31b630f3b5c8ed11f0cb562dd375b072627faf4a2a03e0125c6fc529",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 300,
+              "line": 304,
               "dynamic": false,
               "controls": [
                 {
@@ -9051,8 +9390,8 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 29,
-      "markup_control_occurrences": 171,
+      "route_candidate_count": 31,
+      "markup_control_occurrences": 176,
       "files": [
         {
           "path": "twins/linear/comment_ui.py",
@@ -9222,120 +9561,126 @@
         },
         {
           "path": "twins/linear/frontend.py",
-          "sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 99
+              "line": 103
             },
             {
               "method": "GET",
               "path": "/new",
               "handler": "new_issue",
-              "line": 143
+              "line": 157
             },
             {
               "method": "POST",
               "path": "/ui/issues",
               "handler": "create_issue",
-              "line": 156
+              "line": 170
             },
             {
               "method": "GET",
               "path": "/issue/{identifier}",
               "handler": "detail",
-              "line": 168
+              "line": 182
             },
             {
               "method": "GET",
               "path": "/profile/{user_id}",
               "handler": "profile",
-              "line": 198
+              "line": 212
             },
             {
               "method": "GET",
               "path": "/document/{document_id}",
               "handler": "document_detail",
-              "line": 215
+              "line": 229
             },
             {
               "method": "GET",
               "path": "/{workspace}/project/{reference}",
               "handler": "native_project",
-              "line": 237
+              "line": 251
+            },
+            {
+              "method": "GET",
+              "path": "/{workspace}/my-issues/subscribed",
+              "handler": "native_subscribed",
+              "line": 259
             },
             {
               "method": "GET",
               "path": "/{workspace}/document/{reference}",
               "handler": "native_document",
-              "line": 245
+              "line": 264
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}",
               "handler": "native_issue",
-              "line": 254
+              "line": 273
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}/{title}",
               "handler": "native_issue",
-              "line": 254
+              "line": 273
             },
             {
               "method": "GET",
               "path": "/users/{user_id}",
               "handler": "native_user",
-              "line": 259
+              "line": 278
             },
             {
               "method": "GET",
               "path": "/{workspace}/profiles/{name}",
               "handler": "native_profile",
-              "line": 263
+              "line": 282
             },
             {
               "method": "POST",
               "path": "/ui/documents/{document_id}",
               "handler": "update_document",
-              "line": 280
+              "line": 299
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}",
               "handler": "update",
-              "line": 300
+              "line": 319
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/comments",
               "handler": "comment",
-              "line": 329
+              "line": 348
             },
             {
               "method": "POST",
               "path": "/ui/comments/{comment_id}",
               "handler": "edit_comment",
-              "line": 349
+              "line": 368
             },
             {
               "method": "POST",
               "path": "/ui/comments/{comment_id}/{action}",
               "handler": "resolve_comment",
-              "line": 371
+              "line": 390
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/{action}",
               "handler": "archive",
-              "line": 388
+              "line": 409
             }
           ],
           "markup_expressions": [
             {
-              "line": 76,
+              "line": 80,
               "dynamic": true,
               "controls": [
                 {
@@ -9348,7 +9693,7 @@
               ]
             },
             {
-              "line": 62,
+              "line": 66,
               "dynamic": true,
               "controls": [
                 {
@@ -9371,6 +9716,13 @@
                     "href": "/?mine=1"
                   },
                   "text": "My issues"
+                },
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/?subscribed=1"
+                  },
+                  "text": "Subscribed"
                 },
                 {
                   "tag": "a",
@@ -9416,7 +9768,7 @@
               ]
             },
             {
-              "line": 181,
+              "line": 195,
               "dynamic": true,
               "controls": [
                 {
@@ -9491,7 +9843,7 @@
               ]
             },
             {
-              "line": 58,
+              "line": 62,
               "dynamic": true,
               "controls": [
                 {
@@ -9504,7 +9856,7 @@
               ]
             },
             {
-              "line": 59,
+              "line": 63,
               "dynamic": true,
               "controls": [
                 {
@@ -9517,7 +9869,7 @@
               ]
             },
             {
-              "line": 148,
+              "line": 162,
               "dynamic": true,
               "controls": [
                 {
@@ -9554,7 +9906,7 @@
               ]
             },
             {
-              "line": 224,
+              "line": 238,
               "dynamic": true,
               "controls": [
                 {
@@ -9587,7 +9939,7 @@
               ]
             },
             {
-              "line": 77,
+              "line": 81,
               "dynamic": true,
               "controls": [
                 {
@@ -9600,7 +9952,7 @@
               ]
             },
             {
-              "line": 122,
+              "line": 134,
               "dynamic": true,
               "controls": [
                 {
@@ -9613,7 +9965,7 @@
               ]
             },
             {
-              "line": 176,
+              "line": 190,
               "dynamic": true,
               "controls": [
                 {
@@ -9626,7 +9978,7 @@
               ]
             },
             {
-              "line": 204,
+              "line": 218,
               "dynamic": true,
               "controls": [
                 {
@@ -9639,7 +9991,7 @@
               ]
             },
             {
-              "line": 134,
+              "line": 148,
               "dynamic": true,
               "controls": [
                 {
@@ -9655,43 +10007,48 @@
         },
         {
           "path": "twins/linear/inbox_ui.py",
-          "sha256": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+          "sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/ui/inbox/bulk",
               "handler": "bulk_action",
-              "line": 284
+              "line": 295
             },
             {
               "method": "POST",
               "path": "/ui/inbox/{notification_id}/{action}",
               "handler": "notification_action",
-              "line": 314
+              "line": 325
             }
           ],
           "markup_expressions": [
             {
-              "line": 221,
+              "line": 232,
               "dynamic": true,
               "controls": [
                 {
-                  "tag": "summary",
+                  "tag": "button",
                   "attributes": {
-                    "aria-label": "Display options"
+                    "type": "button",
+                    "aria-label": "Display options",
+                    "aria-controls": "inbox-display"
                   },
                   "text": "Display"
                 },
                 {
                   "tag": "form",
                   "attributes": {
-                    "action": "/inbox"
+                    "id": "inbox-display",
+                    "action": "/inbox",
+                    "hidden": null
                   }
                 },
                 {
                   "tag": "select",
                   "attributes": {
-                    "name": "ordering"
+                    "name": "ordering",
+                    "aria-label": "Ordering"
                   }
                 },
                 {
@@ -9718,13 +10075,15 @@
                 },
                 {
                   "tag": "button",
-                  "attributes": {},
+                  "attributes": {
+                    "aria-label": "Apply display options"
+                  },
                   "text": "Apply"
                 }
               ]
             },
             {
-              "line": 264,
+              "line": 275,
               "dynamic": true,
               "controls": [
                 {
@@ -9777,13 +10136,15 @@
               ]
             },
             {
-              "line": 205,
+              "line": 216,
               "dynamic": true,
               "controls": [
                 {
-                  "tag": "summary",
+                  "tag": "button",
                   "attributes": {
-                    "aria-label": "Notification actions"
+                    "type": "button",
+                    "aria-label": "Notification actions",
+                    "aria-controls": "inbox-actions"
                   },
                   "text": "\u2022\u2022\u2022"
                 },
@@ -9798,14 +10159,15 @@
                   "tag": "button",
                   "attributes": {
                     "name": "action",
-                    "value": "read"
+                    "value": "read",
+                    "aria-label": "Mark all as read"
                   },
                   "text": "Mark all as read"
                 }
               ]
             },
             {
-              "line": 260,
+              "line": 271,
               "dynamic": true,
               "controls": [
                 {
@@ -9825,7 +10187,7 @@
               ]
             },
             {
-              "line": 240,
+              "line": 251,
               "dynamic": true,
               "controls": [
                 {
@@ -9841,13 +10203,18 @@
                   "text": "{dynamic}"
                 },
                 {
-                  "tag": "summary",
-                  "attributes": {},
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "aria-controls": "inbox-snooze"
+                  },
                   "text": "Snooze"
                 },
                 {
                   "tag": "form",
                   "attributes": {
+                    "id": "inbox-snooze",
+                    "hidden": null,
                     "method": "post",
                     "action": "/ui/inbox/{dynamic}/snooze"
                   }
@@ -9856,21 +10223,24 @@
                   "tag": "input",
                   "attributes": {
                     "type": "datetime-local",
-                    "name": "custom"
+                    "name": "custom",
+                    "aria-label": "Custom date and time"
                   }
                 },
                 {
                   "tag": "button",
                   "attributes": {
                     "name": "when",
-                    "value": "custom"
+                    "value": "custom",
+                    "aria-label": "Snooze notification"
                   },
                   "text": "Snooze notification"
                 },
                 {
                   "tag": "button",
                   "attributes": {
-                    "type": "button"
+                    "type": "button",
+                    "aria-label": "Cancel snooze"
                   },
                   "text": "Cancel"
                 },
@@ -9889,7 +10259,7 @@
               ]
             },
             {
-              "line": 197,
+              "line": 208,
               "dynamic": true,
               "controls": [
                 {
@@ -9915,7 +10285,7 @@
               ]
             },
             {
-              "line": 201,
+              "line": 212,
               "dynamic": true,
               "controls": [
                 {
@@ -9928,7 +10298,7 @@
               ]
             },
             {
-              "line": 223,
+              "line": 234,
               "dynamic": true,
               "controls": [
                 {
@@ -9936,26 +10306,28 @@
                   "attributes": {
                     "type": "checkbox",
                     "name": "{dynamic}",
+                    "aria-label": "{dynamic}",
                     "value": "true"
                   }
                 }
               ]
             },
             {
-              "line": 208,
+              "line": 219,
               "dynamic": true,
               "controls": [
                 {
                   "tag": "button",
                   "attributes": {
-                    "type": "button"
+                    "type": "button",
+                    "aria-label": "{dynamic}"
                   },
                   "text": "{dynamic}"
                 }
               ]
             },
             {
-              "line": 253,
+              "line": 264,
               "dynamic": true,
               "controls": [
                 {
@@ -9973,7 +10345,7 @@
               ]
             },
             {
-              "line": 243,
+              "line": 254,
               "dynamic": true,
               "controls": [
                 {
@@ -10589,6 +10961,62 @@
                     "type": "button"
                   },
                   "text": "{dynamic}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/linear/subscription_ui.py",
+          "sha256": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
+          "frontend_route_candidates": [
+            {
+              "method": "POST",
+              "path": "/ui/issues/{issue_id}/subscriptions",
+              "handler": "update_subscription",
+              "line": 135
+            }
+          ],
+          "markup_expressions": [
+            {
+              "line": 54,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "aria-label": "{dynamic} issue"
+                  },
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "aria-label": "Change subscribers"
+                  },
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "search",
+                    "aria-label": "Change subscribers"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 38,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "aria-label": "{dynamic}"
+                  }
                 }
               ]
             }
@@ -11866,132 +12294,132 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+      "sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 761
+          "line": 772
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1047
+          "line": 1062
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1073
+          "line": 1088
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1238
+          "line": 1253
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1749
+          "line": 1764
         },
         {
           "method": "GET",
           "path": "/document/d/{document_id}/edit",
           "handler": "docs_editor",
-          "line": 569
+          "line": 573
         },
         {
           "method": "GET",
           "path": "/spreadsheets/d/{spreadsheet_id}/edit",
           "handler": "sheets_editor",
-          "line": 590
+          "line": 595
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1286
+          "line": 1301
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1321
+          "line": 1336
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1366
+          "line": 1381
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1377
+          "line": 1392
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1398
+          "line": 1413
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1418
+          "line": 1433
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1437
+          "line": 1452
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1448
+          "line": 1463
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1460
+          "line": 1475
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1478
+          "line": 1493
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1489
+          "line": 1504
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1507
+          "line": 1522
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1531
+          "line": 1546
         }
       ],
       "markup_expressions": [
         {
-          "line": 823,
+          "line": 838,
           "dynamic": false,
           "controls": [
             {
@@ -12004,7 +12432,7 @@
           ]
         },
         {
-          "line": 939,
+          "line": 954,
           "dynamic": true,
           "controls": [
             {
@@ -12069,7 +12497,7 @@
           ]
         },
         {
-          "line": 851,
+          "line": 866,
           "dynamic": true,
           "controls": [
             {
@@ -12080,7 +12508,7 @@
           ]
         },
         {
-          "line": 865,
+          "line": 880,
           "dynamic": false,
           "controls": [
             {
@@ -12093,7 +12521,7 @@
           ]
         },
         {
-          "line": 910,
+          "line": 925,
           "dynamic": true,
           "controls": [
             {
@@ -12104,7 +12532,7 @@
           ]
         },
         {
-          "line": 846,
+          "line": 861,
           "dynamic": true,
           "controls": [
             {
@@ -12117,7 +12545,7 @@
           ]
         },
         {
-          "line": 848,
+          "line": 863,
           "dynamic": true,
           "controls": [
             {
@@ -12130,7 +12558,7 @@
           ]
         },
         {
-          "line": 887,
+          "line": 902,
           "dynamic": true,
           "controls": [
             {
@@ -12143,7 +12571,7 @@
           ]
         },
         {
-          "line": 891,
+          "line": 906,
           "dynamic": true,
           "controls": [
             {
@@ -12156,7 +12584,7 @@
           ]
         },
         {
-          "line": 901,
+          "line": 916,
           "dynamic": true,
           "controls": [
             {
@@ -12186,7 +12614,7 @@
           ]
         },
         {
-          "line": 929,
+          "line": 944,
           "dynamic": true,
           "controls": [
             {
@@ -12199,7 +12627,7 @@
           ]
         },
         {
-          "line": 934,
+          "line": 949,
           "dynamic": true,
           "controls": [
             {
@@ -12213,6 +12641,5 @@
         }
       ]
     }
-  ],
-  "source_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3"
+  ]
 }
