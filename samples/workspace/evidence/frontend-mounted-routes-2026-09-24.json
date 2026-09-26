@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-26T12:10:36.542790+00:00",
-  "source_revision": "f40217dd17f7bdc6509015f37a9d5249eff868ac",
+  "observed_at": "2026-09-26T12:49:07.826509+00:00",
+  "source_revision": "ea892cd71bb130c7cf111e91b232a6ca79d2805d",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
@@ -202,8 +202,8 @@
           ],
           "handler": "register_routes.<locals>.actions",
           "source": "twins/github/actions_ui.py",
-          "line": 25,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 35,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -220,8 +220,8 @@
           ],
           "handler": "register_routes.<locals>.artifact_delete",
           "source": "twins/github/actions_ui.py",
-          "line": 112,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 136,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -238,8 +238,8 @@
           ],
           "handler": "register_routes.<locals>.artifact_download",
           "source": "twins/github/actions_ui.py",
-          "line": 108,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 132,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -256,8 +256,8 @@
           ],
           "handler": "register_routes.<locals>.run_detail",
           "source": "twins/github/actions_ui.py",
-          "line": 48,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 61,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -274,8 +274,8 @@
           ],
           "handler": "register_routes.<locals>.run_action",
           "source": "twins/github/actions_ui.py",
-          "line": 135,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 159,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -292,8 +292,8 @@
           ],
           "handler": "register_routes.<locals>.workflow_action",
           "source": "twins/github/actions_ui.py",
-          "line": 118,
-          "source_sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "line": 142,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "tags": [],
           "checks": {
             "reference": "pending",

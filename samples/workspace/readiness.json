@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
@@ -37,7 +37,15 @@
         },
         {
           "path": "samples/workspace/evidence/github-actions-access-2026-09-26.json",
-          "sha256": "d1e230fa1fe25ccad1bd920d2f3ac07689c46bff996d5a8d6b92f28fa4a36436"
+          "sha256": "9fc8806086cd2936822751ab9f949ad925b2068a8066dc8e15c4a64388bd74f2"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-controls-2026-09-26.json",
+          "sha256": "f3013896f833f22c0380044b0a82a4dfc98cc501ea9e4f1f8d82babc89e236bb"
+        },
+        {
+          "path": "samples/workspace/evidence/github-app-scenarios-2026-09-26.json",
+          "sha256": "0cc2626f9c0eb98e555b601537b33b79589ad4fdb5d9192b4b1bcbba1adfc893"
         }
       ]
     },
@@ -48,7 +56,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
@@ -99,7 +107,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
@@ -122,7 +130,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
@@ -189,7 +197,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
@@ -220,7 +228,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
@@ -239,7 +247,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
@@ -266,7 +274,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
+          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
         },
         {
           "path": "samples/workspace/evidence/stripe-assistant-reference-2026-09-26.json",
@@ -412,7 +420,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "45003ec0db3536257d47af8a10d1790298e5f8b737cb3d451817fb20dab7fefc"
+          "sha256": "c6e5d232b92df30b934cf7c9c674a882e98a265be5411f48b8c179b48be09846"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -440,5 +448,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "360cd5cf14dd4a2521a25d6845c2296fae07b17bd4facad130c5cfbc017da552"
+  "sample_tree_sha256": "3ebe0c231d2a760c1b07b25287bc678d78ccd4ed563f9043534f5e962caef2d1"
 }

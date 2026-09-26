@@ -31,84 +31,48 @@
       "files": [
         {
           "path": "twins/github/actions_ui.py",
-          "sha256": "e8d77ee694a41a52c668132088821bbbb6f26834d1e8f92b3f9cb0ac1a270e77",
+          "sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions",
               "handler": "actions",
-              "line": 26
+              "line": 36
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}",
               "handler": "run_detail",
-              "line": 49
+              "line": 62
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download",
               "handler": "artifact_download",
-              "line": 109
+              "line": 133
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/delete",
               "handler": "artifact_delete",
-              "line": 113
+              "line": 137
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/workflows/{workflow_id}/{action}",
               "handler": "workflow_action",
-              "line": 119
+              "line": 143
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}/{action}",
               "handler": "run_action",
-              "line": 136
+              "line": 160
             }
           ],
           "markup_expressions": [
             {
-              "line": 34,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "form",
-                  "attributes": {
-                    "method": "post",
-                    "action": "{dynamic}/{dynamic}"
-                  }
-                },
-                {
-                  "tag": "button",
-                  "attributes": {},
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
-              "line": 55,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "form",
-                  "attributes": {
-                    "method": "post",
-                    "action": "{dynamic}/{dynamic}"
-                  }
-                },
-                {
-                  "tag": "button",
-                  "attributes": {},
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
-              "line": 22,
+              "line": 32,
               "dynamic": true,
               "controls": [
                 {
@@ -156,7 +120,25 @@
               ]
             },
             {
-              "line": 40,
+              "line": 47,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "{dynamic}/{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 53,
               "dynamic": true,
               "controls": [
                 {
@@ -186,7 +168,49 @@
               ]
             },
             {
-              "line": 98,
+              "line": 72,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "{dynamic}/{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 56,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/_ui/repos/{dynamic}/actions/runs/{dynamic}"
+                  },
+                  "text": "{dynamic} #{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 81,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "View logs"
+                }
+              ]
+            },
+            {
+              "line": 117,
               "dynamic": true,
               "controls": [
                 {
@@ -209,31 +233,20 @@
               ]
             },
             {
-              "line": 43,
+              "line": 50,
               "dynamic": true,
               "controls": [
                 {
-                  "tag": "a",
+                  "tag": "option",
                   "attributes": {
-                    "href": "/_ui/repos/{dynamic}/actions/runs/{dynamic}"
+                    "value": "{dynamic}"
                   },
-                  "text": "{dynamic} #{dynamic}"
+                  "text": "{dynamic}"
                 }
               ]
             },
             {
-              "line": 64,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "summary",
-                  "attributes": {},
-                  "text": "View logs"
-                }
-              ]
-            },
-            {
-              "line": 95,
+              "line": 112,
               "dynamic": true,
               "controls": [
                 {
@@ -241,19 +254,6 @@
                   "attributes": {
                     "href": "{dynamic}/download",
                     "aria-label": "Download {dynamic}"
-                  },
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
-              "line": 37,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "{dynamic}"
                   },
                   "text": "{dynamic}"
                 }
@@ -12697,5 +12697,7 @@
         }
       ]
     }
-  ]
+  ],
+  "source_revision": "ea892cd71bb130c7cf111e91b232a6ca79d2805d",
+  "generator_sha256": "d0254ce7fe82dfcfc36af4323916b633bed56df12dd96aa5f18d7a84325fe290"
 }

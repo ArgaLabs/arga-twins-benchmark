@@ -22,5 +22,15 @@
     "Single authenticated owner account; no live read-only role comparison",
     "No error/cancellation/write outcome reference",
     "Not an exhaustive route/menu inventory; no native keyboard/focus or touch claim"
-  ]
+  ],
+  "confirmation_followup": {
+    "status": "native_confirmation_dismissal_blocked_by_locked_host",
+    "prompt": "Are you sure you want to delete all logs for this run?",
+    "confirmed": false,
+    "dismiss_attempt": "Chrome getJsDialog timed out in focus emulation; close tab also timed out",
+    "real_logs_endpoint_still_available": true,
+    "reference_tab": "430123043",
+    "user_handoff": "Cancel confirmation and unlock Mac; no acceptance attempted",
+    "source": "https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs"
+  }
 }
