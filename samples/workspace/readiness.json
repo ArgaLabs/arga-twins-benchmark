@@ -95,6 +95,10 @@
         {
           "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
           "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-warning-close-2026-09-26.json",
+          "sha256": "a2954e1de0daf612053db63fc31f40f5e48ec7b983de3d9848330990428eec29"
         }
       ]
     },
@@ -155,7 +159,11 @@
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
-          "sha256": "12f1692d91e295106a9ad0c2a8650eb620e31f87767c9ab716beb750b5ef2341"
+          "sha256": "835fcf96de9cb7fe159ee8dc01c15a96a759b3e0f5c1e3d95ba3382922b9c8bf"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
+          "sha256": "60d0230112701dc7e1418b5c33064e92e7acc2a6d7bf43165b1b36278fff2fa2"
         }
       ]
     },
@@ -304,5 +312,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "5f5276f01109627847834aadc7c07308d242e8aacb88542978a1ce1b6e36363c"
+  "sample_tree_sha256": "8dfb610f91734a0a9d4b2d38b2a53ebf89c141a9b239bf605a77a9bdb89cd88b"
 }

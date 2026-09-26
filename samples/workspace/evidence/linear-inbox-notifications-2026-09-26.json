@@ -1,0 +1,91 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1172",
+  "source_head": "079c657d9812589a0b59d114e4c87f51ae67ac40",
+  "status": "local_native_desktop_and_390px_pass_ci_and_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Recipient-scoped native notifications and Inbox read/unread/snooze/archive actions",
+    "Transactional bulk actions preserve business state on native or concurrent failures",
+    "Assignment/completion/comment/thread and edited-mention delivery without self-notifications",
+    "Read/write scope includes issue/comment creation without expanding narrow scopes"
+  ],
+  "tests": {
+    "linear_passed": 270,
+    "warnings": 3,
+    "make_fix": "pass",
+    "independent_source_review": "Final six archive/read false, null and unapplied-success cases preserve state; valid retries succeed. Source/API-only approval."
+  },
+  "source_files": {
+    "twins/linear/README.md": "04c38b9f557ec1fa4fb39fc6f4b94d0b924c227639d407f6c0d0e1eb0dad54d6",
+    "twins/linear/comment_ui.py": "aecf6ce0c1e2ddb5429c4661fb9af9e5a77fe8c97594c5ac8e8aefec3427ffc7",
+    "twins/linear/config.py": "22656fe94ab4597a61d289d8ccf6ccb579e214084bc85cd1cd810fd6b30d8b7a",
+    "twins/linear/frontend.py": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+    "twins/linear/graphql/resolvers.py": "8114729455304f4be608df90dcb453f7dad8b80476c4d9b331a7ab6dbd4689e1",
+    "twins/linear/inbox_ui.py": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+    "twins/linear/models.py": "ba1c600c569eb532b2a69e0e8a3eae2b32d3a60da74d0764963881aa0ffb8619",
+    "twins/linear/notifications.py": "707e9fa57f74e052f263b1781dfbfb202618c08ce1e26d727c021a32010c9f0a",
+    "twins/linear/scopes.py": "7143eca7d1181311a0defd48d5045b9225d81566db77b7879d577c80084cdd7d",
+    "twins/linear/store.py": "43d0f68ecfde153d0c237d89d9bd5d173ed45894447a0dae982637c63d332728",
+    "twins/tests/test_linear_notifications.py": "45cf0a77ac52788d480d8e3ea6d4bf790a9aad2b00f85428479b45f4a46cc1ac"
+  },
+  "local_desktop": {
+    "status": "pass",
+    "checks": [
+      "Delete all confirmation canceled with complete native state unchanged",
+      "Opened notification and toggled read/unread",
+      "One-hour snooze hides only the target and decrements unread count",
+      "Exact native state permits target notification and sync_id only; independent/foreign notification and every other business resource unchanged"
+    ],
+    "visual_correction": "Custom datetime input overflow observed; corrected before final desktop/mobile confirmation",
+    "screenshots_retained": false
+  },
+  "local_confirmation": {
+    "status": "pass",
+    "desktop": [
+      "snooze custom date field fits popover",
+      "Cancel closes snooze without submitting"
+    ],
+    "mobile_viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile": [
+      "open details",
+      "one-hour snooze",
+      "show snoozed via Display",
+      "snoozed view retained on reload",
+      "unsnooze",
+      "back to list",
+      "archive selected notification",
+      "reload retains archive"
+    ],
+    "native_state": {
+      "only_selected_notification_read_and_archive_changed": true,
+      "all_issues_and_other_resources_unchanged": true,
+      "other_recipient_and_independent_notification_unchanged": true
+    },
+    "capture_limit": "Browser capture scale became stale after navigation; reset/set restored the same requested viewport. No physical touch test or exhaustive visual approval. No screenshots retained.",
+    "viewport_restored": true,
+    "source_hashes": {
+      "baseline.json": "4a738dc54d23891e4ba210fd35c771b57549e4a891101f4e07c5d78375ee58d6",
+      "final.json": "cf4ac1700e7e362d5195f7dafe857d0f4392bdfbb401cc96d804d5a2c0b58de3"
+    }
+  },
+  "artifacts": {
+    "/tmp/lab-linear-inbox-all-tests.log": "9268c512f24a10aa8ee0db1f0916ce85804d26dea2d780d74f811a5a1145a45b",
+    "/tmp/lab-linear-inbox-makefix.log": "a9dcbaa1e0ade040a9ac2106ce7e3b7e92cde5e21e9e980ce4b04eb47a59d1a1"
+  },
+  "limits": [
+    "CI, deployment, fresh hosted native/browser and image checks pending",
+    "Project notifications, priority/grouping, reminders, manual subscriptions, full settings and external email/push/Slack delivery remain open",
+    "Private-team/workspace permissions, realtime, uploads and AI remain open",
+    "Selected desktop/390px controls only; no exhaustive visual or physical-touch approval",
+    "Full eight-provider audit and sample release including WKS-03 remain open"
+  ],
+  "screenshots_retained": false
+}
