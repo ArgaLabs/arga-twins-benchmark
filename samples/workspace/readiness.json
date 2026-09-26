@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
@@ -45,7 +45,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-app-scenarios-2026-09-26.json",
-          "sha256": "0cc2626f9c0eb98e555b601537b33b79589ad4fdb5d9192b4b1bcbba1adfc893"
+          "sha256": "91a66af05657153d5a44ae7eb55d8d14dc78a1527b30d8af58a4748d0635598a"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-log-controls-2026-09-26.json",
+          "sha256": "239755d8855c55aaf6841229ee2f85a0761aae2d5413c57543baa19e40c1ed6d"
         }
       ]
     },
@@ -56,7 +60,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
@@ -107,7 +111,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
@@ -130,7 +134,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
@@ -197,7 +201,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
@@ -228,7 +232,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
@@ -247,7 +251,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
@@ -274,7 +278,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "469ed25e39744a8f56029b4dc46221f55eb4280b1a0b10d272861f590a5d700c"
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
         },
         {
           "path": "samples/workspace/evidence/stripe-assistant-reference-2026-09-26.json",
@@ -420,7 +424,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "c6e5d232b92df30b934cf7c9c674a882e98a265be5411f48b8c179b48be09846"
+          "sha256": "230536ddf0de37d6a269622dcd6699fbd9dd50ef27ddeef85f3a90fa25c9092f"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -448,5 +452,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "3ebe0c231d2a760c1b07b25287bc678d78ccd4ed563f9043534f5e962caef2d1"
+  "sample_tree_sha256": "da27231dfb7cbddd8eb959ed7d652d75bc981fbf57c2c81cc5720a07fbd21171"
 }

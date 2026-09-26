@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-26T12:49:07.826509+00:00",
-  "source_revision": "ea892cd71bb130c7cf111e91b232a6ca79d2805d",
+  "observed_at": "2026-09-26T13:02:37.509847+00:00",
+  "source_revision": "a02ad70f51175f7cf34eda75942b008b3c68fb12",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
