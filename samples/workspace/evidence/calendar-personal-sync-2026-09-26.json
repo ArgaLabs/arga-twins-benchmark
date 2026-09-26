@@ -1,0 +1,55 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1191",
+  "source_head": "e1aebfa3b49184de17b121209b7021e03dac6a08",
+  "status": "local_pass_ci_pending",
+  "release_allowed": false,
+  "scope": [
+    "Signed shared-event incremental cursors bound to account, owner, calendar and effective role",
+    "Own personal changes and shared revisions appear in delta reads; other users personal reminder-only edits do not",
+    "Final-page cursor, tombstones, unchanged incremental reads and query/cursor rejection without mutation",
+    "Subscriber-owned event-watch registration and stop including reader ACL; matching channel IDs remain isolated",
+    "Personal events notify actor watches, shared changes notify authorized subscribers, revoked/stopped/paused/expired channels do not dispatch",
+    "Actual local HTTP callback headers, empty bodies and delivery completion are verified"
+  ],
+  "tests": {
+    "integrated_calendar_workspace_mcp_fidelity_export_generator_passed": 473,
+    "focused_cases_passed": 18,
+    "original_failures_reproduced": 5,
+    "additional_expired_channel_failure_reproduced": 1,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "references": [
+    "https://developers.google.com/workspace/calendar/api/guides/sync",
+    "https://developers.google.com/workspace/calendar/api/guides/push",
+    "https://developers.google.com/workspace/calendar/api/v3/reference/events"
+  ],
+  "source_files": {
+    "twins/google_calendar/store.py": "4916b940499a9b321d4bc525dd364335065c6ae07b53457c9a7b78233cbde07c",
+    "twins/google_calendar/sharing.py": "f8aa5f96a7178d6713f81d83cf471151a48ec0e0b6f48d3a4e8072d5eee4fe44",
+    "twins/google_calendar/README.md": "c8d856b9ec561799e10f15392058043317c7794e0c64ccb817f1fbd1e7d10c3c",
+    "twins/tests/test_google_calendar_personal_sync.py": "16c4a37bf77abda5b0b9e6df2a0edebdef5d8b3fb37a1b9237289ef8b55c0817"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-personal-sync-red.log": "8a2f2ea8c3558b674b6437789de415106db0a5ae05fef56dffd14b01b048b78a",
+    "lab-calendar-personal-sync-green.log": "ab5b39c6a78229e167431b954fff528d316e0901551404c7b0d5c2749b52ffe6",
+    "lab-calendar-personal-sync-expanded.log": "29905cf73c51dff03131ab015b112692920099fa7b3296d8fd0975c30bd7378d",
+    "lab-calendar-personal-sync-pagination.log": "b1306aa998ac317471b8b89c6d51db31bbe94ea85566b6807cfe72cab6f874a6",
+    "lab-calendar-personal-sync-http.log": "dbc1e476b69f3953f16f342d026b022f94144142026c78c6b777020b5db96d1b",
+    "lab-calendar-personal-sync-make-fix-final.log": "109349cd78cc0295333649ac001c908a996209a24bf2f28f0b792e94732ad4f2",
+    "lab-calendar-personal-sync-final.log": "602e20d90ee062921e7df01299e2f452b385732eb6e972a3258066d195758322"
+  },
+  "limits": [
+    "Exact-head CI, deployment and fresh hosted verification pending",
+    "Earlier shared-calendar sync tokens receive 410/full-sync after upgrade",
+    "Initial channel sync messages, requested expiration/renewal, replay-time access checks and stable pagination during concurrent writes remain open",
+    "Subscriber Scenario export/reseed, reader-only personal reminder edits, full preference move/delete lifecycle and timed reminders remain open",
+    "No exhaustive frontend, visual/mobile/touch, AI/collaboration or sample release claim"
+  ],
+  "screenshots_retained": false
+}
