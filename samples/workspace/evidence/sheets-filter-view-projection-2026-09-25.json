@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1161",
   "head": "555b14a35b83d725519217623f4273b3af073812",
-  "status": "deployed_hosted_native_and_ten_container_pass_gui_blocked",
+  "status": "deployed_hosted_native_ten_container_and_bounded_desktop_390px_pass",
   "scope": [
     "Read-only view grid projection with native-row formula values and translated displayed formulas",
     "View-specific reference errors preserve IFERROR and COUNTA behavior",
@@ -170,7 +170,7 @@
   },
   "reference_evidence": "sheets-filter-views-colors-2026-09-24.json#/provider_reference",
   "limits": [
-    "#1161 merged as c4f07362 after passing full CI. Both production workflows, serving API/proxy observations, all ten fresh worker images and hosted native view checks pass. Hosted GUI checks remain blocked by locked Mac.",
+    "#1161 merged as c4f07362 after full CI. Production workflows, serving API/proxy observations, all ten fresh worker images and hosted native checks pass. Fresh hosted desktop/390px formula, copy, duplicate read-recovery, rename, temporary Save/Exit, failure/retry and reload now pass within the recorded scope.",
     "Cut/reference rewrites, hidden-row clipboard behavior, snapshot semantics, mapped formatting/validation/structural writes, merged-cell projection, actor-aware protected-range enforcement and remaining named/dynamic references remain unfinished.",
     "Unsupported native mutation batches are guarded while a view is active; this is an explicit incomplete feature boundary, not complete control coverage.",
     "Selected temporary-view naming/Save/Exit desktop and390px checks now pass. Complete permission/error/cancellation paths, cross-sheet provider comparison and remaining menu details remain incomplete.",
@@ -814,6 +814,83 @@
         "before": "2026-09-25T20:25:45.205Z",
         "after": "2026-09-25T20:33:38.508Z"
       }
+    }
+  },
+  "hosted_gui_2026_09_26": {
+    "status": "pass_with_explicit_tool_attempts_and_remaining_scope",
+    "date": "2026-09-26",
+    "served_release": "d32c283000b42a01ef6278f80209c1bc9afffb21",
+    "browser": "Google Chrome through CUA",
+    "viewport": [
+      390,
+      844
+    ],
+    "native_checks": {
+      "case_qualified_projection": true,
+      "mapped_write_source_row": true,
+      "readonly_preview": true,
+      "restored_workspace_except_revision": true,
+      "stale_revision_rejection_atomic": true,
+      "status": "pass",
+      "strict_rejection_atomic": true
+    },
+    "passed": [
+      "Opening sorted saved view is read-only across all eight complete native provider snapshots.",
+      "Strict rejection of 200 at visible C2 restores 30 without changing any native provider state.",
+      "Visible C2=45 writes native C3; visible D2 formula =C2*2 writes native D3 =C3*2 and displays 90.",
+      "Edit Copy then Paste translates displayed D2 formula into native F2 =E2*2. Native Chrome Command-C copies selected numeric value 45.",
+      "Injected post-commit preview503 creates exactly one duplicate and restores original active view; menu recovery opens saved copy.",
+      "390px copy rename persists as Hosted recovery copy.",
+      "Manual Save cancellation retains temporary view; Exit Escape restores active view and focus; Don\u2019t save exits but retains unsaved view in session menu.",
+      "Plural Exit prompt has no singular name field; injected503 stays visible and all eight native states remain exact; retry saves both temporary views once and exits.",
+      "Reload retains all four saved views without temporary duplicates; sorted C2=45/D2=90 persists.",
+      "Six unrelated providers remain completely unchanged. Docs receives only synchronized spreadsheet file metadata and change records. Protected sheet, other files, source view71 and unrelated Workspace state remain exact.",
+      "All ten runtime containers match their build publications; teardown confirmed."
+    ],
+    "preserved_attempts": [
+      "First formula input occurred before selected-cell navigation completed and made no formula change; successful settled-cell retry is separately captured.",
+      "Browser-tool super+c did not replace prior clipboard; first paste inserted stale 2-cell clipboard into owned F2:G2. Explicit menu Copy/Paste and native Chrome keyboard copy passed. G2 artifact remains documented in final owned fixture state.",
+      "Viewport override affected the selected tab, not the other driven tab; initial wrong-tab captures are excluded. Reload scaled the rendered surface until viewport reset/set; corrected 390px views inspected inline.",
+      "One post-reload browser AX read omitted the visibly open menu; screenshot confirmed entries and a grounded coordinate selected Sorted projects."
+    ],
+    "remaining": [
+      "Complete cut/reference rewrites and hidden-row clipboard behavior",
+      "Cross-sheet and permission-dependent GUI parity",
+      "All menu, formula/reference, selection/dragging and visual states",
+      "Physical mobile touch and full collaboration/AI parity"
+    ],
+    "screenshots_retained": false,
+    "release_allowed": false,
+    "artifacts_sha256": {
+      "after-confirmed-copy.json": "57923a945ad51456bdc3d0a8f5ba97b068f5c1e1a4f8128bc414a7cd6a7c8108",
+      "after-duplicate-read-failure.json": "5b51c96703da6df5e3e477cf68fa0be0fbbcdcebb4abdc8a5492aae712b1b829",
+      "after-failed-temporary-save.json": "af270c394fd8f90c6dd93e28154b3a83e878e07bc2a4627ac81da90247bb4e75",
+      "after-mapped-formula-confirmed.json": "298b45b7f55ae034dcfcddc7cb19ff62416b8d611da1e0684d4caa75f20e6bf5",
+      "after-mapped-formula.json": "db046cf2d382b0256e8fa20178cc377548896825a0c92bc829f814e71172ad58",
+      "after-open-view.json": "d84a77fc143fba4363f4aa7183ebcf8829f105f41910a48e944f57c697121379",
+      "after-projected-copy.json": "bef94a5d93bed2d5f82c26754e07af48626c414014fd8592a2f41975a35a1a4d",
+      "after-rejected-grid-write.json": "d84a77fc143fba4363f4aa7183ebcf8829f105f41910a48e944f57c697121379",
+      "after-reload.json": "b9f4161a9bc499c110ceb24b3bf260b2705f327504e4b0b919a74b5a0d1ff042",
+      "after-renamed-copy.json": "af270c394fd8f90c6dd93e28154b3a83e878e07bc2a4627ac81da90247bb4e75",
+      "after-successful-temporary-save.json": "b9f4161a9bc499c110ceb24b3bf260b2705f327504e4b0b919a74b5a0d1ff042",
+      "after-temporary-create.json": "af270c394fd8f90c6dd93e28154b3a83e878e07bc2a4627ac81da90247bb4e75",
+      "after-temporary-exit.json": "af270c394fd8f90c6dd93e28154b3a83e878e07bc2a4627ac81da90247bb4e75",
+      "baseline-state.json": "d84a77fc143fba4363f4aa7183ebcf8829f105f41910a48e944f57c697121379",
+      "browser-trace.json": "979471a3be1b2c7f6ee33d839c7bfedc61a1de0ecab1861cba0add0bb4565048",
+      "cleanup.json": "3cd7f951af6c0709ddb3ab86f5e85b0c1d54800c76fb705c12b19bbcc1da1af4",
+      "control.json": "a1cf3378e04611e40ae2a63b6c960cc93a212d090ac4ef5f0f337f632166313a",
+      "final-state.json": "b9f4161a9bc499c110ceb24b3bf260b2705f327504e4b0b919a74b5a0d1ff042",
+      "frontend-code-fingerprints.json": "043cb7b64276e98af655a5f386c8d6a61878acd5bce6d718575218f84309519b",
+      "image-comparison.json": "4cf871502604cfbaf039cdb8c3211c624d8ba8fb8f6409ad6f487204fb9bb35f",
+      "native-after.json": "6cc8ccef4005bc6a56bf956292494574f919b524d5604ed9e3e07df9ab7002ee",
+      "native-before.json": "43a02cbe30aec4ef7a51f5b0c6f69cf59e478af00485461999f8dcc8a950a071",
+      "native-view-checks.json": "b66aeb9dedb0f7e7ed68b59f7150a25e2caa01a16f1d9797ab5b55321789b2eb",
+      "operator-api-trace.json": "78461a17e43acfb2d7a46436dbcfd0c5bdf2c5fd628187120123a041bd4b0d3e",
+      "publication-catalog.json": "a62310185f9207e9853fa7e1761033cd59d85e9d9739456a1f8ff7f2fd5c08c7",
+      "runtime-image-evidence.json": "0a9d55cfdfa924fa148e82453535236807b37f558905d880b975c219d49133a3",
+      "scenario.json": "77dec89fb0d36ad322178272fe19e1cc8b74865f2e08e31bd31ecf6ac703024b",
+      "worker-logs.json": "62dfb0335f092bd75189194ed1c9ecfb06e0bb5f295f4fdea137c3e06013f5f2",
+      "workspaces.json": "b817e9f3e9df4030f8c567f200afe43e49f07b3edf83e5b076750f1a92d4b67f"
     }
   }
 }

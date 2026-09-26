@@ -66,7 +66,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
-          "sha256": "1a4162b8b8aa520ac70333df3f37c8eb8587a217895c583420169305e9764665"
+          "sha256": "3c4128b6e48d881b59b0369c924490b22aac3dc122622fc82706bad1cb1f39a7"
         },
         {
           "path": "samples/workspace/evidence/sheets-values-batch-atomicity-2026-09-25.json",
@@ -187,7 +187,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-inbox-accessibility-2026-09-26.json",
-          "sha256": "5b8eb1c6f86077e352d656f7a4b3979f3e93d32152f3d5abde3e9fce8b1bc65c"
+          "sha256": "e2ccf9c6d8ada428fc08eb4260e5871e37ac0473d179fb2db79415c208d06523"
         }
       ]
     },
@@ -352,5 +352,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "d85aba1d1282f81b218e3f8eebcbb844eed258bbee268a9d9461cf8bc09ecdf9"
+  "sample_tree_sha256": "678fc0e84583d21173510d7f3210de494dd6ed38b15c124690aa68a494ad124f"
 }

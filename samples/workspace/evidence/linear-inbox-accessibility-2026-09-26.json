@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1180",
   "source_head": "66828022945df89d86005709567dfe3f5b052c3a",
-  "status": "local_desktop_390px_pass_ci_deployment_hosted_pending",
+  "status": "merged_full_ci_pass_production_running_hosted_pending",
   "release_allowed": false,
   "scope": [
     "Accessible Inbox Display, bulk-action and Snooze popovers",
@@ -18,7 +18,17 @@
     "linear_passed": 322,
     "snooze_review_targeted_passed": 71,
     "make_fix": "pass",
-    "detector_findings": 0
+    "detector_findings": 0,
+    "full_ci": {
+      "head": "66828022945df89d86005709567dfe3f5b052c3a",
+      "status": "pass",
+      "lint_test_run": 36221895419,
+      "twins_passed": 6143,
+      "twins_skipped": 145,
+      "twins_deselected": 3,
+      "root_passed": 2134,
+      "root_skipped": 2
+    }
   },
   "local_browser": {
     "status": "pass",
@@ -95,12 +105,21 @@
     "lab-linear-inbox-accessibility-snooze/final.json": {
       "sha256": "0d486635553f8f76a47d18c92b12abdff1384e92d4aae5f7fde9fa81dc31b102",
       "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-full-ci.log": {
+      "sha256": "572d7fb06645ce39ce3073922aa1322a4c64e216ed570356603400cd91d271e6",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-accessibility-premerge-66828022.json": {
+      "sha256": "ee68d9d985c288af8993b74882df7c58e594f4e9ba2176695d873789c236ea57",
+      "retention": "Local operator artifact; not bundled"
     }
   },
   "limits": [
-    "CI, deployment and fresh hosted verification pending",
+    "Merged after complete exact-head CI and fresh CLEAN check; production and fresh hosted verification pending",
     "Selected dark-theme desktop/390px checks; full mobile/touch/light-theme parity remains open",
     "Full eight-provider and WKS-03 release gates remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merge_commit": "8d4355f257e18105284cc589feab88278ffc6125"
 }
