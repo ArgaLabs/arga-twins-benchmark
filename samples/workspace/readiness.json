@@ -73,6 +73,10 @@
         {
           "path": "samples/workspace/evidence/calendar-access-requests-2026-09-26.json",
           "sha256": "5c0809bb961454b3912c9f3faaad7547c6e3f7fa47f9c8fc6f70cbefcd9f67e8"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-side-tasks-2026-09-26.json",
+          "sha256": "85d79b8f33f2843996dc50dc2109df7e21610934f764b993c8c45346d0683a9a"
         }
       ]
     },
@@ -408,5 +412,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "147492b71c752ba4a2d7fdf666dba415a3a78bf99bfe6bc97d7c3b0c0e9b6121"
+  "sample_tree_sha256": "c370086a65cc7bf845ac9a2e3453fcd4d0bbd28fae6e5521b4f957f0befa4e7b"
 }

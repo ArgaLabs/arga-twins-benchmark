@@ -1,0 +1,520 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1195",
+  "source_head": "3632cab9c275746257dd3d8b7262eda97a9dd1ba",
+  "status": "local_browser_native_source_review_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_calendar_workspace_passed": 576,
+    "focused_task_cases": 19,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "real_reference": {
+    "observed_on": "2026-09-26",
+    "surface": "Real Google Calendar desktop Chrome, authenticated Workspace account",
+    "side_app_tabs": [
+      "Keep",
+      "Tasks",
+      "Contacts",
+      "Maps",
+      "Get Add-ons"
+    ],
+    "tasks": {
+      "initial_state": "My Tasks list empty",
+      "controls": [
+        "My Tasks list selector",
+        "Open Tasks Fullscreen",
+        "Close Tasks",
+        "Add a task",
+        "List options"
+      ],
+      "new_task_controls": [
+        "Task title",
+        "Details",
+        "Mark completed",
+        "Schedule for today",
+        "Schedule for tomorrow",
+        "Add date/time",
+        "Repeat"
+      ],
+      "list_menu": [
+        "My order",
+        "Date",
+        "Deadline",
+        "Starred recently",
+        "Title",
+        "Rename list",
+        "Delete list (disabled for default)",
+        "Print list",
+        "Delete all completed tasks (disabled when empty)",
+        "Clean up old tasks (disabled when empty)",
+        "Keyboard shortcuts",
+        "Send feedback to Google"
+      ],
+      "cancel_check": "Opened empty Add a task composer, closed panel, reopened; No tasks yet and Moving away from an unsaved task confirmed",
+      "saved_tasks_created": 1,
+      "settings_changed": false,
+      "owned_fixture": "ARGA-LAB-TASKS-20260926-1032",
+      "cleanup": "Owned task deleted through Task options; full page reload returned No tasks yet",
+      "commit_behavior": "Nonempty title committed when panel closed; reopened row preserved exact title",
+      "task_options": [
+        "Add deadline",
+        "Add a subtask",
+        "Add attachment",
+        "Delete",
+        "Move to My Tasks (disabled current list)",
+        "New list"
+      ],
+      "visual_observation": "White ~320px panel between calendar grid and side icons; compact header/list chooser, inline add/row editor, completion circle, star and task menu, centered empty state",
+      "screenshots_retained": false
+    },
+    "source_gap": "Calendar twin side-app controls currently only announce available as dashboard chrome",
+    "limits": [
+      "Owned task title/close/reopen/delete/reload checked; task completion, dates, attachments, repeating tasks and reminder delivery remain unverified against real account",
+      "No mobile/physical-touch or exhaustive visual claim"
+    ],
+    "screenshots_retained": false,
+    "official_references": [
+      "https://developers.google.com/workspace/tasks/reference/rest/v1/tasks",
+      "https://support.google.com/calendar/answer/106237?co=GENIE.Platform%3DDesktop&hl=en"
+    ]
+  },
+  "browser": {
+    "initial": {
+      "passed": true,
+      "checks": [
+        "Empty draft cancellation creates no task",
+        "Title/details/date close and reload persistence",
+        "Star, complete, reopen, delete, undo preserve task identity",
+        "Injected write failure preserves draft; retry succeeds",
+        "Committed create survives read failure without duplicate",
+        "Mobile390px list create and rename",
+        "Read-only account exposes own task with mutations disabled",
+        "Other two account states and all non-task owner resources unchanged"
+      ],
+      "findings_corrected_next": [
+        "Explicit accessible names for expanded task menus",
+        "Cache committed row/list changes before refreshing to avoid misleading rollback or duplicate list create",
+        "Allow read-only list navigation without preference writes",
+        "Serialize task row mutations and preserve draft values through rendering"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Physical touch/native keyboard unverified while Mac locked",
+        "No full Calendar side-app parity claim"
+      ]
+    },
+    "confirmation": {
+      "passed": true,
+      "checks": [
+        "List create plus refresh503 displays committed selected list and explicit recovery; reload does not duplicate",
+        "Task star plus refresh503 retains committed star with recovery; reload does not repeat PATCH",
+        "Task title/details/date persist after close",
+        "Reader switches to second list with no preference or resource write",
+        "Exactly three owner writes: list POST, task POST, starred PATCH",
+        "Two nonowner native states and all owner non-task resources unchanged",
+        "Desktop1465x806 and mobile390x844 inspected inline"
+      ],
+      "unresolved": [
+        "Expanded details-menu descendant control labels still absent from CUA accessibility tree despite explicit labels; requires independent source review and native AX verification",
+        "Native keyboard/focus and physical touch blocked by locked Mac",
+        "Full Tasks time/repeat/subtask/attachment/deadline/grid projection/fullscreen and other side apps remain open"
+      ],
+      "screenshots_retained": false
+    },
+    "review_correction": {
+      "passed": true,
+      "review_fix": "F2",
+      "checks": [
+        "Completed editor remains expanded and title is the browser AX focus target",
+        "Desktop1465x806 and mobile390x844 editor inspected inline",
+        "Completed title edit saved by Close and verified after full reload",
+        "Exactly one PATCH; completed timestamp retained; other accounts and all non-task resources unchanged"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Browser AX focus target is not physical native keyboard verification",
+        "F1 verified separately by out-of-order Node regression",
+        "Menu AX labels and native touch remain unresolved"
+      ]
+    }
+  },
+  "independent_review": {
+    "head": "54f15c9c6145dc97382c70c075b8752a1084a498",
+    "scope": "Bounded verdict pass on F1 and F2 only; source and supplied evidence; no browser operation or screenshots",
+    "disposition": "ship",
+    "evidence": {
+      "source": "Reviewed correction diff from d175e7b4 to 54f15c9c in side_tasks_ui.py, test_google_calendar_side_tasks.py, and fixtures/google_calendar_side_tasks_state.js.",
+      "independent_check": "Reran node /tmp/lab-calendar-side-tasks-review-repro.js against current source: starred true\u2192true after stale GET; completed details_open=true and focus_target_hidden=false.",
+      "focused_tests": "/tmp/lab-calendar-side-tasks-review-tests.log: 19 passed, 1 dependency deprecation warning.",
+      "parent_browser_evidence": "/tmp/lab-calendar-side-tasks-local-r3/browser-native-result.json: desktop1465x806/mobile390x844 completed editor visible, title AX focus target, title edit Close/reload persistence, exactly one PATCH, retained completion timestamp, unchanged other-account/non-task state.",
+      "integrated_tests": "/tmp/lab-calendar-side-tasks-reviewed-final.log: 576 Calendar/Workspace regressions passed, 3 dependency deprecation warnings in 78.81s; final log independently read."
+    },
+    "fidelity_matrix": [
+      {
+        "axis": "TYPE",
+        "status": "unchanged",
+        "limits": "No typography redesign or independent visual verification."
+      },
+      {
+        "axis": "MATERIAL",
+        "status": "unchanged",
+        "limits": "Native white/blue pane vocabulary preserved; supplied visual evidence only."
+      },
+      {
+        "axis": "GROUND",
+        "status": "unchanged",
+        "limits": "Parent desktop/mobile inline inspection supports completed-editor visibility, not physical touch verification."
+      },
+      {
+        "axis": "ASYNC STATE",
+        "status": "F1 resolved",
+        "evidence": "Each GET has a revision; stale results and errors are discarded. Writes, draft creation/save, list editing, and local read-only navigation invalidate older reads."
+      },
+      {
+        "axis": "COMPLETED EDITOR",
+        "status": "F2 resolved",
+        "evidence": "Completed disclosure is explicitly open while it contains the completed task draft."
+      }
+    ],
+    "material_fixes": [
+      {
+        "id": "F1",
+        "status": "resolved",
+        "file": "/Users/tonghx/validation-server-lab-calendar-tasks-panel/twins/google_calendar/side_tasks_ui.py",
+        "lines": [
+          47,
+          53,
+          54,
+          55,
+          56,
+          85,
+          103,
+          129,
+          148,
+          155,
+          160
+        ],
+        "assessment": "Revision arbitration prevents the reproduced older reload snapshot from replacing a newer committed PATCH cache. Exact-SCRIPT durable regression covers the GET/PATCH/GET response schedule."
+      },
+      {
+        "id": "F2",
+        "status": "resolved",
+        "file": "/Users/tonghx/validation-server-lab-calendar-tasks-panel/twins/google_calendar/side_tasks_ui.py",
+        "lines": [
+          118
+        ],
+        "assessment": "The completed-task draft now opens its containing details element before focus is requested. Exact-SCRIPT regression verifies visibility; supplied native-browser R3 evidence confirms visible editor and persistence."
+      }
+    ],
+    "craft_findings": {
+      "bounded_result": "Both requested corrections retain the incumbent interaction and layout and are backed by targeted regression checks.",
+      "unchanged_limits": [
+        "Expanded-menu AX descendant names remain unresolved.",
+        "Native keyboard and physical touch remain unverified.",
+        "Starred recently still groups boolean starred values without recency ordering.",
+        "Time, recurrence, deadlines, subtasks, attachments, grid projection, fullscreen, and other side apps remain open.",
+        "No independent visual/touch approval or full eight-twin release acceptance."
+      ]
+    },
+    "verdict": {
+      "decision": "ship",
+      "meaning": "F1 and F2 are resolved at the requested bounded source/evidence scope. No remaining blocker from these two findings. This verdict does not waive other known limits or replace updated full-suite/CI gates.",
+      "scores": {
+        "F1": "resolved",
+        "F2": "resolved"
+      }
+    }
+  },
+  "documentation": {
+    "schema_version": 1,
+    "generated_at": "2026-09-26T10:52:10.441692+00:00",
+    "role": "Impeccable documenter",
+    "worktree": "/Users/tonghx/validation-server-lab-calendar-tasks-panel",
+    "head": "3632cab9c275746257dd3d8b7262eda97a9dd1ba",
+    "scope": "Read-only source and supplied evidence review of the ordinary Calendar Tasks extension; exact applied README section verified and final bounded reviewer/test evidence recorded.",
+    "write_boundary": "/tmp/lab-calendar-side-tasks-documentation.json",
+    "repository_files_modified": false,
+    "browser_used": false,
+    "screenshots_created_or_retained": false,
+    "tests_executed_by_documenter": false,
+    "instructions": {
+      "document_reference": "/Users/tonghx/.codex/plugins/cache/impeccable/impeccable/4.4.0/skills/impeccable/reference/document.md",
+      "context": "Parent confirmed Impeccable context already ran this session; not rerun.",
+      "adaptation": "Explicit task restricts output to a README proposal JSON. Preserve incumbent provider UI; do not create or change DESIGN.md, PRODUCT.md or a design sidecar."
+    },
+    "source_sha256": {
+      "twins/google_calendar/README.md": "0566e7cdfcbfec3801632f9fbb7ea203e4868ec04128ea38ef11bd8ec53743fc",
+      "twins/google_calendar/side_tasks.py": "f4116717d2f8c143be2bd32cb9acbd23daa7a7877fc96e21fd6cebd281d042ef",
+      "twins/google_calendar/side_tasks_ui.py": "e72034845e10e9f610dd7f1ed5405f02cba883513654ccdf8b06c8145082f114",
+      "twins/google_calendar/app.py": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
+      "twins/google_calendar/store.py": "bc422888f0b2e870c15aa710d7bef742f6915377984e21074fdc577f3d260a92",
+      "twins/google_calendar/ui.py": "6a403ab2d2a99339fd57d45a1764b2744e5950cfd1f8e9e852680089ae1fa5fd",
+      "twins/tests/test_google_calendar_side_tasks.py": "5d8fafbe6ae569041a1b77f84457d7b5dba1f89f9ae49306ff4c94bd9584f53e",
+      "twins/tests/fixtures/google_calendar_side_tasks_state.js": "e007ecb1a6c0cd9aeb74b1055d838976d625161121d73ae16fdfca754190eb7e"
+    },
+    "evidence_sha256": {
+      "/tmp/lab-calendar-side-tasks-local-r1/browser-native-result.json": "f32949289a7ebeac4e98366d7baf3a1d2718d965d466c761d35789b8f633e3a5",
+      "/tmp/lab-calendar-side-tasks-local-r2/browser-native-result.json": "20e4036eabb608105c2ab58ca0da88aab59e4df245e11c96da201ba1505360f3",
+      "/tmp/lab-calendar-side-tasks-finish-review.json": "310347ad741c63e8bc7c4c5d46017524783e51e7fda8afb1a71980b87edfa54f",
+      "/tmp/lab-calendar-side-tasks-review-correction.log": "524ab39b636842ee5944d22e5dcb600cfe3d9fd137c343d051b722ef767c7ec4",
+      "/tmp/lab-calendar-side-tasks-finish-verdict.json": "1b5884f649e4c24e03a623471af0df0d76c2e3e4e47a80b43a88fb5cc3591106",
+      "/tmp/lab-calendar-side-tasks-reviewed-final.log": "d874d13057193c5c6028851fb6cf67e9054ab0f17185df9ff6136866160f9829",
+      "/tmp/lab-calendar-side-tasks-review-tests.log": "4f485c037bb7b53d67285bc4ba387ef5e214d07eacd75aa187708a04a5718d12",
+      "/tmp/lab-calendar-side-tasks-local-r3/browser-native-result.json": "d8db562fbe878f35ff33a19681f78c3791bb78502782af3bb51ace381900df0f"
+    },
+    "design_context": {
+      "mode": "Operate",
+      "authority": "Existing Google Calendar provider UI and parent-supplied native reference observations.",
+      "design_files_found": [],
+      "search": "Repository rg --files scan including hidden files, excluding node_modules and .git; no PRODUCT.md, DESIGN.md or design.json found.",
+      "preserved_absence": true,
+      "observed_layout": "320px white desktop pane; at max-width 760px a full-width fixed drawer with top inset 104px; no new visual world.",
+      "drift_or_open_mismatches": [
+        "The visible Starred recently sort only compares boolean starred; no star-recency timestamp exists. README must describe starred-first behavior until native recency parity is implemented and checked.",
+        "Supplied finish review reports an inherited Inter fallback detector warning in ui.py; no typography redesign or repair performed.",
+        "Expanded details-menu descendants remain unnamed in supplied CUA AX evidence despite source labels; this cannot be declared fixed from source alone."
+      ]
+    },
+    "native_contract": {
+      "account_state_root": "_state(account.id)[google_calendar]",
+      "inspection": "Authenticated GET /_admin/state exposes task_lists, side_tasks and task_preferences at the response top level.",
+      "state_keys": {
+        "task_lists": "Map keyed by list ID. Each record has kind=tasks#taskList, id, title, sort; a mutated or newly created list has updated. Default id=default, title=My Tasks, sort=myOrder.",
+        "side_tasks": "Map keyed by task ID. Records have kind=tasks#task, id, listId, title, notes, status, starred, position and updated; optional due, completed and deleted. Soft-deleted records remain inspectable but are omitted from the pane GET.",
+        "task_preferences": "Object containing selectedListId; initial value default."
+      },
+      "read_response": [
+        "lists",
+        "tasks",
+        "selectedListId",
+        "canEdit"
+      ],
+      "permissions": {
+        "calendar_tasks_read": "Required for GET task/list state.",
+        "calendar_tasks_write": "Required for task mutations and list creation, rename, deletion, sort and stored selection. Writes check this permission independently of Calendar event or ACL permissions.",
+        "registration": "Missing or unknown bearer token returns 401; denied task permission returns 403; another account resource ID is not found (404). Current account permissions are checked on every operation.",
+        "readonly_ui": "Mutation controls are disabled; selecting a different list changes local UI state only."
+      },
+      "private_routes": [
+        {
+          "method": "GET",
+          "path": "/calendar/_ui/tasks"
+        },
+        {
+          "method": "POST",
+          "path": "/calendar/_ui/task-lists"
+        },
+        {
+          "method": "PATCH, DELETE",
+          "path": "/calendar/_ui/task-lists/{list_id}"
+        },
+        {
+          "method": "POST",
+          "path": "/calendar/_ui/task-lists/{list_id}/tasks"
+        },
+        {
+          "method": "PATCH, DELETE",
+          "path": "/calendar/_ui/task-lists/{list_id}/tasks/{task_id}"
+        }
+      ],
+      "validation": {
+        "task_fields": [
+          "title",
+          "notes",
+          "due",
+          "starred",
+          "status",
+          "deleted"
+        ],
+        "task_title": "String, nonblank, at most 1024 characters before trim; stored trimmed.",
+        "notes": "String at most 8192 characters; preserved without trimming.",
+        "due": "Strict ISO date YYYY-MM-DD, normalized to YYYY-MM-DDT00:00:00Z; null or empty removes due; no scheduled time.",
+        "starred_and_deleted": "Boolean only. New-task payload cannot set deleted. A deleted task can only be restored by the exact patch {deleted: false}.",
+        "status": "needsAction or completed; completion sets completed if absent, reopening removes completed.",
+        "list_fields": [
+          "title",
+          "sort",
+          "selected"
+        ],
+        "list_title": "String, nonblank, at most 1024 characters before trim; stored trimmed.",
+        "sort": [
+          "myOrder",
+          "date",
+          "starred",
+          "title"
+        ],
+        "selected": "If provided, must be true.",
+        "atomicity": "Validation occurs before resource mutation. Supplied tests cover invalid task/list payloads, non-task state preservation and account isolation."
+      }
+    },
+    "accepted_behavior_for_documentation": {
+      "mutation": [
+        "Inline title/details/date save on Enter in title (except Shift+Enter), focus moving to an identified control outside the form, or closing Tasks. Closing waits for save and stays open if save fails.",
+        "Other row/list actions first attempt to save the current task draft. Unchanged task edits close without a write.",
+        "Completion/reopen, star, soft delete and latest task-delete undo preserve the task ID. List creation selects the new list; deleted selected lists fall back to default.",
+        "Task/list saved results are cached before follow-up GET. Row mutations are serialized. Draft field values are retained through normal rerenders.",
+        "Current source invalidates outstanding reads at newer read, mutation and draft transitions. Current source forces Completed open while it contains the edited completed task."
+      ],
+      "cancellation": [
+        "An empty new task draft is discarded without a write.",
+        "Escape discards an unsaved task draft while no save is pending; Discard changes is offered after write failure.",
+        "List-form Cancel returns to task state without submitting the list change. Cancelling list deletion leaves the list and tasks unchanged.",
+        "Closing a nonempty changed task draft is a save action, not cancellation."
+      ],
+      "failures": [
+        "Initial read failure retains the panel and exposes Retry.",
+        "Failed task mutation retains draft values and exposes Retry/Discard changes; failed list mutation retains name input for retry.",
+        "When a write succeeded but refresh failed, retain saved cache, say Task saved/Change saved/List saved with refresh error, and provide Reload tasks. Reload does not resubmit the accepted mutation.",
+        "Generation/revision guards discard older or closed-panel GET responses. Source/VM evidence does not establish native browser focus correctness."
+      ]
+    },
+    "evidence_assessment": {
+      "supplied_r1": "passed=true: empty cancellation; title/details/date persistence; star/complete/reopen/delete/undo identity; write-failure retry; accepted-create/read-failure handling; mobile lists; read-only account; other accounts/non-task state preservation.",
+      "supplied_r2": "passed=true: list create and star preserve committed cache after refresh503 without duplicate mutations; title/details/date persistence; local read-only list navigation; exactly three owner writes; unchanged other native state. Desktop 1465x806 and mobile 390x844 inspected inline by parent.",
+      "finish_review": "Historical pre-correction review recorded F1 stale-read arbitration and F2 completed-editor expansion as fix. Superseded for those two findings by /tmp/lab-calendar-side-tasks-finish-verdict.json; retained as provenance.",
+      "correction": "F1 and F2 are resolved in the final reviewer verdict. Current implementation/test hashes match the original source review, including taskReadRevision and completed-draft details.open. Reviewer independently reran the stale-read/completed-editor reproduction; supplied R3 browser evidence covers completed-editor visibility and persistence.",
+      "re_verdict": {
+        "source": "/tmp/lab-calendar-side-tasks-finish-verdict.json",
+        "reviewed_head": "54f15c9c6145dc97382c70c075b8752a1084a498",
+        "decision": "ship",
+        "resolved_findings": [
+          "F1",
+          "F2"
+        ],
+        "attribution": "Independent reviewer source and supplied-evidence verdict; documenter verified the report and unchanged implementation hashes, not native interaction or visual acceptance.",
+        "meaning": "F1 and F2 are resolved at the requested bounded source/evidence scope. No remaining blocker from these two findings. This verdict does not waive other known limits or replace updated full-suite/CI gates.",
+        "current_head_difference": "Only the exact README documentation section was committed after the reviewed source head."
+      },
+      "independent_visual_approval": false,
+      "limits": [
+        "No browser, screenshots or independent visual inspection by documenter.",
+        "Native keyboard/focus, physical touch and expanded details-menu accessibility names remain unresolved.",
+        "Node VM stubs verify state/control flow, not browser accessibility or physical interaction.",
+        "Time, recurrence, deadline, subtasks, attachments, grid projection, fullscreen, other side apps and cross-product delivery remain outside this extension.",
+        "No full Google Tasks/provider parity or eight-twin release approval."
+      ],
+      "supplied_r3": "passed=true: completed editor remained expanded with title as browser AX focus target at desktop 1465x806 and mobile 390x844; completed title edit persisted after Close and full reload; exactly one PATCH; completion timestamp, other accounts and non-task resources retained. Parent supplied browser evidence; browser AX focus is not physical native keyboard verification.",
+      "final_integrated_tests": {
+        "source": "/tmp/lab-calendar-side-tasks-reviewed-final.log",
+        "passed": 576,
+        "warnings": 3,
+        "duration_seconds": 78.81,
+        "attribution": "Existing final log read by documenter; tests were not rerun by documenter.",
+        "supersedes": "Earlier /tmp/lab-calendar-side-tasks-integrated-final.log reported 575 tests; final reviewed log includes the new regression."
+      },
+      "focused_tests": {
+        "source": "/tmp/lab-calendar-side-tasks-review-tests.log",
+        "passed": 19,
+        "warnings": 1,
+        "duration_seconds": 0.6,
+        "attribution": "Existing reviewer log read by documenter; tests were not rerun by documenter."
+      }
+    },
+    "readme_proposal": {
+      "target": "/Users/tonghx/validation-server-lab-calendar-tasks-panel/twins/google_calendar/README.md",
+      "placement": "Insert after Access requests and before Authentication.",
+      "markdown": "### Tasks side panel\n\nThe Calendar Tasks controls open a personal Tasks pane within the incumbent\nCalendar interface: a 320px white pane on desktop and a full-width drawer below\nthe header on narrow screens. It supports task lists, inline title/details and\ndate-only editing, stars, completion/reopening, and task deletion with Undo.\nList controls create, rename, select and delete lists, and sort by stored order,\ndate, title or starred-first. The current \u201cStarred recently\u201d option groups starred\ntasks; it does not track when they were starred. The default My Tasks list cannot\nbe deleted. Deleting another list also soft-deletes its tasks and returns the\nselection to the default list; list deletion has no Undo control.\n\nTask drafts save on Enter in the title, focus moving to another control, or\nclosing Tasks. Empty new drafts and unchanged edits make no write. Escape\ncancels an unsaved task draft; failed writes retain its fields and offer Retry or\nDiscard changes. List forms retain failed input and support Cancel, and list\ndeletion requires confirmation. A successful mutation is cached before refresh:\nif the follow-up read fails, the saved task or list remains visible with an\nexplicit refresh error and Reload tasks action, without repeating the write.\nStale reads are discarded after newer reads, mutations or draft transitions.\nA completed task stays expanded while its inline editor is open.\n\nThe account's native `google_calendar` state contains `task_lists`, `side_tasks`\nand `task_preferences.selectedListId`; `GET /_admin/state` exposes those three\nkeys for inspection. Tasks are personal and do not mutate Calendar events,\nsharing ACLs or other accounts. Reads require `calendar_tasks_read`; mutations,\nincluding saved list selection and sorting, require `calendar_tasks_write`.\nRegistered bearer tokens are required, and permission changes apply to existing\ntokens. Read-only users can browse their own lists without writing preferences.\nTask and list titles are nonempty and limited to 1,024 characters; task details\nare limited to 8,192. Dates accept `YYYY-MM-DD` and store date-only `due` values\nat midnight UTC; clearing the date removes `due`. Invalid fields reject the\nentire mutation.\n\nThe routes under `/calendar/_ui/tasks` and `/calendar/_ui/task-lists` are private\nbrowser resources, not the public Google Tasks API. This extension does not\nimplement task time, recurrence, deadlines, subtasks, attachments, Calendar-grid\nprojection, fullscreen Tasks, other side apps, or cross-product delivery.\nSource regressions and supplied desktop/390px Chrome evidence cover the bounded\nflows; native keyboard/focus, physical touch and unnamed expanded-menu controls\nin the CUA accessibility tree remain unresolved. This is not independent visual\napproval, complete provider parity, or approval of the full eight-twin release.\n",
+      "optional_tests_section_addition": "uv run --project twins --group dev pytest twins/tests/test_google_calendar_side_tasks.py",
+      "test_note": "The side-task tests require Node for deferred-response stale-read and completed-editor visibility regressions; those checks do not replace native accessibility validation.",
+      "status": "applied exactly; retained here as the verified documentation text",
+      "applied_commit": "3632cab9c275746257dd3d8b7262eda97a9dd1ba"
+    },
+    "updated_at": "2026-09-26T10:53:24.841303+00:00",
+    "repository_files_modified_by_documenter": false,
+    "documentation_application": {
+      "status": "applied and committed by parent",
+      "commit": "3632cab9c275746257dd3d8b7262eda97a9dd1ba",
+      "exact_proposal_applied": true,
+      "target": "twins/google_calendar/README.md",
+      "heading": "Tasks side panel",
+      "start_line": 126,
+      "placement": "After Access requests and immediately before Authentication.",
+      "readme_section_sha256": "b377e50c64923df0b858d580b43b5101edb78a86e319ffff154200fa537eab62",
+      "source_hash_changes_since_proposal": {
+        "twins/google_calendar/README.md": {
+          "previous": "cc792e3c2d1f32d5be5da90ccebba655fb2bb3402cbd2d70279d69a11a59d276",
+          "current": "0566e7cdfcbfec3801632f9fbb7ea203e4868ec04128ea38ef11bd8ec53743fc"
+        }
+      },
+      "implementation_and_test_hashes_unchanged": true,
+      "working_tree_clean": true,
+      "optional_test_command_added": false,
+      "changes_since_reviewer_head": [
+        "twins/google_calendar/README.md"
+      ]
+    }
+  },
+  "checks": [
+    "Personal task/list state enforces registered accounts and current read/write permissions without Calendar event or cross-account mutations",
+    "Title/details/date-only save, star, complete/reopen, delete/undo and personal lists",
+    "Empty composer cancellation; failed writes retain drafts; successful writes survive failed follow-up reads without duplicates",
+    "Read-only list switching does not write preferences",
+    "Older GET responses cannot overwrite newer mutations; completed-task editor stays visible",
+    "Owned real Tasks fixture was deleted and empty state confirmed after reload"
+  ],
+  "source_files": {
+    "twins/google_calendar/side_tasks.py": "f4116717d2f8c143be2bd32cb9acbd23daa7a7877fc96e21fd6cebd281d042ef",
+    "twins/google_calendar/side_tasks_ui.py": "e72034845e10e9f610dd7f1ed5405f02cba883513654ccdf8b06c8145082f114",
+    "twins/google_calendar/app.py": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
+    "twins/google_calendar/store.py": "bc422888f0b2e870c15aa710d7bef742f6915377984e21074fdc577f3d260a92",
+    "twins/google_calendar/ui.py": "6a403ab2d2a99339fd57d45a1764b2744e5950cfd1f8e9e852680089ae1fa5fd",
+    "twins/google_calendar/README.md": "0566e7cdfcbfec3801632f9fbb7ea203e4868ec04128ea38ef11bd8ec53743fc",
+    "twins/tests/test_google_calendar_side_tasks.py": "5d8fafbe6ae569041a1b77f84457d7b5dba1f89f9ae49306ff4c94bd9584f53e",
+    "twins/tests/fixtures/google_calendar_side_tasks_state.js": "e007ecb1a6c0cd9aeb74b1055d838976d625161121d73ae16fdfca754190eb7e"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-side-tasks-final.log": "9e5198880f58645ff7ac9ce4d984a07da5072a7eec61312e6b17843e785cf642",
+    "lab-calendar-side-tasks-deps.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-side-tasks-server-r1.log": "2c86b567cc8b8cd5498bef5c495d1c0de6fe8675c4f7d4f3a3bd0ae024a6f552",
+    "lab-calendar-side-tasks-review-tests.log": "4f485c037bb7b53d67285bc4ba387ef5e214d07eacd75aa187708a04a5718d12",
+    "lab-calendar-side-tasks-server-r3.log": "1f4b831c64c04f76863848d73473a6d7991529d3c6ff00460ba57c0b3c73ec22",
+    "lab-calendar-side-tasks-deps-review.log": "5f892db9d3b1f32816f5cc71f82b6e804601819744e1a31d1d60273ddf54e921",
+    "lab-calendar-side-tasks-server-r2.log": "59812c87b63986127d1d98e5c806cf63118338abbc79de13e7c6482e48619fce",
+    "lab-calendar-side-tasks-reviewed-final.log": "d874d13057193c5c6028851fb6cf67e9054ab0f17185df9ff6136866160f9829",
+    "lab-calendar-side-tasks-ui-focused.log": "d6c92c6530553404670ee80fb3929cb0126e1bb34ae033c74aec851507ab180f",
+    "lab-calendar-side-tasks-review-correction.log": "524ab39b636842ee5944d22e5dcb600cfe3d9fd137c343d051b722ef767c7ec4",
+    "lab-calendar-side-tasks-make-fix.log": "16ccc38452e1e631a7f427c50ab6b88947c9d5fe0e1dae997b5a16e5a95b7fc0",
+    "lab-calendar-side-tasks-integrated-final.log": "3749c10da8e0021c819efc1fd10039d78531a82b2001bdc5dc6ee0ad45d7ed57",
+    "lab-calendar-side-tasks-ci-watch.log": "31fe265cc3da7b34e73f5bebfc53b887b21b7ac9a527c4dd30b92564cfb3f182",
+    "lab-calendar-side-tasks-make-fix-review.log": "726b11d816afcec9cc040b4fad887f09177ef8f26c09b416da71d70d6d845ebf",
+    "lab-calendar-side-tasks-make-fix-ui.log": "c283e94e9eb002eeddacf69f55c24e17edde8daa90996c7f4bec5522c14342f6",
+    "lab-calendar-side-tasks-integrated.log": "401cd81801a29d6b5c5964e7240e341a33baffcccfcc9b64ae721cbeefb6b683",
+    "lab-calendar-side-tasks-first.log": "26116cb6e2297781601e2c025df2a23c7dd9c59ab8b88f35a423c97f0d951469",
+    "lab-calendar-side-tasks-make-fix-correction.log": "6bafba1b0c536fcb483a0a648ed6a7814581a50e28b21f5883a81cef1c6c8252",
+    "lab-calendar-side-tasks-finish-review.json": "310347ad741c63e8bc7c4c5d46017524783e51e7fda8afb1a71980b87edfa54f",
+    "lab-calendar-side-tasks-ci-reviewed.json": "1de13ff4206613f6a47ee4d66745aa11c5e4a3fe3aea507b46b6da93b0e4d172",
+    "lab-calendar-side-tasks-design-detector.json": "06767563a6fa09fa7b4f5cc7866a2fed9f962393d05838920b71257aacee5f1c",
+    "lab-calendar-side-tasks-documentation.json": "a09a4bf9aadf6799a19ff008dda00aeba4a33797c4a07d00176ec1b15f7c225c",
+    "lab-calendar-side-tasks-finish-verdict.json": "1b5884f649e4c24e03a623471af0df0d76c2e3e4e47a80b43a88fb5cc3591106",
+    "lab-calendar-side-tasks-ci-current.json": "5dd1ad3a58a973a24cb5c1570650876d15a81b85bffa748a9f42109ae3396e74",
+    "lab-calendar-side-tasks-local-r1/before.json": "cf0c42de392aa8e3fb487e655de79f3341b0cee9d012cc81609bf2ced1baf751",
+    "lab-calendar-side-tasks-local-r1/browser-trace.json": "578b757595d0c6a1cd7760b495df33ee342f78b4db4c898564a51bfc9227d25e",
+    "lab-calendar-side-tasks-local-r1/browser-native-result.json": "f32949289a7ebeac4e98366d7baf3a1d2718d965d466c761d35789b8f633e3a5",
+    "lab-calendar-side-tasks-local-r1/after.json": "5f96cac285d72949db4da843a10616732fbeeb5f4be59b5180f2eae03cad33c1",
+    "lab-calendar-side-tasks-local-r1/fixtures.json": "5fcbf209be65de6f0c1254cc0abf9598f69dcd66ac0c8d4845dfe312b8787287",
+    "lab-calendar-side-tasks-local-r2/before.json": "01ad4dee7f3f6e652122722232435aad4b8b71abc598844533dbfbf9f48bc686",
+    "lab-calendar-side-tasks-local-r2/browser-trace.json": "da0b0d42c43321320871785ca0ab026f66aca7b9478aa7b38b32f3f2cefa5531",
+    "lab-calendar-side-tasks-local-r2/browser-native-result.json": "20e4036eabb608105c2ab58ca0da88aab59e4df245e11c96da201ba1505360f3",
+    "lab-calendar-side-tasks-local-r2/after.json": "16e2f5434de6c95105f819ee15ebf39a3a8de8ebf1a3dcdfa42758eba46c4b03",
+    "lab-calendar-side-tasks-local-r2/fixtures.json": "dcec35113fd8d1be963dd16d615c7828330d654723b1ac618048996ee9bbea61",
+    "lab-calendar-side-tasks-local-r3/before.json": "bb667f28ad63fa1dc00fb3408352af9f34bfb80226d4f3e23979e9ca55bc5fa4",
+    "lab-calendar-side-tasks-local-r3/browser-trace.json": "6ce8100b9f9ca1dae4abdb462be7d66d5a319d5edc6e0965a9e71dfb6367bee5",
+    "lab-calendar-side-tasks-local-r3/browser-native-result.json": "d8db562fbe878f35ff33a19681f78c3791bb78502782af3bb51ace381900df0f",
+    "lab-calendar-side-tasks-local-r3/after.json": "90237ab166177ec5912b6878f6145a46875480746948840b13444d1975a371fa",
+    "lab-calendar-side-tasks-local-r3/fixtures.json": "5c6a2b80d66e6438ce17a1c2584c833fd71eb528c7bc98f22b48027330c7acb1"
+  },
+  "limits": [
+    "Exact-head CI, production and fresh hosted checks pending",
+    "Expanded details-menu control names remain absent from CUA AX despite explicit source labels; native keyboard/focus and touch unverified while Mac locked",
+    "Time, recurrence, deadlines, subtasks, attachments, calendar-grid projection, fullscreen and other side apps remain open",
+    "Starred recently currently groups starred items without recency ordering; full provider behavior unverified",
+    "Scenario reseeding, AI and full Calendar/collaboration audit remain open"
+  ],
+  "screenshots_retained": false
+}
