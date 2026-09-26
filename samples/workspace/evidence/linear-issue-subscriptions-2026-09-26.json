@@ -1,0 +1,122 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1174",
+  "source_head": "1ff0eb2cea55f08b3477df1fe656f2cd7532a031",
+  "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1172",
+  "status": "local_native_desktop_and_390px_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Native issueSubscribe/issueUnsubscribe and validated subscriberIds",
+    "Activity self toggle and searchable member picker with error/focus recovery",
+    "Documented shortcuts and browser-actor Subscribed list",
+    "Incremental membership and preserved unsaved draft/revision protection"
+  ],
+  "references": [
+    "https://linear.app/docs/notifications",
+    "https://github.com/linear/linear/blob/689ccc1e905d97df14272621b96a8614c5d3c2cb/packages/sdk/src/schema.graphql"
+  ],
+  "reference_mode": "Existing authenticated issue viewed read-only; picker opened and dismissed without changing any real subscription",
+  "tests": {
+    "linear_passed": 299,
+    "warnings": 3,
+    "make_fix": "pass",
+    "javascript_syntax": "pass",
+    "detector_findings": 0
+  },
+  "review": {
+    "initial": "fix: native payload typename differed from official IssuePayload",
+    "final": "single listed IssuePayload fix independently confirmed for both operations",
+    "scope": "Source/native only; no independent visual approval",
+    "documentation": "README updated by scoped documenter; incumbent design files preserved"
+  },
+  "local_desktop": {
+    "status": "pass",
+    "checks": [
+      "Unsaved title remains through subscription changes",
+      "Injected failure leaves original checkbox state and history intact",
+      "Space retry succeeds with focus on selected checkbox",
+      "Escape restores picker opener",
+      "Cmd+Shift+S unsubscribe and Shift+S subscribe"
+    ]
+  },
+  "local_mobile": {
+    "status": "pass",
+    "viewport": "390x844",
+    "checks": [
+      "Picker fits",
+      "Search and empty state",
+      "Checkbox unsubscribe",
+      "Reload preserves membership and discards only the intentionally unsaved draft",
+      "Subscribed list navigation"
+    ],
+    "physical_touch_tested": false
+  },
+  "native_comparison": {
+    "status": "pass",
+    "native_state": "Only the selected issue subscriber list changed; all notification history, issue draft contents and other business resources preserved. Confirmation returns the subscriber list to baseline.",
+    "allowed_bookkeeping": [
+      "sync_id",
+      "consumed injected subscription failure"
+    ],
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "viewport_restored": true,
+    "server_stopped": true
+  },
+  "source_files": {
+    "twins/linear/frontend.py": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+    "twins/linear/graphql/resolvers.py": "b481cda3221b1c72862d349ff39173fa05bb4f6ba93a3e5e806903034bfcab11",
+    "twins/linear/subscription_ui.py": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
+    "twins/linear/README.md": "5bf0d6a78409b9496eca3eec6639798a1df8aada8769150f549f7d89b89d41f7",
+    "twins/tests/test_linear_issue_subscriptions.py": "ce56c7eeca465a15641ec96d8341d214da552fe058c54e615f218b3f004dc90a"
+  },
+  "artifacts": {
+    "lab-linear-subscriptions-all-tests-final.log": {
+      "sha256": "571865662c01927ab3e1e5bc6c866663e9d66ca7d53d1de98754f5827c69ea4b",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-makefix-final.log": {
+      "sha256": "346894845c4d651a031eb3e6b3a6be470617fde4b691784241642bb3e130b1a6",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-detector.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/baseline.json": {
+      "sha256": "67e07eb82eb64a46d7f75ebe1a902bdda115925227d2638da00c59a67bc20996",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/final.json": {
+      "sha256": "1ca780becaf25ae5a64f3d00540e23583a682c8b7d868871b64bcadb1725f417",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/verification-summary.json": {
+      "sha256": "f49ee27fc92945b91e6e247470ddee0c12a026cc7257f7522a75ccd4b3d9a5f0",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/baseline.json": {
+      "sha256": "67e07eb82eb64a46d7f75ebe1a902bdda115925227d2638da00c59a67bc20996",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/final.json": {
+      "sha256": "d43b32265cb0b2cb96bc8efa40c97460a65aba6402eacdfd0638aa80e6ae359d",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/verification-summary.json": {
+      "sha256": "f49ee27fc92945b91e6e247470ddee0c12a026cc7257f7522a75ccd4b3d9a5f0",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "CI, production and fresh hosted native/browser/image verification pending",
+    "Assignee-specific picker policy, complete notification settings, project notifications, private-team/workspace permissions, external delivery, realtime and AI remain open",
+    "Selected desktop/390px checks do not establish exhaustive visual or physical-touch parity",
+    "Full eight-provider audit and sample release including WKS-03 remain open"
+  ],
+  "screenshots_retained": false
+}

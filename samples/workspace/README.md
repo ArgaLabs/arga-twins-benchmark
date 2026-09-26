@@ -97,6 +97,8 @@ PR #1169 adds the native protection sidebar and warning-only grid confirmation. 
 
 PR #1173 fixes the shared app publication tag exposed by the latest live-clock Gmail run. All 132 focused deployment/preview checks pass, and three regressions fail with the old tag allocator. Unique references are persisted per rendered bundle while build caches remain shared. CI, Runtime/Workers rollout and concurrent fresh hosted attestation remain pending. The original failed image comparison is preserved. See `app-image-publications-2026-09-26.json`.
 
+PR #1174 adds native issue subscriptions, Activity self/member controls, keyboard shortcuts and an actor-scoped Subscribed list. All 299 Linear regressions, bounded desktop/390px failure/retry/focus/search/reload checks and exact protected-state comparisons pass. The independently found IssuePayload typename mismatch is corrected and confirmed. CI, deployment and fresh hosted verification remain pending; full permissions/settings/realtime/AI and exhaustive parity remain open. See `linear-issue-subscriptions-2026-09-26.json`.
+
 ## Package validation
 
 The current evidence includes a clean locked install and a later full run with 1,194 benchmark tests passing (26 skipped), candidate/relay/outcome regressions and 137 outcome regressions and 12 package-selected checks on the latest source (overlapping with the full suite). Input scans contain no live credentials or image files. Historical invocation results are retained in `evidence/regression-log-summaries.json`; overlapping test counts are not additive. Later source changes must refresh hashes and relevant checks before release. No final ZIP has been created.

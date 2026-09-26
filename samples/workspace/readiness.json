@@ -164,6 +164,10 @@
         {
           "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
           "sha256": "1c8e14314cc4d689b17467e79a9eb595d23a6129ae9d4a35021bb99f27686944"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
+          "sha256": "0496e8202267db3847d84c4aabfe215afbc584a2acaff51350c398513288c9b8"
         }
       ]
     },
@@ -316,5 +320,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "516323cd921b364e28648d43d8351f2f38327edebf2b900842c8485fd6c849ea"
+  "sample_tree_sha256": "e1b3a513e76d04ed66669d8f7ac1b595a77912610b849148d443007fc5f90fb2"
 }
