@@ -167,7 +167,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
-          "sha256": "5497f4b563248a860ef8c7c769a9cb3592ee443cd4ae2c004fee7ab97717271f"
+          "sha256": "cc8db5f312437a815996310ccae3767a2ee7507d175591ab6e84975ec2d0c55b"
         }
       ]
     },
@@ -304,7 +304,7 @@
         },
         {
           "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
-          "sha256": "272f0630de2cc0ccca2ff495cd0f19ac7be4499e20d04f4777092b2492ef350d"
+          "sha256": "4fe7487f0f723c548fa2a38475a41c2e830186aa966f5a56e89800dca8b636c3"
         }
       ]
     },
@@ -320,5 +320,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "cf04190a297a6f9fc6582ec3cbd357edf0f638aa1eebc802a712f432d96985a6"
+  "sample_tree_sha256": "da59d1b347ac79bac4982e64c69bdae6512c77ae77f5d9f06284d059ab097ceb"
 }

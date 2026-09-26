@@ -5,7 +5,7 @@
     "linear"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1174",
-  "source_head": "160857fca36a90aed896eb73b350542022009339",
+  "source_head": "3b2675550632e9ff280117d28dbc79767cfce188",
   "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1172",
   "status": "local_native_desktop_and_390px_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
@@ -13,7 +13,9 @@
     "Native issueSubscribe/issueUnsubscribe and validated subscriberIds",
     "Activity self toggle and searchable member picker with error/focus recovery",
     "Documented shortcuts and browser-actor Subscribed list",
-    "Incremental membership and preserved unsaved draft/revision protection"
+    "Incremental membership and preserved unsaved draft/revision protection",
+    "Atomic description input validation",
+    "Notification/subscription introspection, interfaces, enums, argument/input/payload types"
   ],
   "references": [
     "https://linear.app/docs/notifications",
@@ -21,17 +23,24 @@
   ],
   "reference_mode": "Existing authenticated issue viewed read-only; picker opened and dismissed without changing any real subscription",
   "tests": {
-    "linear_passed": 299,
+    "linear_passed": 322,
     "warnings": 3,
     "make_fix": "pass",
     "javascript_syntax": "pass",
-    "detector_findings": 0
+    "detector_findings": 0,
+    "review_before_failed": 17,
+    "review_focused_passed": 23,
+    "combined_linear_workspace_passed": 1606
   },
   "review": {
     "initial": "fix: native payload typename differed from official IssuePayload",
     "final": "single listed IssuePayload fix independently confirmed for both operations",
     "scope": "Source/native only; no independent visual approval",
-    "documentation": "README updated by scoped documenter; incumbent design files preserved"
+    "documentation": "README updated by scoped documenter; incumbent design files preserved",
+    "github_review_fixes": [
+      "Malformed descriptions reject before issue/subscriber/counter/notification writes",
+      "Implemented notification/subscription metadata and native typenames now agree with the pinned provider schema"
+    ]
   },
   "local_desktop": {
     "status": "pass",
@@ -69,10 +78,15 @@
   },
   "source_files": {
     "twins/linear/frontend.py": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
-    "twins/linear/graphql/resolvers.py": "b481cda3221b1c72862d349ff39173fa05bb4f6ba93a3e5e806903034bfcab11",
+    "twins/linear/graphql/resolvers.py": "d2dd358aca3204ed0205104e93e78a83b3a49f0558411c097e4ba369fe6a55b9",
     "twins/linear/subscription_ui.py": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
-    "twins/linear/README.md": "5bf0d6a78409b9496eca3eec6639798a1df8aada8769150f549f7d89b89d41f7",
-    "twins/tests/test_linear_issue_subscriptions.py": "ce56c7eeca465a15641ec96d8341d214da552fe058c54e615f218b3f004dc90a"
+    "twins/linear/README.md": "f378a1821eb64eeaee58547246f37c770086bc83dd1a77dfcdf5d479ebda877a",
+    "twins/tests/test_linear_issue_subscriptions.py": "ce56c7eeca465a15641ec96d8341d214da552fe058c54e615f218b3f004dc90a",
+    "twins/linear/graphql/notification_schema.py": "f2a50b37440908e88ee3af6cc71eb75bc23310a8f0506097b54ca94833233b3a",
+    "twins/linear/graphql/serializers.py": "b99219d514edbabc6c40b06e99b2c689486e4b2d37a303aa27e701974cfcf814",
+    "twins/linear/runtime.py": "42a62a931295503d6e779656acd722db4f9ef54981af29b39f581d7e72b31429",
+    "twins/linear/notifications.py": "9cf47aa504070556d84d851277c32b5394091f7516bea11fcc88179f4d4dfe10",
+    "twins/tests/test_linear_notification_contract.py": "ca53e151eca5a60010fe99a67543fbb095a4b6756a6a5edbeb319987d8be8a22"
   },
   "artifacts": {
     "lab-linear-subscriptions-all-tests-final.log": {
@@ -110,6 +124,26 @@
     "lab-linear-subscriptions-browser-confirmation/verification-summary.json": {
       "sha256": "f49ee27fc92945b91e6e247470ddee0c12a026cc7257f7522a75ccd4b3d9a5f0",
       "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-notification-contract-valid-before.log": {
+      "sha256": "ca4e3b91c121f2469fd61aaae6bd24d9273aff5079a36247f97bc557840e6666",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-notification-contract-final.log": {
+      "sha256": "cbb37630aea154af18027e3438827cae55f1f2cd89d27b0243a6715903bf8526",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-review-regressions.log": {
+      "sha256": "0084d7cad53336ca8bb66be65878e27770ae4f691610ff57576c0488b1b60fe9",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-fixes-combined-regressions.log": {
+      "sha256": "e7298acb6803310f5c8815d8e7169e8c15b95635cdfc196245b7fe952682c5f2",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-fixes-makefix.log": {
+      "sha256": "1ef252272309f9b78060c5bee7abc8d6e03ba0bbfd656437fa0c687c12a8894e",
+      "retention": "Local operator artifact; not bundled"
     }
   },
   "limits": [
@@ -119,6 +153,6 @@
     "Full eight-provider audit and sample release including WKS-03 remain open"
   ],
   "screenshots_retained": false,
-  "prior_source_head": "1ff0eb2cea55f08b3477df1fe656f2cd7532a031",
-  "head_update": "Updated against merged #1172; feature diff unchanged; CI pending on this exact head."
+  "prior_source_head": "160857fca36a90aed896eb73b350542022009339",
+  "head_update": "Final notification contract fixes and Workspace identity incorporated; exact-head CI pending."
 }

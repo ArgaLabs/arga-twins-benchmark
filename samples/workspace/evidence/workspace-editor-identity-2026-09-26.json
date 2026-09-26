@@ -1,0 +1,120 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_drive",
+    "google_docs",
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1174",
+  "original_pr": "https://github.com/ArgaLabs/validation-server/pull/1175",
+  "source_head": "3b2675550632e9ff280117d28dbc79767cfce188",
+  "status": "local_native_and_bounded_browser_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Requesting-principal Docs/Sheets account avatars",
+    "Shared native file lastModifyingUser and immutable revision authors",
+    "Viewer-relative User.me/ownedByMe in file, revision, stale and change-feed responses"
+  ],
+  "tests": {
+    "original_workspace_passed": 1283,
+    "final_review_focused_passed": 29,
+    "final_review_affected_passed": 300,
+    "combined_linear_workspace_passed": 1606,
+    "make_fix": "pass"
+  },
+  "review": {
+    "initial": "fix: change-feed file snapshots retained owner-relative me flags",
+    "final": "single listed change-feed correction independently confirmed",
+    "scope": "Source/native only; no independent visual approval",
+    "documentation": "Three provider READMEs updated and rechecked by scoped documenter"
+  },
+  "local_browser": {
+    "status": "pass",
+    "scope": "Bounded local account-label checks only",
+    "desktop": [
+      "Docs and Sheets catalogs show Drive Twin Editor (editor@drive-twin.local)",
+      "Docs editor account label matches catalog; account label source covered on both editor routes by HTTP checks"
+    ],
+    "mobile_viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile": [
+      "Both catalogs preserve active-account label and initial without layout changes",
+      "Existing editor avatar hiding at narrow widths preserved"
+    ],
+    "read_only_store_state_unchanged": true,
+    "screenshots_retained": false,
+    "limits": [
+      "No complete provider parity or physical-touch claim",
+      "One stale-scale Docs capture recaptured after viewport reset; malformed capture not used",
+      "Hosted new-code verification pending"
+    ],
+    "hashes": {
+      "baseline.json": "1a66c2ebf4ca73e0a284f7de2090ba2eadefb5d736cd6b0de037011076d32a4a",
+      "final.json": "1a66c2ebf4ca73e0a284f7de2090ba2eadefb5d736cd6b0de037011076d32a4a"
+    }
+  },
+  "source_files": {
+    "twins/google_drive/models.py": "3c368c1797c7d499cc0b1fe5adc942d2d041d16f2893de5f79087eb5addd9573",
+    "twins/google_drive/store.py": "052438c0e0933c307af4bf928af6688d212addcec99eecd7679c1715cda6cd02",
+    "twins/google_drive/runtime.py": "50e3ee69cb82c4198f8cdc3c32b8334d50543e49240e3863a4f0239d205d75e3",
+    "twins/google_drive/app.py": "bf0ae1dd6856320faf8be066ef3d9437fd2162b48e7c83c1b4f8207f89523088",
+    "twins/google_docs/ui.py": "764942ef078bd34c544a56535243d497517bdeda5407226ba7f5438b6ac2393d",
+    "twins/google_sheets/ui.py": "abc860a276d8eb0044809251187a42833da2d5c9fe143584bb0c8ff8d9d1cd72",
+    "twins/tests/test_google_workspace_editor_identity.py": "339e449a64fddd5cbd6cffe62cd61ddf67d1f0fa3f23f072d3706858e16211c6",
+    "twins/google_drive/README.md": "ebdf937134914db177153817e0ed3230faa39290584d78bf0102a3f182f86f96",
+    "twins/google_docs/README.md": "71c3dfa17e6c25f026c08a9f01a22ff35e21887f487b5a162586ca03dadcba0e",
+    "twins/google_sheets/README.md": "8aa32cede59e72c675aa1470f4888affe48001107dd71a9683fde8d1d7780413"
+  },
+  "artifacts": {
+    "lab-workspace-editor-identity-before.log": {
+      "sha256": "92655edf7a522765dcc7860699fe9aaff3cf5edf842be6a957a39362e25d24fe",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-regressions.log": {
+      "sha256": "f14447614a22aa81457ad3decc933c8a9e7ef71f98f1fff616cadebe5f69a44d",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-review-focused.log": {
+      "sha256": "697fc7baed0f3d5f58106cbd51ff0659adcaad79706ac554266cfebd94e8c212",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-review-regressions.log": {
+      "sha256": "c70f4d37c533d42abb8fee54c596dee617004c1cbeca8c1cadd141772b67be62",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-makefix-review.log": {
+      "sha256": "5b4f4958bb423b3a2c24588e2950fc0dc405f3445cc1d335d8c640ae0476d95c",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-detector.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-browser-local/baseline.json": {
+      "sha256": "1a66c2ebf4ca73e0a284f7de2090ba2eadefb5d736cd6b0de037011076d32a4a",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-browser-local/final.json": {
+      "sha256": "1a66c2ebf4ca73e0a284f7de2090ba2eadefb5d736cd6b0de037011076d32a4a",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-workspace-editor-identity-browser-local/verification-summary.json": {
+      "sha256": "271c20abf4f60d624b79861aecdde40704483f407db2d3b1457c830a2149bc4f",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-fixes-combined-regressions.log": {
+      "sha256": "e7298acb6803310f5c8815d8e7169e8c15b95635cdfc196245b7fe952682c5f2",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "Full exact-head CI, production and fresh hosted new-code verification pending",
+    "Denied-link HTML, full reader/access-request UI, permissions/capabilities, realtime and AI remain open",
+    "Bounded desktop/390px checks do not establish exhaustive visual or physical-touch parity",
+    "Full eight-provider audit, WKS-03 and sample release remain open"
+  ],
+  "screenshots_retained": false
+}

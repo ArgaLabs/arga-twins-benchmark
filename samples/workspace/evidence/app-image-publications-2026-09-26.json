@@ -3,7 +3,7 @@
   "observed_on": "2026-09-26",
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1173",
   "source_head": "27c4fd76a88a256d10624997c4002b6bab045fce",
-  "status": "local_tests_pass_ci_deployment_and_concurrent_hosted_attestation_pending",
+  "status": "full_ci_merge_and_runtime_pass_workers_rollout_complete_hosted_concurrent_pending",
   "release_allowed": false,
   "finding": {
     "status": "failed",
@@ -65,14 +65,132 @@
     "lab-run-scoped-images-recovery-postgres.log": {
       "sha256": "85633cb4535b2ed5f9859c031458bf589f82d0a23d346ae0fdc9d8a09fd3575f",
       "retention": "Local operator artifact; not bundled"
+    },
+    "lab-app-images-ci-27c4fd76.log": {
+      "sha256": "3f063f66f411fe25bcf9eff1939017dceb2617ce43e7ffe78fd629ae16dcad11",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-app-images-27c4fd76-premerge.json": {
+      "sha256": "c7650be21fa6e9a77faccb474843242296a61872dcff9dfdcf1e3bcec2c15d88",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-app-publications-bd0c16ea-runtime-attestation.json": {
+      "sha256": "28ba99c611f695d74387c5f908ee1b941b591b852c4ec99f54c2afdb67b30b84",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-app-publications-bd0c16ea-runtime-deploy.log": {
+      "sha256": "35984b5b6eada7c2a28158160322f3fa31392f5e7b3d3feae60db522848e1ef4",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-app-publications-bd0c16ea-workers-deploy.log": {
+      "sha256": "1e89ff5b8807b60e329fd800e597ddc6cd8330187cfc3eaf4b1a804f519342a7",
+      "retention": "Local operator artifact; not bundled"
     }
   },
   "limits": [
-    "CI and Runtime/Workers rollout pending",
+    "Both production workflows pass; fresh concurrent hosted app-image checks pending",
     "Concurrent fresh hosted app-image checks pending",
     "Original failing run preserved and torn down; eight provider images matched; gateway comparison not reached",
     "Not a complete production workload inventory, exhaustive frontend approval or WKS-03 resolution"
   ],
   "prior_source_head": "46759a7a1b99f63b9cd3431e1d03c64ea8eddb01",
-  "head_update": "Updated against merged #1172; feature diff unchanged; CI pending on this exact head."
+  "head_update": "Full checks passed on the exact merged head; original failing hosted run remains preserved.",
+  "merge_commit": "bd0c16ea42e8cd9b5609f05c2a616a21a20ff4b9",
+  "ci": {
+    "head": "27c4fd76a88a256d10624997c4002b6bab045fce",
+    "twins_passed": 6083,
+    "root_passed": 2134,
+    "full_checks": "pass",
+    "exact_head_merge_state": "CLEAN"
+  },
+  "deployment": {
+    "runtime_workflow": 36218906671,
+    "workers_workflow": 36218906705,
+    "both": "success",
+    "cloud_run": {
+      "revision": "bd0c16ea42e8cd9b5609f05c2a616a21a20ff4b9",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00281-d5r",
+          "observed_at": "2026-09-26T04:49:59.992467+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:bd0c16ea42e8cd9b5609f05c2a616a21a20ff4b9",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00281-d5r"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00281-d5r",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+            "sha256:c801631f9f6e3cd2ea1250a00c392c6cd974a288fad593920faa82862eba8821"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00651-mpr",
+          "observed_at": "2026-09-26T04:54:53.724371+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:bd0c16ea42e8cd9b5609f05c2a616a21a20ff4b9",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:5bfc7d0af533976eb0b73471e5eadca606c72e15e72358bdb2e97e18562c9859",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:5bfc7d0af533976eb0b73471e5eadca606c72e15e72358bdb2e97e18562c9859"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00651-mpr"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00651-mpr",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:189312e5a02bc345913eee9b63b05072acc4b1f5c56f4d68701f603cd1cca519",
+            "sha256:5bfc7d0af533976eb0b73471e5eadca606c72e15e72358bdb2e97e18562c9859"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "35984b5b6eada7c2a28158160322f3fa31392f5e7b3d3feae60db522848e1ef4",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    },
+    "worker_images": {
+      "status": "success",
+      "workflow": 36218906705,
+      "builder_image": "arga-cluster-builder-bd0c16ea42e8",
+      "warm_image": "arga-cluster-warm-bd0c16ea42e8",
+      "log_sha256": "1e89ff5b8807b60e329fd800e597ddc6cd8330187cfc3eaf4b1a804f519342a7"
+    }
+  }
 }
