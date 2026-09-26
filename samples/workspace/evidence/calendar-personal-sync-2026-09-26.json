@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1191",
   "source_head": "e1aebfa3b49184de17b121209b7021e03dac6a08",
-  "status": "local_pass_ci_pending",
+  "status": "deployed_hosted_native_images_pass",
   "release_allowed": false,
   "scope": [
     "Signed shared-event incremental cursors bound to account, owner, calendar and effective role",
@@ -42,14 +42,156 @@
     "lab-calendar-personal-sync-pagination.log": "b1306aa998ac317471b8b89c6d51db31bbe94ea85566b6807cfe72cab6f874a6",
     "lab-calendar-personal-sync-http.log": "dbc1e476b69f3953f16f342d026b022f94144142026c78c6b777020b5db96d1b",
     "lab-calendar-personal-sync-make-fix-final.log": "109349cd78cc0295333649ac001c908a996209a24bf2f28f0b792e94732ad4f2",
-    "lab-calendar-personal-sync-final.log": "602e20d90ee062921e7df01299e2f452b385732eb6e972a3258066d195758322"
+    "lab-calendar-personal-sync-final.log": "602e20d90ee062921e7df01299e2f452b385732eb6e972a3258066d195758322",
+    "lab-final-calendar-personal-sync-2413377c-r2/image-comparison.json": "21bcc262a0d93982949cb4068e36bd7d40260a0b0ac2c7814e0b052617d05932",
+    "lab-final-calendar-personal-sync-2413377c-r2/publication-catalog.json": "10e39db5afd8f57f55b5598e2d9cf919a9cf17588334c31b6ff5491086b3d6ca",
+    "lab-final-calendar-personal-sync-2413377c-r2/cleanup.json": "57ae3b4c6a2c4d4e60552dd0869880fde54a25119ad97c0d195fcbab9a1178fe",
+    "lab-final-calendar-personal-sync-2413377c-r2/runtime-image-evidence.json": "fb08471a36caebd9d4d62c19154f208d5ef4c1857846c65b34d3923f4a052d42",
+    "lab-final-calendar-personal-sync-2413377c-r2/native-result.json": "13fa06270fc4c10ee58f48f069ade6208c4b1d06788e463fa5fb5cf4997ec893",
+    "lab-final-calendar-personal-sync-2413377c-r2/worker-logs.json": "c4b08528d201b62770b8746c50f82bd510893da97a68868de93516cb8752b023",
+    "lab-final-calendar-personal-sync-2413377c-r2/scenario.json": "4dd0dba0c132ea6032759958018f43a309c59e9a4d9adf43ac7329ecc4e41807",
+    "lab-final-calendar-personal-sync-2413377c-r2/operator-api-trace.json": "4204d6595d6f94ccbebc3bc4370c3551801f1c97d0b9864663e2bea2f0b2601b",
+    "lab-final-calendar-personal-sync-2413377c-r2/control.json": "b1c8e68428dab6d0dac30053b912b54d61d76577237a854be3e87311ab2faba4",
+    "lab-final-calendar-personal-sync-2413377c/cleanup.json": "c8e665c4249f3163371919e3c92ba767de33b21f1e2a9460b4f3cc4406d1aeec",
+    "lab-final-calendar-personal-sync-2413377c/scenario.json": "4dd0dba0c132ea6032759958018f43a309c59e9a4d9adf43ac7329ecc4e41807",
+    "lab-final-calendar-personal-sync-2413377c/operator-api-trace.json": "f459ee183a1c7e83bff46fb218ebd3d21ce3bb3f0ed43ec85a04fac55834a7ff",
+    "lab-final-calendar-personal-sync-2413377c/control.json": "93b47238617b7ea75e2e1dd08dfd47ef31c4448cb226f5338e964455ad2cef0d",
+    "lab-calendar-personal-sync-ci.log": "b4d775e4df6ec5abf3fd4b0de5f9ff0ec0c6262a28d4154b918427e92262db02",
+    "lab-calendar-personal-sync-premerge-fresh.json": "54f7e15d369a2e7acc3e5f5c66defe451c050a8488fd808584092bb7099f15d7",
+    "lab-final-calendar-personal-sync-2413377c-helper.log": "da130d289458ad5842d3649d8c0e8e169b662e00816707016188681f0d7a6e9e",
+    "lab-final-calendar-personal-sync-2413377c-r2-helper.log": "657a556eaf2ac6e0b648eed81de754050d9a7c05dfd2d2c63d56d79a07f2509b"
   },
   "limits": [
-    "Exact-head CI, deployment and fresh hosted verification pending",
+    "Deployed native sync/watch behavior and all runtime images pass; successful HTTP callbacks are local receiver evidence, hosted reserved-invalid callbacks verify account-local failure delivery.",
     "Earlier shared-calendar sync tokens receive 410/full-sync after upgrade",
     "Initial channel sync messages, requested expiration/renewal, replay-time access checks and stable pagination during concurrent writes remain open",
     "Subscriber Scenario export/reseed, reader-only personal reminder edits, full preference move/delete lifecycle and timed reminders remain open",
     "No exhaustive frontend, visual/mobile/touch, AI/collaboration or sample release claim"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merge_commit": "2413377c69d12a4fb9043cf82b4c254e2aa173a1",
+  "ci": {
+    "head": "e1aebfa3b49184de17b121209b7021e03dac6a08",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6393,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "2413377c69d12a4fb9043cf82b4c254e2aa173a1",
+    "runtime_workflow": 36232731274,
+    "twins_workflow": 36232731320,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:2413377c69d12a4fb9043cf82b4c254e2aa173a1@sha256:4b7583cbc658e24ea9202c46232486e21b7f3c770f1d71079b125c1b2f16a5e0",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:2413377c69d12a4fb9043cf82b4c254e2aa173a1@sha256:4c343b7508099b6bfe62b6160f5163c5b37083f03711cfa7f59e81b039a3b4cb",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:2413377c69d12a4fb9043cf82b4c254e2aa173a1@sha256:959f49a0251873341b7f74a0a4d2101b4b5b9632a1c94b0d7290dcbc67bd2e1e"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00295-rdb",
+      "arga-api": "arga-api-00665-9fn"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-personal-sync-2413377c-twins-deploy.log": "b7034d0eb8f367e5e29892c36f016a55cc2b9e2c131ef82937a81f97e62af406",
+      "lab-final-calendar-personal-sync-2413377c-runtime-deploy.log": "45fe8aab286341aa990b34f59fc46563bec9e7cd05f10dbf0048bc7fb924647b"
+    },
+    "serving_runtime": {
+      "revision": "2413377c69d12a4fb9043cf82b4c254e2aa173a1",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00295-rdb",
+          "observed_at": "2026-09-26T09:26:28.674769+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:2413377c69d12a4fb9043cf82b4c254e2aa173a1",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00295-rdb"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00295-rdb",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+            "sha256:4c343b7508099b6bfe62b6160f5163c5b37083f03711cfa7f59e81b039a3b4cb"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00665-9fn",
+          "observed_at": "2026-09-26T09:30:56.354500+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:2413377c69d12a4fb9043cf82b4c254e2aa173a1",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:b72f83f2ba616da1ffc2f45d4cd666bcae6724b1c6b6005e194b61de08067961",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:b72f83f2ba616da1ffc2f45d4cd666bcae6724b1c6b6005e194b61de08067961"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00665-9fn"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00665-9fn",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:959f49a0251873341b7f74a0a4d2101b4b5b9632a1c94b0d7290dcbc67bd2e1e",
+            "sha256:b72f83f2ba616da1ffc2f45d4cd666bcae6724b1c6b6005e194b61de08067961"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "45fe8aab286341aa990b34f59fc46563bec9e7cd05f10dbf0048bc7fb924647b",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "checks": [
+        "Personal writer changes appear only in its incremental cursor; complete owner state remains unchanged",
+        "Foreign, tampered, future and invalid cursors and incompatible incremental queries reject without native mutation",
+        "Writer and reader event-watch registration is account-local; other accounts cannot stop it; personal change queues only writer callback",
+        "Shared edit fans out to owner, writer and reader watches; reserved-invalid callback failures settle in the correct account outboxes",
+        "Stopped and revoked subscriber watches receive no further deliveries; deletion tombstones sync correctly and role downgrade rejects old cursors atomically"
+      ],
+      "limits": [
+        "Successful HTTP callbacks verified locally only; hosted callbacks use reserved .invalid destination and verify isolated failure delivery",
+        "No initial sync message, renewal, replay ACL, concurrent pagination, timed reminder or exhaustive UI claim"
+      ],
+      "passed": true
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true,
+    "browser": "No UI change in this PR; earlier #1190 browser evidence retains its own revision",
+    "original_operator_attempt": "Preserved; helper attempted JSON parsing of empty 204 DELETE response after earlier checks passed. Teardown confirmed, helper corrected and fresh Scenario run completed."
+  }
 }

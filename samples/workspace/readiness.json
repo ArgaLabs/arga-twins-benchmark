@@ -60,7 +60,11 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-personal-sync-2026-09-26.json",
-          "sha256": "52a2cb73ab8bc1c526a85ea3d429d81060bc78f3b88449b1578c01860f226b07"
+          "sha256": "d1fde5d23c99e2c9d7a51e4211368d921d3ffab99ae11488895638338506a108"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-event-editor-2026-09-26.json",
+          "sha256": "3e5db4f282f8fa5a0145497ad14e7776e084618768ccdafa2700d646ca964db9"
         }
       ]
     },
@@ -368,7 +372,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "bd3d5d0cd710c3df8dc1448089aae4126999d25dc0f37ef16409f6e51ec6f98b"
+          "sha256": "258a8542aa0abeafd8c627a98c057f3833e958493644992de343e9043a5748ba"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -396,5 +400,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "533568ab90a93e65ed60b28d4dfa0a57455afa6b785cfe3c000ee09ded26ea45"
+  "sample_tree_sha256": "44b9eb618c086bfccc7a467cf2d963a479e922baaa240528ff6cc74d4f1dcc1e"
 }

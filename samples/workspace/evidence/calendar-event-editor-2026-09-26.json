@@ -1,0 +1,98 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1192",
+  "source_head": "9108cb5c0f60d49a4d4a71a9751ff5d5e88a7c3e",
+  "status": "local_native_browser_review_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_passed": 499,
+    "focused_editor_passed": 26,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "source_files": {
+    "twins/google_calendar/ui.py": "375cbe8f6ed3fdb42ed8975bcd136cbc44a9e4b9c608df3cb3d818505176f189",
+    "twins/google_calendar/README.md": "d82bfed0e0e5d9cce575e77deb6daebccaeed2c5d484a75f20a8c60d99d7f1ea",
+    "twins/tests/test_google_calendar_event_editor.py": "e2e8bc94921efe1bc27298f9db58d8c218aac5513e9ddc830a9ec6f15249c08f"
+  },
+  "browser": {
+    "surface": "Chrome CUA, desktop and 390x844 viewport emulation",
+    "checks": [
+      "Title-only series edit preserved native custom COUNT recurrence, original dates, attendee metadata, conferencing, reminders, location and notes",
+      "Five-week rejection preserved native event; corrected Email two-day save persisted after true reload",
+      "Cancel discarded edited title",
+      "Writer personal popup10 reminder saved after permission-loss error and retry; complete owner and reader account states unchanged",
+      "Reader inputs disabled, no Save/Delete, Cancel works",
+      "Restricted writer saved location on non-private series without changing other native fields",
+      "Reopened editor scroll position reset to top, Close and title visible"
+    ],
+    "visual_passes": "Batched desktop/mobile inspection, checkbox-width correction and confirmation; reviewer-requested reopening correction confirmed separately",
+    "not_verified": [
+      "Physical touch",
+      "Exhaustive provider-wide routes/states",
+      "Native host focus while Mac locked",
+      "Individual/following-instance editing",
+      "Custom recurrence construction",
+      "Timed notification delivery"
+    ],
+    "screenshots_retained": false
+  },
+  "independent_review": {
+    "disposition": "ship_at_source_scope",
+    "resolved": [
+      "Drag update refresh regression",
+      "Restricted writer capability",
+      "Reopen scroll position"
+    ],
+    "visual_limit": "Reviewer did not inspect screenshots; main task inspected inline only"
+  },
+  "real_reference": {
+    "provider": "Google Calendar",
+    "method": "Unsaved draft custom notification dialog inspected then completely cancelled",
+    "controls": [
+      "Notification",
+      "Email",
+      "minutes",
+      "hours",
+      "days",
+      "weeks"
+    ],
+    "native_mutations": false
+  },
+  "artifacts_sha256": {
+    "lab-calendar-event-editor-local-r2/before.json": "fa6cb08f8b47386327295d0e9ebf54cda44e766d2b619245e4dce1b8aed3f058",
+    "lab-calendar-event-editor-local-r2/browser-trace.json": "d4706f9ddafd5d1d5e99afa76ded26afbcb7d86520458410be2c81c0864e3d96",
+    "lab-calendar-event-editor-local-r2/title-native-result.json": "421112c59401e827a8926d414f3bf1e68c20386d04ee5fe419191d15019e1eaa",
+    "lab-calendar-event-editor-local-r2/personal-baseline.json": "9f3e2d0693aa2cb9973d69dc6c60065523a36df31bfb3edc10f7c298469e722d",
+    "lab-calendar-event-editor-local-r2/revoked-baseline.json": "376ec46cb5e774bdf66e7b1db64d44d533ad9a01256c820d4f542237a9bc4c19",
+    "lab-calendar-event-editor-local-r2/after.json": "9d11fc9f94d7c9248533392c7d9ea8ff0fdc26d8293df46d6426e0bec1b4107c",
+    "lab-calendar-event-editor-local-r2/personal-native-result.json": "565215373ebb00f040be81a0e2b4296bb603e83391bfe9ba8d8752ff81e60fc9",
+    "lab-calendar-event-editor-local-r2/fixtures.json": "e3c1577476be0e3af26edd08a1daddc9afb059843d2d97d32cf503323cccec2c",
+    "lab-calendar-event-editor-local-r2/writer-rule.json": "58422a9fd368ad8d0fc43d5b73d0bd92555574c8a600c535276379da5d9fb1de",
+    "lab-calendar-event-editor-local-r3/before.json": "2bb159d0e7ee4bb46a7a87a87b7f88507f8d8c51f05f4e83590e17e2be9d2e4b",
+    "lab-calendar-event-editor-local-r3/browser-trace.json": "48906796f80b86b7aff7ffacddde2450ccc46404a34acd46c6db41091d2a453e",
+    "lab-calendar-event-editor-local-r3/browser-observations.json": "0279e18f11c226bc10888f115df018c381db5d96a6038330509b792215e143f2",
+    "lab-calendar-event-editor-local-r3/restricted-native-result.json": "39363292ad3c33920fdda99506fa642f0a7fa3fb0f231154d07cc9a489dfb700",
+    "lab-calendar-event-editor-local-r3/after.json": "eb28a515c34840bb9cf5401fd4a9b9cc1d8d84f243d2c892fcea541f170c51e5",
+    "lab-calendar-event-editor-local-r3/fixtures.json": "188cf2729d3cc1c2ddd36dc541f27f35caad334dc8c3165dca4aca01af45cfef",
+    "lab-calendar-event-editor-focused.log": "c2f1795df6c926c168dc3653f3c5e0c1073d82a748fa805f4c222200cf8e2b95",
+    "lab-calendar-event-editor-focused-final.log": "b715bed807cdc013147d8009725fe66e2bdaba1ca287471f2d48b515503415f5",
+    "lab-calendar-event-editor-integrated.log": "6b337f1259043ab421a932d2fbbf3286f99a9a7c32cdb8523bcb53f4089e1fb0",
+    "lab-calendar-event-editor-final.log": "0a7aa026652adb5b3dd4215d59e8b5344405fd6f8ff62d621e3359de972a7f32",
+    "lab-calendar-event-editor-make-fix-final.log": "a4302caa2bfe148f2f514f1aacd487b8184b62a77f413c35b016cf2a61d3a017"
+  },
+  "limits": [
+    "Exact-head CI, production deployment and fresh hosted editor verification remain pending",
+    "Physical touch",
+    "Exhaustive provider-wide routes/states",
+    "Native host focus while Mac locked",
+    "Individual/following-instance editing",
+    "Custom recurrence construction",
+    "Timed notification delivery"
+  ],
+  "screenshots_retained": false
+}
