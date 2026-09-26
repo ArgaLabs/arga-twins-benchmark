@@ -1,0 +1,148 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "github"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1188",
+  "source_head": "34883f250c0918bcbfa9cf3f33019edb244689ae",
+  "status": "deployed_native_hosted_browser_images_teardown_pass",
+  "release_allowed": false,
+  "scope": [
+    "Complete visible pull-request review history instead of latest-only fast path",
+    "Forward/backward opaque cursors, nodes/edges/counts/page metadata, author/state filters and field aliases",
+    "Pending privacy before counts/cursors/filtering; invalid inputs do not mutate native state"
+  ],
+  "origin_failure": "Preserved fresh hosted twelve-review readback failure in github-review-states-2026-09-26.json; a product fidelity defect",
+  "tests": {
+    "github_regressions_before_zero_page_adjustment": 481,
+    "compatibility_runner_passed_before_zero_page_adjustment": 107,
+    "final_review_state_privacy_tests_passed": 88,
+    "new_connection_tests": 20,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "reference": {
+    "sources": [
+      "https://docs.github.com/en/graphql/reference/pulls#pullrequest",
+      "https://docs.github.com/en/graphql/guides/using-pagination-in-the-graphql-api"
+    ],
+    "live_read_only": "Public cli/cli PR #14507, eight reviews; creation order, first/last page metadata, approved-state and empty-state filters, first:0 observed. No real GitHub mutations."
+  },
+  "hosted": {
+    "status": "pass",
+    "native": {
+      "checks": [
+        "APPROVE persists APPROVED through REST create/submit and GraphQL create/submit",
+        "REQUEST_CHANGES persists CHANGES_REQUESTED through REST create/submit and GraphQL create/submit",
+        "COMMENT persists COMMENTED through REST create/submit and GraphQL create/submit",
+        "Invalid GraphQL action preserves exact captured full native state",
+        "All twelve review bodies and canonical outcomes survive full history readback",
+        "Forward/backward pages, counts, edges, filters and zero-sized pages match native visible history",
+        "Foreign pending review stays absent from counts and pages; its cursor errors without exact native state mutation"
+      ],
+      "limitation": "Bounded canonical review state, connection pagination and pending privacy coverage. GraphQL webhooks and broader repository/admin fidelity remain open.",
+      "passed": true
+    },
+    "browser": {
+      "status": "pass",
+      "browser": "Chrome CUA",
+      "scope": "Review outcome submission and true reload, following native review connection and privacy checks",
+      "native_state_allowlist": {
+        "review_ids": {
+          "Approve after browser review": 21,
+          "Request changes after browser review": 23,
+          "Comment after browser review": 25
+        },
+        "fields": [
+          "state",
+          "submitted_at"
+        ],
+        "submitted_at": "2026-09-26T08:00:00Z"
+      },
+      "protected_state": "Complete captured artifact exactly matches only these three intended submissions; private owner review and every review comment unchanged",
+      "screenshots_retained": false,
+      "full_visual_or_touch_parity": false,
+      "cleanup": "torn_down"
+    },
+    "images": {
+      "matched": 3,
+      "total": 3
+    },
+    "serving_api_and_proxy": "Both requested revisions carry 100% traffic; resolved container digests match publications",
+    "teardown": "confirmed torn_down"
+  },
+  "source_files": {
+    "twins/github/handlers/graphql.py": "8a47907b55a072986f97c637019433c03cdf3f1ecfbddb3778b0df728e9b90d7",
+    "twins/github/README.md": "d8a69a7ee64271a8483c12fd277a84c399cdc98d5d1018c5d05fd85ea79cc2a0",
+    "twins/tests/test_github_review_connections.py": "8a58ae3cb3d5e918b059d1be2f4b0db68bc94313a3fd177e50aa23dcb084de89"
+  },
+  "artifacts_sha256": {
+    "lab-github-review-connections-regressions.log": "ba27af6f4e9edce29d5418b7d8ec69139df13adc015156c2d76afa252a0beccc",
+    "lab-github-review-connections-compat-runner.log": "85c1d1e7ec4d41e275479fd44a59a96531d6b107b4cb218fae3b3e77f9f300ff",
+    "lab-github-review-connections-final-focused.log": "ecb19ab4e4b15b7eb501c97d5efffa12c740cb72d617356c18ab19a26190ce3f",
+    "lab-github-review-connections-make-fix3.log": "2c8c2b7f84b278d10494652fd536fe2de8b5a864668a8b0344a964cb676b839c",
+    "lab-github-review-connections-official-reference.json": "2614c333af609e85be78631fee1d1bfe0ad26de4f2e6fe8c38ae2da0b62868b2",
+    "lab-github-review-connections-official-pagination.json": "f5fcc84583c8fb9b2a81614eb91113c1674f442c4a2fc9ffeb2805151761b3fd",
+    "lab-final-hosted-github-review-connections.py": "472c3b1054521ca17c9d9240cd5db6986e4b43af4999c8555344857bac7eca01",
+    "lab-final-verify-github-review-connections.py": "e4c0af1a11f87a3bce61d3655be12f50eb607f21a9125a6798644d3a90e173a2",
+    "lab-final-github-review-connections-premerge-34883f25.json": "2e13c9e565dcdde220538c27e9d26a716b7e186c69a55377015fbca138f46ecf",
+    "lab-github-review-connections-ci.log": "6a9ae0b7526c17e8869abdaea92427510ae08bdcfab5fe7a2507fba86c32d931",
+    "lab-final-github-review-connections-d12aa8d4/browser-trace-0.json": "27ffa85fe7d1aa09bd2d030bb7313de62afade7e9696a0ac7c4fe28def64fcba",
+    "lab-final-github-review-connections-d12aa8d4/image-comparison.json": "75221d92bfee42fe40c6df88ddf1ec1bc69e1e1a74b99148b4e4f23ae5a9e124",
+    "lab-final-github-review-connections-d12aa8d4/publication-catalog.json": "f4dfc7e4bd4a51337704c6d49fb6d58fd2715dc28e1ba9fc8dab2448b1747066",
+    "lab-final-github-review-connections-d12aa8d4/pre-history-state.json": "756c0d6ee8a75fed6e1205bb7e190eaa00f5f72ba71cf5cfa020dd53b2e1a468",
+    "lab-final-github-review-connections-d12aa8d4/gui-baseline-state.json": "a2b41f234fdd98266e7e68dd32be0fbe1eee80bc4835cf3e22822dfab4dfbe99",
+    "lab-final-github-review-connections-d12aa8d4/workspaces.json": "e2cf464e81dbcf6718eade3e0b5cac76c12105e62ea3b97958a2516adb318e68",
+    "lab-final-github-review-connections-d12aa8d4/cleanup.json": "c1077af3d680b0c41ecc5ac6af531f113fa2364e835e659c77a1bb014846d4a6",
+    "lab-final-github-review-connections-d12aa8d4/runtime-image-evidence.json": "be30329b2b418da24ec6c46321054c4a3931d3149fab96960e988845938af621",
+    "lab-final-github-review-connections-d12aa8d4/native-result.json": "804d3e30428f339e675e8f8c7d89a21a9e5c63fa84f77be8a431d8ca4b0b082a",
+    "lab-final-github-review-connections-d12aa8d4/worker-logs.json": "4c7b3dde013d38315c1c749d2d6125da5523b28d823d0d79b1ac72675966bf31",
+    "lab-final-github-review-connections-d12aa8d4/scenario.json": "81c8a21b7eba78d4776ff590525928c5abb56900f1a28bd3b4df87d8ee4ea359",
+    "lab-final-github-review-connections-d12aa8d4/verification.json": "7f0730256a3f9ebd6e58506ad0e266380e3e0b0b1ef93ee1a820b1d1e584a314",
+    "lab-final-github-review-connections-d12aa8d4/operator-api-trace.json": "0e73c9c7eaa0831a6fd6507ed497467f874894b324418b2ad40a0dd89bcb72d5",
+    "lab-final-github-review-connections-d12aa8d4/final-state.json": "6fc3fe2f58d307853293b237db75fa874d9efc763927823ead4adadbd11b171c",
+    "lab-final-github-review-connections-d12aa8d4/control.json": "782e34b76d080f944297f727305d4514bf4380756c7f208d5aab9287fbc52b44",
+    "lab-final-github-review-connections-d12aa8d4-runtime-attestation.json": "f0aeb442592abc78ecb7f406279876200bbf26a746f483bbf20af9977c58a527"
+  },
+  "limits": [
+    "General GraphQL fragments/directives, latest-review summary connections and full review-thread pagination remain open",
+    "Pending review creation timestamps and GraphQL webhooks are not addressed by this correction",
+    "No exhaustive provider/visual/mobile/touch/AI or sample release claim"
+  ],
+  "screenshots_retained": false,
+  "merged_revision": "d12aa8d4c324ab46cf4d845f6a083e2d2563899c",
+  "ci": {
+    "status": "all_complete_success_or_applicable_skip",
+    "head": "34883f250c0918bcbfa9cf3f33019edb244689ae",
+    "premerge": "fresh CLEAN",
+    "workflow": 36229738190,
+    "twin_tests_passed": 6299,
+    "root_tests_passed": 2134
+  },
+  "deployment_workflows": {
+    "twins": 36230061034,
+    "runtime": 36230060981,
+    "status": "both_success"
+  },
+  "deployments": {
+    "revision": "d12aa8d4c324ab46cf4d845f6a083e2d2563899c",
+    "runtime_workflow": 36230060981,
+    "twins_workflow": 36230061034,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:d12aa8d4c324ab46cf4d845f6a083e2d2563899c@sha256:9c6a829cc216e04e8e8561956277e84f659e3fe2061763c6a27072fd83dc7eb3",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d12aa8d4c324ab46cf4d845f6a083e2d2563899c@sha256:bcb060e4db0adad559be61797f0d56b2bd220a2c6ab96bfc5cf8687792c34722",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:d12aa8d4c324ab46cf4d845f6a083e2d2563899c@sha256:8082a5cdc3aea8b5f028a3daa4f0fdbda33ab86aa581c9438a25f82de0961dad"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00292-zsf",
+      "arga-api": "arga-api-00662-ptp"
+    },
+    "log_sha256s": {
+      "lab-final-github-review-connections-d12aa8d4-twins-deploy.log": "1aaad3023d750e1fd4199cc608aac7d8c31583ec63fd7bbc2c2b1556c690d1b4",
+      "lab-final-github-review-connections-d12aa8d4-runtime-deploy.log": "d4ccabd422586424897146f13f0120a1cbceb436cf4cd36b6e452b75809ba15a"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  }
+}

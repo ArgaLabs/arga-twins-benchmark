@@ -5,8 +5,8 @@
     "google_docs"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1187",
-  "source_head": "86dda016fd017fc5a07caaa123ea132267dd4d95",
-  "status": "draft_local_source_tests_pass_native_focus_check_blocked",
+  "source_head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
+  "status": "source_and_ci_pass_native_focus_check_blocked",
   "release_allowed": false,
   "scope": [
     "Native role/OAuth-scoped document access capabilities",
@@ -48,7 +48,8 @@
     ],
     "native_state": "First two sessions match complete native baseline exactly",
     "blocked": "Final native window-focus/revocation/restored-access recovery check: macOS locked",
-    "screenshots_retained": false
+    "screenshots_retained": false,
+    "blocked_session_cleanup": "Third local session stopped. Complete native state changed only in the operator-injected writer-to-reader permission; failed draft never persisted. Current source needs a fresh focus/recovery session."
   },
   "review": {
     "initial": "fix: dirty draft recovery, mode-input/stale-document race and delayed-refresh race",
@@ -91,12 +92,26 @@
     "lab-docs-viewing-regressions5.log": "88041919f969c82637cdc4b34769b371c4473167fbb5da5f607473050eb15f79",
     "lab-docs-viewing-workspace.log": "4e48126ca0d9f2b1308c17e6b2bb491b3732ece324a2f1bec82e78e5dea776e2",
     "lab-docs-viewing-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "lab-docs-viewing-reference.json": "9990d7fb3ff1837ecbf85982de1aa9ee625c6f2f87bd4cf5ecdc836d16808b57"
+    "lab-docs-viewing-reference.json": "9990d7fb3ff1837ecbf85982de1aa9ee625c6f2f87bd4cf5ecdc836d16808b57",
+    "lab-docs-viewing-ci-current.json": "6c4e52a85f5f99fd720915c53e346ca1541c0985a165224a0d1e7944eb60542e",
+    "lab-docs-viewing-local-r3/browser-trace-0.json": "ebcc475927f7a337a09f1add402b32bcd41880375afd65ab163f3ff7041c9053",
+    "lab-docs-viewing-local-r3/browser-trace-1.json": "dc68dd3127616e94d6ef6cd6c651321275a3e4c59717809c2f0cdd309b3f15bb",
+    "lab-docs-viewing-local-r3/blocked-result.json": "e4583097c70477eb8d945afb8796334018f1b1191b275f0dd4646df7672c854a",
+    "lab-docs-viewing-local-r3/workspaces.json": "c1a1a7fef61fad7916e8eec63bd1231a59c6ebd8d636ff9f8725cdbe5acb490a",
+    "lab-docs-viewing-local-r3/baseline.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
+    "lab-docs-viewing-local-r3/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f"
   },
   "limits": [
-    "CI for final PR head, remaining native focus check, merge/deployment and hosted verification pending",
+    "Remaining native focus check, merge/deployment and hosted verification pending; final-head CI passes",
     "No Suggesting, full commenter collaboration, request-access, full menus/admin/realtime/AI claim",
     "No exhaustive visual/mobile/touch parity or final release readiness"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "original_source_head": "86dda016fd017fc5a07caaa123ea132267dd4d95",
+  "ci": {
+    "head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
+    "status": "all_complete_success_or_applicable_skip",
+    "merge_state_observed": "CLEAN",
+    "is_draft": false
+  }
 }

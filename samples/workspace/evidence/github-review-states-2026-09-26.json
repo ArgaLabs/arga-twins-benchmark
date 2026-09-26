@@ -7,7 +7,7 @@
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1186",
   "source_head": "ba1c032c487e1d2d2196227d6f69d2c458d0cc41",
   "merged_revision": "86b01846df16618181419a1fa8514aa20e58a50d",
-  "status": "deployed_hosted_review_connection_failure_preserved",
+  "status": "deployed_original_hosted_failure_preserved_follow_up_pass",
   "release_allowed": false,
   "scope": [
     "Canonical APPROVED, CHANGES_REQUESTED and COMMENTED states across REST, GraphQL and browser forms",
@@ -64,7 +64,7 @@
     "invalid_action": "Exact captured full native state unchanged",
     "failed_check": "reviews(first:100) returned only the last COMMENTED review instead of all twelve created reviews",
     "classification": "Product fidelity defect, not operator setup error or candidate retry",
-    "follow_up": "bug/lab-github-review-connections",
+    "follow_up": "https://github.com/ArgaLabs/validation-server/pull/1188",
     "browser": "not reached because native query check failed",
     "images": "all three provider/app/gateway images matched",
     "teardown": "confirmed torn_down"
@@ -95,9 +95,15 @@
     "lab-final-github-review-states-86b01846-runtime-attestation.json": "53c568baa326dd7e91f008699246b082b24eeca737ae09f8ed148695c025c87f"
   },
   "limits": [
-    "Fresh hosted browser outcome/reload verification remains pending after the review-connection correction",
+    "The original hosted failure is retained; fresh hosted browser outcome/reload passed after #1188",
     "GraphQL webhook delivery, broader permission/admin/AI coverage and exhaustive audits remain open",
     "WKS-03 remains a preserved business failure; no final package release"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "hosted_revalidation": {
+    "source_pr": 1188,
+    "revision": "d12aa8d4c324ab46cf4d845f6a083e2d2563899c",
+    "report": "github-review-connections-2026-09-26.json",
+    "result": "All native outcomes, full paginated history, private drafts, browser outcome/reload, exact complete native-state delta, three images and teardown pass"
+  }
 }

@@ -29,7 +29,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-review-states-2026-09-26.json",
-          "sha256": "d91d0bd39bc0cf32b8369079ceea53939b5d8d2df704fb0c8bfb91cb62a34a48"
+          "sha256": "e32af52bc50c35a5c9e42983c8babf4b8c057cad7a8ad6f398d579af54b3b46e"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-connections-2026-09-26.json",
+          "sha256": "25f98f71da73b76cc12ef626aaa884db820e40e929441ee50d2bac525386c570"
         }
       ]
     },
@@ -45,6 +49,10 @@
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
           "sha256": "6f181b57e7fd883815448aeedee5c1b14b828014b98403902dd668c769eca6b3"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-clock-reminders-2026-09-26.json",
+          "sha256": "7fd3da3fcb0172e2745c5e974265c81b1ad9356c0153ae387ba58c722bb9f8d2"
         }
       ]
     },
@@ -165,7 +173,7 @@
         },
         {
           "path": "samples/workspace/evidence/docs-viewing-mode-2026-09-26.json",
-          "sha256": "af55a0d39078839edb1f6411e0013cd55c23d5ad8feb7463f5fcad4b2e97a6da"
+          "sha256": "2025a949e7232487ae624c67f9590e9106c5650c0751ae2d90e01262e3e690f7"
         }
       ]
     },
@@ -352,7 +360,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "a9dc7132980badc4dc98e538a9de1f17a5cada4f8d90d909647477eacfe02283"
+          "sha256": "f4dfc7e4bd4a51337704c6d49fb6d58fd2715dc28e1ba9fc8dab2448b1747066"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -380,5 +388,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "ed40d05078195ff5c5002df8c09256bd78ff7d85bc2ac6c170701f025e5def49"
+  "sample_tree_sha256": "6bbdb2cd025192cdc0b51532436567141e421493dfac5b966cee1fc95f326b07"
 }

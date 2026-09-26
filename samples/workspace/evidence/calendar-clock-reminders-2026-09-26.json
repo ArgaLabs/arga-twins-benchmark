@@ -1,0 +1,63 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1189",
+  "source_head": "d5628ed9791a1096f0dc1f2c381fa0c2c3b226b1",
+  "status": "local_pass_final_head_ci_pending",
+  "release_allowed": false,
+  "scope": [
+    "Unconfigured clocks follow actual current UTC instead of advancing 37 seconds per timestamp request and freezing while idle",
+    "Explicit base_time retains deterministic steps and reaches runtime during Scenario reset; undated seed events follow that clock while explicit dates stay unchanged",
+    "A subsequent unpinned Scenario restores live time; invalid clock resets preserve every account and the clock",
+    "Scenario export retains clock choice without native mutation",
+    "Event and recurring-instance lists return the authenticated user's current subscription default reminders across aliases and pagination"
+  ],
+  "tests": {
+    "final_calendar_workspace_export_scenario_generator_passed": 314,
+    "clock_export_reset_cases": 15,
+    "reminder_metadata_cases": 4,
+    "reminder_cases_failed_before_fix": 4,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "reference": {
+    "source": "https://developers.google.com/workspace/calendar/api/concepts/reminders",
+    "observed_on": "2026-09-26",
+    "relevant_contract": "Default reminders are user-specific CalendarList metadata and are also returned by Events list. This metadata is separate from timed reminder delivery and change-notification delivery."
+  },
+  "source_files": {
+    "app/validate/scenario_generator.py": "ab2ee72ad4c4982eaba4c67ec202d0197011fb3da86ed7e9477422f117950d95",
+    "twins/google_calendar/app.py": "e927f97d71ab6264607efc80acdce7b8ca22580babb31bda52c5432e6663a7dc",
+    "twins/google_calendar/store.py": "d32f7a480c491b22d3e9c42abbbab33256a22f89c50ce9c00ce6461dc4942e77",
+    "twins/google_calendar/scenario_runner.py": "945768d96d13573d99061e57f78d4fc241c2054fc9453596ea1f0fc1ae6d1e1c",
+    "twins/google_calendar/README.md": "a518651fd110e3d8c354b917add2fe02852c532a1dad0248e280ea98dadbdbc2",
+    "twins/tests/test_google_calendar_clock.py": "d6227d2541404e6e2aa9d131bf74c04d053aec662fca0342d7e402073fd2b616",
+    "twins/tests/test_google_calendar_sharing.py": "322d9959f04ae17508035012138ac02f82f3d2ec4a03e1079b32a14326f70125"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-live-clock-focused.log": "36983d4fcdd66eb5188a9854d9df22940912f8a420fec9bf8348be0df4f7a106",
+    "lab-calendar-live-clock-regressions.log": "de83a2890d1b5a3762d6be6464bf4b64fddaa807e300ceba57cd5405ab959f3d",
+    "lab-calendar-default-reminders-red.log": "32d14bda6d1ed3f36adc2d1abbd614e0bae4b1617f947937b1e1b1914f2804d3",
+    "lab-calendar-default-reminders-green.log": "eeec9a0e7557eb29f30cb4f412780ac2ac3d684f50061467ebddf04ac19712b3",
+    "lab-calendar-clock-reminders-final.log": "dd36fdd17e33e636a530fa310c910ceb87881e4a186182fe848b4676e38d2490",
+    "lab-calendar-scenario-clock-make-fix.log": "c0c71526d8e8c202c78ce6100e01c718c5a9e057e02f04f5f36cd6e14d6fbe5a",
+    "lab-final-hosted-calendar-clock-reminders.py": "4c39197a7b82cf216c57abbf7843f6c7786cb5e8ef576921f98a0c0a9b6a2794"
+  },
+  "operator_test_corrections": [
+    "Initial fixture assumed a primary calendar existed in empty state; it now creates an owned calendar",
+    "Initial GET assertion expected byte-identical event-time JSON; existing API normalizes Z to +00:00 and adds UTC timeZone. Final assertion preserves the same instant and native timestamp fields."
+  ],
+  "hosted": {
+    "status": "pending",
+    "plan": "Fresh live and fixed CLI Scenarios, full owner/reader state comparisons, browser settings/reload reads, all six container images, serving API/proxy digests and both teardowns"
+  },
+  "limits": [
+    "No timed reminder/email or daily agenda delivery implementation",
+    "Personal event-level override isolation and broader notification/access/AI/collaboration remain open",
+    "No exhaustive frontend/visual/mobile/touch or sample release claim"
+  ],
+  "screenshots_retained": false
+}
