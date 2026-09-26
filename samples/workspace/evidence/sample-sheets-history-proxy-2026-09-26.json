@@ -1,0 +1,41 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14",
+  "source_commit": "6c18e31a4914ead714ba14cad0b12b8274554150",
+  "status": "local_protocol_regressions_pass_fresh_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Forward Sheets session and typing-group headers on allowed spreadsheet routes",
+    "Keep authorization and cookies controlled by operator credentials",
+    "Pass history warning-consent revision protocol",
+    "Reject unsupported Sheets history-header routes and avoid forwarding to other providers"
+  ],
+  "tests": {
+    "passed": 195,
+    "before_fix_failed": 3,
+    "ruff": "pass"
+  },
+  "source_files": {
+    "src/arga_twins_benchmark/computer_use/proxy.py": "c93fb02a6895598e3e9939639f224bc8bc34cd273660e7b2accd68f5cf23177e",
+    "tests/test_computer_use_sample.py": "f5feedbbb2765b14f49a6fb3a8c5d4f44a56ab385692d44524c9c8fc2394564e"
+  },
+  "artifacts": {
+    "lab-sheets-history-proxy-before.log": {
+      "sha256": "17b93eddc0dbf9a5034199f7169a15c6ff01f056f8dc471b18592c9380777746",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-history-proxy-regressions.log": {
+      "sha256": "c77fe253eabf9537f96fb2214678c41f3dff9e728db0884166649fd3ab8458a3",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "Fresh hosted native and browser verification after #1179 deployment pending",
+    "No candidate result or full release gate changed"
+  ],
+  "screenshots_retained": false
+}

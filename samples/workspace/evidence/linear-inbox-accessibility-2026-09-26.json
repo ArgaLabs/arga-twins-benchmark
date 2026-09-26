@@ -1,0 +1,106 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1180",
+  "source_head": "66828022945df89d86005709567dfe3f5b052c3a",
+  "status": "local_desktop_390px_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Accessible Inbox Display, bulk-action and Snooze popovers",
+    "Escape/Cancel focus restoration",
+    "Dark-theme label and muted-text contrast",
+    "Preset snooze accessible names retain local date and time"
+  ],
+  "tests": {
+    "linear_passed": 322,
+    "snooze_review_targeted_passed": 71,
+    "make_fix": "pass",
+    "detector_findings": 0
+  },
+  "local_browser": {
+    "status": "pass",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "Display, bulk actions and Snooze controls have names in native accessibility tree",
+      "Display Escape and Snooze Cancel return focus to their trigger buttons",
+      "Delete all dialog Cancel leaves business state unchanged",
+      "Dark label and secondary text readable at both inspected sizes",
+      "Read/unread round trip preserves business state; two expected sync increments"
+    ],
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "limits": [
+      "Selected dark-theme flows only; full light-theme/physical-touch/provider parity remains open",
+      "Native date-picker icon styling remains browser dependent",
+      "One malformed viewport-scale capture discarded and recaptured"
+    ]
+  },
+  "snooze_review_browser": {
+    "review_comment": 4110347038,
+    "status": "pass",
+    "checks": [
+      "All four Chrome AX snooze buttons include label and displayed local date/time",
+      "Escape collapses and returns focus to Snooze"
+    ],
+    "screenshots_retained": false
+  },
+  "review": {
+    "final": "ship within source and recorded behavior scope; snooze timestamp finding resolved",
+    "documentation": "README checked",
+    "limitations": "No independent whole-surface visual approval"
+  },
+  "source_files": {
+    "twins/linear/inbox_ui.py": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
+    "twins/linear/README.md": "48310908f07bb49dd12b0c2f3d20cc764434823f784b53e1dae2c35130381b2c"
+  },
+  "artifacts": {
+    "lab-linear-inbox-accessibility-regressions-final.log": {
+      "sha256": "00f093978a9b520d76d084b6cc3e34e676b0219e448eccdf890ac1b4dafaf709",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-snooze-tests.log": {
+      "sha256": "c37fd194daa41063d10f146845b33cd0f9627ba3c51501c996f573849cefe9fe",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-snooze-makefix.log": {
+      "sha256": "1ef252272309f9b78060c5bee7abc8d6e03ba0bbfd656437fa0c687c12a8894e",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-detector.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-confirmation/baseline.json": {
+      "sha256": "0d486635553f8f76a47d18c92b12abdff1384e92d4aae5f7fde9fa81dc31b102",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-confirmation/checkpoint.json": {
+      "sha256": "0d486635553f8f76a47d18c92b12abdff1384e92d4aae5f7fde9fa81dc31b102",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-confirmation/final.json": {
+      "sha256": "bbcc1daf66c25d4d5486c4adb84ed27bbe153d5742d02dde0d046c0681a8423e",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-snooze/baseline.json": {
+      "sha256": "0d486635553f8f76a47d18c92b12abdff1384e92d4aae5f7fde9fa81dc31b102",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-accessibility-snooze/final.json": {
+      "sha256": "0d486635553f8f76a47d18c92b12abdff1384e92d4aae5f7fde9fa81dc31b102",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "CI, deployment and fresh hosted verification pending",
+    "Selected dark-theme desktop/390px checks; full mobile/touch/light-theme parity remains open",
+    "Full eight-provider and WKS-03 release gates remain open"
+  ],
+  "screenshots_retained": false
+}

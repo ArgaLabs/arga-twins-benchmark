@@ -99,6 +99,18 @@
         {
           "path": "samples/workspace/evidence/sheets-warning-close-2026-09-26.json",
           "sha256": "a2954e1de0daf612053db63fc31f40f5e48ec7b983de3d9848330990428eec29"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-undo-redo-2026-09-26.json",
+          "sha256": "dbb8f1f8a5ca96b0a9629a68e52c65c0e91e88f372ec7272a3fe3b99ae78bba8"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
+          "sha256": "f68619c2d07487ba1894280f1677db76b969c9179430abb11dd19be0cc74a5e5"
         }
       ]
     },
@@ -126,6 +138,10 @@
         {
           "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
           "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
         }
       ]
     },
@@ -168,6 +184,10 @@
         {
           "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
           "sha256": "08c723bbd7c17f1bd6554dad193612f088962bbba6838d5051723ed6dca2611c"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-inbox-accessibility-2026-09-26.json",
+          "sha256": "5b8eb1c6f86077e352d656f7a4b3979f3e93d32152f3d5abde3e9fce8b1bc65c"
         }
       ]
     },
@@ -305,6 +325,14 @@
         {
           "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
           "sha256": "740b0e7a4e9ba0816be66f83b29204128dc70435531e62c9e4d22dd86ba4da55"
+        },
+        {
+          "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
+          "sha256": "a62310185f9207e9853fa7e1761033cd59d85e9d9739456a1f8ff7f2fd5c08c7"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
         }
       ]
     },
@@ -316,9 +344,13 @@
         {
           "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
           "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
+          "sha256": "f68619c2d07487ba1894280f1677db76b969c9179430abb11dd19be0cc74a5e5"
         }
       ]
     }
   ],
-  "sample_tree_sha256": "6df38680eb71bcebc0c520e589229bff216017694655cb85e4d0c196e4646812"
+  "sample_tree_sha256": "fb9d51a0b77789a5db041de902347e91246569cbd40b3fe4ef16b147a244d8b7"
 }

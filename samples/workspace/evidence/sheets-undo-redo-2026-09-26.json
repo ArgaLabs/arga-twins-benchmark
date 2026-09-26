@@ -5,7 +5,7 @@
     "google_sheets"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1179",
-  "source_head": "a4f914ffdd6bcb44a897ef7d3bc543fb94ff7ac3",
+  "source_head": "8cd557ba5076f73d64c796aafc7ec515276b4336",
   "status": "local_native_desktop_390px_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
   "scope": [
@@ -15,15 +15,19 @@
     "Native commit ordering, structural conflicts and reset isolation"
   ],
   "tests": {
-    "workspace_passed": 1310,
-    "focused_undo_passed": 26,
+    "workspace_passed": 1315,
+    "focused_undo_passed": 31,
     "make_fix": "pass",
     "detector_findings": 0
   },
   "review": {
-    "final": "ship: all five listed source/native findings independently resolved",
+    "final": "ship: all seven listed source/native findings independently resolved",
     "scope": "No independent whole-surface visual approval",
-    "documentation": "README checked by scoped documenter"
+    "documentation": "README checked by scoped documenter",
+    "additional_findings": [
+      "Current strict validation is enforced for undo and redo; rejected history preserves all state and remains retryable",
+      "deleteDuplicates and randomizeRange invalidate history at stale row coordinates"
+    ]
   },
   "reference": {
     "observed_on": "2026-09-26",
@@ -163,16 +167,16 @@
     "limitations": [
       "Local twin checks; hosted verification pending",
       "No physical touch or exhaustive mobile/reference parity",
-      "Independent review covered the five listed source/native findings, not whole-surface visual approval"
+      "Independent review covered the seven listed source/native findings, not whole-surface visual approval"
     ]
   },
   "source_files": {
     "twins/google_drive/app.py": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
     "twins/google_drive/runtime.py": "868d482b99dbb921006632a43eacf2d4351877108ab051e12fc770b8280841df",
-    "twins/google_drive/sheet_history.py": "bb7b3ae8ec7285d4e6d8dd114eb2b2f97f06fa809903e86dabcda9b3ac7523b9",
+    "twins/google_drive/sheet_history.py": "bd4907a858c5c7546fbc4c5ad437a51a9bebab9cb5db3ffe8af743f24c56ae09",
     "twins/google_drive/store.py": "fea5d0481ebed785ce9763bc996f960bd3ee789d619b5e6668923d250a35787e",
     "twins/google_drive/workspace_editing.py": "9617b60ea2babe517091aeeffd33ea0e38a72277ca47b681dd1a6016908b0032",
-    "twins/google_sheets/README.md": "852eb7ab96688fd536a2acc84ab3154c1eae6e92d97c742b4d0dc661b20569ba",
+    "twins/google_sheets/README.md": "39643347bf5546579109136d3e50f2db1b4b5bf2fe2f3ccc737afb0024f31cc8",
     "twins/google_sheets/clipboard_ui.py": "4593e44e919647f89d2e93e45c1012adf0efc79b7b6f4dd52d07606baa2e6d1a",
     "twins/google_sheets/grid_format_ui.py": "3c937c76cdfba2612ef37aac2ae913842ac33afca124b67457bf3e3e05297916",
     "twins/google_sheets/history_ui.py": "54911a8f369392028c8130088fe8c388832a4e11458d64c63ff14ec5cdd603a5",
@@ -183,7 +187,7 @@
     "twins/tests/test_google_sheets_grid_format_ui.py": "c4ded9a61e96d1e73c2cc243da4b10f28b8e68929b29e08db09f07a520f7cae3",
     "twins/tests/test_google_sheets_protection_warnings_ui.py": "b4026affc067d1c79364dc396ba403dab9387700b2371f2f33c62f1fb9670477",
     "twins/tests/test_google_sheets_tabs.py": "f52b7822381d15a5894b4601ff3b35c09d219b0e594e104a775e77c263b6572b",
-    "twins/tests/test_google_sheets_undo.py": "b6ac3263ae3b8a96d59b5f43ce4a8e91b40e2aea6572e19ced9395c60d4f96f8"
+    "twins/tests/test_google_sheets_undo.py": "31db07fa0758ebc0b37934bd4ed23085dbae2f38d5b99f3adef1674e7427606d"
   },
   "artifacts": {
     "lab-sheets-undo-workspace-regressions-final.log": {
@@ -208,6 +212,22 @@
     },
     "lab-sheets-undo-reference/verification.json": {
       "sha256": "3f1a63f0221bc6c39f12fc3ed3768e932d339b69f184a106f25e27e9af1a8042",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-pr-review-before.log": {
+      "sha256": "afcfc1436cbd6dc921a74695b94d08e545114a0960b95da583a2ad385b608dd6",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-pr-review-final.log": {
+      "sha256": "17d01dcc51197bddc5e706fef66fb2c4f5b1af51007b38b99173e7e5f7356a11",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-workspace-pr-review-final.log": {
+      "sha256": "573ec2b3928bcbe8d5802eddaec238f9c0345fed9f08ffbd63d8c0dff3ebc473",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-pr-review-makefix.log": {
+      "sha256": "b2c2cf1016c4ddf2a1f5f0ca5881f65d3a22f7ebb248837bf2243a3674292ead",
       "retention": "Local operator artifact; not bundled"
     }
   },

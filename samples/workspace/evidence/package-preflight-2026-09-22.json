@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 296,
+      "files_scanned": 298,
       "image_files": 0,
       "scanned_at": "2026-09-26"
     },
@@ -108,7 +108,7 @@
       ]
     }
   },
-  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The original supporting app image mismatch is preserved; its publication-tag fix is deployed and concurrent hosted runs match all 13 containers to their own builds. Hosted Linear subscriptions, Workspace editor identity, Inbox and Gmail date/readability checks pass within their recorded scope; Sheets undo/redo is in PR #1179; full eight-twin frontend parity and final package release remain open.",
+  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The original supporting app image mismatch is preserved; its publication-tag fix is deployed and concurrent hosted runs match all 13 containers to their own builds. Hosted Linear subscriptions, Workspace editor identity, Inbox and Gmail date/readability checks pass within their recorded scope; Sheets undo/redo (#1179), Linear Inbox accessibility (#1180), and sample history mediation have passing local checks with fresh deployment/hosted verification pending; full eight-twin frontend parity and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,
