@@ -1,0 +1,52 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-26",
+  "provider": "stripe",
+  "status": "local_pass_ci_pending",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1198",
+  "source_head": "7308fb8d39f193cd0c66171835f9ee12df56e6b4",
+  "changes": [
+    "Unconfigured clocks use advancing current UTC",
+    "Explicit zoned ISO base_time fixes Scenario time; omitted clock clears a prior fixed seed",
+    "Malformed clock rejects before any reset or idempotency/resource mutation",
+    "Bare reset preserves active clock; fixed export retains clock without mutation",
+    "Billing test clocks remain independent"
+  ],
+  "tests": {
+    "new_regressions_failed_before_fix": 15,
+    "stripe_and_generator_passed": 192,
+    "native_seeding_integration_passed": 1,
+    "node_sdk_tests_passed": 32,
+    "node_sdk_suites_passed": 20,
+    "make_fix": "pass"
+  },
+  "preserved_attempts": [
+    "The first integrated pytest invocation named a nonexistent test file and collected no tests; corrected invocation passed"
+  ],
+  "source_sha256": {
+    "twins/stripe/clock.py": "2e17824499e8fdac03a7a62f0a4a0b043ab9a30710b0a706d874f34ecc8f8473",
+    "twins/stripe/store.py": "127017bcb1038a5f3201cfced8fd390734650a1c7ccd754910af15d0f5e11ee4",
+    "twins/stripe/app.py": "a40c2b985f45844ec1e8bac3284c2d5106b33a359065fede0c65661aea674322",
+    "twins/stripe/scenario_runner.py": "ffd6b5497d2cdd0c2f4692b0a1ddd785c15ea7a2befb123b31759845cf80641e",
+    "twins/stripe/README.md": "25c1d678c174aa8192711685708bc58d8b16b60095bb6bdbfce05e1350e04b62",
+    "app/validate/scenario_generator.py": "fc44ba304001c7c3ca8fd37d414211840d64dfb4eaeefcfbc4a77c2e5b329855",
+    "twins/tests/test_stripe_clock.py": "f2c3bf9774ba0622e3b366863b421a5a84c17a9e12c8fc24ee9edc8981bd341f"
+  },
+  "artifacts_sha256": {
+    "lab-stripe-clock-node-install.log": "83ff3508ab8dd9315e1f2dbef7e2bb962131178e136433ea5382808a936d9173",
+    "lab-stripe-clock-deps.log": "d734a32f58fae3523c917bc9b3ef7afe573d913ce54a621d26f50897e351febb",
+    "lab-stripe-clock-seeding-integration.log": "63c905da8939fb2b532e871342f0baa566f0dd0000b6efa02eae7b516b771e09",
+    "lab-stripe-clock-integrated-r2.log": "76d207dd302551a53932f7ef6400c8aec98f8054d61d0a5770ac0c83aeeb39a1",
+    "lab-stripe-clock-node-sdk.log": "a944432e4e94c6e44537787686347f2e56bad7ff3d8a62fc9262648c966f80d0",
+    "lab-stripe-clock-make-fix.log": "7218dffad38ee33906d975f30ca1c64cc821afa066c2eaa92b10701385a9cfa2",
+    "lab-stripe-clock-red.log": "8b14709d191ad3ecc5af506a5b77a534a3d5842f6586017e352f1aca5ee1c21c",
+    "lab-stripe-clock-green.log": "7e447d97b9d6a2a9b06582b7026f01445a135525fc66836c98169b7681aee3dc",
+    "lab-stripe-clock-integrated.log": "ced96593cb8eaf8b26c797505bef17ad66c610ef7810bc3344605393623b628a"
+  },
+  "limits": [
+    "Exact-head CI, deployment and fresh hosted native/browser/images pending",
+    "Report UI, fees/FX, AI, account permissions and full frontend audit remain open",
+    "Resource Scenario export remains incomplete; customer-bound Billing simulation not certified"
+  ]
+}

@@ -84,7 +84,7 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-task-scenarios-2026-09-26.json",
-          "sha256": "3a48c6366124d5722a27090df84c9df11167ef01cae9dbcfa23aa8716e0f750b"
+          "sha256": "585a5c9f1b761f59822b84724abff2a17889ae17c326c29cbb46a992397cb588"
         }
       ]
     },
@@ -263,6 +263,18 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-assistant-reference-2026-09-26.json",
+          "sha256": "9e99aa8d7e32c97d690aa06a4b507ee2da3c67cb07ab6c9b0aa672a89eedadf9"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-balance-report-reference-2026-09-26.json",
+          "sha256": "0b462876d38f2065e125951e01748f71bec884b6c8b8b6dcff33d847206e005c"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-live-clock-2026-09-26.json",
+          "sha256": "aa540d238bf00bd9246923be24bc37e6a8f9d9588b404cb6de0b945023cf0305"
         }
       ]
     },
@@ -392,7 +404,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "69753066398058c4212c18e40097f3736567dbac870615be505d9c3394b6e055"
+          "sha256": "6b4b5ccee7f35c0ada9c4dbf8aad32f72dd5175f68abd406036aeadb5c43ac31"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -420,5 +432,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "ca3c2681a42b23dff4ffceefa32bc3faabe09f11351681021580b6fb9fd6efcc"
+  "sample_tree_sha256": "2549b513d35bbf8fd2edddc9f738e3b84bc76723bd83c7f3184bc70b7983f1a1"
 }

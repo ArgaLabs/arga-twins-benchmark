@@ -5,16 +5,18 @@
     "google_calendar"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1197",
-  "source_head": "ff154d440d30d0b356415b300e72ab36977d655d",
-  "status": "local_native_scenario_regressions_pass_ci_pending",
+  "source_head": "8600f40e5caf30e8a60ebae53f158f7f7306d0be",
+  "status": "deployed_hosted_scenario_native_images_pass",
   "release_allowed": false,
   "tests": {
-    "integrated_calendar_workspace_generator_passed": 742,
-    "new_scenario_cases": 21,
+    "new_scenario_cases": 23,
     "existing_tasks_cases": 21,
     "make_fix": "pass",
     "normalizer_typecheck": "pass",
-    "diff_check": "pass"
+    "diff_check": "pass",
+    "targeted_tasks_clock_cases": 59,
+    "integrated_calendar_workspace_generator_passed_before_clock_boundary_guards": 742,
+    "integrated_calendar_workspace_generator_passed": 744
   },
   "checks": [
     "Exported Tasks previously disappeared silently during reseed; reproduction now passes",
@@ -22,7 +24,8 @@
     "Subsequent creates avoid imported IDs and preserve newest-first positions",
     "Fixed-clock mutations follow restored task history while configured base_time is retained",
     "Malformed Tasks reject before any account/state/counter/clock reset; other account state unchanged for personal reset",
-    "Nested lists/tasks supported in Scenario schema; blank seeds clear previous Tasks"
+    "Nested lists/tasks supported in Scenario schema; blank seeds clear previous Tasks",
+    "Clock overflow rejected before reset; resetting a historical fixed clock to live time gives current task timestamps"
   ],
   "preserved_attempts": [
     "Original exported Tasks loss reproduction",
@@ -32,14 +35,14 @@
   "source_files": {
     "app/validate/scenario_generator.py": "6a5e724fd75658f4352bdfe24b37a03d51f249a718792bdd827d3a80d7b45e71",
     "twins/google_calendar/README.md": "0d906a8db80ee26c7dd0fd01b86ed2456a6ad0350e508fff57728ec96be686ed",
-    "twins/google_calendar/app.py": "9cff9c4752f303f200b2120ae2c66f3e7c0c9461a8930368f96e62cbb005405a",
+    "twins/google_calendar/app.py": "ef34747dd6d8fc7432f17356d31a9e352c68c2afe3d332a8eab41f05f9455645",
     "twins/google_calendar/scenario_runner.py": "43dd89d33df2fd154789a740c8902e5072fd065b0cfffddfbab0c399d2f88651",
     "twins/google_calendar/side_tasks.py": "495f4049c8cea81a464311592fbb7d8fd28f465a01bb41ea98fdae73e4aecfc2",
     "twins/google_calendar/task_seeding.py": "696c949fb70bca2f3d98060cfc2a4ea995a97c2f425761c45756af96ca65b1df",
-    "twins/tests/test_google_calendar_task_scenarios.py": "f75b4e8c69737806c49b96f12cfb1e367e37677dcac2911edf639930bf1c2814"
+    "twins/tests/test_google_calendar_task_scenarios.py": "426b0481a43dafb925b4097e42dead0e28d8070a7ece6d9480816e6a0bd05961"
   },
   "artifacts_sha256": {
-    "lab-calendar-tasks-scenarios-ci-watch.log": "a775ca71ff45469cd12d0faea1aa12135f74ddc8a61269744d112102c297d79e",
+    "lab-calendar-tasks-scenarios-ci-watch.log": "1e34e06c64e05302eb44aec225dbdcd7de2c0e0f46a2ec345f25745bcd9b6ebb",
     "lab-calendar-tasks-scenarios-typecheck.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
     "lab-calendar-tasks-scenarios-integrated.log": "e2210b0ee73aaf8a7b35c9afa52115d3ca1e91f6b25ffb855354b84e3974f541",
     "lab-calendar-tasks-scenarios-typecheck-final.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
@@ -52,12 +55,195 @@
     "lab-calendar-tasks-scenarios-preclock.log": "411c5f3b419022f9639f23f4d29441855322bc3b456beb071b132ad5244e15ad",
     "lab-calendar-tasks-scenarios-green.log": "72065f3c7a7042dad0e25384d95d46151179fb710cc81fbed09a157e163a94e8",
     "lab-calendar-tasks-scenarios-make-fix-final.log": "09d58c4b62d9cdb367741a774ed99cc791cc12b23990f251bc321fcce610e698",
-    "lab-calendar-tasks-scenarios-deps.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac"
+    "lab-calendar-tasks-scenarios-deps.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-tasks-scenarios-boundaries-tests.log": "ae349613af09b51a7ed35cbd7d6ce02e30115cdf8cf9f704bd385a97afe8d90e",
+    "lab-calendar-tasks-scenarios-overflow-tests.log": "3e478fb02e96d55e49e7b959af68e7c08dc432453b4cfcd0cb9d7452bba43ccb",
+    "lab-calendar-tasks-scenarios-deps-overflow.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-tasks-scenarios-make-fix-overflow.log": "88549dcc57e2d8fa7d8562315f950e571c93de48c7f440570e7c4dcadf4a2eab",
+    "lab-calendar-tasks-scenarios-deps-boundaries.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-tasks-scenarios-ci-boundaries-watch.log": "088e2e101bda32d91c05ea5a5c1cf2630db0b82a346a7078891266f6875b5ba5",
+    "lab-calendar-tasks-scenarios-make-fix-boundaries.log": "88549dcc57e2d8fa7d8562315f950e571c93de48c7f440570e7c4dcadf4a2eab",
+    "lab-calendar-tasks-scenarios-boundaries-integrated.log": "060d76074322b941ae05cd829e0fff8ee0a778cee39bd80dc0a68aaedcf280bf",
+    "lab-final-calendar-task-scenarios-86b58408/workspace.json": "fa90b9b8bf5c5f51c504374efd906b2e38327ad57babdb50d01e64bbcc01643b",
+    "lab-final-calendar-task-scenarios-86b58408/browser-observations.json": "8c50487dd6b1f6d0e0b6fb44031e0773cd401f9fb67fc2e78c05784499e2d559",
+    "lab-final-calendar-task-scenarios-86b58408/native-result.json": "501b4d481df40d8f000ca946c60c0014a25a4fc67525a1d912924eca324157c8",
+    "lab-final-calendar-task-scenarios-86b58408/source/before-export.json": "3c120357fedd23bdfa0a1d685709572ee4cbe854914b884b6089529f3673060a",
+    "lab-final-calendar-task-scenarios-86b58408/source/image-comparison.json": "9d340606fb7e2d54f7e75b8817bb29cd2832b6d056ec9167ce1505823b56eeb7",
+    "lab-final-calendar-task-scenarios-86b58408/source/publication-catalog.json": "cc50c79c4e3092f98aca9cdb70a63d31b6092989ffd3575679b85124b45195d0",
+    "lab-final-calendar-task-scenarios-86b58408/source/cleanup.json": "2a61a03bf3dd9387cf57ecc18a73392a0945bfaedf964527378b81282bd898f1",
+    "lab-final-calendar-task-scenarios-86b58408/source/runtime-image-evidence.json": "358375600b31a8ec13f327c780ed9db345ec6ea46d8fa92a8f21e52d55fa38b9",
+    "lab-final-calendar-task-scenarios-86b58408/source/worker-logs.json": "6e1105dcde1331cade3c571a8284c5c509aa2f51fdeaf9f87d3b2a36f00765b2",
+    "lab-final-calendar-task-scenarios-86b58408/source/scenario.json": "d1a3337d02712fda8bf3aa16a26ff8ee7fccee68977f1593822baa453760e406",
+    "lab-final-calendar-task-scenarios-86b58408/source/operator-api-trace.json": "a7003ff05da30ec079428287d9677e5f38da0b7d7e07d484811a2ffbb62ffc97",
+    "lab-final-calendar-task-scenarios-86b58408/source/control.json": "49547f2a668a7b7b43acd870635f010ae099b1fd7bbe597b5d3c6861933cae24",
+    "lab-final-calendar-task-scenarios-86b58408/replay/browser-trace.json": "7b0751308228dc6945d9e37a33e229e6a0a329fabfa5a794dffcff197a202cda",
+    "lab-final-calendar-task-scenarios-86b58408/replay/image-comparison.json": "b28d07e83e2eba7b7128517aa91334316505acbf5bf56a7ff54c6b4333829bd5",
+    "lab-final-calendar-task-scenarios-86b58408/replay/publication-catalog.json": "cc50c79c4e3092f98aca9cdb70a63d31b6092989ffd3575679b85124b45195d0",
+    "lab-final-calendar-task-scenarios-86b58408/replay/browser-baseline.json": "3c120357fedd23bdfa0a1d685709572ee4cbe854914b884b6089529f3673060a",
+    "lab-final-calendar-task-scenarios-86b58408/replay/cleanup.json": "3b257692f2bc2e43d91e3e291c1e80f52567f5879c6b2cd39793b61d5883a4f9",
+    "lab-final-calendar-task-scenarios-86b58408/replay/runtime-image-evidence.json": "9f3db6716d53806b9e854f3a8626179d04dc6dcaa8b6109dd2a1d8a8eb295e54",
+    "lab-final-calendar-task-scenarios-86b58408/replay/worker-logs.json": "20f066f1e7d07d96c747bf8eec299e204fb8ce7c406d5b276b5a0f5187231625",
+    "lab-final-calendar-task-scenarios-86b58408/replay/scenario.json": "87b5a10b1704637ec358540028cd5f53f9fafb096590d5a530e18a43be07bbd7",
+    "lab-final-calendar-task-scenarios-86b58408/replay/operator-api-trace.json": "c8e7c8e36940c74100315e69a706be403bb3b3f61a89b7b5963674b16270bd77",
+    "lab-final-calendar-task-scenarios-86b58408/replay/browser-final.json": "3c120357fedd23bdfa0a1d685709572ee4cbe854914b884b6089529f3673060a",
+    "lab-final-calendar-task-scenarios-86b58408/replay/control.json": "f83a80e399caefac5a0ff1d2eb5bdb9ba39f07b4615d23216119c4ba64fbbb37",
+    "lab-calendar-tasks-scenarios-premerge.json": "de81bb33eb363aebbf028023148bad6f73f645b7f7700854b8df7662154e9e61",
+    "lab-calendar-tasks-scenarios-ci-complete.log": "2ffb28e5529b65670779e210684807b948fa7291faecf08682116bc601e94b5b"
   },
   "limits": [
-    "Exact-head CI, deployment and fresh hosted Scenario roundtrip pending",
+    "Exact-head CI, both deployments, serving API/proxy images, fresh CLI Scenario export/reseed/reset, browser/native checks, all six worker images and teardown pass; full Calendar runtime export remains open.",
     "Only active-account personal Tasks state; full Calendar runtime, other accounts/tokens/permissions/export and AI/collaboration audits remain open",
     "No frontend layout changes or new independent visual/touch claim; Mac still locked"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "prior_source_heads": [
+    "ff154d440d30d0b356415b300e72ab36977d655d"
+  ],
+  "merge_commit": "86b5840846ce088611c9d22793a33c81320d9ac9",
+  "ci": {
+    "head": "8600f40e5caf30e8a60ebae53f158f7f7306d0be",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6527,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+    "runtime_workflow": 36239342876,
+    "twins_workflow": 36239342831,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:86b5840846ce088611c9d22793a33c81320d9ac9@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:86b5840846ce088611c9d22793a33c81320d9ac9@sha256:667f17bc6e200bfe92fb33b250572d04477d6a2b66819d31caf32d30784dd2ed",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:86b5840846ce088611c9d22793a33c81320d9ac9@sha256:084c11eaf19419c08441dc9bd3ec8287db719ae22fc693f5b5a109c9a3204681"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00301-rcm",
+      "arga-api": "arga-api-00671-wp7"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-task-scenarios-86b58408-twins-deploy.log": "043bc9a6e3ca832ab94f59adff25a36b4b82e386cf937e342acb92388719f378",
+      "lab-final-calendar-task-scenarios-86b58408-runtime-deploy.log": "e32dfdcce3db47664b2880493e48ccb0b2bb303dfa821bd9d823e30d5b5d7468"
+    },
+    "serving_runtime": {
+      "revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00301-rcm",
+          "observed_at": "2026-09-26T11:37:34.409680+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:86b5840846ce088611c9d22793a33c81320d9ac9",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:60407ba01502e8fb5bbb3b4c07806b8c908b07438939ac3b74f8d78dce020101",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:60407ba01502e8fb5bbb3b4c07806b8c908b07438939ac3b74f8d78dce020101"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00301-rcm"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00301-rcm",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:60407ba01502e8fb5bbb3b4c07806b8c908b07438939ac3b74f8d78dce020101",
+            "sha256:667f17bc6e200bfe92fb33b250572d04477d6a2b66819d31caf32d30784dd2ed"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00671-wp7",
+          "observed_at": "2026-09-26T11:41:53.274040+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:86b5840846ce088611c9d22793a33c81320d9ac9",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:a242f959db2eb7a7dd94593f0b944216ce9b99af49f3cbd556807c0b1b38f0ef",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:a242f959db2eb7a7dd94593f0b944216ce9b99af49f3cbd556807c0b1b38f0ef"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00671-wp7"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00671-wp7",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:084c11eaf19419c08441dc9bd3ec8287db719ae22fc693f5b5a109c9a3204681",
+            "sha256:a242f959db2eb7a7dd94593f0b944216ce9b99af49f3cbd556807c0b1b38f0ef"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "e32dfdcce3db47664b2880493e48ccb0b2bb303dfa821bd9d823e30d5b5d7468",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "browser_reads_preserve_complete_native_state": true,
+      "exact_task_export_reseed_and_cli_reset": true,
+      "invalid_reset_atomic": true,
+      "limits": [
+        "Active-account Tasks maps only; full Calendar runtime/account export remains open",
+        "Native keyboard/touch unverified"
+      ],
+      "new_identifiers_positions_and_clock_follow_imported_history": true,
+      "passed": true,
+      "source_run_unchanged": true
+    },
+    "browser": {
+      "passed": true,
+      "desktop_viewport": [
+        1465,
+        806
+      ],
+      "narrow_viewport_override": [
+        390,
+        844
+      ],
+      "observations": [
+        "Tasks opens with Imported list selected after actual export/reseed/CLI reset",
+        "One active Imported task shows Roundtrip details and 2026-10-03",
+        "Starred recently heading and checked Remove from Starred control",
+        "Deleted task absent",
+        "Full reload at390px followed by reopening Tasks preserves selected list, task, notes, due and star",
+        "Desktop and narrow pointer/visual inspection pass within this state"
+      ],
+      "browser_writes_expected": 0,
+      "screenshots_retained": false,
+      "cleanup": "Viewport restored and owned browser tab closed",
+      "limits": [
+        "Native keyboard/focus unavailable while Mac locked",
+        "Physical touch and exhaustive provider parity not verified"
+      ]
+    },
+    "all_six_images_matched": true,
+    "both_teardowns_confirmed": true
+  }
 }
