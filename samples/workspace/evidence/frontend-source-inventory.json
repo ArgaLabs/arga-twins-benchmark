@@ -3914,61 +3914,61 @@
       "files": [
         {
           "path": "twins/google_calendar/app.py",
-          "sha256": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
+          "sha256": "ef34747dd6d8fc7432f17356d31a9e352c68c2afe3d332a8eab41f05f9455645",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 720
+              "line": 752
             },
             {
               "method": "GET",
               "path": "/calendar/_ui/access-requests",
               "handler": "list_access_requests",
-              "line": 750
+              "line": 782
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/access-requests",
               "handler": "request_calendar_access",
-              "line": 754
+              "line": 786
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/access-requests/{request_id}/approve",
               "handler": "approve_calendar_access",
-              "line": 758
+              "line": 790
             },
             {
               "method": "GET",
               "path": "/calendar/_ui/tasks",
               "handler": "list_side_tasks",
-              "line": 778
+              "line": 810
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/task-lists",
               "handler": "create_side_task_list",
-              "line": 782
+              "line": 814
             },
             {
               "method": "API_ROUTE",
               "path": "/calendar/_ui/task-lists/{list_id}",
               "handler": "change_side_task_list",
-              "line": 786
+              "line": 818
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/task-lists/{list_id}/tasks",
               "handler": "create_side_task",
-              "line": 790
+              "line": 822
             },
             {
               "method": "API_ROUTE",
               "path": "/calendar/_ui/task-lists/{list_id}/tasks/{task_id}",
               "handler": "change_side_task",
-              "line": 796
+              "line": 828
             }
           ],
           "markup_expressions": []
@@ -12697,6 +12697,5 @@
         }
       ]
     }
-  ],
-  "source_revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf"
+  ]
 }

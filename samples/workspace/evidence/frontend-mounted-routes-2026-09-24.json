@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-26T11:06:10.621471+00:00",
-  "source_revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+  "observed_at": "2026-09-26T12:10:36.542790+00:00",
+  "source_revision": "f40217dd17f7bdc6509015f37a9d5249eff868ac",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
@@ -936,8 +936,8 @@
           ],
           "handler": "create_app.<locals>.index",
           "source": "twins/google_calendar/app.py",
-          "line": 719,
-          "source_sha256": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
+          "line": 751,
+          "source_sha256": "ef34747dd6d8fc7432f17356d31a9e352c68c2afe3d332a8eab41f05f9455645",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2882,8 +2882,8 @@
           ],
           "handler": "index",
           "source": "twins/stripe/app.py",
-          "line": 92,
-          "source_sha256": "19514e7e701480b2d347fe40107f752c2cd6ab69c6b657e89b3d271016059c0f",
+          "line": 98,
+          "source_sha256": "a40c2b985f45844ec1e8bac3284c2d5106b33a359065fede0c65661aea674322",
           "tags": [],
           "checks": {
             "reference": "pending",

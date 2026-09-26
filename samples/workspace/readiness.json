@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
@@ -44,7 +44,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
@@ -95,7 +95,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
@@ -118,7 +118,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
@@ -185,7 +185,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
@@ -216,7 +216,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
@@ -235,7 +235,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
@@ -262,7 +262,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "da0f62ad8825ee8fc732dd744b4720e53e32115e5647488676e75677cd7a0a0d"
+          "sha256": "917dc131012d510e12ec1871d3066b4d5c22e3e819f863e635ac2d42c8e108e7"
         },
         {
           "path": "samples/workspace/evidence/stripe-assistant-reference-2026-09-26.json",
@@ -275,6 +275,10 @@
         {
           "path": "samples/workspace/evidence/stripe-live-clock-2026-09-26.json",
           "sha256": "597109813ad8e3bb1b3b9fbaa8096a46578348f15e133ba8fb73b8f3dd8eca73"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-balance-reports-2026-09-26.json",
+          "sha256": "ed817ea61d65187cd4fcd847835935c127d5f5ec738e61bfc2394b296176c435"
         }
       ]
     },
@@ -432,5 +436,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "49a1175afbdddb9c65493e131712ffcebb2f764fa8f2ddd6310e368a74405066"
+  "sample_tree_sha256": "f1f22ace08d4f4993468b9b04b2da83cd349fdd55d1bec19545fb0e6470427ee"
 }
