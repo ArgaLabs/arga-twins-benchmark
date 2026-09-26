@@ -49,7 +49,7 @@
         },
         {
           "path": "samples/workspace/evidence/github-actions-log-controls-2026-09-26.json",
-          "sha256": "239755d8855c55aaf6841229ee2f85a0761aae2d5413c57543baa19e40c1ed6d"
+          "sha256": "e0dbbd424618e5e158aa78bcf3db9eba11206f06447a30b27ab3cd76078a9e36"
         }
       ]
     },
@@ -452,5 +452,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "da27231dfb7cbddd8eb959ed7d652d75bc981fbf57c2c81cc5720a07fbd21171"
+  "sample_tree_sha256": "058d2ab4cde0002f350a05b81217e4e3c8cd1accd1cc43511b3cf3ac05fbc62e"
 }
