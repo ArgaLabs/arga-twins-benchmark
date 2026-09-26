@@ -1,0 +1,71 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "github"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1185",
+  "source_head": "ee5cf913fb1b82764926a62f7ab7bc71a5d6c4f3",
+  "merged_revision": "70e64aabdf6ff05f8db12831cd65d7f89a458411",
+  "status": "exact_head_ci_merged_deployments_running",
+  "release_allowed": false,
+  "scope": [
+    "Actual advancing UTC clock when base_time is absent/empty",
+    "Explicit normalized fixed clocks and logical offsets",
+    "Scenario reset/export preserves live or fixed clock choice",
+    "Existing resource timestamps are preserved on reads; expiring artifact links use advancing time"
+  ],
+  "tests": {
+    "integrated_github_passed": 439,
+    "focused_clock_passed": 10,
+    "compatibility_passed": 107,
+    "compatibility_skipped": 2,
+    "make_fix": "pass"
+  },
+  "browser": {
+    "status": "pass",
+    "browser": "Chrome CUA",
+    "checks": [
+      "live browser reads preserve all native resources; only live logical_now advances",
+      "fixed browser reads preserve all native resources; only live logical_now advances",
+      "Unconfigured PR displayed actual creation time 2026-09-26T07:37:07.687085Z",
+      "Explicit historical PR displayed2024-03-14T12:00:00Z after reload"
+    ],
+    "screenshots_retained": false,
+    "limits": [
+      "Date semantics only; no new visual or mobile parity claim"
+    ]
+  },
+  "source_files": {
+    "twins/github/README.md": "b36e42c4a4505f72f0cd53afd273b6f8770a515c7fb40064dea1947e2914271a",
+    "twins/github/config.py": "6871cc34db2f8702ffcf00c32eb815e17bf1010d3fadd15cf4932e4a0bec5e2b",
+    "twins/github/scenario_runner.py": "b5f45bbd62ac5c014d1c3524d96bba689a2de01709a2c0bd0ca8e1ef6701bdcc",
+    "twins/github/store.py": "a62c1e3bcb529b672eb4c126b0da0d5e6c199cdb9fee188c5f7e41ad314a40d1",
+    "twins/tests/test_github_artifacts.py": "9f22cdcfa461374af04935d7d64093ff7829ac3abe9725e1b20e4cb0f876449a",
+    "twins/tests/test_github_clock.py": "86efd2d20d2543e1bbdff3497a8fe011baa0a128f977928ca573db53c84ef603",
+    "twins/tests/test_github_conversation_ui.py": "98f51d023f6d2a1dedad927687e7e6616eefe09c73d0ca6ebe2dd78480e13963",
+    "twins/tests/test_github_merge_status.py": "7258ab2527239981993945235f70096bb99c2e0d6097b4cc1df9b3b7ab921c4e",
+    "twins/tests/test_github_review_comments.py": "0cdd258d23db8bc4095590ad14bf44b8949c794b7e1d6360d3a8398f41f61d24",
+    "twins/tests/test_github_timeline.py": "4ce462ce5045e7fa33e0382f97dc9cf80590f3684bef4a8de8d6cfddaa5a883e"
+  },
+  "artifacts_sha256": {
+    "fixed-baseline.json": "ceb2706c1cc3c1eb452a522dc14dc2442d8bc8dd1a1300f7d7f25227e00d4160",
+    "fixed-final.json": "ceb2706c1cc3c1eb452a522dc14dc2442d8bc8dd1a1300f7d7f25227e00d4160",
+    "live-baseline.json": "1cac9eeb9920e7ca3d18a9d6cf99ed7d30be2f906a31ac515e5a9905483967c0",
+    "live-final.json": "a8445a0abc7af69a0da0ec48eb18858fe1599746950be56a8185ccdcece790d7",
+    "verification.json": "7396150310d67cec64b43f68ab2075a1cb20d96a1c4f41a4a161d6dafa85a0fb",
+    "workspaces.json": "6c8f8c539e096391bc09c6980a10e36e676849a77b0c3f1bf93d4fbc7db4c4b5",
+    "lab-github-live-clock-regressions.log": "a5f9d0e8714b51b3412d8730525d211612a59f6f861cd03721cb3ce211ec56fd",
+    "lab-github-live-clock-regressions2.log": "48f9e107e0c00bb3a58ee5d4bd3dee62e53994ae267ee83097b6cb1da95ba579",
+    "lab-github-live-clock-focused3.log": "bbefcd3f17e0056bcf2bf008bddc68fb83cc3198290d7633a53f32172f07051c",
+    "lab-github-live-clock-integrated.log": "aa3be813c88a918e16253c0276343d9c2d273bfeaf8d218fa2000e952c109a28",
+    "lab-github-live-clock-compat.log": "abf89e364d6a42b3f01ce9d0f476fa8279f782293b3beb296aef23f943eb1708",
+    "lab-final-github-clock-premerge-ee5cf913.json": "ecbe8bbacf314655cf0d7f32a940215c70d84fe046f67b86ff15737a5648d5cb"
+  },
+  "limits": [
+    "Both production workflows and fresh live/fixed hosted verification pending",
+    "Historical GraphQL compatibility placeholders and exhaustive date/frontend fidelity remain outside this correction",
+    "All broader provider and sample release gates remain pending"
+  ],
+  "screenshots_retained": false
+}

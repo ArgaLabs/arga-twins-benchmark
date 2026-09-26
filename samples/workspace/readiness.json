@@ -21,7 +21,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-review-privacy-2026-09-26.json",
-          "sha256": "489256dae29aae482eae98fc433cc8875cd527bae9e64c452d4df1e8419e8fb5"
+          "sha256": "62409c02666951bbdc01e1ff33b8a518c941708f5be59ba8342aab573bbbac57"
+        },
+        {
+          "path": "samples/workspace/evidence/github-live-clock-2026-09-26.json",
+          "sha256": "972e00c9454fc385eaac6155c264731f3ef214ed7fce5752f1dc96c3f5668adb"
         }
       ]
     },
@@ -340,7 +344,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "8fabe776496893972c16b96f6af674e80cd58ae39f83ea47c37f422c4f3c66e4"
+          "sha256": "1e5e00b40c8903b974dde03339a66a749517c3f82655fea0968dbafbf222633e"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -368,5 +372,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "0aa41ca2ffe3daf604dfcaeb460805859d899b1998063ee8c22a3536e5c08f44"
+  "sample_tree_sha256": "8266b7955bb039a8947a772977a9b9e071eb8d4fb2c3476d21f5f3a0c3c8f5c9"
 }

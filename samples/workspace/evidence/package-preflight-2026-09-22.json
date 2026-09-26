@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 301,
+      "files_scanned": 302,
       "image_files": 0,
       "scanned_at": "2026-09-26"
     },
@@ -108,7 +108,7 @@
       ]
     }
   },
-  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The original supporting app image mismatch is preserved; its publication-tag fix is deployed and concurrent hosted runs match all 13 containers to their own builds. Hosted Linear subscriptions, Workspace editor identity, Inbox and Gmail date/readability checks pass within their recorded scope; Linear Inbox accessibility (#1180) passes CI, both production workflows and fresh native/desktop/390px/image verification; GitHub OAuth collaborator identity (#1182) passes exact-head CI, production, native/desktop/390px and all three image checks, with advanced review privacy still open. Sheets undo/redo (#1179) merged after exact-head CI and both deployments pass; fresh native/desktop/390px checks, all five images and teardown pass. Charts (#1183) pass 1,332 local Workspace tests, exact-head CI, both deployments, fresh native/desktop/390px checks, all five images, exact state comparison and teardown. GitHub pending-review privacy (#1184) passes429 local regressions and107 compatibility checks plus desktop/390px privacy lifecycle; CI/production verification is pending; full eight-twin frontend parity and final package release remain open.",
+  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The original supporting app image mismatch is preserved; its publication-tag fix is deployed and concurrent hosted runs match all 13 containers to their own builds. Hosted Linear subscriptions, Workspace editor identity, Inbox and Gmail date/readability checks pass within their recorded scope; Linear Inbox accessibility (#1180) passes CI, both production workflows and fresh native/desktop/390px/image verification; GitHub OAuth collaborator identity (#1182) passes exact-head CI, production, native/desktop/390px and all three image checks, with subsequent review-privacy verification recorded separately. Sheets undo/redo (#1179) merged after exact-head CI and both deployments pass; fresh native/desktop/390px checks, all five images and teardown pass. Charts (#1183) pass 1,332 local Workspace tests, exact-head CI, both deployments, fresh native/desktop/390px checks, all five images, exact state comparison and teardown. GitHub pending-review privacy (#1184) passes 429 local regressions and 107 compatibility checks, exact-head CI, both deployments, fresh native/desktop/390px lifecycle, all three image matches and exact native-state verification with teardown. GitHub live/fixed clocks (#1185) pass 439 integrated regressions, 10 clock cases and 107 compatibility checks; exact-head CI and merge are complete, with deployments and hosted checks pending; full eight-twin frontend parity and final package release remain open.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,
