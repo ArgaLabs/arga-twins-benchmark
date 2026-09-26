@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-26T04:23:46.648192+00:00",
-  "source_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+  "observed_at": "2026-09-26T11:06:10.621471+00:00",
+  "source_revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
@@ -13,7 +13,7 @@
   "generator_sha256": "e95c92b6be482927a1adfc21db8f664145e3fa58b2f55092d02bc98328b32013",
   "providers": {
     "github": {
-      "registered_nonoperator_routes": 1287,
+      "registered_nonoperator_routes": 1289,
       "mounted_frontend_candidates": [
         {
           "path": "/",
@@ -22,8 +22,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.dashboard",
           "source": "twins/github/frontend.py",
-          "line": 1163,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1166,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -130,8 +130,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.profile_page",
           "source": "twins/github/frontend.py",
-          "line": 2906,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2927,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -148,8 +148,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.update_profile",
           "source": "twins/github/frontend.py",
-          "line": 2958,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2979,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -166,8 +166,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.create_repo",
           "source": "twins/github/frontend.py",
-          "line": 1273,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1276,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -184,8 +184,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.repo_detail",
           "source": "twins/github/frontend.py",
-          "line": 1365,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1368,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -310,8 +310,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.file_view",
           "source": "twins/github/frontend.py",
-          "line": 1579,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1582,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -328,8 +328,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.branch_list_page",
           "source": "twins/github/frontend.py",
-          "line": 2336,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2357,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -346,8 +346,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.create_branch_ui",
           "source": "twins/github/frontend.py",
-          "line": 2415,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2436,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -400,8 +400,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.edit_file_form",
           "source": "twins/github/frontend.py",
-          "line": 2602,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2623,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -418,8 +418,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.edit_file_submit",
           "source": "twins/github/frontend.py",
-          "line": 2676,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2697,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -436,8 +436,8 @@
           ],
           "handler": "register_routes.<locals>.issue_list",
           "source": "twins/github/operations_ui.py",
-          "line": 135,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 136,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -454,8 +454,8 @@
           ],
           "handler": "register_routes.<locals>.issue_detail",
           "source": "twins/github/operations_ui.py",
-          "line": 166,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 167,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -472,8 +472,8 @@
           ],
           "handler": "register_routes.<locals>.comment",
           "source": "twins/github/operations_ui.py",
-          "line": 198,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 199,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -490,8 +490,8 @@
           ],
           "handler": "register_routes.<locals>.edit_issue",
           "source": "twins/github/operations_ui.py",
-          "line": 187,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 188,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -580,8 +580,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.pull_request_detail",
           "source": "twins/github/frontend.py",
-          "line": 1872,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1875,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -598,8 +598,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.add_pull_comment_ui",
           "source": "twins/github/frontend.py",
-          "line": 2061,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2069,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -616,8 +616,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.add_pr_comment_reaction_ui",
           "source": "twins/github/frontend.py",
-          "line": 2135,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2152,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -634,8 +634,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.edit_pr_title_body_ui",
           "source": "twins/github/frontend.py",
-          "line": 2221,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2242,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -652,8 +652,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.merge_pull_request_ui",
           "source": "twins/github/frontend.py",
-          "line": 2264,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2285,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -670,8 +670,8 @@
           ],
           "handler": "register_routes.<locals>.reviewers",
           "source": "twins/github/operations_ui.py",
-          "line": 206,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 207,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -688,8 +688,8 @@
           ],
           "handler": "register_routes.<locals>.create_review",
           "source": "twins/github/operations_ui.py",
-          "line": 219,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 220,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -706,8 +706,8 @@
           ],
           "handler": "register_routes.<locals>.change_review",
           "source": "twins/github/operations_ui.py",
-          "line": 229,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 230,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -724,8 +724,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.toggle_pr_task_ui",
           "source": "twins/github/frontend.py",
-          "line": 2179,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2200,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -742,8 +742,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.pull_request_list",
           "source": "twins/github/frontend.py",
-          "line": 1757,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1760,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -760,8 +760,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.create_pull_request",
           "source": "twins/github/frontend.py",
-          "line": 2470,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2491,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -778,8 +778,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.new_pull_request_form",
           "source": "twins/github/frontend.py",
-          "line": 2457,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 2478,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -796,8 +796,8 @@
           ],
           "handler": "register_frontend_routes.<locals>.dir_view",
           "source": "twins/github/frontend.py",
-          "line": 1666,
-          "source_sha256": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+          "line": 1669,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -814,8 +814,8 @@
           ],
           "handler": "register_routes.<locals>.search_workspace",
           "source": "twins/github/operations_ui.py",
-          "line": 90,
-          "source_sha256": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+          "line": 91,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -927,7 +927,7 @@
       "candidate_count": 1
     },
     "google_calendar": {
-      "registered_nonoperator_routes": 50,
+      "registered_nonoperator_routes": 58,
       "mounted_frontend_candidates": [
         {
           "path": "/",
@@ -936,8 +936,8 @@
           ],
           "handler": "create_app.<locals>.index",
           "source": "twins/google_calendar/app.py",
-          "line": 661,
-          "source_sha256": "40697fc542b0e342a21242598cfd7f2160b1b6116a0c8ae6b2c643aa8e03a211",
+          "line": 719,
+          "source_sha256": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -1014,8 +1014,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.duplicate_document_tab",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9872,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 9914,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Docs UI"
           ],
@@ -1034,8 +1034,8 @@
           ],
           "handler": "create_app.<locals>.docs_editor",
           "source": "twins/google_drive/app.py",
-          "line": 568,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 572,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1054,8 +1054,8 @@
           ],
           "handler": "create_app.<locals>.index",
           "source": "twins/google_drive/app.py",
-          "line": 760,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 771,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -1072,8 +1072,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_rename",
           "source": "twins/google_drive/app.py",
-          "line": 1285,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1300,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1092,8 +1092,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_export",
           "source": "twins/google_drive/app.py",
-          "line": 1320,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1335,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1112,8 +1112,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_list",
           "source": "twins/google_drive/app.py",
-          "line": 1365,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1380,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1132,8 +1132,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_create",
           "source": "twins/google_drive/app.py",
-          "line": 1376,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1391,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1152,8 +1152,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1394,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1409,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1172,8 +1172,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_update",
           "source": "twins/google_drive/app.py",
-          "line": 1417,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1432,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1192,8 +1192,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_list",
           "source": "twins/google_drive/app.py",
-          "line": 1436,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1451,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1212,8 +1212,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_create",
           "source": "twins/google_drive/app.py",
-          "line": 1447,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1462,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1232,8 +1232,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_update",
           "source": "twins/google_drive/app.py",
-          "line": 1459,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1474,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1252,8 +1252,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1477,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1492,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1272,8 +1272,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_create",
           "source": "twins/google_drive/app.py",
-          "line": 1488,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1503,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1292,8 +1292,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_update",
           "source": "twins/google_drive/app.py",
-          "line": 1506,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1521,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1312,8 +1312,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1530,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1545,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Docs UI"
           ],
@@ -1329,8 +1329,48 @@
       "candidate_count": 19
     },
     "google_sheets": {
-      "registered_nonoperator_routes": 49,
+      "registered_nonoperator_routes": 51,
       "mounted_frontend_candidates": [
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_history_status",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 9991,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_history_action",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10008,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
         {
           "path": "/ui/spreadsheets/{spreadsheet_id}/protection-rules",
           "methods": [
@@ -1338,8 +1378,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_protection_rules",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9949,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10046,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1358,8 +1398,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_protections",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9965,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10062,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1378,8 +1418,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_validation_rules",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9974,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10071,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1398,8 +1438,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_validation_preview",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9985,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10082,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1418,8 +1458,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_preview",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9992,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10089,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1438,8 +1478,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_cell",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 9999,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10096,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1458,8 +1498,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_view",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 10008,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10105,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1478,8 +1518,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_paste",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 10017,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10114,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1498,8 +1538,8 @@
           ],
           "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_options",
           "source": "twins/google_drive/workspace_editing.py",
-          "line": 10026,
-          "source_sha256": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+          "line": 10123,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1518,8 +1558,8 @@
           ],
           "handler": "create_app.<locals>.sheets_editor",
           "source": "twins/google_drive/app.py",
-          "line": 585,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 590,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1538,8 +1578,8 @@
           ],
           "handler": "create_app.<locals>.index",
           "source": "twins/google_drive/app.py",
-          "line": 760,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 771,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -1556,8 +1596,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_rename",
           "source": "twins/google_drive/app.py",
-          "line": 1285,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1300,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1576,8 +1616,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_export",
           "source": "twins/google_drive/app.py",
-          "line": 1320,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1335,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1596,8 +1636,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_list",
           "source": "twins/google_drive/app.py",
-          "line": 1365,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1380,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1616,8 +1656,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_create",
           "source": "twins/google_drive/app.py",
-          "line": 1376,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1391,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1636,8 +1676,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1394,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1409,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1656,8 +1696,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_update",
           "source": "twins/google_drive/app.py",
-          "line": 1417,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1432,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1676,8 +1716,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_list",
           "source": "twins/google_drive/app.py",
-          "line": 1436,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1451,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1696,8 +1736,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_create",
           "source": "twins/google_drive/app.py",
-          "line": 1447,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1462,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1716,8 +1756,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_update",
           "source": "twins/google_drive/app.py",
-          "line": 1459,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1474,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1736,8 +1776,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1477,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1492,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1756,8 +1796,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_create",
           "source": "twins/google_drive/app.py",
-          "line": 1488,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1503,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1776,8 +1816,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_update",
           "source": "twins/google_drive/app.py",
-          "line": 1506,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1521,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1796,8 +1836,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1530,
-          "source_sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+          "line": 1545,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1810,7 +1850,7 @@
           }
         }
       ],
-      "candidate_count": 24
+      "candidate_count": 26
     },
     "notion": {
       "registered_nonoperator_routes": 155,
@@ -2215,7 +2255,7 @@
       "candidate_count": 22
     },
     "linear": {
-      "registered_nonoperator_routes": 41,
+      "registered_nonoperator_routes": 43,
       "mounted_frontend_candidates": [
         {
           "path": "/oauth/authorize",
@@ -2242,8 +2282,8 @@
           ],
           "handler": "register_routes.<locals>.index",
           "source": "twins/linear/frontend.py",
-          "line": 98,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 102,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2260,8 +2300,8 @@
           ],
           "handler": "register_routes.<locals>.new_issue",
           "source": "twins/linear/frontend.py",
-          "line": 142,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 156,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2278,8 +2318,8 @@
           ],
           "handler": "register_routes.<locals>.create_issue",
           "source": "twins/linear/frontend.py",
-          "line": 155,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 169,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2296,8 +2336,8 @@
           ],
           "handler": "register_routes.<locals>.detail",
           "source": "twins/linear/frontend.py",
-          "line": 167,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 181,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2314,8 +2354,8 @@
           ],
           "handler": "register_routes.<locals>.profile",
           "source": "twins/linear/frontend.py",
-          "line": 197,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 211,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2332,8 +2372,8 @@
           ],
           "handler": "register_routes.<locals>.document_detail",
           "source": "twins/linear/frontend.py",
-          "line": 214,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 228,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2350,8 +2390,26 @@
           ],
           "handler": "register_routes.<locals>.native_project",
           "source": "twins/linear/frontend.py",
-          "line": 236,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 250,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/my-issues/subscribed",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_subscribed",
+          "source": "twins/linear/frontend.py",
+          "line": 258,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2368,8 +2426,8 @@
           ],
           "handler": "register_routes.<locals>.native_document",
           "source": "twins/linear/frontend.py",
-          "line": 244,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 263,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2386,8 +2444,8 @@
           ],
           "handler": "register_routes.<locals>.native_issue",
           "source": "twins/linear/frontend.py",
-          "line": 252,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 271,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2404,8 +2462,8 @@
           ],
           "handler": "register_routes.<locals>.native_issue",
           "source": "twins/linear/frontend.py",
-          "line": 252,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 271,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2422,8 +2480,8 @@
           ],
           "handler": "register_routes.<locals>.native_user",
           "source": "twins/linear/frontend.py",
-          "line": 258,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 277,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2440,8 +2498,8 @@
           ],
           "handler": "register_routes.<locals>.native_profile",
           "source": "twins/linear/frontend.py",
-          "line": 262,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 281,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2458,8 +2516,8 @@
           ],
           "handler": "register_routes.<locals>.native_comment",
           "source": "twins/linear/frontend.py",
-          "line": 270,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 289,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2476,8 +2534,8 @@
           ],
           "handler": "register_routes.<locals>.update_document",
           "source": "twins/linear/frontend.py",
-          "line": 279,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 298,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2494,8 +2552,8 @@
           ],
           "handler": "register_routes.<locals>.update",
           "source": "twins/linear/frontend.py",
-          "line": 299,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 318,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2512,8 +2570,8 @@
           ],
           "handler": "register_routes.<locals>.comment",
           "source": "twins/linear/frontend.py",
-          "line": 328,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 347,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2530,8 +2588,8 @@
           ],
           "handler": "register_routes.<locals>.edit_comment",
           "source": "twins/linear/frontend.py",
-          "line": 348,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 367,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2548,8 +2606,26 @@
           ],
           "handler": "register_routes.<locals>.resolve_comment",
           "source": "twins/linear/frontend.py",
-          "line": 370,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 389,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues/{issue_id}/subscriptions",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_subscription",
+          "source": "twins/linear/subscription_ui.py",
+          "line": 134,
+          "source_sha256": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2566,8 +2642,8 @@
           ],
           "handler": "register_routes.<locals>.archive",
           "source": "twins/linear/frontend.py",
-          "line": 387,
-          "source_sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
+          "line": 408,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2746,8 +2822,8 @@
           ],
           "handler": "register_routes.<locals>.inbox",
           "source": "twins/linear/inbox_ui.py",
-          "line": 139,
-          "source_sha256": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+          "line": 150,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2764,8 +2840,8 @@
           ],
           "handler": "register_routes.<locals>.bulk_action",
           "source": "twins/linear/inbox_ui.py",
-          "line": 283,
-          "source_sha256": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+          "line": 294,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2782,8 +2858,8 @@
           ],
           "handler": "register_routes.<locals>.notification_action",
           "source": "twins/linear/inbox_ui.py",
-          "line": 313,
-          "source_sha256": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+          "line": 324,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2794,7 +2870,7 @@
           }
         }
       ],
-      "candidate_count": 32
+      "candidate_count": 34
     },
     "stripe": {
       "registered_nonoperator_routes": 660,

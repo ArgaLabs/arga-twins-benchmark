@@ -3909,29 +3909,77 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 1,
-      "markup_control_occurrences": 66,
+      "route_candidate_count": 9,
+      "markup_control_occurrences": 67,
       "files": [
         {
           "path": "twins/google_calendar/app.py",
-          "sha256": "e927f97d71ab6264607efc80acdce7b8ca22580babb31bda52c5432e6663a7dc",
+          "sha256": "0622980c8ca288f33474af6e04e0353f372c72f5b988849f6b7c7a370f8158db",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 689
+              "line": 720
+            },
+            {
+              "method": "GET",
+              "path": "/calendar/_ui/access-requests",
+              "handler": "list_access_requests",
+              "line": 750
+            },
+            {
+              "method": "POST",
+              "path": "/calendar/_ui/access-requests",
+              "handler": "request_calendar_access",
+              "line": 754
+            },
+            {
+              "method": "POST",
+              "path": "/calendar/_ui/access-requests/{request_id}/approve",
+              "handler": "approve_calendar_access",
+              "line": 758
+            },
+            {
+              "method": "GET",
+              "path": "/calendar/_ui/tasks",
+              "handler": "list_side_tasks",
+              "line": 778
+            },
+            {
+              "method": "POST",
+              "path": "/calendar/_ui/task-lists",
+              "handler": "create_side_task_list",
+              "line": 782
+            },
+            {
+              "method": "API_ROUTE",
+              "path": "/calendar/_ui/task-lists/{list_id}",
+              "handler": "change_side_task_list",
+              "line": 786
+            },
+            {
+              "method": "POST",
+              "path": "/calendar/_ui/task-lists/{list_id}/tasks",
+              "handler": "create_side_task",
+              "line": 790
+            },
+            {
+              "method": "API_ROUTE",
+              "path": "/calendar/_ui/task-lists/{list_id}/tasks/{task_id}",
+              "handler": "change_side_task",
+              "line": 796
             }
           ],
           "markup_expressions": []
         },
         {
           "path": "twins/google_calendar/ui.py",
-          "sha256": "375cbe8f6ed3fdb42ed8975bcd136cbc44a9e4b9c608df3cb3d818505176f189",
+          "sha256": "6a403ab2d2a99339fd57d45a1764b2744e5950cfd1f8e9e852680089ae1fa5fd",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 11,
+              "line": 14,
               "dynamic": true,
               "controls": [
                 {
@@ -3984,6 +4032,14 @@
                   "attributes": {
                     "type": "submit",
                     "aria-label": "Search"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "calendarTasksBtn",
+                    "aria-label": "Tasks"
                   },
                   "text": ""
                 },
@@ -4130,7 +4186,7 @@
               ]
             },
             {
-              "line": 2221,
+              "line": 2235,
               "dynamic": true,
               "controls": [
                 {
@@ -4364,11 +4420,11 @@
         },
         {
           "path": "twins/google_calendar/workspace_ui.py",
-          "sha256": "5992911b1b9d88b5146ceb3a475aa22179ac7e8eb31f41be46dacdc795e166a0",
+          "sha256": "5731c6aa3a21e716b7aae02045137c83b76cbe8aa70729b7b13e129cf958fab0",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 55,
+              "line": 69,
               "dynamic": false,
               "controls": [
                 {
@@ -12641,5 +12697,6 @@
         }
       ]
     }
-  ]
+  ],
+  "source_revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf"
 }

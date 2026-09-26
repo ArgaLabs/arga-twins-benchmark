@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1195",
   "source_head": "3632cab9c275746257dd3d8b7262eda97a9dd1ba",
-  "status": "local_browser_native_source_review_pass_ci_pending",
+  "status": "deployed_hosted_browser_native_images_pass",
   "release_allowed": false,
   "tests": {
     "integrated_calendar_workspace_passed": 576,
@@ -507,14 +507,179 @@
     "lab-calendar-side-tasks-local-r3/browser-trace.json": "6ce8100b9f9ca1dae4abdb462be7d66d5a319d5edc6e0965a9e71dfb6367bee5",
     "lab-calendar-side-tasks-local-r3/browser-native-result.json": "d8db562fbe878f35ff33a19681f78c3791bb78502782af3bb51ace381900df0f",
     "lab-calendar-side-tasks-local-r3/after.json": "90237ab166177ec5912b6878f6145a46875480746948840b13444d1975a371fa",
-    "lab-calendar-side-tasks-local-r3/fixtures.json": "5c6a2b80d66e6438ce17a1c2584c833fd71eb528c7bc98f22b48027330c7acb1"
+    "lab-calendar-side-tasks-local-r3/fixtures.json": "5c6a2b80d66e6438ce17a1c2584c833fd71eb528c7bc98f22b48027330c7acb1",
+    "lab-calendar-side-tasks-merge.json": "0dfdf4512df253f93a812d09929a6162c7e910f39ec0abe23d7e5b3b5a442c96",
+    "lab-calendar-side-tasks-ci-complete.log": "7e843bf9b5d08e4a9538130c772fa05bf6f4d21c792d4387167e85e0d1d7b667",
+    "lab-calendar-side-tasks-premerge.json": "c70183422500d628633d9496de4e95b5661b18eab102668e59668c73cc4e3b11",
+    "lab-calendar-side-tasks-ci-counts.json": "91a5128d21985671a322183a13d8687db4da43779486f7d26c356f9a576f3c06",
+    "lab-final-calendar-side-tasks-16c40465/browser-trace.json": "c2fdfb3387a737b090e209cf801b5b69278a12297affd606998f5e4df83f0c89",
+    "lab-final-calendar-side-tasks-16c40465/image-comparison.json": "b9726033a5ae520e2a0a2b15788e08f36739f41ca2930b99c097b9f0ab0fdc0c",
+    "lab-final-calendar-side-tasks-16c40465/workspace.json": "2a91410e0ace4a7b80e1c53a9ae9c3d60e685c838f3724e8442bd8edb65412be",
+    "lab-final-calendar-side-tasks-16c40465/publication-catalog.json": "b74bdc905f9b943db3a03005803746f89a16eff5606e8232a65bb84ed3d054da",
+    "lab-final-calendar-side-tasks-16c40465/browser-observations.json": "e602e2c8a8cec24b735a1aa7f561c0ad5b25ed8975934c8fced3565072b0c53c",
+    "lab-final-calendar-side-tasks-16c40465/gui-baseline-state.json": "7748ed9d4b61a9bdf5b4677aab4f00e1c8d96c41406327e99c7f67b6f6ea147d",
+    "lab-final-calendar-side-tasks-16c40465/browser-native-result.json": "b8cde5101e813f238f8028286d2e2ba14751267e77cee370e7ca737dc7c79210",
+    "lab-final-calendar-side-tasks-16c40465/gui-final-state.json": "a0f435cc98ebe030de968180e6d2235840deb54e344dc564cc9dc58a34e8e057",
+    "lab-final-calendar-side-tasks-16c40465/cleanup.json": "8ac291bc70bb6486819ba00d6aef2f208612902d4818a10981466eaba696f608",
+    "lab-final-calendar-side-tasks-16c40465/runtime-image-evidence.json": "7a4af3f82c31e69327721d23801ba6921501ae8c8e969663014b83732db41b2d",
+    "lab-final-calendar-side-tasks-16c40465/worker-logs.json": "53eabed15624cfac31e55b5b3306d9ffae66d09c31d176b8980853d10f3a15fc",
+    "lab-final-calendar-side-tasks-16c40465/scenario.json": "cfc2b1f9be95f88fe46f9c20b8d5afafd85f146fe36fec0ce8933b739a350c94",
+    "lab-final-calendar-side-tasks-16c40465/operator-api-trace.json": "de7654d67a2d254338736fe754edfc3cca77c373524ff922f0ad7f27d9a973e3",
+    "lab-final-calendar-side-tasks-16c40465/control.json": "5ab2a75ad4f893b1c80d9738ad5d8d50a8a05bff7b94ba61a2594a2e268caa05",
+    "lab-final-calendar-side-tasks-16c40465-hosted.log": "a38d76ce831dab1885d823c973abac1c0533e0c5c167edd083a720328323bf08"
   },
   "limits": [
-    "Exact-head CI, production and fresh hosted checks pending",
+    "Exact-head CI, both deployments, serving API/proxy images and fresh hosted task/list lifecycle/browser/native/container checks pass; full provider audit remains open.",
     "Expanded details-menu control names remain absent from CUA AX despite explicit source labels; native keyboard/focus and touch unverified while Mac locked",
     "Time, recurrence, deadlines, subtasks, attachments, calendar-grid projection, fullscreen and other side apps remain open",
     "Starred recently currently groups starred items without recency ordering; full provider behavior unverified",
     "Scenario reseeding, AI and full Calendar/collaboration audit remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merge_commit": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+  "ci": {
+    "head": "3632cab9c275746257dd3d8b7262eda97a9dd1ba",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6502,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+    "runtime_workflow": 36237453703,
+    "twins_workflow": 36237453720,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:16c404650c6c6c034b39a535eb2e56ab401eaeaf@sha256:690c85897e71cfa76436ccba0daef07e630dd60203cae3467d2200621fb5fa9e",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:16c404650c6c6c034b39a535eb2e56ab401eaeaf@sha256:7dcbade72f885c3d60a88984aae9a4c151bd02bb0a0de02e8a1f2e1bf7bddb77",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:16c404650c6c6c034b39a535eb2e56ab401eaeaf@sha256:ec88de1b438923ce0bc6a40d9167738e6e91d2787dc77007e34bdb35995cacd7"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00299-glh",
+      "arga-api": "arga-api-00669-77h"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-side-tasks-16c40465-twins-deploy.log": "f1c77dce94905fba862f380fe5668401b6b5478259bd20d6f83af1e9fd344065",
+      "lab-final-calendar-side-tasks-16c40465-runtime-deploy.log": "4dafd7782e8ff372d916d5a6ab803384e25fc7cb4d55029db12c604ea177898c"
+    },
+    "serving_runtime": {
+      "revision": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00299-glh",
+          "observed_at": "2026-09-26T11:01:12.456777+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00299-glh"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00299-glh",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+            "sha256:7dcbade72f885c3d60a88984aae9a4c151bd02bb0a0de02e8a1f2e1bf7bddb77"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00669-77h",
+          "observed_at": "2026-09-26T11:06:16.206542+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:4025555352ee2c9b75a19c69faab2c947460f091a4c1ac2ee545a204b870b100",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:4025555352ee2c9b75a19c69faab2c947460f091a4c1ac2ee545a204b870b100"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00669-77h"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00669-77h",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4025555352ee2c9b75a19c69faab2c947460f091a4c1ac2ee545a204b870b100",
+            "sha256:ec88de1b438923ce0bc6a40d9167738e6e91d2787dc77007e34bdb35995cacd7"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "4dafd7782e8ff372d916d5a6ab803384e25fc7cb4d55029db12c604ea177898c",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "invalid_and_forbidden_writes_atomic": true,
+      "limits": [
+        "Private UI routes, not public Google Tasks API",
+        "Timed/repeating tasks, reminders, grid projection, other side apps and full provider audit remain open",
+        "Native keyboard/touch unverified"
+      ],
+      "one_list_one_task_and_five_lifecycle_changes": true,
+      "other_accounts_and_non_task_resources_unchanged": true,
+      "passed": true
+    },
+    "browser": {
+      "desktop": [
+        "Empty initial My Tasks; created Hosted tasks list through visible menu",
+        "Saved Hosted task with notes Preserve calendar state. and date2026-10-01; full reload retained all values and selected list",
+        "Star, complete, completed-group expand and reopen worked"
+      ],
+      "mobile": {
+        "width": 390,
+        "height": 844,
+        "checks": [
+          "Task title/notes/date/star readable",
+          "Deleted own task; No tasks yet and Undo delete shown",
+          "Undo restored same task; full reload retained selected list and task, starred and incomplete"
+        ]
+      },
+      "accounts": [
+        "Reader own empty My Tasks; Add a task disabled and read-only message",
+        "Outsider own empty My Tasks, no owner list/task or event"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Native keyboard/focus and physical touch unverified while Mac locked",
+        "Details-menu descendant AX labels unresolved in this deployed revision; visible pointer controls exercised; #1196 corrects independently",
+        "No full provider or release approval"
+      ]
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true
+  }
 }

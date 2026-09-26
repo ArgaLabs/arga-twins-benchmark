@@ -1,0 +1,429 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1196",
+  "source_head": "82242b336519623fd11276d6b158b5351d212d07",
+  "status": "local_browser_native_review_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_calendar_workspace_passed": 578,
+    "focused": 21,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "real_reference": {
+    "observed_on": "2026-09-26",
+    "provider": "google_calendar",
+    "surface": "Tasks side panel native Google account",
+    "official_sources": [
+      "https://support.google.com/tasks/answer/12718779?co=GENIE.Platform%3DDesktop&hl=en",
+      "https://support.google.com/tasks/answer/7675629?co=GENIE.Platform%3DDesktop&hl=en"
+    ],
+    "owned_fixtures": [
+      "ARGA-LAB-STAR-20260926-1055 A",
+      "ARGA-LAB-STAR-20260926-1055 B"
+    ],
+    "observations": [
+      "Initial My Tasks empty, sort My order",
+      "Creating A then B places B before A in My order",
+      "Star B then A; Starred recently sorts A before B",
+      "Unstar B yields separate Not starred section",
+      "Re-star B; full reload shows B before A",
+      "Native selected sort AX describes sorted descending",
+      "Task options have Add deadline, Add subtask, Add attachment, Delete and move-to-list/New list"
+    ],
+    "cleanup": [
+      "Deleted only both uniquely prefixed owned tasks",
+      "Full reload confirms No tasks yet",
+      "Restored original My order; selected state verified after reload",
+      "No Calendar event mutations or outbound messages"
+    ],
+    "screenshots_retained": false,
+    "limits": [
+      "No physical touch or native keyboard check; Mac locked",
+      "Task timestamps not available through browser UI",
+      "This reference is for a subsequent ordering correction, not proof current twin matches"
+    ]
+  },
+  "browser": {
+    "r1": {
+      "status": "pass",
+      "scope": "bounded local Chrome ordering and native state",
+      "writes": [
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default/tasks/side_task_f4e69eaf225c",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default/tasks/side_task_f4e69eaf225c",
+          "status": 200
+        }
+      ],
+      "changed_owner_keys": [
+        "side_tasks"
+      ],
+      "task_changed_fields": {
+        "side_task_f4e69eaf225c": [
+          "updated",
+          "starredAt"
+        ]
+      },
+      "other_accounts_unchanged": true,
+      "owner_non_task_state_unchanged": true,
+      "screenshots_saved": false,
+      "native_keyboard_touch_verified": false,
+      "observations": [
+        "Initial starred B,A; unstar/re-star A moves A first; 390px grouping visible. Native details menu inaccessible; correction required."
+      ]
+    },
+    "r2": {
+      "status": "pass",
+      "scope": "bounded local Chrome ordering and native state",
+      "writes": [
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default/tasks/side_task_f4e69eaf225c",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/_ui/task-lists/default/tasks/side_task_f4e69eaf225c",
+          "status": 200
+        }
+      ],
+      "changed_owner_keys": [
+        "task_lists",
+        "side_tasks"
+      ],
+      "task_changed_fields": {
+        "side_task_f4e69eaf225c": [
+          "updated",
+          "starredAt"
+        ]
+      },
+      "other_accounts_unchanged": true,
+      "owner_non_task_state_unchanged": true,
+      "screenshots_saved": false,
+      "native_keyboard_touch_verified": false,
+      "observations": [
+        "Named list/menu controls exposed and Sort by settable. My order C,B,A. Starred grouping B,A/C. Unstar A moves it below C. Re-star A gives A,B/C after full reload at 390px. Mobile task menu named Delete; outside click collapses. Desktop and mobile inspected inline."
+      ]
+    }
+  },
+  "independent_review": {
+    "disposition": "ship",
+    "scope": "Bounded Calendar Tasks ordering and controlled menu correction against 3632cab9; source and supplied behavioral evidence only.",
+    "limitations": [
+      "No independent visual, physical-touch, native-keyboard, or native-focus approval. Screenshots were viewed inline by the parent and not retained, honoring the user's prohibition.",
+      "No PRODUCT.md, DESIGN.md, quality-bar card, or approved comp exists for this scoped provider-fidelity correction. Existing provider UI and the explicit preservation brief govern; no new visual world is being approved.",
+      "The JS fixture tests sorting and existing race/editor behavior; its DOM stubs do not exercise the menu event or native focus paths. Supplied round-2 browser observations cover named controls, sort selection, mobile Delete exposure, and outside-click collapse.",
+      "Existing broader Calendar and release gates remain pending."
+    ],
+    "persistence": {
+      "status": "pass",
+      "details": [
+        "The four-file diff stays within personal Calendar Tasks state, its existing companion UI, and regression tests; no provider redesign or unrelated product change.",
+        "starredAt is generated by the existing store clock only for POST-starred or false-to-true transitions; unstar removes it. Unchanged stars return without advancing state, while edits, completion, deletion, and restore preserve prior recency.",
+        "The accepted task-field allowlist excludes starredAt, preventing client-authored recency. Account permission and isolation boundaries are unchanged.",
+        "Current-clock behavior is inherited from _next_datetime(), with explicit fixed-clock support preserved.",
+        "Supplied round-2 evidence reports persistence after full reload and unchanged other accounts and non-task owner state."
+      ],
+      "evidence": [
+        "twins/google_calendar/side_tasks.py:123-166",
+        "twins/google_calendar/app.py:602-613",
+        "twins/tests/test_google_calendar_side_tasks.py:137-170",
+        "/tmp/lab-calendar-task-ordering-local-r2/browser-native-result.json"
+      ]
+    },
+    "fidelity": {
+      "status": "faithful within the bounded source and supplied behavior evidence",
+      "matrix": [
+        {
+          "element": "My order",
+          "verdict": "match",
+          "basis": "Descending zero-padded creation position produces C,B,A; official-account observation and local round 2 report the same newest-first behavior."
+        },
+        {
+          "element": "Starred recently",
+          "verdict": "match",
+          "basis": "Starred tasks precede unstarred tasks, descending starredAt resolves star recency, and creation order supplies a deterministic fallback. Unstar/re-star changes ordering after reload in round 2."
+        },
+        {
+          "element": "Starred / Not starred grouping",
+          "verdict": "match",
+          "basis": "Group headings are emitted when active tasks cross the boolean star boundary and only in starred sort; completed tasks retain their existing separate section."
+        },
+        {
+          "element": "List and task options",
+          "verdict": "adaptation",
+          "basis": "The bounded inspection found native details descendants inaccessible. Buttons with stable accessible names, aria-expanded, aria-controls, hidden groups, one-open behavior, outside-click dismissal, and Escape return-to-trigger replace those details controls. Supplied round 2 confirms Sort by and Delete exposure."
+        },
+        {
+          "element": "TYPE",
+          "verdict": "match at source scope",
+          "basis": "Existing provider UI typography is retained; only the new 12px, medium-weight group label rule is added. Rendered typography was not independently inspected."
+        },
+        {
+          "element": "MATERIAL",
+          "verdict": "match at source scope",
+          "basis": "Existing SVG icon and flat provider menu treatment are retained; no raster, faux physical material, decorative imagery, or replacement visual system is added."
+        },
+        {
+          "element": "GROUND",
+          "verdict": "match at source scope",
+          "basis": "Existing white drawer/menu surfaces and provider text tokens remain unchanged; no color-field change appears in the diff. Pixel-level ground comparison was not available."
+        }
+      ],
+      "evidence": [
+        "twins/google_calendar/side_tasks_ui.py:52-65",
+        "twins/google_calendar/side_tasks_ui.py:111-153",
+        "twins/tests/fixtures/google_calendar_side_tasks_state.js:34-43",
+        "/tmp/lab-calendar-tasks-sorting-reference-2026-09-26.json",
+        "/tmp/lab-calendar-task-ordering-local-r2/browser-native-result.json"
+      ]
+    },
+    "ceiling": {
+      "status": "reached for the bounded source and supplied behavior review",
+      "details": [
+        "Operate-mode correction preserves the provider interface and makes existing actions discoverable; no additional decorative or structural device is warranted by this scope.",
+        "Source includes visible focus styling, named disclosure buttons, native controls in the revealed groups, and Escape focus restoration. Their native keyboard/focus and physical-touch behavior remain unverified here.",
+        "One supplied detector run returned []; no second detector or browser inspection was performed by this reviewer.",
+        "Supplied focused tests: 21 passed. Supplied integrated tests: 578 passed with 3 dependency deprecation warnings. Reviewer git diff --check passed."
+      ]
+    },
+    "material_fixes": [],
+    "keep": "Keep server-owned transition recency, latest-first My order, explicit star grouping, named controlled disclosure controls, personal account isolation, and the existing Calendar visual identity."
+  },
+  "documentation": {
+    "schema_version": 1,
+    "role": "Impeccable documenter",
+    "generated_at": "2026-09-26T11:07:12.261674+00:00",
+    "scope": "Calendar Tasks ordering and controlled options-menu correction; incumbent provider interface preserved.",
+    "workspace": "/Users/tonghx/validation-server-lab-calendar-task-ordering",
+    "source_snapshot": {
+      "head": "26242737ad262fad071ae9db3bf788fecd58dcf1",
+      "parent": "16c404650c6c6c034b39a535eb2e56ab401eaeaf",
+      "status_porcelain": "",
+      "implementation_diff_sha256": "267c99234fafef9373be6abd0881193b05e679cf96e3f2afabcb2fb6e8e5d70c",
+      "files": [
+        {
+          "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/google_calendar/side_tasks.py",
+          "sha256": "af0f742a05a0250f212f912b3ffb15afe41b0644dd0096ef29a42b7ef1f6a672",
+          "bytes": 8190
+        },
+        {
+          "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/google_calendar/side_tasks_ui.py",
+          "sha256": "089bac0311c17e1cafb6f41bab7cfab6f78a760e1ae7c77349828ceba64ed2f5",
+          "bytes": 19444
+        },
+        {
+          "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/tests/fixtures/google_calendar_side_tasks_state.js",
+          "sha256": "6a4b01fc9f51caac47da5b4f3ebab85b98eb34e3dd17051e0b3c3364bb640daa",
+          "bytes": 4093
+        },
+        {
+          "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/tests/test_google_calendar_side_tasks.py",
+          "sha256": "6243671d518c009d852cff013a9f1f27700439b2d72adf30db61f94c2122b456",
+          "bytes": 8414
+        },
+        {
+          "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/google_calendar/README.md",
+          "sha256": "0566e7cdfcbfec3801632f9fbb7ea203e4868ec04128ea38ef11bd8ec53743fc",
+          "bytes": 13416
+        }
+      ]
+    },
+    "instructions_checked": [
+      {
+        "path": "/Users/tonghx/AGENTS.md",
+        "sha256": "07c4464c8f901578a45b66468a75c774822f856e1558c4fa45a95949f6ce6f22",
+        "bytes": 33697
+      },
+      {
+        "path": "/Users/tonghx/.codex/plugins/cache/impeccable/impeccable/4.4.0/skills/impeccable/reference/document.md",
+        "sha256": "87b3db688c7963898bda8096f7868fed05ec5a0a80d14298e8b906b70cdf9c42",
+        "bytes": 27428
+      }
+    ],
+    "checked_evidence": [
+      {
+        "path": "/tmp/lab-calendar-tasks-sorting-reference-2026-09-26.json",
+        "sha256": "fce6e4891a387c4cc6cd3089d815d514dc21245436b4c479fc7e23bc8abbedf1",
+        "bytes": 1374,
+        "checked": true,
+        "finding": "Supplied native Google-account reference: new tasks first; star recency, unstarred grouping, and restar persistence; only uniquely prefixed owned tasks deleted and initial empty/My order state restored. Timestamp internals were not observable. No screenshots retained; locked-Mac keyboard/touch limitation.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-local-r1/browser-native-result.json",
+        "sha256": "e25d3c9a2573fd8ae9e886c1431343f4f43444dc680f7dfe3804b4798fe04e22",
+        "bytes": 917,
+        "checked": true,
+        "finding": "Supplied first local Chrome result: ordering/state boundaries pass; native details menu descendants inaccessible. This is the pre-correction finding, not final menu approval.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-local-r2/browser-native-result.json",
+        "sha256": "1d58c44344b970a7eef3abd7b0ec0336abcbfa495e826245071ff1294ebf48fc",
+        "bytes": 1358,
+        "checked": true,
+        "finding": "Supplied second local Chrome result: named list/menu controls, settable Sort by, C/B/A My order, starred grouping, unstar/restar after full reload at 390px, named mobile Delete, and outside-click collapse. Owner changes only task_lists and side_tasks; other accounts and non-task owner state unchanged. No screenshots saved; keyboard/touch false.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-final-integrated.log",
+        "sha256": "e923860e59c98a529afe81d667b7dfd65c37a4006a59eaff77ba93f861dd7af6",
+        "bytes": 2123,
+        "checked": true,
+        "finding": "Read supplied integrated log: 578 passed with 3 dependency deprecation warnings. Tests were not rerun by the documenter.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-menu-tests.log",
+        "sha256": "c2b9a8a5679d042f11db46f7c17bc5798a274e7b8741d5ede191ecd3590a8746",
+        "bytes": 626,
+        "checked": true,
+        "finding": "Read supplied focused log: 21 passed with 1 dependency deprecation warning. This is not native keyboard/menu focus validation; the JavaScript fixture stubs menu DOM event behavior.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-design-detector.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3,
+        "checked": true,
+        "finding": "Read supplied detector result: empty JSON array. No independent detector or visual approval claimed.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      },
+      {
+        "path": "/tmp/lab-calendar-task-ordering-finish-review.json",
+        "sha256": "f0b274b25f3127c110ce897b7dc04f3416c82f3255bef106adacfe7be26b9ebe",
+        "bytes": 5647,
+        "checked": true,
+        "finding": "Read reviewer disposition ship for bounded source and supplied behavior evidence, no material fixes. Native visual, focus, keyboard, touch and broader release gates remain outside that disposition.",
+        "verification": "artifact contents inspected; original activity not independently repeated"
+      }
+    ],
+    "source_checks": [
+      {
+        "finding": "Server-only star recency is generated on create-starred and false-to-true transitions; unstar removes it; repeated true returns unchanged; other edits, completion, deletion and restore preserve existing recency. Client allowlist excludes starredAt.",
+        "files": [
+          "twins/google_calendar/side_tasks.py",
+          "twins/tests/test_google_calendar_side_tasks.py"
+        ]
+      },
+      {
+        "finding": "My order reverses stored position. Starred sort first groups the boolean star state then uses descending starredAt and descending position/ID fallback. Only active tasks gain Starred recently/Not starred headings; completed section remains separate.",
+        "files": [
+          "twins/google_calendar/side_tasks_ui.py",
+          "twins/tests/fixtures/google_calendar_side_tasks_state.js"
+        ]
+      },
+      {
+        "finding": "Named native buttons replace list/task details controls, use aria-expanded and aria-controls, expose hidden named groups, allow one open group, close on outside click, and include Escape return-to-trigger code. Native keyboard/focus/touch not independently executed.",
+        "files": [
+          "twins/google_calendar/side_tasks_ui.py"
+        ]
+      }
+    ],
+    "documentation_proposal": {
+      "path": "/Users/tonghx/validation-server-lab-calendar-task-ordering/twins/google_calendar/README.md",
+      "start_marker": "### Tasks side panel\n",
+      "end_marker_exclusive": "## Authentication\n",
+      "original_section_sha256": "6093781975d82fbe167ce4c1b15ec8c7ec4ad2af2b0b1992f385b4d383d8baef",
+      "replacement_section_sha256": "dff88c46c3dbe6c8a99767978c5a35ae91fe80e60174aba80161a93453fea0b8",
+      "replacement_markdown": "### Tasks side panel\n\nThe Calendar Tasks controls open a personal Tasks pane within the incumbent\nCalendar interface: a 320px white pane on desktop and a full-width drawer below\nthe header on narrow screens. It supports task lists, inline title/details and\ndate-only editing, stars, completion/reopening, and task deletion with Undo.\nList controls create, rename, select and delete lists, and choose My order,\nDate, Starred recently or Title. My order displays descending stored positions,\nso newly created tasks appear first. Starred recently groups active tasks under\n\u201cStarred recently\u201d and \u201cNot starred\u201d, with starred tasks ordered by the most\nrecent starring time. Unstarred tasks use My order; ties, including legacy\nstarred tasks without timestamps, fall back to My order. Completed tasks retain\ntheir separate section. The default My Tasks list cannot be deleted. Deleting\nanother list also soft-deletes its tasks and returns the selection to the\ndefault list; list deletion has no Undo control.\n\nTask drafts save on Enter in the title, focus moving to another control, or\nclosing Tasks. Empty new drafts and unchanged edits make no write. Escape\ndismisses an open options menu before cancelling an unsaved task draft; failed\nwrites retain its fields and offer Retry or Discard changes. List forms retain\nfailed input and support Cancel, and list deletion requires confirmation. A\nsuccessful mutation is cached before refresh: if the follow-up read fails, the\nsaved task or list remains visible with an explicit refresh error and Reload\ntasks action, without repeating the write. Stale reads are discarded after newer\nreads, mutations or draft transitions. A completed task stays expanded while its\ninline editor is open.\n\nList and task options use named buttons with expanded state and associated\nhidden option groups. Opening one closes any other options group, and clicking\noutside dismisses it. The Escape handler returns focus to the options button.\nThe supplied Chrome check confirms named list controls, Sort by selection,\nthe task Delete action, and outside-click dismissal; native keyboard/focus\nbehavior remains unverified.\n\nThe account's native `google_calendar` state contains `task_lists`, `side_tasks`\nand `task_preferences.selectedListId`; `GET /_admin/state` exposes those three\nkeys for inspection. The server assigns `starredAt` when a task is created\nstarred or changes from unstarred to starred. Removing a star clears that value;\nstarring again assigns a new value. Repeated starring, other edits, completion,\ndeletion and Undo preserve existing star recency. Clients cannot supply\n`starredAt` directly. Tasks are personal and do not mutate Calendar events,\nsharing ACLs or other accounts. Reads require `calendar_tasks_read`; mutations,\nincluding saved list selection and sorting, require `calendar_tasks_write`.\nRegistered bearer tokens are required, and permission changes apply to existing\ntokens. Read-only users can browse their own lists without writing preferences.\nTask and list titles are nonempty and limited to 1,024 characters; task details\nare limited to 8,192. Dates accept `YYYY-MM-DD` and store date-only `due` values\nat midnight UTC; clearing the date removes `due`. Invalid fields reject the\nentire mutation.\n\nThe routes under `/calendar/_ui/tasks` and `/calendar/_ui/task-lists` are private\nbrowser resources, not the public Google Tasks API. This extension does not\nimplement Tasks Scenario export/reseed, task time, recurrence, deadlines,\nsubtasks, attachments, Calendar-grid projection, fullscreen Tasks, other side\napps, or cross-product delivery. Source regressions and supplied desktop/390px\nChrome evidence cover the bounded flows, including ordering after reload and\nnamed options controls. Native keyboard/focus and physical-touch checks remain\nunverified because the host Mac was locked. No screenshots were retained.\nThis is not independent visual approval, complete provider parity, or approval\nof the full eight-twin release.\n\n",
+      "apply_status": "applied by parent and verified at final_head; README section matches replacement_markdown exactly and all four implementation source hashes remain unchanged; no repository edits by documenter"
+    },
+    "retained_boundaries": [
+      "personal account task state and calendar_tasks_read/calendar_tasks_write permission gates",
+      "Calendar events, sharing ACLs and other accounts remain outside task mutations",
+      "task/list validation limits and atomic rejection",
+      "default-list protection, list soft deletion without Undo, task deletion with Undo",
+      "draft save, failure recovery, stale-read protection and completed-editor behavior",
+      "private browser resources; no public Google Tasks API",
+      "Tasks Scenario export/reseed remains outside this extension",
+      "task time, recurrence, deadlines, subtasks and attachments remain outside this extension",
+      "Calendar-grid projection, fullscreen Tasks, other side apps and cross-product delivery remain outside this extension"
+    ],
+    "limits": [
+      "No browser launched and no independent visual or pixel comparison performed by the documenter.",
+      "No screenshots retained, consistent with the user instruction.",
+      "Native keyboard/focus and physical-touch checks were blocked by the locked Mac and remain unverified; source handlers are not proof of native behavior.",
+      "Tests and detector results were read from supplied artifacts, not independently rerun.",
+      "This documenter pass does not approve complete provider parity or the full eight-twin release."
+    ],
+    "design_documentation": {
+      "decision": "Preserve incumbent system; no DESIGN.md, PRODUCT.md or design sidecar changes.",
+      "reason": "This is a narrow provider-fidelity ordering/menu correction, not a new visual-system documentation or replacement task."
+    },
+    "mutations": {
+      "written_files": [
+        "/tmp/lab-calendar-task-ordering-documentation.json"
+      ],
+      "repository_files_written": [],
+      "external_messages_or_comments_sent": false
+    },
+    "final_head": "82242b336519623fd11276d6b158b5351d212d07"
+  },
+  "source_files": {
+    "twins/google_calendar/side_tasks.py": "af0f742a05a0250f212f912b3ffb15afe41b0644dd0096ef29a42b7ef1f6a672",
+    "twins/google_calendar/side_tasks_ui.py": "089bac0311c17e1cafb6f41bab7cfab6f78a760e1ae7c77349828ceba64ed2f5",
+    "twins/google_calendar/README.md": "4fc0b1c12cbebc5d29fd335cee70ceeaac5b68ff798fefc2803b98ce0858dc67",
+    "twins/tests/test_google_calendar_side_tasks.py": "6243671d518c009d852cff013a9f1f27700439b2d72adf30db61f94c2122b456",
+    "twins/tests/fixtures/google_calendar_side_tasks_state.js": "6a4b01fc9f51caac47da5b4f3ebab85b98eb34e3dd17051e0b3c3364bb640daa"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-task-ordering-make-fix-menu.log": "6bafba1b0c536fcb483a0a648ed6a7814581a50e28b21f5883a81cef1c6c8252",
+    "lab-calendar-task-ordering-deps-menu.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-task-ordering-server.log": "a64d3d8bd420792aaf26068e82c01c4a68024c1991b45f1d06c0016bbf68f142",
+    "lab-calendar-task-ordering-local-r2-server.log": "7bf359a77761ec56df99539055217169a628c87c83e91d942497cbbf28cd3cc9",
+    "lab-calendar-task-ordering-focused.log": "96bedb85e3a41008cf01ca990710529ea7d6c609d0496ad9dd5f7242c420b0f3",
+    "lab-calendar-task-ordering-red.log": "88ec09b40c4d432dc1aaaf89d2cb81c1eabe85bb33c9032de93ce62ba8e430ec",
+    "lab-calendar-task-ordering-menu-tests.log": "c2b9a8a5679d042f11db46f7c17bc5798a274e7b8741d5ede191ecd3590a8746",
+    "lab-calendar-task-ordering-make-fix.log": "bfdf05322197e8fac968655f7a14bd95a611b0445f96aadfb87eee908bdf3a8d",
+    "lab-calendar-task-ordering-deps.log": "47593fc97b5b847b33b43a7b72897b650b3074ba8f1d40c56352032d82ebe9e9",
+    "lab-calendar-task-ordering-ci-watch.log": "0eb98bf3d664c3c83a246d7595382f0d733ec193d5201617a55dd5385f6e5750",
+    "lab-calendar-task-ordering-final-integrated.log": "e923860e59c98a529afe81d667b7dfd65c37a4006a59eaff77ba93f861dd7af6",
+    "lab-calendar-task-ordering-integrated.log": "bc840cb441b36c0e063ba63cd36007f2be2318dabccd6d947639238e9cd8b6e5",
+    "lab-calendar-task-ordering-design-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-calendar-task-ordering-finish-review.json": "f0b274b25f3127c110ce897b7dc04f3416c82f3255bef106adacfe7be26b9ebe",
+    "lab-calendar-task-ordering-documentation.json": "e175ad495e5d59b389489512e5745c856fc875c76ff228e581e3783a365b35fe",
+    "lab-calendar-task-ordering-local-r1/before.json": "48a1647382f98bceee5b169289c2357f3a8c42ea6440047bc9ea944207bc0d22",
+    "lab-calendar-task-ordering-local-r1/browser-trace.json": "62c0ccb57d4165143f0376d500a2fb46feb2207a0447fcdd35ea8c3c69f43b46",
+    "lab-calendar-task-ordering-local-r1/browser-native-result.json": "e25d3c9a2573fd8ae9e886c1431343f4f43444dc680f7dfe3804b4798fe04e22",
+    "lab-calendar-task-ordering-local-r1/after.json": "82c1daf25d36c8d849fef94b0f4cb7371e7e0a6674423c0f61d154086b56bcd4",
+    "lab-calendar-task-ordering-local-r1/fixtures.json": "bb24375b5cad52c0391eebca830f18a90c7897479075fc75087028173bdc1131",
+    "lab-calendar-task-ordering-local-r2/before.json": "f366b3ade8df7c40e050ccd7f598e3181a8f70593fb4b011c94c408cbf4ec900",
+    "lab-calendar-task-ordering-local-r2/browser-trace.json": "830b9b8ec09d22659d0129aa0d186cf7ee36341c4dbd463ce36cfaab30e164cf",
+    "lab-calendar-task-ordering-local-r2/browser-native-result.json": "1d58c44344b970a7eef3abd7b0ec0336abcbfa495e826245071ff1294ebf48fc",
+    "lab-calendar-task-ordering-local-r2/after.json": "60c66a01551fca18d6ffbec0354dcea9bef7980a13f88ac84085992691c26969",
+    "lab-calendar-task-ordering-local-r2/fixtures.json": "c78109301f9ed78e035fc80d2874bd7ed84aa424c91252708a204c82f2786312"
+  },
+  "limits": [
+    "Exact-head CI, deployment and fresh hosted verification pending",
+    "Native keyboard/focus and physical touch unverified while Mac locked; no independent visual approval",
+    "Full Tasks/Calendar/AI/collaboration and eight-provider release gates remain open"
+  ],
+  "screenshots_retained": false
+}
