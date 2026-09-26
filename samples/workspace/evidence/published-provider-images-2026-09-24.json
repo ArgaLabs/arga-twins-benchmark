@@ -2234,5 +2234,11 @@
         "stripe": "identical"
       }
     }
-  ]
+  ],
+  "latest_image_gate_failure": {
+    "observed_on": "2026-09-26",
+    "report": "app-image-publications-2026-09-26.json",
+    "status": "open",
+    "scope": "Latest live-clock Gmail run app container does not match its own builder publication; older successful attestations remain historical evidence."
+  }
 }

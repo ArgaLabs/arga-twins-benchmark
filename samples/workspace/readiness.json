@@ -43,7 +43,7 @@
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
-          "sha256": "000b3dad49dca8fb7813f96c33bfabb8dd17f0e2096c00aff23b3e1ca80ffda8"
+          "sha256": "f93339f4993929825d2a677442e275f455cacbd538502cd4e8497a6256b630f5"
         }
       ]
     },
@@ -163,7 +163,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
-          "sha256": "60d0230112701dc7e1418b5c33064e92e7acc2a6d7bf43165b1b36278fff2fa2"
+          "sha256": "1c8e14314cc4d689b17467e79a9eb595d23a6129ae9d4a35021bb99f27686944"
         }
       ]
     },
@@ -297,6 +297,10 @@
         {
           "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
           "sha256": "e16703c3dcee9cf4b0c8da6485f68a6332fc443746b23773ce78dbffafb64b01"
+        },
+        {
+          "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
+          "sha256": "41297facdd488c6e88ca9b973dbdc6c161125686a0bb279c03469d21959a34ba"
         }
       ]
     },
@@ -312,5 +316,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "8dfb610f91734a0a9d4b2d38b2a53ebf89c141a9b239bf605a77a9bdb89cd88b"
+  "sample_tree_sha256": "516323cd921b364e28648d43d8351f2f38327edebf2b900842c8485fd6c849ea"
 }

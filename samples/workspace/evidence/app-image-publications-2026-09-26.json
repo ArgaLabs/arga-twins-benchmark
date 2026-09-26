@@ -1,0 +1,76 @@
+{
+  "schema": "arga.lab.deployment-evidence/1",
+  "observed_on": "2026-09-26",
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1173",
+  "source_head": "46759a7a1b99f63b9cd3431e1d03c64ea8eddb01",
+  "status": "local_tests_pass_ci_deployment_and_concurrent_hosted_attestation_pending",
+  "release_allowed": false,
+  "finding": {
+    "status": "failed",
+    "scope": "app supporting container publication match",
+    "observed_image_digest": "sha256:19aec4c5a590ea23213f277d0dec92eb45db8ab0ffde2fec448d7510bd812149",
+    "published_platform_manifest": "sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+    "published_manifest_index": "sha256:f855609a08c6cc3ba1f6dd2bccf832815c8f18d56d931158fb02698d106208c2",
+    "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main",
+    "note": "Preserved current-run app mismatch; do not claim all-container match or silently substitute another build."
+  },
+  "cause": "App publication tags depended only on the repository/ref, allowing a concurrent build to replace the image before a warm VM pulled it. No different business behavior is established by this image-identity failure.",
+  "correction": "Unique publication tag allocated once per rendered ordinary or preview bundle and persisted for both builder and warm VM; cache tags remain branch-scoped.",
+  "local_tests": {
+    "focused_passed": 132,
+    "old_allocator_reproduced_failures": 3,
+    "make_fix": "pass",
+    "recovery_postgres": {
+      "passed": 37,
+      "skipped": 0,
+      "cleanup": "owned disposable PostgreSQL container removed"
+    }
+  },
+  "source_files": {
+    "cluster_deploy/control/buildkit.py": "f98a5d1ad25cedd2ace507a010b575671057dab26c15bb83d55005fcaa96600d",
+    "cluster_deploy/control/preview_bundle.py": "108e3dfdd5f295ae90a788752d0a99f69896f164e76487d08de1e51ea0b93836",
+    "tests/test_deploy_stack.py": "9594b47b89f28fb1a27dfa844e8ae902b3695c3e4b9b3ae69c0575178bcf5f51",
+    "tests/test_preview_bundle_compose.py": "411fe192617eb47f576eb1cd249ae8afbe49959847fef3903e6690e96727c894",
+    "cluster_deploy/README.md": "443a5bca1c29ef36ec46f985f9b128aad57445546c288962b466689c8201e069"
+  },
+  "artifacts": {
+    "lab-run-scoped-images-focused-final.log": {
+      "sha256": "debdf218c74c713f4a813b7ffa7b8e88ffcfb01835f2c75368dd3961822856ae",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-run-scoped-images-old-tag-reproduction.log": {
+      "sha256": "7db986800f7af42e1c63f7ef65631a077ff59d73cd98f4b2bc2a0197698fb8c2",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-run-scoped-images-makefix-final.log": {
+      "sha256": "bfde159407d8eedb5886a83d62d5af6e0fe1c371dbe3e5aadc0faae174ae5032",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-chrome-live-9e18dd55/runtime-image-evidence.json": {
+      "sha256": "0cc19f4c054209c9620b60a29a3b5caead0dd2ef90c245be74fdcabbcdfe2a10",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-chrome-live-9e18dd55/worker-logs.json": {
+      "sha256": "450eb85a797cdcee16f87a00450aae6e904eba91e4f688dd80545b6a17d62b3d",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-chrome-live-9e18dd55/image-comparison-failure.json": {
+      "sha256": "1014545e4fb26160f419dd0f885aeb85022d0502dd38c267f7477bff4db6e6be",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-chrome-live-9e18dd55/cleanup.json": {
+      "sha256": "def2529a4607a074b61eb5d6a8b722f5a8395d8e6fe51db2d82d182663ae7389",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-run-scoped-images-recovery-postgres.log": {
+      "sha256": "85633cb4535b2ed5f9859c031458bf589f82d0a23d346ae0fdc9d8a09fd3575f",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "CI and Runtime/Workers rollout pending",
+    "Concurrent fresh hosted app-image checks pending",
+    "Original failing run preserved and torn down; eight provider images matched; gateway comparison not reached",
+    "Not a complete production workload inventory, exhaustive frontend approval or WKS-03 resolution"
+  ]
+}

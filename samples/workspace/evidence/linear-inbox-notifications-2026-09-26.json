@@ -5,20 +5,22 @@
     "linear"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1172",
-  "source_head": "079c657d9812589a0b59d114e4c87f51ae67ac40",
+  "source_head": "cc9b8eb06a6f2293c35a2f3a68cc873c25df3247",
   "status": "local_native_desktop_and_390px_pass_ci_and_hosted_pending",
   "release_allowed": false,
   "scope": [
     "Recipient-scoped native notifications and Inbox read/unread/snooze/archive actions",
     "Transactional bulk actions preserve business state on native or concurrent failures",
     "Assignment/completion/comment/thread and edited-mention delivery without self-notifications",
-    "Read/write scope includes issue/comment creation without expanding narrow scopes"
+    "Read/write scope includes issue/comment creation without expanding narrow scopes",
+    "Overflow archives the oldest open notifications above 2,000 instead of deleting history"
   ],
   "tests": {
-    "linear_passed": 270,
+    "linear_passed": 271,
     "warnings": 3,
     "make_fix": "pass",
-    "independent_source_review": "Final six archive/read false, null and unapplied-success cases preserve state; valid retries succeed. Source/API-only approval."
+    "independent_source_review": "Final six archive/read false, null and unapplied-success cases preserve state; valid retries succeed. Source/API-only approval.",
+    "independent_retention_review": "Archives oldest above 2,000 open records; history and other recipients preserved. Native/API-only confirmation."
   },
   "source_files": {
     "twins/linear/README.md": "04c38b9f557ec1fa4fb39fc6f4b94d0b924c227639d407f6c0d0e1eb0dad54d6",
@@ -28,10 +30,10 @@
     "twins/linear/graphql/resolvers.py": "8114729455304f4be608df90dcb453f7dad8b80476c4d9b331a7ab6dbd4689e1",
     "twins/linear/inbox_ui.py": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
     "twins/linear/models.py": "ba1c600c569eb532b2a69e0e8a3eae2b32d3a60da74d0764963881aa0ffb8619",
-    "twins/linear/notifications.py": "707e9fa57f74e052f263b1781dfbfb202618c08ce1e26d727c021a32010c9f0a",
+    "twins/linear/notifications.py": "fe23c179a9a8000648a873c0aa9f1876c79497dccb21c8d7c580380acb564bba",
     "twins/linear/scopes.py": "7143eca7d1181311a0defd48d5045b9225d81566db77b7879d577c80084cdd7d",
     "twins/linear/store.py": "43d0f68ecfde153d0c237d89d9bd5d173ed45894447a0dae982637c63d332728",
-    "twins/tests/test_linear_notifications.py": "45cf0a77ac52788d480d8e3ea6d4bf790a9aad2b00f85428479b45f4a46cc1ac"
+    "twins/tests/test_linear_notifications.py": "6b98e0dfe0e96e16373e0fe11ddc50fb5ff03f6aecfd6c25746dff4e8c43c952"
   },
   "local_desktop": {
     "status": "pass",
@@ -78,7 +80,15 @@
   },
   "artifacts": {
     "/tmp/lab-linear-inbox-all-tests.log": "9268c512f24a10aa8ee0db1f0916ce85804d26dea2d780d74f811a5a1145a45b",
-    "/tmp/lab-linear-inbox-makefix.log": "a9dcbaa1e0ade040a9ac2106ce7e3b7e92cde5e21e9e980ce4b04eb47a59d1a1"
+    "/tmp/lab-linear-inbox-makefix.log": "a9dcbaa1e0ade040a9ac2106ce7e3b7e92cde5e21e9e980ce4b04eb47a59d1a1",
+    "lab-linear-inbox-all-tests-retention-final.log": {
+      "sha256": "96bc000739b8a679a115770564772e85bdc0cad27a755a7b09b942793fa82753",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-inbox-makefix-retention-final.log": {
+      "sha256": "a9dcbaa1e0ade040a9ac2106ce7e3b7e92cde5e21e9e980ce4b04eb47a59d1a1",
+      "retention": "Local operator artifact; not bundled"
+    }
   },
   "limits": [
     "CI, deployment, fresh hosted native/browser and image checks pending",
