@@ -102,7 +102,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-undo-redo-2026-09-26.json",
-          "sha256": "dbb8f1f8a5ca96b0a9629a68e52c65c0e91e88f372ec7272a3fe3b99ae78bba8"
+          "sha256": "d95d429de2c5f18191a28779146df3c208ee61cc079777e3ebc928a188fe4fb4"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -352,5 +352,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "fb9d51a0b77789a5db041de902347e91246569cbd40b3fe4ef16b147a244d8b7"
+  "sample_tree_sha256": "d85aba1d1282f81b218e3f8eebcbb844eed258bbee268a9d9461cf8bc09ecdf9"
 }

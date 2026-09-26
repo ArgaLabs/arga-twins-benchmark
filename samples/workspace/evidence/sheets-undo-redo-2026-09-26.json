@@ -5,7 +5,7 @@
     "google_sheets"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1179",
-  "source_head": "8cd557ba5076f73d64c796aafc7ec515276b4336",
+  "source_head": "f98f883dc7740f71e0a44d12f452d5067469fb1a",
   "status": "local_native_desktop_390px_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
   "scope": [
@@ -15,18 +15,19 @@
     "Native commit ordering, structural conflicts and reset isolation"
   ],
   "tests": {
-    "workspace_passed": 1315,
-    "focused_undo_passed": 31,
+    "workspace_passed": 1316,
+    "focused_undo_passed": 32,
     "make_fix": "pass",
     "detector_findings": 0
   },
   "review": {
-    "final": "ship: all seven listed source/native findings independently resolved",
+    "final": "ship: all eight listed source/native/reference findings independently resolved",
     "scope": "No independent whole-surface visual approval",
     "documentation": "README checked by scoped documenter",
     "additional_findings": [
       "Current strict validation is enforced for undo and redo; rejected history preserves all state and remains retryable",
-      "deleteDuplicates and randomizeRange invalidate history at stale row coordinates"
+      "deleteDuplicates and randomizeRange invalidate history at stale row coordinates",
+      "Real-reference formula-entry Repeat leaves targets unchanged; exclude formula-entry repeat while preserving native Undo/Redo"
     ]
   },
   "reference": {
@@ -130,10 +131,10 @@
     "formula_reference": "B1 remains =A1*2 after paste redo, confirmed in formula bar",
     "cleanup": "File moved to recoverable trash; both generated tabs closed",
     "limitations": [
-      "Desktop only; no mobile/touch comparison yet",
+      "Initial desktop observation; later 390px reference recorded separately, physical touch remains pending",
       "Different-principal simultaneous edits and overlapping changes remain unaudited",
       "gws CLI token returned invalid_rapt; CSV export served as native value verification",
-      "Twin Undo/Redo implementation and parity pending"
+      "Bounded native implementation and local browser checks pass; hosted/full parity pending"
     ],
     "screenshots_retained": false
   },
@@ -173,10 +174,10 @@
   "source_files": {
     "twins/google_drive/app.py": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
     "twins/google_drive/runtime.py": "868d482b99dbb921006632a43eacf2d4351877108ab051e12fc770b8280841df",
-    "twins/google_drive/sheet_history.py": "bd4907a858c5c7546fbc4c5ad437a51a9bebab9cb5db3ffe8af743f24c56ae09",
+    "twins/google_drive/sheet_history.py": "b59b072b774c4a008b9d5633da66191e109181c6dc4a2cf3ff7a75987ea049a6",
     "twins/google_drive/store.py": "fea5d0481ebed785ce9763bc996f960bd3ee789d619b5e6668923d250a35787e",
     "twins/google_drive/workspace_editing.py": "9617b60ea2babe517091aeeffd33ea0e38a72277ca47b681dd1a6016908b0032",
-    "twins/google_sheets/README.md": "39643347bf5546579109136d3e50f2db1b4b5bf2fe2f3ccc737afb0024f31cc8",
+    "twins/google_sheets/README.md": "f42ef8932253932a2af60095b67f3b3ce61cc0efe1aad10d73150983d3eb1430",
     "twins/google_sheets/clipboard_ui.py": "4593e44e919647f89d2e93e45c1012adf0efc79b7b6f4dd52d07606baa2e6d1a",
     "twins/google_sheets/grid_format_ui.py": "3c937c76cdfba2612ef37aac2ae913842ac33afca124b67457bf3e3e05297916",
     "twins/google_sheets/history_ui.py": "54911a8f369392028c8130088fe8c388832a4e11458d64c63ff14ec5cdd603a5",
@@ -187,7 +188,7 @@
     "twins/tests/test_google_sheets_grid_format_ui.py": "c4ded9a61e96d1e73c2cc243da4b10f28b8e68929b29e08db09f07a520f7cae3",
     "twins/tests/test_google_sheets_protection_warnings_ui.py": "b4026affc067d1c79364dc396ba403dab9387700b2371f2f33c62f1fb9670477",
     "twins/tests/test_google_sheets_tabs.py": "f52b7822381d15a5894b4601ff3b35c09d219b0e594e104a775e77c263b6572b",
-    "twins/tests/test_google_sheets_undo.py": "31db07fa0758ebc0b37934bd4ed23085dbae2f38d5b99f3adef1674e7427606d"
+    "twins/tests/test_google_sheets_undo.py": "af18314d9b9b5978d179e2f67f594a03f1e537dd8a8d2c12900796cdb5ed8c99"
   },
   "artifacts": {
     "lab-sheets-undo-workspace-regressions-final.log": {
@@ -229,13 +230,564 @@
     "lab-sheets-undo-pr-review-makefix.log": {
       "sha256": "b2c2cf1016c4ddf2a1f5f0ca5881f65d3a22f7ebb248837bf2243a3674292ead",
       "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-formula-repeat-before.log": {
+      "sha256": "81eb4bf9e827d760c58c9f2fd7d311535f9673beafe21651e8e55c947a267d99",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-formula-repeat-after.log": {
+      "sha256": "4246dcc25ccf7b3b8171c35b491245debfa997b9a04c5eba96cd788349841b28",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-formula-repeat-final.log": {
+      "sha256": "b783ff3b380b99ba41d9515ab59b95caa7bc313105bfcf25047fa1a1c235fac8",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-formula-repeat-workspace.log": {
+      "sha256": "6d16abe52bc07c43fe980ce94f9d607e9d5efc28a681d1f4d4b2f252eda507f1",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-formula-repeat-makefix.log": {
+      "sha256": "29f738f57f4577fe93bc891c3925019d9349954ab392d370c618d5c29135a201",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-narrow-reference/verification.json": {
+      "sha256": "ce1c3ac888395e86488951a7ed93400a5eadd97913293c898a2615a2739647ba",
+      "retention": "Local operator artifact; not bundled"
     }
   },
   "limits": [
     "CI, production and fresh hosted checks pending",
-    "Real reference comparison is bounded desktop; no exhaustive mobile or physical-touch parity",
-    "Structural repeat unsupported; complete formula/reference/clipboard parity remains open",
+    "Real reference comparison covers selected desktop/390px history flows; no exhaustive mobile or physical-touch parity",
+    "Formula-entry and structural Repeat unsupported; complete formula/reference/clipboard parity remains open",
     "Full eight-provider audit and WKS-03 release gate remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "narrow_reference": {
+    "observed_on": "2026-09-26",
+    "provider": "google_sheets",
+    "fixture": "Arga fidelity 2026-09-26 undo 01",
+    "viewports": [
+      "390x844",
+      "desktop formula follow-up"
+    ],
+    "checks": {
+      "edit": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "559a8ee19ea730a27e63555001531db9e4e9b76899e0fed1d28d43e61a350f1d"
+      },
+      "undo": {
+        "values": [
+          [
+            "10",
+            "20"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "ecccc397f9fa8714a823ffd485195de37bcdc930ed210d17c76d3fa6c76bc1b9"
+      },
+      "redo": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "559a8ee19ea730a27e63555001531db9e4e9b76899e0fed1d28d43e61a350f1d"
+      },
+      "reload_undo_noop": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "559a8ee19ea730a27e63555001531db9e4e9b76899e0fed1d28d43e61a350f1d"
+      },
+      "repeat_value": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "7",
+            ""
+          ],
+          [
+            "7",
+            ""
+          ]
+        ],
+        "sha256": "50c43df18d742c2551fec6a0e17fbce0004456d881bbd5041cd8453e10074189"
+      },
+      "undo_repeat": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "7",
+            ""
+          ]
+        ],
+        "sha256": "dfd5ee6ea0aaa4c0ab3e193a7496353b2ff5e00a2092e5595b7c674a53940b73"
+      },
+      "formula_autofill_interference": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "7",
+            "21"
+          ],
+          [
+            "8",
+            ""
+          ]
+        ],
+        "sha256": "93f4975c0545b8ad0da84c0acbccfd75125496ab2a9bed646c9620eade140324"
+      },
+      "formula_after_dismiss": {
+        "values": [
+          [
+            "25",
+            "50"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "7",
+            "21"
+          ],
+          [
+            "8",
+            ""
+          ]
+        ],
+        "sha256": "93f4975c0545b8ad0da84c0acbccfd75125496ab2a9bed646c9620eade140324"
+      },
+      "isolated_relative_formula": {
+        "values": [
+          [
+            "25",
+            "50",
+            "",
+            ""
+          ],
+          [
+            "77",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            ""
+          ],
+          [
+            "7",
+            "21",
+            "",
+            ""
+          ],
+          [
+            "8",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "50"
+          ]
+        ],
+        "sha256": "01a885b66315fff91a4081172d16788bfe2934a40e87b73c23ad5a5c7c3e1c6c"
+      },
+      "constant_formula": {
+        "values": [
+          [
+            "25",
+            "50",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "3"
+          ],
+          [
+            "77",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "7",
+            "21",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "8",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "50",
+            "",
+            "",
+            "",
+            ""
+          ]
+        ],
+        "sha256": "0d529518f7ed948cd4b840f32c96dd9b8e91313ed1f0e92bdcd5624a88b43340"
+      },
+      "populated_formula_destination": {
+        "values": [
+          [
+            "25",
+            "50",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "5"
+          ],
+          [
+            "77",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "41"
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "99",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "7",
+            "21",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "8",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            "50",
+            "",
+            "",
+            "",
+            ""
+          ]
+        ],
+        "sha256": "a696641488ce781ce2ec7ac1b1b59f9242f41e93caf2e27acc5deedde24a41fc"
+      }
+    },
+    "findings": [
+      "390px real browser exposes compact Undo/Redo toolbar; selected value undo/redo and formula recalculation pass",
+      "Reload clears history; repeated value follows selected cell and keyboard undo reverses it",
+      "Formula-entry Repeat did not commit translated relative or constant formulas to blank destinations; populated destination retained 41",
+      "Initial adjacent formula check encountered autofill suggestion; preserved separately; isolated nonadjacent formula and constant formula confirm no repeat"
+    ],
+    "twin_correction": "Disable unsupported formula-entry repeat while preserving normal undo/redo; native guard and regression under validation",
+    "cleanup": "Generated fixture restored only for these checks, then returned to recoverable Trash; reference tab closed; viewport reset",
+    "screenshots_retained": false,
+    "limits": [
+      "Viewport override uses desktop Chrome; no physical touch or native mobile app tested",
+      "No exhaustive clipboard, paste-block or formula-reference parity claim"
+    ]
+  }
 }
