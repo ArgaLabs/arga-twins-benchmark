@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1196",
   "source_head": "82242b336519623fd11276d6b158b5351d212d07",
-  "status": "local_browser_native_review_pass_ci_pending",
+  "status": "deployed_hosted_browser_native_images_pass",
   "release_allowed": false,
   "tests": {
     "integrated_calendar_workspace_passed": 578,
@@ -418,12 +418,177 @@
     "lab-calendar-task-ordering-local-r2/browser-trace.json": "830b9b8ec09d22659d0129aa0d186cf7ee36341c4dbd463ce36cfaab30e164cf",
     "lab-calendar-task-ordering-local-r2/browser-native-result.json": "1d58c44344b970a7eef3abd7b0ec0336abcbfa495e826245071ff1294ebf48fc",
     "lab-calendar-task-ordering-local-r2/after.json": "60c66a01551fca18d6ffbec0354dcea9bef7980a13f88ac84085992691c26969",
-    "lab-calendar-task-ordering-local-r2/fixtures.json": "c78109301f9ed78e035fc80d2874bd7ed84aa424c91252708a204c82f2786312"
+    "lab-calendar-task-ordering-local-r2/fixtures.json": "c78109301f9ed78e035fc80d2874bd7ed84aa424c91252708a204c82f2786312",
+    "lab-calendar-task-ordering-merge.json": "a0fa6f6ec2ed049def18181ffbd89279f59539d82d5c2f5ff4fb85981e9f8b37",
+    "lab-calendar-task-ordering-ci-complete.log": "c6544c1d5e03c90415fb020741a04b48ba709530228ee5c804f7c4b0032e0613",
+    "lab-calendar-task-ordering-premerge.json": "8634b33481ff8f922b5442fae90f28984b92e5b3971a8703b5d2b8666a4252f3",
+    "lab-final-calendar-task-ordering-2697ce65/browser-trace.json": "3f8d488e89585fcc75b0e904f26f25bf5872b927d3c7898ac64e7f7e46a306a3",
+    "lab-final-calendar-task-ordering-2697ce65/image-comparison.json": "0691e234ac61908e2c526e72bac199fceba985b3a78a9f6478bac41a7e4ab417",
+    "lab-final-calendar-task-ordering-2697ce65/workspace.json": "f004d3a6ec29ec25ebf01fd63201a6a45015fd677a110e05477efb097baebb1e",
+    "lab-final-calendar-task-ordering-2697ce65/publication-catalog.json": "7e7b6a8eb8520e9996494373b03d864e5493ac7013b92d77e6f241565062dc11",
+    "lab-final-calendar-task-ordering-2697ce65/browser-observations.json": "f55803b6a668a2ee45781130d39ca7009dbb1c09f29b6fc3de756199051ebb0d",
+    "lab-final-calendar-task-ordering-2697ce65/gui-baseline-state.json": "ab99fd2308c4c6a8e96395e6b5ada6748f41d1e2eba4b25baefb2a5c86e1b0b2",
+    "lab-final-calendar-task-ordering-2697ce65/browser-native-result.json": "bc6e56a14bd66e96547c9fedeea5a7d511f6fc1a8f8f663cb24acbba3921df8b",
+    "lab-final-calendar-task-ordering-2697ce65/gui-final-state.json": "0bee4cd04649cb6eb41c3f0f36caec70843076d17532800f10312fae32a14275",
+    "lab-final-calendar-task-ordering-2697ce65/cleanup.json": "b5cd34e282060f037b0ac8ca445ddef8534c9cdbb52bf25613f763535244893e",
+    "lab-final-calendar-task-ordering-2697ce65/runtime-image-evidence.json": "849f183001e64c68a9d4e284c4e93cd08551728901381a3f6052ff41bf0bd4e1",
+    "lab-final-calendar-task-ordering-2697ce65/worker-logs.json": "4f9abb4299c781bd5391f3b0cbd42ca4ae5b1def4bf37910f4d96cc75b71b8a3",
+    "lab-final-calendar-task-ordering-2697ce65/scenario.json": "07c007678b3203db0704c0ad51d3ad54116ab545429bfb71a63c1df0c0cfd5f1",
+    "lab-final-calendar-task-ordering-2697ce65/operator-api-trace.json": "ecc82559abe414b63ce6751991ebd357dcd10692d4d6343e46d9fe7c8aa91ded",
+    "lab-final-calendar-task-ordering-2697ce65/control.json": "7c10e6b9e3edd2d98f44de39f236e5edc0fe7e65025cdac4c2e3405a1cad4b74",
+    "lab-final-calendar-task-ordering-2697ce65-hosted.log": "e3a3167504a90540e7e184cfda2a1bedf919b2b63a30348615d6924e13804d85"
   },
   "limits": [
-    "Exact-head CI, deployment and fresh hosted verification pending",
+    "Exact-head CI, both deployments, serving API/proxy images and fresh hosted ordering/menu/browser/native/container checks pass; full provider audit remains open.",
     "Native keyboard/focus and physical touch unverified while Mac locked; no independent visual approval",
     "Full Tasks/Calendar/AI/collaboration and eight-provider release gates remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merge_commit": "2697ce65845591fab115ace062c5e3dca77382ed",
+  "ci": {
+    "head": "82242b336519623fd11276d6b158b5351d212d07",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6504,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "2697ce65845591fab115ace062c5e3dca77382ed",
+    "runtime_workflow": 36238200488,
+    "twins_workflow": 36238200477,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:2697ce65845591fab115ace062c5e3dca77382ed@sha256:df76c0c7f4d77ebbabad251f9e9c4b3086c51ece2f08c0c0197f61c8da37ad93",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:2697ce65845591fab115ace062c5e3dca77382ed@sha256:40ec919fbe171187bd77d9f8f69cecea9f4cb87cbb741d9e8bb6a38caadb798b",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:2697ce65845591fab115ace062c5e3dca77382ed@sha256:f817cae6a689f70fb605d61287113a0338fe9d14ba22bfc1c2b26378fbfe989e"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00300-h48",
+      "arga-api": "arga-api-00670-24p"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-task-ordering-2697ce65-twins-deploy.log": "c09a2c4c83c7953d9def9aa349108453dfe3defb7925dfac6c6b6e86e083b926",
+      "lab-final-calendar-task-ordering-2697ce65-runtime-deploy.log": "e99adb793f71edf06e723d418b423248bb2bb04f11b604bd95a9dd9b81858803"
+    },
+    "serving_runtime": {
+      "revision": "2697ce65845591fab115ace062c5e3dca77382ed",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00300-h48",
+          "observed_at": "2026-09-26T11:15:31.554587+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:2697ce65845591fab115ace062c5e3dca77382ed",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00300-h48"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00300-h48",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:40ec919fbe171187bd77d9f8f69cecea9f4cb87cbb741d9e8bb6a38caadb798b",
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00670-24p",
+          "observed_at": "2026-09-26T11:19:56.741314+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:2697ce65845591fab115ace062c5e3dca77382ed",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:5e47013262b4cbb8762c0891d50b6db75e5d83b7aed2a0d98a6f12c6d04ede46",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:5e47013262b4cbb8762c0891d50b6db75e5d83b7aed2a0d98a6f12c6d04ede46"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00670-24p"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00670-24p",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:5e47013262b4cbb8762c0891d50b6db75e5d83b7aed2a0d98a6f12c6d04ede46",
+            "sha256:f817cae6a689f70fb605d61287113a0338fe9d14ba22bfc1c2b26378fbfe989e"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "e99adb793f71edf06e723d418b423248bb2bb04f11b604bd95a9dd9b81858803",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "invalid_and_forbidden_writes_atomic": true,
+      "limits": [
+        "Private UI routes, not public Google Tasks API",
+        "Timed/repeating tasks, reminders, grid projection, other side apps and full provider audit remain open",
+        "Native keyboard/touch unverified"
+      ],
+      "other_accounts_and_non_task_resources_unchanged": true,
+      "passed": true,
+      "two_sort_and_two_star_transitions_only": true
+    },
+    "browser": {
+      "desktop": [
+        "Initial Starred recently B,A / Not starred C",
+        "Named Sort by selector changed to My order, yielding C,B,A",
+        "Restored Starred recently",
+        "Unstar A yielded B / C,A"
+      ],
+      "mobile": {
+        "width": 390,
+        "height": 844,
+        "checks": [
+          "Re-star A yielded A,B / C",
+          "Full reload retained Starred recently and A,B / C",
+          "Task options expose named Delete",
+          "Outside click collapses task options"
+        ]
+      },
+      "accounts": [
+        "Reader has own empty My Tasks and cannot-edit message",
+        "Outsider has own empty My Tasks and no owner tasks or event"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Native keyboard/focus and physical touch unverified while Mac locked",
+        "No exhaustive provider or full release approval"
+      ]
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true
+  }
 }

@@ -80,7 +80,11 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-task-ordering-2026-09-26.json",
-          "sha256": "0e4a4f88918e2712ce5e7d59e0b21dd1d8dc6e620497956ba9a755e8f04ec775"
+          "sha256": "ed621432a240678b7f7c41b4aad0cc8edea5c423c8086e513f3ea3017244a9b4"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-task-scenarios-2026-09-26.json",
+          "sha256": "3a48c6366124d5722a27090df84c9df11167ef01cae9dbcfa23aa8716e0f750b"
         }
       ]
     },
@@ -388,7 +392,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "b7c56b75200a5862217c793a8c9b8b42217d86483a82698da269e5a324e235b0"
+          "sha256": "69753066398058c4212c18e40097f3736567dbac870615be505d9c3394b6e055"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -416,5 +420,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "2afc4f36424ebcc53150ccca02f4b32a48c56caa915663cbf39193903a389073"
+  "sample_tree_sha256": "ca3c2681a42b23dff4ffceefa32bc3faabe09f11351681021580b6fb9fd6efcc"
 }

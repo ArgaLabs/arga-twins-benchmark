@@ -1,0 +1,63 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1197",
+  "source_head": "ff154d440d30d0b356415b300e72ab36977d655d",
+  "status": "local_native_scenario_regressions_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_calendar_workspace_generator_passed": 742,
+    "new_scenario_cases": 21,
+    "existing_tasks_cases": 21,
+    "make_fix": "pass",
+    "normalizer_typecheck": "pass",
+    "diff_check": "pass"
+  },
+  "checks": [
+    "Exported Tasks previously disappeared silently during reseed; reproduction now passes",
+    "Exact active-account task/list/selection maps survive repeated reset, including IDs, timestamps, dates, notes, completion and deleted/orphan-list tombstones",
+    "Subsequent creates avoid imported IDs and preserve newest-first positions",
+    "Fixed-clock mutations follow restored task history while configured base_time is retained",
+    "Malformed Tasks reject before any account/state/counter/clock reset; other account state unchanged for personal reset",
+    "Nested lists/tasks supported in Scenario schema; blank seeds clear previous Tasks"
+  ],
+  "preserved_attempts": [
+    "Original exported Tasks loss reproduction",
+    "Three intermediate Calendar-only seed-report shape failures; corrected by adding counts only when Tasks supplied",
+    "Nonstandard broad pyright invocation omitted interpreter and checked excluded dynamic mixins; not a canonical CI failure. New normalizer passes with selected interpreter."
+  ],
+  "source_files": {
+    "app/validate/scenario_generator.py": "6a5e724fd75658f4352bdfe24b37a03d51f249a718792bdd827d3a80d7b45e71",
+    "twins/google_calendar/README.md": "0d906a8db80ee26c7dd0fd01b86ed2456a6ad0350e508fff57728ec96be686ed",
+    "twins/google_calendar/app.py": "9cff9c4752f303f200b2120ae2c66f3e7c0c9461a8930368f96e62cbb005405a",
+    "twins/google_calendar/scenario_runner.py": "43dd89d33df2fd154789a740c8902e5072fd065b0cfffddfbab0c399d2f88651",
+    "twins/google_calendar/side_tasks.py": "495f4049c8cea81a464311592fbb7d8fd28f465a01bb41ea98fdae73e4aecfc2",
+    "twins/google_calendar/task_seeding.py": "696c949fb70bca2f3d98060cfc2a4ea995a97c2f425761c45756af96ca65b1df",
+    "twins/tests/test_google_calendar_task_scenarios.py": "f75b4e8c69737806c49b96f12cfb1e367e37677dcac2911edf639930bf1c2814"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-tasks-scenarios-ci-watch.log": "a775ca71ff45469cd12d0faea1aa12135f74ddc8a61269744d112102c297d79e",
+    "lab-calendar-tasks-scenarios-typecheck.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-calendar-tasks-scenarios-integrated.log": "e2210b0ee73aaf8a7b35c9afa52115d3ca1e91f6b25ffb855354b84e3974f541",
+    "lab-calendar-tasks-scenarios-typecheck-final.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-calendar-tasks-scenarios-final.log": "2f21a60ee14bda34c38f23906839f83dbcbbb48e54204569e03f3676140851cd",
+    "lab-calendar-tasks-scenarios-make-fix.log": "b3c0e26d56d6fc7f116a523fcfa426021717c81715f8b0a03adac03fb2c03a9f",
+    "lab-calendar-tasks-scenarios-pyright.log": "4f7690dd78e67c8e54e5f498370ea49ca3b4fe9fd40eba1d453a3cf3e02bb713",
+    "lab-calendar-tasks-scenarios-red.log": "966735c7a22e72d3d2a39c65846253067108b2f116c199c53b1d7757f008e066",
+    "lab-calendar-tasks-scenarios-focused.log": "610c6d128299d3ad94f1c7ddcc038af3e663a0ef9598a95b2c1bd5521961be51",
+    "lab-calendar-tasks-scenarios-deps-final.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-tasks-scenarios-preclock.log": "411c5f3b419022f9639f23f4d29441855322bc3b456beb071b132ad5244e15ad",
+    "lab-calendar-tasks-scenarios-green.log": "72065f3c7a7042dad0e25384d95d46151179fb710cc81fbed09a157e163a94e8",
+    "lab-calendar-tasks-scenarios-make-fix-final.log": "09d58c4b62d9cdb367741a774ed99cc791cc12b23990f251bc321fcce610e698",
+    "lab-calendar-tasks-scenarios-deps.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac"
+  },
+  "limits": [
+    "Exact-head CI, deployment and fresh hosted Scenario roundtrip pending",
+    "Only active-account personal Tasks state; full Calendar runtime, other accounts/tokens/permissions/export and AI/collaboration audits remain open",
+    "No frontend layout changes or new independent visual/touch claim; Mac still locked"
+  ],
+  "screenshots_retained": false
+}
