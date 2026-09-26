@@ -68,7 +68,11 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-watch-lifecycle-2026-09-26.json",
-          "sha256": "da231795e8e5aa402c7aa5f07ba4920cb16a038b243efd0791510984409ab940"
+          "sha256": "1171e3b5c648e38ee267f563f617056f436b85d97888ff8759f9d7bc3e5b7939"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-access-requests-2026-09-26.json",
+          "sha256": "b91323a3a142bbc47832d746683590ba3fe50f4baee82398076385e5920855a8"
         }
       ]
     },
@@ -376,7 +380,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "96957350c4f5af882ec44ec4964badb9f2af1c93b241fd5652612a96d7a5721a"
+          "sha256": "0c545f26bd8e3b68f687cf8b2fe18013a9a6cf8a7ae0082c1ae38ad2cf9bd1db"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -404,5 +408,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "a890aee6a43533dd8b5ec4ffa956af8c631609c654b94f1b9d592e3682def5ca"
+  "sample_tree_sha256": "97972255b6fc61ef5baeaeccec612d7494f7dfd3880a8c86ae65c164e9debc9b"
 }

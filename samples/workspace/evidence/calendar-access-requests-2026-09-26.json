@@ -1,0 +1,466 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1194",
+  "source_head": "b503e9b5f888a7a9db2f8d0fa67fa1ebdfe519fe",
+  "status": "local_browser_native_source_review_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_passed": 586,
+    "focused_access_request_cases": 32,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "real_reference": {
+    "observed_on": "2026-09-26",
+    "surface": "Real Google Calendar, Chrome CUA desktop",
+    "account_condition": "Authenticated Workspace account",
+    "entry": "Other calendars > Subscribe to calendar",
+    "observations": [
+      "Settings Add calendar contains a people/email lookup",
+      "Selecting the user-authorized recipient without access opens a denial dialog",
+      "Dialog states that access is unavailable, offers an optional request message, Cancel and Request access",
+      "Cancel returns to subscription settings; Back restores original week with four events and original calendar list"
+    ],
+    "request_submitted": false,
+    "calendar_subscription_added": false,
+    "native_events_mutated": false,
+    "screenshots_retained": false,
+    "limits": [
+      "Request submission/approval not exercised against real account",
+      "Mobile and permission-specific variants pending"
+    ],
+    "official_reference": "https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en",
+    "documented_semantics": [
+      "Request primary-calendar access by email",
+      "Request creates a notification to owner without granting access",
+      "Owner approves through an email link into sharing settings and selects an access role",
+      "Existing shared calendars subscribe directly",
+      "Native mobile apps cannot initiate subscriptions; desktop browser is required"
+    ]
+  },
+  "browser": {
+    "initial": {
+      "desktop_pass": [
+        "request Cancel retained email; native unchanged",
+        "503 request retained note; native unchanged; retry created one pending record",
+        "owner Cancel and 503 retained role and native state",
+        "owner approval reader; reload added subscription and disabled event editing",
+        "outsider link unavailable",
+        "revocation removed subscription and event on reload"
+      ],
+      "mobile_initial": {
+        "viewport": "390x844, Chrome emulation",
+        "request_dialog_readable": true,
+        "cancel_retained_email": true
+      },
+      "findings": [
+        "Settings Subscribe callback populated PointerEvent",
+        "request dialog typography, background and buttons differ from real reference",
+        "close label repeats long denial title"
+      ],
+      "limits": [
+        "Real reference only lookup/cancel, no live request sent",
+        "Native touch, focus/keyboard blocked by locked Mac",
+        "No screenshot files retained"
+      ]
+    },
+    "confirmation": {
+      "confirmation_round": 1,
+      "desktop_viewport": "1465x806",
+      "mobile_viewport": "390x844 Chrome emulation",
+      "confirmed": [
+        "Settings Subscribe starts with empty input",
+        "request dialog matches observed reference palette, heading weight and action shape",
+        "desktop and mobile request dialog fits without clipping",
+        "mobile request preserves exact message",
+        "owner approval recipient and selected role readable on desktop and mobile",
+        "mobile approval applies writer",
+        "approval reload shows already approved",
+        "requester reload reveals subscribed calendar and event"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "CUA pointer actions with emulated viewport; physical touch untested",
+        "Real Google request/approval sending untested",
+        "Locked Mac blocks native focus/keyboard",
+        "No exhaustive visual parity claim"
+      ]
+    },
+    "native": {
+      "passed": true,
+      "request_created_only_pending_notification": true,
+      "approval_selected_writer_role": true,
+      "subscription_persisted_after_reload": true,
+      "owner_event_and_calendar_preserved": true,
+      "outsider_unchanged": true
+    }
+  },
+  "independent_review": {
+    "disposition": "ship",
+    "verdict": {
+      "scope": "F1 correction only; source/evidence-only verdict pass. This ship verdict covers the scored fix, not independent whole-surface visual, keyboard, touch, eight-provider fidelity, or release approval.",
+      "findings": [
+        {
+          "id": "F1",
+          "score": "resolved",
+          "file": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/access_requests.py",
+          "line": 57,
+          "evidence": "Current owner lookup now occurs before returning the existing pending request and still requires matching workspace and email. Under the existing shared lock, explicit requester retry uses setdefault to restore only a missing owner inbox copy. It preserves the original pending request and leaves the sender outbox, ACL, and CalendarList untouched. Valid duplicate retries remain idempotent.",
+          "regression_test": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/tests/test_google_calendar_access_requests.py:301",
+          "test_coverage": "Owner-only reset followed by retry restores inbox availability; requester and outsider snapshots remain exactly unchanged; the owner's changes are restricted to the inbox; requester cannot read the replacement calendar before approval; another retry leaves all states unchanged; owner approval grants the requested reader role on the replacement primary."
+        }
+      ],
+      "verification": [
+        "Reviewed the F1 source change and regression test; no repository edits or independent test execution.",
+        "git diff --check passed with no output.",
+        "/tmp/lab-calendar-access-requests-review-final.log reports 586 passed, 3 dependency deprecation warnings in 27.30s.",
+        "No new UI changes were part of F1; no browser automation, screenshot capture, or detector rerun was performed."
+      ],
+      "fix_batch_regressions": []
+    },
+    "remaining": {
+      "scored_material_fixes": "clear",
+      "limits": "Original evidence limitations remain: no saved screenshots by user instruction; no independent visual, native keyboard/focus, or physical-touch approval; no real Google request/approval sending, mail delivery, cross-Gmail notification, Scenario export/reseed, or exhaustive frontend/mobile parity verification."
+    }
+  },
+  "documentation": {
+    "schema_version": 1,
+    "review_type": "Impeccable documentation comparison for an ordinary incumbent Calendar extension",
+    "review_date": "2026-09-26",
+    "status": "comparison_complete_calendar_readme_drift_resolved",
+    "repository": "/Users/tonghx/validation-server-lab-calendar-access-requests",
+    "authorization_boundary": "Read-only repository review. Only this /tmp report was written. No repository mutation, commit, detector rerun, live request, screenshot capture, or independent visual approval.",
+    "instructions_read": [
+      "/Users/tonghx/AGENTS.md",
+      "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/AGENTS.md",
+      "/Users/tonghx/.codex/plugins/cache/impeccable/impeccable/4.4.0/skills/impeccable/reference/document.md"
+    ],
+    "direction_contract": [
+      "Extend the incumbent Google Calendar twin appearance and interaction patterns.",
+      "Use the observed real access-denial/request dialog as the narrow visual reference.",
+      "Reuse native ACL grants, CalendarList subscriptions, account identity and workspace scoping.",
+      "Preserve absent PRODUCT.md, DESIGN.md and .impeccable system files; do not create a visual identity or promote request-specific CSS into global design tokens."
+    ],
+    "design_document_comparison": {
+      "files_absent_at": [
+        "repository root",
+        "twins",
+        "twins/google_calendar"
+      ],
+      "absent_names": [
+        "PRODUCT.md",
+        "DESIGN.md",
+        ".impeccable"
+      ],
+      "absence_verified": true,
+      "classification": "Pre-existing documentation absence; no existing canonical visual document to compare or overwrite.",
+      "disposition": "Preserve absence. Scope this report to implemented behavior, incumbent code, supplied evidence and README drift.",
+      "incumbent_visual_authority": "ui.py retains Google Sans/Inter/system sans, existing Calendar color variables and app shell; workspace_ui.py reuses the existing dialog, field, message, button and role-selector helpers.",
+      "request_specific_css": {
+        "source": "twins/google_calendar/workspace_ui.py:32-45",
+        "observed_values": [
+          "560px maximum width bounded by 100vw minus 24px",
+          "wrapping access heading and action row",
+          "16px form fields",
+          "request surface #e9eef6 and 28px corners",
+          "24px, weight-400 request heading",
+          "request textarea #dfe5ef with bottom border and explicit focus-visible outline",
+          "44px minimum request buttons, 24px rounded shape, #0b57d0 primary action"
+        ],
+        "scope": "cal-access/cal-request classes are removed when opening a different workspace view at lines 133-138; request-specific appearance is not a new global system."
+      },
+      "responsive_source_check": "Existing viewport-bounded dialog height and max-width remain; <=760px workspace padding rules apply. Source review supports layout intent, while parent evidence supplies the actual 390x844 emulation observations."
+    },
+    "code_checked": [
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/access_requests.py",
+        "sha256": "a6c993e6736017b5932e170698f9439606f3adcd2c1bf26a3d2158c027e271dd",
+        "lines": "1-193",
+        "checked": "Read complete request/approval implementation: permission checks, public projections, pending records and outbox, same-workspace owner lookup, pending retry repair after owner reset, approval validation, native ACL call, subscription preference preservation, status/outbox updates."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/app.py",
+        "sha256": "20f2ef1a563647cd453dcd92ad29a830c9f41865b98a07b7fa0308f830216699",
+        "lines": "18-21, 433, 680-758",
+        "checked": "Mixin integration, registered bearer-account requirement, UI routes excluded from provider schema, 400/403/404 mapping."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/store.py",
+        "sha256": "a0a82ae64dc3687efa12407575cacf399819d0b3b1b4614a4f036b599d6ddee4",
+        "lines": "1031-1059",
+        "checked": "Admin state includes access_requests, access_request_inbox and access_request_outbox alongside native calendar/ACL/subscription resources."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/ui.py",
+        "sha256": "1ff8d9da93ca884342279541622c7efe2aa42ccbf0350e81f350c7adc55f0952",
+        "lines": "28-39, 934-945, 2203-2217",
+        "checked": "Incumbent typography/colors, status-carrying API errors and account-initialized approval-link opening."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/workspace_ui.py",
+        "sha256": "5731c6aa3a21e716b7aae02045137c83b76cbe8aa70729b7b13e129cf958fab0",
+        "lines": "1-143, 249-323",
+        "checked": "Scoped request CSS, existing dialog/role controls, denied email lookup path, already-shared subscription path, Cancel email restoration, retained request/approval errors, disabled pending controls and duplicate-submit guard, generation guards and already-approved reload state."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/tests/test_google_calendar_access_requests.py",
+        "sha256": "c3bcea55c4533b3d69a38a4e1ec844c8b00163cf516db8b7a6e901c52acc5800",
+        "lines": "1-330",
+        "checked": "Read the complete test file, including selected roles, unauthorized and cross-workspace access, request/approval idempotence, atomic validation and permission failures, requester reset rejection, missing primary calendar, ACL failure, preferences after revocation/reapproval, and owner-reset retry recovery."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/twins/google_calendar/README.md",
+        "sha256": "cc792e3c2d1f32d5be5da90ccebba655fb2bb3402cbd2d70279d69a11a59d276",
+        "lines": "complete file",
+        "checked": "Re-read complete README and verified new Access requests section against the proposed paragraph; bounded request/approval behavior, retry/revocation and delivery/reseed/focus/touch/parity limits are present.",
+        "prior_sha256": "f2bf661fd72beebba275c590862812d2b198a5633726f977cf5e0d629380fc7f"
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/docs/twins/lab-sample/README.md",
+        "sha256": "c250aa2aabc29ec845903845b3a9d35c82e20c4e9f1a2a177ade10dda0bfe9c3",
+        "lines": "Calendar references at 13, 19, 27-31, 42",
+        "checked": "Historical coverage summary and broader provider-parity limitations; line 31 still describes the earlier incomplete recipient invitation/subscription flow."
+      },
+      {
+        "path": "/Users/tonghx/validation-server-lab-calendar-access-requests/docs/twins/lab-sample/evidence/README.md",
+        "sha256": "e3b3c2106d21ff76bd37ebbb62efeaa06cd754a52fa1c6bee1d7900bf39d4cd9",
+        "lines": "1-9",
+        "checked": "Existing explicit ban on deriving pixel/full-coverage certification from retained evidence; screenshot files previously removed."
+      }
+    ],
+    "evidence_checked": {
+      "real_reference": {
+        "path": "/tmp/lab-calendar-access-request-reference.json",
+        "basis": "Read supplied observation record only; no independent real-provider inspection.",
+        "observed": "Lookup, denial with optional message, Request access and Cancel; cancellation restored original calendar state. No real request submitted or subscription/event mutation.",
+        "documented_semantics_recorded": "Pending owner notification without immediate grant; owner selects role; existing shared calendars subscribe directly.",
+        "official_reference_in_record": "https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en"
+      },
+      "design_detector": {
+        "path": "/tmp/lab-calendar-access-requests-design-detector.json",
+        "value": [],
+        "rerun": false,
+        "meaning": "No detector findings in supplied artifact; not visual approval."
+      },
+      "parent_browser_observations": [
+        {
+          "path": "/tmp/lab-calendar-access-requests-local-r1/browser-observations.json",
+          "read": true,
+          "reported": "Desktop Cancel and 503 paths retained inputs with unchanged native state; reader approval and reload; outsider rejection; revocation reload; initial 390x844 readability. Initial findings were PointerEvent prefill, request visual mismatch and verbose close label."
+        },
+        {
+          "path": "/tmp/lab-calendar-access-requests-local-r2/browser-observations.json",
+          "read": true,
+          "reported": "Confirmation at 1465x806 and 390x844: blank subscription input, reference-aligned request styling, dialogs fit, exact request message retained, readable recipient/role, writer approval, already-approved reload and requester subscription/event reload."
+        }
+      ],
+      "result_summaries_read": [
+        "/tmp/lab-calendar-access-requests-local-r1/pending-native-result.json",
+        "/tmp/lab-calendar-access-requests-local-r1/failed-request-native-result.json",
+        "/tmp/lab-calendar-access-requests-local-r1/approved-native-result.json",
+        "/tmp/lab-calendar-access-requests-local-r1/cancel-approval-native-result.json",
+        "/tmp/lab-calendar-access-requests-local-r1/failed-approval-native-result.json",
+        "/tmp/lab-calendar-access-requests-local-r2/browser-native-result.json"
+      ],
+      "independent_saved_state_comparisons": [
+        {
+          "files": [
+            "/tmp/lab-calendar-access-requests-local-r1/cancel-native-state.json",
+            "/tmp/lab-calendar-access-requests-local-r1/pending-native-state.json"
+          ],
+          "result": "Owner and requester calendars, events, ACL, CalendarList, settings, watches and deliveries were equal. Pending state contains exactly one requester record/outbox item and one owner inbox record."
+        },
+        {
+          "files": [
+            "/tmp/lab-calendar-access-requests-local-r1/pending-native-state.json",
+            "/tmp/lab-calendar-access-requests-local-r1/approved-native-state.json"
+          ],
+          "result": "Request changes pending to approved with reader role; owner events/calendars and complete outsider state remain equal; requester request outbox remains equal and owner has one approval outbox item."
+        },
+        {
+          "files": [
+            "/tmp/lab-calendar-access-requests-local-r1/approved-native-state.json",
+            "/tmp/lab-calendar-access-requests-local-r1/revoked-native-state.json"
+          ],
+          "result": "Owner events and complete outsider state remain equal after revocation."
+        },
+        {
+          "files": [
+            "/tmp/lab-calendar-access-requests-local-r2/pending-native-state.json",
+            "/tmp/lab-calendar-access-requests-local-r2/browser-native-state.json"
+          ],
+          "result": "Exactly one pending request/outbox and owner inbox record; approval role is writer; owner events/calendars and complete outsider state remain equal; requester request outbox remains equal and owner has one approval outbox item."
+        }
+      ],
+      "shape_only_inspections": "The before.json, after.json and browser-trace.json in each round were parsed to inspect artifact shape, not to establish additional behavioral or visual claims.",
+      "screenshots_viewed_by_documenter": false,
+      "screenshots_written": false,
+      "final_independent_verdict": {
+        "path": "/tmp/lab-calendar-access-requests-finish-verdict.json",
+        "sha256": "bf54f7c5d7ce5e67762089f729418e3c40de803752bafc62dfc520b2e9c11701",
+        "disposition": "ship",
+        "finding": "F1 resolved",
+        "scope": "F1 correction only; source/evidence-only verdict pass. This ship verdict covers the scored fix, not independent whole-surface visual, keyboard, touch, eight-provider fidelity, or release approval.",
+        "fix_batch_regressions": [],
+        "test_log": "/tmp/lab-calendar-access-requests-review-final.log",
+        "test_result_checked": "586 passed, 3 dependency deprecation warnings in 27.30s; read retained log, did not rerun tests.",
+        "limits_preserved": "Original evidence limitations remain: no saved screenshots by user instruction; no independent visual, native keyboard/focus, or physical-touch approval; no real Google request/approval sending, mail delivery, cross-Gmail notification, Scenario export/reseed, or exhaustive frontend/mobile parity verification."
+      }
+    },
+    "behavior_documentation_matrix": [
+      {
+        "topic": "Pending notification without grant",
+        "source": "access_requests.py:33-102; tests:53-70",
+        "assessment": "Describe request intent plus inspectable native outbox; no immediate ACL, subscription, event access or external email delivery."
+      },
+      {
+        "topic": "Owner-selected native role",
+        "source": "access_requests.py:104-193; workspace_ui.py:143,301-322; tests:202-211",
+        "assessment": "Approval uses existing native ACL route and CalendarList. Supported roles are freeBusyReader, reader, writerWithoutPrivateAccess, writer and owner; selection is subject to current owner/account permissions."
+      },
+      {
+        "topic": "Subscription preferences",
+        "source": "access_requests.py:151-173; tests:264-298",
+        "assessment": "Existing CalendarList entry is copied before restoring visibility and role, preserving nickname, colors and notification preferences. Test explicitly checks nickname, background color and reminders after revocation/reapproval."
+      },
+      {
+        "topic": "Current permissions and account/workspace scope",
+        "source": "access_requests.py:20-36,57-64,104-139; app.py:685-758; tests:98-105,153-175,214-236",
+        "assessment": "Current read/subscription/sharing permissions apply to existing registered tokens; inbox and approval are account scoped and owner matching is workspace scoped. Unknown and other-workspace recipients produce indistinguishable pending public records."
+      },
+      {
+        "topic": "Idempotence, revocation and reset retry",
+        "source": "access_requests.py:49-73,119-120,134-139; tests:137-189,264-330",
+        "assessment": "Repeated pending request and completed approval do not duplicate grants/outbox. Old approved links do not undo revocation; fresh request/reapproval restores subscription. Requester reset prevents stale approval. Explicit retry repairs a missing owner inbox after reset without another notification or immediate grant."
+      },
+      {
+        "topic": "Errors, Cancel and reload",
+        "source": "workspace_ui.py:249-322; ui.py:2215-2216; parent r1/r2 observations and result summaries",
+        "assessment": "Request/approval controls prevent repeat submits while pending, failures retain entered message/selected role, Cancel performs no request/grant write, and approval links load account-scoped state. Parent browser evidence records these tested paths and subscription visibility after reload."
+      },
+      {
+        "topic": "Scoped request visual and 390px layout",
+        "source": "workspace_ui.py:6-45,59-65,133-138; parent r2 observations",
+        "assessment": "Request-specific CSS is isolated from general workspace views and retains incumbent helpers. Parent reports desktop and 390px fit/reference comparison; this documentation review does not independently approve visual parity."
+      }
+    ],
+    "drift_and_recommendations": [
+      {
+        "severity": "documentation",
+        "location": "twins/google_calendar/README.md",
+        "finding": "New Access requests section documents the implemented bounded UI workflow and required limits.",
+        "recommendation": "No further paragraph change needed. Focused test command remains an optional addition to the existing test list.",
+        "status": "resolved",
+        "original_finding": "No access-request paragraph covers the newly implemented bounded UI workflow.",
+        "resolved_in_commit": "b503e9b5"
+      },
+      {
+        "severity": "pre_existing_documentation",
+        "location": "docs/twins/lab-sample/README.md:31",
+        "finding": "Broad older recipient-account invitation/subscription limitation predates this extension. It should not be removed wholesale: live email, Gmail delivery and full provider invitation flow remain unimplemented.",
+        "recommendation": "If refreshing this status document, distinguish the newly supported twin-local request/owner-approval flow from the still-open real delivery and full provider parity work."
+      },
+      {
+        "severity": "pre_existing_documentation",
+        "location": "PRODUCT.md / DESIGN.md / .impeccable",
+        "finding": "No canonical product/design documents at root, twins or Calendar twin scope.",
+        "recommendation": "Preserve absence for this ordinary extension; do not fabricate global design tokens, design language or product commitments."
+      }
+    ],
+    "proposed_readme_paragraph": "Subscribe to calendar can request access to another account\u2019s primary calendar when an email lookup is denied. The optional message creates a pending, account-scoped request and inspectable notification outbox; it grants no access. An owner in the same workspace opens the approval link and chooses an existing Calendar sharing role, which updates native ACL and CalendarList state while preserving the subscriber\u2019s preferences. Current permissions apply to existing tokens. Repeated requests and approvals are idempotent; old approved links cannot reverse revocation, and retrying a pending request repairs an owner inbox cleared by reset without another notification or grant. Request and approval errors retain the message or role for retry; Cancel leaves access unchanged, and reload reads native state. The dialogs retain the incumbent Calendar interface, with desktop and 390px Chrome-emulation checks recorded. Real mail, Gmail twin delivery, Scenario export/reseed, native keyboard/focus and physical-touch validation, and exhaustive provider or visual parity remain outside this extension.",
+    "proposed_test_command": "uv run --project twins --group dev pytest twins/tests/test_google_calendar_access_requests.py",
+    "validation_limits": [
+      "This agent reviewed source, tests and saved JSON evidence; it did not execute tests or browser interactions.",
+      "Final independent source/evidence verdict is available and scores F1 resolved with no fix-batch regressions; its retained test log reports 586 passed. That bounded verdict does not establish independent whole-surface visual, keyboard, touch, eight-provider fidelity or release approval.",
+      "No real Google request or approval was submitted. Real reference evidence covers lookup, denial and cancellation only.",
+      "No actual mail or Gmail twin delivery is implemented or established.",
+      "Scenario export/reseed coverage of access-request state is not established.",
+      "Native keyboard/focus and physical touch were not exercised; viewport emulation is not native-mobile parity.",
+      "No independent screenshot review or visual approval occurred in this documentation task; no screenshot file was saved.",
+      "No complete Google Calendar provider, permission-variant or all-route UI parity claim is supported."
+    ],
+    "followup_review": {
+      "commit": "b503e9b5",
+      "readme_section": "twins/google_calendar/README.md:108-124",
+      "comparison": "New Access requests section exactly matches the recommended paragraph after normalizing line wraps, including the account-scoped hyphen wrap.",
+      "code_unchanged_since_documentation_review": true,
+      "sha256_check": "All previously recorded code/test hashes remain unchanged; only Calendar README changed among the nine recorded files.",
+      "design_files_absence_reverified": true,
+      "repository_edits_by_documenter": false,
+      "remaining_documentation_context": "Historical lab-sample README wording remains a pre-existing broader status limitation; the current Calendar README now documents the bounded extension and its limits.",
+      "optional_test_command": "Focused test command remains a suggestion, not an unresolved correctness/documentation blocker."
+    }
+  },
+  "checks": [
+    "Request creates only pending sender/outbox and current owner inbox state; no early ACL/subscription grant",
+    "Current owner approval chooses native role and preserves personal subscription preferences and event state",
+    "Request/approval cancellation and injected 503 retain state and draft; retries commit once",
+    "Outsider isolation; read-only controls; revocation removes visible event and subscription on reload",
+    "Malformed payloads, current profile permissions, all five roles, stale requester and owner resets, duplicate retries and revoked approved links",
+    "Explicit pending retry repairs owner-reset inbox without duplicate notification or early access"
+  ],
+  "source_files": {
+    "twins/google_calendar/access_requests.py": "a6c993e6736017b5932e170698f9439606f3adcd2c1bf26a3d2158c027e271dd",
+    "twins/google_calendar/app.py": "20f2ef1a563647cd453dcd92ad29a830c9f41865b98a07b7fa0308f830216699",
+    "twins/google_calendar/store.py": "a0a82ae64dc3687efa12407575cacf399819d0b3b1b4614a4f036b599d6ddee4",
+    "twins/google_calendar/ui.py": "1ff8d9da93ca884342279541622c7efe2aa42ccbf0350e81f350c7adc55f0952",
+    "twins/google_calendar/workspace_ui.py": "5731c6aa3a21e716b7aae02045137c83b76cbe8aa70729b7b13e129cf958fab0",
+    "twins/google_calendar/README.md": "cc792e3c2d1f32d5be5da90ccebba655fb2bb3402cbd2d70279d69a11a59d276",
+    "twins/tests/test_google_calendar_access_requests.py": "c3bcea55c4533b3d69a38a4e1ec844c8b00163cf516db8b7a6e901c52acc5800"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-access-requests-make-fix-final.log": "3d387f76e35acffb26bf3b18402014d49802b7e5d40dc519c52cedcf5f5a02e5",
+    "lab-calendar-access-requests-focused-v3.log": "ecdf6358dcf121b444af4b38729604ae3da954c44b1489825e37c2da763421d4",
+    "lab-calendar-access-requests-focused-v2.log": "093b03a030a00994731403ef25a6e7d7dfda9b5fe77c15aea19941066f7c0360",
+    "lab-calendar-access-requests-review-final.log": "75c0bb04bd84ce96b5c67031fa8bd6e8b71069aa3a7f5f63a390b24d1c336a3b",
+    "lab-calendar-access-requests-server.log": "c2f273cfa01c3cb8b669adf7368427ca247226cac7807a7fda411c2c0903dea8",
+    "lab-calendar-access-requests-focused.log": "53b862cfef67ebd5e82d512c5cf6b397c1e435cbd8de4cdb5999045bf557421c",
+    "lab-calendar-access-requests-make-fix-review.log": "f86e5e7081eb91201bb0aae32a26031c5e6f49e90e116f169058dcbf92397d9e",
+    "lab-calendar-access-requests-server-r1.log": "5b4c39bbfb9307709ff3335b7375238a6016a5e7f13516e7f6d6b1763416f84e",
+    "lab-calendar-access-requests-dependencies-v2.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-calendar-access-requests-server-r2.log": "0b403fa72aae90a79a76d2ea7226509266cf055ec75f58e6be8c8d807243b6fe",
+    "lab-calendar-access-requests-make-fix-v2.log": "c464e6fae92c49f8a5e392fbbccf522c29f6de5ea90057d5dd5d06f768e3f7a1",
+    "lab-calendar-access-requests-integrated.log": "e50126653c55d3a02aef725c6db3a8f23b8e7a089ba115b024fcb65eb2622f94",
+    "lab-calendar-access-requests-dependencies.log": "d734a32f58fae3523c917bc9b3ef7afe573d913ce54a621d26f50897e351febb",
+    "lab-calendar-access-requests-final.log": "245ee23dd30fa9f0edb12de0db95ff6add044cc1cb84b528a74dba1edd42b53f",
+    "lab-calendar-access-requests-red.log": "1d8a563e2fd393cad90c23404466e31bec0f26292aa11ce55bc7ff7e18d42c50",
+    "lab-calendar-access-requests-make-fix.log": "6fea991686b9243b4fc53b271af7af4e5b2a3ca7ea3a60298187073ca165d344",
+    "lab-calendar-access-requests-design-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-calendar-access-requests-finish-review.json": "c738728559e4d30af19702c1c7c23fe35e00bb4315601090e4ac4d124daa9664",
+    "lab-calendar-access-requests-finish-verdict.json": "bf54f7c5d7ce5e67762089f729418e3c40de803752bafc62dfc520b2e9c11701",
+    "lab-calendar-access-requests-documentation.json": "4c9f8f8fa2e2dea8f83e7c8d5779a4fdfff39c375d5422560f817d175149f5b6",
+    "lab-calendar-access-requests-local-r1/before.json": "8a65a96d71035b9a6296e35976b30f4d6d1cca8449ddd6138adc115dede82d31",
+    "lab-calendar-access-requests-local-r1/approved-native-state.json": "ba5268f9e03b24240a9c3b1f7415b76dbbd80a70469f8659d4b1a479b8f6ef45",
+    "lab-calendar-access-requests-local-r1/browser-trace.json": "691cb53be5160f8f092f06f902780410767f62785dace33957195f46b2bd2bf7",
+    "lab-calendar-access-requests-local-r1/browser-observations.json": "22b8448fe426f99a3621d855625a441780e4fd0be5435bd8f4513e60315f6860",
+    "lab-calendar-access-requests-local-r1/cancel-approval-native-result.json": "4ebf5f82c688551c3bda5805d85fdfb36342c95b7ebc678e86037581286e1dac",
+    "lab-calendar-access-requests-local-r1/failed-approval-native-result.json": "6ca998e30c8075b04e344225c93ad89d13d1ba167598d3ba5d9f6b6b567b3d34",
+    "lab-calendar-access-requests-local-r1/after.json": "089cdf126f26d305d6c308917bfa628a5b04ec567fe19cb3fc0b05beed95a50d",
+    "lab-calendar-access-requests-local-r1/cancel-native-result.json": "1b2d8abed96ab8e43316f33ee675fa737efae889a267e9a0981cdc9e76c7e682",
+    "lab-calendar-access-requests-local-r1/approved-native-result.json": "4c4f683802b9598f78f2becb54c99fe2be7060c9f8e6e78f39ecfae394667c4e",
+    "lab-calendar-access-requests-local-r1/pending-native-state.json": "21936225a2a14f43157fbba46f03cc0d06a0a75c016f78594db15423900d229a",
+    "lab-calendar-access-requests-local-r1/revoked-native-state.json": "7d6248e214dc918cc42100580f553d1ba8258747cbf2164260970fd777823784",
+    "lab-calendar-access-requests-local-r1/fixtures.json": "6248383a37ecfa4a4228e0f8eb16b793de2b5991f0864b9136912b472fae903a",
+    "lab-calendar-access-requests-local-r1/failed-request-native-result.json": "7542216a74d54bd0c52e300ca2efe51b75f365354394c866c8bc7635efa71647",
+    "lab-calendar-access-requests-local-r1/cancel-native-state.json": "5a6004475c83a6d28184de0db5685f6b82bfaaa00b8a28c1d317cd95c315668a",
+    "lab-calendar-access-requests-local-r1/pending-native-result.json": "cea6ac59aad7c21323e7cf406913a2b8db26d9af77d7eb325d30737031494873",
+    "lab-calendar-access-requests-local-r2/before.json": "948cd2b52c693c59b1ac95ca3432dcae2851ec4190f085786b9b0b35ff9b0d77",
+    "lab-calendar-access-requests-local-r2/browser-trace.json": "0f8486246648d0ebf2c739c4a02f10a7c98fe43da06e3179e57eeb9240e0cd41",
+    "lab-calendar-access-requests-local-r2/browser-observations.json": "1bb617fa67fa6a8be44d7a91cd3faa232caada70924da8996a9cf43a8b4f51eb",
+    "lab-calendar-access-requests-local-r2/browser-native-result.json": "f21e60395c75b80dd53ceb07b4bcfbefb1dd46fb41af009e20c901da3e8ce504",
+    "lab-calendar-access-requests-local-r2/after.json": "416eb11b8713fc9c75760f82f12dd4739f729fd73466e3e37341f807f182acfb",
+    "lab-calendar-access-requests-local-r2/pending-native-state.json": "0fc06a78be94dc7f3646fb97de6000f1d9e99ee3bcce5dd1616afc8fecd32412",
+    "lab-calendar-access-requests-local-r2/fixtures.json": "5f63ba5842b45e4add8f620ffd635325f695d4bf4a4b8c3007c4a907c3b4584c",
+    "lab-calendar-access-requests-local-r2/browser-native-state.json": "f673b727401bb65f89a812fce943135537e0170ba2ebfad20808dbacf89599a1"
+  },
+  "limits": [
+    "Exact-head CI, production and fresh hosted checks pending",
+    "Native outboxes do not send real email or implement cross-Gmail notification delivery",
+    "Scenario export/reseed of access-request resources, native keyboard/focus, physical touch and exhaustive Calendar/AI/collaboration audit remain open"
+  ],
+  "screenshots_retained": false
+}
