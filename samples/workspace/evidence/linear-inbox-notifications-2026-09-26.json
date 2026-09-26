@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1172",
   "source_head": "cc9b8eb06a6f2293c35a2f3a68cc873c25df3247",
-  "status": "ci_and_production_pass_fresh_hosted_pending",
+  "status": "ci_production_and_fresh_hosted_pass_remaining_ui_audit_open",
   "release_allowed": false,
   "scope": [
     "Recipient-scoped native notifications and Inbox read/unread/snooze/archive actions",
@@ -98,14 +98,92 @@
     "lab-linear-inbox-makefix-retention-final.log": {
       "sha256": "a9dcbaa1e0ade040a9ac2106ce7e3b7e92cde5e21e9e980ce4b04eb47a59d1a1",
       "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r2/http-trace.json": {
+      "sha256": "866a0a3141fa7b70db0efa668c86941bc955e4c63f6d626123ce06ec42eec506",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r2/cleanup.json": {
+      "sha256": "6fde2c56b393ee614138497a773ac7f0fa34b24b84d4f727620d944a12e05b33",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r3/http-trace.json": {
+      "sha256": "866a0a3141fa7b70db0efa668c86941bc955e4c63f6d626123ce06ec42eec506",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r3/cleanup.json": {
+      "sha256": "f533cb3c43c63ea0ce58332992a756982c32397c908f02bc07f4bd9db5832e75",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r3/clock-1-before.json": {
+      "sha256": "34b7f086d913067f82735749eed1612891b35c8dc0b3c4378030e1e47a90d515",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r3/clock-1-after.json": {
+      "sha256": "6bc30fa65d3a7e00f8b3f7d49117c864e69338afdef002a454f3b099ac3b0e3f",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/scenario.json": {
+      "sha256": "8d72dd5fde48e0a3915eb4fea5d92e86fbd92c9240315636a580c108fd770bfe",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/baseline-state.json": {
+      "sha256": "185f0205b232bc49312a2c39373c43854c50b4faa81388a6a46e5c3fb77551e3",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/native-final-state.json": {
+      "sha256": "12b08c03ea5055335cf50c3672f2893ac5be8474319e934a1d21acfa663613e3",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/native-checks.json": {
+      "sha256": "498cde71dd9e6ce7b255c9616f14c4b313ab065b29ef49ba04e0bf41587ca162",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/retention-state.json": {
+      "sha256": "103f72127d6a3975e1e57586332b047b89d89c8c82ee6ead46f0e10e7544a4e3",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/gui-baseline-state.json": {
+      "sha256": "185f0205b232bc49312a2c39373c43854c50b4faa81388a6a46e5c3fb77551e3",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/gui-after-cancel.json": {
+      "sha256": "c31b497c396fb00934a418fb384dcd2902a03ca391297fae79a975e5233c7651",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/gui-final-state.json": {
+      "sha256": "56051239c93d832b1c96bd90def7d31e612c2105202947e7b793cf7a3590d8dc",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/gui-checks.json": {
+      "sha256": "31aad1b5165cc1e35bc350ff35d78703f774ee6734d1df98edd69832e7042e4f",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/image-comparison.json": {
+      "sha256": "d31fcfd27332ffe44c62500d3e14c3597d1f065d8295c7f72ad5a2559568c49f",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/runtime-image-evidence.json": {
+      "sha256": "e6d77ee151e2fdbdcfbb00c188c9f79a033db431cf43a74b78bf4de58eb899b1",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/proxy-http-trace.json": {
+      "sha256": "bf0cf7c18d93ece66a332ebcec2bdaa1c710f6e6fba8da69dec782d4a13f1d75",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-linear-inbox-concurrent-bd0c16ea-r4/cleanup.json": {
+      "sha256": "d964fc2a78a6add33c5ba1ecde2f0a03e39cf3aa3c5a74d76655476da8d8ea9c",
+      "retention": "Private local operator artifact; not bundled"
     }
   },
   "limits": [
-    "Fresh hosted native/browser and worker-container image checks pending",
     "Project notifications, priority/grouping, reminders, manual subscriptions, full settings and external email/push/Slack delivery remain open",
     "Private-team/workspace permissions, realtime, uploads and AI remain open",
     "Selected desktop/390px controls only; no exhaustive visual or physical-touch approval",
-    "Full eight-provider audit and sample release including WKS-03 remain open"
+    "Full eight-provider audit and sample release including WKS-03 remain open",
+    "Keyboard and physical-touch parity not exhaustive",
+    "Opened details popover controls had blank CUA AX names despite visible text; accessibility needs investigation",
+    "Display-option labels have visibly weak contrast"
   ],
   "screenshots_retained": false,
   "merged_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
@@ -206,5 +284,100 @@
         "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
       ]
     }
+  },
+  "hosted": {
+    "run_id": "30a86dc6-3f4d-41c4-bed0-1270998e4b88",
+    "native": {
+      "checks": [
+        "recipient lists isolated; foreign read/archive rejected unchanged",
+        "invalid dates and read-only mutation preserve every native resource",
+        "read-only Inbox exposes no writes and rejects open-as-read",
+        "native read/unread and snooze visibility obey exact clock boundary",
+        "past custom snooze rejects without native mutation",
+        "archive/unarchive retains issue and foreign notification",
+        "read/write scope creates native and browser comments as teammate; owner receives notification without self-delivery",
+        "unrelated issue preserved throughout native conformance",
+        "above 2,000 open notifications, oldest is archived and remains queryable; foreign recipient unchanged"
+      ],
+      "gui_tested": false,
+      "status": "pass"
+    },
+    "browser": {
+      "status": "pass",
+      "checks": [
+        "Bulk delete dialog cancelled; all native business state unchanged",
+        "Notification open/read and mark unread saved",
+        "390px snooze menu cancellation and one-hour save",
+        "Reload preserved snooze; Display Show snoozed restored visibility",
+        "Unsnooze and mark unread persisted through desktop reload",
+        "Six native writes increased sync_id by six; all original business resources restored; foreign notification untouched"
+      ],
+      "limits": [
+        "Keyboard and physical-touch parity not exhaustive",
+        "Opened details popover controls had blank CUA AX names despite visible text; accessibility needs investigation",
+        "Display-option labels have visibly weak contrast"
+      ],
+      "screenshots_retained": false
+    },
+    "images": {
+      "status": "complete",
+      "observed_at": "2026-09-26T05:07:25.763773+00:00",
+      "publication_sha256": "d3ba2524848b417f8c66d40b81eeb45bc8f9992b55c84e207034be1c2b27d8e1",
+      "containers": {
+        "linear": {
+          "published_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+          "image_id": "sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:b7361487250c58dddb7ab0c00f9981746885744e06bc4b5c7f25a034540c40e7",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e7285e8fd7d34e2b8ae56020dc112c0e",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e7285e8fd7d34e2b8ae56020dc112c0e@sha256:71154b6e42b7189219e6d733115a4eec5e7c4ea8eec232380d555dfdfc89a3cc",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:71154b6e42b7189219e6d733115a4eec5e7c4ea8eec232380d555dfdfc89a3cc"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:71154b6e42b7189219e6d733115a4eec5e7c4ea8eec232380d555dfdfc89a3cc"
+          ],
+          "builder_log_sha256": "3bbcb18c2f71dc1cc46b8e403ad8066b68fa8117e7669b10361e0282b04eefa3"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "teardown": "confirmed",
+    "scope": "Native checks and selected desktop/390px browser controls; not exhaustive approval",
+    "preserved_attempts": [
+      {
+        "artifact_root": "lab-final-linear-inbox-concurrent-bd0c16ea",
+        "result": "verification-script failure; closed dialog text was incorrectly treated as visible controls",
+        "torn_down": true
+      },
+      {
+        "artifact_root": "lab-final-linear-inbox-concurrent-bd0c16ea-r2",
+        "result": "verification-script failure; exact one-hour snooze check also expires browser authentication sessions",
+        "torn_down": true
+      },
+      {
+        "artifact_root": "lab-final-linear-inbox-concurrent-bd0c16ea-r3",
+        "result": "verification-script failure; exact one-hour snooze check also expires browser authentication sessions",
+        "torn_down": true
+      }
+    ],
+    "assertion_correction": "Require exact business state equality; additionally verify only expired browser sessions are removed and new sessions retain the same actor and one-hour expiry. No business-resource difference is ignored."
   }
 }

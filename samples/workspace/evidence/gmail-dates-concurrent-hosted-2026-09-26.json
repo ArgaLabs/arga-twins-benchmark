@@ -1,0 +1,190 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "gmail"
+  ],
+  "status": "selected_desktop_and_390px_hosted_pass",
+  "release_allowed": false,
+  "run_id": "054cd07b-1c7d-42eb-a4cc-7282f953050e",
+  "browser": {
+    "status": "pass",
+    "screenshots_retained": false,
+    "checks": [
+      "Desktop and 390px current-day, same-year and prior-year dates",
+      "Full approved message date and 24 seats at 30 USD for 12 months visible",
+      "Superseded proposal, review/no-send policy remain readable",
+      "Reloaded list retains date rendering",
+      "All eight provider business states unchanged; only real-time Linear logical_now advances"
+    ],
+    "candidate_retry": false
+  },
+  "native_clock": {
+    "fixed_seed_base_ms": null,
+    "reference_ms": null
+  },
+  "images": {
+    "status": "complete",
+    "observed_at": "2026-09-26T04:59:07.716077+00:00",
+    "publication_sha256": "d3ba2524848b417f8c66d40b81eeb45bc8f9992b55c84e207034be1c2b27d8e1",
+    "containers": {
+      "github": {
+        "published_revision": "8b40448d06afcde6fead75dc16dddbf54a428886",
+        "image_id": "sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:015bf9f35d7ef062e20f55fe3af368be118994e44c4df24529fe17a24c235191",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d"
+        ],
+        "matched": true
+      },
+      "gmail": {
+        "published_revision": "3f91765b8ef787e8fad435d3d67145e941b54fb8",
+        "image_id": "sha256:339e5a21383b0c26f6d295446fd8118b7371deb9c29b78c3178db849197b7b04",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:339e5a21383b0c26f6d295446fd8118b7371deb9c29b78c3178db849197b7b04",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:343ad24f05660a017c66068240cf8a00299b049e0c21f331d15567bacae5e719"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:339e5a21383b0c26f6d295446fd8118b7371deb9c29b78c3178db849197b7b04"
+        ],
+        "matched": true
+      },
+      "google_calendar": {
+        "published_revision": "7a314dac9129a69f322e2e2bc91945ee510a3c19",
+        "image_id": "sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:f4404ce14ad2b8d31ea9ffe2c9749ec256c1355e01851917d0e6950a7d718c7c"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:566a484755b3db8f4c419e4ed22c85d0829a861ae66877460efd124b8d97d96d"
+        ],
+        "matched": true
+      },
+      "google_docs": {
+        "published_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+        "image_id": "sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:21a32d551ddc85f341ab48e7c6a61ea8b92f4bc7455d80b3d26d10da5a0a94b7",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21"
+        ],
+        "matched": true
+      },
+      "google_sheets": {
+        "published_revision": "9e18dd55c2b4fee1087730e8f215d285dde821ca",
+        "image_id": "sha256:ee1fa4eae2dd465bc3f404ad99b4cd1792e2c3442469424e1d519ee966857054",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:4772af49a7cec3c0d4906229aab6ce7d9a8322f1ae6862088f028e9e45397191",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:ee1fa4eae2dd465bc3f404ad99b4cd1792e2c3442469424e1d519ee966857054"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:ee1fa4eae2dd465bc3f404ad99b4cd1792e2c3442469424e1d519ee966857054"
+        ],
+        "matched": true
+      },
+      "linear": {
+        "published_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+        "image_id": "sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:b7361487250c58dddb7ab0c00f9981746885744e06bc4b5c7f25a034540c40e7",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff"
+        ],
+        "matched": true
+      },
+      "notion": {
+        "published_revision": "7854c3c7c6741dbff191a6604f109f86f6b7772a",
+        "image_id": "sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:10ca596bd6a885aba8ea34da16c98e1b2e7a3c9b4826fce9d33e58f92db8062d",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646"
+        ],
+        "matched": true
+      },
+      "stripe": {
+        "published_revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+        "image_id": "sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:d9dfca40180eb86e43bf5af7a122aa8348c9e63fe4dcdcf8e22d32b8180afb8a"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:9fe3a1ae2d1fe941419fd4fa340986ae454d38266e87026fb3e756a3d4e1cd0f"
+        ],
+        "matched": true
+      },
+      "app": {
+        "matched": true,
+        "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-fd412bda0905415eb7b36016200a4d0a",
+        "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-fd412bda0905415eb7b36016200a4d0a@sha256:6a92bc2ab6c698d74f1b620c42379cc9083b865757bb7e1da9228d6116c51f5f",
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:6a92bc2ab6c698d74f1b620c42379cc9083b865757bb7e1da9228d6116c51f5f"
+        ],
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:6a92bc2ab6c698d74f1b620c42379cc9083b865757bb7e1da9228d6116c51f5f"
+        ],
+        "builder_log_sha256": "45c52404db0653e67ed1d92153206332a2281d7cf6eb7bcca0e934074828fb8e"
+      },
+      "twin-gateway": {
+        "matched": true,
+        "observed_repo_digests": [
+          "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        ],
+        "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+        "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+      }
+    }
+  },
+  "teardown": "confirmed",
+  "limits": [
+    "Operator readability check is not a candidate retry or a resolution of WKS-03",
+    "Not exhaustive visual, mobile or physical-touch parity",
+    "WKS-03 business failure and full sample release gates remain open"
+  ],
+  "artifacts": {
+    "lab-final-gmail-dates-concurrent-bd0c16ea/scenario.json": {
+      "sha256": "075a900dda20101bbf78fa701ba8f8c4f78ee9b30201b36953eb0de6810ee948",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/baseline-state.json": {
+      "sha256": "7bfbc38a1e93084f9a76932e1f990d752aa71ef995a7831e1af48a7b80ec89ab",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/final-state.json": {
+      "sha256": "3010ad89f99cac239a3136e5e19383ede95532cd25612d0c7d81ed31602cc7ed",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/gui-checks.json": {
+      "sha256": "c9c2d4da539af55ddec729ad964c8483c41e213ae71d7a324de318dc37da28ca",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/observed-clock.json": {
+      "sha256": "9d6e16d4addc908f4be6b1cbb5b3873345cd4040b698f4c0c69fd4b371391dbe",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/image-comparison.json": {
+      "sha256": "32f40b9cf149091638040b01e25e7a0ed0bf8a8aa262197dc048c30223885089",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/browser-trace.json": {
+      "sha256": "788d3ccb5579195afeb38f9f42047c0d437cf908b3d586771d45d5c94116d659",
+      "retention": "Private local operator artifact; not bundled"
+    },
+    "lab-final-gmail-dates-concurrent-bd0c16ea/cleanup.json": {
+      "sha256": "af44d3051fe97bbf0345a16fa4091de9235bd99f58df13c5f2b26c21424a5a59",
+      "retention": "Private local operator artifact; not bundled"
+    }
+  }
+}

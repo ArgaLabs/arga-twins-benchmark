@@ -163,7 +163,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
-          "sha256": "4d4231881b7f81e1b469522b265bc237aecab83d23ff49f15697300245e4f749"
+          "sha256": "9ecaaf39250c08eeeb74967bd30809f237b79f10ae061091c3bad3e5dcfc732d"
         },
         {
           "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
@@ -304,7 +304,7 @@
         },
         {
           "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
-          "sha256": "4fe7487f0f723c548fa2a38475a41c2e830186aa966f5a56e89800dca8b636c3"
+          "sha256": "740b0e7a4e9ba0816be66f83b29204128dc70435531e62c9e4d22dd86ba4da55"
         }
       ]
     },
@@ -320,5 +320,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "da59d1b347ac79bac4982e64c69bdae6512c77ae77f5d9f06284d059ab097ceb"
+  "sample_tree_sha256": "ffa8805c050776168a2f116069e68335971e0afd56a78016bc540863ae6b41df"
 }
