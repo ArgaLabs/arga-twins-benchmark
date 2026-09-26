@@ -34,6 +34,10 @@
         {
           "path": "samples/workspace/evidence/github-review-connections-2026-09-26.json",
           "sha256": "25f98f71da73b76cc12ef626aaa884db820e40e929441ee50d2bac525386c570"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-access-2026-09-26.json",
+          "sha256": "d1e230fa1fe25ccad1bd920d2f3ac07689c46bff996d5a8d6b92f28fa4a36436"
         }
       ]
     },
@@ -278,7 +282,7 @@
         },
         {
           "path": "samples/workspace/evidence/stripe-balance-reports-2026-09-26.json",
-          "sha256": "ed817ea61d65187cd4fcd847835935c127d5f5ec738e61bfc2394b296176c435"
+          "sha256": "1852bf05e51fb9079db40e69f9d48aca7b9d4adfa6678a74c7e1478730a3bc1e"
         }
       ]
     },
@@ -436,5 +440,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "f1f22ace08d4f4993468b9b04b2da83cd349fdd55d1bec19545fb0e6470427ee"
+  "sample_tree_sha256": "360cd5cf14dd4a2521a25d6845c2296fae07b17bd4facad130c5cfbc017da552"
 }

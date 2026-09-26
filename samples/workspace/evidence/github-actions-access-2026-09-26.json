@@ -1,0 +1,84 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-26",
+  "provider": "github",
+  "status": "local_native_access_pass_ci_pending",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1200",
+  "source_head": "1290c4cacb6f603b8dd82adc9eda3f4cfaf9ad1a",
+  "changes": [
+    "Workflow/run/job/timing/log reads and native browser delegates share existing Actions artifact authorization",
+    "Dispatch, enable/disable, rerun, cancel and run/log deletion require write access",
+    "Current credentials are resolved at use time, including after dispatch body reads"
+  ],
+  "tests": {
+    "all_github_passed": 592,
+    "focused_passed": 110,
+    "failed_before_correction": 87,
+    "make_fix": "pass",
+    "preserved_failures": [
+      "First integrated run: two legacy authenticated positive browser writes omitted their fixture header; corrected to use existing AUTH, with explicit anonymous denial retained",
+      "Initial make fix found redundant unused get-job-log locals; removed before passing run"
+    ]
+  },
+  "local_browser": {
+    "status": "bounded-native-access-pass",
+    "denied_state_unchanged": true,
+    "owner_only_change": "actions_workflows/test-org/demo-repo",
+    "protected_state_unchanged": true,
+    "browser": [
+      "private owner/reader page loads",
+      "anonymous 401 and reload",
+      "reader disable rejected 403 without native mutation",
+      "owner disable/enable and reload",
+      "390px anonymous denial and restored workflow page"
+    ],
+    "unpassed": [
+      "403 provider error presentation: Chrome ERR_BLOCKED_BY_CLIENT",
+      "read-only users still see write controls",
+      "native keyboard/focus while Mac locked",
+      "touch behavior",
+      "exhaustive GitHub parity"
+    ]
+  },
+  "ci": {
+    "status": "pending"
+  },
+  "deployment": "pending; unmerged",
+  "references": [
+    "https://docs.github.com/en/rest/actions/workflows",
+    "https://docs.github.com/en/rest/actions/workflow-runs",
+    "https://docs.github.com/en/rest/actions/workflow-jobs"
+  ],
+  "limits": [
+    "Existing coarse owner/org-member and installation model; full collaborator roles/fine-grained token types and anonymous public REST coverage remain incomplete",
+    "Read-only users still see write controls, and Chrome blocked the 403 error page from rendering",
+    "Native keyboard/focus while locked and physical touch are unverified",
+    "Full GitHub frontend, AI/collaboration and sample gates remain pending"
+  ],
+  "source_sha256": {
+    "twins/github/handlers/compat.py": "92ee6026a42d55d7e83ea845386573261849ceafc147530970ebc37c4deddc5e",
+    "twins/github/README.md": "fc7f5ee39cc2b38a5422d00c73b9fff2eb36260fb98d866956de8f0f17a20f4a",
+    "twins/tests/test_github_actions_access.py": "2507b5e4963f6d8c8b8ddf7fdf79588ac9cedfb554102d300152c3ca9c2acd06",
+    "twins/tests/test_github_operations_state.py": "dfa08f53117a06271d7ceb237ce796075496cad3e09207b9165a1e5fbc26872e"
+  },
+  "artifacts_sha256": {
+    "lab-github-actions-access-red.log": "c1767141afff496f297b0684e01994255406e9fd73c35931bdf47c5bb00629a8",
+    "lab-github-actions-access-integrated.log": "cde6bbddd45b3dc843cb58ab78685446fdf43a42afca6f8ff3380f50b5d19779",
+    "lab-github-actions-access-make-fix.log": "02d4b4649177d6c3c97fc33bcf9b04e40f39e02563fa18e33e03212976f4b332",
+    "lab-github-actions-access-integrated-r2.log": "98538bed587e2d1b272a3187703fd134b32100f46a0f6b0329f63843517c7670",
+    "lab-github-actions-access-deps-r3.log": "c7d0fc9d1f35f6b9b7b517d201e0d0de263a7bba43b47fe7565157c9e523d118",
+    "lab-github-actions-access-green.log": "b77d1da28b0bc4715b2e643509b5d30408f99399a341462dd9759f4adbdd6f3b",
+    "lab-github-actions-access-deps.log": "f875ac20bf4f92118b5f1d2c9b856af29a4796d730582523fb71e44e17721069",
+    "lab-github-actions-access-make-fix-r3.log": "ffc99158cb8014d5223d1df76560105164616a237a00137f4f707b2209cd1e18",
+    "lab-github-actions-access-make-fix-r2.log": "ff7aa754fd9f47b7f39af14db4b73c3f99a7b9947979aad09fdc3bcd9714202a",
+    "lab-github-actions-access-local.log": "c3c10ac7f1a6abaebd96465169e2200ee2288746fe13658e7866541c542d5cea",
+    "lab-github-actions-access-local/browser-trace.json": "c873a5993b0269aaf68a747438da4c30f4743c850ce983b5b83d4ec8d4104869",
+    "lab-github-actions-access-local/workspace.json": "dd34ffe434ef782e3253bc478a61cad68e8f6e388f8942962efcf2e2c1fcdc3a",
+    "lab-github-actions-access-local/checkpoint.json": "437c3376dd7f587426c920208ed107ac031c17e7becf63774e3ad2d2127d480b",
+    "lab-github-actions-access-local/result.json": "4f5239753a194b1b0bfc6dc70b1a5196a2c6bdcfde981febcb4aa305e5a7eae6",
+    "lab-github-actions-access-local/baseline.json": "b2e72561fa9e73f76c93eb7cd855cc118aeb48b94517f7f379a83eef1246af98",
+    "lab-github-actions-access-local/denied-unchanged.json": "b2e72561fa9e73f76c93eb7cd855cc118aeb48b94517f7f379a83eef1246af98",
+    "lab-github-actions-access-local/final.json": "7301e6179209938c36f8b447fa6afa4020ae86c523cb57e73f472f2960f20f7b"
+  }
+}

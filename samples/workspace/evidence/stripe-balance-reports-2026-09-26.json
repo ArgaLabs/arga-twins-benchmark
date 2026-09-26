@@ -2,7 +2,7 @@
   "schema": "arga.lab.feature-evidence/1",
   "observed_on": "2026-09-26",
   "provider": "stripe",
-  "status": "local_review_pass_ci_requested_browser_download_blocked",
+  "status": "local_review_and_ci_pass_browser_download_blocked",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1199",
   "source_head": "486ec063ce41885a66aed0767a644b8824ee0f58",
@@ -99,8 +99,16 @@
     "documenter": "Bounded documentation accepted; missing date presets/Clear/timezone picker/AI and native input limitations explicitly documented"
   },
   "ci": {
-    "status": "requested_after_marking_ready",
-    "preserved_attempt": "Draft-triggered Actions skipped under repository policy; not counted as passing CI"
+    "status": "passed",
+    "preserved_attempt": "Draft-triggered Actions skipped under repository policy; not counted as passing CI",
+    "head": "486ec063ce41885a66aed0767a644b8824ee0f58",
+    "all_complete": true,
+    "merge_state_at_check": "CLEAN",
+    "twin_tests_passed": 6581,
+    "root_tests_passed": 2134,
+    "lint_and_test_run": 36241116012,
+    "docker_build_run": 36241116024,
+    "fidelity_run": 36241116152
   },
   "deployment": "pending; unmerged",
   "limits": [
@@ -160,6 +168,8 @@
     "lab-stripe-reports-review-r1/baseline-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
     "lab-stripe-reports-review-r1/request-trace.json": "035c989b203cd79d6a06dc87b8dc3c5786476c857a9cdca2d4d028d4acb78be9",
     "lab-stripe-reports-review-r1/final-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
-    "lab-stripe-reports-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    "lab-stripe-reports-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-stripe-reports-ci-current.json": "d22a2d0c0fe81c65bc9a4944cfc5912528534692e3f1dff3153de982424626e8",
+    "lab-stripe-reports-ci-complete.log": "69e478add7302515d98363dcd94e89396ac67a328e3dcff8a23d1f5f33bc45ac"
   }
 }

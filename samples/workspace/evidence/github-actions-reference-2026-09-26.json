@@ -1,0 +1,26 @@
+{
+  "schema": "arga.lab.provider-reference/1",
+  "observed_on": "2026-09-26",
+  "provider": "github",
+  "browser": "Chrome CUA",
+  "surfaces": [
+    "https://github.com/ArgaLabs/validation-server/actions",
+    "https://github.com/ArgaLabs/validation-server/actions/workflows/lint-and-test.yml",
+    "https://github.com/ArgaLabs/validation-server/actions/runs/36241116012"
+  ],
+  "observations": [
+    "All workflows includes workflow/sidebar navigation, filter text and Workflow/Event/Status/Branch/Actor menus",
+    "A workflow page has a Show workflow options menu with Create status badge, Pin workflow and Disable workflow",
+    "Completed run summary includes Re-run all jobs and Workflow run options with Create status badge and Delete all logs",
+    "Desktop run summary has jobs sidebar, status/duration/artifacts summary and job graph",
+    "390px switches repository navigation to More and run navigation to Summary dropdown; title wraps, graph has horizontal content"
+  ],
+  "interaction_scope": "Read-only navigation and opening/closing menus; no workflow dispatched, rerun, disabled, pinned or deleted; no logs deleted",
+  "screenshots_retained": false,
+  "provider_state_changes": false,
+  "limits": [
+    "Single authenticated owner account; no live read-only role comparison",
+    "No error/cancellation/write outcome reference",
+    "Not an exhaustive route/menu inventory; no native keyboard/focus or touch claim"
+  ]
+}
