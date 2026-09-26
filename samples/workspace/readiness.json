@@ -90,7 +90,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-protection-sidebar-2026-09-25.json",
-          "sha256": "e4a0b277d9fbc7aaaa659807b9a384461e837d891960289b3b1586e72b106096"
+          "sha256": "f820c68c14de211abc6c4c8ccea9e18ab8724ec1e9c36603641e84c9fe63f61f"
         },
         {
           "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
@@ -155,7 +155,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
-          "sha256": "54c0aff1c1fc38786984128dee2a8700f06ea0a87e2a7a9b9096776f99d758bf"
+          "sha256": "12f1692d91e295106a9ad0c2a8650eb620e31f87767c9ab716beb750b5ef2341"
         }
       ]
     },
@@ -304,5 +304,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "3a898f1fb2ff339ac0ea03cfc36c3d271e11f2a4a7f0c8a460ec8687df67bf7f"
+  "sample_tree_sha256": "5f5276f01109627847834aadc7c07308d242e8aacb88542978a1ce1b6e36363c"
 }

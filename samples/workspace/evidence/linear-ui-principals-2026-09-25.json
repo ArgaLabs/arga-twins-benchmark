@@ -5,8 +5,8 @@
     "linear"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1170",
-  "source_head": "240843fddb9c99d8cf6d9f2e0921bbc540248827",
-  "status": "local_source_api_checks_pass_ci_hosted_and_browser_pending",
+  "source_head": "e9cef1a189cc81ce73f4f1c3ca762181eb2a9d5a",
+  "status": "local_browser_identity_and_oauth_checks_pass_ci_hosted_pending",
   "release_allowed": false,
   "scope": [
     "Explicit browser authentication uses the native token; read-only credentials cannot mutate as the default owner",
@@ -17,23 +17,29 @@
   ],
   "tests": {
     "focused_passed": 34,
-    "linear_regressions_passed": 198,
+    "linear_regressions_passed": 223,
     "skipped": 0,
     "warnings": 3,
     "reproduced_old_frontend_failures": 27,
     "make_fix": "pass",
     "diff_check": "pass",
     "independent_source_review": "Pass after resolving headerless-form identity loss and expiring-cookie fallback; native GraphQL cookie isolation and mid-form revocation independently checked",
-    "documentation_review": "Pass with inherited permissive-token mode and missing native OAuth expiry distinguished from browser-session expiry"
+    "documentation_review": "Browser-identity documentation review passed on the prior source; combined OAuth documentation describes remaining scope, final independent confirmation pending.",
+    "prior_browser_only_regressions_passed": 198,
+    "oauth_focused_passed": 25
   },
   "source_files": {
     "twins/linear/frontend_auth.py": "d3f376f82f5ab0940e6f366b3e4b8c7336917878b6853fd0509cc25680f76d94",
     "twins/linear/frontend.py": "ddf18814637b38241125df454fa07857d4a79ac4a9829ffb896ce6068c8901f4",
     "twins/linear/comment_ui.py": "a7842f2408891efa09c910f85ca5d32564eb8b2c9c2de16eb449124e34052210",
     "twins/linear/project_ui.py": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
-    "twins/linear/store.py": "ac044742cc3afd94c15ef26369ec84b3814a64c59a58836b2b26a15660f57ce0",
-    "twins/linear/README.md": "a89007b29929c0432c5d20bee0ce16b9370251ea8a32da8d6b846794542a4f73",
-    "twins/tests/test_linear_ui_principals.py": "fd6eba1c7a63c1e2bada44c0bd581f1f06b0cc7dc0abe7d18f55d1bc885b8500"
+    "twins/linear/store.py": "86c9715729c51cb8ca6228d28862fbf32bced84971bf051538594df3fffce6f7",
+    "twins/linear/README.md": "2d852f85f26fd3faeb62e54eb54ff26b5ea0d99cf1378d0cdda65745c22866ce",
+    "twins/tests/test_linear_ui_principals.py": "fd6eba1c7a63c1e2bada44c0bd581f1f06b0cc7dc0abe7d18f55d1bc885b8500",
+    "twins/linear/models.py": "3c53b6ea032e355bdaa69b0e87afe48a4a19ee6f2ef2aed42fa3005fbd44ee80",
+    "twins/linear/oauth.py": "6919055ac31714555607b99c24f7edef1a4f39200fd4fea2141736537bd7a375",
+    "twins/linear/runtime.py": "649b83589ba53cf6b8212c0546996b98c3f50483ab57b65ce287bc1f5ca6550c",
+    "twins/tests/test_linear_oauth_lifecycle.py": "abe4ad6ba17fb753330c2cf35c567b217d16c4852d39b2152bca0ad8e75158fb"
   },
   "artifacts": {
     "lab-linear-ui-principals-original-reproduced.log": "9cf0d589bce3eaf21652826e72eeb65c4dd9bd670f7003433d588075f496181f",
@@ -42,10 +48,31 @@
     "lab-linear-ui-principals-makefix-final.log": "033834de5ecb478b63670138b3995cfd20b5090ff58dca12ca2212bf561e0d4d"
   },
   "limits": [
-    "CI, hosted HTTP/native verification and desktop/mobile/touch remain pending. Chrome currently exposes no usable tree or screenshot.",
-    "Existing optional allow_unknown_tokens configuration and native OAuth expiry behavior are preserved, not corrected here.",
+    "Current full CI, fresh hosted/native checks and Linear desktop/mobile/touch verification remain pending. Chrome is accessible again; Linear real account is authenticated.",
+    "Optional allow_unknown_tokens is retained; known expired/revoked OAuth credentials now fail closed. PKCE, app actors, client credentials and consent-screen coverage remain open.",
     "Private-team membership, workspace roles, complete read-only controls, AI, uploads, notifications and realtime remain open.",
     "All broader frontend/sample gates, including WKS-03, remain pending; no final ZIP."
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "oauth_lifecycle": {
+    "focused_passed": 25,
+    "linear_regressions_passed": 223,
+    "scope": [
+      "24-hour expiry on twin clock",
+      "Configured-client validation and Basic/form refresh",
+      "Rotation with 30-minute exact-response replay including later rotation",
+      "Grant-family revocation and consumed-refresh retry invalidation"
+    ],
+    "review_correction": "Preserve cached refresh response independently of subsequent token rotation; final independent confirmation pending",
+    "regression_log_sha256": "691a007ebf5a532f6f18a387bd8baf11351afb518af89eb931a1485432dea7b0",
+    "limits": [
+      "PKCE, app actors, client credentials, consent UI and complete permissions remain open",
+      "Hosted/real-provider GUI comparison pending"
+    ]
+  },
+  "ci": {
+    "workflow": 36212880730,
+    "head": "e9cef1a189cc81ce73f4f1c3ca762181eb2a9d5a",
+    "status": "twins_tests_in_progress_other_required_checks_passed"
+  }
 }
