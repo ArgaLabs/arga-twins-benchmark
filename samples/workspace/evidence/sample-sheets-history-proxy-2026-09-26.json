@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14",
   "source_commit": "6c18e31a4914ead714ba14cad0b12b8274554150",
-  "status": "local_protocol_regressions_pass_fresh_hosted_pending",
+  "status": "local_protocol_and_fresh_hosted_native_browser_pass",
   "release_allowed": false,
   "scope": [
     "Forward Sheets session and typing-group headers on allowed spreadsheet routes",
@@ -34,8 +34,10 @@
     }
   },
   "limits": [
-    "Fresh hosted native and browser verification after #1179 deployment pending",
+    "Fresh native HTTP and Chrome desktop/390px history/warning verification pass through this sample proxy, with exact native-state checks and all five images matched; no exhaustive browser/touch claim",
     "No candidate result or full release gate changed"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "hosted_evidence": "sheets-undo-redo-2026-09-26.json#/hosted",
+  "hosted_revision": "b711e3a756a158955ad6aa0affcaa69e2248017b"
 }

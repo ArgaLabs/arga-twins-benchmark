@@ -14,6 +14,10 @@
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
           "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
+        },
+        {
+          "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
+          "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
         }
       ]
     },
@@ -102,7 +106,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-undo-redo-2026-09-26.json",
-          "sha256": "2ea776f3e78fadc4e5604c0b88985f6e5209a39e900150578fadfa75a647eae0"
+          "sha256": "a0b280faaeefe59a6e0fc52401967a4eb756de0632361205ef6f341a59684577"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -110,7 +114,11 @@
         },
         {
           "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
-          "sha256": "f68619c2d07487ba1894280f1677db76b969c9179430abb11dd19be0cc74a5e5"
+          "sha256": "a009a865d9196a409307eda54722c8611b98ba096cff106b44901779a0a3f2f4"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-charts-2026-09-26.json",
+          "sha256": "e78b5b3ba67833db85b8c7ef02944d387a5ef57fcea1106936ea7ad68c8ceff6"
         }
       ]
     },
@@ -328,11 +336,15 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "54b7e18fed38a43b8385c3df5104802650422d8df468479f05e1eb85d21acc69"
+          "sha256": "b73e78e02786213693dc71907593d4d6801d4b728bb31be2f77322c6e517f390"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
           "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
+          "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
         }
       ]
     },
@@ -347,10 +359,10 @@
         },
         {
           "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
-          "sha256": "f68619c2d07487ba1894280f1677db76b969c9179430abb11dd19be0cc74a5e5"
+          "sha256": "a009a865d9196a409307eda54722c8611b98ba096cff106b44901779a0a3f2f4"
         }
       ]
     }
   ],
-  "sample_tree_sha256": "b503146524fe098b98a2b7175de576f45ced0106f8abebd4ff56f1880bf1b240"
+  "sample_tree_sha256": "7e5fcb553b41c68a21ec71fa5fc321210b7e3be5515fbe86d57c0856685e1d4a"
 }

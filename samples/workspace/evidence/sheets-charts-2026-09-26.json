@@ -1,0 +1,129 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_sheets",
+    "google_drive"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1183",
+  "source_head": "14329efee0f4f0cf9d9e2f7c80f716e0410e835a",
+  "status": "merged_exact_head_ci_pass_deployment_in_progress",
+  "release_allowed": false,
+  "scope": [
+    "Native column/bar/line/area/scatter/pie/doughnut rendering and editing",
+    "Source/title/type/customization, move/resize/delete and source-cell preservation",
+    "Native placement field masks and cross-sheet collection moves",
+    "Reader denial, atomic invalid batches, source-preserving type changes, numeric scatter scale",
+    "Selected-chart synchronization, per-chart error isolation and visible initial read recovery"
+  ],
+  "tests": {
+    "focused_passed": 16,
+    "integrated_workspace_passed": 1332,
+    "make_fix": "pass",
+    "rendered_javascript_syntax": "pass",
+    "detector_findings": 0,
+    "ci": "All exact-head checks complete; fresh CLEAN snapshot verified before squash merge"
+  },
+  "browser": {
+    "rounds": 2,
+    "final_desktop": [
+      1465,
+      806
+    ],
+    "final_mobile": [
+      390,
+      844
+    ],
+    "reference": "/tmp/lab-sheets-charts-reference/verification.json",
+    "final_observations": [
+      "Desktop: native-backed Line chart title Quarterly comparison, three source points Revenue 10/20/15 and Expenses 8/12/9; axes, title and legend fit the 600x371 chart",
+      "Native-style white 320px chart editor at right with Setup and Customize, type, range, X-axis, series and checkboxes",
+      "390px: editor x54..374 fits within viewport, close and all setup controls visible; native chart remains full size in scrollable grid behind panel",
+      "Native reference also uses a 320px editor at 390px and shows narrow-grid warning; no physical touch hardware tested"
+    ],
+    "earlier_findings": [
+      "First local CSV fixture seeded numeric-looking strings; empty-data message was accurate; corrected via native USER_ENTERED values and preserved original seed snapshot",
+      "Chart panel excess empty-status spacing corrected",
+      "A screenshot attempt targeted another selected tab after Chrome focus changed; no image returned; fresh owned tab used for final valid captures"
+    ],
+    "screenshots_retained": false,
+    "independent_visual_review_limit": "User forbids retaining screenshots. All images inspected inline in primary CUA session; reviewer must not claim independent pixel comparison from this text record.",
+    "reviewer_fixes": {
+      "date": "2026-09-26",
+      "chrome": "CUA",
+      "checks": [
+        "Two valid charts and one missing-source error coexist",
+        "A editor title Quarterly comparison switches to B Second chart on single click",
+        "B title saved; Tab focus stays at Horizontal axis title",
+        "Remove Revenue then Line\u2192Column preserves Expenses only",
+        "Invalid range rejected; Cancel leaves previous native spec exact",
+        "ArrowRight stores offsetX=10; Shift+ArrowRight stores width=610; native values persisted after reload",
+        "Injected top-level 503 exposes Reload charts at initial viewport; transient screenshot confirms visible at y236",
+        "Reload charts after removing fault renders both valid charts and the separate missing-source error and removes top-level notice"
+      ],
+      "native_delta": "Exactly B title, series removal, type; then intended move/resize only",
+      "regressions": {
+        "focused_passed": 16,
+        "workspace_passed": 1082
+      },
+      "screenshots_retained": false,
+      "physical_touch_tested": false
+    }
+  },
+  "real_reference": {
+    "fixture": "Arga fidelity 2026-09-26 charts 01",
+    "spreadsheet_id": "1kmnX1by6vjgbgoQjB5g1l-yBgKb6OfV1TxQGchcdpoA",
+    "observed_on": "2026-09-26",
+    "desktop": [
+      1465,
+      806
+    ],
+    "narrow": [
+      390,
+      844
+    ],
+    "checks": [
+      "Native creation from A1:C4 defaults to Column; headers row 1, labels column A, two series",
+      "Changed to Line and title Quarterly comparison; persisted on reload",
+      "Native range dialog invalid!A0 closes into visible invalid range error; previous chart remains; restoring A1:C4 recovers",
+      "Chart options Edit, Delete, Download, Publish, Copy, Move to own sheet, Alt text observed",
+      "390px editor fits with scroll; provider warns window is too small for grid"
+    ],
+    "exported_chart_xml": "chart1.xml",
+    "cleanup": "File moved to trash confirmed; fixture is recoverable. Tab closed.",
+    "screenshots_retained": false,
+    "limits": "No touch hardware; native chart API JSON unavailable; XLSX chart XML preserves native series source references and title."
+  },
+  "review": {
+    "disposition": "ship",
+    "scope": "Four material findings resolved; independent pixel verification unavailable",
+    "documentation": "README checked; inherits current Sheets editor; no system redesign"
+  },
+  "source_files": {
+    "twins/google_sheets/ui.py": "6714997f31b630f3b5c8ed11f0cb562dd375b072627faf4a2a03e0125c6fc529",
+    "twins/google_sheets/chart_model_ui.py": "428c7c25e7d8bcccd3992c36e91e763d2a7ae5fea4587a3509aae17482ae560b",
+    "twins/google_sheets/charts_ui.py": "366a32c5a71708e450845a2de39df83e049759806e91c39eef4511f578b44fe3",
+    "twins/google_sheets/README.md": "a3213b755c982a5bd3115b2ca4fe2313573708de47a66e9fa23a15c488f48bcb",
+    "twins/google_drive/workspace_editing.py": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+    "twins/tests/test_google_sheets_charts_ui.py": "09e83c09586a7cbf031314e2e956ea3db2e6447b6c3d66642bcee665303b11af"
+  },
+  "artifacts_sha256": {
+    "lab-sheets-charts-workspace-final.log": "7c7fd49eb16393fb5f7e8e66ff20d6b128f66768cdc01c02145782cfc34cb296",
+    "lab-sheets-charts-review-tests2.log": "d7c9b809730a56a92b1201fb24c83f8b1b66fcab77d3135be9bb0bb18e36766d",
+    "lab-sheets-charts-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "reviewer-fixture-baseline.json": "302c231cb06d9830f3f5f0dea3e667d378304617417b201fb72b26a9f098b9fb",
+    "reviewer-gui-state.json": "835933b1bc918108c56fc3fba7ebfdd3952fce48b7d904e8b5b20eaf9de54968",
+    "reviewer-moved-state.json": "cd61761b4f3ff2931b6c3c48857344c4fe37d46f0b5e077b11e329ad7f18740a",
+    "reviewer-deleted-state.json": "1f993deda752c61d2c009367fb96d7216d14820f8dd96848de2e43f386561b7f",
+    "chart1.xml": "d8dc073a5c2f2485e24ef8ade7b78b279c3a2ad156a9f534333b15c51ceaba13",
+    "lab-final-sheets-charts-premerge-14329efe.json": "53db31e74ebe13637e35d2e46f6dd779078dae25287219057698edaaa79751d0"
+  },
+  "limits": [
+    "Both production workflows and fresh hosted verification pending",
+    "Additional chart families, chart-sheet/export/publishing/copy controls, full customization and exact rendering parity remain open",
+    "Native basic-to-pie conversion retains only first series; rectangular data rebuild does not retain custom noncontiguous source layout",
+    "Source range maximum 10,000 cells; no full provider/touch or sample gate closure"
+  ],
+  "screenshots_retained": false,
+  "merge_commit": "5d95bdf73293c84521cfad453f7d36a38b702bed"
+}
