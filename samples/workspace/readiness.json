@@ -102,7 +102,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-undo-redo-2026-09-26.json",
-          "sha256": "d95d429de2c5f18191a28779146df3c208ee61cc079777e3ebc928a188fe4fb4"
+          "sha256": "2ea776f3e78fadc4e5604c0b88985f6e5209a39e900150578fadfa75a647eae0"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -187,7 +187,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-inbox-accessibility-2026-09-26.json",
-          "sha256": "e2ccf9c6d8ada428fc08eb4260e5871e37ac0473d179fb2db79415c208d06523"
+          "sha256": "e76c4240986f75959b162492fe61b4f49a3d3c37e0b701745dac65c93624cb7f"
         }
       ]
     },
@@ -328,7 +328,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "a62310185f9207e9853fa7e1761033cd59d85e9d9739456a1f8ff7f2fd5c08c7"
+          "sha256": "54b7e18fed38a43b8385c3df5104802650422d8df468479f05e1eb85d21acc69"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -352,5 +352,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "678fc0e84583d21173510d7f3210de494dd6ed38b15c124690aa68a494ad124f"
+  "sample_tree_sha256": "b503146524fe098b98a2b7175de576f45ced0106f8abebd4ff56f1880bf1b240"
 }

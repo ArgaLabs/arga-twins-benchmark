@@ -5,7 +5,7 @@
     "google_sheets"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1179",
-  "source_head": "f98f883dc7740f71e0a44d12f452d5067469fb1a",
+  "source_head": "270c726fbc35b2e801d522501e9b17f7263a8320",
   "status": "local_native_desktop_390px_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
   "scope": [
@@ -789,5 +789,13 @@
       "Viewport override uses desktop Chrome; no physical touch or native mobile app tested",
       "No exhaustive clipboard, paste-block or formula-reference parity claim"
     ]
+  },
+  "base_update_2026_09_26": {
+    "previous_head": "f98f883dc7740f71e0a44d12f452d5067469fb1a",
+    "base": "8d4355f257e18105284cc589feab88278ffc6125",
+    "head": "270c726fbc35b2e801d522501e9b17f7263a8320",
+    "reviewed_diff_byte_identical": true,
+    "diff_sha256": "dca56463e7cad7302dd19df4142d78c8b5c24f6a0175c58bba817fd778a84ecb",
+    "current_head_ci": "running"
   }
 }

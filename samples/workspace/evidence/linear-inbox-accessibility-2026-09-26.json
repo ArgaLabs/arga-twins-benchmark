@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1180",
   "source_head": "66828022945df89d86005709567dfe3f5b052c3a",
-  "status": "merged_full_ci_pass_production_running_hosted_pending",
+  "status": "deployed_hosted_native_desktop_390px_three_container_pass",
   "release_allowed": false,
   "scope": [
     "Accessible Inbox Display, bulk-action and Snooze popovers",
@@ -116,10 +116,189 @@
     }
   },
   "limits": [
-    "Merged after complete exact-head CI and fresh CLEAN check; production and fresh hosted verification pending",
+    "Exact-head CI, both production workflows, fresh native/desktop/390px checks, three container images and teardown pass within recorded scope",
     "Selected dark-theme desktop/390px checks; full mobile/touch/light-theme parity remains open",
     "Full eight-provider and WKS-03 release gates remain open"
   ],
   "screenshots_retained": false,
-  "merge_commit": "8d4355f257e18105284cc589feab88278ffc6125"
+  "merge_commit": "8d4355f257e18105284cc589feab88278ffc6125",
+  "hosted": {
+    "status": "pass",
+    "date": "2026-09-26",
+    "revision": "8d4355f257e18105284cc589feab88278ffc6125",
+    "browser": "Google Chrome CUA",
+    "viewports": [
+      "1465x806",
+      "390x844"
+    ],
+    "checks": [
+      "Display and Notification actions buttons expose accessible names and expand/collapse state.",
+      "Display checkbox labels and Ordering/Apply controls are readable at desktop and 390px.",
+      "Display Escape returns focus to trigger at both widths.",
+      "Desktop Delete all confirmation Cancel returns focus to originating menu action without mutation; Escape then returns focus to actions trigger.",
+      "All four Snooze presets include the exact displayed local date/time in Chrome accessible names.",
+      "Snooze Cancel and Escape return focus to trigger; custom date/time, submit and cancel controls remain within 390px.",
+      "Mobile Notification actions opens by Shift-Tab/Space and collapses with Escape.",
+      "Native read/unread round trip and true reload preserve both unread notifications and every business resource."
+    ],
+    "native_checks": {
+      "checks": [
+        "recipient lists isolated; foreign read/archive rejected unchanged",
+        "invalid dates and read-only mutation preserve every native resource",
+        "read-only Inbox exposes no writes and rejects open-as-read",
+        "native read/unread and snooze visibility obey exact clock boundary",
+        "past custom snooze rejects without native mutation",
+        "archive/unarchive retains issue and foreign notification",
+        "read/write scope creates native and browser comments as teammate; owner receives notification without self-delivery",
+        "unrelated issue preserved throughout native conformance",
+        "issue subscriptions use actor-scoped native IssuePayload, reject reader/invalid members, and browser writes preserve comment/notification history",
+        "above 2,000 open notifications, oldest is archived and remains queryable; foreign recipient unchanged"
+      ],
+      "gui_tested": false,
+      "status": "pass"
+    },
+    "native_state": {
+      "all_business_resources_exactly_restored": true,
+      "desktop_cancellations_sync_delta": 0,
+      "read_unread_sync_delta": 2,
+      "one_browser_session_bootstrap": "Expected authenticated page session, expires at native clock + one hour",
+      "protected_issue_and_foreign_notification": "exactly unchanged"
+    },
+    "runtime_images_matched": 3,
+    "teardown": "torn_down",
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "preserved_attempts": [
+      "An initial exact-state comparison included browser-session bootstrap and failed; the sole difference was the expected new authenticated browser session. Business-state equality was then asserted without discarding any other fields."
+    ],
+    "remaining": [
+      "Complete light-theme, physical touch, settings, notification delivery, permission and realtime parity",
+      "Broader AI/collaboration and full sample gates"
+    ],
+    "release_allowed": false,
+    "artifacts_sha256": {
+      "after-desktop-cancellations.json": "a122126887f096b30a7ae956f95a835596db56dc55dea7758b0737897c7ad222",
+      "after-reload.json": "a2296986d1fed011f915c08190f3a43429c7230c7f14648d05c52677d48eb03e",
+      "baseline-state.json": "185f0205b232bc49312a2c39373c43854c50b4faa81388a6a46e5c3fb77551e3",
+      "cleanup.json": "1f1b1ea355ca7de77119edc85291256cecf1b3da65427dc8979e7e00df9e7543",
+      "clock-1-after.json": "0529cbf13111afd333764f3cefae29485f5fbca431b69146005ae3a0dfa5d76a",
+      "clock-1-before.json": "004feaa776a6e6255642df2cce598abb30645d2bbf6cbb7f4559e51554c9f3eb",
+      "clock-3599-after.json": "62b1fa9d5a30c05d9bf0b05b14a022c817772f442b5bf44385b1f73fb9a4cbf3",
+      "clock-3599-before.json": "62b1fa9d5a30c05d9bf0b05b14a022c817772f442b5bf44385b1f73fb9a4cbf3",
+      "control.json": "f8e8a2de243b56c5b2912c5004718f733005e9a1f6ef2a3ddfa3a4f07e162f0c",
+      "gui-baseline-state.json": "185f0205b232bc49312a2c39373c43854c50b4faa81388a6a46e5c3fb77551e3",
+      "gui-final-state.json": "a2296986d1fed011f915c08190f3a43429c7230c7f14648d05c52677d48eb03e",
+      "gui-workspaces.json": "d512c701d431b6c7d1dee55e7d7228085bf438807eedc2a0c05a6cf7bf463920",
+      "http-trace.json": "8a770025aad8fdac9013190a6d6d31ed8fcf4ca0478af31e3048d372d23f22ec",
+      "image-comparison.json": "6d50b233f2a96c45c96644848378537fc682f35d743ffc3c717ea75e61bdb5f8",
+      "native-checks.json": "f4c90f0407884b93a363971184a742ca082611ffbc6720b858e970e878a5bde5",
+      "native-final-state.json": "95107321a995c61c2908c73201b09b6bea8529a51e89821466d2e87f36271d4f",
+      "operator-fixture-config.json": "8ec195f33869fbff8924233628a477a634ee7977636c3eea0b6c092da65e14a3",
+      "proxy-http-trace.json": "5480d24367f88426896498fad1d040eb32cce24aeef406352d71b7b3a79c80de",
+      "publication-catalog.json": "e41264e3ee4245908cda9723ff8ab5817f7898cc1a3f8b92aaaecd12112566a9",
+      "readonly-inbox-response.json": "7fafa68fd03b52c8b18b9bd6393ab9e9981c684a69bc3d2853ceca348db894f7",
+      "retention-state.json": "103f72127d6a3975e1e57586332b047b89d89c8c82ee6ead46f0e10e7544a4e3",
+      "runtime-image-evidence.json": "d69aeb829368c7f4cef885207232bdefcbcc39cffd2ffc801ce78481ac0bc215",
+      "scenario.json": "8d72dd5fde48e0a3915eb4fea5d92e86fbd92c9240315636a580c108fd770bfe",
+      "worker-logs.json": "128a55527bda6107834d1ef96fc5e51867cc2d58cbb0d96e2bf920e4103ea0fe"
+    }
+  },
+  "deployment": {
+    "revision": "8d4355f257e18105284cc589feab88278ffc6125",
+    "runtime_workflow": 36223191418,
+    "twins_workflow": 36223191436,
+    "both": "success",
+    "published_images": {
+      "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:8d4355f257e18105284cc589feab88278ffc6125@sha256:b83fb8060f3a95bd45201d17c912cbe892024a8a34d4e653339fe545b9ecf9ed",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:8d4355f257e18105284cc589feab88278ffc6125@sha256:963a824502ffa53bfa3ec839051298672eec7e9ab21b8de00bc6b8b4240b7516",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:8d4355f257e18105284cc589feab88278ffc6125@sha256:1defdc38e4ef00210bbcfdcf199c047d2830a3a88c458bf11e7c43af5f72b492"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00283-4ks",
+      "arga-api": "arga-api-00653-dmb"
+    },
+    "log_sha256s": {
+      "lab-final-linear-inbox-accessibility-8d4355f2-twins-deploy.log": "966038baccf6aa543e02b6eb5efe2aa65d9a8fca132ac1ef74f2b51cd5645861",
+      "lab-final-linear-inbox-accessibility-8d4355f2-runtime-deploy.log": "f0dfb663d99bf06ddc8bc411d4e023649c489c0b05853cfee3d1a9778865fc20"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately.",
+    "cloud_run": {
+      "revision": "8d4355f257e18105284cc589feab88278ffc6125",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00283-4ks",
+          "observed_at": "2026-09-26T06:16:13.309459+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:8d4355f257e18105284cc589feab88278ffc6125",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00283-4ks"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00283-4ks",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+            "sha256:963a824502ffa53bfa3ec839051298672eec7e9ab21b8de00bc6b8b4240b7516"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00653-dmb",
+          "observed_at": "2026-09-26T06:21:00.854777+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:8d4355f257e18105284cc589feab88278ffc6125",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:72b4050a240e4566f9e0928597dca4026fe8bb57cb6f90eecc4bd5de8fa38534",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:72b4050a240e4566f9e0928597dca4026fe8bb57cb6f90eecc4bd5de8fa38534"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00653-dmb"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00653-dmb",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:1defdc38e4ef00210bbcfdcf199c047d2830a3a88c458bf11e7c43af5f72b492",
+            "sha256:72b4050a240e4566f9e0928597dca4026fe8bb57cb6f90eecc4bd5de8fa38534"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "f0dfb663d99bf06ddc8bc411d4e023649c489c0b05853cfee3d1a9778865fc20",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  }
 }
