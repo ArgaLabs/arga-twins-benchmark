@@ -1,0 +1,77 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "github"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1184",
+  "source_head": "bffe2597637f2f20d6935a1161047ead3b1bb081",
+  "status": "local_regressions_and_browser_pass_ci_running",
+  "release_allowed": false,
+  "scope": [
+    "Author-only pending review and attached comment visibility across REST/GraphQL/browser",
+    "Direct and list reads, repository-wide comment lists, replies and reactions",
+    "Author-only submit/discard and GraphQL review-thread guards",
+    "Inline browser actor attribution and private-edit webhook suppression"
+  ],
+  "tests": {
+    "github_regressions_passed": 429,
+    "privacy_focused_passed": 45,
+    "compatibility_passed": 107,
+    "compatibility_skipped": 2,
+    "make_fix": "pass",
+    "detector_findings": 0
+  },
+  "browser": {
+    "status": "pass",
+    "browser": "Chrome CUA",
+    "viewports": [
+      "1465x806",
+      "390x844"
+    ],
+    "checks": [
+      "Owner cannot see either pending review or comments",
+      "Reviewer submits first draft; owner sees only submitted review/comments after reload",
+      "Reviewer discards second draft and associated comment",
+      "390px creates another pending review; owner cannot see it; reviewer discards it",
+      "Exact full native state only changes intended review publication, draft deletion and one mobile draft ID counter"
+    ],
+    "screenshots_retained": false,
+    "full_visual_or_touch_parity": false
+  },
+  "review": {
+    "disposition": "ship",
+    "scope": "One GraphQL dispatch/authorization mismatch independently scored resolved; source/behavior only",
+    "documentation": "README checked against incumbent UI; no style/layout changes"
+  },
+  "official_reference": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request",
+  "source_files": {
+    "twins/github/README.md": "7ca709182ef30d8872cfe2302beba4a79990f0e0cbc588309bf1715a1e2e3533",
+    "twins/github/frontend.py": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+    "twins/github/handlers/graphql.py": "9fdbaae426d18413f373239561a12700430cfcdbf3a94bbe3d0c266a28935228",
+    "twins/github/handlers/pulls.py": "dee8c53c66e2484bd2dd0652a1534f9bdec755cd9f1d9af13b1acb35bc160ee1",
+    "twins/github/handlers/reactions.py": "4b385c9756d0feed3a96365f6dd41af3d37c406bc857687237fedcede4af99cf",
+    "twins/github/handlers/reviews.py": "30cae26b8e677a518dfadef2e9531a4c4a7772b8a083b22ba36c1fee30a32a0b",
+    "twins/github/operations_ui.py": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+    "twins/github/review_access.py": "a8381cfc032d9717e8e4f96ba6a4df100403fb39cd3d3513540e411c907e4561",
+    "twins/tests/test_github_review_privacy.py": "5541053537728a6d94085509e1dfb2e49a60a9c9a98fda9c16e80f12254beb64"
+  },
+  "artifacts_sha256": {
+    "baseline.json": "67bcc7d29fb459faf7285a16bc1ea3921386c440a23a54c1ff19117bdb75f822",
+    "checkpoint.json": "c44ce7a5464f3c681fb7279fef9a3eb79fe55d1dc16fd6137881b71729c128e6",
+    "final.json": "c44ce7a5464f3c681fb7279fef9a3eb79fe55d1dc16fd6137881b71729c128e6",
+    "verification.json": "282ee3715fc99caca7b15765920899cf46fc14d2715db93ba769c56aa9e9031e",
+    "workspaces.json": "a0b488496c09be41b514bff675b8e94e43503c96c206362a669c9494aadd504c",
+    "lab-github-review-privacy-focused2.log": "5334263f5e5d891a5928818554776945a76ff76fc5f0df2672a391ad10bfc8e9",
+    "lab-github-review-privacy-regressions2.log": "b30a058b0796d6175dee21e996d97644929eeea06e7d36d526a5693f5c72da2b",
+    "lab-github-review-privacy-compat.log": "04f32718de24c399b149625bcf366c288676a5f3a59d1510937bd91bb95591e6",
+    "lab-github-review-privacy-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "limits": [
+    "Exact-head CI, merge, both deployments and fresh hosted verification pending",
+    "No live provider draft sent; official reference used for pending-comment privacy semantics",
+    "General GraphQL parsing, repository/admin permissions, review-state aliases and GraphQL submission webhook parity remain open",
+    "No exhaustive visual/mobile/physical-touch or eight-provider/sample release gate closure"
+  ],
+  "screenshots_retained": false
+}

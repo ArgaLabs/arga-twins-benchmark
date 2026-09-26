@@ -18,6 +18,10 @@
         {
           "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
           "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-privacy-2026-09-26.json",
+          "sha256": "489256dae29aae482eae98fc433cc8875cd527bae9e64c452d4df1e8419e8fb5"
         }
       ]
     },
@@ -118,7 +122,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-charts-2026-09-26.json",
-          "sha256": "e78b5b3ba67833db85b8c7ef02944d387a5ef57fcea1106936ea7ad68c8ceff6"
+          "sha256": "11832b63ca05806a7e988c3dd43d01adb95bd14d77139546b85a7ee485037fa8"
         }
       ]
     },
@@ -336,7 +340,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "b73e78e02786213693dc71907593d4d6801d4b728bb31be2f77322c6e517f390"
+          "sha256": "8fabe776496893972c16b96f6af674e80cd58ae39f83ea47c37f422c4f3c66e4"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -364,5 +368,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "7e5fcb553b41c68a21ec71fa5fc321210b7e3be5515fbe86d57c0856685e1d4a"
+  "sample_tree_sha256": "0aa41ca2ffe3daf604dfcaeb460805859d899b1998063ee8c22a3536e5c08f44"
 }
