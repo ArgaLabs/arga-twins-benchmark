@@ -167,7 +167,7 @@
         },
         {
           "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
-          "sha256": "cc8db5f312437a815996310ccae3767a2ee7507d175591ab6e84975ec2d0c55b"
+          "sha256": "08c723bbd7c17f1bd6554dad193612f088962bbba6838d5051723ed6dca2611c"
         }
       ]
     },
@@ -320,5 +320,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "ffa8805c050776168a2f116069e68335971e0afd56a78016bc540863ae6b41df"
+  "sample_tree_sha256": "6df38680eb71bcebc0c520e589229bff216017694655cb85e4d0c196e4646812"
 }

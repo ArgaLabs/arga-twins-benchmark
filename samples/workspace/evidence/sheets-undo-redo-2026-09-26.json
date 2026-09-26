@@ -1,0 +1,221 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1179",
+  "source_head": "a4f914ffdd6bcb44a897ef7d3bc543fb94ff7ac3",
+  "status": "local_native_desktop_390px_pass_ci_deployment_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Native principal/page-scoped Undo and Redo",
+    "Toolbar, Edit menu and grid keyboard controls",
+    "Repeat supported value/format edits with validation and permission checks",
+    "Native commit ordering, structural conflicts and reset isolation"
+  ],
+  "tests": {
+    "workspace_passed": 1310,
+    "focused_undo_passed": 26,
+    "make_fix": "pass",
+    "detector_findings": 0
+  },
+  "review": {
+    "final": "ship: all five listed source/native findings independently resolved",
+    "scope": "No independent whole-surface visual approval",
+    "documentation": "README checked by scoped documenter"
+  },
+  "reference": {
+    "observed_on": "2026-09-26",
+    "provider": "google_sheets",
+    "fixture": "Arga fidelity 2026-09-26 undo 01",
+    "reference_url": "https://docs.google.com/spreadsheets/d/1Q_c6dCjiWE78PX1c5uFcAMWnotVO_tgAi3UWdhl8LqU/edit",
+    "reference_mode": "Private generated fixture; two same-account browser sessions; CUA controls and authenticated CSV exports only",
+    "checks": {
+      "paste_redo": {
+        "values": [
+          [
+            "10",
+            "20"
+          ]
+        ],
+        "sha256": "f79122f7692deb4dc22efdf6ca8e027bc460085b562c8d9cb1d84a04a3ea0839"
+      },
+      "undo_after_reload_noop": {
+        "values": [
+          [
+            "10",
+            "20"
+          ]
+        ],
+        "sha256": "f79122f7692deb4dc22efdf6ca8e027bc460085b562c8d9cb1d84a04a3ea0839"
+      },
+      "own_undo_preserves_other_session": {
+        "values": [
+          [
+            "10",
+            "20"
+          ],
+          [
+            "77",
+            ""
+          ]
+        ],
+        "sha256": "49d312b52d1a13c6977a299f8ec147e7e026b439f12bbfb986e86b98d1ce19b2"
+      },
+      "own_redo_recomputes_formula": {
+        "values": [
+          [
+            "15",
+            "30"
+          ],
+          [
+            "77",
+            ""
+          ]
+        ],
+        "sha256": "32d2171328810ac83b6ff98275edd81179a6e8aced281a901fc58eb1f289f74c"
+      },
+      "new_edit_then_redo_repeats_at_selection": {
+        "values": [
+          [
+            "10",
+            "20"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "9d6f86e998ca7e703225b00145dcaed2c1d62b0e68c45b02341a26b11e1f24b3"
+      },
+      "toolbar_redo_repeats_at_selection": {
+        "values": [
+          [
+            "10",
+            "20"
+          ],
+          [
+            "77",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ],
+          [
+            "99",
+            ""
+          ]
+        ],
+        "sha256": "ecccc397f9fa8714a823ffd485195de37bcdc930ed210d17c76d3fa6c76bc1b9"
+      }
+    },
+    "formula_reference": "B1 remains =A1*2 after paste redo, confirmed in formula bar",
+    "cleanup": "File moved to recoverable trash; both generated tabs closed",
+    "limitations": [
+      "Desktop only; no mobile/touch comparison yet",
+      "Different-principal simultaneous edits and overlapping changes remain unaudited",
+      "gws CLI token returned invalid_rapt; CSV export served as native value verification",
+      "Twin Undo/Redo implementation and parity pending"
+    ],
+    "screenshots_retained": false
+  },
+  "local_browser": {
+    "status": "pass",
+    "observed_on": "2026-09-26",
+    "browser": "Chrome CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "Undo/Redo toolbar, Edit menu and grid keyboard controls",
+      "Formula recalculation after undo/redo",
+      "Unrelated second-editor write preserved",
+      "Repeat at new selection and undo repeated edit",
+      "Repeat bold preserves destination italic; undo removes only the repeated bold",
+      "Strict validation rejection is visible and preserves the entire native snapshot exactly",
+      "Reload retains saved values and clears page history controls",
+      "Unrelated file preserved"
+    ],
+    "reference": "/tmp/lab-sheets-undo-reference/verification.json",
+    "snapshot_comparison_note": "The initial unrelated-file comparison included three generated HTTP links with different summary base URLs. Only those three expected origin strings were normalized; every other field is exactly equal. Rejected-repeat comparison requires exact equality without normalization.",
+    "artifact_sha256": {
+      "before-rejected-repeat.json": "e3df86fb2f50a089a4ccbcd7d1e846044e0fd2516df5508eb6ed8b4e92f4ad34",
+      "baseline.json": "381a997c8dff9ce3552c75e0dd739921a47aa13eb04f87bb67a24e7e956dfd94",
+      "after-rejected-repeat.json": "e3df86fb2f50a089a4ccbcd7d1e846044e0fd2516df5508eb6ed8b4e92f4ad34",
+      "final.json": "797ed62e21ec8cafa69077a6856be11441323c38174af21222c964582c946270"
+    },
+    "screenshots_retained": false,
+    "limitations": [
+      "Local twin checks; hosted verification pending",
+      "No physical touch or exhaustive mobile/reference parity",
+      "Independent review covered the five listed source/native findings, not whole-surface visual approval"
+    ]
+  },
+  "source_files": {
+    "twins/google_drive/app.py": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+    "twins/google_drive/runtime.py": "868d482b99dbb921006632a43eacf2d4351877108ab051e12fc770b8280841df",
+    "twins/google_drive/sheet_history.py": "bb7b3ae8ec7285d4e6d8dd114eb2b2f97f06fa809903e86dabcda9b3ac7523b9",
+    "twins/google_drive/store.py": "fea5d0481ebed785ce9763bc996f960bd3ee789d619b5e6668923d250a35787e",
+    "twins/google_drive/workspace_editing.py": "9617b60ea2babe517091aeeffd33ea0e38a72277ca47b681dd1a6016908b0032",
+    "twins/google_sheets/README.md": "852eb7ab96688fd536a2acc84ab3154c1eae6e92d97c742b4d0dc661b20569ba",
+    "twins/google_sheets/clipboard_ui.py": "4593e44e919647f89d2e93e45c1012adf0efc79b7b6f4dd52d07606baa2e6d1a",
+    "twins/google_sheets/grid_format_ui.py": "3c937c76cdfba2612ef37aac2ae913842ac33afca124b67457bf3e3e05297916",
+    "twins/google_sheets/history_ui.py": "54911a8f369392028c8130088fe8c388832a4e11458d64c63ff14ec5cdd603a5",
+    "twins/google_sheets/protection_warning_ui.py": "4ba00c13d77efd62e3e7fdcb96bde13288be6d4a63d2833f451a79e87389a66b",
+    "twins/google_sheets/ui.py": "fa1fb7d6243b7e726d34b85c73b40a1fd7f8fdf2ea4fea6aaf73ad8ec2320dd1",
+    "twins/tests/test_google_sheets_filter_view_sessions_ui.py": "cfc80f41633b288e1525bbf0a5035e63c278a5d52e26ce44049fbf6e38c284b3",
+    "twins/tests/test_google_sheets_filter_view_ui.py": "2b0a68544c32ebbf823a364ca8a286a0e29784355864ebd01f581557cd64ed8c",
+    "twins/tests/test_google_sheets_grid_format_ui.py": "c4ded9a61e96d1e73c2cc243da4b10f28b8e68929b29e08db09f07a520f7cae3",
+    "twins/tests/test_google_sheets_protection_warnings_ui.py": "b4026affc067d1c79364dc396ba403dab9387700b2371f2f33c62f1fb9670477",
+    "twins/tests/test_google_sheets_tabs.py": "f52b7822381d15a5894b4601ff3b35c09d219b0e594e104a775e77c263b6572b",
+    "twins/tests/test_google_sheets_undo.py": "b6ac3263ae3b8a96d59b5f43ce4a8e91b40e2aea6572e19ced9395c60d4f96f8"
+  },
+  "artifacts": {
+    "lab-sheets-undo-workspace-regressions-final.log": {
+      "sha256": "ebcdee8d35434acdc04b026a9b8b92b87f4ce44ac4736d3e448a18bbc08403b4",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-review-fixes.log": {
+      "sha256": "8e787cd37c872f702b1d2be7392fbf8098eb90163fd423b5ec0ee82d2b8f2f01",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-final2-makefix.log": {
+      "sha256": "29f738f57f4577fe93bc891c3925019d9349954ab392d370c618d5c29135a201",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-design-detect.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-browser-confirmation/gui-checks.json": {
+      "sha256": "961d8adaae376f1a8bc6108279c284ab9e9c26cd31cd18af4b484ad7ec8eb5b8",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-sheets-undo-reference/verification.json": {
+      "sha256": "3f1a63f0221bc6c39f12fc3ed3768e932d339b69f184a106f25e27e9af1a8042",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "CI, production and fresh hosted checks pending",
+    "Real reference comparison is bounded desktop; no exhaustive mobile or physical-touch parity",
+    "Structural repeat unsupported; complete formula/reference/clipboard parity remains open",
+    "Full eight-provider audit and WKS-03 release gate remain open"
+  ],
+  "screenshots_retained": false
+}
