@@ -1,0 +1,45 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1193",
+  "source_head": "a35c3a21a6a5a36a00c35248498cdba47110bab9",
+  "status": "local_native_http_pass_ci_pending",
+  "release_allowed": false,
+  "tests": {
+    "integrated_passed": 527,
+    "focused_lifecycle_cases": 28,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "checks": [
+    "Owner/writer/reader initial sync isolation and per-channel increasing message numbers",
+    "Requested TTL/expiration, stable resource identities and atomic malformed lifetime/duplicate rejection",
+    "Register/replay current resource permission for events, ACL, calendarList and settings",
+    "Stopped/revoked/paused/expired replay rejection without state mutation or dispatch",
+    "Actual local HTTP initial sync/change/replay, empty bodies and unchanged original Google replay headers"
+  ],
+  "source_files": {
+    "twins/google_calendar/app.py": "a5f7c3b6265b074fa19bd3d6e499d750c4dba649a7e75a11f10ec1e1d96ccd32",
+    "twins/google_calendar/store.py": "745a3e15da42e3c1ba5c604dd3aea11dcbd58aeb3f732c91065df36ff3e00e39",
+    "twins/google_calendar/README.md": "f2bf661fd72beebba275c590862812d2b198a5633726f977cf5e0d629380fc7f",
+    "twins/tests/test_google_calendar_watch_lifecycle.py": "a312784606a1ad5cda6b633cb0b5cd7845e0c7d8d32d8a3621084f850b14b909",
+    "twins/tests/test_google_calendar_personal_sync.py": "f0c15883b5e277b4d3c57a8413e6a43be7efed7b730491bd6964c5e42ecd7fe0",
+    "twins/tests/test_google_calendar_twin_app.py": "5e822f2e98448849968be9b064b9022b678a33c33f175e7990ba0bb191d3034a"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-watch-lifecycle-red.log": "9dda1b7d94ae90d4301bd321a68641adfd1831e3601db3e7c5327c5cad7f56f2",
+    "lab-calendar-watch-lifecycle-focused-v2.log": "2bed315d49cdc22ec4c64fb3c7dcec51f0158b20884c1a9be538858b1b5fc57c",
+    "lab-calendar-watch-lifecycle-make-fix.log": "0bb6e532feaed6b5d174781e5505bd2ff71ddb576ed72b218c05bd74330a023e",
+    "lab-calendar-watch-lifecycle-make-fix-final.log": "a4302caa2bfe148f2f514f1aacd487b8184b62a77f413c35b016cf2a61d3a017",
+    "lab-calendar-watch-lifecycle-final.log": "31f148f02d6f76aa0589667428967a190c8f87b83b78ceea93189cfe219aa4d8",
+    "lab-calendar-watch-lifecycle-rebased-final.log": "e7357efaf8693443f0f051a056d3104f7e5f66a134a7a9cabcd17d82c626438b"
+  },
+  "limits": [
+    "Exact-head CI, production and fresh hosted verification pending",
+    "Production successful receiver, queued-delivery revocation, complete channel payload validation, concurrent pagination, timed reminders and exhaustive frontend audit remain open"
+  ],
+  "screenshots_retained": false
+}

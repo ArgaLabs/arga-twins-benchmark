@@ -3914,20 +3914,20 @@
       "files": [
         {
           "path": "twins/google_calendar/app.py",
-          "sha256": "40697fc542b0e342a21242598cfd7f2160b1b6116a0c8ae6b2c643aa8e03a211",
+          "sha256": "e927f97d71ab6264607efc80acdce7b8ca22580babb31bda52c5432e6663a7dc",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 662
+              "line": 689
             }
           ],
           "markup_expressions": []
         },
         {
           "path": "twins/google_calendar/ui.py",
-          "sha256": "d7808df7abaac70c0dc7d5e4ee0a63850f13c2119b8b6c0e50ba87c4367e5eff",
+          "sha256": "375cbe8f6ed3fdb42ed8975bcd136cbc44a9e4b9c608df3cb3d818505176f189",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4130,7 +4130,7 @@
               ]
             },
             {
-              "line": 2073,
+              "line": 2221,
               "dynamic": true,
               "controls": [
                 {
