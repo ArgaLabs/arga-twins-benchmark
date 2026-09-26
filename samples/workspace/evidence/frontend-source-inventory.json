@@ -5640,7 +5640,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 181,
+      "markup_control_occurrences": 210,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -6010,7 +6010,7 @@
         },
         {
           "path": "twins/google_sheets/filters_ui.py",
-          "sha256": "f3c55c9e83ed51cdc10eceeedcfb5e96940f82dd2d282c7e1ce4bb5541111a72",
+          "sha256": "79a82a4c0a78457a34d601a9228b8f4ec8c067963cf43b307cf0c3dfee82dd85",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6280,7 +6280,7 @@
         },
         {
           "path": "twins/google_sheets/grid_format_ui.py",
-          "sha256": "7c35bfaf750dd2a387d722451fd5596816ac40a7247ce78e8241558a2552d7f8",
+          "sha256": "547a0b02b7537515a0a7481fb2939def1e8892816b571baf8123608a9262907e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6611,7 +6611,7 @@
         },
         {
           "path": "twins/google_sheets/named_ranges_ui.py",
-          "sha256": "f477b4d7c3e05bd4f6d982125838d20927a5c6e6076246de24ea0ebbcafcd257",
+          "sha256": "7f9a7ab616eb1448aef5ad6d9f680b9df221ea37a18cfd01a8ef4d94fe181fd4",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6721,6 +6721,250 @@
           ]
         },
         {
+          "path": "twins/google_sheets/protection_ui.py",
+          "sha256": "8debea491098bb58b0f903bed5adfdc17db4cc5d5f3167aab46c13d898cd89c5",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 42,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-close",
+                    "aria-label": "Close protected ranges"
+                  },
+                  "text": "\u00d7"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-refresh",
+                    "hidden": null
+                  },
+                  "text": "Reload protected ranges"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-add",
+                    "hidden": null
+                  },
+                  "text": "+ Add a sheet or range"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "protection-form",
+                    "hidden": null
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-description"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-range-tab",
+                    "type": "button",
+                    "role": "tab",
+                    "aria-controls": "protection-range-fields"
+                  },
+                  "text": "Range"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-sheet-tab",
+                    "type": "button",
+                    "role": "tab",
+                    "aria-controls": "protection-sheet-fields"
+                  },
+                  "text": "Sheet"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-address"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "id": "protection-sheet"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-exceptions-enabled",
+                    "type": "checkbox"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-add-exception",
+                    "type": "button"
+                  },
+                  "text": "Add another range"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-remove",
+                    "type": "button",
+                    "hidden": null
+                  },
+                  "text": "Remove protection"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-cancel",
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-permissions-open",
+                    "type": "submit"
+                  },
+                  "text": "Set permissions"
+                },
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "protection-permissions",
+                    "aria-labelledby": "protection-permissions-title"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-warning",
+                    "name": "protection-policy",
+                    "type": "radio"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-restrict",
+                    "name": "protection-policy",
+                    "type": "radio"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "id": "protection-policy"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "self"
+                  },
+                  "text": "Only you"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "custom"
+                  },
+                  "text": "Custom"
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "id": "protection-editors"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-domain",
+                    "type": "checkbox"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-permissions-cancel"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-save"
+                  },
+                  "text": "Done"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_sheets/protection_warning_ui.py",
+          "sha256": "f85a0e884afb06eb2c7c17dcda1329d60125f763baddad0dcde59a88b4ed29d2",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 3,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "protection-warning-dialog",
+                    "aria-labelledby": "protection-warning-title"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-warning-close",
+                    "type": "button",
+                    "aria-label": "Close"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "protection-warning-suppress",
+                    "type": "checkbox"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-warning-cancel",
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "protection-warning-accept",
+                    "type": "button"
+                  },
+                  "text": "OK"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_sheets/sheet_tabs_ui.py",
           "sha256": "ed0f570f013435dd9f5701399d7cdb286a464abf558f80391acdcf901237e002",
           "frontend_route_candidates": [],
@@ -6786,11 +7030,11 @@
         },
         {
           "path": "twins/google_sheets/ui.py",
-          "sha256": "6c88bd2ece4f68c0619ffd0836cf24416f3e22032b01827cdb68bf0e187cbd76",
+          "sha256": "42549e9862cefbc8d8d1033cbc3aa2f5172d6834f92cdc12462980733fdd8123",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 298,
+              "line": 300,
               "dynamic": false,
               "controls": [
                 {
@@ -6998,7 +7242,7 @@
         },
         {
           "path": "twins/google_sheets/validation_ui.py",
-          "sha256": "64518d3b543ceb60b2a84609ceb7afa02a5c86c94c3d8559a5c453233125efc4",
+          "sha256": "83ff7cf7bf6bf2740ad4d0c5f32d43f9e9eb70d079bb4be6ccf843ae6ddfd465",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -7899,7 +8143,7 @@
         },
         {
           "path": "twins/notion/database_ui.py",
-          "sha256": "fb2481a22350700f52a0c3971a46867b60432a54bd7e3db9a26d91532eae7cef",
+          "sha256": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
           "frontend_route_candidates": [
             {
               "method": "GET",
@@ -8295,7 +8539,7 @@
         },
         {
           "path": "twins/notion/groups_ui.py",
-          "sha256": "b9b2868e29267fb397c3c4e9b29004b58e478b3ffb5e34cf044efb6368eee714",
+          "sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
           "frontend_route_candidates": [
             {
               "method": "GET",
@@ -8313,31 +8557,31 @@
               "method": "POST",
               "path": "/ui/groups/{group_id}",
               "handler": "rename",
-              "line": 182
+              "line": 186
             },
             {
               "method": "POST",
               "path": "/ui/groups/{group_id}/delete",
               "handler": "delete",
-              "line": 186
+              "line": 190
             },
             {
               "method": "POST",
               "path": "/ui/groups/{group_id}/members",
               "handler": "add_member",
-              "line": 190
+              "line": 194
             },
             {
               "method": "POST",
               "path": "/ui/groups/{group_id}/members/{user_id}",
               "handler": "role",
-              "line": 194
+              "line": 198
             },
             {
               "method": "POST",
               "path": "/ui/groups/{group_id}/members/{user_id}/remove",
               "handler": "remove_member",
-              "line": 198
+              "line": 202
             }
           ],
           "markup_expressions": [
@@ -8807,16 +9051,16 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 27,
-      "markup_control_occurrences": 133,
+      "route_candidate_count": 29,
+      "markup_control_occurrences": 171,
       "files": [
         {
           "path": "twins/linear/comment_ui.py",
-          "sha256": "f2a2978dfc36752385701dfd5e3e9fa382dce406aa8b3ef305c086a914fc35d3",
+          "sha256": "aecf6ce0c1e2ddb5429c4661fb9af9e5a77fe8c97594c5ac8e8aefec3427ffc7",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 61,
+              "line": 64,
               "dynamic": true,
               "controls": [
                 {
@@ -8843,7 +9087,7 @@
               ]
             },
             {
-              "line": 81,
+              "line": 84,
               "dynamic": true,
               "controls": [
                 {
@@ -8877,7 +9121,7 @@
               ]
             },
             {
-              "line": 118,
+              "line": 121,
               "dynamic": true,
               "controls": [
                 {
@@ -8895,7 +9139,7 @@
               ]
             },
             {
-              "line": 92,
+              "line": 95,
               "dynamic": false,
               "controls": [
                 {
@@ -8908,7 +9152,7 @@
               ]
             },
             {
-              "line": 95,
+              "line": 98,
               "dynamic": true,
               "controls": [
                 {
@@ -8934,7 +9178,7 @@
               ]
             },
             {
-              "line": 124,
+              "line": 127,
               "dynamic": true,
               "controls": [
                 {
@@ -8947,7 +9191,7 @@
               ]
             },
             {
-              "line": 63,
+              "line": 66,
               "dynamic": true,
               "controls": [
                 {
@@ -8961,7 +9205,7 @@
               ]
             },
             {
-              "line": 62,
+              "line": 65,
               "dynamic": true,
               "controls": [
                 {
@@ -8978,120 +9222,120 @@
         },
         {
           "path": "twins/linear/frontend.py",
-          "sha256": "b8db3db2d27280f8133297d0c80a8220f23b03b8ed25b8f969ccd12fca94af5b",
+          "sha256": "a26f323cbe404f4bddafbced67008b3f5284fea50b708cfdeb3bae78bf3ae835",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 94
+              "line": 99
             },
             {
               "method": "GET",
               "path": "/new",
               "handler": "new_issue",
-              "line": 138
+              "line": 143
             },
             {
               "method": "POST",
               "path": "/ui/issues",
               "handler": "create_issue",
-              "line": 151
+              "line": 156
             },
             {
               "method": "GET",
               "path": "/issue/{identifier}",
               "handler": "detail",
-              "line": 163
+              "line": 168
             },
             {
               "method": "GET",
               "path": "/profile/{user_id}",
               "handler": "profile",
-              "line": 193
+              "line": 198
             },
             {
               "method": "GET",
               "path": "/document/{document_id}",
               "handler": "document_detail",
-              "line": 210
+              "line": 215
             },
             {
               "method": "GET",
               "path": "/{workspace}/project/{reference}",
               "handler": "native_project",
-              "line": 232
+              "line": 237
             },
             {
               "method": "GET",
               "path": "/{workspace}/document/{reference}",
               "handler": "native_document",
-              "line": 240
+              "line": 245
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}",
               "handler": "native_issue",
-              "line": 249
+              "line": 254
             },
             {
               "method": "GET",
               "path": "/{workspace}/issue/{identifier}/{title}",
               "handler": "native_issue",
-              "line": 249
+              "line": 254
             },
             {
               "method": "GET",
               "path": "/users/{user_id}",
               "handler": "native_user",
-              "line": 254
+              "line": 259
             },
             {
               "method": "GET",
               "path": "/{workspace}/profiles/{name}",
               "handler": "native_profile",
-              "line": 258
+              "line": 263
             },
             {
               "method": "POST",
               "path": "/ui/documents/{document_id}",
               "handler": "update_document",
-              "line": 275
+              "line": 280
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}",
               "handler": "update",
-              "line": 295
+              "line": 300
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/comments",
               "handler": "comment",
-              "line": 324
+              "line": 329
             },
             {
               "method": "POST",
               "path": "/ui/comments/{comment_id}",
               "handler": "edit_comment",
-              "line": 344
+              "line": 349
             },
             {
               "method": "POST",
               "path": "/ui/comments/{comment_id}/{action}",
               "handler": "resolve_comment",
-              "line": 366
+              "line": 371
             },
             {
               "method": "POST",
               "path": "/ui/issues/{issue_id}/{action}",
               "handler": "archive",
-              "line": 383
+              "line": 388
             }
           ],
           "markup_expressions": [
             {
-              "line": 75,
+              "line": 76,
               "dynamic": true,
               "controls": [
                 {
@@ -9104,9 +9348,16 @@
               ]
             },
             {
-              "line": 61,
+              "line": 62,
               "dynamic": true,
               "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/inbox"
+                  },
+                  "text": "Inbox"
+                },
                 {
                   "tag": "a",
                   "attributes": {
@@ -9165,7 +9416,7 @@
               ]
             },
             {
-              "line": 176,
+              "line": 181,
               "dynamic": true,
               "controls": [
                 {
@@ -9240,7 +9491,7 @@
               ]
             },
             {
-              "line": 57,
+              "line": 58,
               "dynamic": true,
               "controls": [
                 {
@@ -9253,7 +9504,7 @@
               ]
             },
             {
-              "line": 58,
+              "line": 59,
               "dynamic": true,
               "controls": [
                 {
@@ -9266,7 +9517,7 @@
               ]
             },
             {
-              "line": 143,
+              "line": 148,
               "dynamic": true,
               "controls": [
                 {
@@ -9303,7 +9554,7 @@
               ]
             },
             {
-              "line": 219,
+              "line": 224,
               "dynamic": true,
               "controls": [
                 {
@@ -9336,7 +9587,7 @@
               ]
             },
             {
-              "line": 76,
+              "line": 77,
               "dynamic": true,
               "controls": [
                 {
@@ -9349,7 +9600,7 @@
               ]
             },
             {
-              "line": 117,
+              "line": 122,
               "dynamic": true,
               "controls": [
                 {
@@ -9362,7 +9613,7 @@
               ]
             },
             {
-              "line": 171,
+              "line": 176,
               "dynamic": true,
               "controls": [
                 {
@@ -9375,7 +9626,7 @@
               ]
             },
             {
-              "line": 199,
+              "line": 204,
               "dynamic": true,
               "controls": [
                 {
@@ -9388,7 +9639,7 @@
               ]
             },
             {
-              "line": 129,
+              "line": 134,
               "dynamic": true,
               "controls": [
                 {
@@ -9397,6 +9648,341 @@
                     "href": "/project/{dynamic}"
                   },
                   "text": "\u2190 Project overview"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/linear/inbox_ui.py",
+          "sha256": "695ca7da40c640fd7b86547cfba9262188046d1d3f1f3c3bdd1ee461500ef491",
+          "frontend_route_candidates": [
+            {
+              "method": "POST",
+              "path": "/ui/inbox/bulk",
+              "handler": "bulk_action",
+              "line": 284
+            },
+            {
+              "method": "POST",
+              "path": "/ui/inbox/{notification_id}/{action}",
+              "handler": "notification_action",
+              "line": 314
+            }
+          ],
+          "markup_expressions": [
+            {
+              "line": 221,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {
+                    "aria-label": "Display options"
+                  },
+                  "text": "Display"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "action": "/inbox"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "name": "ordering"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "newest"
+                  },
+                  "text": "Newest"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "oldest"
+                  },
+                  "text": "Oldest"
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "q",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "Apply"
+                }
+              ]
+            },
+            {
+              "line": 264,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "action": "/inbox"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "aria-label": "Filter notifications",
+                    "name": "q",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "inbox-confirm",
+                    "aria-labelledby": "inbox-confirm-title"
+                  }
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/bulk"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "action"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "Delete notifications"
+                }
+              ]
+            },
+            {
+              "line": 205,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {
+                    "aria-label": "Notification actions"
+                  },
+                  "text": "\u2022\u2022\u2022"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/bulk"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "name": "action",
+                    "value": "read"
+                  },
+                  "text": "Mark all as read"
+                }
+              ]
+            },
+            {
+              "line": 260,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/inbox"
+                  },
+                  "text": "\u2190 Inbox"
+                },
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/issue/{dynamic}"
+                  },
+                  "text": "{dynamic} \u00b7 Open issue"
+                }
+              ]
+            },
+            {
+              "line": 240,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/{dynamic}/toggle-read"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Snooze"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/{dynamic}/snooze"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "datetime-local",
+                    "name": "custom"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "name": "when",
+                    "value": "custom"
+                  },
+                  "text": "Snooze notification"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/{dynamic}/delete"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "Delete notification"
+                }
+              ]
+            },
+            {
+              "line": 197,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/{dynamic}/open"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "view",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 201,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/inbox?{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 223,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "name": "{dynamic}",
+                    "value": "true"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 208,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 253,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "/ui/inbox/{dynamic}/unsnooze"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {},
+                  "text": "Unsnooze"
+                }
+              ]
+            },
+            {
+              "line": 243,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "name": "when",
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic} {dynamic}"
                 }
               ]
             }
@@ -9424,18 +10010,18 @@
         },
         {
           "path": "twins/linear/oauth.py",
-          "sha256": "01b8fc6c06f1dd0bc4a766ee4a9f1b7ffd705699d0af74a3b8b1fbf35629035b",
+          "sha256": "6919055ac31714555607b99c24f7edef1a4f39200fd4fea2141736537bd7a375",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/oauth/authorize",
               "handler": "authorize_page",
-              "line": 65
+              "line": 97
             }
           ],
           "markup_expressions": [
             {
-              "line": 84,
+              "line": 116,
               "dynamic": true,
               "controls": [
                 {
@@ -9508,7 +10094,7 @@
               ]
             },
             {
-              "line": 80,
+              "line": 112,
               "dynamic": true,
               "controls": [
                 {
@@ -9524,60 +10110,60 @@
         },
         {
           "path": "twins/linear/project_ui.py",
-          "sha256": "cfa728ed581024b149702d98436e6f642511308a28861fd113b4ee253122b9a6",
+          "sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}",
               "handler": "save",
-              "line": 187
+              "line": 188
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/documents",
               "handler": "create_document",
-              "line": 215
+              "line": 216
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/milestones",
               "handler": "save_milestone",
-              "line": 230
+              "line": 231
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/milestones/{milestone_id}",
               "handler": "save_milestone",
-              "line": 230
+              "line": 231
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/milestones/{milestone_id}/{action}",
               "handler": "milestone_action",
-              "line": 261
+              "line": 262
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/updates",
               "handler": "save_update",
-              "line": 293
+              "line": 294
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/updates/{update_id}",
               "handler": "save_update",
-              "line": 293
+              "line": 294
             },
             {
               "method": "POST",
               "path": "/ui/projects/{project_id}/updates/{update_id}/delete",
               "handler": "delete_update",
-              "line": 319
+              "line": 320
             }
           ],
           "markup_expressions": [
             {
-              "line": 29,
+              "line": 30,
               "dynamic": true,
               "controls": [
                 {
@@ -9591,7 +10177,7 @@
               ]
             },
             {
-              "line": 64,
+              "line": 65,
               "dynamic": true,
               "controls": [
                 {
@@ -9603,7 +10189,7 @@
               ]
             },
             {
-              "line": 168,
+              "line": 169,
               "dynamic": true,
               "controls": [
                 {
@@ -9640,7 +10226,7 @@
               ]
             },
             {
-              "line": 169,
+              "line": 170,
               "dynamic": true,
               "controls": [
                 {
@@ -9673,7 +10259,7 @@
               ]
             },
             {
-              "line": 174,
+              "line": 175,
               "dynamic": true,
               "controls": [
                 {
@@ -9702,7 +10288,7 @@
               ]
             },
             {
-              "line": 183,
+              "line": 184,
               "dynamic": true,
               "controls": [
                 {
@@ -9738,7 +10324,7 @@
               ]
             },
             {
-              "line": 177,
+              "line": 178,
               "dynamic": true,
               "controls": [
                 {
@@ -9776,7 +10362,7 @@
               ]
             },
             {
-              "line": 140,
+              "line": 141,
               "dynamic": true,
               "controls": [
                 {
@@ -9794,7 +10380,7 @@
               ]
             },
             {
-              "line": 181,
+              "line": 182,
               "dynamic": true,
               "controls": [
                 {
@@ -9820,7 +10406,7 @@
               ]
             },
             {
-              "line": 66,
+              "line": 67,
               "dynamic": true,
               "controls": [
                 {
@@ -9833,7 +10419,7 @@
               ]
             },
             {
-              "line": 137,
+              "line": 138,
               "dynamic": true,
               "controls": [
                 {
@@ -9868,7 +10454,7 @@
               ]
             },
             {
-              "line": 172,
+              "line": 173,
               "dynamic": true,
               "controls": [
                 {
@@ -9881,7 +10467,7 @@
               ]
             },
             {
-              "line": 112,
+              "line": 113,
               "dynamic": true,
               "controls": [
                 {
@@ -11280,37 +11866,37 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "1c1fb39c7c3bfb4d21b812b97aa0cbcb5af03ae4ef90abf867cd7af2a1c1dfa8",
+      "sha256": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 758
+          "line": 761
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1044
+          "line": 1047
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1070
+          "line": 1073
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1235
+          "line": 1238
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1746
+          "line": 1749
         },
         {
           "method": "GET",
@@ -11328,84 +11914,84 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1283
+          "line": 1286
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1318
+          "line": 1321
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1363
+          "line": 1366
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1374
+          "line": 1377
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1395
+          "line": 1398
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1415
+          "line": 1418
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1434
+          "line": 1437
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1445
+          "line": 1448
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1457
+          "line": 1460
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1475
+          "line": 1478
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1486
+          "line": 1489
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1504
+          "line": 1507
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1528
+          "line": 1531
         }
       ],
       "markup_expressions": [
         {
-          "line": 820,
+          "line": 823,
           "dynamic": false,
           "controls": [
             {
@@ -11418,7 +12004,7 @@
           ]
         },
         {
-          "line": 936,
+          "line": 939,
           "dynamic": true,
           "controls": [
             {
@@ -11483,7 +12069,7 @@
           ]
         },
         {
-          "line": 848,
+          "line": 851,
           "dynamic": true,
           "controls": [
             {
@@ -11494,7 +12080,7 @@
           ]
         },
         {
-          "line": 862,
+          "line": 865,
           "dynamic": false,
           "controls": [
             {
@@ -11507,7 +12093,7 @@
           ]
         },
         {
-          "line": 907,
+          "line": 910,
           "dynamic": true,
           "controls": [
             {
@@ -11518,7 +12104,7 @@
           ]
         },
         {
-          "line": 843,
+          "line": 846,
           "dynamic": true,
           "controls": [
             {
@@ -11531,7 +12117,7 @@
           ]
         },
         {
-          "line": 845,
+          "line": 848,
           "dynamic": true,
           "controls": [
             {
@@ -11544,7 +12130,7 @@
           ]
         },
         {
-          "line": 884,
+          "line": 887,
           "dynamic": true,
           "controls": [
             {
@@ -11557,7 +12143,7 @@
           ]
         },
         {
-          "line": 888,
+          "line": 891,
           "dynamic": true,
           "controls": [
             {
@@ -11570,7 +12156,7 @@
           ]
         },
         {
-          "line": 898,
+          "line": 901,
           "dynamic": true,
           "controls": [
             {
@@ -11600,7 +12186,7 @@
           ]
         },
         {
-          "line": 926,
+          "line": 929,
           "dynamic": true,
           "controls": [
             {
@@ -11613,7 +12199,7 @@
           ]
         },
         {
-          "line": 931,
+          "line": 934,
           "dynamic": true,
           "controls": [
             {
@@ -11627,5 +12213,6 @@
         }
       ]
     }
-  ]
+  ],
+  "source_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3"
 }

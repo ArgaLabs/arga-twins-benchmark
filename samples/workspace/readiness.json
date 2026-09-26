@@ -13,7 +13,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         }
       ]
     },
@@ -24,7 +24,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
@@ -39,7 +39,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
@@ -62,7 +62,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
@@ -113,7 +113,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
@@ -136,7 +136,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
@@ -155,7 +155,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         },
         {
           "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
@@ -163,11 +163,11 @@
         },
         {
           "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
-          "sha256": "1c8e14314cc4d689b17467e79a9eb595d23a6129ae9d4a35021bb99f27686944"
+          "sha256": "4d4231881b7f81e1b469522b265bc237aecab83d23ff49f15697300245e4f749"
         },
         {
           "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
-          "sha256": "0496e8202267db3847d84c4aabfe215afbc584a2acaff51350c398513288c9b8"
+          "sha256": "5497f4b563248a860ef8c7c769a9cb3592ee443cd4ae2c004fee7ab97717271f"
         }
       ]
     },
@@ -178,7 +178,7 @@
       "evidence": [
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
-          "sha256": "7545eb3474212f4595d0e6a5d044179271cb24fb4468f4bd51a303ca83cb6fa8"
+          "sha256": "bc279416057bac1fd72fbe93f1f67d5082e32825c4566f6cf577c2ac9197f4e1"
         }
       ]
     },
@@ -304,7 +304,7 @@
         },
         {
           "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
-          "sha256": "41297facdd488c6e88ca9b973dbdc6c161125686a0bb279c03469d21959a34ba"
+          "sha256": "272f0630de2cc0ccca2ff495cd0f19ac7be4499e20d04f4777092b2492ef350d"
         }
       ]
     },
@@ -320,5 +320,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "e1b3a513e76d04ed66669d8f7ac1b595a77912610b849148d443007fc5f90fb2"
+  "sample_tree_sha256": "cf04190a297a6f9fc6582ec3cbd357edf0f638aa1eebc802a712f432d96985a6"
 }

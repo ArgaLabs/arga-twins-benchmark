@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1172",
   "source_head": "cc9b8eb06a6f2293c35a2f3a68cc873c25df3247",
-  "status": "local_native_desktop_and_390px_pass_ci_and_hosted_pending",
+  "status": "ci_and_production_pass_fresh_hosted_pending",
   "release_allowed": false,
   "scope": [
     "Recipient-scoped native notifications and Inbox read/unread/snooze/archive actions",
@@ -20,7 +20,17 @@
     "warnings": 3,
     "make_fix": "pass",
     "independent_source_review": "Final six archive/read false, null and unapplied-success cases preserve state; valid retries succeed. Source/API-only approval.",
-    "independent_retention_review": "Archives oldest above 2,000 open records; history and other recipients preserved. Native/API-only confirmation."
+    "independent_retention_review": "Archives oldest above 2,000 open records; history and other recipients preserved. Native/API-only confirmation.",
+    "ci": {
+      "lint_test_run": 36216312962,
+      "twins_passed": 6083,
+      "twins_skipped": 145,
+      "twins_deselected": 3,
+      "root_passed": 2130,
+      "root_skipped": 2,
+      "all_checks_passed": true,
+      "merge_state_at_exact_head": "CLEAN"
+    }
   },
   "source_files": {
     "twins/linear/README.md": "04c38b9f557ec1fa4fb39fc6f4b94d0b924c227639d407f6c0d0e1eb0dad54d6",
@@ -91,11 +101,110 @@
     }
   },
   "limits": [
-    "CI, deployment, fresh hosted native/browser and image checks pending",
+    "Fresh hosted native/browser and worker-container image checks pending",
     "Project notifications, priority/grouping, reminders, manual subscriptions, full settings and external email/push/Slack delivery remain open",
     "Private-team/workspace permissions, realtime, uploads and AI remain open",
     "Selected desktop/390px controls only; no exhaustive visual or physical-touch approval",
     "Full eight-provider audit and sample release including WKS-03 remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "merged_revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+  "production": {
+    "revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+    "runtime_workflow": 36217588009,
+    "twins_workflow": 36217588147,
+    "both": "success",
+    "published_images": {
+      "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:db8d452ddf847331ed88cc74d9c5802c6811a2c3@sha256:e3f84a01e7edb5795295c8fb6154139bdcfd71118d79bf66ce92f2bf38d434ff",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:db8d452ddf847331ed88cc74d9c5802c6811a2c3@sha256:f18bb953195d7f9cdd9d74890cd40535bf97afb656bd6b06c5b6682ab76658d7",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:db8d452ddf847331ed88cc74d9c5802c6811a2c3@sha256:6c492e65b27850e9188c9fe0fdb78ddffc2776979e0e7bf7d4181357f67b793b"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00280-gj4",
+      "arga-api": "arga-api-00650-6ml"
+    },
+    "log_sha256s": {
+      "lab-final-linear-inbox-db8d452d-twins-deploy.log": "4363f490f722d48a212b0e7da375d286af56fc9ce6bffd60e35647f45fcf59ff",
+      "lab-final-linear-inbox-db8d452d-runtime-deploy.log": "c2096cb9db9f192b828fd7e47219e27a2b638f5bd493533bbae779da5e6e1559"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately.",
+    "runtime_image_observations": {
+      "revision": "db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00280-gj4",
+          "observed_at": "2026-09-26T04:22:34.002225+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00280-gj4"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00280-gj4",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b",
+            "sha256:f18bb953195d7f9cdd9d74890cd40535bf97afb656bd6b06c5b6682ab76658d7"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00650-6ml",
+          "observed_at": "2026-09-26T04:26:49.997103+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:db8d452ddf847331ed88cc74d9c5802c6811a2c3",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:8ffe1befced104e2c46d103d7ec154c74f30e6e96035caab100ab673253fc252",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:8ffe1befced104e2c46d103d7ec154c74f30e6e96035caab100ab673253fc252"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00650-6ml"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00650-6ml",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:6c492e65b27850e9188c9fe0fdb78ddffc2776979e0e7bf7d4181357f67b793b",
+            "sha256:8ffe1befced104e2c46d103d7ec154c74f30e6e96035caab100ab673253fc252"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "c2096cb9db9f192b828fd7e47219e27a2b638f5bd493533bbae779da5e6e1559",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  }
 }

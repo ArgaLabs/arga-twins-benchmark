@@ -2,7 +2,7 @@
   "schema": "arga.lab.deployment-evidence/1",
   "observed_on": "2026-09-26",
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1173",
-  "source_head": "46759a7a1b99f63b9cd3431e1d03c64ea8eddb01",
+  "source_head": "27c4fd76a88a256d10624997c4002b6bab045fce",
   "status": "local_tests_pass_ci_deployment_and_concurrent_hosted_attestation_pending",
   "release_allowed": false,
   "finding": {
@@ -72,5 +72,7 @@
     "Concurrent fresh hosted app-image checks pending",
     "Original failing run preserved and torn down; eight provider images matched; gateway comparison not reached",
     "Not a complete production workload inventory, exhaustive frontend approval or WKS-03 resolution"
-  ]
+  ],
+  "prior_source_head": "46759a7a1b99f63b9cd3431e1d03c64ea8eddb01",
+  "head_update": "Updated against merged #1172; feature diff unchanged; CI pending on this exact head."
 }

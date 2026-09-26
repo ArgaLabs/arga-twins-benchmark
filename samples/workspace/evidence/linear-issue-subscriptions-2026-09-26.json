@@ -5,7 +5,7 @@
     "linear"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1174",
-  "source_head": "1ff0eb2cea55f08b3477df1fe656f2cd7532a031",
+  "source_head": "160857fca36a90aed896eb73b350542022009339",
   "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1172",
   "status": "local_native_desktop_and_390px_pass_ci_deployment_hosted_pending",
   "release_allowed": false,
@@ -118,5 +118,7 @@
     "Selected desktop/390px checks do not establish exhaustive visual or physical-touch parity",
     "Full eight-provider audit and sample release including WKS-03 remain open"
   ],
-  "screenshots_retained": false
+  "screenshots_retained": false,
+  "prior_source_head": "1ff0eb2cea55f08b3477df1fe656f2cd7532a031",
+  "head_update": "Updated against merged #1172; feature diff unchanged; CI pending on this exact head."
 }
