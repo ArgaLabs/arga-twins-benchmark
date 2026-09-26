@@ -328,6 +328,7 @@ def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
         ("POST", "/v4/spreadsheets/book:batchUpdate"),
         ("POST", "/ui/spreadsheets/book/filter-cell"),
         ("POST", "/ui/spreadsheets/book/filter-paste"),
+        ("POST", "/ui/spreadsheets/book/history"),
     ],
 )
 def test_proxy_preserves_sheet_warning_consent_and_revision(method: str, path: str) -> None:
@@ -408,6 +409,95 @@ def test_proxy_warning_headers_do_not_expand_other_routes_or_providers() -> None
                     await browser.get("/admin/state", headers={"X-Arga-Sheets-Warning": "prompt"})
                 ).status_code == 403
         assert len(seen) == 1 and "x-arga-sheets-warning" not in seen[0].headers
+
+    asyncio.run(exercise())
+
+
+def test_proxy_preserves_sheet_history_sessions_and_grouped_edits() -> None:
+    async def exercise() -> None:
+        histories: dict[str, list[tuple[str, str]]] = {}
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            session = request.headers.get("x-arga-sheets-session")
+            if not session:
+                return httpx.Response(400, json={"error": "Missing editor session"})
+            assert "cookie" not in request.headers
+            assert request.headers["authorization"] == "Bearer operator-synthetic-token"
+            history = histories.setdefault(session, [])
+            if request.method == "PUT":
+                group = request.headers.get("x-arga-sheets-edit-group")
+                assert group is not None
+                value = request.content.decode()
+                if history and history[-1][0] == group:
+                    history[-1] = (group, value)
+                else:
+                    history.append((group, value))
+            return httpx.Response(200, json={"undoEntries": len(history), "values": [value for _, value in history]})
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(
+            "google_sheets",
+            {"base_url": "https://twin.example", "env": {"GOOGLE_SHEETS_TOKEN": "operator-synthetic-token"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            for session, group, value in [
+                ("page-session-one", "typing-one", "1"),
+                ("page-session-one", "typing-one", "12"),
+                ("page-session-two", "typing-two", "99"),
+            ]:
+                response = await browser.put(
+                    "/v4/spreadsheets/book/values/Sheet1!A1",
+                    content=value,
+                    headers={
+                        "X-Arga-Sheets-Session": session,
+                        "X-Arga-Sheets-Edit-Group": group,
+                        "Cookie": "untrusted=browser",
+                        "Authorization": "attacker",
+                    },
+                )
+                assert response.status_code == 200
+            for session, expected in [
+                ("page-session-one", ["12"]),
+                ("page-session-two", ["99"]),
+                ("new-page-session", []),
+            ]:
+                response = await browser.get(
+                    "/ui/spreadsheets/book/history", headers={"X-Arga-Sheets-Session": session}
+                )
+                assert response.status_code == 200
+                assert response.json() == {"undoEntries": len(expected), "values": expected}
+
+    asyncio.run(exercise())
+
+
+def test_sheet_history_headers_do_not_expand_routes_or_other_providers() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(200, json={})
+
+        context = {"X-Arga-Sheets-Session": "page-session-one", "X-Arga-Sheets-Edit-Group": "typing-one"}
+        for provider in ("google_sheets", "linear"):
+            client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+            proxy = BrowserProxy(provider, {"base_url": "https://twin.example"}, client=client)
+            proxy.origin = "http://local.test"
+            async with (
+                client,
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+            ):
+                assert (await browser.get("/admin/state", headers=context)).status_code == 403
+                assert (await browser.post("/ui/issues", headers=context)).status_code == (
+                    400 if provider == "google_sheets" else 200
+                )
+        assert len(seen) == 1
+        assert all(name not in seen[0].headers for name in ["x-arga-sheets-session", "x-arga-sheets-edit-group"])
 
     asyncio.run(exercise())
 

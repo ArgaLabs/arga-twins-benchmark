@@ -163,12 +163,20 @@ class BrowserProxy:
         for name in ("content-type", "accept", "if-match", "idempotency-key", "notion-version"):
             if name in request.headers:
                 headers[name] = request.headers[name]
+        sheets_context = self.provider == "google_sheets" and bool(re.match(r"^/(?:v4|ui)/spreadsheets(?:/|$)", path))
+        for name in ("x-arga-sheets-session", "x-arga-sheets-edit-group"):
+            if self.provider == "google_sheets" and name in request.headers:
+                if not sheets_context:
+                    return JSONResponse({"error": "Editor history is unsupported on this route"}, status_code=400)
+                # Keep page history and typing groups intact. The twin validates
+                # these values and binds history to the authenticated principal.
+                headers[name] = request.headers[name]
         sheets_write = (
             self.provider == "google_sheets"
             and request.method in {"POST", "PUT", "PATCH", "DELETE"}
             and bool(
                 re.match(r"^/v4/spreadsheets/[^/?]+(?::batchUpdate|/values(?:/|:))", path)
-                or re.fullmatch(r"/ui/spreadsheets/[^/]+/(?:filter-cell|filter-paste)", path)
+                or re.fullmatch(r"/ui/spreadsheets/[^/]+/(?:filter-cell|filter-paste|history)", path)
             )
         )
         if self.provider == "google_sheets" and "x-arga-sheets-warning" in request.headers:
