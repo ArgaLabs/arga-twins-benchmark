@@ -1,0 +1,59 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1190",
+  "source_head": "98ae22137347c8c608caf787466cf9e802a78f84",
+  "status": "local_pass_ci_pending",
+  "release_allowed": false,
+  "scope": [
+    "Account-local reminder projection for shared GET/list/recurring instances",
+    "Shared writes preserve owner preferences, unrelated events and per-user ETags",
+    "Reminder-only PATCH and full-resource PUT retain the main event updated timestamp",
+    "Personal collaborator edits preserve complete owner native state and do not dispatch owner watches; shared edits still dispatch",
+    "Atomic validation of email/popup methods, integer minute bounds, at most five overrides, boolean defaults and conflicting defaults",
+    "Current ACL, private-event, revocation and failure injection checks retained"
+  ],
+  "tests": {
+    "integrated_calendar_workspace_mcp_fidelity_export_generator_passed": 455,
+    "new_reminder_tests_passed": 57,
+    "original_reproduced_failures": 44,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "references": [
+    "https://developers.google.com/workspace/calendar/api/v3/reference/events",
+    "https://developers.google.com/workspace/calendar/api/concepts/reminders"
+  ],
+  "source_files": {
+    "twins/google_calendar/store.py": "3b2f4cf43510b155dfc0b53ac0fdf5984ff517d673bbad0ff1c43e6426e93e51",
+    "twins/google_calendar/sharing.py": "d5eae9fde548a787c3a15d2415793936aeb2dedac1ad3645458ae30015986730",
+    "twins/google_calendar/README.md": "b88aeca06ea541e8964288f38b09654cae9eb5a1204e87bec14c9d0aa75d66a2",
+    "twins/tests/test_google_calendar_event_reminders.py": "58afc48577985a93a3afec004384f297cbc24493d57bfcdd0fdbfa09a958d550"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-event-reminders-red.log": "532d9db585a6d5b4afbe48973f3e851a73d55e39b8f5266cd8ec2a83e228902b",
+    "lab-calendar-event-reminders-green.log": "25cf0f8e3657c1eadff8ecab55484364871ef30fc7de50856b7bc984fe3e7214",
+    "lab-calendar-event-reminders-expanded.log": "a8defbf08fbc0373a446bf1a582e227a75ca995283af33af8f80580603be43be",
+    "lab-calendar-event-reminders-expanded-final.log": "8fcff88090a50f60cf14685f5e45325e030b22f16e2c13ef605db177f292a5b0",
+    "lab-calendar-event-reminders-move-red.log": "796c55c59eb1d8dfc1e2a414974c4cb0bd866e12bc449ce00523ce4869192a66",
+    "lab-calendar-event-reminders-update-move.log": "9dad2cea797b53b41d8c19b2323ef5d823d192ec3c833310f40a310932adb3e6",
+    "lab-calendar-event-reminders-make-fix-final.log": "03fe8b1a55a974a1294e1d3aa7556297135b172c2f8c4378afcb3e7616d57292",
+    "lab-calendar-event-reminders-integrated.log": "be3a085e66a2c7bcf2b84e7b802ba9bb442c85d7d8c070c06a2ae7643f683d5f"
+  },
+  "operator_test_corrections": [
+    "Revocation/private test setup initially reinserted an existing ACL rule and received 409; changed to PATCH the existing native grant"
+  ],
+  "implementation_regressions_fixed": [
+    "Shared move initially lost the owner reminder at the destination; regression now also preserves unrelated destination events",
+    "Review identified copied owner watches could still dispatch externally; personal changes now suppress owner notification dispatch, with explicit dispatch regression coverage"
+  ],
+  "limits": [
+    "Exact-head CI, production rollout and fresh hosted verification pending",
+    "Personal incremental sync/watch delivery, subscriber Scenario export/reseed, reader-only personal editing and complete move/delete preference lifecycle remain open",
+    "No timed reminder delivery, exhaustive UI/mobile/touch, AI/collaboration or sample release claim"
+  ],
+  "screenshots_retained": false
+}

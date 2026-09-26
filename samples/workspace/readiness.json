@@ -52,7 +52,11 @@
         },
         {
           "path": "samples/workspace/evidence/calendar-clock-reminders-2026-09-26.json",
-          "sha256": "7fd3da3fcb0172e2745c5e974265c81b1ad9356c0153ae387ba58c722bb9f8d2"
+          "sha256": "cfce28523892d6da553b8a6b8829c7d2a38dd7aeecd95a28c2a83e2c9bebf671"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-event-reminders-2026-09-26.json",
+          "sha256": "e9ea9ed81f637abb6e4572c9c3d5b0274a9f94a1535c37cd0133983c466554b6"
         }
       ]
     },
@@ -360,7 +364,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "f4dfc7e4bd4a51337704c6d49fb6d58fd2715dc28e1ba9fc8dab2448b1747066"
+          "sha256": "325fa857be601d6a70234971c43aa259cdd97e5650c1732a15ba876e98302239"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -388,5 +392,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "6bbdb2cd025192cdc0b51532436567141e421493dfac5b966cee1fc95f326b07"
+  "sample_tree_sha256": "1bba893e430406a76206ebcbe52cee7df17b466546eea45455eabcc2db84e3d8"
 }
