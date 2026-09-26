@@ -1,0 +1,66 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "scored_candidate": false,
+  "source_revision": "a4734799480881893c248f7eed48b0101ebcba8c",
+  "tested_revision": "d1ed2273be63c941cc22671e0aa4057f68f5982c",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35799077325",
+  "deployment_status": "success",
+  "source_fingerprint": {
+    "source_file": "twins/gmail/labels_ui.py",
+    "exact_script_present": true,
+    "script_sha256": "4292167ac58db75f1e3c25de6c394834ff83039deffc76535533679e27270930",
+    "tested_head": "d1ed2273be63c941cc22671e0aa4057f68f5982c",
+    "deployed_merge": "a4734799480881893c248f7eed48b0101ebcba8c",
+    "per_container_digest_attestation": false
+  },
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "read_clears_unread_conversations": "pass",
+    "independent_visibility_settings": "pass",
+    "two_drafts_one_thread": "pass",
+    "sidebar_more_less": "pass",
+    "hidden_labels_remain_applicable": "pass",
+    "message_chips_independent_of_sidebar": "pass",
+    "reload_persistence": "pass",
+    "mobile_viewport_no_horizontal_page_overflow": "pass"
+  },
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/gmail-labels-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "scenario.json": "f84af84fbce326c591a1718aa4602c39bcf10477f1e9e4e0259062906d039d74",
+    "baseline-state.json": "9183ca4851e186c427c292a6e4955e59f1005d7d8766e181e47b040d7f330dc8",
+    "operator-fixture-setup.json": "291091f4c1c1baf58ec45014d29d1d6484bcbe7a4ccfa2e658a0b9b070bdbb49",
+    "labels-before.json": "96122afb18a5c56ab6069fae6899fe38d10e94fd11b4a634685b3ab2b973c984",
+    "frontend-source-check.json": "85ae3c2b4f4c6651b2a239ac9092abab089d5a292627511c472949a04b5417ea",
+    "manual-native-readback.json": "65ad496ed2d7fd4303809e9e31cbf3c054ba9d256422e11b8b6ccacf1c4d3c78",
+    "final-state.json": "8aa865c671f4edd0d897509f6863e0bd4cb4b1e1b7475958de71340a69e98eab",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d",
+    "gmail-browser-trace.json": "482f7e811d5d898d1b92f6fc12c7a7f5e2d4d398a500643c24f5e0f0957062bc",
+    "cleanup.json": "b567ebf6040be4d2a12b5b83691235d9490e630096d62cb03c8520c413a6f2a5"
+  },
+  "limitations": [
+    "Manual operator feature check, not an autonomous candidate rollout or full Gmail parity.",
+    "An additional pagination defect was observed: one conversation displayed 1\u20131 of 2 and paging arrows were static. A follow-up implementation is in progress.",
+    "No screenshot files retained.",
+    "No per-container digest attestation is available through the CLI."
+  ],
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
+}

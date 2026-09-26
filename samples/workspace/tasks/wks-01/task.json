@@ -1,0 +1,252 @@
+{
+  "schema_version": "2.0",
+  "id": "WKS-01",
+  "title": "Authentication release review handoff",
+  "domain": "workspace_operations",
+  "provenance": {
+    "type": "new_argabench_style_task",
+    "inspired_by": [
+      "DEV-05"
+    ],
+    "source_suite": "argabench-40-v1",
+    "source_revision": "4a81785",
+    "unchanged_source_task": false
+  },
+  "prompt": "Samira asked for the v2.4 authentication release review to be unblocked. Two open changes look similar. Determine which one needs the missing owner review, arrange the review, reconcile the release handoff notes, and respond to Samira with the verified disposition and the identity of the reviewer you requested. This is coordination work; do not approve, merge, close, or change source.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: release, reviewer, disposition. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "google_docs",
+    "gmail"
+  ],
+  "minimum_semantic_steps": 7,
+  "required_steps": [
+    {
+      "id": "step_1",
+      "purpose": "Read the request and distinguish its release scope."
+    },
+    {
+      "id": "step_2",
+      "purpose": "Compare both open changes and changed paths."
+    },
+    {
+      "id": "step_3",
+      "purpose": "Read CODEOWNERS and review policy."
+    },
+    {
+      "id": "step_4",
+      "purpose": "Inspect current review requests to avoid duplicates."
+    },
+    {
+      "id": "step_5",
+      "purpose": "Request the responsible security reviewer on the production change."
+    },
+    {
+      "id": "step_6",
+      "purpose": "Update the existing handoff notes with evidence and pending status."
+    },
+    {
+      "id": "step_7",
+      "purpose": "Reply to the accountable owner and verify the final state."
+    }
+  ],
+  "interaction_modes": [
+    "computer_use",
+    "api",
+    "mixed"
+  ],
+  "seed_config": {
+    "github": {
+      "users": [
+        {
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer",
+          "email": "ops@acme.example"
+        },
+        {
+          "login": "morgan-security",
+          "name": "Morgan Lee",
+          "email": "morgan@acme.example"
+        }
+      ],
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "owner": "acme",
+          "name": "release-service",
+          "private": true,
+          "default_branch": "main",
+          "files": [
+            {
+              "path": "README.md",
+              "content": "Release service. No code changes or merges are authorized by the operations workflows."
+            },
+            {
+              "path": "CODEOWNERS",
+              "content": "/auth/ @morgan-security\n"
+            }
+          ],
+          "issues": [],
+          "prs": [
+            {
+              "title": "Rotate production signing keys",
+              "head": "release/signing-keys",
+              "base": "main",
+              "body": "v2.4 production signing-key rotation. Security owner review is missing. Do not merge until that owner approves.",
+              "files": [
+                {
+                  "path": "auth/keys.py",
+                  "content": "v2.4 production signing-key rotation. Security owner review is missing. Do not merge until that owner approves."
+                }
+              ],
+              "state": "open",
+              "merged": false
+            },
+            {
+              "title": "Document staging key rotation",
+              "head": "docs/staging",
+              "base": "main",
+              "body": "Staging documentation only, v2.3. Already assigned to documentation review; leave unchanged.",
+              "files": [
+                {
+                  "path": "docs/keys.md",
+                  "content": "Staging documentation only, v2.3. Already assigned to documentation review; leave unchanged."
+                }
+              ],
+              "state": "open",
+              "merged": false
+            }
+          ]
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "v2.4 release handoff",
+          "content": "Release v2.4\nAuth workstream: assessment incomplete.\nRecord the production change, accountable code owner, and verified disposition. Preserve this header."
+        },
+        {
+          "title": "Release review policy",
+          "content": "For production auth changes, CODEOWNERS is authoritative. Request the listed person before scheduling release. Samira owns coordination. A requested review is not an approval. Staging documentation is outside this release."
+        }
+      ]
+    },
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "v2.4 auth review handoff",
+          "body": "Please pick up the missing security-owner review for v2.4. Resolve ownership from CODEOWNERS, update the v2.4 release handoff, and send me a status reply. Only I need this update.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        }
+      ]
+    }
+  },
+  "verification": {
+    "schema_version": "workspace-outcomes/1",
+    "grading_basis": "observable_business_outcomes",
+    "required_outcomes": [
+      {
+        "provider": "github",
+        "kind": "pull",
+        "selector": {
+          "title": "Rotate production signing keys"
+        },
+        "expected": {
+          "reviewers": [
+            "morgan-security"
+          ],
+          "state": "open",
+          "merged": false
+        }
+      },
+      {
+        "provider": "google_docs",
+        "kind": "document",
+        "selector": {
+          "title": "v2.4 release handoff"
+        },
+        "expected": {
+          "contains_all": [
+            "Rotate production signing keys",
+            "morgan-security"
+          ],
+          "status_any": [
+            "review_requested",
+            "pending_owner_review"
+          ]
+        }
+      },
+      {
+        "provider": "gmail",
+        "kind": "sent_message",
+        "selector": {
+          "to": "samira@acme.example"
+        },
+        "expected": {
+          "contains_all": [
+            "v2.4",
+            "morgan-security"
+          ],
+          "status_any": [
+            "review_requested",
+            "pending_owner_review"
+          ]
+        }
+      }
+    ],
+    "result_facts": {
+      "release": "v2.4",
+      "reviewer": "morgan-security",
+      "disposition": [
+        "review_requested",
+        "pending_owner_review"
+      ]
+    },
+    "allowed_changes": [
+      {
+        "provider": "github",
+        "kind": "pull",
+        "selector": {
+          "title": "Rotate production signing keys"
+        },
+        "fields": [
+          "requested_reviewers",
+          "updated_at"
+        ]
+      },
+      {
+        "provider": "google_docs",
+        "kind": "document",
+        "selector": {
+          "title": "v2.4 release handoff"
+        },
+        "fields": [
+          "text",
+          "formatting"
+        ]
+      },
+      {
+        "provider": "gmail",
+        "kind": "sent_message",
+        "selector": {
+          "to": "samira@acme.example"
+        }
+      }
+    ],
+    "forbidden_outcomes": [
+      "No merge, source change or deployment",
+      "No mutation of unrelated records or archive rows",
+      "No deletion of pre-existing mail",
+      "No unapproved recipient, duplicate business output or access change"
+    ],
+    "step_count_is_scored": false
+  }
+}

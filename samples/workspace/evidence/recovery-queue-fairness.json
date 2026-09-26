@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-23",
+  "status": "merged_production_deployed",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1107",
+  "commit": "5316a020aa778b877804684a7488d3a070a8e6da",
+  "reproduction": "105 unchanged historical cleanups prevent a new request and newer cleanup from being selected by the oldest-100 scan.",
+  "tests": {
+    "before": "Two PostgreSQL starvation tests failed",
+    "after_passed": 81,
+    "recovery_tests": 21,
+    "pyright": "passed",
+    "ruff": "passed"
+  },
+  "fix": "Separate provisioning and cleanup selection; preserve capacity limits and rotate through each eligible queue by timestamp and ID.",
+  "limits": [
+    "No production state mutated by these tests",
+    "Production VM ownership and seed/cleanup protections are unchanged",
+    "Separate PR #1108 addresses 17 historical stale VM cleanup records; those records alone do not establish that the oldest-100 scheduling limit caused the hosted Gmail stall."
+  ],
+  "screenshots_retained": false,
+  "review_followup": {
+    "problem": "A mutable updated_at cursor can skip retrying a busy-lock row when other failing cleanups continually advance their progress timestamps.",
+    "fix": "Cursor uses immutable created_at and ID.",
+    "regression": "Failed with the mutable cursor (one visit instead of two), passed after correction.",
+    "tests_passed": 81
+  },
+  "production": {
+    "merge_sha": "7e320c953afbff494e793fc77e3315fafebe36c9",
+    "checks": "All applicable checks passed before merge",
+    "deploy_runtime": {
+      "run": 35897854485,
+      "status": "success"
+    }
+  },
+  "hosted_followup": "Original stalled Gmail run reached torn_down; one same-fixture retry provisioned ready and completed manual CUA checks with confirmed cleanup. This observation does not by itself prove the scheduler was the only cause of the original stall."
+}

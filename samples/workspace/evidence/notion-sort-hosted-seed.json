@@ -1,0 +1,88 @@
+{
+  "notion": {
+    "pages": [
+      {
+        "title": "Protected Notion page",
+        "content": "Keep this page unchanged."
+      }
+    ],
+    "databases": [
+      {
+        "name": "Hosted launch tracker",
+        "schema": {
+          "Name": {
+            "title": {}
+          },
+          "Count": {
+            "number": {}
+          },
+          "Contact": {
+            "type": "email",
+            "email": {}
+          },
+          "Status": {
+            "select": {
+              "options": [
+                {
+                  "name": "Open",
+                  "color": "blue"
+                },
+                {
+                  "name": "Done",
+                  "color": "green"
+                }
+              ]
+            }
+          }
+        },
+        "rows": [
+          {
+            "Name": "Alpha",
+            "Count": {
+              "number": 1
+            },
+            "Contact": {
+              "type": "email",
+              "email": "alpha@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Open"
+              }
+            }
+          },
+          {
+            "Name": "Beta",
+            "Count": {
+              "number": 3
+            },
+            "Contact": {
+              "type": "email",
+              "email": "beta@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Done"
+              }
+            }
+          },
+          {
+            "Name": "Gamma",
+            "Count": {
+              "number": 2
+            },
+            "Contact": {
+              "type": "email",
+              "email": "gamma@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Open"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

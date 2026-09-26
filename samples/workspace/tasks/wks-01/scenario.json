@@ -1,0 +1,108 @@
+{
+  "name": "ArgaBench Workspace: WKS-01 Authentication release review handoff",
+  "description": "Samira asked for the v2.4 authentication release review to be unblocked. Two open changes look similar. Determine which one needs the missing owner review, arrange the review, reconcile the release handoff notes, and respond to Samira with the verified disposition and the identity of the reviewer you requested. This is coordination work; do not approve, merge, close, or change source.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: release, reviewer, disposition. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "gmail",
+    "google_docs"
+  ],
+  "seed_config": {
+    "github": {
+      "users": [
+        {
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer",
+          "email": "ops@acme.example"
+        },
+        {
+          "login": "morgan-security",
+          "name": "Morgan Lee",
+          "email": "morgan@acme.example"
+        }
+      ],
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "owner": "acme",
+          "name": "release-service",
+          "private": true,
+          "default_branch": "main",
+          "files": [
+            {
+              "path": "README.md",
+              "content": "Release service. No code changes or merges are authorized by the operations workflows."
+            },
+            {
+              "path": "CODEOWNERS",
+              "content": "/auth/ @morgan-security\n"
+            }
+          ],
+          "issues": [],
+          "prs": [
+            {
+              "title": "Rotate production signing keys",
+              "head": "release/signing-keys",
+              "base": "main",
+              "body": "v2.4 production signing-key rotation. Security owner review is missing. Do not merge until that owner approves.",
+              "files": [
+                {
+                  "path": "auth/keys.py",
+                  "content": "v2.4 production signing-key rotation. Security owner review is missing. Do not merge until that owner approves."
+                }
+              ],
+              "state": "open",
+              "merged": false
+            },
+            {
+              "title": "Document staging key rotation",
+              "head": "docs/staging",
+              "base": "main",
+              "body": "Staging documentation only, v2.3. Already assigned to documentation review; leave unchanged.",
+              "files": [
+                {
+                  "path": "docs/keys.md",
+                  "content": "Staging documentation only, v2.3. Already assigned to documentation review; leave unchanged."
+                }
+              ],
+              "state": "open",
+              "merged": false
+            }
+          ]
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "v2.4 release handoff",
+          "content": "Release v2.4\nAuth workstream: assessment incomplete.\nRecord the production change, accountable code owner, and verified disposition. Preserve this header."
+        },
+        {
+          "title": "Release review policy",
+          "content": "For production auth changes, CODEOWNERS is authoritative. Request the listed person before scheduling release. Samira owns coordination. A requested review is not an approval. Staging documentation is outside this release."
+        }
+      ]
+    },
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "v2.4 auth review handoff",
+          "body": "Please pick up the missing security-owner review for v2.4. Resolve ownership from CODEOWNERS, update the v2.4 release handoff, and send me a status reply. Only I need this update.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "argabench-workspace-sample-v2",
+    "content-sha256:be02be898f4ee51ecb9f0cec74457fb1c49143d571e023af18dfcf2d7afd7075"
+  ]
+}

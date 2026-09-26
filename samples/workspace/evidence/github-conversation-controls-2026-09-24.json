@@ -1,0 +1,204 @@
+{
+  "date": "2026-09-24",
+  "status": "production_hosted_desktop_and_390px_pass",
+  "parent_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+  "change_revision": "112bb0002bab61fe4878c3f2882619d86ac62eb0",
+  "real_reference": {
+    "url": "https://github.com/ArgaLabs/validation-server/pull/1150",
+    "mode": "read_only",
+    "observed_comment_menu": [
+      "Copy link",
+      "Copy Markdown",
+      "Quote reply",
+      "Reference in new issue",
+      "Edit",
+      "Hide",
+      "Delete",
+      "Block user"
+    ],
+    "mutations": 0
+  },
+  "observed_gap": "A native API-created issue comment existed on the PR but was not rendered anywhere on its conversation page.",
+  "implemented": [
+    "Shared issue/PR conversation renders native API comments and sanitized Markdown.",
+    "Browser create/edit/delete use native handlers and maintain comment identity and independent unsent composition.",
+    "Copy link/Markdown, Quote reply, edit Cancel, delete confirmation/Cancel/Escape.",
+    "Whitespace validation, pending field protection and modal-local error recovery."
+  ],
+  "desktop": {
+    "actual_viewport": {
+      "width": 1063,
+      "height": 806
+    },
+    "horizontal_overflow": false,
+    "checks": [
+      "API sentinel visible on PR.",
+      "Cancel edit leaves complete native state unchanged and preserves independent unsent composer.",
+      "Edit changes native body while preserving ID and created_at.",
+      "Delete Cancel and Escape leave complete native state unchanged.",
+      "Copy Markdown and link return exact expected content; previously empty clipboard cleared afterward.",
+      "Quote appends native Markdown to existing unsent text.",
+      "Confirmed delete removes disposable native comment without clearing independent composer.",
+      "Whitespace-only comment rejected.",
+      "Browser-created Markdown reply survives reload.",
+      "Protected native collections and generic fallback state unchanged; repository differences limited to native comment aliases.",
+      "After review fix: invalid edit Cancel/reopen/save succeeds.",
+      "After review fix: invalid compose then Quote submits successfully.",
+      "Held local request makes submitting textarea non-settable and disables submission, restoring both after success.",
+      "Injected local deletion 403 appears visibly and accessibly within dialog; comment remains native."
+    ]
+  },
+  "review": {
+    "initial_disposition": "fix",
+    "findings": [
+      "Clear validity on Cancel/Quote.",
+      "Protect text from changes during pending save.",
+      "Show deletion failures inside modal."
+    ],
+    "verdict": "All three findings resolved; scoped code can proceed to PR. Mobile/full visual finish remains pending."
+  },
+  "tests": {
+    "initial_provider_passed": 373,
+    "recovery_focused_passed": 7,
+    "focused_pyright": "0 errors",
+    "existing_frontend_pyright": "19 diagnostics identical to parent baseline",
+    "detector_findings": [],
+    "final_github_and_frontend_passed": 383
+  },
+  "limits": [
+    "No retained screenshot artifacts; desktop screenshots inspected transiently.",
+    "Reference in new issue, Hide, Block user, reactions, richer editor, full permissions and advanced review flows remain open.",
+    "No exhaustive GitHub or eight-provider fidelity claim.",
+    "Hosted desktop and actual 390px Chrome checks cover these conversation controls only; physical-touch and exhaustive permission/review/AI parity remain pending."
+  ],
+  "source_hashes": {
+    "twins/github/conversation_ui.py": "50bebc7331724d62a5c9590e34dfed4c685674fc8e6f50f6c927970dfd4895db",
+    "twins/github/frontend.py": "3e175e34a6e0030c054272e35f36b349db3534ab8e8124737074233ae7325260",
+    "twins/github/operations_ui.py": "a1e1a7971dba1991c455becd27af9cdda64171fa0bd178313c23776551c75fda",
+    "twins/tests/test_github_conversation_ui.py": "7a642b7090c55d0d77cd1117b8ec8e33e9e029bf8ca570e7c528f8593c1bbe30"
+  },
+  "private_evidence_sha256": {
+    "lab-final-github-conversation-audit-native.json": "7a171e1f6a44b866924d5acbeb90d24c16b3d2678d07967d6d5d7b7e1e89ab77",
+    "lab-final-github-conversation-edited-native.json": "f7582009fd1a6b6065d5efb242decc09a2556ffd18be668021a27d0d292ee601",
+    "lab-final-github-conversation-deleted-native.json": "7633da3fc4111e51bb05aadfd125536732f0a84282ecd060ebc7b5f85991b341",
+    "lab-final-github-conversation-final-native.json": "45ff7355a3766c70ea9bd3b5a691486482338d5897118377ba3459c62e9dd980",
+    "lab-final-github-conversation-review-native.json": "d6a0e9d032bdda024c4ac6d4d871a95a2e7d43111b97033ceb445331c9189caf",
+    "lab-final-github-conversation-recovery-tests.log": "8c98746ac5a18b445d0a2e7a9bfdda4a14cd9ec307c4a535483d11f31d9f7162",
+    "lab-final-github-conversation-focused-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-github-conversation-provider-tests.log": "514b17aae2a30fc33f43b268af9e624871435971c14b0614312b31fb2464fd6c",
+    "lab-final-github-conversation-design-detect.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-final-github-conversation-provider-tests-v2.log": "faf94fb114ba07893226a398c631b5e296fd994c44465ab436f4e39a416baced"
+  },
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1151",
+  "documentation_review": {
+    "status": "complete_read_only",
+    "finding": "Ordinary extension preserves incumbent GitHub twin palette, typography, shared buttons and Markdown rendering; no new design world or system files created.",
+    "limits": "Source comparison only; full visual/mobile parity not established."
+  },
+  "tested_revision_before_rebase": "b1ae06d75aaad9c2bfb753bb53dc1bb924cfaeb0",
+  "ci": {
+    "status": "success",
+    "workflow": 36068281319,
+    "twins_passed": 5275,
+    "twins_skipped": 145,
+    "twins_deselected": 3,
+    "root_passed": 2106,
+    "root_skipped": 2,
+    "log_sha256": "8f0d2f0adadb86cc608c4a7658dffbf70866b185421b1a400f08777b042a4ee5"
+  },
+  "merged_revision": "8b40448d06afcde6fead75dc16dddbf54a428886",
+  "deployment": {
+    "revision": "8b40448d06afcde6fead75dc16dddbf54a428886",
+    "runtime_workflow": 36070393401,
+    "twins_workflow": 36070393527,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:8b40448d06afcde6fead75dc16dddbf54a428886@sha256:22e39b66743da2d8b3dbad07791710d895d04ba0de78148c1c633d87658f483d",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:8b40448d06afcde6fead75dc16dddbf54a428886@sha256:96b22ec5f47350b92245b27b8b34d79397b0db437c6bec83805898f1dfaaec20",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:8b40448d06afcde6fead75dc16dddbf54a428886@sha256:8a14b643c47500fcfd05a8ed4de691fc6e0f986cca84088858efc1e2838d4f8e"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00262-vtr",
+      "arga-api": "arga-api-00632-9rr"
+    },
+    "log_sha256s": {
+      "lab-final-github-conversation-twins-deploy.log": "41e1b8218f6d4fea7e774dd20d90c25112f703293d1a1fd3c1204e2d819bf5b7",
+      "lab-final-github-conversation-runtime-deploy.log": "20eee6dc559b252791591f8070e06aca11c561eae2c11f7f59489a8c79dd305f"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains pending GCP reauthentication."
+  },
+  "hosted": {
+    "status": "pass",
+    "browser_observations": {
+      "desktop_viewport": [
+        1063,
+        806
+      ],
+      "narrow_issue_viewport": [
+        390,
+        844
+      ],
+      "narrow_pr_viewport": [
+        390,
+        844
+      ],
+      "narrow_document_width": 390,
+      "desktop_checks": [
+        "Native API sentinel visible on PR",
+        "Edit Cancel and delete Cancel/Escape preserve complete full native state",
+        "Copy Markdown and permalink exact; original clipboard restored",
+        "Quote preserves independent unsent draft",
+        "PR native edit preserves independent unsent composition",
+        "Whitespace create rejected; valid Markdown create survives reload",
+        "Confirmed disposable reply deletion preserves independent unsent composition"
+      ],
+      "narrow_checks": [
+        "Issue menu, editor and delete dialog fit 390px",
+        "Edit Cancel and Escape preserve unsent composition",
+        "Issue create survives reload",
+        "Invalid edit Cancel/reopen/valid edit succeeds",
+        "Disposable issue reply deletion preserves unsent composition and survives reload",
+        "Fresh PR page wraps without page overflow; menu and quote work"
+      ],
+      "tool_limitations": [
+        "One read-only DOM validationMessage query timed out after issue reload; cancellation and subsequent save verified through fresh accessibility state and native snapshots.",
+        "Viewport override applies reliably to a newly controlled tab; inactive existing PR tab stayed at 1063px, so final narrow PR proof uses a fresh verified 390px tab."
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false
+    },
+    "native_checks": {
+      "complete_cancelled_state_equal": true,
+      "complete_edited_state_matches_only_native_comment_body_change": true,
+      "desktop_created_comment_removed": true,
+      "mobile_created_comment_edited_and_removed": true,
+      "complete_final_state_matches_only_pr_comment_edit_and_two_id_allocations": true,
+      "protected_issue_and_all_other_native_collections_unchanged": true,
+      "comment_identity_and_creation_time_preserved": true
+    },
+    "frontend_code_fingerprints": {
+      "matched": {
+        "twins/github/conversation_ui.py:SCRIPT": "2d8bf4a0b3ee4de68becfcaa52cb5099a7d360e938e616bc33335273804ce75c"
+      },
+      "scope": "Selected complete served code block, not container attestation."
+    },
+    "cleanup_confirmation": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifact_sha256s": {
+      "scenario.json": "0e679af87180bca8523ff94f1bac274a39c174cf4b2e15988118790de447c683",
+      "baseline-state.json": "d529ef7c747d5770e10b239c7fd155edfe788772548f28f6add3c545ca836a74",
+      "cancelled-state.json": "d529ef7c747d5770e10b239c7fd155edfe788772548f28f6add3c545ca836a74",
+      "edited-state.json": "6bdaa46d6b7487629bac2b5d8a420ea3555a557abdda3671991e2a4135fe3cc4",
+      "deleted-state.json": "1add9cf09074122822e2e67f4fbad8416e692e04fe30084f40f2e765772fe15c",
+      "mobile-edited-state.json": "2ba1cb37730807ed9e08bb74fda40e24822fb3949c62945734579f359d566f4f",
+      "final-state.json": "5dacb5d1820f2528351ef2b47d41d4690a2b533255fe216a4f0bf3969ecbd16d",
+      "browser-trace.json": "e2cef271a3acf6a4da82514a3d1c0b11f2d8ad277a5bb7cdc9a0474c31ceb82a",
+      "operator-api-trace.json": "a8a370150cc2a9872e75a314e2f237ae76e115c4872a14aaf43154ad5df57d61",
+      "browser-observations.json": "6bd200cfb6d3ff2a5f4ef0638495aceabb3add06c2d816fc25a9259c891dc18a",
+      "native-checks.json": "865321327b50777e5d05adbccdf5fda68ea4adeeb16eed7ef0f849318ce9de21",
+      "cleanup.json": "4f249aa1a77053a60f07c050eba4416a39a322762114479b719c95e1552277df"
+    }
+  }
+}

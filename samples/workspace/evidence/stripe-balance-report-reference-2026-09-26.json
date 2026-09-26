@@ -1,0 +1,53 @@
+{
+  "schema": "arga.lab.reference-observation/1",
+  "observed_on": "2026-09-26",
+  "provider": "stripe",
+  "status": "balance_report_read_only_reference",
+  "release_allowed": false,
+  "sources": [
+    "https://docs.stripe.com/reports/balance",
+    "https://docs.stripe.com/reports/balance-transaction-types"
+  ],
+  "route": "/reports/balance",
+  "query_fields": [
+    "startDate",
+    "endDate",
+    "currency",
+    "templateType",
+    "timezone"
+  ],
+  "observed_controls": [
+    "Summary: starting balance, net activity, total payouts, ending balance",
+    "Balance change from activity: charges, fees, refunds, additional Stripe fees and net total",
+    "Payouts section",
+    "Date range presets and start/end calendar fields with Apply/Clear",
+    "Timezone selector",
+    "Per-section Export menu: local download or warehouse",
+    "Download dialog: CSV/PDF, Summary/Itemized, reporting category, Default/All/Custom columns, optional email notification, Cancel"
+  ],
+  "default_activity_columns": [
+    "balance_transaction_id",
+    "created",
+    "available_on",
+    "currency",
+    "gross",
+    "fee",
+    "net",
+    "reporting_category",
+    "description"
+  ],
+  "actions": [
+    "Viewed actual report",
+    "Opened activity export, local-download configuration and column list",
+    "Cancelled without download or email",
+    "Opened and dismissed date controls without applying",
+    "Inspected desktop and390px layout"
+  ],
+  "mutations": "No financial/admin state changed; no export, scheduling, warehouse or notification submitted. Report values and account identifiers are intentionally not retained.",
+  "cleanup": "Owned report tab closed, viewport reset. No screenshots saved.",
+  "limits": [
+    "No twin report implemented yet",
+    "Native keyboard/focus and physical touch unavailable while Mac locked",
+    "Schedule, PDF, custom columns, role matrix and non-default account variants pending"
+  ]
+}

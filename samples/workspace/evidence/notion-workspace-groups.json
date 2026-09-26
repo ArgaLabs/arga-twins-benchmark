@@ -1,0 +1,67 @@
+{
+  "date": "2026-09-24",
+  "scope": "Notion workspace group management UI and native permission state",
+  "references": [
+    "https://www.notion.com/help/create-and-manage-groups"
+  ],
+  "changes": [
+    "Settings/People/Groups navigation from pages and database views",
+    "Create, rename, delete, member add/remove, owner/member role changes and search by group/member/email",
+    "Workspace owners manage all groups; group owners manage only their own; guests and restricted tokens denied",
+    "Optimistic revisions reject stale forms before changes; group changes immediately affect existing native user tokens",
+    "Native empty group reads and failed membership lookups preserve state",
+    "Scenario users are deterministic from seed/email, available in the native user list and group picker, and cleared exactly between scenarios; guests excluded from groups"
+  ],
+  "tests": {
+    "all_notion_passed": 172,
+    "focused_group_tests": 10,
+    "counts_overlap": true,
+    "ruff": "pass",
+    "log_sha256": "9c19e1e82fbe3dffdedb2ef887046062513265c7de3fecafd61008ecea10d361",
+    "backend_schema_integration_passed": 1,
+    "combined_passed": 173,
+    "scenario_people_cases": 4
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Home Settings link opens People/Groups",
+      "Create Release reviewers, add Ada, promote to group owner",
+      "At 390px rename to Mobile release reviewers, reload, search by Ada email",
+      "Add and remove Bea; Ada remains owner",
+      "Page width and scroll width both 390"
+    ],
+    "protected_state": "Only permission_groups, permission_group_members and counters changed; all pages/users and other protected state unchanged",
+    "snapshot_sha256": "a766ebd7bd731ba160f8f8c7c5210cae64a568dfe3aea1c92e78a83495d9965c",
+    "screenshots_retained": false
+  },
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "notion-groups-production-2026-09-24.json"
+  },
+  "limits": [
+    "Membership-admin workspace roles, configurable group-creation policy, teamspace creation/associations, group icons and SCIM sync warnings remain open",
+    "Workspace billing/settings/AI/full collaboration parity remains open",
+    "No exhaustive provider visual/mobile parity claim"
+  ],
+  "review_followup": {
+    "checks": [
+      "Case-insensitive Bearer schemes",
+      "Hide navigation when token lacks effective group-read capability",
+      "Keep Settings in empty ordinary member views",
+      "Group-read-only integrations see memberships without unusable write controls"
+    ],
+    "regressions": 4
+  }
+}

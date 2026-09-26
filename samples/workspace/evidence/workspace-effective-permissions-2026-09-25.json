@@ -1,0 +1,53 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "date": "2026-09-25",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1164",
+  "head": "80bf96250addd222fe8e0e48e05ceef26dacd774",
+  "status": "local_pass_ci_and_hosted_pending",
+  "release_allowed": false,
+  "scope": [
+    "Strongest active file grants across separate Drive, Docs and Sheets APIs",
+    "Exact authenticated domain matching and case-insensitive user addresses",
+    "Expiration and revocation affect existing tokens while retaining other grants",
+    "Permission create/update expiration validation, renewal and native config reset"
+  ],
+  "provider_contract": "https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions",
+  "tests": {
+    "before_failed": 9,
+    "focused_passed": 45,
+    "drive_docs_sheets_workspace_passed": 1092,
+    "skipped": 0,
+    "make_fix": "pass"
+  },
+  "source_files": {
+    "twins/google_drive/README.md": "4595227f6742472655699843a9a39d819813d2b00411c54dfd032049aba92a7a",
+    "twins/google_drive/config.py": "6ac975adbf9b719e80c1827146e6efb3658a847ad4fc7486c3dd90a1d2dcf717",
+    "twins/google_drive/models.py": "5ea1d45a2a1e7869812c507b578d19de42f510e5148d2dffb002c7b9b99f1ece",
+    "twins/google_drive/runtime.py": "0be2df2a80111d213cecef3918872935ef389d7830c1eb7d0179bd6baee428a7",
+    "twins/google_drive/store.py": "b131fc5be21f96ef2fed23740c78e9f88b6946b9ba4cb076e8f7d9527c774a58",
+    "twins/tests/test_google_workspace_effective_permissions.py": "b90ad127654074ba7f13a1a6a2b941733a1c69387bfdeb96fef1c89caf44dc90"
+  },
+  "artifacts": {
+    "lab-workspace-effective-permissions-before.log": "6faedabed24654a3685ac0c11cc8e347ce583d8f02f683c4d98e856957d7d31b",
+    "lab-workspace-effective-permissions-focused.log": "1a0e3a6c80990bcec962c9e0519cba9c37090ba8762c58c618c0b44c89bf172a",
+    "lab-workspace-effective-permissions-regressions.log": "3a9cb6d87433c3cf3e9b41446ff25c2a179124b342b94ecf7c138420c35c3851",
+    "lab-workspace-effective-permissions-makefix.log": "967075135bb1c0868f010e5d46afb3758d2217ccb7978117ec9c3d76e2c96e01",
+    "lab-workspace-remove-expiration-before-corrected.log": "d830e0b9d59bf35eacbac0b602f7e3a9fcaed238b314fbafb3a2a7de8901b69e"
+  },
+  "limits": [
+    "Included in combined PR #1166; final CI, deployment and hosted verification remain pending. This original PR remains open until verified combined delivery.",
+    "Group membership, folder inheritance, shared-drive restrictions and complete role-dependent frontend capabilities remain open.",
+    "This is native API coverage, not an exhaustive browser/AI/collaboration audit."
+  ],
+  "current_ci_head": "80bf96250addd222fe8e0e48e05ceef26dacd774",
+  "base_update": "Main3f91765b included; review fix for removeExpiration added and new exact-head CI running.",
+  "review_followup": {
+    "comment": "https://github.com/ArgaLabs/validation-server/pull/1164#discussion_r4108409570",
+    "provider_contract": "https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/update",
+    "fixed": "Honor removeExpiration=true before final folder-role validation; false and unauthorized requests retain expiration. Expired grants renew existing tokens.",
+    "regression_before_failed": 2
+  },
+  "combined_delivery_pr": "https://github.com/ArgaLabs/validation-server/pull/1166",
+  "combined_delivery_evidence": "workspace-permissions-combined-2026-09-25.json",
+  "combined_delivery_status": "Delivered in #1166 main5f67b252; production, fresh hosted native/HTTP bootstrap, five worker images and teardown pass. This PR closed as incorporated. GUI remains pending."
+}

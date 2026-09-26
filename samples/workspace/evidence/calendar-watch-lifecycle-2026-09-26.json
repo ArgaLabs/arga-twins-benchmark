@@ -1,0 +1,195 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1193",
+  "source_head": "60899baf932388ff550e17de7004f3d263db03df",
+  "status": "deployed_hosted_native_images_pass",
+  "release_allowed": false,
+  "tests": {
+    "integrated_passed": 554,
+    "focused_lifecycle_cases": 28,
+    "make_fix": "pass",
+    "diff_check": "pass",
+    "legacy_inactive_replay_cases": 4
+  },
+  "checks": [
+    "Owner/writer/reader initial sync isolation and per-channel increasing message numbers",
+    "Requested TTL/expiration, stable resource identities and atomic malformed lifetime/duplicate rejection",
+    "Register/replay current resource permission for events, ACL, calendarList and settings",
+    "Stopped/revoked/paused/expired replay rejection without state mutation or dispatch",
+    "Actual local HTTP initial sync/change/replay, empty bodies and unchanged original Google replay headers",
+    "Legacy integration callbacks distinguish initial sync/change and both replay route aliases return 403 for inactive channels"
+  ],
+  "source_files": {
+    "twins/google_calendar/app.py": "a5f7c3b6265b074fa19bd3d6e499d750c4dba649a7e75a11f10ec1e1d96ccd32",
+    "twins/google_calendar/store.py": "745a3e15da42e3c1ba5c604dd3aea11dcbd58aeb3f732c91065df36ff3e00e39",
+    "twins/google_calendar/README.md": "f2bf661fd72beebba275c590862812d2b198a5633726f977cf5e0d629380fc7f",
+    "twins/tests/test_google_calendar_watch_lifecycle.py": "a312784606a1ad5cda6b633cb0b5cd7845e0c7d8d32d8a3621084f850b14b909",
+    "twins/tests/test_google_calendar_personal_sync.py": "f0c15883b5e277b4d3c57a8413e6a43be7efed7b730491bd6964c5e42ecd7fe0",
+    "twins/tests/test_google_calendar_twin_app.py": "5e822f2e98448849968be9b064b9022b678a33c33f175e7990ba0bb191d3034a",
+    "twins/unified/app.py": "4b5e397f78a9f3c0774dfdffaf06e12815c24ae4ecbca780bd4fef60bb7950e7",
+    "twins/tests/test_unified_twin_app.py": "a0f59778f1672b5d2fd61648486fce7f422d6a38a847896b16f6e8e07b451969"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-watch-lifecycle-red.log": "9dda1b7d94ae90d4301bd321a68641adfd1831e3601db3e7c5327c5cad7f56f2",
+    "lab-calendar-watch-lifecycle-focused-v2.log": "2bed315d49cdc22ec4c64fb3c7dcec51f0158b20884c1a9be538858b1b5fc57c",
+    "lab-calendar-watch-lifecycle-make-fix.log": "0bb6e532feaed6b5d174781e5505bd2ff71ddb576ed72b218c05bd74330a023e",
+    "lab-calendar-watch-lifecycle-make-fix-final.log": "a4302caa2bfe148f2f514f1aacd487b8184b62a77f413c35b016cf2a61d3a017",
+    "lab-calendar-watch-lifecycle-final.log": "31f148f02d6f76aa0589667428967a190c8f87b83b78ceea93189cfe219aa4d8",
+    "lab-calendar-watch-lifecycle-rebased-final.log": "e7357efaf8693443f0f051a056d3104f7e5f66a134a7a9cabcd17d82c626438b",
+    "lab-calendar-watch-lifecycle-ci-failure.log": "1363c4c331926e2148942ce8cdb9e18352edc5f19255d1f5ff72f2c216db1b94",
+    "lab-calendar-watch-lifecycle-original-ci.json": "b0ab81fbc96339942b708c74f07d1065965912f3a054916841ee21d294714fe6",
+    "lab-calendar-watch-lifecycle-ci-correction.log": "b2c157532f8d3722f628158d5d5b26ef936f5b7c1d54cb42728d4c9707a0509b",
+    "lab-calendar-watch-lifecycle-make-fix-ci.log": "f4395345e7f5e9d3cd295337709f8fdf7854b4005e426ce578c2f46858cffdd2",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/image-comparison.json": "b3869c025ac63017f04f8071bc8fd79257ab38154949ee73c274f6744973ed92",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/publication-catalog.json": "1e3be8da3fa8b25327166bf05abffb73c44928826d66ea4a61b4833b9cae85e3",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/cleanup.json": "6e28e6b76604e30e68f8bd3a789e1e5345243f6c4a47dd0f4b9355f6fa760927",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/runtime-image-evidence.json": "43f9cdf8f87183f2a6ae1e26f18ab92e3445177963e9654dab4518e3cddb73fe",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/native-result.json": "7332fff4264890b05c9605c30c0687f15555b66460b7955468553d883a6d9a70",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/worker-logs.json": "eb3e95b14d8dbb27c5766b6f905f58bbae336319f18b0163fd80aa42e0099519",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/scenario.json": "15073448748f7928e22935a3b5601e6a5c5a9c274495294649a52f6950efa267",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/operator-api-trace.json": "1957c8b6f863683848ac12e7389890532cdb5f8af5bf0f21edc52340a6d853a8",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc/control.json": "7fc3cd6972b4528e4be206daf3f24528db8bcc002b25430f89c036bd82837da8",
+    "lab-calendar-watch-lifecycle-premerge.json": "39cd7d4dd186de4a366e2466477fa735faf0e3b85fd4419d5c3fc4133c98e957",
+    "lab-calendar-watch-lifecycle-final-ci.log": "3d1bd1ada48fa57db8519d61ae4d92d1d3ef26a9dbfb8e6b286552ea276d024a",
+    "lab-final-calendar-watch-lifecycle-eae7b4dc-hosted.log": "faccf543d6de21b00329b4b75f07c6dea19523c407b7192b28387412e3875082"
+  },
+  "limits": [
+    "Exact-head CI, both deployments, serving API/proxy images and fresh three-account native/container checks pass; successful hosted callback receiver and full provider audit remain open.",
+    "Production successful receiver, queued-delivery revocation, complete channel payload validation, concurrent pagination, timed reminders and exhaustive frontend audit remain open"
+  ],
+  "screenshots_retained": false,
+  "previous_heads": [
+    {
+      "head": "a35c3a21a6a5a36a00c35248498cdba47110bab9",
+      "tests_passed": 527,
+      "ci": "Two legacy callback-count assertions failed when required initial sync was added; original failure preserved."
+    }
+  ],
+  "merge_commit": "eae7b4dc69f4656d0f87e2d314f198be0a2c1f02",
+  "ci": {
+    "head": "60899baf932388ff550e17de7004f3d263db03df",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6451,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "eae7b4dc69f4656d0f87e2d314f198be0a2c1f02",
+    "runtime_workflow": 36234632226,
+    "twins_workflow": 36234632237,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02@sha256:141e5c3a77cb8353d0c509ad911bf2ccbba19294a2b5ae382158b3a7c6ee4390",
+      "twin-unified": "us-west1-docker.pkg.dev/arga-labs/arga/twin-unified:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02@sha256:3abddf4dadfe54610bd10e3e24f5c1a5b1ff27a8a68ddf30574478f355a293bf",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02@sha256:07198787a31a986f6722f4335b40c29c1a65b45bf197c2588a78dad51cf4c2ce",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02@sha256:996862b8c1e26d34de5998abd4ec4fedf3c55b2ee77525e94fdda816ccb34d52"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00297-bm2",
+      "arga-api": "arga-api-00667-dct"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-watch-lifecycle-eae7b4dc-twins-deploy.log": "aeba622179d90aa15f21869a94e1b3230e1dcf904fd91d9f2fdf28cd755e94ae",
+      "lab-final-calendar-watch-lifecycle-eae7b4dc-runtime-deploy.log": "0cf784f23e380b030ba7108610032b0660341f1650aa3060d091d8ecf52603a4"
+    },
+    "serving_runtime": {
+      "revision": "eae7b4dc69f4656d0f87e2d314f198be0a2c1f02",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00297-bm2",
+          "observed_at": "2026-09-26T10:04:46.536935+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00297-bm2"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00297-bm2",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:07198787a31a986f6722f4335b40c29c1a65b45bf197c2588a78dad51cf4c2ce",
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00667-dct",
+          "observed_at": "2026-09-26T10:08:58.795366+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:eae7b4dc69f4656d0f87e2d314f198be0a2c1f02",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:7888b65e2c5cc77349af4f2bdeb7ac8285ecc0dc7fb4f6ced878eddca52dee76",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:7888b65e2c5cc77349af4f2bdeb7ac8285ecc0dc7fb4f6ced878eddca52dee76"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00667-dct"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00667-dct",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:7888b65e2c5cc77349af4f2bdeb7ac8285ecc0dc7fb4f6ced878eddca52dee76",
+            "sha256:996862b8c1e26d34de5998abd4ec4fedf3c55b2ee77525e94fdda816ccb34d52"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "0cf784f23e380b030ba7108610032b0660341f1650aa3060d091d8ecf52603a4",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "checks": [
+        "Each owner/writer/reader registration emits only its initial sync message 1 with matching resource and expiration headers",
+        "Malformed lifetimes and duplicate callback replacement reject with all account states unchanged",
+        "Replacement uses the same resource identity and requested shorter lifetime; shared changes fan out with exists; replay preserves Google headers",
+        "Stopped and revoked delivery replay rejects without native mutation or new dispatch"
+      ],
+      "limits": [
+        "Successful HTTP callbacks verified locally only; hosted callbacks use reserved .invalid destination and verify isolated failure delivery",
+        "No successful hosted receiver, queued-delivery revocation, concurrent pagination, timed reminder or exhaustive UI claim"
+      ],
+      "passed": true
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true
+  }
+}

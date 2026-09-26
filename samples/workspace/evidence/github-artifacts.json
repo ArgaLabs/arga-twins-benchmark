@@ -1,0 +1,158 @@
+{
+  "status": "local_browser_verified_deployment_pending",
+  "date": "2026-09-23",
+  "screenshots_retained": false,
+  "features": [
+    "ZIP archive bytes and exact digest/size",
+    "60-second signed download redirects",
+    "artifact deletion and run-deletion cascade",
+    "repository/run pagination and name filter",
+    "public metadata, OAuth and installation Actions grants",
+    "text/base64 Scenario seed and snapshot replay",
+    "responsive artifact table and deletion confirmation"
+  ],
+  "checks": {
+    "github_regression_tests": 326,
+    "ruff": "passed",
+    "desktop_chrome": "Artifact table inspected and native ZIP download verified",
+    "mobile_chrome": {
+      "width": 390,
+      "height": 844,
+      "scroll_width": 390,
+      "deletion_reload": "passed"
+    },
+    "native_readback": {
+      "protected_repository": "unchanged",
+      "sha256": "2758fe9b92bbd7668669485e45ee9eb73e90630334dc1315327ce2499f5f24f5"
+    },
+    "candidate_adapters": {
+      "kind": "in_process_gateway_proxy_check",
+      "candidate_api_status": 200,
+      "candidate_browser_proxy_status": 200,
+      "same_archive_bytes": true,
+      "admin_denied": true,
+      "archive_sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+      "not_a_browser_agent_rollout": true
+    },
+    "root_compatibility_runner_tests": 107,
+    "contract_matrix_regressions": 45,
+    "full_github_contract_matrix": {
+      "status": "pass_at_high_severity_threshold",
+      "high": 0,
+      "medium": 122,
+      "low": 0,
+      "unexpected_5xx": 0
+    },
+    "browser_download": {
+      "status": "passed",
+      "file": "artifact-35676634226106.zip",
+      "size_bytes": 213,
+      "sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+      "members": [
+        "run.json"
+      ],
+      "workflow_run_id": 2700049846,
+      "downloaded_at": "2026-09-23T19:00:36.496263+00:00",
+      "verification": "File absent before the fresh Chrome download click and present afterward; size and digest equal the native artifact. Browser event delivery stalled and returned a stale paused-response error, so the downloaded file was independently inspected."
+    },
+    "github_regression_tests_after_main_integration": 346
+  },
+  "provider_reference": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28",
+  "remaining": [
+    "hosted deployment and browser validation",
+    "complete Actions/review/project settings, collaboration and visual parity"
+  ],
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1106",
+  "ci_followup": {
+    "initial_failure": "Compatibility runner cleared artifact records but retained initialization flags and expected legacy JSON downloads",
+    "fix": "Reset both local Actions resource and singleton fixtures; validate documented redirect, ZIP bytes, size and digest",
+    "local_result": "107 passed",
+    "ci_rerun": "Previous feature-head full GitHub Twin Fidelity workflow 35834526925 succeeded; latest main integration pending current PR CI",
+    "manual_workflow_failure": "Public artifact metadata was incorrectly required to reject missing authentication by the contract harness",
+    "manual_workflow_fix": "Allow anonymous metadata GETs only on public repositories; retain private, invalid-token, archive-download and write auth checks"
+  },
+  "review_followup": {
+    "branch_sha": "A branch override derives its current commit SHA unless an explicit SHA is provided.",
+    "browser_authorization": "Artifact handlers now resolve real request credentials and enforce OAuth scopes, repository membership and installation Actions grants; anonymous private metadata, downloads and deletes are rejected.",
+    "tests": {
+      "artifact_regressions": 22,
+      "all_github_regressions": 326,
+      "ruff": "passed",
+      "artifacts_pyright": "passed",
+      "expanded_typecheck": "passed for artifact, Actions UI, compatibility handlers and registry after preserving decorated handler types",
+      "typing_followup_regressions": 26
+    },
+    "chrome_via_cua": {
+      "private_repository_navigation": "passed",
+      "authenticated_adapter": "actual sample BrowserProxy",
+      "mobile_width": 390,
+      "deletion_after_reload": "passed",
+      "protected_artifact_state": "unchanged",
+      "download": "Chrome blocked this authenticated-proxy download with ERR_BLOCKED_BY_CLIENT; no new file was saved. Prior direct-twin download success remains recorded separately.",
+      "screenshots_retained": false
+    },
+    "deployment": "Source-head CI passed; hosted deployment and readback pending.",
+    "download_link_followup": {
+      "behavior": "Use native HTML download semantics to keep the Actions run page open.",
+      "chrome_via_cua": "Passed after recovering the blocked Chrome confirmation: the native download link emitted a download event, kept the run page open and saved a new verified ZIP through the actual authenticated sample BrowserProxy.",
+      "browser_manager_inspection": "Chrome internal downloads URL was blocked by Browser Use URL policy; no workaround attempted.",
+      "artifact_tests_passed": 22,
+      "ruff": "passed",
+      "verification": {
+        "source_commit": "d4602281213075b2cdf01a80d75e44dc887a0a1d",
+        "new_file_verified": true,
+        "size_bytes": 213,
+        "sha256": "1ed34e94eb063542c55d1ea3e43c9b4224cb817eaf711ee6c83406e2b3be45c5",
+        "members": [
+          "run.json"
+        ],
+        "archive_integrity": "passed",
+        "protected_artifact_state": "unchanged",
+        "native_readback": {
+          "protected_unchanged": true,
+          "demo_artifacts_remaining": 1,
+          "proxy_statuses": [
+            {
+              "method": "GET",
+              "path": "/",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions/runs/2700049846",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "path": "/_ui/repos/test-org/demo-repo/actions/artifacts/35676634226106/download",
+              "status": 302
+            },
+            {
+              "method": "GET",
+              "path": "/__artifacts/test-org/demo-repo/35676634226106",
+              "status": 200
+            }
+          ]
+        }
+      }
+    },
+    "main_integration": "Combined anonymous public artifact metadata and public merge-status matching; all 346 GitHub regressions passed."
+  },
+  "production_followup": {
+    "integrated_pr": 1115,
+    "merged_revision": "46938097",
+    "evidence": "mailbox-cursor-artifacts-production-2026-09-24.json",
+    "status": "native_and_browser_download_delete_checks_passed",
+    "full_actions_parity": false
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "named_ranges": {
+    "MoveBlock": "Sheet1!$A$2"
+  },
+  "cells": {
+    "A1": {
+      "formula": null,
+      "value": "0.0"
+    },
+    "D1": {
+      "formula": "SUM(MoveBlock)",
+      "value": "3"
+    },
+    "A2": {
+      "formula": null,
+      "value": "3.0"
+    },
+    "A3": {
+      "formula": null,
+      "value": "1.0"
+    },
+    "A4": {
+      "formula": null,
+      "value": "2.0"
+    },
+    "A5": {
+      "formula": null,
+      "value": "4.0"
+    }
+  },
+  "source": "Google Sheets in Chrome; disposable private workbook 1crzn1dVAiZqIRL3hj2iWjKrK0cKFIogUr6F3j2oYtcA, moved to Trash after export; temporary export removed.",
+  "before": {
+    "values": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ]
+    ],
+    "named_range": "Sheet1!A2:A4",
+    "formula": "=SUM(MoveBlock)"
+  },
+  "move": {
+    "source": {
+      "sheetId": 0,
+      "dimension": "ROWS",
+      "startIndex": 1,
+      "endIndex": 3
+    },
+    "destinationIndex": 4
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "date": "2026-09-24",
+  "kind": "provider_reference_checks_with_isolated_docs_fixture",
+  "browser": "Chrome",
+  "providers": {
+    "notion": {
+      "status": "authentication_required",
+      "observed": "Login form with email, Google, ChatGPT, Apple, Microsoft, passkey and SSO controls.",
+      "workspace_permissions_and_ai": "not inspected; intended test workspace and sign-in requested",
+      "latest_entry_check": {
+        "date": "2026-09-25",
+        "status": "authentication_required",
+        "entry": "Official notion.so redirected to notion.com; Log in opened the app.notion.com login form.",
+        "handoff": "Chrome sign-in tab left available; user asked to sign in while other release work continues.",
+        "workspace_mutated": false
+      }
+    },
+    "linear": {
+      "status": "authenticated_bounded_desktop_reference_inspected",
+      "observed": "Login with Google, email, SAML SSO and passkey controls.",
+      "workspace_permissions_and_ai": "Authenticated Arga Labs workspace; AI, notification and security settings inspected read-only. No settings, membership, application grants, issues, projects or messages changed.",
+      "previous_entry_status": "authentication_required",
+      "agent_entry": {
+        "route": "/agent",
+        "controls": [
+          "Send a message to Linear AI",
+          "Skills",
+          "Attach images, files, or videos",
+          "Send message",
+          "Switch agent chat",
+          "Chat history"
+        ],
+        "skills_menu": "Search skills and Create skill; Escape closes the menu.",
+        "request_submitted": false
+      },
+      "settings_inventory": {
+        "personal": [
+          "Preferences",
+          "Profile",
+          "Notifications",
+          "Code & reviews",
+          "Security & access",
+          "Connected accounts",
+          "Agent personalization"
+        ],
+        "issues": [
+          "Labels",
+          "Templates",
+          "SLAs"
+        ],
+        "projects": [
+          "Labels",
+          "Templates",
+          "Statuses",
+          "Updates"
+        ],
+        "features": [
+          "AI & Agents",
+          "Loops",
+          "Initiatives",
+          "Documents",
+          "Customer requests",
+          "Releases",
+          "Pulse",
+          "Asks",
+          "Emojis",
+          "Integrations"
+        ],
+        "administration": [
+          "Workspace",
+          "Teams",
+          "Members",
+          "Security",
+          "API",
+          "Applications",
+          "Billing",
+          "Usage & limits",
+          "Import & export"
+        ]
+      },
+      "ai_and_agents": {
+        "routes": [
+          "/settings/ai",
+          "/settings/ai/agent"
+        ],
+        "availability": [
+          "Linear Agent enabled",
+          "Coding sessions needs code access",
+          "Code Intelligence disabled",
+          "Triage Intelligence disabled",
+          "Resolved thread summaries enabled"
+        ],
+        "controls": [
+          "Enable Linear Agent",
+          "Enable web search",
+          "Enable MCP connectors",
+          "Allowed MCP connectors Manage",
+          "Workspace guidance",
+          "Installed agents guidance",
+          "Usage settings"
+        ],
+        "manage_navigation": "Allowed MCP connectors Manage navigates to /settings/security#linear-agent-mcp-servers; it is not a dialog."
+      },
+      "permission_controls": [
+        "New user invitations",
+        "Team creation",
+        "Workspace initiatives",
+        "Manage workspace labels",
+        "Manage workspace templates",
+        "Manage pinned views",
+        "Manage loops",
+        "API key creation",
+        "Import data",
+        "Modify agent guidance",
+        "Review third-party applications",
+        "Prevent guests from interacting with agents in the workspace",
+        "Enable Linear Agent web search",
+        "Enable Linear Agent MCP connectors"
+      ],
+      "notifications": {
+        "routes": [
+          "/settings/account/notifications",
+          "/settings/account/notifications/email"
+        ],
+        "channels": [
+          "Desktop",
+          "Mobile",
+          "Email",
+          "Slack"
+        ],
+        "email_controls": [
+          "Enable email notifications",
+          "Only deliver priority notifications",
+          "Notification format",
+          "Delay low priority emails outside of work hours until next work day",
+          "Immediately notify if an assigned issue is urgent or breaches SLA",
+          "Assignments",
+          "Status changes",
+          "Comments and replies",
+          "Mentions",
+          "Reactions",
+          "Subscriptions",
+          "Document changes",
+          "Updates",
+          "Reminders and deadlines",
+          "Loops",
+          "Apps and integrations",
+          "Billing",
+          "Triage"
+        ],
+        "conditional_state": "Only deliver priority notifications is disabled while Priority inbox is not enabled.",
+        "format_menu": "Digest and Immediate. Opened then cancelled with Escape; Digest remains selected."
+      },
+      "limits": [
+        "Single authenticated desktop account; role-dependent enforcement, native mutations, delivery and realtime collaboration remain pending.",
+        "AI generation, cancellation, errors and accepted native effects remain pending.",
+        "No exhaustive route, mobile or physical touch certification."
+      ],
+      "inbox": {
+        "route": "/inbox",
+        "controls": [
+          "Mark all as read",
+          "Delete all",
+          "Delete read",
+          "Delete completed",
+          "Settings",
+          "Priority inbox",
+          "Group unread",
+          "Order by",
+          "Show snoozed",
+          "Unread first"
+        ],
+        "checked": "Opened display options and cancelled; opened an already-read issue notification to inspect Activity/Subscribe/attachments/comment composer. Unread count remained one; no comments, subscription or notification state changed."
+      },
+      "member_administration": {
+        "route": "/settings/members",
+        "controls": [
+          "Search by name or email",
+          "Member filter",
+          "Export CSV",
+          "Invite",
+          "Sort Name/Email/Status/Joined/Last seen",
+          "Member menu"
+        ],
+        "filters": [
+          "All",
+          "Admins",
+          "Members",
+          "Guests",
+          "Applications",
+          "Pending invites",
+          "Suspended",
+          "Left workspace"
+        ],
+        "invite_dialog": {
+          "fields": [
+            "Email",
+            "Role"
+          ],
+          "roles": [
+            "Guest: limited access to teams",
+            "Member: full access with limited permissions",
+            "Admin: full administrative access"
+          ],
+          "checked": "Opened role selector, selected Guest in the unsent draft, then Escape closed the dialog and returned focus to Invite. No email entered or invitation sent."
+        },
+        "filter_cancel": "Escape retains All and returns focus to Member filter."
+      },
+      "team_administration": {
+        "routes": [
+          "/settings/teams",
+          "/settings/new-team"
+        ],
+        "list_controls": [
+          "Filter by name",
+          "Team status",
+          "Export CSV",
+          "Create new team",
+          "Sort Name/Visibility/Members/Issues/Created",
+          "Team menu"
+        ],
+        "create_fields": [
+          "Icon & Name",
+          "Identifier",
+          "Parent team",
+          "Team access",
+          "Timezone",
+          "Copy settings from existing team"
+        ],
+        "visibility_options": [
+          "Public to workspace",
+          "Private to team members"
+        ],
+        "observed_policy": "Private teams are visible to team members and workspace admins. Parent teams supply inherited settings/workflows; subteams must copy parent settings. Copying settings excludes team members and Slack notification settings.",
+        "checked": "Opened visibility options and cancelled with Escape, then used Back without entering fields or creating a team. Existing active-team count unchanged."
+      }
+    },
+    "stripe": {
+      "status": "authenticated_entry_controls_inspected",
+      "reporting_navigation": [
+        "Reports",
+        "Custom metrics",
+        "Sigma (activation entry)",
+        "Revenue Recognition",
+        "Data management"
+      ],
+      "assistant_entry": "Help opens a panel titled Assistant with an empty text composer, attachment control, disabled send control and AI disclaimer.",
+      "assistant_request_submitted": false,
+      "account_data_mutated": false,
+      "account_admin_and_permissions": "not audited"
+    },
+    "google_docs": {
+      "status": "bounded_owner_desktop_segment_reference_verified",
+      "account_conditions": "Authenticated owner; private new Pages-format document; no sharing or outbound messages.",
+      "fixture": "ARGA-FIDELITY-20260924-DOC-SEGMENTS",
+      "viewport": {
+        "width": 1063,
+        "height": 806
+      },
+      "observations": [
+        "Insert > Page elements exposes Header, Footer and Footnote alongside Table of contents, Watermark and Page numbers.",
+        "Header insertion focuses an editable area above the body, with Different first page and Options controls.",
+        "Header Options includes Header format, Page numbers and Remove header.",
+        "Headers & footers dialog exposes Header/Footer margins (both initially 0.5 inches), Different first page, Different odd & even, Cancel and Apply. Cancel was exercised without changing these settings.",
+        "While editing a header, Footnote and Table of contents are disabled; Break and Bookmark are also disabled in the parent Insert menu.",
+        "Footer insertion focuses a separate area at the page bottom, with the same Different first page and Options entry points.",
+        "Command+Option+F in the body inserts a superscript footnote reference and focuses a numbered note above the footer; toolbar font size changes from 11 to 10.",
+        "After Saved to Drive and reload, transient desktop inspection confirmed header text, body reference, numbered footnote and footer persist in separate regions.",
+        "Ask Gemini, Gemini menu and inline Write with Gemini entry points are visible; no AI request was submitted."
+      ],
+      "cleanup": {
+        "status": "confirmed_moved_to_trash",
+        "confirmation": "File moved to trash names the unique fixture; no permanent deletion submitted; reference tab closed."
+      },
+      "native_api_readback": "GWS read of only this fixture failed with invalid_grant/invalid_rapt reauthentication. UI persistence verified; API payload shape not verified live.",
+      "known_twin_gap": {
+        "source_revision": "8b40448d06afcde6fead75dc16dddbf54a428886",
+        "detail": "createHeader/createFooter/createFootnote native records exist, but insertText routes through a body-only location validator that rejects nonempty segmentId; Insert UI lacks these controls."
+      },
+      "limits": [
+        "No non-owner, shared, mobile, physical touch, pageless, section-specific or multi-page reference coverage.",
+        "No native API shape attestation, full Unicode input certification or complete segment feature implementation."
+      ]
+    }
+  },
+  "privacy": "Account identifiers, live balances, revenue and other financial record values are excluded from this report.",
+  "limits": [
+    "Entry controls only; no complete provider parity, AI-response, permission, admin, visual or mobile certification.",
+    "Notion still needs sign-in; Linear was signed in by the user and its bounded authenticated checks are recorded above.",
+    "Native Print was blocked during the original entry check; subsequent hosted Print/afterprint passes are recorded in gmail-compose-production-2026-09-24.json. Direct container attestation still requires GCP reauthentication."
+  ],
+  "screenshots_retained": false
+}

@@ -1,0 +1,71 @@
+{
+  "kind": "local_injected_failure_cua_check",
+  "browser": "Google Chrome via CUA",
+  "read_failure": {
+    "restored_top": 0,
+    "restored_left": 0,
+    "first_cell": "A1",
+    "marker_preserved": true
+  },
+  "save_failure": {
+    "restored_top": 0,
+    "restored_left": 0,
+    "dirty_C3": "9",
+    "marker_preserved": true
+  },
+  "retry": {
+    "top": 2586,
+    "first_cell": "A117",
+    "last_cell": "Q163",
+    "status": "Saved to this twin"
+  },
+  "native_values": [
+    [
+      "Protected marker",
+      "Wide column heading to fit"
+    ],
+    [],
+    [
+      "",
+      "",
+      9,
+      18
+    ]
+  ],
+  "protected_sheet_formulas": [
+    [
+      "='Plan'!C3",
+      "Protected summary"
+    ]
+  ],
+  "no_screenshot_files": true,
+  "date": "2026-09-22",
+  "tested_head": "9110d17cea01f246d019493d88848a701e3d2be4",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1093",
+  "merge_revision": "a8794a31b81420aa5c235b37a5cdbac528fef938",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35815189283",
+  "limitations": [
+    "Local injected-failure check, not hosted verification or full Sheets parity.",
+    "No screenshot files retained."
+  ],
+  "ci_check_summary": {
+    "verified_at": "2026-09-24",
+    "revision": "9110d17cea01f246d019493d88848a701e3d2be4",
+    "check_runs_total": 29,
+    "check_run_conclusions": {
+      "success": 21,
+      "skipped": 8
+    },
+    "legacy_statuses": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "url": "https://vercel.com/argalabs/validation-server/71d5qu3BazPV9YqZ9rAsC2GPgLCv"
+      }
+    ],
+    "scope": "GitHub CI and deployment statuses, separate from the feature assertions in checks. Skipped jobs are not passed feature checks.",
+    "previous_ambiguous_count": 30
+  },
+  "deployment_status": "in_progress",
+  "deployment_status_scope": "Historical status when this local record was made; see sheets-viewport-production-2026-09-22.json for completed hosted deployment evidence."
+}

@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-24",
+  "status": "local_checks_passed",
+  "problem": "GET requested_reviewers returned an unrelated empty generic collection and persisted that collection, producing a false unsafe result during WKS-01 verification.",
+  "changes": [
+    "Dedicated reviewer read returns users and teams from existing pull request state",
+    "Generic collection and missing-resource GET requests no longer create empty resource collections"
+  ],
+  "tests": {
+    "github_suite_passed": 350,
+    "focused_passed": 26,
+    "focused_is_subset": true
+  },
+  "official_reference": "https://docs.github.com/en/rest/pulls/review-requests#get-all-requested-reviewers-for-a-pull-request",
+  "original_hosted_trial": "lab-wks01-contract-browser-2026-09-24-r1",
+  "original_trial_preserved": true,
+  "production_validation": "pending",
+  "screenshots_retained": false,
+  "ci": "passed",
+  "merge_revision": "5703d0bef5f033a7b6e7b93f0f2f0a4ebda8e752",
+  "deployment": {
+    "twins": {
+      "run": 35982008113,
+      "conclusion": "success"
+    },
+    "runtime": {
+      "run": 35982008099,
+      "conclusion": "success"
+    }
+  },
+  "hosted_validation": "Fresh WKS-01 and WKS-04 candidates passed; teardown confirmed"
+}

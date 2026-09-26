@@ -1,0 +1,81 @@
+{
+  "date": "2026-09-22",
+  "kind": "local_native_scenario_regression",
+  "checks": {
+    "native_workbook_and_sheet_properties": "pass",
+    "native_title_precedence_and_escaped_A1_titles": "pass",
+    "stable_native_sheet_ids": "pass",
+    "large_grid_and_sparse_formula": "pass",
+    "hidden_rows_and_columns": "pass",
+    "row_heights_and_column_widths": "pass",
+    "formatting_and_formula_preservation": "pass",
+    "unrelated_tab_preservation": "pass",
+    "reset_replay_restores_mutated_state": "pass",
+    "seed_config_remains_unchanged": "pass",
+    "invalid_native_request_fails_seed": "pass",
+    "falsey_non_list_requests_rejected": "pass"
+  },
+  "regressions": {
+    "new_tests_failed_before_fix": 2,
+    "passed_after_fix": 196,
+    "coverage": [
+      "Sheets scenario runners",
+      "Sheets native API",
+      "Sheets viewport",
+      "Scenario generator"
+    ],
+    "before_log": "samples/workspace/evidence/regression-log-summaries.json#lab-sheets-scenario-layout-before.txt",
+    "after_log": "samples/workspace/evidence/regression-log-summaries.json#lab-sheets-scenario-layout-tests.txt"
+  },
+  "limitations": [
+    "Historical local evidence; subsequent deployment and hosted Scenario replay are recorded in sheets-scenario-production-2026-09-22.json.",
+    "Native property seeding does not establish frontend feature parity.",
+    "No screenshot files retained."
+  ],
+  "chrome_verification": {
+    "browser": "Google Chrome via CUA",
+    "kind": "local_seed_replay",
+    "grid_rows": 5000,
+    "grid_columns": 100,
+    "row_1_height": 48,
+    "column_A_width": 180,
+    "hidden_rows_3_4_and_columns_C_D": "pass",
+    "header_bold": "pass",
+    "CV5000_formula": "=B2*3",
+    "CV5000_initial_value": 21,
+    "Cua_B2_edit": 11,
+    "native_B3_after_edit": 22,
+    "native_CV5000_after_edit": 33,
+    "protected_tab_unchanged": "pass",
+    "replay_B2_restored_to": 7,
+    "mobile_viewport": {
+      "width": 390,
+      "height": 844,
+      "document_width": 390
+    },
+    "native_readback_sha256": "305f4f3a95c29c7673cbd4c5874443c0b00d5ee81db0a2ec88bd6064960eca86",
+    "screenshots_retained": false
+  },
+  "review_followup": {
+    "issue": "Falsey non-list native request payloads were skipped",
+    "invalid_payload_cases": [
+      {},
+      "",
+      null,
+      false,
+      0
+    ],
+    "passed": 5
+  },
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1096",
+  "source_revision": "29c90bfe0d7b75452128170780afa123fc79f791",
+  "implementation_pr_head": "172774989d825c406d01dfd1cdf9ca2ae920618f",
+  "operator_evidence_directory": "runs/local/sheets-scenario-layout-2026-09-22",
+  "operator_artifacts_sha256": {
+    "native-readback.json": "305f4f3a95c29c7673cbd4c5874443c0b00d5ee81db0a2ec88bd6064960eca86",
+    "before.txt": "70b194d92ed0e922a26763873a49daad6f7a2ec9015e0dd6f3757e522ca7a8dc",
+    "tests.txt": "f554e3266a62156f7b6fb1eed98a54ad6e3d384aad812937e713501ca0ca1db6",
+    "fixture.json": "b316aaad07c29cb9d9007a686f30f9f2b27cd7279ebda0f9c934cf6d509640c5"
+  },
+  "source_provenance_limit": "The implementation PR head and merge revision are known, but the exact working-tree hash for the original 196-test invocation was not captured. It is not attested as a test of the final PR head; the later 5-case review followup is separate."
+}

@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-22",
+  "provider": "linear",
+  "status": "local_and_hosted_verified",
+  "problem": "Table-toolbar collapse on pointer focus moved Save changes before mouseup, swallowing the click and leaving edits unsaved.",
+  "fix": "Defer toolbar collapse through pointer activation; retain immediate keyboard focus behavior and release on pointer cancellation.",
+  "validation": {
+    "tests_passed": 43,
+    "log": "/tmp/lab-linear-pointer-save-tests.txt",
+    "Chrome_via_CUA": [
+      "Desktop pointer Save persists table text",
+      "390px pointer Save persists inserted row and edited table text after reload",
+      "390px pointer Comment persists a new table comment",
+      "Seeded comment and protected issue unchanged"
+    ],
+    "screenshots_retained": false
+  },
+  "native_readback_sha256": "2d73efb9d9b13ab1f93f36fdd685c469ac5712dd25152be1a35bebf99b91faf0",
+  "source_sha256": {
+    "twins/linear/table_editor.py": "ab703775acaa1012e03cb14d33bc515ebe590e4a8c10837b00ebaf5b9bf438ac",
+    "twins/tests/test_linear_table_controls.py": "05881d14d407db7a4311a552aae8d4cb0745cf42b5707bdc576132e40a211485"
+  },
+  "limitations": [
+    "Full Linear feature/reference/mobile parity remains open"
+  ],
+  "production": {
+    "pull_request": 1105,
+    "merge_sha": "1ea7872a1d9da9603370187d53020e082d1b078f",
+    "deploy_twins": {
+      "run": 35833193583,
+      "conclusion": "success"
+    },
+    "deploy_runtime": {
+      "run": 35833193626,
+      "conclusion": "success"
+    }
+  },
+  "hosted_evidence": "samples/workspace/evidence/linear-pointer-production-2026-09-23.json"
+}

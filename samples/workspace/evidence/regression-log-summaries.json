@@ -1,0 +1,111 @@
+{
+  "kind": "retained_regression_invocation_summaries",
+  "captured": "2026-09-24",
+  "records": {
+    "lab-gmail-all-matching-network-tests.txt": {
+      "source_log_sha256": "4ac1415bc96ad83e5cf35914b5c1466e429d515dc1ba56f54726fbac72488d79",
+      "observed_results": [
+        "5 passed, 56 deselected, 3 warnings in 2.23s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-gmail-all-matching-review-tests.txt": {
+      "source_log_sha256": "a3140aa23f623b1cf969823050efbcf29c66b1074b6bb07d3a9aa9ad4b91b952",
+      "observed_results": [
+        "29 passed, 1 warning in 3.65s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-gmail-all-matching-tests.txt": {
+      "source_log_sha256": "372479809744135b3b95141d700f02450c25e3d5b7e322bf4bdfa4d12d5d149b",
+      "observed_results": [
+        "6 failed, 109 passed, 1 warning in 10.62s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-gmail-all-matching-ui-tests.txt": {
+      "source_log_sha256": "c29347bb795f110d32f132e756ac9b5b7313787261b22e8e693883ebda9bbd02",
+      "observed_results": [
+        "54 passed, 1 warning in 4.72s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-docs-tabs-final-regressions.txt": {
+      "source_log_sha256": "0f52cf3fa0063a6128c6a986ddcb33e64f6d18ae84790dfb273f173d4e0b1594",
+      "observed_results": [
+        "185 passed, 3 warnings in 13.06s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-docs-tabs-review-tests.txt": {
+      "source_log_sha256": "15a6d8fc43ff51052dbae6719968db0c55133b02d0d932e53a0ead6266672144",
+      "observed_results": [
+        "35 passed, 1 warning in 2.38s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-docs-tabs-shared-tests.txt": {
+      "source_log_sha256": "b8e721819833e8659da3009597f5f3c9626b7426b8ad3877fbe1bf25c9648001",
+      "observed_results": [
+        "23 passed, 1 warning in 1.85s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sheets-frozen-final-tests.txt": {
+      "source_log_sha256": "4b70e905773f76fa2c8daa9b0512ee0f957b13f85abb13a86d773badb6f4cc57",
+      "observed_results": [
+        "165 passed, 1 warning in 12.22s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sheets-frozen-regressions.txt": {
+      "source_log_sha256": "dd4dc63f8d1b96e389570eb934a8c23440aa8de28557f3f0541511c415a2557b",
+      "observed_results": [
+        "162 passed, 1 warning in 11.10s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sheets-frozen-review-regressions.txt": {
+      "source_log_sha256": "5b4b98efbe7e4b40c0c067c4a8588fb3b3f210c321b7c7af903667b427274cdf",
+      "observed_results": [
+        "168 passed, 1 warning in 11.28s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-workspace-integrated-tests.txt": {
+      "source_log_sha256": "927673fee16b663dc0c22f107f0aa1ea75782ab5c3732a0823a179794c784797",
+      "observed_results": [
+        "573 passed, 3 warnings in 93.39s (0:01:33)"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-workspace-merge-type-tests.txt": {
+      "source_log_sha256": "d2d29787f5700a5f612aaa8b8236a9e40023ab1f56d81dc16ac2266f218557e9",
+      "observed_results": [
+        "70 passed, 1 warning in 4.09s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sheets-scenario-layout-before.txt": {
+      "source_log_sha256": "70b194d92ed0e922a26763873a49daad6f7a2ec9015e0dd6f3757e522ca7a8dc",
+      "observed_results": [
+        "2 failed, 2 deselected in 0.44s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sheets-scenario-layout-tests.txt": {
+      "source_log_sha256": "f554e3266a62156f7b6fb1eed98a54ad6e3d384aad812937e713501ca0ca1db6",
+      "observed_results": [
+        "196 passed, 1 warning in 6.87s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    },
+    "lab-sample-package-gate-tests.txt": {
+      "source_log_sha256": "113baf7e4cb083dd8f695720eb8c8295e01eba48fa51436f4cb0281ebb348d3d",
+      "observed_results": [
+        "11 passed, 85 deselected in 0.19s"
+      ],
+      "note": "Recorded invocation result; counts across invocations may overlap and are not additive."
+    }
+  }
+}

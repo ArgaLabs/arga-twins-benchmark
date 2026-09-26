@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-23",
+  "status": "production_hosted_verified",
+  "screenshots_retained": false,
+  "bug": "Account reset with an explicit empty groups list retained the previous membership and group-granted Calendar access.",
+  "fix": "Treat groups=[] as clearing membership; preserve membership only when groups is omitted.",
+  "validation": {
+    "regression_reproduced_before_fix": true,
+    "calendar_tests": 82,
+    "type_errors": 0,
+    "ruff": "passed",
+    "full_contract_matrix": "passed",
+    "unexpected_5xx": 0,
+    "existing_token_access_revoked": true,
+    "owner_state_unchanged": true
+  },
+  "limits": [
+    "Production CI, deployments and hosted existing-token revocation passed; broader Calendar parity remains open.",
+    "This runner-facing account reset fix does not add provider group administration UI or certify full Calendar parity."
+  ],
+  "merge_commit": "eb05493164d5622159c5d781826cd6d66c5fc054",
+  "ci": "all_applicable_checks_passed",
+  "production": {
+    "twins_run": 35940056249,
+    "twins_status": "success",
+    "runtime_run": 35940056326,
+    "runtime_status": "success"
+  },
+  "hosted_validation": {
+    "status": "passed",
+    "evidence": "sheets-calendar-production-2026-09-24.json",
+    "run_id": "4f86415a-3c0f-41b7-96ab-1840e46119cf",
+    "cleanup": "torn_down"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-26",
+  "provider": "stripe",
+  "status": "deployed_hosted_clock_native_images_pass",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1198",
+  "source_head": "7308fb8d39f193cd0c66171835f9ee12df56e6b4",
+  "changes": [
+    "Unconfigured clocks use advancing current UTC",
+    "Explicit zoned ISO base_time fixes Scenario time; omitted clock clears a prior fixed seed",
+    "Malformed clock rejects before any reset or idempotency/resource mutation",
+    "Bare reset preserves active clock; fixed export retains clock without mutation",
+    "Billing test clocks remain independent"
+  ],
+  "tests": {
+    "new_regressions_failed_before_fix": 15,
+    "stripe_and_generator_passed": 192,
+    "native_seeding_integration_passed": 1,
+    "node_sdk_tests_passed": 32,
+    "node_sdk_suites_passed": 20,
+    "make_fix": "pass"
+  },
+  "preserved_attempts": [
+    "The first integrated pytest invocation named a nonexistent test file and collected no tests; corrected invocation passed"
+  ],
+  "source_sha256": {
+    "twins/stripe/clock.py": "2e17824499e8fdac03a7a62f0a4a0b043ab9a30710b0a706d874f34ecc8f8473",
+    "twins/stripe/store.py": "127017bcb1038a5f3201cfced8fd390734650a1c7ccd754910af15d0f5e11ee4",
+    "twins/stripe/app.py": "a40c2b985f45844ec1e8bac3284c2d5106b33a359065fede0c65661aea674322",
+    "twins/stripe/scenario_runner.py": "ffd6b5497d2cdd0c2f4692b0a1ddd785c15ea7a2befb123b31759845cf80641e",
+    "twins/stripe/README.md": "25c1d678c174aa8192711685708bc58d8b16b60095bb6bdbfce05e1350e04b62",
+    "app/validate/scenario_generator.py": "fc44ba304001c7c3ca8fd37d414211840d64dfb4eaeefcfbc4a77c2e5b329855",
+    "twins/tests/test_stripe_clock.py": "f2c3bf9774ba0622e3b366863b421a5a84c17a9e12c8fc24ee9edc8981bd341f"
+  },
+  "artifacts_sha256": {
+    "lab-stripe-clock-node-install.log": "83ff3508ab8dd9315e1f2dbef7e2bb962131178e136433ea5382808a936d9173",
+    "lab-stripe-clock-deps.log": "d734a32f58fae3523c917bc9b3ef7afe573d913ce54a621d26f50897e351febb",
+    "lab-stripe-clock-seeding-integration.log": "63c905da8939fb2b532e871342f0baa566f0dd0000b6efa02eae7b516b771e09",
+    "lab-stripe-clock-integrated-r2.log": "76d207dd302551a53932f7ef6400c8aec98f8054d61d0a5770ac0c83aeeb39a1",
+    "lab-stripe-clock-node-sdk.log": "a944432e4e94c6e44537787686347f2e56bad7ff3d8a62fc9262648c966f80d0",
+    "lab-stripe-clock-make-fix.log": "7218dffad38ee33906d975f30ca1c64cc821afa066c2eaa92b10701385a9cfa2",
+    "lab-stripe-clock-red.log": "8b14709d191ad3ecc5af506a5b77a534a3d5842f6586017e352f1aca5ee1c21c",
+    "lab-stripe-clock-green.log": "7e447d97b9d6a2a9b06582b7026f01445a135525fc66836c98169b7681aee3dc",
+    "lab-stripe-clock-integrated.log": "ced96593cb8eaf8b26c797505bef17ad66c610ef7810bc3344605393623b628a",
+    "lab-final-stripe-clock-f40217dd/browser-observations.json": "801737a6e38665994d0b0cf27cbf9c4a068649125a0dccf8e3b88e4f24e4be42",
+    "lab-final-stripe-clock-f40217dd/native-result.json": "f258341ce9eb27c7d0954268fec3fd7c697454f8ace48702bc19b4ae359a1819",
+    "lab-final-stripe-clock-f40217dd/fixed/browser-trace.json": "a980747bef035a8328a7c29e922ec645cdd6cf39cf40e355b3b6af9ac0de7ec0",
+    "lab-final-stripe-clock-f40217dd/fixed/image-comparison.json": "7f89f98f43d1b72fc4cd4de013238e33057a7e9b03d85c4ff774110ae7e67b39",
+    "lab-final-stripe-clock-f40217dd/fixed/workspace.json": "39588a28b0ac4c4cd963680be4ea1fbd00fe44dc2fbb34261dd20e4d3c07753f",
+    "lab-final-stripe-clock-f40217dd/fixed/publication-catalog.json": "dd54fc202bb3e4575b342cef2ed334cf2106b79fd6575da865d5cf73fe348697",
+    "lab-final-stripe-clock-f40217dd/fixed/browser-baseline.json": "be7041d1713061a95b734e190d181346569e384a2df051a91a640c6fc430305f",
+    "lab-final-stripe-clock-f40217dd/fixed/cleanup.json": "d7eb17b4f966f83589ecca7ba9f4e897934d1e391538569d16ef1ea5e9253ec6",
+    "lab-final-stripe-clock-f40217dd/fixed/runtime-image-evidence.json": "952b3b76c73b7bd51ee1d8c2f6da69c11f24e585af66d10293c4df818d9bb1c6",
+    "lab-final-stripe-clock-f40217dd/fixed/worker-logs.json": "271d58d527317c44fdd8ed446778f9645d2820252c911642c349d51cfb900361",
+    "lab-final-stripe-clock-f40217dd/fixed/scenario.json": "703568c84f34ae3f12fad306aad6ee727b705a7ad41b5fc73ee59876e2d508a1",
+    "lab-final-stripe-clock-f40217dd/fixed/operator-api-trace.json": "3b9ec164fc384cb6bd61a05130f30caddb9945d0f761c7c4d0a09ad20d046dce",
+    "lab-final-stripe-clock-f40217dd/fixed/browser-final.json": "be7041d1713061a95b734e190d181346569e384a2df051a91a640c6fc430305f",
+    "lab-final-stripe-clock-f40217dd/fixed/control.json": "fa728fd45fa0f4977b44f66880753a144265267322e7368796a3ef4306e719a6",
+    "lab-final-stripe-clock-f40217dd/live/browser-trace.json": "b5da7867b1b904973e331f2e046e194f728005829c7edb038595a22029dcc9ec",
+    "lab-final-stripe-clock-f40217dd/live/image-comparison.json": "9b129773a0f7efd15971bce443d6e3b959267c50b62298531359435e57381001",
+    "lab-final-stripe-clock-f40217dd/live/workspace.json": "59220212fad3dfdc3f049bc0969b7d6365e72dc519a1ea19843334e22d2f316a",
+    "lab-final-stripe-clock-f40217dd/live/publication-catalog.json": "dd54fc202bb3e4575b342cef2ed334cf2106b79fd6575da865d5cf73fe348697",
+    "lab-final-stripe-clock-f40217dd/live/browser-baseline.json": "92d1079851e934c522317a16d9f3e7cd7d41215b9abda3ce6431b324acb42ff7",
+    "lab-final-stripe-clock-f40217dd/live/cleanup.json": "075a79c6b3d4e51526666aef62f31d87172dcb4e31cd6162f55762eebb0cb41e",
+    "lab-final-stripe-clock-f40217dd/live/runtime-image-evidence.json": "b506b77584ea395202550062d58d226ca1079cc6d758efa75a7b7b03b763ca7b",
+    "lab-final-stripe-clock-f40217dd/live/worker-logs.json": "c74764cf99075faf462ebbbe29a9254b94082caef830e165239f0ae5de963774",
+    "lab-final-stripe-clock-f40217dd/live/scenario.json": "9eced8bb575cd8cfe9e61d4f0a0b912ab6c03b5afe7ff24fd5a46af6968a9cef",
+    "lab-final-stripe-clock-f40217dd/live/operator-api-trace.json": "5b53c982b64747dfd6adb82291b3fba76584bd9d6f355a88f26de03f35428ec8",
+    "lab-final-stripe-clock-f40217dd/live/browser-final.json": "92d1079851e934c522317a16d9f3e7cd7d41215b9abda3ce6431b324acb42ff7",
+    "lab-final-stripe-clock-f40217dd/live/control.json": "23e58c538c27f8125488b2e7d51021a462d26f0d30060a6a5af1132117731eae",
+    "lab-stripe-clock-premerge.json": "d0149c4c0df86b816ed7a9403d72a700e8addfc56beabb815dbdd3b888a9e578",
+    "lab-stripe-clock-ci-complete.log": "0f393659189e878030dd449ee4a28bef99c79c27904a7f05025d1b8659332356"
+  },
+  "limits": [
+    "Exact-head CI, both deployments, serving API/proxy images, fresh live/fixed CLI Scenario reset, browser/native clocks, all six worker images and teardown pass; full Stripe audit remains open.",
+    "Report UI, fees/FX, AI, account permissions and full frontend audit remain open",
+    "Resource Scenario export remains incomplete; customer-bound Billing simulation not certified"
+  ],
+  "merge_commit": "f40217dd17f7bdc6509015f37a9d5249eff868ac",
+  "ci": {
+    "head": "7308fb8d39f193cd0c66171835f9ee12df56e6b4",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6542,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "f40217dd17f7bdc6509015f37a9d5249eff868ac",
+    "runtime_workflow": 36240108330,
+    "twins_workflow": 36240108337,
+    "both": "success",
+    "published_images": {
+      "twin-stripe": "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe:f40217dd17f7bdc6509015f37a9d5249eff868ac@sha256:e8113da2578cfe2215e936cfa4db34471579d01bab68534fba075a5f2e98eb55",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f40217dd17f7bdc6509015f37a9d5249eff868ac@sha256:f03036175e3c162e97e7356a06b7193bfe7bd9de63dfe2ec21137654203668a7",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f40217dd17f7bdc6509015f37a9d5249eff868ac@sha256:289794c5f98bc64612e1c388d0fddd98b439a6e906afaa0b7d1037c29476a860"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00302-xlp",
+      "arga-api": "arga-api-00672-2ng"
+    },
+    "log_sha256s": {
+      "lab-final-stripe-clock-f40217dd-twins-deploy.log": "e6f1a73a2de47f0fc7c462bd0acfc1575bf49a4c14e5434389fccb364314363f",
+      "lab-final-stripe-clock-f40217dd-runtime-deploy.log": "f2d3b73c6a8e990b79f791220366f6fe1611558ada55768ddf04fc158aba30d7"
+    },
+    "serving_runtime": {
+      "revision": "f40217dd17f7bdc6509015f37a9d5249eff868ac",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00302-xlp",
+          "observed_at": "2026-09-26T11:52:37.458220+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f40217dd17f7bdc6509015f37a9d5249eff868ac",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:759f066caaf627b99ad6b7b677c6ee9f25e994596620a3ead31dde078ad3252f",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:759f066caaf627b99ad6b7b677c6ee9f25e994596620a3ead31dde078ad3252f"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00302-xlp"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00302-xlp",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:759f066caaf627b99ad6b7b677c6ee9f25e994596620a3ead31dde078ad3252f",
+            "sha256:f03036175e3c162e97e7356a06b7193bfe7bd9de63dfe2ec21137654203668a7"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00672-2ng",
+          "observed_at": "2026-09-26T11:57:37.069740+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:f40217dd17f7bdc6509015f37a9d5249eff868ac",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:57c1ac0c03a8ed0aa90abee6f0223b3c3190aeb51433af31d1cc9bcee0cbe147",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:57c1ac0c03a8ed0aa90abee6f0223b3c3190aeb51433af31d1cc9bcee0cbe147"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00672-2ng"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00672-2ng",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:289794c5f98bc64612e1c388d0fddd98b439a6e906afaa0b7d1037c29476a860",
+            "sha256:57c1ac0c03a8ed0aa90abee6f0223b3c3190aeb51433af31d1cc9bcee0cbe147"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "f2d3b73c6a8e990b79f791220366f6fe1611558ada55768ddf04fc158aba30d7",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "checks": [
+        "Live and fixed Scenario clocks reach seeded dates and survive CLI reset",
+        "Three later writes preserve earlier resources and use the correct clock",
+        "Relative Checkout expiry is one day from creation",
+        "Export preserves clock choice without mutation",
+        "Invalid clock resets reject atomically",
+        "Browser reads leave both complete native states unchanged"
+      ],
+      "limits": [
+        "Clock scope only; reports, AI, roles and complete native Scenario export remain open",
+        "Stripe Billing customer-bound test-clock simulation not certified"
+      ],
+      "passed": true
+    },
+    "browser": {
+      "passed": true,
+      "scope": "Hosted live and fixed Stripe customer date rendering and reload",
+      "viewports": [
+        {
+          "width": 1465,
+          "height": 806
+        },
+        {
+          "width": 390,
+          "height": 844
+        }
+      ],
+      "checks": [
+        "Both runs display their seeded customer and three clock probes",
+        "Live dates display 2026-09-26 11:59 UTC; fixed dates display 2024-03-14 12:00 UTC",
+        "Both date groups persist after desktop and narrow reloads",
+        "Selected customer dates remain readable at 390px",
+        "No browser mutation attempted; owned tabs closed and viewport reset"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Selected customer route only, not exhaustive Stripe visual/mobile parity",
+        "No native keyboard/focus or physical touch verification",
+        "Existing shared shell differs from real Stripe"
+      ]
+    },
+    "all_six_images_matched": true,
+    "both_teardowns_confirmed": true
+  }
+}

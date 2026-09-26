@@ -1,0 +1,472 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1169",
+  "source_head": "5fc6e82d8ac0b911732d7e601c5b7bb75e21e0ab",
+  "depends_on": "PR #1168 merged/deployed at 625a11b3",
+  "status": "production_native_http_and_bounded_desktop_pass_mobile_and_broader_parity_pending",
+  "release_allowed": false,
+  "scope": [
+    "Permission-aware protected sheets/ranges sidebar with native range/named/table targets and sheet exceptions",
+    "Only you/Custom editor and native warningOnly policy configuration",
+    "Atomic revision-checked writes, denied/stale preservation and body-read revocation",
+    "Untouched native open bounds and exceptions survive description edits; pending form fields stay frozen",
+    "Warning-only grid confirmation with Cancel/OK, page-session workbook-scoped five-minute suppression and revision-bound consent",
+    "Existing API protections cover typed, clipboard, formatted, structural and sorted-view edits; native API semantics unchanged"
+  ],
+  "tests": {
+    "focused_passed": 102,
+    "workspace_regressions_passed": 1270,
+    "skipped": 0,
+    "warnings": 3,
+    "make_fix": "pass",
+    "rendered_javascript_syntax": "pass",
+    "diff_check": "pass",
+    "independent_source_review": "Open-bound and frozen-field corrections plus warning controls, request context isolation and stale-body consent preservation independently verified; source/API-only pass.",
+    "documentation_review": "Scope and limitations match current source; no visual approval.",
+    "warning_javascript_passed": 10,
+    "warning_initial_attempt_limits": "Initial warning tests included incorrect runtime fixture attribute and missing gridRange in filter preview. Corrected tests subsequently verify all 16 API cases; these fixture errors are not claimed as product defects.",
+    "warning_review_correction": "Bulk grid actions initially disabled warning dialog buttons. Fixed by excluding confirmation controls from the frozen grid controls; independent exact-script execution passed.",
+    "additional_regressions_after_broad_pass": 3
+  },
+  "local_desktop": {
+    "status": "pass",
+    "scope": "one local desktop named-range protection created using Chrome CUA",
+    "native_allowlist": [
+      "one protection bound to prices with owner editor",
+      "one source revision and protection-id counter increment"
+    ],
+    "all_other_native_state_unchanged": true,
+    "post_fix_gui_verified": false,
+    "mobile_verified": false,
+    "screenshots_retained": false,
+    "artifact_sha256": "2f1c0e45dcdd1452c73e23f7129661abc1c4b601660ab552fc8717f278b10f91"
+  },
+  "provider_reference_evidence": "sheets-protection-access-2026-09-25.json",
+  "source_files": {
+    "twins/google_drive/app.py": "9f48bbfb8d9ec83157b6a9fdbc7e957d1173eac403f2f42e9047167fb93f9c31",
+    "twins/google_drive/runtime.py": "7da052401ff61cf084354b6feae029d9ef381bcd62e23731116ccd7b3c4f6957",
+    "twins/google_drive/sheet_protection_ui.py": "0477740a1d297fa732e6585b73c55b5a8c513fad6b1464778d488348705e1a46",
+    "twins/google_drive/workspace_editing.py": "1d1391075a5e7c7465ffbd650aa23211809fe5b6c77fd3a38243de04567e0158",
+    "twins/google_sheets/README.md": "446247a0237697d319905361a09a5ca52eed6b658cbd4eabe3e56c7e0bdaeea7",
+    "twins/google_sheets/filters_ui.py": "79a82a4c0a78457a34d601a9228b8f4ec8c067963cf43b307cf0c3dfee82dd85",
+    "twins/google_sheets/named_ranges_ui.py": "7f9a7ab616eb1448aef5ad6d9f680b9df221ea37a18cfd01a8ef4d94fe181fd4",
+    "twins/google_sheets/protection_ui.py": "d6e9c15365f8ea7f9ad06e0a04371d51087238e70aa4974c5ee44602d7eeefd1",
+    "twins/google_sheets/ui.py": "42549e9862cefbc8d8d1033cbc3aa2f5172d6834f92cdc12462980733fdd8123",
+    "twins/google_sheets/validation_ui.py": "83ff7cf7bf6bf2740ad4d0c5f32d43f9e9eb70d079bb4be6ccf843ae6ddfd465",
+    "twins/tests/test_google_sheets_protection_ui.py": "a176e428513b4f25cbd970f29c1388a629dde320e0d4837b90e8617a21f6ef2e",
+    "twins/tests/test_google_sheets_tabs.py": "0538f39076d0659f43ea496a247f24daf99262a14a9f1e3a2f6d1eb79d052342",
+    "twins/tests/test_google_workspace_request_revocation.py": "e0771ba400029372efd7054ce2a909177d773100fbfdd4fa97cc5b218150be33",
+    "twins/google_drive/sheet_protection.py": "4d85fb49fa66b440963be873809e67367fec77b483e7e7b76209fad28fee90aa",
+    "twins/google_sheets/grid_format_ui.py": "547a0b02b7537515a0a7481fb2939def1e8892816b571baf8123608a9262907e",
+    "twins/google_sheets/protection_warning_ui.py": "d3f972f147d9cfe1d2f7d4acfa376189eb7eb4c6f34e80c0a81de088d52a9973",
+    "twins/tests/test_google_sheets_protection_warnings_ui.py": "d7bd3c6034bdde1997b25f5fdf3cb8a5fd7d5caf57f190cf4ca6a07e3b6f25be"
+  },
+  "artifacts": {
+    "lab-sheets-protection-ui-focused-final.log": "ad0f807f73eddebd57b4cf0ddc94c2135e0b457f5c7c621ee7ac43503e829e36",
+    "lab-sheets-protection-ui-reviewed-focused.log": "aae0bc67455b9c41bdc6537559bb93e56657086e664a77f3075607f4933bdca7",
+    "lab-sheets-protection-ui-final-focused.log": "437e53fb5a85fe245d06413673fd9f18a635b412f1f276640630c8a9debaca30",
+    "lab-sheets-protection-ui-reviewed-regressions.log": "c2fbaa753e2f207d9a353bb3532010c5b2c47049f1415e2e1b1b2ee25f2fbff5",
+    "lab-sheets-protection-ui-makefix-final.log": "7b01e2ecb87dabe137a41613917d396239ba91dd7e8efbfd2168883f4322e32d",
+    "lab-sheets-protection-ui-browser-result.json": "2f1c0e45dcdd1452c73e23f7129661abc1c4b601660ab552fc8717f278b10f91",
+    "lab-sheets-protection-ui-desktop-checks.json": "0f43ea47f86b4e917e76a4d9f4b685cc63e7215fbbfeec35af10fbf3c865256f",
+    "lab-sheets-protection-ui-desktop-native.json": "d09ecbd9cd2c792ad66673abfd1d324760b00beb9d7a8325d0a8de61acbf989e",
+    "lab-sheets-protection-warning-reproduced.log": "f87ea9c6ef9b3c89f6806bea8f15ef055a92fa9ab1bbe94dda0fdb7e00223541",
+    "lab-sheets-protection-warning-after-v2.log": "d19f8ee5f104bcbf573f8988660267f496e8888cf5d5cc53b8b46bb7b1cb308b",
+    "lab-sheets-protection-warning-js.log": "24ad8f3778b08d2cce8c6fc099a794bf11913562b5a015fe47b7f89662408c4f",
+    "lab-sheets-protection-warning-regressions.log": "7e28e653ccfc0f2ce723da9d01fb7ce001c69a3d34a797f9e9bf9a475d00c2fe",
+    "lab-sheets-protection-warning-final-focused.log": "c3917a1f08589c9a9b2a2617a6a6873522f9b1f5dcfb64ca4c3970114d5c1397",
+    "lab-sheets-protection-warning-makefix-v2.log": "74df7d68b87875b6d71f6e1e3fbafa2fda0a739637d9e4ae78db88230c89d422",
+    "lab-sheets-protection-warning-final-review.log": "e467acf2cffdad120b7e7abfb82f7625bbdaebd0d0aebf55db5f3cd0efd76f71",
+    "lab-sheets-protection-warning-makefix-final.log": "1ee56975d8eee9dfe679267eef767921d2fd5857fb091d05306f72738a154dda",
+    "hosted/native-checks.json": "7df80841a3290323322c08e020e51db1c7f76280b484bf1dc6ee5447c5417734",
+    "hosted/gui-observations.json": "3de2027a9d2e8bb2eea38817535732355a521ad17e9077fd33bd6c78e589b8ac",
+    "hosted/gui-baseline-state.json": "3e61e03f3bdd746f579bf066d3cbc4158ab156dba8428b8971e81c43d75e319d",
+    "hosted/gui-after-cancel-state.json": "3e61e03f3bdd746f579bf066d3cbc4158ab156dba8428b8971e81c43d75e319d",
+    "hosted/gui-final-state.json": "17b2b7912078d61971e83946853b74e188c5884595c2515d050c3196e69cec69",
+    "hosted/gui-native-comparison.json": "06d68763d6e634c1e197681cfa6a88180c890000dc45166e662065da50ae0393",
+    "hosted/gui-native-sheet.json": "fa1f10753d5fc053b904ace061db53c69744f3fdd3a0398dc8b7b0e8b53c0fc2",
+    "hosted/gui-native-formulas.json": "e03e8cf80f6be1631e912322bd1f8a10246ddb87e3f42c7265c24274842959fe",
+    "hosted/runtime-image-evidence.json": "ecfa2262e523e028d5d81ed2fdebdbc0882f5fa884fa38b9189c497f7b116082",
+    "hosted/image-comparison.json": "c958a7fcd30b9cd038b2eef4e375c379e2bd84d1ba3c3188cb5a5dc8062f492c",
+    "hosted/cleanup.json": "c5cead7f1acd8123695f10aed3a19c2c7365e924c0c1870344292f3dbd9f03f4",
+    "hosted/owner-proxy-http-trace.json": "6815bba10cb7b2236e691275aacbfbbc9edf75cb5934d2197b8eb5b1df2be616",
+    "hosted/editor-proxy-http-trace.json": "cf8b20526d7698af8bf5c63ac524f2131eba89d97253bb3c97c778f9640f2d67",
+    "real-sheets-protection-formula-reference-2026-09-25.json": "b71f138bb97e92a040fb07810f3bf7daae6b766f2abc16574d1d0fb8c8dca13a"
+  },
+  "limits": [
+    "Fresh hosted desktop checks cover warning Cancel/OK/Escape/suppression/reload, one relative formula copy, and protection invalid-input/cancel/description persistence. Mobile and physical-touch verification remain pending.",
+    "Real reference uses one newly created private desktop fixture, now in recoverable trash. CLI reauthentication prevented real-provider native API readback; only browser reference results are claimed.",
+    "Warning wording, Close control and broader layout/menu fidelity differ from the real provider. Group/copy-permission management, selection pickers and active filter-view protection edits remain open.",
+    "All five containers in this fresh Workspace run and both serving Cloud Run images match publication. Final eight-provider image attestation must be repeated after subsequent deployment changes.",
+    "All eight frontend/AI/collaboration gates, WKS-03 and final sample release remain open."
+  ],
+  "screenshots_retained": false,
+  "prior_source_head": "4e90a4548fe0559cea8c3e6d5b3bd655baef3490",
+  "merge_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+  "ci": {
+    "workflow": 36196740024,
+    "status": "success",
+    "twin_tests_passed": 5974,
+    "root_tests_passed": 2130,
+    "log_sha256": "d84f6921d0914f6ce70800bdd2754c2db0b5ae455facdf4c19b420591129056b"
+  },
+  "deployment": {
+    "revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+    "runtime_workflow": 36212786410,
+    "twins_workflow": 36212786475,
+    "both": "success",
+    "published_images": {
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:89f7b6c98fecb31f74824a81f9b13f3154e879444fc4952be8654b97c70f6a7b",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:046458ddde39c0e6b83e7ce392ad06b9ac0ed05bea40b96e81a06497f76c5fc3",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:1249e81012f286c88d4e95b2838019f29872a6c4a0bc43471c1dee457654417d",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:f309e742d2ca8f537148fcced3ea4187e99f8012a22d7a1f8affda510bd8ab95",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:161af4ac56b11ab494a50e2800da154990ecc1e7@sha256:38402935cf497c884648c15729663f56668a3d983db01d875e82cf422bb0c9e7"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00277-l2p",
+      "arga-api": "arga-api-00647-xtl"
+    },
+    "log_sha256s": {
+      "lab-final-sheets-warning-161af4ac-twins-deploy.log": "45f78422e2ef86b63bf7140e59c326a2fa2479901986b22db01b9eab540640a2",
+      "lab-final-sheets-warning-161af4ac-runtime-deploy.log": "959089015429f9cea7f2b12cf456e69e4f7d2362994e514d9737fd1df4751168"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately.",
+    "cloud_run_image_observations": {
+      "revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00277-l2p",
+          "observed_at": "2026-09-26T02:49:07.181801+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:161af4ac56b11ab494a50e2800da154990ecc1e7",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00277-l2p"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00277-l2p",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b",
+            "sha256:f309e742d2ca8f537148fcced3ea4187e99f8012a22d7a1f8affda510bd8ab95"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00647-xtl",
+          "observed_at": "2026-09-26T02:53:43.124806+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:161af4ac56b11ab494a50e2800da154990ecc1e7",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:c2f0d338d4833deaff7c81898712ce231a50daeefcc102c504d81691df2272f3",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:c2f0d338d4833deaff7c81898712ce231a50daeefcc102c504d81691df2272f3"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00647-xtl"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00647-xtl",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:38402935cf497c884648c15729663f56668a3d983db01d875e82cf422bb0c9e7",
+            "sha256:c2f0d338d4833deaff7c81898712ce231a50daeefcc102c504d81691df2272f3"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "959089015429f9cea7f2b12cf456e69e4f7d2362994e514d9737fd1df4751168",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native_http": {
+      "checks": [
+        {
+          "metadata_permission_redaction": "pass",
+          "sidebar_create_edit_http_reload_delete": "pass",
+          "stale_duplicate_and_unauthorized_edit_preserve_all_three_native_states": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "value",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "clear",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "batch",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "format",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "insert",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "owner",
+          "confirmed_native_commit": true,
+          "operation": "resize",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "value",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "clear",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "batch",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "format",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "insert",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "actor": "editor",
+          "confirmed_native_commit": true,
+          "operation": "resize",
+          "revision_header_survives_proxy": true,
+          "warning_preflight_428_unchanged": true
+        },
+        {
+          "ordinary_native_api_warning_write": "pass",
+          "stale_and_invalid_consent": "409_no_native_change"
+        },
+        {
+          "mapped_operation": "filter-cell",
+          "native_row_warning_and_commit": "pass",
+          "preflight_all_three_native_states_unchanged": true
+        },
+        {
+          "mapped_operation": "filter-paste",
+          "native_row_warning_and_commit": "pass",
+          "preflight_all_three_native_states_unchanged": true
+        },
+        {
+          "hard_restriction_cannot_be_confirmed": "pass"
+        }
+      ],
+      "gui_tested": false,
+      "protected_reference_unchanged": true,
+      "scope": "Native state and mediated HTTP confirmation protocol; no dialog clicks, visual, keyboard or touch verification.",
+      "status": "pass"
+    },
+    "desktop": {
+      "status": "bounded_desktop_pass",
+      "surface": "Chrome macOS desktop via sample browser proxy",
+      "deployed_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+      "checks": [
+        "Protected B2 edit prompted; Cancel restored original protected value; all three complete native states equal baseline",
+        "True browser reload retained original B2 after cancellation",
+        "Accepted B2 edit with five-minute suppression; second B3 edit committed without another prompt; exact native values confirmed",
+        "True browser reload reset suppression within five minutes; warning returned with unchecked suppression; Escape restored saved B2",
+        "Typed C2 =A2+1 calculated 2; Edit menu Copy then keyboard Paste after C3 selection settled shifted formula to =A3+1 and calculated 3; exact native formulas confirmed",
+        "Protection sidebar listed B2:B3 warning rule; invalid range rejected before permission dialog; Cancel retained original rule",
+        "Changed description through permissions dialog, preserved warningOnly, confirmed native metadata and reloaded sidebar",
+        "Final true browser reload retained B2/B3 confirmed values, C2=2,C3=3 and changed protection description"
+      ],
+      "differences": [
+        "Warning text expands contractions relative to real Sheets",
+        "Warning dialog lacks real Sheets top-right Close control; Escape and Cancel work",
+        "Full menus, toolbar, geometry and visual parity remain open"
+      ],
+      "operator_corrections": [
+        "A cell click immediately after cancellation did not select the intended C2; cancelled the resulting protected edit and used the name box with observed selection before typing",
+        "Initial batched keyboard copy/paste preceded asynchronous selection completion; used Edit Copy then waited for observed C3 focus before successful keyboard Paste"
+      ],
+      "limits": [
+        "Desktop only; no mobile or physical touch claim",
+        "Single formula copy; comprehensive clipboard, cut and structural-reference coverage remains open",
+        "Not a candidate episode or exhaustive provider parity claim"
+      ],
+      "screenshots_retained": false
+    },
+    "complete_native_comparison": {
+      "status": "pass",
+      "providers": [
+        "google_docs",
+        "google_drive",
+        "google_sheets"
+      ],
+      "changes_allowed": [
+        "B2 and B3 confirmed text",
+        "C2 and C3 formulas with relative shift",
+        "One protection description change",
+        "Five target-file revision/change-log bookkeeping entries"
+      ],
+      "all_other_complete_native_state_unchanged": true,
+      "cancellation_all_three_states_unchanged": true,
+      "cleanup_confirmed": "torn_down"
+    },
+    "images": {
+      "status": "complete",
+      "observed_at": "2026-09-26T02:55:29.867109+00:00",
+      "publication_sha256": "5050e793a9b5318f7f6f1c4c73dfe3d411bc288573a877b5333fb4a79ac8f6c0",
+      "containers": {
+        "google_docs": {
+          "published_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+          "image_id": "sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:21a32d551ddc85f341ab48e7c6a61ea8b92f4bc7455d80b3d26d10da5a0a94b7",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:af764d8476902c5264723ee5c203deb3750c51e62a23e65f4f87b18aae8b6e21"
+          ],
+          "matched": true
+        },
+        "google_drive": {
+          "published_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+          "image_id": "sha256:1249e81012f286c88d4e95b2838019f29872a6c4a0bc43471c1dee457654417d",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:1249e81012f286c88d4e95b2838019f29872a6c4a0bc43471c1dee457654417d",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:371f8bdc74eca6fd0254fc552dc1fbf8c1d58d5667e6cb532cf95606f1934548"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:1249e81012f286c88d4e95b2838019f29872a6c4a0bc43471c1dee457654417d"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "161af4ac56b11ab494a50e2800da154990ecc1e7",
+          "image_id": "sha256:89f7b6c98fecb31f74824a81f9b13f3154e879444fc4952be8654b97c70f6a7b",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:89f7b6c98fecb31f74824a81f9b13f3154e879444fc4952be8654b97c70f6a7b",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:9baee85f2c2b3d9251a8e133d22c3f0c9b85399057aa63506fb5462bd5a3bfcb"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:89f7b6c98fecb31f74824a81f9b13f3154e879444fc4952be8654b97c70f6a7b"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:07aac238443216070214a586fa25550bec0b81107b31e384ce3af8a6110ddb22"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:07aac238443216070214a586fa25550bec0b81107b31e384ce3af8a6110ddb22",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038"
+          ],
+          "builder_log_sha256": "932614d973a4f3d8ff1915f26de12a84478c5951a9afdf7066b55f0a57435329"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "cleanup_confirmed": "torn_down"
+  },
+  "real_reference": {
+    "reference_checks": [
+      "Created B2:B3 warning-only protection via Data menu and native permission dialog",
+      "Cancelled B2 x edit; initial reload claim withdrawn because Command-R invoked Sheets Fill right rather than a browser reload; cancellation tested again below",
+      "Accepted B2 y with five-minute suppression; B3 z committed without repeated prompt",
+      "Typed A2=1,A3=2,C2 formula =A2+1; rejected unsolicited autofill",
+      "Copied C2 to C3 with keyboard; formula bar shows =A3+1 and displayed result 3",
+      "True Chrome toolbar Reload after Saved to Drive retained C3 formula =A3+1 and displayed result 3",
+      "Accepted B2 x with five-minute suppression, waited for Saved to Drive, used Chrome toolbar Reload, and edited B3 q well within five minutes; warning reappeared with unchecked suppression",
+      "Cancelled B3 q, used true Chrome toolbar Reload, selected B3 and read unchanged z in formula bar",
+      "Final inline visual inspection after reload showed A2=1,A3=2,B2=x,B3=z,C2=2,C3=3; C3 formula bar =A3+1",
+      "Moved the uniquely owned private reference file to recoverable trash through File menu; confirmed resulting UI"
+    ],
+    "native_api_readback": "gws unavailable: invalid_grant reauth invalid_rapt; no native API result claimed",
+    "gui_surface": "Chrome macOS desktop",
+    "operator_corrections": [
+      "Initial TSV paste did not populate the canvas; individual cell typing used instead",
+      "Command-R was Fill right; restored C3 using copy from C2 before true browser reload",
+      "An attempted reload during Saving was cancelled; subsequent reloads waited for Saved to Drive"
+    ],
+    "limits": [
+      "Single private desktop reference fixture; no exhaustive parity or mobile/touch claim",
+      "Native API unavailable because account CLI credentials require reauthentication"
+    ],
+    "trashed": true,
+    "cleanup_confirmation": "Chrome displayed File moved to trash and Take out of trash; no permanent deletion",
+    "screenshots_retained": false
+  }
+}

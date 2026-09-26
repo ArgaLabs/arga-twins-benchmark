@@ -1,0 +1,75 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-26",
+  "provider": "github",
+  "status": "ci_pass_browser_and_review_pending_unmerged",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1203",
+  "source_head": "4e68f0b16312b838a60eed019ee0922215e6c6b0",
+  "changes": [
+    "Writer-only Workflow run options and Delete all logs command with observed native confirmation",
+    "Existing REST deletion handler controls browser mutation; post-delete reload omits log controls and preserves run/job/artifact metadata",
+    "Native permissions reject direct or stale nonwriter submissions"
+  ],
+  "tests": {
+    "all_github_passed": 615,
+    "focused_cases": 3,
+    "failed_before_implementation": 3,
+    "make_fix": "pass"
+  },
+  "browser": {
+    "status": "pending",
+    "reason": "Locked host and unconfirmed real GitHub native dialog block Chrome; user cancellation/unlock was requested",
+    "accept_cancel": "unverified",
+    "desktop_390px": "unverified",
+    "keyboard_focus_touch": "unverified",
+    "screenshots_retained": false,
+    "fresh_host_check": "Native Chrome check reports Mac locked; automatic unlock failed. GitHub dialog and Notion login tabs marked for handoff."
+  },
+  "review": {
+    "status": "pending",
+    "independent_finish_review": "pending after browser evidence",
+    "documentation_verification": "pending"
+  },
+  "ci": {
+    "status": "passed",
+    "head": "4e68f0b16312b838a60eed019ee0922215e6c6b0",
+    "all_complete": true,
+    "merge_state_observed": "CLEAN",
+    "twin_tests_passed": 6675,
+    "root_tests_passed": 2134,
+    "lint_and_test_run": 36243867006,
+    "preserved_initial_draft_workflows": "skipped, not counted as passes"
+  },
+  "deployment": "pending; unmerged because browser and independent review gates remain open",
+  "references": [
+    "https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs"
+  ],
+  "limits": [
+    "No real GitHub log deletion was confirmed",
+    "Local native tests do not establish browser confirmation or visual fidelity",
+    "Remaining workflow menus/filters, graphs, permissions and full provider/AI/collaboration/sample gates remain open"
+  ],
+  "source_sha256": {
+    "twins/github/actions_ui.py": "1a5c938ac1488b236d707eea632040a5c6821e9954bcb177c96f9b76a2157aeb",
+    "twins/github/README.md": "5b09c48b9f3fd313c27d3fd9ac74071e3bbffae817cb6c11c5a2c206086f506b",
+    "twins/tests/test_github_actions_log_controls.py": "56981bcb87138e604d475ad802e68ab793803b2c267fbdb001db025d581960ab"
+  },
+  "artifacts_sha256": {
+    "lab-github-actions-log-controls-deps-r2.log": "6b3cb53e59b272dbf16cef3e866647efa7cdf1305ad953e1b2f1ed09b1bb3518",
+    "lab-github-actions-log-controls-green.log": "3c503fe005bceb5cfe42a8e710fe12d05aa4168ecc3d9e3fdc68831ea9572238",
+    "lab-github-actions-log-controls-deps.log": "03b2745afd10acd891bceae3729e55ac828eb5f03db17318ab0f91d6ff399b71",
+    "lab-github-actions-log-controls-make-fix-r2.log": "39c1c55f6972c7f4fd1e6cfbd4438fc85d9a48b3fb3f28a69033f04251dfdfb8",
+    "lab-github-actions-log-controls-red.log": "4263096259c228dd0424255dc91b469a89359d71da560dc40aab347a3b026092",
+    "lab-github-actions-log-controls-integrated.log": "0c13c889481e26528bf7cd94ee8c13b79ca1962ec37e1251cbbea89f45db893a",
+    "lab-github-actions-log-controls-make-fix.log": "26a87d59d4d6172a7c40e4a92f50ef9df121253076a5d3f849ffdd0a05b799b3",
+    "lab-github-actions-log-controls-ci-complete.log": "e9b06be207eccf11eb5989d694eaf2e70815d23000aa4ed6de56802f395b3062",
+    "lab-github-actions-log-controls-ci-current.json": "c59608b177431884af05091274941f13d7e6d272fdb588d737ee3afee8368bc1"
+  },
+  "pull_request_state": {
+    "state": "open",
+    "draft": false,
+    "ready_for_review_event": "2026-09-26T13:03:00Z",
+    "note": "PR was externally marked ready after draft creation; state preserved."
+  }
+}

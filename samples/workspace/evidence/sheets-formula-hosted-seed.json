@@ -1,0 +1,53 @@
+{
+  "google_sheets": {
+    "spreadsheets": [
+      {
+        "title": "Hosted formula refresh",
+        "sheets": [
+          {
+            "properties": {
+              "sheetId": 10,
+              "title": "Plan",
+              "gridProperties": {
+                "rowCount": 5000,
+                "columnCount": 100,
+                "frozenRowCount": 1,
+                "frozenColumnCount": 1
+              }
+            },
+            "values": [
+              [
+                "Pinned",
+                "Value",
+                "Double",
+                "Plus one"
+              ],
+              [
+                "Input",
+                7,
+                "=B2*2",
+                "=C2+1"
+              ],
+              [
+                "Formula",
+                "=B2*3"
+              ]
+            ]
+          },
+          {
+            "properties": {
+              "sheetId": 20,
+              "title": "Protected"
+            },
+            "values": [
+              [
+                "Keep",
+                42
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

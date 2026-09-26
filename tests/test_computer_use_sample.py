@@ -1,0 +1,662 @@
+from __future__ import annotations
+
+import argparse
+import asyncio
+import json
+from pathlib import Path
+from typing import Any
+from unittest.mock import AsyncMock, Mock
+
+import httpx
+import pytest
+
+from arga_twins_benchmark.computer_use.proxy import BrowserProxy, allowed_path
+from arga_twins_benchmark.computer_use.session import SAMPLES, load_task
+
+
+@pytest.mark.parametrize(
+    "mode",
+    ["pass", "fail", "unsafe", "evidence_gap", "cleanup", "timeout", "drain", "multipart", "drain_error", "tool_error"],
+)
+def test_session_handoff_submission_and_cleanup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
+    """Exercise real local HTTP workspaces without provisioning or paid model calls."""
+    from arga_twins_benchmark.arga_cli import ProvisionedTwin, TwinRun
+    from arga_twins_benchmark.computer_use import session
+    from arga_twins_benchmark.evaluation.state_capture import TrustedStateSnapshot
+    from arga_twins_benchmark.lifecycle import SavedScenario
+
+    run = TwinRun(
+        "synthetic-run",
+        "ready",
+        {p: ProvisionedTwin(p, "https://synthetic.invalid") for p in load_task("WKS-01")["twins"]},
+        True,
+        raw={"run_id": "synthetic-run", "status": "ready", "twins": {}},
+    )
+    cli = AsyncMock()
+    cli.__aenter__.return_value = cli
+    cli.create_twin_run.return_value = run
+    monkeypatch.setattr(session, "SubprocessArgaCli", lambda: cli)
+    monkeypatch.setattr(
+        session,
+        "_save_compiled_scenario",
+        AsyncMock(return_value=SavedScenario("WKS-01", "synthetic-scenario", "Sample", "Sample", "synthetic", False)),
+    )
+    monkeypatch.setattr(session, "_wait_for_twin_run", AsyncMock(return_value=run))
+    reference = json.loads((Path(__file__).parent / "fixtures/workspace/wks-01.json").read_text())["baseline-state"]
+    snapshot = Mock(spec=TrustedStateSnapshot)
+    snapshot.artifact_payload.return_value = reference
+    snapshot.providers = reference["providers"]
+    capture = AsyncMock(return_value=snapshot)
+    capturer = AsyncMock()
+    capturer.capture = capture
+
+    def make_capturer(**_: object) -> AsyncMock:
+        return capturer
+
+    monkeypatch.setattr(session, "TrustedStateCapturer", make_capturer)
+    cleanup = AsyncMock(side_effect=RuntimeError("Synthetic cleanup failure") if mode == "cleanup" else None)
+    cleanup.return_value = {"confirmation": {"outcome": "terminal_without_twins"}}
+    monkeypatch.setattr(session, "cleanup_twin_run", cleanup)
+
+    def fake_grade(*_: object) -> dict[str, Any]:
+        statuses = ["unsafe", "fail"] if mode == "unsafe" else [mode] if mode in {"fail", "evidence_gap"} else []
+        return {"assertions": [{"id": str(i), "status": status} for i, status in enumerate(statuses)]}
+
+    monkeypatch.setattr(session, "grade_workspace_attempt", fake_grade)
+    write_started = asyncio.Event()
+    write_finished = False
+
+    async def upstream(request: httpx.Request) -> httpx.Response:
+        nonlocal write_finished
+        if request.method == "POST":
+            write_started.set()
+            await asyncio.sleep(0.2)
+            write_finished = True
+        return httpx.Response(
+            200, text='<html><button id="open-comments">Comments</button></html>', headers={"content-type": "text/html"}
+        )
+
+    async def capture_after_drain(*_: object, **__: object) -> Mock:
+        if mode == "drain" and capture.await_count > 1:
+            assert write_finished, "Final snapshot must follow the accepted browser write"
+        return snapshot
+
+    capture.side_effect = capture_after_drain
+
+    def make_proxy(provider: str, access: dict[str, object]) -> BrowserProxy:
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(provider, access, client=client)
+        proxy.owns_client = True
+        return proxy
+
+    monkeypatch.setattr(session, "BrowserProxy", make_proxy)
+    if mode == "drain_error":
+        original_close = session.Server.close
+
+        async def failed_close(server: session.Server) -> None:
+            await original_close(server)
+            raise TimeoutError("Synthetic drain timeout")
+
+        monkeypatch.setattr(session.Server, "close", failed_close)
+    output = tmp_path / "attempt"
+
+    async def exercise() -> None:
+        running = asyncio.create_task(
+            session.run(
+                argparse.Namespace(
+                    task="WKS-01",
+                    credentials=None,
+                    output=output,
+                    minutes=0.05 if mode == "timeout" else 1,
+                    reset_check=False,
+                )
+            )
+        )
+        try:
+            for _ in range(240):
+                if (output / "candidate.json").exists():
+                    break
+                if running.done():
+                    await running
+                await asyncio.sleep(0.05)
+            assert (output / "candidate.json").exists(), (
+                "Session did not publish the candidate handoff within 12 seconds"
+            )
+            candidate = json.loads((output / "candidate.json").read_text())
+            assert set(candidate["workspaces"]) == {"github", "google_docs", "gmail"}
+            assert "synthetic.invalid" not in json.dumps(candidate)
+            async with httpx.AsyncClient() as client:
+                assert (await client.get(candidate["workspaces"]["google_docs"])).status_code == 200
+                blocked = await client.post(
+                    candidate["tool_endpoint"],
+                    json={
+                        "name": "provider_api",
+                        "arguments": {"provider": "google_docs", "method": "GET", "path": "/admin/state"},
+                    },
+                )
+                assert blocked.status_code == 200
+                assert "error" in blocked.json()
+                if mode == "timeout":
+
+                    async def slow_report():
+                        yield b'{"final_text": "'
+                        await asyncio.sleep(3.5)
+                        yield b'Late report"}'
+
+                    response = await client.post(
+                        candidate["completion_endpoint"],
+                        content=slow_report(),
+                        headers={"content-type": "application/json"},
+                    )
+                    assert response.status_code == 410
+                else:
+                    invalid_payloads: list[Any] = [[], {"name": "provider_api", "arguments": []}]
+                    for payload in invalid_payloads:
+                        assert (await client.post(candidate["tool_endpoint"], json=payload)).status_code == 400
+                    assert (
+                        await client.post(candidate["completion_endpoint"], json={"final_text": "x" * 100001})
+                    ).status_code == 400
+                    assert (
+                        await client.post(candidate["tool_endpoint"], content=b"x" * (1024 * 1024 + 1))
+                    ).status_code == 413
+                    if mode == "tool_error":
+                        monkeypatch.setattr(
+                            session.ProviderGateway,
+                            "execute",
+                            AsyncMock(side_effect=RuntimeError("Private authenticated URL must not escape")),
+                        )
+                        failed = await client.post(
+                            candidate["tool_endpoint"],
+                            json={
+                                "name": "provider_api",
+                                "arguments": {"provider": "github", "method": "GET", "path": "/user"},
+                            },
+                        )
+                        assert failed.status_code == 502
+                        assert failed.json()["error_type"] == "RuntimeError"
+                        assert "Private authenticated" not in failed.text
+                    pending_write = None
+                    if mode == "drain":
+                        pending_write = asyncio.create_task(
+                            client.post(candidate["workspaces"]["google_docs"] + "ui/edit")
+                        )
+                        await asyncio.wait_for(write_started.wait(), 2)
+                    if mode == "multipart":
+                        assert (
+                            await client.post(
+                                candidate["completion_endpoint"], files={"final_text": ("report.txt", "bad")}
+                            )
+                        ).status_code == 400
+                        response = await client.post(
+                            candidate["completion_endpoint"], files={"final_text": (None, "Fixture complete")}
+                        )
+                    else:
+                        response = await client.post(
+                            candidate["completion_endpoint"], json={"final_text": "Fixture complete"}
+                        )
+                    assert response.status_code == 200
+                    if pending_write is not None:
+                        assert (await pending_write).status_code == 200
+            if mode == "cleanup":
+                with pytest.raises(RuntimeError, match="Synthetic cleanup"):
+                    await running
+            else:
+                await running
+            assert capture.await_count == 2
+            cleanup.assert_awaited_once_with("synthetic-run", arga=cli)
+            verdict = json.loads((output / "verifier.json").read_text())
+            outcome = (
+                "infrastructure_invalid"
+                if mode in {"cleanup", "timeout", "evidence_gap", "drain_error"}
+                else "pass"
+                if mode in {"drain", "multipart", "tool_error"}
+                else mode
+            )
+            assert verdict["outcome"] == outcome
+            assert verdict["reward"] == {"pass": 1, "fail": 0, "unsafe": -1, "infrastructure_invalid": None}[outcome]
+            invocation = json.loads((output / "invocation.json").read_text())
+            assert invocation["final_text"] == ("" if mode == "timeout" else "Fixture complete")
+            assert len(invocation["events"]) == (2 if mode == "tool_error" else 1)
+        finally:
+            if not running.done():
+                running.cancel()
+                await asyncio.gather(running, return_exceptions=True)
+
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/admin/state",
+        "/%61dmin/state",
+        "/%2561dmin/state",
+        "/_ui/scenarios/export",
+        "/ui/scenarios/export",
+        "/ui//scenarios/export",
+        "/_ui/export-scenario",
+        "/docs",
+        "//external.test",
+        "/foo/../admin/state",
+        "/mcp",
+        "/openapi.json",
+        "/schema",
+        "/schemas",
+        "/foo\\admin",
+    ],
+)
+def test_browser_boundary_rejects_control_and_discovery_paths(path: str) -> None:
+    assert not allowed_path(path)
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/",
+        "/issue/ENG-1",
+        "/ui/issues/issue-1/comments",
+        "/billing/meters",
+        "/graphql",
+        "/_ui/repos/acme/platform/pull/2/reviewers",
+        "/ui/documents/doc-1/export",
+        "/repos/acme/docs/contents/schema",
+        "/_ui/repos/acme/admin/issues/1",
+        "/api/chat.postMessage",
+    ],
+)
+def test_browser_boundary_accepts_frontend_and_provider_routes(path: str) -> None:
+    assert allowed_path(path)
+
+
+def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(
+                200,
+                headers={"content-type": "text/html"},
+                text=(
+                    '<a href="https://twin.example/issue/ENG-1">Issue</a>'
+                    '<script>var token="secret-synthetic-key"</script>'
+                    "<style data-twin-control-plane>.tcp-panel{display:block}</style>"
+                    "<button data-tcp-toggle>Controls</button>"
+                    '<aside data-twin-control-plane><a href="/admin/state">State</a></aside>'
+                    '<script data-twin-control-plane>fetch("/admin/state")</script>'
+                ),
+            )
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(
+            "linear",
+            {"base_url": "https://twin.example", "env": {"LINEAR_API_KEY": "secret-synthetic-key"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.post("/ui/issues/one/comments", data={"body": "From browser"})
+            assert response.status_code == 200
+            assert seen[0].url == "https://twin.example/ui/issues/one/comments"
+            assert seen[0].headers["authorization"] == "secret-synthetic-key"
+            assert "secret-synthetic-key" not in response.text and "https://twin.example" not in response.text
+            assert "http://local.test/issue/ENG-1" in response.text
+            assert "Controls" not in response.text and "/admin/state" not in response.text
+            assert (await browser.get("/admin/state")).status_code == 403
+            assert (await browser.post("/graphql", json={"query": "{__schema{types{name}}}"})).status_code == 403
+            assert (await browser.get("/graphql", params={"query": '{__type(name: "Query"){name}}'})).status_code == 403
+            assert (
+                await browser.post("/graphql", content=b'{"query":"{\\u005f_schema{types{name}}}"}')
+            ).status_code == 403
+            assert (await browser.post("/graphql", json=[{"query": "{__schema{types{name}}}"}])).status_code == 403
+            assert (await browser.post("/ui/issues", headers={"origin": "http://attacker.test"})).status_code == 403
+            assert len(seen) == 1
+            proxy.accepting = False
+            assert (await browser.get("/")).status_code == 410
+
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize(
+    ("method", "path"),
+    [
+        ("PUT", "/v4/spreadsheets/book/values/Sheet1!A1"),
+        ("POST", "/v4/spreadsheets/book/values:batchUpdate"),
+        ("POST", "/v4/spreadsheets/book:batchUpdate"),
+        ("POST", "/ui/spreadsheets/book/filter-cell"),
+        ("POST", "/ui/spreadsheets/book/filter-paste"),
+        ("POST", "/ui/spreadsheets/book/history"),
+    ],
+)
+def test_proxy_preserves_sheet_warning_consent_and_revision(method: str, path: str) -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+        state = {"revision": "7", "value": "Original"}
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            consent = request.headers.get("x-arga-sheets-warning")
+            if consent == "prompt":
+                status = 428
+            elif consent != state["revision"]:
+                status = 409
+            else:
+                state["value"] = "Confirmed"
+                status = 200
+            return httpx.Response(
+                status,
+                json={"value": state["value"]},
+                headers={
+                    "X-Arga-Sheets-Revision": state["revision"],
+                    "set-cookie": "private-token=upstream-secret",
+                    "authorization": "upstream-secret",
+                },
+            )
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy("google_sheets", {"base_url": "https://twin.example"}, client=client)
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            prompt = await browser.request(
+                method,
+                path,
+                json={"values": [["Confirmed"]]},
+                headers={"X-Arga-Sheets-Warning": "prompt", "Cookie": "untrusted=browser"},
+            )
+            assert prompt.status_code == 428
+            assert prompt.headers["x-arga-sheets-revision"] == "7"
+            assert "set-cookie" not in prompt.headers and "authorization" not in prompt.headers
+            assert "cookie" not in seen[0].headers
+            assert state["value"] == "Original"  # Cancel sends no follow-up.
+            state["revision"] = "8"
+            for consent in ("7", "invalid"):
+                stale = await browser.request(method, path, headers={"X-Arga-Sheets-Warning": consent})
+                assert stale.status_code == 409
+                assert state["value"] == "Original"
+                assert seen[-1].headers["x-arga-sheets-warning"] == consent
+            accepted = await browser.request(method, path, headers={"X-Arga-Sheets-Warning": "8"})
+            assert accepted.status_code == 200 and state["value"] == "Confirmed"
+
+    asyncio.run(exercise())
+
+
+def test_proxy_warning_headers_do_not_expand_other_routes_or_providers() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(200, json={}, headers={"X-Arga-Sheets-Revision": "7"})
+
+        for provider in ("google_sheets", "linear"):
+            client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+            proxy = BrowserProxy(provider, {"base_url": "https://twin.example"}, client=client)
+            proxy.origin = "http://local.test"
+            async with (
+                client,
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+            ):
+                result = await browser.post("/ui/issues", headers={"X-Arga-Sheets-Warning": "prompt"})
+                assert result.status_code == (400 if provider == "google_sheets" else 200)
+                assert "x-arga-sheets-revision" not in result.headers
+                assert (
+                    await browser.get("/admin/state", headers={"X-Arga-Sheets-Warning": "prompt"})
+                ).status_code == 403
+        assert len(seen) == 1 and "x-arga-sheets-warning" not in seen[0].headers
+
+    asyncio.run(exercise())
+
+
+def test_proxy_preserves_sheet_history_sessions_and_grouped_edits() -> None:
+    async def exercise() -> None:
+        histories: dict[str, list[tuple[str, str]]] = {}
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            session = request.headers.get("x-arga-sheets-session")
+            if not session:
+                return httpx.Response(400, json={"error": "Missing editor session"})
+            assert "cookie" not in request.headers
+            assert request.headers["authorization"] == "Bearer operator-synthetic-token"
+            history = histories.setdefault(session, [])
+            if request.method == "PUT":
+                group = request.headers.get("x-arga-sheets-edit-group")
+                assert group is not None
+                value = request.content.decode()
+                if history and history[-1][0] == group:
+                    history[-1] = (group, value)
+                else:
+                    history.append((group, value))
+            return httpx.Response(200, json={"undoEntries": len(history), "values": [value for _, value in history]})
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(
+            "google_sheets",
+            {"base_url": "https://twin.example", "env": {"GOOGLE_SHEETS_TOKEN": "operator-synthetic-token"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            for session, group, value in [
+                ("page-session-one", "typing-one", "1"),
+                ("page-session-one", "typing-one", "12"),
+                ("page-session-two", "typing-two", "99"),
+            ]:
+                response = await browser.put(
+                    "/v4/spreadsheets/book/values/Sheet1!A1",
+                    content=value,
+                    headers={
+                        "X-Arga-Sheets-Session": session,
+                        "X-Arga-Sheets-Edit-Group": group,
+                        "Cookie": "untrusted=browser",
+                        "Authorization": "attacker",
+                    },
+                )
+                assert response.status_code == 200
+            for session, expected in [
+                ("page-session-one", ["12"]),
+                ("page-session-two", ["99"]),
+                ("new-page-session", []),
+            ]:
+                response = await browser.get(
+                    "/ui/spreadsheets/book/history", headers={"X-Arga-Sheets-Session": session}
+                )
+                assert response.status_code == 200
+                assert response.json() == {"undoEntries": len(expected), "values": expected}
+
+    asyncio.run(exercise())
+
+
+def test_sheet_history_headers_do_not_expand_routes_or_other_providers() -> None:
+    async def exercise() -> None:
+        seen: list[httpx.Request] = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(200, json={})
+
+        context = {"X-Arga-Sheets-Session": "page-session-one", "X-Arga-Sheets-Edit-Group": "typing-one"}
+        for provider in ("google_sheets", "linear"):
+            client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+            proxy = BrowserProxy(provider, {"base_url": "https://twin.example"}, client=client)
+            proxy.origin = "http://local.test"
+            async with (
+                client,
+                httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+            ):
+                assert (await browser.get("/admin/state", headers=context)).status_code == 403
+                assert (await browser.post("/ui/issues", headers=context)).status_code == (
+                    400 if provider == "google_sheets" else 200
+                )
+        assert len(seen) == 1
+        assert all(name not in seen[0].headers for name in ["x-arga-sheets-session", "x-arga-sheets-edit-group"])
+
+    asyncio.run(exercise())
+
+
+def test_streaming_transfer_limits_stop_before_consuming_every_chunk(monkeypatch: pytest.MonkeyPatch) -> None:
+    from starlette.exceptions import HTTPException
+    from starlette.requests import Request
+
+    from arga_twins_benchmark.computer_use import proxy as module
+
+    async def exercise() -> None:
+        consumed = 0
+
+        async def receive():
+            nonlocal consumed
+            consumed += 1
+            return {"type": "http.request", "body": b"x" * 64, "more_body": True}
+
+        request = Request({"type": "http", "headers": []}, receive=receive)
+        with pytest.raises(HTTPException) as rejected:
+            await module.bounded_body(request, 128)
+        assert rejected.value.status_code == 413 and consumed == 3
+
+        returned = 0
+
+        class ResponseStream(httpx.AsyncByteStream):
+            async def __aiter__(self):
+                nonlocal returned
+                for _ in range(100):
+                    returned += 1
+                    yield b"x" * 64
+
+        upstream = httpx.AsyncClient(
+            transport=httpx.MockTransport(lambda _: httpx.Response(200, stream=ResponseStream()))
+        )
+        proxy = BrowserProxy("github", {"base_url": "https://twin.example"}, client=upstream)
+        proxy.origin = "http://local.test"
+        monkeypatch.setattr(module, "MAX_RESPONSE_BYTES", 128)
+        async with (
+            upstream,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as client,
+        ):
+            assert (await client.get("/large")).status_code == 502
+            assert returned == 3
+
+    asyncio.run(exercise())
+
+
+def test_five_argabench_style_tasks_have_all_modalities_and_exact_seed_files() -> None:
+    manifest = json.loads((SAMPLES / "manifest.json").read_text())
+    assert len(manifest["tasks"]) == 5
+    assert all(t["provenance"]["type"] == "new_argabench_style_task" for t in manifest["tasks"])
+    assert {p for task in manifest["tasks"] for p in task["twins"]} == {
+        "github",
+        "google_docs",
+        "google_sheets",
+        "gmail",
+        "google_calendar",
+    }
+    for item in manifest["tasks"]:
+        task = load_task(item["id"])
+        folder = SAMPLES / "tasks" / item["id"].lower()
+        assert task["minimum_semantic_steps"] >= 6
+        assert "Computer Use" in task["prompt"] and "provider APIs" in task["prompt"]
+        assert "through the provisioned provider_api" not in task["prompt"]
+        assert task["interaction_modes"] == ["computer_use", "api", "mixed"]
+        assert task["seed_config"] == json.loads((folder / "seed_config.json").read_text())
+        scenario = json.loads((folder / "scenario.json").read_text())
+        assert scenario["twins"] == sorted(task["twins"])
+        assert scenario["seed_config"] == task["seed_config"] and "prompt" not in scenario
+        assert scenario["description"] == task["prompt"] and len(scenario["name"]) <= 80
+
+
+def test_unknown_task_does_not_read_arbitrary_paths() -> None:
+    with pytest.raises(ValueError):
+        load_task("../../anything")
+
+
+def test_scenario_hash_matches_seed_and_description() -> None:
+    import hashlib
+
+    for path in (SAMPLES / "tasks").glob("*/scenario.json"):
+        scenario = json.loads(path.read_text())
+        tags = scenario.pop("tags")
+        digest = hashlib.sha256(json.dumps(scenario, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        assert "content-sha256:" + digest in tags
+
+
+@pytest.mark.parametrize(
+    "mime",
+    [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/zip",
+        "application/octet-stream",
+    ],
+)
+def test_browser_exports_preserve_archive_bytes(mime: str) -> None:
+    import io
+    import zipfile
+
+    archive_bytes = io.BytesIO()
+    with zipfile.ZipFile(archive_bytes, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", "<document>Résumé</document>")
+        archive.writestr("media/content.bin", bytes(range(256)))
+    original = archive_bytes.getvalue()
+
+    async def exercise() -> None:
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(
+                    200,
+                    content=original,
+                    headers={"content-type": mime, "content-disposition": 'attachment; filename="document.docx"'},
+                )
+            )
+        )
+        proxy = BrowserProxy("google_docs", {"base_url": "https://twin.example"}, client=client)
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.get("/ui/documents/doc-1/export")
+            assert response.content == original
+            assert response.headers["content-type"] == mime
+            assert response.headers["content-disposition"] == 'attachment; filename="document.docx"'
+            with zipfile.ZipFile(io.BytesIO(response.content)) as exported:
+                assert exported.testzip() is None
+                assert exported.read("media/content.bin") == bytes(range(256))
+
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize("mime", ["text/html", "application/xml", "image/svg+xml", "application/problem+json"])
+def test_browser_text_redaction_preserves_declared_decoding(mime: str) -> None:
+    async def exercise() -> None:
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(
+                    200,
+                    content=b"caf\xe9 secret-synthetic-key",
+                    headers={"content-type": mime + "; charset=iso-8859-1"},
+                )
+            )
+        )
+        proxy = BrowserProxy(
+            "linear",
+            {"base_url": "https://twin.example", "env": {"LINEAR_API_KEY": "secret-synthetic-key"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.get("/ui/content")
+            assert response.text == "café twin-browser-session"
+            assert response.headers["content-type"] == mime + "; charset=utf-8"
+
+    asyncio.run(exercise())

@@ -1,0 +1,71 @@
+{
+  "date": "2026-09-22",
+  "kind": "local_frontend_feature_verification",
+  "browser": "Google Chrome via CUA",
+  "checks": {
+    "native_cross_page_selection": "pass",
+    "list_all_targets_before_mutation": "pass",
+    "search_includes_archived_conversations": "pass",
+    "all_53_search_matches_archived": "pass",
+    "unmatched_inbox_thread_unchanged": "pass",
+    "both_unsent_drafts_unchanged": "pass",
+    "selection_failure_does_not_commit_partial_targets": "pass",
+    "stale_search_selection_ignored": "pass",
+    "duplicate_page_tokens_stop_with_error": "pass",
+    "draft_selection_preserves_independent_message_ids": "pass",
+    "offscreen_failures_retry_without_repeating_successes": "pass",
+    "unsubmitted_search_rejected": "pass",
+    "individual_deselection_leaves_page_selection": "pass",
+    "mobile_clear_selection": "pass"
+  },
+  "responsive_measurements": {
+    "width": 390,
+    "height": 844,
+    "document_width": 390,
+    "notice_left": 64,
+    "notice_right": 384,
+    "clear_button_left": 175,
+    "clear_button_right": 272.9921875
+  },
+  "native_readback_sha256": "b72e9918c2fb5b5290bb870b8018deba4ce1b78dedc2bf7e5c3cdfd30e9a1d6e",
+  "sources": [
+    "https://support.google.com/mail/answer/9259770?hl=en"
+  ],
+  "limitations": [
+    "Local feature checks only; CI, deployment and hosted validation pending.",
+    "390px Chrome emulation is a responsive check, not exhaustive mobile-device coverage.",
+    "Rich compose, filter delivery and full settings/admin/AI/collaboration parity remain open.",
+    "No screenshot files retained."
+  ],
+  "automated_regressions": {
+    "new_selection_regressions": 8,
+    "logs": [
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-tests.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-ui-tests.txt",
+      "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-network-tests.txt"
+    ],
+    "note": "The initial 109 passing tests plus six failures were followed by socket and UI/date fixes. Follow-up invocations overlap the original tests; do not add the counts. The eight new selection regressions are included in those invocations, not an additional total.",
+    "invocation_results": {
+      "initial": {
+        "passed": 109,
+        "failed": 6
+      },
+      "socket_retry": {
+        "passed": 5
+      },
+      "ui_date_followup": {
+        "passed": 54
+      },
+      "review_followup": {
+        "passed": 29
+      }
+    }
+  },
+  "review_followup": {
+    "search_debounce_stale_selection": "fixed",
+    "synchronous_input_clear": "pass",
+    "stale_archive_trash_label_mutation_rejection": "pass",
+    "focused_regressions_passed": 29,
+    "log": "samples/workspace/evidence/regression-log-summaries.json#lab-gmail-all-matching-review-tests.txt"
+  }
+}

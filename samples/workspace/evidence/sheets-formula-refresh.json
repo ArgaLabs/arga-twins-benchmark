@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-22",
+  "provider": "google_sheets",
+  "status": "local_and_hosted_verified",
+  "tests": {
+    "passed": 92,
+    "log": "/tmp/lab-sheets-recalculation-tests.txt",
+    "scope": "Native formula evaluation, refresh-in-place, edit/navigation races, retries, save queues, viewport, merge and border regressions"
+  },
+  "browser": {
+    "tool": "Google Chrome via CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "B2 7\u21929 updates C2=18, D2=19 and B3=27 without reload",
+      "Mobile B2 9\u219211 updates C2=22, D2=23 without reload",
+      "Merge B2:B3, edit B2=13; visible C2=26 and D2=27, selected range B2:B3 retained",
+      "Protected sheet Keep/42 and frozen row/column counts unchanged"
+    ],
+    "screenshots_retained": false
+  },
+  "native_readback_sha256": "5e3abd285cfb4c6f1d498c9af400a3bdf1febe2fdab5da60df960b7eb3dc323f",
+  "source_sha256": {
+    "twins/google_sheets/ui.py": "ac3f931d489a54cddfa3a859a3e4ba5990eac5382ec1dbf2d5c25af15971865a",
+    "twins/google_sheets/recalculation_ui.py": "4d0fe3bc26cda8fe682667e9b244cf60d436b2c330f98498658feb70f9cd3186",
+    "twins/tests/test_google_sheets_recalculation_ui.py": "9b76b6e4c0f13b459f2c64c0180482f6f94754f9a7b79071b34054e90f1b76db",
+    "twins/tests/test_google_sheets_grid_format_ui.py": "678c482bb5ef1a6e5394515f281bb2c2e7099d0659b9e5b9ec8a378cb045c31c"
+  },
+  "limitations": [
+    "Full provider and exhaustive mobile/visual audits remain open"
+  ],
+  "review_followup": {
+    "commit": "af8cd10011f39f36ab5d89c4afaf646dac4620e7",
+    "change": "Successful refresh retries clear only the formula-refresh error, preserving unrelated save failures",
+    "focused_tests_passed": 12,
+    "deployment": "success"
+  },
+  "production": {
+    "pull_request": 1104,
+    "merge_sha": "baed86f9dd5b0e50891af5209fc5c75f6a7d96ba",
+    "checked_head": "43e6e95c11d73c7f9e7b986a4bbb8a07e972e298",
+    "checks": "All applicable checks successful before merge",
+    "deploy_twins": {
+      "run": 35835722584,
+      "status": "success"
+    },
+    "deploy_runtime": {
+      "run": 35835722816,
+      "status": "success"
+    }
+  },
+  "hosted_evidence": "samples/workspace/evidence/sheets-formula-production-2026-09-23.json"
+}

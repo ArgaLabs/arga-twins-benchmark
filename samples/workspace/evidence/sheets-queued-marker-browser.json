@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-24",
+  "tested_revision": "ef60f267cee4f3d522b5fa8dee662e1aa65168d7",
+  "scope": "Local Chrome CUA with operator-controlled transport delay/failure on actual queued saves",
+  "status": "queued_restore_pass_hosted_pending",
+  "checks": [
+    "H3 initially 35: held a valid write of 45, queued invalid 25, then released the valid PUT. The rejection restored 45 with savedEnteredValue=45 and no invalid marker.",
+    "G2 initially invalid 5 under >10: held valid 15, queued invalid 4, then returned a controlled 503 before the first PUT reached the native app. The rejection restored 5 with its invalid marker, despite the earlier preview having cleared the marker.",
+    "Reload retained native G2=5 and H3=45.",
+    "The native WorkspaceEditing snapshot differs only by H3=45 and its spreadsheet source version; all other cells, protected-sheet content, structures and rules remain unchanged."
+  ],
+  "observations": [
+    "Full reload initially renders the legacy invalid G2 without a red marker until focus validation runs. This pre-existing broader validation-rendering gap remains open; immediate rejected-edit restoration is verified.",
+    "The first post-reload DOM-evaluation attempt hit a browser transport timeout. Accessibility and screenshot inspection confirmed reload and values; this is not recorded as a post-reload DOM marker pass."
+  ],
+  "transport_scope": "Fault injection occurred only in the operator local test proxy. It does not claim a provider outage or a production failure.",
+  "capture_sha256": "94940386e433616f02360939ec3d0d638e1700afa093fdd1ec9b3f55413ab183",
+  "screenshots_retained": false,
+  "cleanup": "Local server stopped and Chrome test tab closed."
+}

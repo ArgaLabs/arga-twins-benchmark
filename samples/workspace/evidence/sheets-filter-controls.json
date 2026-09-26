@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-24",
+  "scope": "Sheets native basic-filter visibility, column filter controls and range sorting",
+  "references": [
+    "https://support.google.com/docs/answer/3540681?hl=en",
+    "https://developers.google.com/workspace/sheets/api/guides/filters"
+  ],
+  "changes": [
+    "Data menu creates/removes a native basic filter, with inferred populated range for single-cell selection.",
+    "Column controls edit hidden values and text/number/date/custom-formula conditions, preserving other columns and rejecting stale filter edits.",
+    "Native rowMetadata.hiddenByFilter derives from current cells; filters preserve data and manually hidden rows.",
+    "Header-aware multi-column range sorting and filter sorting preserve formulas; empty cells sort last in both directions."
+  ],
+  "tests": {
+    "passed": 489,
+    "log_sha256": "8dbb6849744e3bcf4b1d070c7dc82232b2be765773f86aa84fed91fa1c052fab",
+    "ruff": "pass",
+    "contract_matrix": "all four layers passed with zero findings or unexpected 5xx"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "flows": [
+      "Create filter from a single cell",
+      "Compound condition and excluded-value selection",
+      "Multiple column criteria",
+      "Mobile reload, cancellation and filter sort",
+      "Remove filter restores all rows",
+      "Header-aware advanced sorting; add/remove sort columns",
+      "Descending sorting survives mobile reload; page remains 390px"
+    ],
+    "protected_sheet_unchanged": true,
+    "cell_rows_preserved_as_permutation": true,
+    "formula_preserved": true,
+    "native_snapshot_sha256": "3092d8fe6f4a07c104de004146bbf74dfa219615c0c27012a8e9aa79e7d22bb7",
+    "screenshots_retained": false
+  },
+  "provider_reference": "twins/tests/fixtures/google_sheets_filter_reference.json",
+  "ci": "Current head pending; earlier Linux ARG_MAX syntax-test failure fixed by passing generated JavaScript over stdin.",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "Filter views and saved/temporary per-user views remain open.",
+    "Color, data-validation and relative-date filter controls remain open.",
+    "A complete reference/mobile audit, charts, protection, undo and broader Sheets parity remain open."
+  ],
+  "review_followup": {
+    "provider_reference": "twins/tests/fixtures/google_sheets_sort_region_reference.json",
+    "changes": [
+      "Infer the populated data region containing a single selected cell, excluding separated tables.",
+      "Translate row-relative formulas on sort while preserving absolute references."
+    ],
+    "browser": "Chrome desktop and 390px: filter header C5:F5 from D7, ascending relative formula readback, mobile descending sort/reload, unrelated cells unchanged.",
+    "native_snapshot_sha256": "dee0ebb2632ba964c9070eebcca0f64bae2c6acbe85284ec60726b1fa45422fb",
+    "protected_sheet_unchanged": true,
+    "screenshots_retained": false
+  }
+}

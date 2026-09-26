@@ -1,0 +1,152 @@
+{
+  "gmail": {
+    "base_time": "2026-09-24T04:00:00Z",
+    "labels": [
+      {
+        "name": "Renewal"
+      }
+    ],
+    "messages": [
+      {
+        "subject": "Protected renewal",
+        "body": "Keep this existing thread message unchanged.",
+        "from": "fixture@example.test",
+        "labels": [
+          "INBOX"
+        ],
+        "date": "2026-09-24T03:00:00Z"
+      }
+    ]
+  },
+  "google_docs": {
+    "documents": [
+      {
+        "title": "Hosted merge validation",
+        "content": "Protected first tab text.\n"
+      },
+      {
+        "title": "Protected document",
+        "content": "Do not change this document.\n"
+      }
+    ]
+  },
+  "linear": {
+    "teams": [
+      {
+        "key": "HST",
+        "name": "Hosted Checks"
+      }
+    ],
+    "projects": [
+      {
+        "name": "Hosted Roadmap",
+        "team_key": "HST"
+      }
+    ],
+    "issues": [
+      {
+        "team_key": "HST",
+        "title": "Check resource mentions",
+        "description": "Preserve this issue description.",
+        "project": "Hosted Roadmap"
+      },
+      {
+        "team_key": "HST",
+        "title": "Protected issue",
+        "description": "Do not change this issue."
+      }
+    ],
+    "comments": [
+      {
+        "issue_identifier": "HST-1",
+        "body": "Protected existing comment."
+      }
+    ]
+  },
+  "notion": {
+    "pages": [
+      {
+        "title": "Protected Notion page",
+        "content": "Keep this page unchanged."
+      }
+    ],
+    "databases": [
+      {
+        "name": "Hosted launch tracker",
+        "schema": {
+          "Name": {
+            "title": {}
+          },
+          "Count": {
+            "number": {}
+          },
+          "Contact": {
+            "type": "email",
+            "email": {}
+          },
+          "Status": {
+            "select": {
+              "options": [
+                {
+                  "name": "Open",
+                  "color": "blue"
+                },
+                {
+                  "name": "Done",
+                  "color": "green"
+                }
+              ]
+            }
+          }
+        },
+        "rows": [
+          {
+            "Name": "Alpha",
+            "Count": {
+              "number": 1
+            },
+            "Contact": {
+              "type": "email",
+              "email": "alpha@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Open"
+              }
+            }
+          },
+          {
+            "Name": "Beta",
+            "Count": {
+              "number": 3
+            },
+            "Contact": {
+              "type": "email",
+              "email": "beta@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Done"
+              }
+            }
+          },
+          {
+            "Name": "Gamma",
+            "Count": {
+              "number": 2
+            },
+            "Contact": {
+              "type": "email",
+              "email": "gamma@example.test"
+            },
+            "Status": {
+              "select": {
+                "name": "Open"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

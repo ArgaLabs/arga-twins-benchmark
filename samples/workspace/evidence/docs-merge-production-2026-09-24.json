@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-24",
+  "status": "bounded_production_checks_passed",
+  "run_id": "f0f3849a-a86d-4ff0-b5d3-d95445ab3b37",
+  "scenario_id": "1814cd96-b835-4d48-97e0-53fc17dbc6b6",
+  "merged_revision": "6c739745ddfb2437ff3cd8bb5115649e08ebae6e",
+  "deployments": {
+    "twins": {
+      "run": 35960818385,
+      "conclusion": "success"
+    },
+    "runtime": {
+      "run": 35960818390,
+      "conclusion": "success"
+    }
+  },
+  "browser": "Google Chrome through CUA and sample BrowserProxy",
+  "viewports": [
+    "1465x862",
+    "390x844"
+  ],
+  "flows": [
+    "Select rectangular A/B/D/E cells; neighboring C/F excluded",
+    "Merge from cell context menu; reload retains six visible cells and 2x2 head span",
+    "Close mobile tabs overlay to expose table; context menu fits viewport",
+    "Unmerge at 390px and reload retains nine cells with combined text only in head"
+  ],
+  "native_checks": {
+    "protected_document_exactly_unchanged": true,
+    "protected_first_tab_exactly_unchanged": true,
+    "physical_cells": 9,
+    "final_cell_texts": [
+      "A\ud83d\ude42\nB\nD\nE\n",
+      "\n",
+      "C\n",
+      "\n",
+      "\n",
+      "F\n",
+      "G\n",
+      "H\n",
+      "I\n"
+    ],
+    "all_spans_reset": true,
+    "business_errors": []
+  },
+  "mobile_body_width": 390,
+  "code_fingerprints": {
+    "matched": {
+      "twins/google_docs/document_actions_ui.py:ACTION_SCRIPT": "042721dc27708c1fb82b7731e6f3cb023ce91159b2a488ba82bb3652f8da8320"
+    },
+    "scope": "Complete served code blocks; not container digest attestation."
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "artifact_sha256": {
+    "scenario.json": "b103bc7e45be99c5c02ffb78c94b1279dfafa771ab8de2625d480a0e9f5afba7",
+    "native-before.json": "65dff6b1714efa195a7209718bf6614a5b87218120cf8f10a6cc8fe62794d56f",
+    "native-after.json": "dc3d38fc845299fb1c711d9f762f938f42d54122957c32201213a3fb932944a5",
+    "baseline-state.json": "a9ac72490fe4d3aa6491d4277cc8adceccdc9f14a2108d2f295d58f805a6d614",
+    "final-state.json": "9c50060fdcfd0da74eca5bc265b2c80f7c0eb8440a78d375bc35f8108a3114eb",
+    "google_docs-browser-trace.json": "0b923958c8790d53bb9e31cb2d70258fda8fedfc1cd5d888673b69bace944d61",
+    "operator-api-trace.json": "5f92dec2c6eb36d59d83def1e1fb08f4cc2fcbd9ff528085a8bcc47d590a015f",
+    "cleanup.json": "a75fbd4dd62b009134735758c876e9264f799d1463118d16769ef79a66f1ccc5"
+  },
+  "screenshots_retained": false,
+  "limits": [
+    "Operator CUA check with native API table preparation recorded separately; not a scored candidate rollout.",
+    "Served frontend script is matched to tested source, not a per-container digest attestation.",
+    "Does not establish full Docs or eight-provider feature/visual parity."
+  ]
+}

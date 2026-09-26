@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-24",
+  "scope": "Sheets relative-date controls and formula condition operands",
+  "references": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/other#ConditionValue",
+    "twins/tests/fixtures/google_sheets_date_filters_reference.json"
+  ],
+  "changes": [
+    "Date presets for today/tomorrow/yesterday, past week/month/year and exact dates.",
+    "Native relativeDate operands and formula operands derive filter visibility and value choices.",
+    "TODAY/NOW and relative filters share the controllable twin clock and spreadsheet time zone; quoted strings and sheet names remain intact.",
+    "Date-is windows use native custom formulas and reopen as their corresponding preset.",
+    "Explicit Scenario base_time is applied once across selected Google file twins; conflicting sibling clocks fail before reset or seeding."
+  ],
+  "tests": {
+    "passed": 545,
+    "log_sha256": "9aea23871bc76cb8e1b00e328176790d056823fd99da8a5d91cb4aa3d1a5051f",
+    "ruff": "pass",
+    "contract_matrix": "All four layers pass for Docs, Drive and Sheets, zero findings and unexpected 5xx.",
+    "scope": "Sheets/Workspace/split Scenario runners and root Scenario dispatch tests",
+    "pyright": "0 errors, 0 warnings"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "flows": [
+      "Before today reproduces the reference rows.",
+      "Past week reproduces the reference and survives reopen/reload.",
+      "Cancel a staged exact-date change preserves the past-week preset.",
+      "Switching a reopened preset to exact date starts with a clean input.",
+      "=TODAY() retains only Today; after yesterday retains Today and Tomorrow.",
+      "After-yesterday selection survives mobile reload; viewport/page both 390px."
+    ],
+    "native_snapshot_sha256": "79376357f460310f43834f0e78bf5428e5f309d4a7bc0a7d18e7b07788881c89",
+    "cells_formulas_formats_metadata_and_protected_sheet_unchanged": true,
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "No claim of full Sheets or eight-provider parity.",
+    "Native provider readback was unavailable because gws credentials require reauthentication; reference outcomes were observed in Chrome.",
+    "Color filters, filter views, data-validation filtering, charts, protection, undo and broader coverage remain open."
+  ]
+}

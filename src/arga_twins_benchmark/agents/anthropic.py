@@ -39,7 +39,7 @@ def _overlay_mapping(target: dict[str, Any], update: object) -> None:
             if not isinstance(nested, dict):
                 nested = {}
                 target[key] = nested
-            _overlay_mapping(cast(dict[str, Any], nested), value)
+            _overlay_mapping(cast(dict[str, Any], nested), cast(dict[str, object], value))
         else:
             target[key] = value
 
@@ -89,7 +89,7 @@ def _message_from_sse(response_text: str) -> dict[str, Any] | None:
                 blocks.update(
                     {
                         index: dict(cast(dict[str, Any], block))
-                        for index, block in enumerate(raw_content)
+                        for index, block in enumerate(cast(list[object], raw_content))
                         if isinstance(block, dict)
                     }
                 )
@@ -379,7 +379,20 @@ class AnthropicMessagesAdapter:
                             "usage": response_usage,
                         }
                     )
-                    messages.append({"role": "assistant", "content": content})
+                    # The Messages API requires object-valued tool inputs in history,
+                    # even when the model emitted malformed arguments. Keep the raw
+                    # response in events and validate/execute that original below.
+                    replay_content: list[object] = []
+                    for block_value in content:
+                        replay_block = (
+                            dict(cast(dict[str, object], block_value)) if isinstance(block_value, dict) else None
+                        )
+                        if replay_block is not None and replay_block.get("type") == "tool_use":
+                            replay_block["input"], _ = parse_tool_arguments(replay_block.get("input"))
+                            replay_content.append(replay_block)
+                        else:
+                            replay_content.append(cast(object, block_value))
+                    messages.append({"role": "assistant", "content": replay_content})
                     text_blocks: list[object] = []
                     for block_value in content:
                         if not isinstance(block_value, dict):

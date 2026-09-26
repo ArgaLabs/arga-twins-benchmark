@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-24",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Table menu and cell context menu merge/unmerge selected rectangular cells using native tab-scoped requests.",
+    "Selection highlighting shows the logical rectangle including merged spans.",
+    "Merge moves paragraphs and annotations into the head cell; unmerge retains that content in the head and restores blank physical cells.",
+    "Native API retains covered physical cells and UTF-16 indices; frontend paints visible merged cells while preserving hidden structural indices.",
+    "Partially overlapping merges reject atomically; extending whole existing merges and unmerging intersecting covered slots follow live-provider behavior."
+  ],
+  "validation": {
+    "docs_workspace_regressions_before_additional_tests": 281,
+    "drive_sheets_regressions": 345,
+    "targeted_merge_regressions": 14,
+    "ruff": "passed",
+    "browser": "Google Chrome via CUA and sample BrowserProxy",
+    "viewports": [
+      "1465x862",
+      "390x844"
+    ],
+    "flows": [
+      "Drag select A/B/D/E with C/F unhighlighted",
+      "Right-click selected rectangle; Merge enabled and Unmerge disabled",
+      "Merge 2x2 into A\ud83d\ude42/B/D/E with C/F/G/H/I unchanged",
+      "Reload merged state",
+      "Mobile context menu fits viewport; Unmerge enabled and Merge disabled",
+      "Unmerge and reload restores nine visible cells with all merged text retained only in the head"
+    ],
+    "capture_sha256": "69037c5e084c36999069681b27fd14c4429c2b2b7ab61348e6755d180ff19b56",
+    "protected_tabs": "exactly unchanged",
+    "final_cell_text": [
+      "A\ud83d\ude42\nB\nD\nE\n",
+      "\n",
+      "C\n",
+      "\n",
+      "\n",
+      "F\n",
+      "G\n",
+      "H\n",
+      "I\n"
+    ],
+    "business_api_errors": [],
+    "mobile_body_width": 390,
+    "docs_workspace_regressions": 295,
+    "docs_workspace_report_sha256": "394453919f0c23423e0b1ba3e7d543683617f911f91be9bf12b840375ddc848a",
+    "generated_js_syntax": "passed"
+  },
+  "provider_reference": {
+    "fixture": "twins/tests/fixtures/google_docs_table_merge_reference.json",
+    "scope": "Native API content, indices, styles and merge errors for LTR/RTL, empty/mixed cells, extension and partial unmerge; official help documents UI interaction. Not a pixel-level comparison.",
+    "cleanup": "All five newly created documents confirmed trashed; no pre-existing files changed."
+  },
+  "remaining": [
+    "CI, production deployment and hosted checks pending.",
+    "Table drag resize, positioning/wrapping, pinned headers, full menus and broader Docs/eight-provider parity remain open."
+  ]
+}

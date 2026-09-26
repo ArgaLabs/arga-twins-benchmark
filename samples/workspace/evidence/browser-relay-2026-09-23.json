@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-23",
+  "kind": "candidate_driver_transport_validation",
+  "screenshots_retained": false,
+  "scored_candidate": false,
+  "status": "local_verified",
+  "tests": {
+    "candidate_runner_outcomes": 133,
+    "candidate_specific": 17,
+    "ruff": "passed",
+    "pyright": "passed"
+  },
+  "Chrome_via_CUA": {
+    "provider": "gmail",
+    "queued_actions": [
+      "observe",
+      "click Drafts",
+      "fill search",
+      "click Drafts"
+    ],
+    "requests": 4,
+    "completed_responses": 4,
+    "observed_result": "Search filtered the conversation list; returning to Drafts cleared search and showed both seeded drafts.",
+    "driver": "Manual execution of each queued action with Chrome CUA; accessibility text responses relayed through mode-0600 files. Initial observation was an explicitly marked excerpt.",
+    "scope": "Transport smoke only, not an independent candidate or hosted rollout."
+  },
+  "remaining": [
+    "External Computer Use driver must be connected by the operator",
+    "Five complete hosted browser or mixed candidate rollouts remain open"
+  ]
+}

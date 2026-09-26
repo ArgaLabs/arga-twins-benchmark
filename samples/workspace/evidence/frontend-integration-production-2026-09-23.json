@@ -1,0 +1,86 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_validation",
+  "scored_candidate": false,
+  "status": "passed",
+  "environment": "production",
+  "run_id": "9acbe857-ab40-43b8-bd00-84911fc7e365",
+  "scenario_id": "8b320c9b-05a7-415c-9d5a-5d6775169936",
+  "deployment": {
+    "pull_request": 1115,
+    "tested_head": "35d3e46b3cba1c2bc5b207d752c7237b48b0aa16",
+    "merge_sha": "46938097853cf8ea76ab22173122549d1669ecd3",
+    "all_applicable_ci_checks": "passed",
+    "twins_workflow": 35934139043,
+    "runtime_workflow": 35934139353,
+    "both_deployments": "success",
+    "per_container_digest_attestation": false
+  },
+  "browser": "Google Chrome through CUA and the actual sample BrowserProxy",
+  "viewports": [
+    "desktop",
+    "390x844"
+  ],
+  "screenshots_retained": false,
+  "checks": {
+    "gmail_mobile_folders": [
+      "Drafts: two separate unsent rows",
+      "Spam: protected fixture visible",
+      "Folder QA: labeled conversation visible",
+      "Inbox: 52 conversations and 51\u201352 final page"
+    ],
+    "gmail_entire_native_state_unchanged": true,
+    "calendar": [
+      "Shared calendar restored by ID across separate owner/subscriber identities",
+      "Personal nickname, color and 30-minute popup reminder retained",
+      "Reader cannot edit owner calendar settings",
+      "Cancel does not unsubscribe",
+      "Mobile unsubscribe then resubscribe succeeds",
+      "Owner calendar list, calendars, events and ACLs unchanged",
+      "Other subscriber resources unchanged except expected subscription sync/notification metadata"
+    ],
+    "github": [
+      "Browser download followed signed redirect and returned archive bytes",
+      "Native ZIP digest and synthetic results.json contents verified",
+      "Mobile deletion removed only disposable-results",
+      "Remaining artifact, protected repository and all other captured state unchanged"
+    ]
+  },
+  "archive": {
+    "bytes": 171,
+    "digest": "sha256:cb39b4212cd780ad64e9ca0134157602f93c043579dc0529465f7f214b7c5af4"
+  },
+  "requests": {
+    "github": 9,
+    "gmail": 121,
+    "google_calendar": 34
+  },
+  "console_errors": 0,
+  "nonblocking_http_findings": [
+    "Each twin favicon request returned 404; all tested business requests succeeded."
+  ],
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "artifacts_sha256": {
+    "calendar-owner-after.json": "33f47ee6a7507cb02970d3d47493f8a4aee401bf5b3fe1cd4e8d0b0b38c22e8a",
+    "operator-native-readback.json": "6fcdfd1fc87b6fcfba097e829ff4b977dba54f143b6254441fda0034429df388",
+    "google_calendar-browser-trace.json": "ba1a9c216731e70a63e3f4283f049885a35e3b2f6d4e5061c4e0a4211c5276df",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d",
+    "workspaces.json": "f6d6fcf61fd8ea5d095b1d86b120dd35f307c4879e1dbde642cde0a4f9b51fbd",
+    "operator-fixture-setup.json": "19475a77edafbe3c43f3dce29355d1864087e7a0d507740e7cdf6eb55cfcef19",
+    "cleanup.json": "1f0d5897281464846d1979181b0f41867ec439170c53705a7a938a17dd990b52",
+    "gmail-browser-trace.json": "87d97eb90e524901bb721cd47aa7eced86010814a8c27a0f702a650432af9a1c",
+    "github-browser-trace.json": "aa14562f9d92c5248710674eafc8a47390e83a518d5bd71d9b514cfbff1704c5",
+    "scenario.json": "206b0b89b62b64b0be49dcead68c5fa72d8236ae88abe939b9032d839fd4bbf6",
+    "baseline-state.json": "6cad0b9ab18040778c0d903b8e231a5f8bff6d6d97d8372e4d6b45e4021a6565",
+    "calendar-owner-before.json": "33f47ee6a7507cb02970d3d47493f8a4aee401bf5b3fe1cd4e8d0b0b38c22e8a",
+    "final-state.json": "a8b3cbc590a9cee23b2d32a0a2345c11c15c7ce7f5fdb976d0c5add9b42c042c"
+  },
+  "limits": [
+    "Manual operator flows are not scored model rollouts.",
+    "No per-container image digest attestation was obtained; exact-commit deployment success and hosted feature behavior were verified.",
+    "Full eight-provider feature inventory, visual/mobile parity, remaining Sheets deployment and final package gates stay open."
+  ]
+}

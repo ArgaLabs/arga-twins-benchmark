@@ -1,0 +1,188 @@
+{
+  "date": "2026-09-22",
+  "environment": "production",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35786489900",
+  "twin_source_revision": "4a1bd4c410a6ed073f48a492c0a6de1f0f948413",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_mode": "api",
+  "browser_agent_coverage": false,
+  "model_comparison": false,
+  "repeats_per_current_task": 1,
+  "results": [
+    {
+      "task": "WKS-01",
+      "outcome": "pass",
+      "candidate_status": "completed",
+      "model_tool_calls": 32,
+      "business_api_calls": 22,
+      "official_docs_calls": 8,
+      "assertion_count": 10,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "operator_evidence_directory": "runs/hosted/wks-01-attempt-2",
+      "artifacts_sha256": {
+        "baseline-state.json": "76248251fac1d6d8b1d6bc8e28b17d3392af95475c82f88788311f55fd09f836",
+        "final-state.json": "1100e390b75a311925537dd316d383b12be64d4f0a095528034a2d0c1cb17138",
+        "invocation.json": "4337039bdad6e0774a133622f064f2fdb54fe49dfe6c6aaf31600ce925db8f0e",
+        "provider-trace.json": "dc20052d1da7f58315d967dcc3472e746af2f3c193bedbd296f787bace248941",
+        "official-docs-trace.json": "085ce2d768649a86260890e52f1c39b62fb2e890dafaac03b4aadcfc74673c37",
+        "browser-trace.json": "23751574b3e82d89da55d090d62371f5ccf71e321c96d0e9984cb004e23f59eb",
+        "cleanup.json": "58066e20b43aa981098b7315896fdeb9101517d746ef8df50ceed638ccd1b5cb",
+        "verifier.json": "ebb2f76999c9f8281129b1f5d7d2422c604ce22ed78103826dc6404d7c3e7583",
+        "candidate-evidence/model-invocation.json": "1c62c4fa3a5b3de51056067ef89306f7ff2af7db08ecb3c28de59ac49ae41b7a",
+        "candidate-evidence/adapter.json": "eba2dbd33d898a3d3cbe6569caf81f2b45d721443cb198438409a9e5313223ff",
+        "verifier-regraded.json": "74411fb840bb5b39d8a1b28a0da6713a999f49960683976d6189a7c542590c2b",
+        "verifier-regraded-v2.json": "5bbfb0572f2f5fc740b609202b4caa4517c2bec19e59c427f16d11196d77a391",
+        "verifier-regraded-v3.json": "b15311c1627965bfab1f53e61b5adb2b44204e5546ad0c81f6b6a2f402504c6c"
+      },
+      "scenario_sha256": "faa7b8df10756bdedd3d617bfc44a187366e8f6ac261279a99da89f56bf14086",
+      "latest_verifier": "verifier-regraded-v3.json"
+    },
+    {
+      "task": "WKS-02",
+      "outcome": "pass",
+      "candidate_status": "completed",
+      "model_tool_calls": 18,
+      "business_api_calls": 15,
+      "official_docs_calls": 2,
+      "assertion_count": 10,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "operator_evidence_directory": "runs/hosted/wks-02-attempt-1",
+      "artifacts_sha256": {
+        "baseline-state.json": "f92ceb02d3b17ed69e80ab2553a548660aff546f9cafce668d12071bb2647cad",
+        "final-state.json": "12bf5839e1ec05c537d60ccece9077840e398f074f33c1b65da5abf53acc94e8",
+        "invocation.json": "705fbcfc8e9269e3c0b8c4e68e21a2a7fa1a47ff5ff0ff0d1300e55c6cf84979",
+        "provider-trace.json": "f3b45ed862b02d27ae5cf412a4e0e7fb6513ca2651bb5a6ee92a9ec34eabe391",
+        "official-docs-trace.json": "b90211c6980acbeadb5ac38e7c9b768a26696dd86ddb3cd650d54b5f26a4de3e",
+        "browser-trace.json": "3d446402edf582843daf7fb22f697c0a4b6fdd258a014fd9388265fec77006f4",
+        "cleanup.json": "81a63624f7396aa26ae1a1ada0a33fff67890cb3a9628a438b760eb2190e2287",
+        "verifier.json": "073d9f84589dfc6191a3e78f4d90e3adfe3eeffe7337eb739eb0e778074969fc",
+        "candidate-evidence/model-invocation.json": "d297cfec7e5ae531c3f16bfaa1d3fb26b4e17a81d04422838ac9cade922fac3e",
+        "candidate-evidence/adapter.json": "ca6a8250b5bf96613e20eea3fdb53b69d4eb4b2dfb523c9c1b32fe189901acfc",
+        "verifier-regraded.json": "28e8d5b9d9515f236cf1067ae69068503111537edcb352477fa06183126c88e0",
+        "verifier-regraded-v2.json": "88939ce5cf99aa9c0f4e0eb1715b6629a8fd7cb54d9dc06d2cc6ca7a1d75f6a3",
+        "verifier-regraded-v3.json": "04ab62295676325dbe4f095a2885268ca3c21765072dfdabe4367add35fcfea1"
+      },
+      "scenario_sha256": "e1c7547747ee29e1629ec9334156f08389bdb435eef62b641589e20e1d67ef12",
+      "latest_verifier": "verifier-regraded-v3.json"
+    },
+    {
+      "task": "WKS-03",
+      "outcome": "pass",
+      "candidate_status": "completed",
+      "model_tool_calls": 21,
+      "business_api_calls": 18,
+      "official_docs_calls": 2,
+      "assertion_count": 12,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "operator_evidence_directory": "runs/hosted/wks-03-attempt-1",
+      "artifacts_sha256": {
+        "baseline-state.json": "8c48d0f4ba6114113153ac0a436e6fe8594bdb5decf9810263b9113522ad930e",
+        "final-state.json": "015715dccff172c98fac4d570244817c96e544ebfc68a2e1004c9b5cabbdd939",
+        "invocation.json": "0f6ec8b328671d0ef2dbf7b3fbf6c6f8c0f62ad3ae29db02f2c6846780841864",
+        "provider-trace.json": "b8e0cf36328d690fae4b1dc6a02dead3f5f350d9e88019d07be56f23527b74a3",
+        "official-docs-trace.json": "24aa6fc5898948a12bd4dba62982aac58cc4101da0f999f02c4cef53e7ee3024",
+        "browser-trace.json": "9dc4b76dee7319f38b2fe5be5a1c9181fa688869af9103707c9c8ef92711c938",
+        "cleanup.json": "7a9d903e113267dd69ff852c52448c576fa347d916cc1a39fdd37f4f8727f956",
+        "verifier.json": "d0360c517d903e0699379020ed13b821048b848dc557bc030eff7a50419e21c8",
+        "candidate-evidence/model-invocation.json": "2e1478d7393203c2038a55878c4ee2257180d6fac2b378297e8d1bd794325561",
+        "candidate-evidence/adapter.json": "30ba14a7025a58602c4a899c2f403c846369aa19ee647f32446e102a9d3a06b0",
+        "verifier-regraded.json": "e35db11a1df359da9dd0ac7733b76b6f31f7b3480f44d6c29a486ae3b62241fc",
+        "verifier-regraded-v2.json": "6ff53d22475605c237175eff7e4d7cab98788f832f834ebd6b4fdf174de04e87",
+        "verifier-regraded-v3.json": "494f2cfe0dd5287d0f499da150fd070f81c86fbe05f815cc9fe7a0603fca9100"
+      },
+      "scenario_sha256": "b2d107f38f6fd4a577cee2813f5a1895f5d7ee9b3686ed03dd67486456a50865",
+      "latest_verifier": "verifier-regraded-v3.json"
+    },
+    {
+      "task": "WKS-04",
+      "outcome": "pass",
+      "candidate_status": "completed",
+      "model_tool_calls": 23,
+      "business_api_calls": 20,
+      "official_docs_calls": 2,
+      "assertion_count": 13,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "operator_evidence_directory": "runs/hosted/wks-04-attempt-1",
+      "artifacts_sha256": {
+        "baseline-state.json": "e651f65f5ed81b547549bd6504cfba5abb9bb9e833ffcc08d3f04830168baddb",
+        "final-state.json": "011171a769ea76a2002dc017df2d09ec37dbe8668c94f6348d395a0cd2fb0cc6",
+        "invocation.json": "f3780cf8b01fa3c1617149d7392907e9c6eb5898e62c60a566f29b68fb671b24",
+        "provider-trace.json": "55df35e2782e1dbd40b401958e1696eb843f18e6a154d19622e51f6db048ca54",
+        "official-docs-trace.json": "199fbec47e98b9e92a4e5b70d07c758cfe94aa68d511a65614f938f98867bd27",
+        "browser-trace.json": "4ee97e71a4cdb2f0c4895bdba0cbaab15c6f5fdec97cc79f582290a0054846d7",
+        "cleanup.json": "f028596c4e06d5ca025dcce281fc1a977037354d5de10fc1a97d176ecfd91df3",
+        "verifier.json": "ba8e7b851a582586f436a13f8a9b2d013fa68944d25db64f1926a0bb0999dca2",
+        "candidate-evidence/model-invocation.json": "6d9da37269b11ba7d5b4ad742ac1e11dfb69433cb548b64134097126ef10230e",
+        "candidate-evidence/adapter.json": "9c0e5fff8673b378037393effd28ef4ccc727a1c20708b290b819366aeb9d9db",
+        "verifier-regraded.json": "b17a3b067341f31f197f9301f41d676ed9c90e1b222a247bd5d3f7bffefcb20b",
+        "verifier-regraded-v2.json": "fd047a89fc377e208fe4dcd81f141ad8c85e80854e48b024f32e55d24ab937b5",
+        "verifier-regraded-v3.json": "ef117c6c48b7f632e426d16b71801266c0b5ad5c99a2004e974ff902127b2dc9"
+      },
+      "scenario_sha256": "26457823c44c14046654732c63277435bdd0fc770325db81ad1e79d9e29bb6f9",
+      "latest_verifier": "verifier-regraded-v3.json"
+    },
+    {
+      "task": "WKS-05",
+      "outcome": "pass",
+      "candidate_status": "completed",
+      "model_tool_calls": 39,
+      "business_api_calls": 25,
+      "official_docs_calls": 13,
+      "assertion_count": 16,
+      "cleanup_confirmation": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "operator_evidence_directory": "runs/hosted/wks-05-attempt-2",
+      "artifacts_sha256": {
+        "baseline-state.json": "75ecefd74160a8c473b3ec0b25bf6cbc0843a332fc46d49bb995fb4acffbf160",
+        "final-state.json": "763b309e374083b25363241f13789c10d889046fbfd48c8970b1337a4d283637",
+        "invocation.json": "cbbf85ceef14f17e357bad1b36379ed1f80142ebc667a8fa2cf9bad19712c74a",
+        "provider-trace.json": "adb0fe3cf1ce4864220fd0227c681ece9337e76f831ccc2c5f197297d3a873a7",
+        "official-docs-trace.json": "20b1b32f38a7b18b71ac3606186d396cfc3a15daf41cd1c7b30ad0b2d2bdb54c",
+        "browser-trace.json": "34f5ab986107931208b815b8ed6b031df779c3290d84d286afe61b4920377573",
+        "cleanup.json": "8ce94d3f55b3d171f11ec5518fbdfca90a9d7d9d66d12c495c04a3ed1add638a",
+        "verifier.json": "7bee2ee3ef5bc62d7ebe251de75697c0681e9ecb4403701549f8dabbc0b8a097",
+        "candidate-evidence/model-invocation.json": "7bdd9256ca43a890b7a43184558042c514b9df182cfbe47cccd85392b5d3c633",
+        "candidate-evidence/adapter.json": "2125e5ce83eb56df8885f399bec63f9ce10908757840c0edb3515b9f75dc40cb",
+        "verifier-regraded.json": "b027b90d8d8dea9a7984f39bc34f0084aeec79037728e67dd44cde7a6538e06e",
+        "verifier-regraded-v2.json": "b4ba1e6c8262376ea24d920992e25116c0c3066ef992d250c712ce81e3d69dae",
+        "verifier-regraded-v3.json": "452243a73684e39d514eab520a1802d809203c35337bd49c7848d1d444d98a90"
+      },
+      "scenario_sha256": "b0ad1d8986165a9d3fcf709a6fb6bac43161a8db599acc66bc642bf5dfed6c54",
+      "latest_verifier": "verifier-regraded-v3.json"
+    }
+  ],
+  "preserved_earlier_attempts": [
+    {
+      "directory": "runs/hosted/wks-01-attempt-1",
+      "outcome": "infrastructure_invalid",
+      "reason": "Missing explicit twins in Scenario import; fixed before candidate provisioning; malformed test Scenario removed."
+    },
+    {
+      "directory": "runs/hosted/wks-05-attempt-1",
+      "outcome": "fail",
+      "reason": "Missing blocker discussion record and readiness meeting purpose; preserved. Current task wording makes these deliverables explicit."
+    }
+  ],
+  "limitations": [
+    "These rollouts do not certify full frontend parity, mobile or pixel coverage.",
+    "Original verifier verdicts are retained beside corrected regrades; candidate reports and captured state were not altered.",
+    "Runtime container digests are not exposed by the current CLI. The successful deployment, matching source revision, fresh provisioning and frontend preflight establish the tested baseline; do not claim direct per-container digest attestation."
+  ],
+  "regrading_notes": [
+    "The v3 regrade closes an incomplete renewal-confirmation check. All five preserved hosted outcomes still pass; no candidate report or captured state was edited."
+  ]
+}

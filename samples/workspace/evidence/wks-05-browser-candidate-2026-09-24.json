@@ -1,0 +1,109 @@
+{
+  "date": "2026-09-24",
+  "task_id": "WKS-05",
+  "kind": "hosted_browser_enabled_candidate",
+  "screenshots_retained": false,
+  "status": "completed_pass_mixed",
+  "scored": true,
+  "run_id": "70a1099b-9394-460d-b138-7b497c88ec35",
+  "scenario_id": "b1bf7fb4-8a81-45de-a7e3-4cc33480f315",
+  "model": "claude-sonnet-5",
+  "model_tool_calls": 41,
+  "mediated_business_api_calls": 21,
+  "documentation_calls": 5,
+  "browser_calls": 14,
+  "completed_browser_calls": 14,
+  "browser_tools_enabled": true,
+  "interaction_mode_used": "mixed",
+  "verifier_outcome": "pass",
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "required_4",
+      "status": "pass"
+    },
+    {
+      "id": "required_5",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_github_issue_comment",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:github:issue_comment:7",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_calendar:event:d22b5544a010ae3e1c8de05077",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:Vcoy3M4gp6u7WsuOId92RIGN0nU",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:nWXaLukZ6oBdgWrd44--D0wct_s/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:release",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:blocker",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:decision",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:review_utc",
+      "status": "pass"
+    }
+  ],
+  "unauthorized_changes": 0,
+  "cleanup": "torn_down",
+  "counts_as_browser_coverage": true,
+  "raw_model_evidence_retained_privately": true,
+  "browser_driver": "Google Chrome via CUA; extension actions followed by native app actions after extension transport became unavailable. All model browser requests received observations before their deadlines.",
+  "browser_workflows": [
+    "Read go/no-go policy in Docs",
+    "Inspect existing decision meeting in Calendar",
+    "Edit and save launch brief in Docs"
+  ],
+  "limits": [
+    "One candidate and model; not a model comparison.",
+    "Browser actions covered Docs and Calendar; remaining business changes used provider APIs.",
+    "This verifies the sample business flow, not exhaustive frontend parity."
+  ],
+  "capture_sha256s": {
+    "verifier.json": "ff5cdfde8580e7a0381c49d11210d2c136f7bf64def58b9a6b85713bdbe977a3",
+    "invocation.json": "30ef2423057847ae2049eb427567c46f37c77f3b8c4be8bd1e20759355e6cffe",
+    "baseline-state.json": "98165db46ae43f9f6bcfd0a9a8dee0bdb37a3bc10f2a2459723651867335a04d",
+    "final-state.json": "0d54ede78844e443a8b446114b6cd1eeed7373ca3d4d3aa73fb5db2f6f0064c6",
+    "cleanup.json": "be378166aac7e63cf7bd8ab485b859c18e3aaa0107fb42114a8faa58f2439980",
+    "provider-trace.json": "b20c6a8c54f0881c110919c6c99d842eabde0a4156651335959126e362214086",
+    "browser-trace.json": "d453f8e48bd23c4d134211c209f5152db2578e80e64e8a39e88d992befd98278"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "arga.lab.reference-observation/1",
+  "observed_on": "2026-09-26",
+  "provider": "stripe",
+  "status": "authenticated_empty_state_read_only",
+  "release_allowed": false,
+  "account_conditions": "Existing authenticated account; account plan, assistant entitlement and role matrix not established. No account identifiers or financial values retained in this report.",
+  "entry": "Dashboard Help button opens Assistant pane",
+  "desktop": {
+    "viewport": [
+      1465,
+      806
+    ],
+    "observed_panel_width_approx_px": 344,
+    "controls": [
+      "Assistant heading",
+      "Unnamed header menu with Restart conversation",
+      "Two additional unnamed header buttons, one visibly closes the pane",
+      "Personalized empty greeting",
+      "My verification status prompt button",
+      "Rotating sample prompt placeholder",
+      "Empty textarea",
+      "Select attachment",
+      "Disabled send",
+      "AI accuracy disclaimer"
+    ]
+  },
+  "menu": "Restart conversation was observed; menu dismissed without invoking it.",
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "observations": [
+      "Assistant remains open at narrow width",
+      "Pane occupies about344px, with header and composer visible",
+      "Close icon returns to dashboard",
+      "Pointer interaction only; no physical touch claim"
+    ]
+  },
+  "mutations": {
+    "assistant_request_submitted": false,
+    "text_entered": false,
+    "attachment_uploaded": false,
+    "restart_requested": false,
+    "financial_or_admin_action_submitted": false
+  },
+  "cleanup": "Assistant closed; temporary viewport reset; owned reference tab closed. No fixture or outbound message created.",
+  "screenshots_retained": false,
+  "source_discovery": {
+    "revision": "2697ce65845591fab115ace062c5e3dca77382ed",
+    "scope": "Read-only rg of twins/stripe for Assistant/assistant/Help/Sigma/Reporting found no Assistant UI implementation. This source search is a discovery hint, not a complete route/runtime audit."
+  },
+  "limits": [
+    "No AI response, source grounding, assistant error/cancel/retry, attachment processing or account-dependent behavior verified",
+    "No twin implementation or production pass established",
+    "Full Stripe reporting/account/admin/AI/collaboration audit remains pending"
+  ],
+  "followup": {
+    "status": "navigation_response_and_reload_observed",
+    "prompt": "Where can I view balance transaction reports? Please only explain navigation; do not contact support or change account settings.",
+    "observations": [
+      "Submit enabled after entering text",
+      "Loading state showed Just one moment...",
+      "Response explained Reporting > Reports > Balance Summary and linked /reports/balance",
+      "Response included thumbs-up/down controls; neither used",
+      "Full reload closed the pane; reopening Help restored the owned question and answer",
+      "Link opened a separate live Balance report tab"
+    ],
+    "effects": "One navigation-only AI conversation turn; no human support contact, attachment, financial or admin action. Conversation remains in reference account history. Both owned tabs closed and viewport reset.",
+    "limits": [
+      "One response is not exhaustive AI coverage, grounding, permissions, cancellation, retry or error verification",
+      "No twin AI implementation is established"
+    ]
+  }
+}

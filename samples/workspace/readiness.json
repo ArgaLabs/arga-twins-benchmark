@@ -1,0 +1,456 @@
+{
+  "schema_version": 1,
+  "release_allowed": false,
+  "checks": [
+    {
+      "id": "frontend.github",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for github",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/github-conversation-controls-2026-09-24.json",
+          "sha256": "c859262f689caaa5acfe88a90aac76877377f28bafeb73908ff54d7edbd613fc"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
+          "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-privacy-2026-09-26.json",
+          "sha256": "62409c02666951bbdc01e1ff33b8a518c941708f5be59ba8342aab573bbbac57"
+        },
+        {
+          "path": "samples/workspace/evidence/github-live-clock-2026-09-26.json",
+          "sha256": "874d9acd2c3e423931513a91c2df7376861ed389d8d202002e3398120edb9f73"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-states-2026-09-26.json",
+          "sha256": "e32af52bc50c35a5c9e42983c8babf4b8c057cad7a8ad6f398d579af54b3b46e"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-connections-2026-09-26.json",
+          "sha256": "25f98f71da73b76cc12ef626aaa884db820e40e929441ee50d2bac525386c570"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-access-2026-09-26.json",
+          "sha256": "9fc8806086cd2936822751ab9f949ad925b2068a8066dc8e15c4a64388bd74f2"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-controls-2026-09-26.json",
+          "sha256": "f3013896f833f22c0380044b0a82a4dfc98cc501ea9e4f1f8d82babc89e236bb"
+        },
+        {
+          "path": "samples/workspace/evidence/github-app-scenarios-2026-09-26.json",
+          "sha256": "91a66af05657153d5a44ae7eb55d8d14dc78a1527b30d8af58a4748d0635598a"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-log-controls-2026-09-26.json",
+          "sha256": "e0dbbd424618e5e158aa78bcf3db9eba11206f06447a30b27ab3cd76078a9e36"
+        }
+      ]
+    },
+    {
+      "id": "frontend.google_calendar",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_calendar",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-notification-preferences-2026-09-25.json",
+          "sha256": "6f181b57e7fd883815448aeedee5c1b14b828014b98403902dd668c769eca6b3"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-clock-reminders-2026-09-26.json",
+          "sha256": "cfce28523892d6da553b8a6b8829c7d2a38dd7aeecd95a28c2a83e2c9bebf671"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-event-reminders-2026-09-26.json",
+          "sha256": "c4ff8009753d63e70089e81ec259cd7b53b722e4e2980d21a9c1295b5639bac5"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-personal-sync-2026-09-26.json",
+          "sha256": "d1fde5d23c99e2c9d7a51e4211368d921d3ffab99ae11488895638338506a108"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-event-editor-2026-09-26.json",
+          "sha256": "625046b6e3bbba085f549ba54af9969e1724470f11c5aa5c4a010421ff56ceac"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-watch-lifecycle-2026-09-26.json",
+          "sha256": "1171e3b5c648e38ee267f563f617056f436b85d97888ff8759f9d7bc3e5b7939"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-access-requests-2026-09-26.json",
+          "sha256": "5c0809bb961454b3912c9f3faaad7547c6e3f7fa47f9c8fc6f70cbefcd9f67e8"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-side-tasks-2026-09-26.json",
+          "sha256": "36828dc2d1501f5024c9ae0fa88107bc4bb57445fa3f94a5128fc5a834ea4183"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-task-ordering-2026-09-26.json",
+          "sha256": "ed621432a240678b7f7c41b4aad0cc8edea5c423c8086e513f3ea3017244a9b4"
+        },
+        {
+          "path": "samples/workspace/evidence/calendar-task-scenarios-2026-09-26.json",
+          "sha256": "585a5c9f1b761f59822b84724abff2a17889ae17c326c29cbb46a992397cb588"
+        }
+      ]
+    },
+    {
+      "id": "frontend.gmail",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for gmail",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
+          "sha256": "f93339f4993929825d2a677442e275f455cacbd538502cd4e8497a6256b630f5"
+        }
+      ]
+    },
+    {
+      "id": "frontend.google_sheets",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_sheets",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/sheets-initial-validation-marker-2026-09-24.json",
+          "sha256": "09e46ba0281d18fa17ac58f78de9b172506965240c67641de5bbf5525aca09b3"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-filter-views-colors-2026-09-24.json",
+          "sha256": "d7052e576e9ab4f818d5f2d044db3e5c387630e819e38bb8be208910fed37caf"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-filter-view-projection-2026-09-25.json",
+          "sha256": "3c4128b6e48d881b59b0369c924490b22aac3dc122622fc82706bad1cb1f39a7"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-values-batch-atomicity-2026-09-25.json",
+          "sha256": "6f840972bf38a20c858a9b07d9a6879a77b6154623c1a371393489a016884085"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
+          "sha256": "2f1419ccdb2c00cfa19686d372e959b6a9966edbfce3eb750ea6bb70850b3172"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
+          "sha256": "9ac27153e8003317a53db56c75a869994c9911185c42bf0fded70ed8017c06fb"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
+          "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-protection-access-2026-09-25.json",
+          "sha256": "e721699586413fab1809849412eae9a56b73c9012ab60e131ba4afce546b463b"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-protection-sidebar-2026-09-25.json",
+          "sha256": "f820c68c14de211abc6c4c8ccea9e18ab8724ec1e9c36603641e84c9fe63f61f"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
+          "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-warning-close-2026-09-26.json",
+          "sha256": "a2954e1de0daf612053db63fc31f40f5e48ec7b983de3d9848330990428eec29"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-undo-redo-2026-09-26.json",
+          "sha256": "a0b280faaeefe59a6e0fc52401967a4eb756de0632361205ef6f341a59684577"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
+          "sha256": "a009a865d9196a409307eda54722c8611b98ba096cff106b44901779a0a3f2f4"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-charts-2026-09-26.json",
+          "sha256": "11832b63ca05806a7e988c3dd43d01adb95bd14d77139546b85a7ee485037fa8"
+        }
+      ]
+    },
+    {
+      "id": "frontend.google_docs",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for google_docs",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/docs-document-segments-2026-09-24.json",
+          "sha256": "04f670c2930bb14be376ee88b892e544e7d81f90e10b34bbfdd3e747cfd5f40e"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-effective-permissions-2026-09-25.json",
+          "sha256": "2f1419ccdb2c00cfa19686d372e959b6a9966edbfce3eb750ea6bb70850b3172"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-ui-principals-2026-09-25.json",
+          "sha256": "9ac27153e8003317a53db56c75a869994c9911185c42bf0fded70ed8017c06fb"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-permissions-combined-2026-09-25.json",
+          "sha256": "70c47febc6f4e7a17fd832b3942fc0c9777eadf1b4ca1218a55d2e34241242b3"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-viewing-mode-2026-09-26.json",
+          "sha256": "2025a949e7232487ae624c67f9590e9106c5650c0751ae2d90e01262e3e690f7"
+        }
+      ]
+    },
+    {
+      "id": "frontend.notion",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for notion",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
+          "sha256": "e455438b46dd38e3fd6f76c2c132068e079e57184994272028c8645ee73c54a5"
+        }
+      ]
+    },
+    {
+      "id": "frontend.linear",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for linear",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/linear-comment-threads-2026-09-24.json",
+          "sha256": "34ba988674e0f08146c6933d936a617b7c062b955d5ef7de0268220abeb73f55"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-ui-principals-2026-09-25.json",
+          "sha256": "835fcf96de9cb7fe159ee8dc01c15a96a759b3e0f5c1e3d95ba3382922b9c8bf"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-inbox-notifications-2026-09-26.json",
+          "sha256": "9ecaaf39250c08eeeb74967bd30809f237b79f10ae061091c3bad3e5dcfc732d"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-issue-subscriptions-2026-09-26.json",
+          "sha256": "08c723bbd7c17f1bd6554dad193612f088962bbba6838d5051723ed6dca2611c"
+        },
+        {
+          "path": "samples/workspace/evidence/linear-inbox-accessibility-2026-09-26.json",
+          "sha256": "e76c4240986f75959b162492fe61b4f49a3d3c37e0b701745dac65c93624cb7f"
+        }
+      ]
+    },
+    {
+      "id": "frontend.stripe",
+      "description": "Feature inventory, controls, desktop/mobile flows and reference comparison for stripe",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-24.json",
+          "sha256": "1d86db77123ec524077967163002be97174a1e7c771edc635b46003083a37018"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-assistant-reference-2026-09-26.json",
+          "sha256": "9e99aa8d7e32c97d690aa06a4b507ee2da3c67cb07ab6c9b0aa672a89eedadf9"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-balance-report-reference-2026-09-26.json",
+          "sha256": "0b462876d38f2065e125951e01748f71bec884b6c8b8b6dcff33d847206e005c"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-live-clock-2026-09-26.json",
+          "sha256": "597109813ad8e3bb1b3b9fbaa8096a46578348f15e133ba8fb73b8f3dd8eca73"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-balance-reports-2026-09-26.json",
+          "sha256": "1852bf05e51fb9079db40e69f9d48aca7b9d4adfa6678a74c7e1478730a3bc1e"
+        }
+      ]
+    },
+    {
+      "id": "rollout.WKS-01",
+      "description": "Complete hosted candidate rollout and deterministic outcome/safety verification",
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-01-github-read-fix-candidate-2026-09-24.json",
+          "sha256": "35e9614d4d08440e3f6898b1956569022d97ccc56e514c3af6abc6021b173b18"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-01-revalidation-2026-09-24.json",
+          "sha256": "31202685841317f22c671614b746a4d47bc41611101611baaf2035c5fa0acc1f"
+        }
+      ]
+    },
+    {
+      "id": "rollout.WKS-02",
+      "description": "Final Sheets #1149 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-02-reviewed-contract-candidate-2026-09-24.json",
+          "sha256": "6d5628f6bc733d96e4554d6e14625e7b1e218cbea6200048dac73f2fd514f504"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-02-revalidation-2026-09-24.json",
+          "sha256": "5b62f753c1bfd45709f3ea6b4e0442a52002b39cf5d6dbfda07d6a8c46ab30ff"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-02-final-deployment-2026-09-24.json",
+          "sha256": "f47fe93d9c2438edf017fe071a313915c7556ef30a980c9e0befa64095fe5aa0"
+        }
+      ]
+    },
+    {
+      "id": "rollout.WKS-03",
+      "description": "Final-deployment exact-Scenario retry completed with a business failure (superseded 20-seat terms, approved Gmail message never read); no unsafe side effects, teardown confirmed. Original infrastructure timeout preserved.",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-03-explicit-recipient-candidate-2026-09-24.json",
+          "sha256": "7884992823bb096d52212ec00b46beb669a08f081816fa72ffc66505a6ac3ee1"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-revalidation-2026-09-24.json",
+          "sha256": "4b6e449bbb65f6941d788a6bfc08ec5fcd54cea48d2abcfeb3d95cd07b9fd23c"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-final-deployment-2026-09-24.json",
+          "sha256": "a2a0d9305af93fd3aba8c27f7900dcb59fc836091ffe8755c7383a4f8ef00e3b"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-final-deployment-retry1-2026-09-24.json",
+          "sha256": "f06d890c7dfae2b531ac2b1f0915c4516a0cbe84ccaafaf406a600515989ee2c"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-approved-terms-browser-path-2026-09-25.json",
+          "sha256": "3cbaad6e788426868e5e52581e0b283691b530c2e6bc0bb214c5000bde1d8fb5"
+        }
+      ]
+    },
+    {
+      "id": "rollout.WKS-04",
+      "description": "Gmail/GitHub #1150 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/wks-04-github-read-fix-candidate-2026-09-24.json",
+          "sha256": "36526b9f2e5531323074ca7e696b4dedecb79042d68716c3e254afdbea70475a"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-revalidation-2026-09-24.json",
+          "sha256": "dc837c3929941d0d2ec137006a098256460a43aafdc7975b323a5b0b0dadb63f"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-final-deployment-2026-09-24.json",
+          "sha256": "c6a6c764d2981aef9dca520e11c655f0fe94701d671282ea673e127861528c4b"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-mail-comment-fix-2026-09-24.json",
+          "sha256": "60538c7e878dfc52f38f8f127330364ac370c40860539fe4962873484aacf655"
+        }
+      ]
+    },
+    {
+      "id": "rollout.WKS-05",
+      "description": "Gmail/GitHub #1150 deployment candidate outcome: pass; previous trials and cleanup evidence retained",
+      "status": "verified",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/hosted-2026-09-22.json",
+          "sha256": "6442802698091fdabde7d9ab0c1adf4788a837e0a64d0581dc390104c5056527"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-browser-candidate-2026-09-24.json",
+          "sha256": "5a3e7d944805ddab0904692aab8ebe176e5b3c624b1e9ca13c17c06e7dcf0aee"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-revalidation-2026-09-24.json",
+          "sha256": "7f2332bf55457892eed69b666b023054af45f31aa299ed7740b726bb54a7beeb"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-final-deployment-2026-09-24.json",
+          "sha256": "24c6f93b8432a204bf68e06d4f3507136659a894220f97777e9c9348e1e33bd8"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-mail-comment-fix-2026-09-24.json",
+          "sha256": "b343c300f9677250a50d8fa3e104ca52f00a8bb138aaa14a3c3588be335f965d"
+        }
+      ]
+    },
+    {
+      "id": "deployment",
+      "description": "Verify tested twin revision on hosted deployment",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
+          "sha256": "e16703c3dcee9cf4b0c8da6485f68a6332fc443746b23773ce78dbffafb64b01"
+        },
+        {
+          "path": "samples/workspace/evidence/app-image-publications-2026-09-26.json",
+          "sha256": "740b0e7a4e9ba0816be66f83b29204128dc70435531e62c9e4d22dd86ba4da55"
+        },
+        {
+          "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
+          "sha256": "230536ddf0de37d6a269622dcd6699fbd9dd50ef27ddeef85f3a90fa25c9092f"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
+          "sha256": "0a09fe1518f996eb42ea88f6d33ee33d54d8f3f7e80bdea42aa9198ad28c282b"
+        },
+        {
+          "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
+          "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
+        }
+      ]
+    },
+    {
+      "id": "package",
+      "description": "Clean-install runner, secret scan, resource boundary and teardown verification",
+      "status": "pending",
+      "evidence": [
+        {
+          "path": "samples/workspace/evidence/sample-sheets-warning-proxy-2026-09-25.json",
+          "sha256": "8f804ed5402027e03075c8ba0b76ab33f76301d06c9c08864a9a5b6a8bacf855"
+        },
+        {
+          "path": "samples/workspace/evidence/sample-sheets-history-proxy-2026-09-26.json",
+          "sha256": "a009a865d9196a409307eda54722c8611b98ba096cff106b44901779a0a3f2f4"
+        }
+      ]
+    }
+  ],
+  "sample_tree_sha256": "058d2ab4cde0002f350a05b81217e4e3c8cd1accd1cc43511b3cf3ac05fbc62e"
+}

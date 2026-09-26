@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_smoke",
+  "scored_candidate": false,
+  "status": "infrastructure_invalid",
+  "run_id": "9e180c43-59ab-4f18-a8ca-54b6a0a1af34",
+  "seed": "samples/workspace/evidence/gmail-folder-hosted-seed.json",
+  "provisioning": "Timed out after 1200 seconds; no provider endpoints became available.",
+  "cleanup": "Confirmed through Arga CLI: torn_down with no twins after recovery scheduler deployment; original provisioning and teardown-confirmation timeouts remain preserved.",
+  "browser_actions": 0,
+  "screenshots_retained": false,
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  }
+}

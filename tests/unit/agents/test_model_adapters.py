@@ -159,6 +159,91 @@ def test_anthropic_opus_runs_tool_loop_with_exact_prompts_and_high_effort() -> N
     assert requests[1]["messages"][-1]["content"][0]["type"] == "tool_result"
 
 
+@pytest.mark.parametrize("stream", [False, True])
+@pytest.mark.parametrize("tool_name", ["provider_api", "google_docs"])
+@pytest.mark.parametrize("invalid_input", ["", "[", [], None, 42, '"text"'])
+def test_anthropic_recovers_from_malformed_tool_input_without_executing_it(
+    stream: bool, tool_name: str, invalid_input: object
+) -> None:
+    requests: list[dict[str, Any]] = []
+    thinking = {"type": "thinking", "thinking": "Check the provider.", "signature": "signed"}
+    malformed = {"type": "tool_use", "id": "bad-call", "name": tool_name, "input": invalid_input}
+    valid = {
+        "type": "tool_use",
+        "id": "valid-call",
+        "name": "provider_api",
+        "input": {"method": "GET", "path": "/records"},
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        requests.append(body)
+        if len(requests) == 1:
+            if stream:
+                fragment = invalid_input if isinstance(invalid_input, str) else json.dumps(invalid_input)
+                return httpx.Response(
+                    200,
+                    headers={"Content-Type": "text/event-stream"},
+                    text=anthropic_sse(
+                        {"type": "message_start", "message": anthropic_message(content=[], stop_reason="tool_use")},
+                        {"type": "content_block_start", "index": 0, "content_block": thinking},
+                        {"type": "content_block_stop", "index": 0},
+                        {"type": "content_block_start", "index": 1, "content_block": {**malformed, "input": {}}},
+                        {
+                            "type": "content_block_delta",
+                            "index": 1,
+                            "delta": {"type": "input_json_delta", "partial_json": fragment},
+                        },
+                        {"type": "content_block_stop", "index": 1},
+                        {"type": "message_stop"},
+                    ),
+                )
+            return httpx.Response(200, json=anthropic_message(content=[thinking, malformed], stop_reason="tool_use"))
+        # Reproduce the API rejection if any malformed argument is replayed.
+        for message in body["messages"]:
+            if message["role"] == "assistant":
+                for block in message["content"]:
+                    if block["type"] == "tool_use" and not isinstance(block["input"], dict):
+                        return httpx.Response(400, json={"error": "tool_use.input must be an object"})
+        if len(requests) == 2:
+            assert body["messages"][-2]["content"] == [thinking, {**malformed, "input": {}}]
+            tool_result = body["messages"][-1]["content"][0]
+            assert tool_result["tool_use_id"] == "bad-call"
+            assert tool_result["is_error"] is True
+            assert json.loads(tool_result["content"]) == {"error": {"type": "InvalidToolCall"}}
+            return httpx.Response(200, json=anthropic_message(content=[valid], stop_reason="tool_use"))
+        return httpx.Response(
+            200, json=anthropic_message(content=[{"type": "text", "text": "done"}], stop_reason="end_turn")
+        )
+
+    calls: list[tuple[str, dict[str, Any]]] = []
+
+    async def execute_tool(name: str, arguments: dict[str, Any]) -> object:
+        calls.append((name, arguments))
+        return {"status_code": 200, "body": []}
+
+    client = async_client(handler)
+    adapter = AnthropicMessagesAdapter(api_key="test-key", model_id="claude-sonnet-5", client=client)
+    result = asyncio.run(
+        adapter.invoke(
+            system_prompt="system",
+            user_prompt="user",
+            tool_schema=TOOL_SCHEMA,
+            execute_tool=execute_tool,
+            max_tool_calls=2,
+            timeout_seconds=10,
+        )
+    )
+    asyncio.run(client.aclose())
+
+    assert result.status == "completed"
+    assert result.tool_calls == 2
+    assert calls == [("provider_api", {"method": "GET", "path": "/records"})]
+    first_response = next(event for event in result.events if event["type"] == "assistant_response")
+    expected_input = "text" if stream and invalid_input == '"text"' else invalid_input
+    assert first_response["content"] == [thinking, {**malformed, "input": expected_input}]
+
+
 def test_anthropic_retries_empty_tool_turn_without_polluting_history() -> None:
     requests: list[dict[str, Any]] = []
 
@@ -295,7 +380,7 @@ def test_anthropic_stream_reconstructs_thinking_and_tool_input() -> None:
     def handler(_request: httpx.Request) -> httpx.Response:
         nonlocal request_count
         request_count += 1
-        start = {
+        start: dict[str, Any] = {
             "type": "message_start",
             "message": {
                 "id": f"msg_{request_count}",
@@ -307,6 +392,7 @@ def test_anthropic_stream_reconstructs_thinking_and_tool_input() -> None:
                 "usage": {"input_tokens": 10 * request_count, "output_tokens": 1},
             },
         }
+        events: tuple[dict[str, Any], ...]
         if request_count == 1:
             events = (
                 start,

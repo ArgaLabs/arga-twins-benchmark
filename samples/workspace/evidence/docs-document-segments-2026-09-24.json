@@ -1,0 +1,454 @@
+{
+  "date": "2026-09-24",
+  "status": "deployed_hosted_native_and_bounded_gui_pass",
+  "screenshots_retained": false,
+  "scope": "Default inline headers, footers and numbered footnotes in independent document tabs. This is not complete Google Docs fidelity.",
+  "changes": [
+    "Native zero-based UTF-16 segment edits preserve body and sibling-tab state, support rich text/lists/header-footer tables and images, and reject unsupported/malformed segment actions atomically.",
+    "Insert > Page elements creates or opens native default header/footer/footnote; one shared editor preserves selection, formatting and the existing save queue.",
+    "Switching regions saves pending drafts; failures retain the draft and selected region.",
+    "Margins use native updateDocumentStyle; Cancel and Escape preserve complete native state.",
+    "Body-only Find returns to the body before highlighting/replacing. Table options and resize gestures carry segment identity and reject stale controls.",
+    "Header/footer controls wrap at 390px; footnote editor uses10pt text and grouped footnotes use one separator.",
+    "Segment saves preserve the Home-card body preview and still update its modified time.",
+    "Exports retain selected-tab header/footer and numbered footnote content across all ten supported formats. DOCX uses separate native section headers/footers and linked footnote parts, including references inside tables."
+  ],
+  "provider_reference": {
+    "source": "Disposable Google Docs reference inspected through Chrome; fixture moved to Trash and its tab closed.",
+    "observed": [
+      "Insert > Page elements > Header/Footer/Footnote",
+      "Header/footer format margins0.5in, Cancel/Apply, Remove header",
+      "Cmd+Alt+F creates numbered10pt footnote abovefooter",
+      "Reload retains separate header/body/footnote/footer",
+      "First-page/odd-even controls observed but not implemented in this bounded change"
+    ],
+    "native_readback": "Blocked by Google reauthentication; this reference is GUI evidence only.",
+    "official_references": [
+      "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request",
+      "https://support.google.com/docs/answer/86629?hl=en"
+    ]
+  },
+  "verification": {
+    "browser": "Google Chrome via CUA against isolated local Google Docs twin through BrowserProxy",
+    "desktop": [
+      1459,
+      862
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "physical_touch": false,
+    "flows": [
+      "Header/footer/footnote creation, Unicode text, bold text, save and region switch",
+      "Default-header/footer format Apply and exact native margins; Cancel/Escape complete-native equality",
+      "Protected tab selection, reload and native equality",
+      "Synthetic503 save failure blocks switch, retains header draft, complete native state equal; retry saves and survives reload",
+      "Header removal persists while body/footer/footnotes/protectedtab remain exactlyunchanged",
+      "Find opened fromheader targets visiblebody; replacement changesbody and preservesheader",
+      "Header1x1 table insertion and1.75in column width with bodytable atoverlappingindices; nativeheaderwidth126pt,body/footer/footnotes/protectedtabexactlyunchanged",
+      "Keyboardsegment switch closes open tableoptions",
+      "Actual390px control bounds withinviewport and40px controlheight; footnote13.3333px computed font and10pt toolbar"
+    ],
+    "regressions": {
+      "initial_backend_and_shared_workspace": 337,
+      "existing_editor": 100,
+      "review_targeted": 71,
+      "final_broad": 389,
+      "post_review_save_queue": 6
+    },
+    "typecheck": "Changed UI modules and new segment tests:0 errors. Shared workspace_editing has58 pre-existing diagnostics; normalized messages matched the baseline. Export codec retains the same two pre-existing spreadsheet diagnostics as main; new export tests have none.",
+    "format": "make fix passed",
+    "independent_review": {
+      "disposition": "ship",
+      "scope": "Both material source/native findings resolved: Find target and table context. No independent screenshot/fullparity verdict."
+    },
+    "captures": [
+      {
+        "name": "lab-final-docs-segments-local-r2/after-desktop.json",
+        "sha256": "c93f1caf8522d79bfc45e21edb58e0bac1f279cc76911a58c8786aa9aa5de51f"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r3/before-failed-save.json",
+        "sha256": "f95154a8307b5adefa4b67161629ab1ea695f6c17e161d2ea439becc218c6f45"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r3/after-failed-save.json",
+        "sha256": "f95154a8307b5adefa4b67161629ab1ea695f6c17e161d2ea439becc218c6f45"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r3/before-cancel.json",
+        "sha256": "d6940a401c91c136bb564b3da57a3b65e306acf0960017402d3ffd5ebe392e07"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r3/after-cancel.json",
+        "sha256": "d6940a401c91c136bb564b3da57a3b65e306acf0960017402d3ffd5ebe392e07"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r3/after-header-delete.json",
+        "sha256": "1e34b2a5ca968580d89b0b5e04cdaee78b85ae6c97fe1752b60f2602f62bb149"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r4/after-find.json",
+        "sha256": "73c23c0e88174bbf8fe3817df3c44768ca93ea760acf42becd21d71d7616581d"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r4/before-header-table-width.json",
+        "sha256": "e8f79b918c1eb405031add384ee75bb03e99c4541f4ba2d53011b70a1c07d835"
+      },
+      {
+        "name": "lab-final-docs-segments-local-r4/after-header-table-width.json",
+        "sha256": "a1a25bc0c0e4e5e1bb1616ac5646b574583b19ec3f6a5fd9b2c18948309fd30a"
+      }
+    ],
+    "documentation": "Ordinary-extension documentation handoff complete; Home-card preview finding fixed and separately tested. Existing visual system preserved.",
+    "source_hashes": {
+      "twins/google_drive/workspace_editing.py": "6426b3d85d2b0ee3a6707a3d9fc623baf1383c2746a4a144b4839b92573ea48e",
+      "twins/google_docs/document_actions_ui.py": "734f15746a8962bf02d0b5e7a3f792f885f7f69a687d934fab514e4ce21f233e",
+      "twins/google_docs/document_segments_ui.py": "18c2d550a39be78f89c6d491549d1800e20dd213b2efe1ec41f765907834c282",
+      "twins/google_docs/document_tabs_ui.py": "f6a3a93941f1340236c32d4292e8233ad8ec4f24a5b384c9c47f8fb402fb0125",
+      "twins/google_docs/find_replace_ui.py": "5f569a724b792dd5c540515bdf0edb7ca8b943d8083da963a54f56b1a341e5ec",
+      "twins/google_docs/rich_text_ui.py": "a0ac75039ea08574b48c4df2eea8369558e5005e1896a7dc6b2401c5b4e981c4",
+      "twins/google_docs/structured_ui.py": "9deefab66f04ef210907bc9faf717fa77f7467fd6bb6676f4a7705f3b0b99962",
+      "twins/google_docs/table_options_ui.py": "21056e32eb3496df38f4eb62838361507f35928e9684173c08a76fa4a3f37033",
+      "twins/google_docs/table_resize_ui.py": "1fe06429847c55e0c0ccb12617d454b875dfad4ca3f4b618ea638b170fac5c9e",
+      "twins/google_docs/version_history_ui.py": "218e492c5de48bf6335cf53b37ec03b2867d47cdfaf688c7b327ec9452ae1ea1",
+      "twins/google_docs/ui.py": "bccc66858474f4c8832bf9a4601d613a887a738ce8f89c163e756a72dac3fa6d",
+      "twins/google_drive/workspace_codec.py": "388326c83d14e80fc7cf39e20b61814c4e1b5230b116affec697c1c7df3083ae",
+      "twins/tests/test_google_docs_segment_exports.py": "e8eda04bb5009f2f60fea932b0f6d06b6e9c1551c593d6238592d504cb184c65"
+    },
+    "exports": {
+      "targeted_tests": 23,
+      "formats": 10,
+      "tab_modes": [
+        "selected",
+        "all"
+      ],
+      "state_unchanged": true,
+      "docx_native_checks": [
+        "separate unlinked section headers/footers",
+        "native footnote part, references, content type and relationship",
+        "header table and table-cell footnote reference",
+        "empty later tab does not inherit prior segments"
+      ],
+      "render": "Bundled LibreOffice rendered two DOCX pages; both inspected with separate header, body, linked bottom footnote and footer. Temporary page PNGs removed.",
+      "sources": [
+        "https://python-docx.readthedocs.io/en/latest/user/hdrftr.html",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.footnotereference?view=openxml-3.0.1"
+      ],
+      "broad_regressions": 379
+    },
+    "ci": {
+      "run": 36077357838,
+      "head": "8919ced05ef985cd4663e2dc3c03fbfb5ca0af95",
+      "result": "success",
+      "twins": {
+        "passed": 5362,
+        "skipped": 145,
+        "deselected": 3
+      },
+      "root": {
+        "passed": 2106,
+        "skipped": 2
+      },
+      "log_sha256": "cb77cdd9c0b221afdddcd5fca928b7c8b30bda953a54c8040ec4c9b564112cc9"
+    },
+    "deployment": {
+      "revision": "c8324b19119107e4422881fbaf76642c8a12de4f",
+      "runtime_workflow": 36079238202,
+      "twins_workflow": 36079238244,
+      "both": "success",
+      "published_images": {
+        "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4657b56c2b70308388cb1e7f7fc8f39f9cc07c8d5655960db5e6c0bb6c1b6bcc",
+        "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:a970ab1d31afc12c7faa61e1689540b98bdb70d3a77fc9f74e80599359a38d11",
+        "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4dab07ebe5c37455efdf3bd434d23909e9056bbb8ad4844bba5aa2d1e575ed35",
+        "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:88bcd3de7be3f996668de8a62fa0512decb4adc4b28358048c2ce66492e3968b",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:4b0e6d852fa2148699aa3ad8280050c002d0af8bfa553b9053c220bc92725e33",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c8324b19119107e4422881fbaf76642c8a12de4f@sha256:1b3cdd93529f8e7a87f0badc7e3fe7348d107a48d0edcba4a139f30614006d7b"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": "preview-proxy-00265-hrb",
+        "arga-api": "arga-api-00635-87f"
+      },
+      "log_sha256s": {
+        "lab-final-docs-segments-twins-deploy.log": "4c0b3043e54b40184abd32c452c31ad2df901b230604265ac93b184d4eab9fb8",
+        "lab-final-docs-segments-runtime-deploy.log": "66475f9aea5ffe4b2687e20c8b1506572dd56fe065bf69ae201d48220c9d6ba4"
+      },
+      "attestation_limit": "Full timestamped container attestation for the fresh eight-provider run and serving API/proxy is recorded in runtime-image-evidence-2026-09-24.json; historical rollout metadata retained here."
+    },
+    "hosted": {
+      "scope": "Fresh CLI-provisioned durable Scenario; operator native API checks and HTTP exports through BrowserProxy. These are not GUI checks.",
+      "native_segments": "Default header/footer/footnote creation and text readback, 36pt margins, unchanged body text, exact protected document/tab equality.",
+      "atomic_failure": {
+        "http_status": 400,
+        "complete_document_unchanged": true
+      },
+      "exports": {
+        "status": "pass",
+        "exports": [
+          {
+            "filename": "active-tab.txt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.md",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.xmd",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.html",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.rtf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.docx",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "pass"
+          },
+          {
+            "filename": "active-tab.odt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.epub",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.zip",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "active-tab.pdf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.txt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.md",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.xmd",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.html",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.rtf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.docx",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "pass"
+          },
+          {
+            "filename": "all-tabs.odt",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.epub",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.zip",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          },
+          {
+            "filename": "all-tabs.pdf",
+            "content_and_tab_isolation": "pass",
+            "native_docx_parts": "not_applicable"
+          }
+        ],
+        "limits": [
+          "PDF and text-like exports include segments in reading order; this is not page-exact PDF or full rich export parity."
+        ],
+        "full_native_state_unchanged": true,
+        "render_inspection": {
+          "pages": 2,
+          "header_body_note_footer_separate": true,
+          "second_tab_does_not_inherit_segments": true,
+          "follow_up": "Footnote marker-to-text spacing is tight in the native DOCX rendering; richer export typography remains pending.",
+          "screenshots_retained": false
+        }
+      },
+      "served_source": {
+        "matched": {
+          "twins/google_docs/document_segments_ui.py:SEGMENT_SCRIPT": "0214e8507115b6ba4de55bc3d28ceb42a1d7afd970e0c99c323ede78563d844f",
+          "twins/google_docs/table_options_ui.py:TABLE_OPTIONS_SCRIPT": "8c817e482e93fb63599ca1acb3f531f2a0925364fa0716a0cd96da164feb3ef5"
+        },
+        "scope": "Complete served code blocks; not container digest attestation."
+      },
+      "cleanup": "torn_down confirmed",
+      "browser": "Fresh separate hosted Chrome desktop/390px GUI verification passes; see hosted_browser.",
+      "captures": [
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-before.json",
+          "sha256": "56bbae59c212391fc2e1566f451dc085cf4e2351f273b2f8ead0da275fa17680"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-after.json",
+          "sha256": "94a9df50ef66c1f9e58c0fdc8203bf78ec866654267acdf8439c9f1bd3026fa9"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-after-api-segments.json",
+          "sha256": "f737607b1e2b2e7ebc319f0194b888e71d3599d18a4094e15e96ea0c68240073"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/native-segment-operator-trace.json",
+          "sha256": "dc32eafb695eb6e4e5da5dafd81dacd21b5094fbd490869e19077164b7678325"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/before-fixed-exports.json",
+          "sha256": "682139ff40286d41ae450c35870da7b0fba3f7c03b9ee44b521b6c1183d81733"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/after-fixed-exports.json",
+          "sha256": "682139ff40286d41ae450c35870da7b0fba3f7c03b9ee44b521b6c1183d81733"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/hosted-export-checks.json",
+          "sha256": "a4c58b4696c6b4238e31976c1503eaf7eba3be6dafa57a231ef94a9ae1b34ce3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/frontend-code-fingerprints.json",
+          "sha256": "97b58547822544ab0c3d1caeff45c0dc4201f029839d611c3ee1c799f6c580a3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-r2/cleanup.json",
+          "sha256": "f4ac0178d6d692019e582e1ecf7bc22f533cda962a5a17ee91dbff97290024c1"
+        }
+      ],
+      "operator_attempts": [
+        "First run: local Starlette middleware compatibility error; no product failure inferred; teardown confirmed.",
+        "Second run: native checks and 20 exports pass after BrowserProxy binary MIME fix. Original corrupted exports retained privately."
+      ]
+    },
+    "hosted_browser": {
+      "status": "pass",
+      "scope": "Fresh hosted Chrome CUA GUI and complete trusted native snapshots; operator conformance, not candidate replay.",
+      "desktop": [
+        1465,
+        806
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "physical_touch": false,
+      "screenshots_retained": false,
+      "checks": [
+        "Header/footer creation and save",
+        "Margin Cancel preserves complete native state and reopening restores0.5in default",
+        "Apply0.7in header and0.6in footer margins",
+        "Footnote creation at native index1 and text save",
+        "Reload retains separate header/body/footnote/footer",
+        "Protected tab content and complete protected document/tab state unchanged",
+        "390px injected503 header save preserves draft and complete native state; retry persists on reload",
+        "390px footer removal persists after reload",
+        "Original body content/styles preserved except authorized footnote marker at index1",
+        "File permissions and all unrelated file fields unchanged"
+      ],
+      "viewport_observation": {
+        "document_width": 390,
+        "viewport_width": 390,
+        "limits": "Document canvas has its own horizontal scroller. Narrow control visibility checked; not a complete mobile visual or physical-touch audit."
+      },
+      "cleanup": "torn_down confirmed",
+      "captures": [
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/baseline-state.json",
+          "sha256": "24f04dfdd27168ad138d3b20032283c69d9611d5013f92fbaeb4d481b91552fd"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/native-before.json",
+          "sha256": "fe0a97b56e39f5fd2b0ae375f5dbd9f5fa052789694792e75702aa83aae97a10"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/before-margin-cancel.json",
+          "sha256": "0732d83797a3d225fcda33889c469eb93bb7e8dfc4842032cf509ac1348da82f"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-margin-cancel.json",
+          "sha256": "0732d83797a3d225fcda33889c469eb93bb7e8dfc4842032cf509ac1348da82f"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/before-mobile-failure.json",
+          "sha256": "befa248cc0a181b017dc7b5e46a95cdb0f0edfbd15c5461e25f7aa07aed8568c"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-mobile-failure.json",
+          "sha256": "befa248cc0a181b017dc7b5e46a95cdb0f0edfbd15c5461e25f7aa07aed8568c"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/after-mobile-retry-removal.json",
+          "sha256": "ea6109399a3fc999080c19f859dc512603d015d1c21738760e66634be2e4d240"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/native-after.json",
+          "sha256": "fedbbd7d52f977377f821221bfd3349772e54378809868cadc11854d4bb6c41a"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/final-state.json",
+          "sha256": "ea6109399a3fc999080c19f859dc512603d015d1c21738760e66634be2e4d240"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/frontend-code-fingerprints.json",
+          "sha256": "97b58547822544ab0c3d1caeff45c0dc4201f029839d611c3ee1c799f6c580a3"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/browser-trace.json",
+          "sha256": "89d2922dfead08c9899486eeac61a7a021bc59405dd82b97f2f66b6e96e4689e"
+        },
+        {
+          "name": "lab-final-docs-segments-hosted-browser-r3/cleanup.json",
+          "sha256": "cac4810ef115f9a628623799f1941fdee29655b3912280c49fff736ec28857dc"
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Fresh hosted bounded desktop/390px GUI checks pass with native state assertions and confirmed teardown. Broader provider and physical-touch audits remain open.",
+    "First-page/odd-even/section-specific and repeated paginated headers/footers remain pending.",
+    "Find searches bodies only; segment-inclusive search and rich history previews remain pending.",
+    "Footnote reference deletion is verified through the native backend; browser keyboard removal remains unverified because the attempted CUA selection did not remove its atom.",
+    "No retained screenshots or physical touch-device verification; bounded transientdesktop/390 checks do not establish exhaustivevisual/mobileparity.",
+    "Broader Docs/AI/collaboration, all-eight-twin inventory and release gates remain open.",
+    "PDF/text-like formats include segment text in reading order; page-exact PDF layout, Unicode PDF fonts and full rich export fidelity remain open. DOCX default header/footer and native footnote placement are covered, not every section variant or embedded asset."
+  ],
+  "pull_request": {
+    "number": 1155,
+    "url": "https://github.com/ArgaLabs/validation-server/pull/1155",
+    "tested_source_revision": "8919ced05ef985cd4663e2dc3c03fbfb5ca0af95",
+    "status": "merged",
+    "merge_commit": "c8324b19119107e4422881fbaf76642c8a12de4f",
+    "merged_at": "2026-09-25T00:48:34Z"
+  }
+}

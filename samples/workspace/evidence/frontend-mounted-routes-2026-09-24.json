@@ -1,0 +1,3332 @@
+{
+  "schema": "arga-mounted-frontend-routes/1",
+  "observed_at": "2026-09-26T13:02:37.509847+00:00",
+  "source_revision": "a02ad70f51175f7cf34eda75942b008b3c68fb12",
+  "certifies_exhaustive_coverage": false,
+  "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
+  "limitations": [
+    "Client-side menus, routes, dialogs and permission-dependent states still require live browser enumeration.",
+    "Frontend candidates use path, response type, tags and handler module hints; native API routes supporting browser actions need separate mapping.",
+    "Administrative and Scenario-export routes are excluded from provider frontend candidates.",
+    "Every route check remains pending; registration does not establish functional behavior or coverage."
+  ],
+  "generator_sha256": "e95c92b6be482927a1adfc21db8f664145e3fa58b2f55092d02bc98328b32013",
+  "providers": {
+    "github": {
+      "registered_nonoperator_routes": 1289,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.dashboard",
+          "source": "twins/github/frontend.py",
+          "line": 1166,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/action-logs/{job_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "download_workflow_job_logs",
+          "source": "twins/github/app.py",
+          "line": 588,
+          "source_sha256": "fc3e745e97aec77693f2b55aabd6b2fe977089c356070ba11d765c3e5c169c8c",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/apps/manifest-callback",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_manifest_callback_ui.<locals>.manifest_callback",
+          "source": "twins/github/app_manifest_ui.py",
+          "line": 108,
+          "source_sha256": "a144f83051e7f2a04105683a3a29b22f9fa380633c3874176c0a9927f614f334",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/apps/{slug}/install",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_install_ui.<locals>.install_page",
+          "source": "twins/github/install_ui.py",
+          "line": 69,
+          "source_sha256": "f11bc64bcd9a209a91a71d0e4b890570f441d971ea5993233040556338822124",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/apps/{slug}/install",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_install_ui.<locals>.install_submit",
+          "source": "twins/github/install_ui.py",
+          "line": 155,
+          "source_sha256": "f11bc64bcd9a209a91a71d0e4b890570f441d971ea5993233040556338822124",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/apps/{slug}/installations/{installation_id}/uninstall",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_install_ui.<locals>.uninstall_submit",
+          "source": "twins/github/install_ui.py",
+          "line": 193,
+          "source_sha256": "f11bc64bcd9a209a91a71d0e4b890570f441d971ea5993233040556338822124",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/profile",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.profile_page",
+          "source": "twins/github/frontend.py",
+          "line": 2927,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/profile",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.update_profile",
+          "source": "twins/github/frontend.py",
+          "line": 2979,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.create_repo",
+          "source": "twins/github/frontend.py",
+          "line": 1276,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.repo_detail",
+          "source": "twins/github/frontend.py",
+          "line": 1368,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.actions",
+          "source": "twins/github/actions_ui.py",
+          "line": 35,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/delete",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.artifact_delete",
+          "source": "twins/github/actions_ui.py",
+          "line": 136,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.artifact_download",
+          "source": "twins/github/actions_ui.py",
+          "line": 132,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.run_detail",
+          "source": "twins/github/actions_ui.py",
+          "line": 61,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.run_action",
+          "source": "twins/github/actions_ui.py",
+          "line": 159,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/actions/workflows/{workflow_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.workflow_action",
+          "source": "twins/github/actions_ui.py",
+          "line": 142,
+          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.file_view",
+          "source": "twins/github/frontend.py",
+          "line": 1582,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/branches",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.branch_list_page",
+          "source": "twins/github/frontend.py",
+          "line": 2357,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/branches",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.create_branch_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2436,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/conversation/{number}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.add_comment",
+          "source": "twins/github/conversation_ui.py",
+          "line": 258,
+          "source_sha256": "50bebc7331724d62a5c9590e34dfed4c685674fc8e6f50f6c927970dfd4895db",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/conversation/{number}/comments/{comment_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.change_comment",
+          "source": "twins/github/conversation_ui.py",
+          "line": 279,
+          "source_sha256": "50bebc7331724d62a5c9590e34dfed4c685674fc8e6f50f6c927970dfd4895db",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.edit_file_form",
+          "source": "twins/github/frontend.py",
+          "line": 2623,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.edit_file_submit",
+          "source": "twins/github/frontend.py",
+          "line": 2697,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/issues",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.issue_list",
+          "source": "twins/github/operations_ui.py",
+          "line": 136,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/issues/{number}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.issue_detail",
+          "source": "twins/github/operations_ui.py",
+          "line": 167,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/issues/{number}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.comment",
+          "source": "twins/github/operations_ui.py",
+          "line": 199,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/issues/{number}/edit",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.edit_issue",
+          "source": "twins/github/operations_ui.py",
+          "line": 188,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/projects",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.project",
+          "source": "twins/github/projects_ui.py",
+          "line": 16,
+          "source_sha256": "83a9ffbf69f8575dcbdb6da0b5014decb58a70876601307bf9098c2afb3c7f12",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/projects/items",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.add_item",
+          "source": "twins/github/projects_ui.py",
+          "line": 66,
+          "source_sha256": "83a9ffbf69f8575dcbdb6da0b5014decb58a70876601307bf9098c2afb3c7f12",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/projects/items/{item_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_item",
+          "source": "twins/github/projects_ui.py",
+          "line": 80,
+          "source_sha256": "83a9ffbf69f8575dcbdb6da0b5014decb58a70876601307bf9098c2afb3c7f12",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/projects/items/{item_id}/remove",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.remove_item",
+          "source": "twins/github/projects_ui.py",
+          "line": 91,
+          "source_sha256": "83a9ffbf69f8575dcbdb6da0b5014decb58a70876601307bf9098c2afb3c7f12",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.pull_request_detail",
+          "source": "twins/github/frontend.py",
+          "line": 1875,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.add_pull_comment_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2069,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.add_pr_comment_reaction_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2152,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.edit_pr_title_body_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2242,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.merge_pull_request_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2285,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviewers",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.reviewers",
+          "source": "twins/github/operations_ui.py",
+          "line": 207,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_review",
+          "source": "twins/github/operations_ui.py",
+          "line": 220,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews/{review_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.change_review",
+          "source": "twins/github/operations_ui.py",
+          "line": 230,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.toggle_pr_task_ui",
+          "source": "twins/github/frontend.py",
+          "line": 2200,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pulls",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.pull_request_list",
+          "source": "twins/github/frontend.py",
+          "line": 1760,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pulls",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.create_pull_request",
+          "source": "twins/github/frontend.py",
+          "line": 2491,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/pulls/new",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.new_pull_request_form",
+          "source": "twins/github/frontend.py",
+          "line": 2478,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_frontend_routes.<locals>.dir_view",
+          "source": "twins/github/frontend.py",
+          "line": 1669,
+          "source_sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/search",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.search_workspace",
+          "source": "twins/github/operations_ui.py",
+          "line": 91,
+          "source_sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/apps/{slug}/installations/new",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_install_ui.<locals>.install_new_alias",
+          "source": "twins/github/install_ui.py",
+          "line": 221,
+          "source_sha256": "f11bc64bcd9a209a91a71d0e4b890570f441d971ea5993233040556338822124",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/login/oauth/authorize",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_oauth_routes.<locals>.oauth_authorize_page",
+          "source": "twins/github/oauth.py",
+          "line": 72,
+          "source_sha256": "e92da942c53545b4e4f45ff6f418fb3643926e684d8105bcccc8f81b16c57a2b",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/organizations/{org}/settings/apps/new",
+          "methods": [
+            "GET",
+            "POST"
+          ],
+          "handler": "register_app_manifest_routes.<locals>.org_new_app",
+          "source": "twins/github/app_manifest_ui.py",
+          "line": 170,
+          "source_sha256": "a144f83051e7f2a04105683a3a29b22f9fa380633c3874176c0a9927f614f334",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/settings/apps/new",
+          "methods": [
+            "GET",
+            "POST"
+          ],
+          "handler": "register_app_manifest_routes.<locals>.personal_new_app",
+          "source": "twins/github/app_manifest_ui.py",
+          "line": 161,
+          "source_sha256": "a144f83051e7f2a04105683a3a29b22f9fa380633c3874176c0a9927f614f334",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 49
+    },
+    "gmail": {
+      "registered_nonoperator_routes": 104,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.index",
+          "source": "twins/gmail/app.py",
+          "line": 617,
+          "source_sha256": "76b0d6f3adb0a2aa5250663e601b690bc0baaf67dc940f898cdbbf7835c7744c",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 1
+    },
+    "google_calendar": {
+      "registered_nonoperator_routes": 58,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.index",
+          "source": "twins/google_calendar/app.py",
+          "line": 751,
+          "source_sha256": "ef34747dd6d8fc7432f17356d31a9e352c68c2afe3d332a8eab41f05f9455645",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 1
+    },
+    "google_docs": {
+      "registered_nonoperator_routes": 40,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/ui/documents/{document_id}/versions",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_document_history.<locals>.document_history_list",
+          "source": "twins/google_drive/document_history.py",
+          "line": 73,
+          "source_sha256": "8b55bdb9b8e500c5364511304b72232230d71e36db997a8cca04834da110c912",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{document_id}/versions/{version_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_document_history.<locals>.document_history_get",
+          "source": "twins/google_drive/document_history.py",
+          "line": 84,
+          "source_sha256": "8b55bdb9b8e500c5364511304b72232230d71e36db997a8cca04834da110c912",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{document_id}/versions/{version_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_document_history.<locals>.document_history_action",
+          "source": "twins/google_drive/document_history.py",
+          "line": 90,
+          "source_sha256": "8b55bdb9b8e500c5364511304b72232230d71e36db997a8cca04834da110c912",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{document_id}/tabs/{tab_id}/duplicate",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.duplicate_document_tab",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 9914,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/document/d/{document_id}/edit",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.docs_editor",
+          "source": "twins/google_drive/app.py",
+          "line": 572,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.index",
+          "source": "twins/google_drive/app.py",
+          "line": 771,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_rename",
+          "source": "twins/google_drive/app.py",
+          "line": 1300,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/export",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_export",
+          "source": "twins/google_drive/app.py",
+          "line": 1335,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/permissions",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_list",
+          "source": "twins/google_drive/app.py",
+          "line": 1380,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/permissions",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1391,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/permissions/{permission_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1409,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/permissions/{permission_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1432,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_list",
+          "source": "twins/google_drive/app.py",
+          "line": 1451,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1462,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments/{comment_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1474,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments/{comment_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1492,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments/{comment_id}/replies",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1503,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments/{comment_id}/replies/{reply_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1521,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/comments/{comment_id}/replies/{reply_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1545,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Docs UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 19
+    },
+    "google_sheets": {
+      "registered_nonoperator_routes": 51,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_history_status",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 9991,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_history_action",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10008,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/protection-rules",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_protection_rules",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10046,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/protections",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_protections",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10062,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_validation_rules",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10071,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/validation-preview",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_validation_preview",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10082,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-preview",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_preview",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10089,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-cell",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_cell",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10096,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-view",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_view",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10105,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-paste",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_paste",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10114,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-options",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_workspace_editing_routes.<locals>.spreadsheet_filter_options",
+          "source": "twins/google_drive/workspace_editing.py",
+          "line": 10123,
+          "source_sha256": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/spreadsheets/d/{spreadsheet_id}/edit",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.sheets_editor",
+          "source": "twins/google_drive/app.py",
+          "line": 590,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.index",
+          "source": "twins/google_drive/app.py",
+          "line": 771,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_rename",
+          "source": "twins/google_drive/app.py",
+          "line": 1300,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/export",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_export",
+          "source": "twins/google_drive/app.py",
+          "line": 1335,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/permissions",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_list",
+          "source": "twins/google_drive/app.py",
+          "line": 1380,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/permissions",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1391,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/permissions/{permission_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1409,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/permissions/{permission_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_permissions_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1432,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_list",
+          "source": "twins/google_drive/app.py",
+          "line": 1451,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1462,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments/{comment_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1474,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments/{comment_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_comments_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1492,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments/{comment_id}/replies",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_create",
+          "source": "twins/google_drive/app.py",
+          "line": 1503,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments/{comment_id}/replies/{reply_id}",
+          "methods": [
+            "PATCH"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_update",
+          "source": "twins/google_drive/app.py",
+          "line": 1521,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/spreadsheets/{file_id}/comments/{comment_id}/replies/{reply_id}",
+          "methods": [
+            "DELETE"
+          ],
+          "handler": "create_app.<locals>.workspace_ui_replies_delete",
+          "source": "twins/google_drive/app.py",
+          "line": 1545,
+          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "tags": [
+            "Google Sheets UI"
+          ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 26
+    },
+    "notion": {
+      "registered_nonoperator_routes": 155,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.index",
+          "source": "twins/notion/app.py",
+          "line": 1289,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/settings/groups",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_groups_ui.<locals>.index",
+          "source": "twins/notion/groups_ui.py",
+          "line": 81,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.create",
+          "source": "twins/notion/groups_ui.py",
+          "line": 141,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups/{group_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.rename",
+          "source": "twins/notion/groups_ui.py",
+          "line": 185,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups/{group_id}/delete",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.delete",
+          "source": "twins/notion/groups_ui.py",
+          "line": 189,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups/{group_id}/members",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.add_member",
+          "source": "twins/notion/groups_ui.py",
+          "line": 193,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups/{group_id}/members/{user_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.role",
+          "source": "twins/notion/groups_ui.py",
+          "line": 197,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/groups/{group_id}/members/{user_id}/remove",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_groups_ui.<locals>.remove_member",
+          "source": "twins/notion/groups_ui.py",
+          "line": 201,
+          "source_sha256": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/data-source/{source_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_database_ui.<locals>.open_source",
+          "source": "twins/notion/database_ui.py",
+          "line": 140,
+          "source_sha256": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/database/{database_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_database_ui.<locals>.database_page",
+          "source": "twins/notion/database_ui.py",
+          "line": 149,
+          "source_sha256": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/databases/{database_id}/views",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_database_ui.<locals>.add_view",
+          "source": "twins/notion/database_ui.py",
+          "line": 366,
+          "source_sha256": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/views/{view_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_database_ui.<locals>.change_view",
+          "source": "twins/notion/database_ui.py",
+          "line": 395,
+          "source_sha256": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/pages/{page_id}/sharing",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_page_sharing",
+          "source": "twins/notion/app.py",
+          "line": 1490,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/share/{page_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.shared_page",
+          "source": "twins/notion/app.py",
+          "line": 1507,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/pages",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_create_page",
+          "source": "twins/notion/app.py",
+          "line": 1524,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/pages/{page_id}/appearance",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_page_appearance",
+          "source": "twins/notion/app.py",
+          "line": 1587,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/pages/{page_id}/title",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_update_page_title",
+          "source": "twins/notion/app.py",
+          "line": 1618,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/properties",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_update_property",
+          "source": "twins/notion/app.py",
+          "line": 1649,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/blocks/{block_id}/todo",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_toggle_todo",
+          "source": "twins/notion/app.py",
+          "line": 1706,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/blocks/{block_id}/text",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_update_block_text",
+          "source": "twins/notion/app.py",
+          "line": 1728,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_create_comment",
+          "source": "twins/notion/app.py",
+          "line": 1752,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/content",
+          "methods": [
+            "POST"
+          ],
+          "handler": "create_app.<locals>.ui_append_content",
+          "source": "twins/notion/app.py",
+          "line": 1783,
+          "source_sha256": "6e3ccf171157fa786e227b0bb00c859c91ce46dc7216d38f7bef9b70b65dce45",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 22
+    },
+    "linear": {
+      "registered_nonoperator_routes": 43,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/oauth/authorize",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_oauth_routes.<locals>.authorize_page",
+          "source": "twins/linear/oauth.py",
+          "line": 96,
+          "source_sha256": "6919055ac31714555607b99c24f7edef1a4f39200fd4fea2141736537bd7a375",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.index",
+          "source": "twins/linear/frontend.py",
+          "line": 102,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/new",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.new_issue",
+          "source": "twins/linear/frontend.py",
+          "line": 156,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_issue",
+          "source": "twins/linear/frontend.py",
+          "line": 169,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/issue/{identifier}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.detail",
+          "source": "twins/linear/frontend.py",
+          "line": 181,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/profile/{user_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.profile",
+          "source": "twins/linear/frontend.py",
+          "line": 211,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/document/{document_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.document_detail",
+          "source": "twins/linear/frontend.py",
+          "line": 228,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/project/{reference}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_project",
+          "source": "twins/linear/frontend.py",
+          "line": 250,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/my-issues/subscribed",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_subscribed",
+          "source": "twins/linear/frontend.py",
+          "line": 258,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/document/{reference}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_document",
+          "source": "twins/linear/frontend.py",
+          "line": 263,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/issue/{identifier}/{title}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_issue",
+          "source": "twins/linear/frontend.py",
+          "line": 271,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/issue/{identifier}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_issue",
+          "source": "twins/linear/frontend.py",
+          "line": 271,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/users/{user_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_user",
+          "source": "twins/linear/frontend.py",
+          "line": 277,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/profiles/{name}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_profile",
+          "source": "twins/linear/frontend.py",
+          "line": 281,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/{workspace}/comment/{comment_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.native_comment",
+          "source": "twins/linear/frontend.py",
+          "line": 289,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{document_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_document",
+          "source": "twins/linear/frontend.py",
+          "line": 298,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues/{issue_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update",
+          "source": "twins/linear/frontend.py",
+          "line": 318,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues/{issue_id}/comments",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.comment",
+          "source": "twins/linear/frontend.py",
+          "line": 347,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/comments/{comment_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.edit_comment",
+          "source": "twins/linear/frontend.py",
+          "line": 367,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/comments/{comment_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.resolve_comment",
+          "source": "twins/linear/frontend.py",
+          "line": 389,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues/{issue_id}/subscriptions",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_subscription",
+          "source": "twins/linear/subscription_ui.py",
+          "line": 134,
+          "source_sha256": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/issues/{issue_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.archive",
+          "source": "twins/linear/frontend.py",
+          "line": 408,
+          "source_sha256": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/project/{project_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.overview",
+          "source": "twins/linear/project_ui.py",
+          "line": 123,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.save",
+          "source": "twins/linear/project_ui.py",
+          "line": 187,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/documents",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_document",
+          "source": "twins/linear/project_ui.py",
+          "line": 215,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/milestones/{milestone_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.save_milestone",
+          "source": "twins/linear/project_ui.py",
+          "line": 229,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/milestones",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.save_milestone",
+          "source": "twins/linear/project_ui.py",
+          "line": 229,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/milestones/{milestone_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.milestone_action",
+          "source": "twins/linear/project_ui.py",
+          "line": 261,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/updates/{update_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.save_update",
+          "source": "twins/linear/project_ui.py",
+          "line": 292,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/updates",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.save_update",
+          "source": "twins/linear/project_ui.py",
+          "line": 292,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/projects/{project_id}/updates/{update_id}/delete",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.delete_update",
+          "source": "twins/linear/project_ui.py",
+          "line": 319,
+          "source_sha256": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/inbox",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.inbox",
+          "source": "twins/linear/inbox_ui.py",
+          "line": 150,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/inbox/bulk",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.bulk_action",
+          "source": "twins/linear/inbox_ui.py",
+          "line": 294,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/inbox/{notification_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.notification_action",
+          "source": "twins/linear/inbox_ui.py",
+          "line": 324,
+          "source_sha256": "3c616ec22ef24ff134a1a15772f85fc0ff345704f55fe0fcc40f00e6e5b743fb",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 34
+    },
+    "stripe": {
+      "registered_nonoperator_routes": 660,
+      "mounted_frontend_candidates": [
+        {
+          "path": "/",
+          "methods": [
+            "GET"
+          ],
+          "handler": "index",
+          "source": "twins/stripe/app.py",
+          "line": 98,
+          "source_sha256": "a40c2b985f45844ec1e8bac3284c2d5106b33a359065fede0c65661aea674322",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/billing/meters",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.meter_page",
+          "source": "twins/stripe/products_ui.py",
+          "line": 305,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/checkout/{session_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.checkout_page",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 179,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/checkout/{session_id}/cancel",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.checkout_cancel",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 237,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/checkout/{session_id}/complete",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.checkout_complete",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 231,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/checkout/{session_id}/fail/{scenario_key}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.checkout_fail",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 243,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/customers",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.customers_page",
+          "source": "twins/stripe/products_ui.py",
+          "line": 271,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.dashboard_home",
+          "source": "twins/stripe/dashboard_ui.py",
+          "line": 690,
+          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard/balances",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.dashboard_balances",
+          "source": "twins/stripe/dashboard_ui.py",
+          "line": 706,
+          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard/invoices",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.dashboard_invoices",
+          "source": "twins/stripe/dashboard_ui.py",
+          "line": 702,
+          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard/payments",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.dashboard_payments",
+          "source": "twins/stripe/dashboard_ui.py",
+          "line": 694,
+          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard/subscriptions",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.dashboard_subscriptions",
+          "source": "twins/stripe/dashboard_ui.py",
+          "line": 698,
+          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/dashboard/{kind}/{resource_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.billing_detail",
+          "source": "twins/stripe/billing_ui.py",
+          "line": 173,
+          "source_sha256": "0d42a84c337865ca2632d9566ffaef357ba725ecdd676ac48f58e6f6eb8fba80",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/portal/{session_id}",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.portal_page",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 254,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/portal/{session_id}/action/{subscription_id}/{scenario_key}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.portal_action",
+          "source": "twins/stripe/checkout_ui.py",
+          "line": 332,
+          "source_sha256": "e5fe0c94e5bb9ae7c8df1a580e58123c3f82c9adf3a6bd7766a2b30ed4106d61",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/products",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.products_page",
+          "source": "twins/stripe/products_ui.py",
+          "line": 245,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/billing/{kind}/{resource_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.billing_action",
+          "source": "twins/stripe/billing_ui.py",
+          "line": 197,
+          "source_sha256": "0d42a84c337865ca2632d9566ffaef357ba725ecdd676ac48f58e6f6eb8fba80",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/customers/{customer_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_customer",
+          "source": "twins/stripe/products_ui.py",
+          "line": 429,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/meters",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_meter",
+          "source": "twins/stripe/products_ui.py",
+          "line": 336,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/meters/{meter_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_meter",
+          "source": "twins/stripe/products_ui.py",
+          "line": 349,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/meters/{meter_id}/{action}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.meter_action",
+          "source": "twins/stripe/products_ui.py",
+          "line": 355,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/prices",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_price",
+          "source": "twins/stripe/products_ui.py",
+          "line": 389,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/prices/{price_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_price",
+          "source": "twins/stripe/products_ui.py",
+          "line": 415,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/products",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.create_product",
+          "source": "twins/stripe/products_ui.py",
+          "line": 363,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/products/{product_id}",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_routes.<locals>.update_product",
+          "source": "twins/stripe/products_ui.py",
+          "line": 371,
+          "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        }
+      ],
+      "candidate_count": 25
+    }
+  }
+}

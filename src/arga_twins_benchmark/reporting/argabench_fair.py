@@ -1636,6 +1636,8 @@ def grade_argabench_fair_attempt(task_dir: Path, task: Mapping[str, Any]) -> dic
     contract = fair_contract_for_task(task)
     requirements = contract.semantic_requirements
     assertions: list[dict[str, Any]] = []
+    if task_id == "DEV-05":
+        assertions.extend(_dev05_selector_assertions(after, mutations))
     if task_id == "MKT-06":
         assertions.append(_mkt06_cohort_measurement_assertion(task, baseline, final))
     for requirement in requirements:

@@ -1,0 +1,117 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_docs"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1187",
+  "source_head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
+  "status": "source_and_ci_pass_native_focus_check_blocked",
+  "release_allowed": false,
+  "scope": [
+    "Native role/OAuth-scoped document access capabilities",
+    "Editing and Viewing preferences, reader controls and read-only navigation",
+    "Save-before-Viewing, draft recovery and serialized mode/navigation transitions"
+  ],
+  "tests": {
+    "docs_principal_passed": 264,
+    "docs_drive_workspace_passed": 544,
+    "make_fix": "pass",
+    "new_mode_static_detector_findings": 0
+  },
+  "reference": {
+    "provider": "Google Docs",
+    "observed_on": "2026-09-26",
+    "fixture_title": "ARGA-LAB-viewing-20260926-0756",
+    "fixture_id": "11ZV8UpV3cfAVczDmyD-KpOevvNJPK4cBP9LRDo4GCgE",
+    "access": "Private owned disposable document; no sharing or outbound messages",
+    "observations": [
+      "Editing mode menu offers Editing, Suggesting and Viewing; Viewing says Read or print final document",
+      "Viewing removes formatting toolbar and Insert/Format menus; title no longer editable",
+      "Viewing Edit menu contains Copy and Select all",
+      "Viewing tab options contain Copy link and Hide outline; no rename/add/delete",
+      "Version history disabled in Viewing; Export/Print and Share remain available",
+      "390px preserves viewing-mode control and sidebar; desktop document overflows horizontally"
+    ],
+    "cleanup": "Moved owned fixture to recoverable trash; File moved to trash confirmation observed",
+    "screenshots_retained": false,
+    "limits": [
+      "Owner-selected Viewing mode; no second-account reader/commenter reference or physical touch tested"
+    ]
+  },
+  "local_browser": {
+    "status": "partial",
+    "passed": [
+      "Chrome desktop/390px owner Viewing mode removes editing controls and survives reload",
+      "Reader tab navigation and sharing dialog omit editing/grant controls",
+      "Failed save blocks Viewing, preserves draft, and reverting disposable edit restores exact full native state"
+    ],
+    "native_state": "First two sessions match complete native baseline exactly",
+    "blocked": "Final native window-focus/revocation/restored-access recovery check: macOS locked",
+    "screenshots_retained": false,
+    "blocked_session_cleanup": "Third local session stopped. Complete native state changed only in the operator-injected writer-to-reader permission; failed draft never persisted. Current source needs a fresh focus/recovery session."
+  },
+  "review": {
+    "initial": "fix: dirty draft recovery, mode-input/stale-document race and delayed-refresh race",
+    "final": "ship for the listed source/test corrections, including segment/tab/native/Find overlap guards",
+    "scope": "Source/test approval only; no independent visual or live focus approval",
+    "documentation": "Scoped README updated"
+  },
+  "source_files": {
+    "twins/google_docs/README.md": "11727eb2c853653a8ca237ee49bd8cd53d0c91e367948566577bd6ff7d62d224",
+    "twins/google_docs/document_actions_ui.py": "e09405784525ad5b3724ac764e5208f8289369f78e95d36464c0499c8e5186f8",
+    "twins/google_docs/document_segments_ui.py": "eda8820b6914d634337dcf6ee975a8522d85857f457cec90db71b2461b7b6a5e",
+    "twins/google_docs/document_tabs_ui.py": "9dbb489e38e726cb243c0b0147cc11d4f36aae564938bf7619034a22cf45eee2",
+    "twins/google_docs/find_replace_ui.py": "424345557d13cccff3b8d2a232032b5310a5d5e9688a3b882b7944cc92ddf58e",
+    "twins/google_docs/rich_text_ui.py": "29f779d18ad44cdfe204d7342c9b599cd193ef3707de328653464a32978a1727",
+    "twins/google_docs/table_options_ui.py": "88c0ac4d8d921bf66f83ddd4e3aaacfb300ca42e9c7c64972af865b932790a82",
+    "twins/google_docs/ui.py": "1b624a9b82ed0e0201468b63b6a9867b685e8caf94358513e4222066aeed848e",
+    "twins/google_docs/version_history_ui.py": "aa27401f93a2d1cd09234101183b4c7ebbd26a24680fc6365d66537628a141b6",
+    "twins/google_docs/viewing_mode.py": "ca9629e35ea557b05e3dc7a1f7a81ae704e0f08a17f4f9829234f1ddd47bd3a4",
+    "twins/google_docs/viewing_mode_ui.py": "d505c7f4dcb1e322fbdf6e2bcc84fa4461da7b527600491e86616d965da67c42",
+    "twins/google_drive/app.py": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
+    "twins/tests/test_google_docs_document_actions.py": "490b960e280355decfec05c048cf3bf56ce4e6b7de65ba56adb49d3f9c8bc8bb",
+    "twins/tests/test_google_docs_find_replace.py": "64b51650e6aba735a4a99a08f38ffe21e914b6bdd0ce7b20ea38ebb1d000b8a6",
+    "twins/tests/test_google_docs_save_queue.py": "015ac5781253836b642227962923b3a8ff5eccc44caee7364b8a93e2385a957b",
+    "twins/tests/test_google_docs_version_history.py": "ed6d96c3b671d4b62e23a1af467ea96ad9e43743e766121e86fe05bd5e68caef",
+    "twins/tests/test_google_docs_viewing_mode.py": "683e6bfab47925aa6bb0cf08b84e4e3669e6ebb019d2a67d7094be72f059618c"
+  },
+  "artifacts_sha256": {
+    "lab-docs-viewing-local/browser-trace-0.json": "f4a002a8c7151b166b66ff396c03763bd23e1d1efe8d53776da81094c436fed2",
+    "lab-docs-viewing-local/checkpoint.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local/browser-trace-1.json": "176c9947f98075886e082963d95b8e531d7d97fd4600c89dfe0bde811ab9dfcb",
+    "lab-docs-viewing-local/workspaces.json": "f2b3d561f5965ec3f0dd1160d37f78c407cfc813ac4474372d7a6bff2fd44342",
+    "lab-docs-viewing-local/baseline.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local-r2/browser-trace-0.json": "3c830374d2332bb24a02bafad14cd78f9462223361b3c2f21b7873cc724abd26",
+    "lab-docs-viewing-local-r2/checkpoint.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local-r2/browser-trace-1.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "lab-docs-viewing-local-r2/workspaces.json": "15b67461513c3620d084cc37138c608d50144d2a91f9ca74a69b46eb4775dedc",
+    "lab-docs-viewing-local-r2/baseline.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local-r2/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-regressions5.log": "88041919f969c82637cdc4b34769b371c4473167fbb5da5f607473050eb15f79",
+    "lab-docs-viewing-workspace.log": "4e48126ca0d9f2b1308c17e6b2bb491b3732ece324a2f1bec82e78e5dea776e2",
+    "lab-docs-viewing-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-docs-viewing-reference.json": "9990d7fb3ff1837ecbf85982de1aa9ee625c6f2f87bd4cf5ecdc836d16808b57",
+    "lab-docs-viewing-ci-current.json": "6c4e52a85f5f99fd720915c53e346ca1541c0985a165224a0d1e7944eb60542e",
+    "lab-docs-viewing-local-r3/browser-trace-0.json": "ebcc475927f7a337a09f1add402b32bcd41880375afd65ab163f3ff7041c9053",
+    "lab-docs-viewing-local-r3/browser-trace-1.json": "dc68dd3127616e94d6ef6cd6c651321275a3e4c59717809c2f0cdd309b3f15bb",
+    "lab-docs-viewing-local-r3/blocked-result.json": "e4583097c70477eb8d945afb8796334018f1b1191b275f0dd4646df7672c854a",
+    "lab-docs-viewing-local-r3/workspaces.json": "c1a1a7fef61fad7916e8eec63bd1231a59c6ebd8d636ff9f8725cdbe5acb490a",
+    "lab-docs-viewing-local-r3/baseline.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
+    "lab-docs-viewing-local-r3/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f"
+  },
+  "limits": [
+    "Remaining native focus check, merge/deployment and hosted verification pending; final-head CI passes",
+    "No Suggesting, full commenter collaboration, request-access, full menus/admin/realtime/AI claim",
+    "No exhaustive visual/mobile/touch parity or final release readiness"
+  ],
+  "screenshots_retained": false,
+  "original_source_head": "86dda016fd017fc5a07caaa123ea132267dd4d95",
+  "ci": {
+    "head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
+    "status": "all_complete_success_or_applicable_skip",
+    "merge_state_observed": "CLEAN",
+    "is_draft": false
+  }
+}

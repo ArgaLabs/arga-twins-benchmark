@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_feature_verification",
+  "provider": "google_sheets",
+  "scored_candidate": false,
+  "status": "passed",
+  "run_id": "2858b7d5-3e27-4a40-b3ee-a63f2ca0faeb",
+  "seed": "samples/workspace/evidence/sheets-formula-hosted-seed.json",
+  "fix": {
+    "pull_request": 1104,
+    "merge_sha": "baed86f9dd5b0e50891af5209fc5c75f6a7d96ba",
+    "deploy_twins": 35835722584,
+    "deploy_runtime": 35835722816,
+    "deployment_conclusions": "success"
+  },
+  "browser": {
+    "tool": "Google Chrome via CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "Desktop B2=9 updates C2=18, D2=19 and B3=27 without reload",
+      "Mobile B2=11 updates C2=22, D2=23 and B3=33 without reload",
+      "After merging B2:B3, B2=13 updates C2=26 and D2=27 without reload; selected range remains B2:B3",
+      "Saved status returns after every completed operation",
+      "Mobile document scroll width equals 390px viewport"
+    ],
+    "screenshots_retained": false
+  },
+  "native_readback": {
+    "protected_sheet_exactly_unchanged": true,
+    "frozen_row_and_column_unchanged": true,
+    "expected_cell_changes": [
+      "B2 becomes 13",
+      "B3 removed by confirmed merge"
+    ],
+    "other_cells_and_formula_definitions_unchanged": true,
+    "expected_merge": "B2:B3",
+    "file_permissions_and_identity_unchanged": true
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "artifacts_sha256": {
+    "scenario.json": "67ad295931528dba08da2a9c0ec291f3dd6218b8304dff123334756cc235f71c",
+    "baseline-state.json": "f88b46946aceec9e70a723349baa98b2dbd14ec525af681f9d72d1450760887e",
+    "final-state.json": "7a2cc3d672a5a01a0b4c8ccada526fc215181e0edadc300c27713a72ba9c212f",
+    "google_sheets-browser-trace.json": "7cf05b7089075baee38001ca6ddc0cc772b49b898d2c8076f16cdba111c05aca",
+    "cleanup.json": "b5bb5f0471d30a902e5f9cdf8934dd788e340b4e4f3412f2a77b6e47322e7ca0"
+  },
+  "limits": [
+    "Manual feature check, not a scored candidate rollout",
+    "Full Sheets feature/reference/mobile parity remains open"
+  ]
+}

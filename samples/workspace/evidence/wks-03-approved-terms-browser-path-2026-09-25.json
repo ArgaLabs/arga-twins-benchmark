@@ -1,0 +1,40 @@
+{
+  "schema": "arga.task-critical-browser-path/1",
+  "date": "2026-09-25",
+  "task": "WKS-03",
+  "kind": "local_operator_conformance_not_candidate_retry",
+  "status": "bounded_desktop_and_390px_pass",
+  "source_head": "555b14a35b83d725519217623f4273b3af073812",
+  "fixture_provenance": {
+    "baseline_sha256": "56e18a26a2d7d0dd0df304991ecee7f5ea45b409ee6af592fc0db9b81a4fac0c",
+    "method": "Reconstructed Gmail messages using original IDs/thread IDs, sender, recipient, subject, decoded body, explicit dates and labels from preserved hosted baseline."
+  },
+  "checks": [
+    "Approved message first in inbox; archived proposal separately available",
+    "Desktop opening displays all approved terms and communication policy",
+    "Search RN-204 yields approved message only",
+    "390x844 Chrome responsive viewport displays full approved message with readable wrapping",
+    "Actual Chrome reload retains both messages",
+    "Entire Gmail native snapshot unchanged"
+  ],
+  "critical_terms": {
+    "approval": "RN-204",
+    "seats": 24,
+    "monthly_per_seat_usd": 30,
+    "months": 12,
+    "effective_date": "2026-10-01",
+    "communication": "Samira review before sending; no external send authorized"
+  },
+  "artifact_sha256s": {
+    "lab-wks03-browser-path-result.json": "cb494b76bfa9ab5cf5f3f6fca8909be8392398da092f704fb4750ec251f61e86",
+    "lab-wks03-browser-path-server.py": "7551e00a12fc7029ba222076bbce6090c2cbbd59146bdaea232ca4e42790d4e0"
+  },
+  "candidate_outcome_unchanged": "fail",
+  "release_allowed": false,
+  "screenshots_retained": false,
+  "limits": [
+    "Local operator browser conformance only; no new hosted candidate attempt",
+    "Emulated viewport with CUA interaction, not physical touch validation",
+    "No claim of complete Gmail or WKS-03 release parity"
+  ]
+}

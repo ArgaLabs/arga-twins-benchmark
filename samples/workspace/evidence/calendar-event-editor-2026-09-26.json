@@ -1,0 +1,253 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1192",
+  "source_head": "9108cb5c0f60d49a4d4a71a9751ff5d5e88a7c3e",
+  "status": "deployed_hosted_browser_native_images_pass",
+  "release_allowed": false,
+  "tests": {
+    "integrated_passed": 499,
+    "focused_editor_passed": 26,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "source_files": {
+    "twins/google_calendar/ui.py": "375cbe8f6ed3fdb42ed8975bcd136cbc44a9e4b9c608df3cb3d818505176f189",
+    "twins/google_calendar/README.md": "d82bfed0e0e5d9cce575e77deb6daebccaeed2c5d484a75f20a8c60d99d7f1ea",
+    "twins/tests/test_google_calendar_event_editor.py": "e2e8bc94921efe1bc27298f9db58d8c218aac5513e9ddc830a9ec6f15249c08f"
+  },
+  "browser": {
+    "surface": "Chrome CUA, desktop and 390x844 viewport emulation",
+    "checks": [
+      "Title-only series edit preserved native custom COUNT recurrence, original dates, attendee metadata, conferencing, reminders, location and notes",
+      "Five-week rejection preserved native event; corrected Email two-day save persisted after true reload",
+      "Cancel discarded edited title",
+      "Writer personal popup10 reminder saved after permission-loss error and retry; complete owner and reader account states unchanged",
+      "Reader inputs disabled, no Save/Delete, Cancel works",
+      "Restricted writer saved location on non-private series without changing other native fields",
+      "Reopened editor scroll position reset to top, Close and title visible"
+    ],
+    "visual_passes": "Batched desktop/mobile inspection, checkbox-width correction and confirmation; reviewer-requested reopening correction confirmed separately",
+    "not_verified": [
+      "Physical touch",
+      "Exhaustive provider-wide routes/states",
+      "Native host focus while Mac locked",
+      "Individual/following-instance editing",
+      "Custom recurrence construction",
+      "Timed notification delivery"
+    ],
+    "screenshots_retained": false
+  },
+  "independent_review": {
+    "disposition": "ship_at_source_scope",
+    "resolved": [
+      "Drag update refresh regression",
+      "Restricted writer capability",
+      "Reopen scroll position"
+    ],
+    "visual_limit": "Reviewer did not inspect screenshots; main task inspected inline only"
+  },
+  "real_reference": {
+    "provider": "Google Calendar",
+    "method": "Unsaved draft custom notification dialog inspected then completely cancelled",
+    "controls": [
+      "Notification",
+      "Email",
+      "minutes",
+      "hours",
+      "days",
+      "weeks"
+    ],
+    "native_mutations": false
+  },
+  "artifacts_sha256": {
+    "lab-calendar-event-editor-local-r2/before.json": "fa6cb08f8b47386327295d0e9ebf54cda44e766d2b619245e4dce1b8aed3f058",
+    "lab-calendar-event-editor-local-r2/browser-trace.json": "d4706f9ddafd5d1d5e99afa76ded26afbcb7d86520458410be2c81c0864e3d96",
+    "lab-calendar-event-editor-local-r2/title-native-result.json": "421112c59401e827a8926d414f3bf1e68c20386d04ee5fe419191d15019e1eaa",
+    "lab-calendar-event-editor-local-r2/personal-baseline.json": "9f3e2d0693aa2cb9973d69dc6c60065523a36df31bfb3edc10f7c298469e722d",
+    "lab-calendar-event-editor-local-r2/revoked-baseline.json": "376ec46cb5e774bdf66e7b1db64d44d533ad9a01256c820d4f542237a9bc4c19",
+    "lab-calendar-event-editor-local-r2/after.json": "9d11fc9f94d7c9248533392c7d9ea8ff0fdc26d8293df46d6426e0bec1b4107c",
+    "lab-calendar-event-editor-local-r2/personal-native-result.json": "565215373ebb00f040be81a0e2b4296bb603e83391bfe9ba8d8752ff81e60fc9",
+    "lab-calendar-event-editor-local-r2/fixtures.json": "e3c1577476be0e3af26edd08a1daddc9afb059843d2d97d32cf503323cccec2c",
+    "lab-calendar-event-editor-local-r2/writer-rule.json": "58422a9fd368ad8d0fc43d5b73d0bd92555574c8a600c535276379da5d9fb1de",
+    "lab-calendar-event-editor-local-r3/before.json": "2bb159d0e7ee4bb46a7a87a87b7f88507f8d8c51f05f4e83590e17e2be9d2e4b",
+    "lab-calendar-event-editor-local-r3/browser-trace.json": "48906796f80b86b7aff7ffacddde2450ccc46404a34acd46c6db41091d2a453e",
+    "lab-calendar-event-editor-local-r3/browser-observations.json": "0279e18f11c226bc10888f115df018c381db5d96a6038330509b792215e143f2",
+    "lab-calendar-event-editor-local-r3/restricted-native-result.json": "39363292ad3c33920fdda99506fa642f0a7fa3fb0f231154d07cc9a489dfb700",
+    "lab-calendar-event-editor-local-r3/after.json": "eb28a515c34840bb9cf5401fd4a9b9cc1d8d84f243d2c892fcea541f170c51e5",
+    "lab-calendar-event-editor-local-r3/fixtures.json": "188cf2729d3cc1c2ddd36dc541f27f35caad334dc8c3165dca4aca01af45cfef",
+    "lab-calendar-event-editor-focused.log": "c2f1795df6c926c168dc3653f3c5e0c1073d82a748fa805f4c222200cf8e2b95",
+    "lab-calendar-event-editor-focused-final.log": "b715bed807cdc013147d8009725fe66e2bdaba1ca287471f2d48b515503415f5",
+    "lab-calendar-event-editor-integrated.log": "6b337f1259043ab421a932d2fbbf3286f99a9a7c32cdb8523bcb53f4089e1fb0",
+    "lab-calendar-event-editor-final.log": "0a7aa026652adb5b3dd4215d59e8b5344405fd6f8ff62d621e3359de972a7f32",
+    "lab-calendar-event-editor-make-fix-final.log": "a4302caa2bfe148f2f514f1aacd487b8184b62a77f413c35b016cf2a61d3a017",
+    "lab-final-calendar-event-editor-c2aa6bdb/browser-trace.json": "c36df5b93ca7d508383b30a012a3847b5dac696cf97ba3c52972e8cba26884e8",
+    "lab-final-calendar-event-editor-c2aa6bdb/image-comparison.json": "000f8b4358660703e15ffcc99ddb4f50f0e7ef3de074505a4e6dd25ad9b6bec1",
+    "lab-final-calendar-event-editor-c2aa6bdb/workspace.json": "27ad6b8617829b4d2d0e9f512b7c8bd54755ac2117ef6345b0f864a487bec5e5",
+    "lab-final-calendar-event-editor-c2aa6bdb/publication-catalog.json": "c0c779086f714ba57b0b6b864040347752292d5e0660f1fd6a5483daf883cccb",
+    "lab-final-calendar-event-editor-c2aa6bdb/browser-observations.json": "3e96f4d5d1eb448391e5d4866cf217b3fdb85f367bd416acb93a4beb80e7d998",
+    "lab-final-calendar-event-editor-c2aa6bdb/gui-baseline-state.json": "4c73b256ae29791e3e2abea8e2a6cae5b85485465486717864358da10da8fed9",
+    "lab-final-calendar-event-editor-c2aa6bdb/invalid-notification-result.json": "946d3fcaab545cdb76f2c2b389ca84918b0fcec6f5f30320e2efe314887afae7",
+    "lab-final-calendar-event-editor-c2aa6bdb/invalid-notification-native-state.json": "b26144ee22051978870abcf20afea96f43621d463972f8951b9161c7371c6edf",
+    "lab-final-calendar-event-editor-c2aa6bdb/browser-native-result.json": "45a1ed25f1a78675595d5942450c6e17a61cab40c364e61246fc7b0a176b8f38",
+    "lab-final-calendar-event-editor-c2aa6bdb/gui-final-state.json": "03d2e9247f0de56503eac7736e4f64d9ffa8c0e4d7b31223c56d244607a43fb4",
+    "lab-final-calendar-event-editor-c2aa6bdb/cleanup.json": "b1ff4152b073a89249f8e0f29053e0f0826846f6f650950b7a187dd8588c3ff6",
+    "lab-final-calendar-event-editor-c2aa6bdb/runtime-image-evidence.json": "5964e2dc6999d3a942b30610a8ea7781fadfdb52148167005ede7a56e58d82fa",
+    "lab-final-calendar-event-editor-c2aa6bdb/native-result.json": "01d583750081281c313cfe90447f8a7195d11a680ad80c923e0dc87171bea861",
+    "lab-final-calendar-event-editor-c2aa6bdb/worker-logs.json": "f6729047d0845b0082a5cfe53614372bd800b3ad5adb881dad8a35695021994c",
+    "lab-final-calendar-event-editor-c2aa6bdb/scenario.json": "72267e8eb409b12095f736730b22c0d878a94b90d35f2ca6bbb2a4d8d0e36c98",
+    "lab-final-calendar-event-editor-c2aa6bdb/operator-api-trace.json": "1d0f40ab5188941cc1fb18a5718f31602e716af7d7bbe90652b30095ab6df315",
+    "lab-final-calendar-event-editor-c2aa6bdb/control.json": "ed7e7a017c9e947bdfee47aba4c4afc67ada623d91b84ad3f45e2bafe5d7c600",
+    "lab-calendar-event-editor-premerge.json": "03b910d54eba49961f112bf8f98631f523f2676756ba67b34b7c1bdf4c95931a",
+    "lab-calendar-event-editor-twin-ci.log": "c63ecb34f834c992d9a47d32835add0b82a8943d5b4357db8b345ccba51d394b",
+    "lab-calendar-event-editor-root-ci.log": "93c04420fc42045be9c7f8e45b10dbbfd7641d420a560c5241dcbbb804f11a64",
+    "lab-final-calendar-event-editor-c2aa6bdb-helper.log": "0b2fa30ece0dc3ae1136529ac14c6e9782d7d365033b89ac79a1d2110a3fcfe5"
+  },
+  "limits": [
+    "Deployed bounded editor, native preservation and container-image checks pass; full provider/frontend/mobile/touch gates remain open.",
+    "Physical touch",
+    "Exhaustive provider-wide routes/states",
+    "Native host focus while Mac locked",
+    "Individual/following-instance editing",
+    "Custom recurrence construction",
+    "Timed notification delivery"
+  ],
+  "screenshots_retained": false,
+  "merge_commit": "c2aa6bdbd7db04e2be76652c0ace6f230efd4588",
+  "ci": {
+    "head": "9108cb5c0f60d49a4d4a71a9751ff5d5e88a7c3e",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6419,
+    "root_tests_passed": 2134
+  },
+  "deployment": {
+    "revision": "c2aa6bdbd7db04e2be76652c0ace6f230efd4588",
+    "runtime_workflow": 36233631340,
+    "twins_workflow": 36233631301,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:c2aa6bdbd7db04e2be76652c0ace6f230efd4588@sha256:f40f51e93a3a916f4c84034719443bac43ff1881af232eedff2d54bb5cd49485",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c2aa6bdbd7db04e2be76652c0ace6f230efd4588@sha256:5a0783fbe221ade55dbef178fda26887ecda1a1e76c565155bd2c495e50248c5",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c2aa6bdbd7db04e2be76652c0ace6f230efd4588@sha256:12616811ee5a3070ba05c69e328fe83acce6e993db0e0505dd0cbdb23644142d"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00296-wpc",
+      "arga-api": "arga-api-00666-tpf"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-event-editor-c2aa6bdb-twins-deploy.log": "de47fc0033331a0cd7b7707811ef59eb9f0d68bf0bddd446f00396f22921d5bc",
+      "lab-final-calendar-event-editor-c2aa6bdb-runtime-deploy.log": "29a91ca207db2ec4779eef9979fee4f84b9d590bda62653860bfeafe02fa60d7"
+    },
+    "serving_runtime": {
+      "revision": "c2aa6bdbd7db04e2be76652c0ace6f230efd4588",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00296-wpc",
+          "observed_at": "2026-09-26T09:44:21.018558+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c2aa6bdbd7db04e2be76652c0ace6f230efd4588",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00296-wpc"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00296-wpc",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+            "sha256:5a0783fbe221ade55dbef178fda26887ecda1a1e76c565155bd2c495e50248c5"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00666-tpf",
+          "observed_at": "2026-09-26T09:49:12.712895+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:c2aa6bdbd7db04e2be76652c0ace6f230efd4588",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:fdd0b66230217e42f68fd6897691926f36c2cf8141fd71e6926d57f4b261ae71",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:fdd0b66230217e42f68fd6897691926f36c2cf8141fd71e6926d57f4b261ae71"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00666-tpf"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00666-tpf",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:12616811ee5a3070ba05c69e328fe83acce6e993db0e0505dd0cbdb23644142d",
+            "sha256:fdd0b66230217e42f68fd6897691926f36c2cf8141fd71e6926d57f4b261ae71"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "29a91ca207db2ec4779eef9979fee4f84b9d590bda62653860bfeafe02fa60d7",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "hosted": {
+    "native": {
+      "complete_writer_reader_states_unchanged": true,
+      "passed": true,
+      "recurrence_dates_guests_conference_preserved": true,
+      "successful_patch_count": 2,
+      "unrelated_event_fields_and_resources_unchanged": true
+    },
+    "browser": {
+      "surface": "Chrome CUA desktop and 390x844 viewport",
+      "checks": [
+        "Recurring instance opens master series with explicit all-events notice and original start/end dates",
+        "Title-only save preserves custom schedule, guest metadata, existing conferencing, inherited reminders, notes and location",
+        "Five-week invalid notification retained draft and rejected without native event mutation",
+        "Corrected Email two-day reminder saved and persisted after real mobile-width reload",
+        "Mobile editor scroll keeps notification row and Cancel/Save controls accessible",
+        "Mobile edited title canceled and reload checked before teardown"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Bounded hosted owner flow; reader/writer/revocation checks are local evidence at this source revision",
+        "Viewport emulation is not physical touch validation",
+        "Mac remained locked for native focus verification",
+        "No exhaustive provider-wide parity claim"
+      ]
+    },
+    "all_three_images_matched": true,
+    "teardown_confirmed": true
+  }
+}

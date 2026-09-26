@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "provider": "linear",
+  "scored_candidate": false,
+  "status": "partial_with_reproduced_pointer_save_failure",
+  "deployment": {
+    "revision": "af3730d50c2b98d3602ce595a225d64359ef33f3",
+    "twins_run": 35828072116,
+    "runtime_run": 35828072160,
+    "conclusions": "success"
+  },
+  "checks": {
+    "structural_table_controls": "Row/column insertion, alignment, row movement, native undo/redo worked in the editor; pointer Save did not persist the structural edits",
+    "mobile_comment": "Passed; inserted, filled, aligned and pointer-submitted a table comment at 390px",
+    "mobile_alignment_menu": "Passed; x153.05..333.05,y677.78..797.78 inside390x844",
+    "seeded_comment_and_protected_issue": "Unchanged by exact native-state comparison",
+    "keyboard_save": "Passed; final description contains Desktop checked after Enter activation"
+  },
+  "failure": "Focusing Save changes hides the table toolbar and moves the button before pointer click completion. Earlier structural description edits were lost on comment-submit navigation. Follow-up fix required.",
+  "cleanup": "torn_down",
+  "artifacts_sha256": {
+    "scenario.json": "704185948ba6a7d23ca95b2b5456a744ccce7dafe9bc120eb12bbca1d79a296a",
+    "baseline-state.json": "b728607188ee39523f4c46d413d73868a7ae76514a6619842dda574bcb048f2b",
+    "intermediate-state.json": "bea61a5fb0f1750288106c2e35b6709b38ddb057a865ca30f974ccc48b34f3d8",
+    "final-state.json": "233250db2f32090380c2cc90db8d250445329c54725def79135aef57ff397f7e",
+    "linear-browser-trace.json": "7d405f3127eb431bcddc956866af9c0a065c056b889b7ba26cace39c173d7219",
+    "cleanup.json": "6218ee6cde2cd71bc2749225db32e2f76d700f453fa723a7e100daa5381a456e"
+  },
+  "limitations": [
+    "This is not full Linear parity or a scored candidate rollout.",
+    "No screenshot files retained."
+  ]
+}

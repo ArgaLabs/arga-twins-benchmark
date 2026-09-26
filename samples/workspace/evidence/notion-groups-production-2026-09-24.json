@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "a01e7e13-8c77-4908-acd9-b76f3fe03d5d",
+  "scenario_id": "02924e0c-fe71-4596-ab11-18f1047b8b77",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "runtime_workflow": 35986499616,
+    "twins_workflow": 35986499613,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/notion/groups_ui.py:STYLES": "34a0c20c8ad9d4d212e2da791eeada2416c5bae9d6f4abad7ca7740b02bbcd92"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "viewports": [
+    "1465x862",
+    "390x844"
+  ],
+  "native_checks": [
+    "Exactly one renamed group remains with Ada as its sole owner.",
+    "Bea was added then removed; guest was unavailable in the member picker.",
+    "All pages/blocks/users and every unrelated captured collection are exactly unchanged."
+  ],
+  "browser_checks": [
+    "Desktop create group, add Ada and promote group owner.",
+    "390px rename, add/remove Bea, search Ada email and reload.",
+    "Both widths visually inspected; mobile page width remains 390px."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "b3aec5096168f4a24550f5b0245642b5c90443ae94bde30862a97bb0665fc06e",
+    "native-after.json": "aa7f6dc3fe09be33da6983d5667eb08ee3b11f723b4ac0f82d8666561419e6b5",
+    "baseline-state.json": "b1560816359b5bbb3612cd7e9887dafbf9241d6a12f1193f03ef2b3434f1b3aa",
+    "final-state.json": "6d5078447e36a27cb6581eb76cca21ea8e9c18d61fcbfe19524746da776620ca",
+    "browser-trace.json": "ccdfd30fa96791cc2b96548798bb7686422761d10406e70a794f931944624dfd",
+    "operator-api-trace.json": "3ba9d415734563f795efc713efe69451ecb79b623b758e42ac7b47a206b1ef65",
+    "cleanup.json": "2783dda4864726852ba5c8b214655415a6351af7c4a8d98f5a11b4d04195c1c2"
+  },
+  "limits": [
+    "This is a bounded manual hosted flow, not full provider parity or an additional scored candidate rollout.",
+    "Successful exact-commit deployment plus served block fingerprints are not per-container digest attestation.",
+    "No complete pixel comparison or physical-touch/mobile device audit."
+  ],
+  "retry_provenance": {
+    "first_attempt": "Local reference-module import failed because the sample Python environment lacks FastAPI; no browser action occurred. The first Twin Run was torn down.",
+    "repair": "Read the literal served style reference with Python AST instead of importing the backend module.",
+    "prior_cleanup_sha256": "87a63690c8a4d761934da30440a6adcc22aa3b503f177dcadf69bd7b4bea8ce2"
+  }
+}

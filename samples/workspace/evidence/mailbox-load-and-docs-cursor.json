@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "status": "production_bounded_checks_passed",
+  "scope": [
+    "Gmail stale post-send row interactions during mailbox refresh",
+    "Docs insertion at restored terminal caret in empty or populated tabs"
+  ],
+  "tests": {
+    "command": "UV_NO_SYNC=1 uv run pytest twins/tests/test_gmail*.py twins/tests/test_google_docs*.py twins/tests/test_google_workspace*.py -q",
+    "passed": 427,
+    "report_sha256": "e2be20e17bc87c489a0b004e301e212db158535d93121ced13cf5cc398b09984",
+    "ruff": "make fix completed"
+  },
+  "browser": {
+    "driver": "Google Chrome through CUA",
+    "gmail": {
+      "injected_labels_delay_seconds": 6,
+      "old_row_aria_disabled": true,
+      "old_row_tab_index": -1,
+      "stale_force_click_did_not_cancel_refresh": true,
+      "keyboard_locator_refused_disabled_row": true,
+      "final_folder": "SENT",
+      "draft_count": 0,
+      "message_not_found_error": false,
+      "native_protected_message_unchanged": true
+    },
+    "docs": {
+      "desktop_empty_tab_table": {
+        "rows": 1,
+        "columns": 2
+      },
+      "mobile_viewport": [
+        390,
+        844
+      ],
+      "mobile_empty_tab_table": {
+        "rows": 1,
+        "columns": 2
+      },
+      "mobile_table_persisted_after_reload": true,
+      "protected_first_tab_exact_unchanged": true
+    },
+    "native_business_requests_errors": 0,
+    "incidental_favicon_404s": 5,
+    "native_state_and_trace_sha256": "7961fc2d9a1931c4b0afdec40f48b51fd5cd4c1f6a9fc92a31874c1de396ee32"
+  },
+  "limitations": [
+    "The forced six-second mailbox delay was checked locally; hosted validation exercised normal send/refresh and native state.",
+    "Not a complete provider parity or mobile audit",
+    "No screenshots retained"
+  ],
+  "production": {
+    "merged_revision": "95e755a1e5201b7d3ea09ffb3a0b47ac6e03af61",
+    "deployment_workflows": "both passed",
+    "evidence": "mailbox-cursor-artifacts-production-2026-09-24.json"
+  }
+}

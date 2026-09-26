@@ -1,0 +1,14 @@
+{
+  "google_docs": {
+    "documents": [
+      {
+        "title": "Hosted table options validation",
+        "content": "Protected first tab text.\n"
+      },
+      {
+        "title": "Protected document",
+        "content": "Do not change this document.\n"
+      }
+    ]
+  }
+}

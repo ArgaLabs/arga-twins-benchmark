@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-24",
+  "provider": "Gmail",
+  "status": "pass_bounded_live_conformance",
+  "access": "Refreshed already-granted Gmail scopes in an isolated CLI profile; original Workspace CLI credentials were unchanged.",
+  "fixture_policy": {
+    "prefixes": [
+      "ARGA-FILTER-20260924T045505-6e62b60a",
+      "ARGA-FILTER-20260924T045601-8f5b42ac"
+    ],
+    "created_messages": 9,
+    "sent_messages": 0,
+    "preexisting_messages_touched": 0,
+    "created_filters": 6,
+    "created_labels": 2,
+    "cleanup": "All nine test messages confirmed trashed; all six test filters and both labels deleted."
+  },
+  "criteria": {
+    "from": "at200611@gmail.com",
+    "subject": "unique fixture prefix",
+    "query": "\"approved renewal\" has:attachment",
+    "negatedQuery": "blocked",
+    "hasAttachment": true
+  },
+  "action": {
+    "addLabelIds": [
+      "unique fixture label",
+      "STARRED"
+    ],
+    "removeLabelIds": [
+      "INBOX",
+      "UNREAD"
+    ]
+  },
+  "observations": {
+    "matching_import": "STARRED and fixture label; INBOX/UNREAD removed",
+    "matching_insert": "STARRED and fixture label; INBOX/UNREAD removed",
+    "excluded_import": "INBOX and UNREAD; fixture label absent",
+    "attachment_missing_import": "INBOX and UNREAD; fixture label absent",
+    "preexisting_fixture": "INBOX and UNREAD; fixture label absent",
+    "malformed_date_filter_create": "accepted",
+    "positive_malformed_date_size_age_queries": "accepted but nonmatching",
+    "negated_malformed_date_query": "accepted and matching"
+  },
+  "artifacts": {
+    "conformance.json": "4a2e0633f0a338c7285ee1b5ce27b30ea116bdae53347f22bb98753f1514336e",
+    "malformed-query-conformance.json": "e89d4c4ea1c311a65605e62378f88aecede9e1ada7394685c6cecc5698f02b62"
+  },
+  "limits": [
+    "Bounded real-provider checks; not complete Gmail filter/search conformance",
+    "OR/overflow handling additionally covered by local regressions",
+    "Filter forwarding and automatic forwarding remain unimplemented"
+  ],
+  "screenshots_retained": false
+}

@@ -1,0 +1,120 @@
+{
+  "checks": {
+    "clean_locked_install": {
+      "status": "pass"
+    },
+    "focused_tests_clean_environment": {
+      "status": "pass",
+      "passed": 108,
+      "skipped": 0
+    },
+    "full_benchmark_tests": {
+      "status": "pass",
+      "passed": 1084,
+      "skipped": 26
+    },
+    "package_source_secret_scan": {
+      "status": "pass",
+      "files_scanned": 323,
+      "image_files": 0,
+      "scanned_at": "2026-09-26"
+    },
+    "final_zip_created": false,
+    "release_gate_regressions": {
+      "status": "pass",
+      "passed": 11,
+      "log": "samples/workspace/evidence/regression-log-summaries.json#lab-sample-package-gate-tests.txt"
+    },
+    "browser_relay_candidate_runner_outcomes": {
+      "status": "pass",
+      "passed": 183
+    },
+    "passive_fact_normalization": {
+      "passed": 85,
+      "ruff": "passed",
+      "pyright": "passed"
+    },
+    "incident_fact_normalization": {
+      "passed": 96,
+      "ruff": "passed",
+      "pyright": "passed",
+      "offline_regrade": "WKS-04 passed; original verdict preserved"
+    },
+    "padded_date_normalization": {
+      "passed": 102,
+      "ruff": "pass",
+      "pyright": "pass",
+      "log_sha256": "c5c3c129896f1558e8bd0c1dfe32a51753b219b04ca64635890cf906752c0a03"
+    },
+    "current_sample_cleanup_regressions": {
+      "passed": 159,
+      "scope": "Runner, candidate and workspace outcome tests after obsolete-kit removal and padded-date normalization",
+      "log_sha256": "028aca98767059fb584ecbe04e0de3bea09b47a6f7ed6dcd22b6444733013cdf"
+    },
+    "reviewed_contract_followup": {
+      "passed": 185,
+      "pyright": "pass",
+      "ruff": "pass",
+      "log_sha256": "2c7f180f35ed967e0861b3034f93ba91b9560d7645c9b7acc55a3e0b2bca16ff"
+    },
+    "current_full_benchmark_tests": {
+      "date": "2026-09-24",
+      "source_revision": "5bf2ce3",
+      "passed": 1203,
+      "skipped": 26,
+      "log_sha256": "606651863743ac4bee2a119101a039f1e1f181cae02968d1e5d800d42c5dc385",
+      "command": "PYTHONPATH=src .venv/bin/python -m pytest -q"
+    },
+    "current_package_readiness_tests": {
+      "date": "2026-09-24",
+      "passed": 18,
+      "deselected": 110,
+      "command": "PYTHONPATH=src python -m pytest -q tests/test_workspace_outcomes.py -k 'package or readiness or release'",
+      "log_sha256": "4f3bf190f05e0dff6f30c1571de0a8b39ef9a6e54fc34bb2f8af4d151e11cf3b"
+    },
+    "browser_export_proxy": {
+      "new_regressions": 9,
+      "scoped_regressions": 186,
+      "full_benchmark": {
+        "passed": 1203,
+        "skipped": 26
+      },
+      "ruff": "pass",
+      "pyright": {
+        "baseline_errors": 1196,
+        "current_errors": 1196,
+        "normalized_added": 0,
+        "normalized_removed": 0,
+        "status": "unchanged existing baseline, not clean"
+      },
+      "hosted": "20 Docs exports pass content/tab isolation and archive checks through patched proxy; complete captured native state unchanged.",
+      "source_hashes": {
+        "src/arga_twins_benchmark/computer_use/proxy.py": "ceb22a23ef60f33479592483d8d6849d15851ee7ae2a2fda49dfcb5960ebc6aa",
+        "tests/test_computer_use_sample.py": "d3fc92e313b2e9f6ac847f27af175f80138924163ffbb5483ff8c5db427f2d3b"
+      },
+      "logs": [
+        {
+          "name": "lab-final-sample-gates-v7.log",
+          "sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a"
+        },
+        {
+          "name": "lab-final-sample-full-regression-v8.log",
+          "sha256": "606651863743ac4bee2a119101a039f1e1f181cae02968d1e5d800d42c5dc385"
+        },
+        {
+          "name": "lab-final-sample-pyright-v8-comparison.json",
+          "sha256": "1a94bdd315e43f2e41191db460c6e1549982c9ed4874cf6714fd6f08b168ae9f"
+        }
+      ]
+    }
+  },
+  "limits": "Earlier passing candidate runs and all later outcomes are preserved. WKS-03 exhausted its one infrastructure retry with a business failure; WKS-04 and WKS-05 pass revalidation after #1150; hosted native Print and 390px queued validation now pass. The original supporting app image mismatch is preserved; its publication-tag fix is deployed and concurrent hosted runs match all 13 containers to their own builds. Hosted Linear subscriptions, Workspace editor identity, Inbox and Gmail date/readability checks pass within their recorded scope; Linear Inbox accessibility (#1180) passes CI, both production workflows and fresh native/desktop/390px/image verification; GitHub OAuth collaborator identity (#1182) passes exact-head CI, production, native/desktop/390px and all three image checks, with subsequent review-privacy verification recorded separately. Sheets undo/redo (#1179) merged after exact-head CI and both deployments pass; fresh native/desktop/390px checks, all five images and teardown pass. Charts (#1183) pass 1,332 local Workspace tests, exact-head CI, both deployments, fresh native/desktop/390px checks, all five images, exact state comparison and teardown. GitHub pending-review privacy (#1184) passes 429 local regressions and 107 compatibility checks, exact-head CI, both deployments, fresh native/desktop/390px lifecycle, all three image matches and exact native-state verification with teardown. GitHub live/fixed clocks (#1185) pass 439 integrated regressions, 10 clock cases and 107 compatibility checks; exact-head CI, both deployments, fresh live/fixed native/Chrome, all six images, exact state and teardown pass. Canonical review states #1186 and the history correction #1188 pass fresh native/Chrome, all three image and exact-state checks with teardown; the original truncation failure is retained. Calendar clock/Scenario/default-reminder correction #1189 passes 314 relevant regressions, exact-head CI, both deployments, two fresh native/Chrome runs, all six images, complete unchanged owner/reader state and both teardowns. Calendar #1190 reminder isolation and #1191 personal sync/watch now pass both deployments, hosted native/account isolation checks and all three containers in each run; #1192 event editor passes 499 local regressions, exact-head CI, both deployments, fresh Chrome/native preservation checks, all three images and teardown. Calendar watch lifecycle #1193 passes 554 integrated regressions, exact-head CI, both deployments, fresh three-account native checks, all three image matches and teardown; successful HTTP delivery remains local evidence. Calendar access requests #1194 pass 586 local regressions, exact-head CI, both deployments, fresh hosted browser/native checks, three images and teardown. Calendar Tasks #1195 passes 576 local Calendar/Workspace regressions, 6,502 twin/2,134 root CI, both deployments, serving API/proxy image checks, fresh desktop/390px lifecycle/native isolation, all three worker images and teardown. Tasks ordering and named menus #1196 pass 578 local regressions, 6,504 twin/2,134 root CI, both deployments, fresh desktop/390px recency/menu/reload and native isolation, all three image matches and teardown. Calendar Tasks Scenario repair #1197 passes 744 relevant regressions, 6,527 twin/2,134 root CI, both deployments, fresh two-run export/reseed/reset/browser/native verification, all six worker images and both teardowns. Stripe live/fixed clocks #1198 pass 193 local Python checks, 32 Node SDK tests, 6,542 twin/2,134 root CI, both deployments, serving API/proxy images, two fresh live/fixed CLI reset/native/browser runs, all six worker images and teardown. Stripe balance reports #1199 pass 231 local tests, bounded Chrome controls/native checks and three independently resolved review findings; exact-head CI passes (6,581 twin/2,134 root) but actual CSV browser delivery is blocked and deployment/hosted remain open. GitHub Actions access #1200 passes 592 local regressions, bounded Chrome/native-state checks and exact-head CI (6,652 twin/2,134 root); merged 55da0f2d with both deployments, serving API/proxy images, fresh hosted 68 denied/26 allowed reads, owner lifecycle, three container images and teardown passed. Two operator setup failures remain preserved; hosted Chrome is pending at a blocked native dialog. Actions controls #1201 passes 142 local tests, bounded Chrome/native-state, source review and 6,658 twin/2,134 root CI; merged ea892cd7; both deployments, serving images, fresh native controls/access/lifecycle/protected-state checks, all three worker images and teardown pass, while hosted Chrome remains pending. App Scenario grants #1202 passes 755 local regressions and 6,672 twin/2,134 root CI; merged a02ad70f; both deployments, serving images, two-run native App/token/export/reseed/CLI reset and source isolation, all six worker images and both teardowns pass. Unmerged #1203 log controls passes 615 GitHub tests and 6,675 twin/2,134 root CI; browser confirmation, visual checks, independent reviews, deployment and hosted verification remain pending. Docs Viewing mode #1187 passes 544 Workspace regressions, source review and final-head CI, with native focus/revocation blocked by the Mac lock; full eight-twin frontend parity and final package release remain open.",
+  "latest_package_checks": {
+    "date": "2026-09-24",
+    "passed": 186,
+    "scope": "Complete workspace-outcome and sample tests after binary Office export fix",
+    "command": "PYTHONPATH=src python -m pytest tests/test_workspace_outcomes.py tests/test_computer_use_sample.py -q",
+    "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
+    "release_allowed": false
+  }
+}
