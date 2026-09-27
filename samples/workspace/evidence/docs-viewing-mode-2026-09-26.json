@@ -1,12 +1,12 @@
 {
   "schema": "arga.lab.frontend-evidence/1",
-  "observed_on": "2026-09-26",
+  "observed_on": "2026-09-27",
   "providers": [
     "google_docs"
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1187",
-  "source_head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
-  "status": "source_and_ci_pass_native_focus_check_blocked",
+  "source_head": "42286471a25b9ea65b1491bd59d2a264479fc6b2",
+  "status": "local_browser_and_ci_pass_merged_deploying",
   "release_allowed": false,
   "scope": [
     "Native role/OAuth-scoped document access capabilities",
@@ -40,16 +40,37 @@
     ]
   },
   "local_browser": {
-    "status": "partial",
+    "status": "bounded_local_pass",
     "passed": [
       "Chrome desktop/390px owner Viewing mode removes editing controls and survives reload",
       "Reader tab navigation and sharing dialog omit editing/grant controls",
-      "Failed save blocks Viewing, preserves draft, and reverting disposable edit restores exact full native state"
+      "Failed save blocks Viewing, preserves draft, and reverting disposable edit restores exact full native state",
+      "Foreground nativeChrome focus revocation/restoration retains unsaveddraft and finalcomplete state matches baseline"
     ],
     "native_state": "First two sessions match complete native baseline exactly",
-    "blocked": "Final native window-focus/revocation/restored-access recovery check: macOS locked",
     "screenshots_retained": false,
-    "blocked_session_cleanup": "Third local session stopped. Complete native state changed only in the operator-injected writer-to-reader permission; failed draft never persisted. Current source needs a fresh focus/recovery session."
+    "blocked_session_cleanup": "Third local session stopped. Complete native state changed only in the operator-injected writer-to-reader permission; failed draft never persisted. Current source needs a fresh focus/recovery session.",
+    "preserved_blocked_attempt": "Final native window-focus/revocation/restored-access recovery check: macOS locked",
+    "focus_recovery": {
+      "passed": true,
+      "source_head": "42286471a25b9ea65b1491bd59d2a264479fc6b2",
+      "native_chrome_foreground": true,
+      "observations": [
+        "Failed save blocks Viewing with Unsaved changes and draft retained",
+        "Real tab focus after writer-to-reader revocation selects disabledViewing/removes editing;unsaved draft text retained",
+        "Real tab focus after writer restoration enablesmode;Editing restores editable retaineddraft",
+        "Reload restores original native document after deliberately discarding disposable unsaved edit"
+      ],
+      "final_complete_state_equals_baseline": true,
+      "operator_notes": [
+        "Initial helper invocation in benchmark venv lackedfastapi;rerun repositoryvenv with benchmarkPYTHONPATH succeeded",
+        "Native selectText and commandEnd did not produce intended text-selection; disposable draft restoration usedselectall plusoriginaltext thenreload with writesstillblocked; no provider edit persisted"
+      ],
+      "limits": [
+        "No physical touch",
+        "This closes local focus/revocation recovery gate only; hosted check and full collaboration remain open"
+      ]
+    }
   },
   "review": {
     "initial": "fix: dirty draft recovery, mode-input/stale-document race and delayed-refresh race",
@@ -99,19 +120,46 @@
     "lab-docs-viewing-local-r3/blocked-result.json": "e4583097c70477eb8d945afb8796334018f1b1191b275f0dd4646df7672c854a",
     "lab-docs-viewing-local-r3/workspaces.json": "c1a1a7fef61fad7916e8eec63bd1231a59c6ebd8d636ff9f8725cdbe5acb490a",
     "lab-docs-viewing-local-r3/baseline.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
-    "lab-docs-viewing-local-r3/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f"
+    "lab-docs-viewing-local-r3/final.json": "2b425e679f5d756530dcdaf95de4e5118c25a7bc18b6f6f0796a5326833c345f",
+    "lab-docs-viewing-local-r4/browser-trace-0.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "lab-docs-viewing-local-r4/checkpoint.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
+    "lab-docs-viewing-local-r4/browser-trace-1.json": "c6bbd0700341f92e464b14ddb97cae2a09b19dce1158e9713dadc61ae2d0167a",
+    "lab-docs-viewing-local-r4/revoked-state.json": "51a65efedc59a1a1b379410714b2ac51f75a8cce38b1622ad5ecfc25e2093fa9",
+    "lab-docs-viewing-local-r4/workspaces.json": "6d0210bcc0bdcfef1ec2d8c04cd027c8d29356c0da4ac8f69d4dd7d11518a1c2",
+    "lab-docs-viewing-local-r4/baseline.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
+    "lab-docs-viewing-local-r4/final.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
+    "lab-docs-viewing-local-r4/focus-recovery-result.json": "d871c1047f3ff3af64e7ead2398530c824bc47bffb51d4b8223d4b068b659661",
+    "lab-docs-viewing-premerge-final.json": "86c349d9536aed55a3f57b7b9a5781835a155ee91e298d47d3efe2ee073328ba",
+    "lab-docs-viewing-ci-complete-r2.log": "c25327aa47ea76b3e013cb76757a62bdd9e1726987e904dc674a68c92e8eb555"
   },
   "limits": [
-    "Remaining native focus check, merge/deployment and hosted verification pending; final-head CI passes",
+    "Both deployment workflows and fresh hosted verification pending; localfocusgateandexactheadCIpass",
     "No Suggesting, full commenter collaboration, request-access, full menus/admin/realtime/AI claim",
     "No exhaustive visual/mobile/touch parity or final release readiness"
   ],
   "screenshots_retained": false,
   "original_source_head": "86dda016fd017fc5a07caaa123ea132267dd4d95",
   "ci": {
-    "head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
-    "status": "all_complete_success_or_applicable_skip",
-    "merge_state_observed": "CLEAN",
-    "is_draft": false
-  }
+    "status": "passed",
+    "head": "42286471a25b9ea65b1491bd59d2a264479fc6b2",
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6698,
+    "root_tests_passed": 2140,
+    "lint_and_test_run": 36287517693
+  },
+  "preserved_ci_attempts": [
+    {
+      "head": "13a5ddb1b621e2c7f3db93e37fe32f44171cc1c4",
+      "status": "all_complete_success_or_applicable_skip",
+      "merge_state_observed": "CLEAN",
+      "is_draft": false
+    }
+  ],
+  "deployment": {
+    "status": "running",
+    "twins_workflow": 36287887217,
+    "runtime_workflow": 36287887197
+  },
+  "merge_commit": "59f3c4390e43319f40c25774da694f7fb2f34c40"
 }

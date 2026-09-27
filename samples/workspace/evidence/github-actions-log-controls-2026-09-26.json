@@ -1,11 +1,11 @@
 {
   "schema": "arga.lab.feature-evidence/1",
-  "observed_on": "2026-09-26",
+  "observed_on": "2026-09-27",
   "provider": "github",
-  "status": "ci_pass_browser_and_review_pending_unmerged",
+  "status": "local_browser_gates_pass_rebased_ci_pending",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1203",
-  "source_head": "4e68f0b16312b838a60eed019ee0922215e6c6b0",
+  "source_head": "44facf6c2d13db626b327babc1171f80fe9b9ee3",
   "changes": [
     "Writer-only Workflow run options and Delete all logs command with observed native confirmation",
     "Existing REST deletion handler controls browser mutation; post-delete reload omits log controls and preserves run/job/artifact metadata",
@@ -15,44 +15,52 @@
     "all_github_passed": 615,
     "focused_cases": 3,
     "failed_before_implementation": 3,
-    "make_fix": "pass"
+    "make_fix": "pass",
+    "final_refinement_focused_passed": 9
   },
   "browser": {
-    "status": "pending",
-    "reason": "Locked host and unconfirmed real GitHub native dialog block Chrome; user cancellation/unlock was requested",
-    "accept_cancel": "unverified",
-    "desktop_390px": "unverified",
-    "keyboard_focus_touch": "unverified",
+    "status": "bounded_local_pass",
+    "desktop": [
+      1465,
+      806
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "native_accept_cancel": true,
+    "native_accessible_name": true,
+    "keyboard_activation_escape_focus_click_away": true,
+    "cancel_zero_post_full_state_unchanged": true,
+    "accept_only_logs_deleted_native404": true,
+    "reader403_anonymous401_full_state_unchanged": true,
     "screenshots_retained": false,
-    "fresh_host_check": "Native Chrome check reports Mac locked; automatic unlock failed. GitHub dialog and Notion login tabs marked for handoff."
+    "limits": [
+      "Extension browser AX omitted command name even after explicitlabel; foreground native ChromeAX exposes exactname;causeunestablished",
+      "Physical touch and hosted check pending"
+    ]
   },
   "review": {
-    "status": "pending",
-    "independent_finish_review": "pending after browser evidence",
-    "documentation_verification": "pending"
+    "initial": "fix: unnamed destructive button in suppliedAX",
+    "verdict": "ship for one listed finding, resolved after explicitlabel and foregroundnativeAXverification",
+    "scope": "Source and supplied text/nativeevidence; no independentvisual/touchapproval",
+    "documenter": "ship;README accurate; no systemchange"
   },
   "ci": {
-    "status": "passed",
-    "head": "4e68f0b16312b838a60eed019ee0922215e6c6b0",
-    "all_complete": true,
-    "merge_state_observed": "CLEAN",
-    "twin_tests_passed": 6675,
-    "root_tests_passed": 2134,
-    "lint_and_test_run": 36243867006,
-    "preserved_initial_draft_workflows": "skipped, not counted as passes"
+    "status": "running",
+    "head": "44facf6c2d13db626b327babc1171f80fe9b9ee3"
   },
-  "deployment": "pending; unmerged because browser and independent review gates remain open",
+  "deployment": "pending; unmerged",
   "references": [
     "https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs"
   ],
   "limits": [
-    "No real GitHub log deletion was confirmed",
-    "Local native tests do not establish browser confirmation or visual fidelity",
-    "Remaining workflow menus/filters, graphs, permissions and full provider/AI/collaboration/sample gates remain open"
+    "No real GitHub log deletion confirmed; original reference logs remain downloadable",
+    "Hosted verification and fullprovider/AI/collaboration/samplegates pending"
   ],
   "source_sha256": {
-    "twins/github/actions_ui.py": "1a5c938ac1488b236d707eea632040a5c6821e9954bcb177c96f9b76a2157aeb",
-    "twins/github/README.md": "5b09c48b9f3fd313c27d3fd9ac74071e3bbffae817cb6c11c5a2c206086f506b",
+    "twins/github/actions_ui.py": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
+    "twins/github/README.md": "6af613f83155878513e691228c7aa628015bd9ae2543b0fc58d349593132dbd9",
     "twins/tests/test_github_actions_log_controls.py": "56981bcb87138e604d475ad802e68ab793803b2c267fbdb001db025d581960ab"
   },
   "artifacts_sha256": {
@@ -64,12 +72,46 @@
     "lab-github-actions-log-controls-integrated.log": "0c13c889481e26528bf7cd94ee8c13b79ca1962ec37e1251cbbea89f45db893a",
     "lab-github-actions-log-controls-make-fix.log": "26a87d59d4d6172a7c40e4a92f50ef9df121253076a5d3f849ffdd0a05b799b3",
     "lab-github-actions-log-controls-ci-complete.log": "e9b06be207eccf11eb5989d694eaf2e70815d23000aa4ed6de56802f395b3062",
-    "lab-github-actions-log-controls-ci-current.json": "c59608b177431884af05091274941f13d7e6d272fdb588d737ee3afee8368bc1"
+    "lab-github-actions-log-controls-ci-current.json": "c59608b177431884af05091274941f13d7e6d272fdb588d737ee3afee8368bc1",
+    "lab-github-actions-log-controls-local-r3/browser-trace.json": "20eb2fcd21d0b2c23f5fa83bb9366afefca92e52ea58e8c65cce4e0bdfe7f064",
+    "lab-github-actions-log-controls-local-r3/workspace.json": "738c1113ae0daa147a1445260fd3b6250c7c6d4b68828a98ea48fa6501255fad",
+    "lab-github-actions-log-controls-local-r3/checkpoint.json": "0b4abacb6eab985758e60fd4d355ce7849abbb5c872afac9e0a8dcb883092ac5",
+    "lab-github-actions-log-controls-local-r3/baseline.json": "0b11e253793d7f73827610e9cc37551fd08fd9aa826846927814a51819255f39",
+    "lab-github-actions-log-controls-local-r3/accept-result.json": "bb26a66ace0b1b874b096806bbf57f308f20a246af47e8dd7db287ab2c5d4dc8",
+    "lab-github-actions-log-controls-local-r3/final.json": "0b4abacb6eab985758e60fd4d355ce7849abbb5c872afac9e0a8dcb883092ac5",
+    "lab-github-actions-log-controls-local-r3/native-ax-verdict.json": "4a836e6a8138d569c78522ad9f66e1f2efaf694799c8e6404feedaf41f884a02"
   },
   "pull_request_state": {
     "state": "open",
     "draft": false,
     "ready_for_review_event": "2026-09-26T13:03:00Z",
     "note": "PR was externally marked ready after draft creation; state preserved."
-  }
+  },
+  "preserved_ci_attempts": [
+    {
+      "status": "passed",
+      "head": "4e68f0b16312b838a60eed019ee0922215e6c6b0",
+      "all_complete": true,
+      "merge_state_observed": "CLEAN",
+      "twin_tests_passed": 6675,
+      "root_tests_passed": 2134,
+      "lint_and_test_run": 36243867006,
+      "preserved_initial_draft_workflows": "skipped, not counted as passes"
+    }
+  ],
+  "preserved_browser_attempt": {
+    "status": "pending",
+    "reason": "Locked host and unconfirmed real GitHub native dialog block Chrome; user cancellation/unlock was requested",
+    "accept_cancel": "unverified",
+    "desktop_390px": "unverified",
+    "keyboard_focus_touch": "unverified",
+    "screenshots_retained": false,
+    "fresh_host_check": "Native Chrome check reports Mac locked; automatic unlock failed. GitHub dialog and Notion login tabs marked for handoff."
+  },
+  "browser_artifacts": [
+    "lab-github-actions-log-controls-local-r1/result.json",
+    "lab-github-actions-log-controls-local-r2/cancel-result.json",
+    "lab-github-actions-log-controls-local-r3/native-ax-verdict.json",
+    "lab-github-actions-log-controls-local-r3/accept-result.json"
+  ]
 }

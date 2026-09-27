@@ -49,7 +49,7 @@
         },
         {
           "path": "samples/workspace/evidence/github-actions-log-controls-2026-09-26.json",
-          "sha256": "e0dbbd424618e5e158aa78bcf3db9eba11206f06447a30b27ab3cd76078a9e36"
+          "sha256": "9c9f18496d1769af8fbf27c0daad9dfa547a2955755268e6c8064318c4ae47df"
         }
       ]
     },
@@ -221,7 +221,7 @@
         },
         {
           "path": "samples/workspace/evidence/docs-viewing-mode-2026-09-26.json",
-          "sha256": "2025a949e7232487ae624c67f9590e9106c5650c0751ae2d90e01262e3e690f7"
+          "sha256": "850478366c93733bf11a76a1e7190785e0bf43f5b2394c13f6946143063644b2"
         }
       ]
     },
@@ -294,7 +294,7 @@
         },
         {
           "path": "samples/workspace/evidence/stripe-balance-reports-2026-09-26.json",
-          "sha256": "1852bf05e51fb9079db40e69f9d48aca7b9d4adfa6678a74c7e1478730a3bc1e"
+          "sha256": "e40d0461e037206c6845c22808e74bf21443cb3be22af5c90bcbaa8398aa3fd8"
         }
       ]
     },
@@ -452,5 +452,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "058d2ab4cde0002f350a05b81217e4e3c8cd1accd1cc43511b3cf3ac05fbc62e"
+  "sample_tree_sha256": "652314d4d8c4e4b569a1673c31be72cfa724d7cfa8f7841d97eb423149935151"
 }

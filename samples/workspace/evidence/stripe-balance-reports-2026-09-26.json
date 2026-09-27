@@ -1,11 +1,11 @@
 {
   "schema": "arga.lab.feature-evidence/1",
-  "observed_on": "2026-09-26",
+  "observed_on": "2026-09-27",
   "provider": "stripe",
-  "status": "local_review_and_ci_pass_browser_download_blocked",
+  "status": "local_browser_gates_pass_rebased_ci_pending",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1199",
-  "source_head": "486ec063ce41885a66aed0767a644b8824ee0f58",
+  "source_head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52",
   "changes": [
     "Native balance report projections reconcile opening/activity/fees/payouts/ending by settlement currency",
     "Local calendar date and timezone boundaries, including historical DST; automatic payout effective dates",
@@ -80,6 +80,15 @@
         "No independent reviewer visual approval; no native keyboard/focus or physical touch claim",
         "Global shell/filter differences and full Stripe parity remain open"
       ]
+    },
+    {
+      "passed": true,
+      "summary_download": "Chrome native Done;217bytes;4rows net14.70,86.30,-50.00,51.00",
+      "activity_download": "Chrome native Done;369bytes;2chargerows with selected source_id/exchange_rate and embeddednewlinequotes preserved",
+      "complete_state_matches_fresh_fixed_fixture": true,
+      "browser_security_changed": false,
+      "prior_extension_ERR_BLOCKED_BY_CLIENT_preserved": true,
+      "physical_touch": false
     }
   ],
   "review": {
@@ -99,24 +108,15 @@
     "documenter": "Bounded documentation accepted; missing date presets/Clear/timezone picker/AI and native input limitations explicitly documented"
   },
   "ci": {
-    "status": "passed",
-    "preserved_attempt": "Draft-triggered Actions skipped under repository policy; not counted as passing CI",
-    "head": "486ec063ce41885a66aed0767a644b8824ee0f58",
-    "all_complete": true,
-    "merge_state_at_check": "CLEAN",
-    "twin_tests_passed": 6581,
-    "root_tests_passed": 2134,
-    "lint_and_test_run": 36241116012,
-    "docker_build_run": 36241116024,
-    "fidelity_run": 36241116152
+    "status": "running",
+    "head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52"
   },
   "deployment": "pending; unmerged",
   "limits": [
-    "Actual browser CSV file delivery blocked by Chrome ERR_BLOCKED_BY_CLIENT; matching download files absent; no security bypass attempted",
-    "Native HTTP CSV bytes and rendered form submissions pass but do not establish browser file delivery",
     "Global dashboard shell/filter composition differ from live Stripe; date presets, Clear and timezone picker missing",
     "PDF, scheduling, report email delivery, warehouse export, complete column catalog, permissions, broader analytics/AI remain open",
-    "No native keyboard/focus or physical touch claim; full provider audit and sample release gates remain pending"
+    "Summary/itemizedactual filedownloads now verified in foregroundChrome; earlierextension failurespreserved",
+    "Physical touch and fullprovider/AI/collaboration/samplegates pending"
   ],
   "source_sha256": {
     "twins/stripe/README.md": "8448f24c350caf21f201637b13b02bb51dbc707497ac6dca0ac1fa77071a9320",
@@ -170,6 +170,26 @@
     "lab-stripe-reports-review-r1/final-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
     "lab-stripe-reports-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "lab-stripe-reports-ci-current.json": "d22a2d0c0fe81c65bc9a4944cfc5912528534692e3f1dff3153de982424626e8",
-    "lab-stripe-reports-ci-complete.log": "69e478add7302515d98363dcd94e89396ac67a328e3dcff8a23d1f5f33bc45ac"
-  }
+    "lab-stripe-reports-ci-complete.log": "69e478add7302515d98363dcd94e89396ac67a328e3dcff8a23d1f5f33bc45ac",
+    "lab-stripe-reports-local-r3/workspace.json": "290253a3d4be55cfaca3cb17d46aad595ee9148acfa1640521078ba904dede4f",
+    "lab-stripe-reports-local-r3/download-result.json": "e9b8ae3993ccc9d835fa33c3016575a6fea84c0ea15a2169fbb2a35e88b32115",
+    "lab-stripe-reports-local-r3/summary-download.json": "1fb74ba31b2e4746c65d250535853c4a58b3dd8a5556341d509eeba514478396",
+    "lab-stripe-reports-local-r3/activity-download.json": "9b6714a8668298b7324e639059fdc7d312178d19e7d447dd1ea8bb218c9e2ced",
+    "lab-stripe-reports-local-r3/after-download-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-local-r3/request-trace.json": "2eda5e56e8b01a2b73d2fe0c9b40ee39461b590521db09d63a4edc2b9ead39c2"
+  },
+  "preserved_ci_attempts": [
+    {
+      "status": "passed",
+      "preserved_attempt": "Draft-triggered Actions skipped under repository policy; not counted as passing CI",
+      "head": "486ec063ce41885a66aed0767a644b8824ee0f58",
+      "all_complete": true,
+      "merge_state_at_check": "CLEAN",
+      "twin_tests_passed": 6581,
+      "root_tests_passed": 2134,
+      "lint_and_test_run": 36241116012,
+      "docker_build_run": 36241116024,
+      "fidelity_run": 36241116152
+    }
+  ]
 }

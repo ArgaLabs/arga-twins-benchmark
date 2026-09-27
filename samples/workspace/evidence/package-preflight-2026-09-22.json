@@ -116,5 +116,6 @@
     "command": "PYTHONPATH=src python -m pytest tests/test_workspace_outcomes.py tests/test_computer_use_sample.py -q",
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
-  }
+  },
+  "latest_browser_gate_status": "2026-09-27: local GitHub log confirmation/accessible-name review, Docs focus recovery and Stripe actual CSV downloads pass; current-main exact-head CI and deployments/hosted checks remain pending. Historical failures below are preserved."
 }
