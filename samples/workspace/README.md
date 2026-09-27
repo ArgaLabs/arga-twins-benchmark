@@ -221,6 +221,10 @@ public_repo-only administrator, private/public transition, denied-access,
 invalid-value, desktop/390px cancellation/stale-form/recovery/reload checks pass.
 The final full state of all eight providers exactly matches the baseline; ten
 worker images and both serving images match, and teardown is confirmed. Docs
-commenter controls #1217 have 1,451 local regressions and scoped Chrome evidence;
-CI and hosted release verification remain in progress. Provider-wide and final
-sample gates remain open.
+commenter controls #1217 are deployed as `7eb452ed`. Their 1,451 local
+regressions and fresh hosted create/edit/reply, revoked-write retention,
+reader/owner mode, cancellation and reload checks pass at selected desktop and
+390px layouts. Exactly one comment and one reply were added; full protected
+state is unchanged after restoring the role. Ten worker images and both serving
+images match, and teardown is confirmed. Provider-wide and final sample gates
+remain open.

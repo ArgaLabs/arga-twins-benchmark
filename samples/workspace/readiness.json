@@ -302,6 +302,10 @@
         {
           "path": "samples/workspace/evidence/docs-table-header-controls-2026-09-27.json",
           "sha256": "1d0feef37e8f6dbc2f0c765c6c1b4415434b38a6b94c7ef0a651778cd535f73b"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-commenter-controls-2026-09-27.json",
+          "sha256": "5804a5844b24581cb7dafea9ec81a24245ab73b4e5396f5d1e41b2e29c3d9c05"
         }
       ]
     },
@@ -576,7 +580,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "53a4164c49ac164f43613bd7fb027ed38cc5ca4fca990f30fe1aaa5ad74c1002"
+          "sha256": "6e6b1edf714f1312d160f92058d2d29bf5930d9ee44b544f83c386743a013960"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -608,5 +612,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "b16ab190f2d52bea3f47c3b844c294cda604f3fadf0e6804f38851f700f4f0ec"
+  "sample_tree_sha256": "e6fa092005d97313fe38aa16f411b3812bd6904b18bae2044584c8249755bc3c"
 }
