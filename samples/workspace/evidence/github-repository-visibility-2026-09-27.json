@@ -438,5 +438,11 @@
       "candidate_retry": false,
       "all_three_container_images_match": true
     }
-  ]
+  ],
+  "subsequent_projects_correction": {
+    "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1206",
+    "evidence": "github-project-permissions-2026-09-27.json",
+    "status": "deployed_bounded_hosted_verified",
+    "original_observations_preserved": true
+  }
 }

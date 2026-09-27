@@ -276,5 +276,11 @@
     "lab-github-project-access-audit/anonymous-browser_public_update.json": "d18118289e200526c7aceae82732c380840e183f2fa7857168bd971c179eb9bc",
     "lab-github-project-access-audit/limited-browser_public_remove.json": "0891ac301b8ff7833b11a2f57bd78b29759da276070bbf4e6a3deee5b3260128",
     "lab-github-project-permissions-red.log": "96a95c3aa0c577cb07f584cd029c255ad1e7ec01bc01727d2ed758d4f8952931"
+  },
+  "subsequent_projects_correction": {
+    "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1206",
+    "evidence": "github-project-permissions-2026-09-27.json",
+    "status": "deployed_bounded_hosted_verified",
+    "original_observations_preserved": true
   }
 }

@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 327,
+      "files_scanned": 328,
       "image_files": 0,
       "scanned_at": "2026-09-27"
     },
@@ -112,7 +112,7 @@
       "status": "pass",
       "passed": 58,
       "command": "PYTHONPATH=src /Users/tonghx/validation-server/.venv/bin/python -m pytest tests/test_computer_use_sample.py -q",
-      "log_sha256": "5288537c4bbd435e5a51e69f67af5dd0c2d62ef86e9410d1411b8f2b44e481f2",
+      "log_sha256": "d43ae3a5c396db2e26dd624a8eb122426c9ba2384e87146f2501360dd360b961",
       "scope": "Package and readiness regression checks; no ZIP created"
     }
   },
@@ -125,10 +125,10 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 hosted native/browser/image gates pass within their recorded scope. GitHub Actions recovery #1204 and repository visibility #1205 pass exact-head CI, both deployments, serving image checks, fresh desktop/390px browser/native state checks and all three current-run container-image matches, with teardown confirmed. Failed operator fixture/submission attempts are preserved. A separate Projects operation-grant audit reproduces unauthorized writes and private native item disclosure; 31 new regressions fail before correction. The most recent all-eight ten-container checkpoint remains c232855b. Full provider and final sample gates remain open.",
+  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 hosted native/browser/image gates pass within their recorded scope. GitHub Actions recovery #1204 and repository visibility #1205 pass exact-head CI, both deployments, serving image checks, fresh desktop/390px browser/native state checks and all three current-run container-image matches, with teardown confirmed. Failed operator fixture/submission attempts are preserved. PR #1206 corrects the separately reproduced Projects write-grant and linked-content defects; 81 final affected tests and exact-head CI pass, with 6,825 twin and 2,140 root tests. All checks completed and a fresh CLEAN check preceded merge d1da8f17. Both deployments, API/proxy serving images, hosted native and Chrome desktop/390px checks pass. Complete native state matches one allowed status write plus explicit installation suspension; denied writes add no mutation. All three run images match and teardown is confirmed. The most recent all-eight ten-container checkpoint remains c232855b. Full provider and final sample gates remain open.",
   "latest_sample_package_tests": {
     "passed": 58,
     "observed_on": "2026-09-27",
-    "log_sha256": "5288537c4bbd435e5a51e69f67af5dd0c2d62ef86e9410d1411b8f2b44e481f2"
+    "log_sha256": "d43ae3a5c396db2e26dd624a8eb122426c9ba2384e87146f2501360dd360b961"
   }
 }
