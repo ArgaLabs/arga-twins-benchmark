@@ -82,6 +82,10 @@
         {
           "path": "samples/workspace/evidence/github-default-branch-settings-2026-09-27.json",
           "sha256": "4cbbce9e79c1c53ecdb3e8da7769dfc87c5dbd009563438eeb66f6c39c326a56"
+        },
+        {
+          "path": "samples/workspace/evidence/github-public-repo-settings-2026-09-27.json",
+          "sha256": "804dd189020c476a8c969069bd0850331e6b96113da05fbfdb4c71ba93a1981f"
         }
       ]
     },
@@ -572,7 +576,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "2767cbf98c619406f9b98764eb204a3fe051ca351472a06175a456448a6a48fc"
+          "sha256": "53a4164c49ac164f43613bd7fb027ed38cc5ca4fca990f30fe1aaa5ad74c1002"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -604,5 +608,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "0b055d5b62b4f0a72874f90de0b2f4d6c7d5849b29c056f8a110706d26afa336"
+  "sample_tree_sha256": "b16ab190f2d52bea3f47c3b844c294cda604f3fadf0e6804f38851f700f4f0ec"
 }

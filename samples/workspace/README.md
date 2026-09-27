@@ -215,3 +215,12 @@ Structured facts accept a nested `result_facts` object or a JSON object directly
 The sample contains a manifest, five prompts, five exact seed files, five Scenario definitions, executable outcome contracts, the runner/proxy and its tests. It contains no live credentials. Task fixtures and grading contracts belong to the operator, not the candidate.
 
 The current sample suite passes 1,191 tests with 26 skips at grader revision `9f7b369`; changed-file Ruff/Pyright pass. Repository-wide Pyright has the same 1,196 diagnostics as the unchanged baseline; see `evidence/approval-grader-regressions-2026-09-24.json`. Historical checks remain labeled in `package-preflight-2026-09-22.json`. No final ZIP has been generated.
+
+GitHub public-repository settings #1216 are deployed as `0b9adb61`. Fresh
+public_repo-only administrator, private/public transition, denied-access,
+invalid-value, desktop/390px cancellation/stale-form/recovery/reload checks pass.
+The final full state of all eight providers exactly matches the baseline; ten
+worker images and both serving images match, and teardown is confirmed. Docs
+commenter controls #1217 have 1,451 local regressions and scoped Chrome evidence;
+CI and hosted release verification remain in progress. Provider-wide and final
+sample gates remain open.
