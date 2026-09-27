@@ -17,7 +17,7 @@
       "status": "pass",
       "files_scanned": 323,
       "image_files": 0,
-      "scanned_at": "2026-09-26"
+      "scanned_at": "2026-09-27"
     },
     "final_zip_created": false,
     "release_gate_regressions": {
@@ -106,9 +106,17 @@
           "sha256": "1a94bdd315e43f2e41191db460c6e1549982c9ed4874cf6714fd6f08b168ae9f"
         }
       ]
+    },
+    "latest_sample_package_tests": {
+      "date": "2026-09-27",
+      "status": "pass",
+      "passed": 58,
+      "command": ".venv/bin/python -m pytest tests/test_computer_use_sample.py -q",
+      "log_sha256": "a5ae73294094411114fca08959ac25d1339cad0cd7a7cfea6371fd541bca2494",
+      "scope": "Package and readiness regression checks; no ZIP created"
     }
   },
-  "limits": "Earlier passing candidate episodes, failed attempts and retry provenance remain preserved in their reports. WKS-03 exhausted its approved infrastructure retry with a business failure caused by unread approved terms; do not retry solely to obtain a pass. WKS-04 and WKS-05 pass recorded revalidation after #1150. Individual frontend reports distinguish local, CI, deployment, native, browser and image verification; no bounded feature result closes an exhaustive provider gate. All eight full frontend/AI/collaboration audits, physical mobile/touch coverage, final-deployment task revalidation and final package gates remain open. Current Docs hosted focus, GitHub hosted Chrome and Stripe deployment/hosted checks remain pending. No final ZIP is authorized by this preflight.",
+  "limits": "Earlier passing candidate episodes, failed attempts and retry provenance remain preserved in their reports. WKS-03 exhausted its approved infrastructure retry with a business failure caused by unread approved terms; do not retry solely to obtain a pass. WKS-04 and WKS-05 pass recorded revalidation after #1150. Individual frontend reports distinguish local, CI, deployment, native, browser and image verification; no bounded feature result closes an exhaustive provider gate. All eight full frontend/AI/collaboration audits, physical mobile/touch coverage, final-deployment task revalidation and final package gates remain open. Current Docs hosted focus, GitHub hosted Chrome and Stripe hosted browser/download checks remain pending. No final ZIP is authorized by this preflight.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,
@@ -117,5 +125,5 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: local GitHub log confirmation/menu/accessibility, Docs focus recovery and Stripe actual CSV downloads pass. Docs #1187 is deployed with serving and four worker image matches, native permissions and bounded owner Viewing/reload checks; hosted focus recovery remains blocked by the Mac lock. GitHub #1203 is merged and deploying. Stripe #1199 final rebased CI is running."
+  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Hosted Docs focus, GitHub log confirmation and Stripe browser download checks remain pending because the Mac is locked."
 }

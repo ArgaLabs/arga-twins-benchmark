@@ -27,11 +27,11 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 48,
-      "markup_control_occurrences": 293,
+      "markup_control_occurrences": 296,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
-          "sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "frontend_route_candidates": [
             {
               "method": "GET",
@@ -49,25 +49,25 @@
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download",
               "handler": "artifact_download",
-              "line": 133
+              "line": 158
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/delete",
               "handler": "artifact_delete",
-              "line": 137
+              "line": 162
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/workflows/{workflow_id}/{action}",
               "handler": "workflow_action",
-              "line": 143
+              "line": 168
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}/{action}",
               "handler": "run_action",
-              "line": 160
+              "line": 185
             }
           ],
           "markup_expressions": [
@@ -168,7 +168,7 @@
               ]
             },
             {
-              "line": 72,
+              "line": 83,
               "dynamic": true,
               "controls": [
                 {
@@ -199,7 +199,35 @@
               ]
             },
             {
-              "line": 81,
+              "line": 86,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {
+                    "aria-label": "Workflow run options"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "{dynamic}/delete-logs"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit",
+                    "aria-label": "Delete all logs"
+                  },
+                  "text": "Delete all logs"
+                }
+              ]
+            },
+            {
+              "line": 106,
               "dynamic": true,
               "controls": [
                 {
@@ -210,7 +238,7 @@
               ]
             },
             {
-              "line": 117,
+              "line": 142,
               "dynamic": true,
               "controls": [
                 {
@@ -246,7 +274,7 @@
               ]
             },
             {
-              "line": 112,
+              "line": 137,
               "dynamic": true,
               "controls": [
                 {
@@ -11257,9 +11285,369 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 20,
-      "markup_control_occurrences": 112,
+      "route_candidate_count": 25,
+      "markup_control_occurrences": 141,
       "files": [
+        {
+          "path": "twins/stripe/balance_reports_ui.py",
+          "sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+          "frontend_route_candidates": [
+            {
+              "method": "GET",
+              "path": "/reports",
+              "handler": "reports_hub",
+              "line": 302
+            },
+            {
+              "method": "GET",
+              "path": "/reports/hub",
+              "handler": "reports_hub",
+              "line": 302
+            },
+            {
+              "method": "GET",
+              "path": "/reports/balance",
+              "handler": "balance_report",
+              "line": 315
+            },
+            {
+              "method": "GET",
+              "path": "/reports/balance/activity-breakdown",
+              "handler": "balance_activity",
+              "line": 319
+            },
+            {
+              "method": "GET",
+              "path": "/reports/balance/export",
+              "handler": "balance_export",
+              "line": 323
+            }
+          ],
+          "markup_expressions": [
+            {
+              "line": 102,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "date",
+                    "name": "startDate",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "date",
+                    "name": "endDate",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "name": "timezone",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "name": "currency"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 115,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "get",
+                    "action": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Apply"
+                }
+              ]
+            },
+            {
+              "line": 165,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "get",
+                    "action": "/reports/balance/export"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "section",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Download CSV"
+                }
+              ]
+            },
+            {
+              "line": 173,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Export {dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 111,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "reportingCategory",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 138,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "format",
+                    "value": "summary"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 152,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "radio",
+                    "name": "format",
+                    "value": "summary"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "radio",
+                    "name": "format",
+                    "value": "itemized"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "name": "reportingCategory"
+                  }
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "text": "All"
+                },
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Columns"
+                }
+              ]
+            },
+            {
+              "line": 156,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "export-{dynamic}",
+                    "aria-labelledby": "export-title-{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 161,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                }
+              ]
+            },
+            {
+              "line": 163,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/reports/balance?{dynamic}"
+                  },
+                  "text": "Back to Balance summary"
+                }
+              ]
+            },
+            {
+              "line": 99,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 134,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "{dynamic}",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 142,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 149,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "name": "columns",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 210,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/reports/balance/activity-breakdown?{dynamic}"
+                  },
+                  "text": "Show all activity"
+                }
+              ]
+            },
+            {
+              "line": 217,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/reports/balance?{dynamic}"
+                  },
+                  "text": "Back to Balance summary"
+                }
+              ]
+            },
+            {
+              "line": 269,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 256,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 308,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/reports/balance"
+                  },
+                  "text": "Balance summary"
+                }
+              ]
+            }
+          ]
+        },
         {
           "path": "twins/stripe/billing_ui.py",
           "sha256": "0d42a84c337865ca2632d9566ffaef357ba725ecdd676ac48f58e6f6eb8fba80",
@@ -11716,42 +12104,42 @@
         },
         {
           "path": "twins/stripe/dashboard_ui.py",
-          "sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/dashboard",
               "handler": "dashboard_home",
-              "line": 691
+              "line": 692
             },
             {
               "method": "GET",
               "path": "/dashboard/payments",
               "handler": "dashboard_payments",
-              "line": 695
+              "line": 696
             },
             {
               "method": "GET",
               "path": "/dashboard/subscriptions",
               "handler": "dashboard_subscriptions",
-              "line": 699
+              "line": 700
             },
             {
               "method": "GET",
               "path": "/dashboard/invoices",
               "handler": "dashboard_invoices",
-              "line": 703
+              "line": 704
             },
             {
               "method": "GET",
               "path": "/dashboard/balances",
               "handler": "dashboard_balances",
-              "line": 707
+              "line": 708
             }
           ],
           "markup_expressions": [
             {
-              "line": 370,
+              "line": 371,
               "dynamic": true,
               "controls": [
                 {
@@ -11778,7 +12166,7 @@
               ]
             },
             {
-              "line": 157,
+              "line": 158,
               "dynamic": true,
               "controls": [
                 {
@@ -11791,7 +12179,7 @@
               ]
             },
             {
-              "line": 366,
+              "line": 367,
               "dynamic": true,
               "controls": [
                 {
@@ -11804,7 +12192,7 @@
               ]
             },
             {
-              "line": 429,
+              "line": 430,
               "dynamic": true,
               "controls": [
                 {
@@ -11817,7 +12205,7 @@
               ]
             },
             {
-              "line": 496,
+              "line": 497,
               "dynamic": true,
               "controls": [
                 {
@@ -11830,7 +12218,7 @@
               ]
             },
             {
-              "line": 547,
+              "line": 548,
               "dynamic": true,
               "controls": [
                 {

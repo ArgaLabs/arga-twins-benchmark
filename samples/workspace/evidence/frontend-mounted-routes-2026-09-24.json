@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-27T02:18:21.617870+00:00",
-  "source_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+  "observed_at": "2026-09-27T02:37:36.946429+00:00",
+  "source_revision": "c232855befa0b3d4373f32166979af326bee0fac",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
@@ -203,7 +203,7 @@
           "handler": "register_routes.<locals>.actions",
           "source": "twins/github/actions_ui.py",
           "line": 35,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -220,8 +220,8 @@
           ],
           "handler": "register_routes.<locals>.artifact_delete",
           "source": "twins/github/actions_ui.py",
-          "line": 136,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "line": 161,
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -238,8 +238,8 @@
           ],
           "handler": "register_routes.<locals>.artifact_download",
           "source": "twins/github/actions_ui.py",
-          "line": 132,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "line": 157,
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -257,7 +257,7 @@
           "handler": "register_routes.<locals>.run_detail",
           "source": "twins/github/actions_ui.py",
           "line": 61,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -274,8 +274,8 @@
           ],
           "handler": "register_routes.<locals>.run_action",
           "source": "twins/github/actions_ui.py",
-          "line": 159,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "line": 184,
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -292,8 +292,8 @@
           ],
           "handler": "register_routes.<locals>.workflow_action",
           "source": "twins/github/actions_ui.py",
-          "line": 142,
-          "source_sha256": "b29c571781255288939fc9770fff6daf81ca499b2ac83a647d2e63b925a5b4b3",
+          "line": 167,
+          "source_sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -2893,7 +2893,7 @@
       "candidate_count": 34
     },
     "stripe": {
-      "registered_nonoperator_routes": 660,
+      "registered_nonoperator_routes": 665,
       "mounted_frontend_candidates": [
         {
           "path": "/",
@@ -2902,8 +2902,8 @@
           ],
           "handler": "index",
           "source": "twins/stripe/app.py",
-          "line": 98,
-          "source_sha256": "a40c2b985f45844ec1e8bac3284c2d5106b33a359065fede0c65661aea674322",
+          "line": 106,
+          "source_sha256": "4ce76d218666a07f3118f703cb6dd42b279631618d62ebc0c845bb952d99626a",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3028,8 +3028,8 @@
           ],
           "handler": "register_routes.<locals>.dashboard_home",
           "source": "twins/stripe/dashboard_ui.py",
-          "line": 690,
-          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "line": 691,
+          "source_sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3046,8 +3046,8 @@
           ],
           "handler": "register_routes.<locals>.dashboard_balances",
           "source": "twins/stripe/dashboard_ui.py",
-          "line": 706,
-          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "line": 707,
+          "source_sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3064,8 +3064,8 @@
           ],
           "handler": "register_routes.<locals>.dashboard_invoices",
           "source": "twins/stripe/dashboard_ui.py",
-          "line": 702,
-          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "line": 703,
+          "source_sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3082,8 +3082,8 @@
           ],
           "handler": "register_routes.<locals>.dashboard_payments",
           "source": "twins/stripe/dashboard_ui.py",
-          "line": 694,
-          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "line": 695,
+          "source_sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3100,8 +3100,8 @@
           ],
           "handler": "register_routes.<locals>.dashboard_subscriptions",
           "source": "twins/stripe/dashboard_ui.py",
-          "line": 698,
-          "source_sha256": "e45ddc9ff6a856e0701ecd12a2f945eab3071c6d89ee04fa07da2bada970c502",
+          "line": 699,
+          "source_sha256": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3174,6 +3174,96 @@
           "source": "twins/stripe/products_ui.py",
           "line": 245,
           "source_sha256": "787d919ddce34a1178c1457247d1f1b1ff93d9d93fb46ab6c3d67604c27ab783",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/reports",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.reports_hub",
+          "source": "twins/stripe/balance_reports_ui.py",
+          "line": 300,
+          "source_sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/reports/balance",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.balance_report",
+          "source": "twins/stripe/balance_reports_ui.py",
+          "line": 314,
+          "source_sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/reports/balance/activity-breakdown",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.balance_activity",
+          "source": "twins/stripe/balance_reports_ui.py",
+          "line": 318,
+          "source_sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/reports/balance/export",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.balance_export",
+          "source": "twins/stripe/balance_reports_ui.py",
+          "line": 322,
+          "source_sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/reports/hub",
+          "methods": [
+            "GET"
+          ],
+          "handler": "register_routes.<locals>.reports_hub",
+          "source": "twins/stripe/balance_reports_ui.py",
+          "line": 300,
+          "source_sha256": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3346,7 +3436,7 @@
           }
         }
       ],
-      "candidate_count": 25
+      "candidate_count": 30
     }
   }
 }

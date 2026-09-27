@@ -2,7 +2,7 @@
   "schema": "arga.lab.feature-evidence/1",
   "observed_on": "2026-09-27",
   "provider": "stripe",
-  "status": "local_browser_gates_pass_rebased_ci_pending",
+  "status": "deployed_native_images_pass_hosted_browser_pending",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1199",
   "source_head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
@@ -108,11 +108,35 @@
     "documenter": "Bounded documentation accepted; missing date presets/Clear/timezone picker/AI and native input limitations explicitly documented"
   },
   "ci": {
-    "status": "running",
+    "status": "passed",
     "head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
-    "lint_and_test_run": 36288698393
+    "lint_and_test_run": 36288698393,
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "check_count": 34,
+    "twin_tests_passed": 6740,
+    "root_tests_passed": 2140
   },
-  "deployment": "pending; unmerged",
+  "deployment": {
+    "revision": "c232855befa0b3d4373f32166979af326bee0fac",
+    "runtime_workflow": 36289029008,
+    "twins_workflow": 36289028995,
+    "both": "success",
+    "published_images": {
+      "twin-stripe": "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe:c232855befa0b3d4373f32166979af326bee0fac@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c232855befa0b3d4373f32166979af326bee0fac@sha256:4e754ce1db87a5bb41c1bd0ff9ec6cc92678c056ecbee877ec7fc6c3e8c1d673",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c232855befa0b3d4373f32166979af326bee0fac@sha256:0a52d7b5edf3b5bb2308ea925625f360cd756d48f703e72a4e8bb60b717e65a2"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00309-4m5",
+      "arga-api": "arga-api-00679-j94"
+    },
+    "log_sha256s": {
+      "lab-final-stripe-reports-c232855b-twins-deploy.log": "b530868f92a0cdd40e7233caa2c87c93ac6652efa49e03cbcf279cd81f487a07",
+      "lab-final-stripe-reports-c232855b-runtime-deploy.log": "eee7a9f5ccc80f8a3967d0e0285e60060026f04216e5683f6c863393415a065c"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
   "limits": [
     "Global dashboard shell/filter composition differ from live Stripe; date presets, Clear and timezone picker missing",
     "PDF, scheduling, report email delivery, warehouse export, complete column catalog, permissions, broader analytics/AI remain open",
@@ -183,7 +207,19 @@
     "lab-stripe-reports-ci-watch-repro.log": "bd59e925476e987fb44e951f5b801bc010aa23aaf898f6a28d5f6320aeacf7f2",
     "lab-stripe-reports-ci-watch-regressions.log": "72c24eb6c7f3e1986f28dbb6f3c9568b2877dc8eac51c81d7770b4b8898dddf1",
     "lab-stripe-reports-ci-head-a82655dc.json": "d244f96066590a269d5bbcc924a8c63b9c493a9685c943d3c79cf298cf3f8a1f",
-    "lab-stripe-reports-ci-log-a82655dc.log": "438bc481988ee28d2177ce2330349abc3ccaf8717c867c7591d23e1428d23aa6"
+    "lab-stripe-reports-ci-log-a82655dc.log": "438bc481988ee28d2177ce2330349abc3ccaf8717c867c7591d23e1428d23aa6",
+    "lab-stripe-reports-premerge-final.json": "8e08d4adb471f3bd7c95e47316569d9d28874e18175affbb24c7bbb5c4d4b4d4",
+    "lab-stripe-reports-ci-log-eb920a4f.log": "6e6d409e4a13a3ab46ebb9e5fb2c8348bef9568670beb392399c3e8225610af2",
+    "lab-final-stripe-reports-c232855b/native-result.json": "ec9b692df1b931971e5bc6db87dae3fd1f565d55712159c6594d6f526d6ee7b3",
+    "lab-final-stripe-reports-c232855b/browser-pending.json": "0f68dc47f4eacb818bb645f3bd037427b5bb69b16dfb6fb7f8de78ffe4fa0e66",
+    "lab-final-stripe-reports-c232855b/image-comparison.json": "a901fa26c1446f0ea4da8fadf1f1d706e9069dedb69f6aa8134decbccb4c6211",
+    "lab-final-stripe-reports-c232855b/runtime-image-evidence.json": "531e018ddb46221698d135381e86b660612b81bfb4efe514a4fbb4391a2e3747",
+    "lab-final-stripe-reports-c232855b/baseline-state.json": "85b3f44772e8df0d9ed858dc4a6bead2aed4286c41252a46ad569ca11c76fe69",
+    "lab-final-stripe-reports-c232855b/final-state.json": "85b3f44772e8df0d9ed858dc4a6bead2aed4286c41252a46ad569ca11c76fe69",
+    "lab-final-stripe-reports-c232855b/cleanup.json": "2cb56ee64cb0c75bc9292643fb40f6bda2e7b31617c035c0e0b274a0e2fbd0c1",
+    "lab-final-stripe-reports-c232855b/operator-api-trace.json": "2f6393b4996357a96cac88f6365151f08ce6c5ad0bf87065cd0523678cc572fd",
+    "lab-final-stripe-reports-c232855b/summary-csv.json": "dd03d7ae2bdc38759e4e623a731955e51ec970f146072b8e9d00f5dac6471e76",
+    "lab-final-stripe-reports-c232855b/refund-csv.json": "cdd5090e4be87e8d69e0327d89230710dfd084c955aa1ea422812bf20ea866ae"
   },
   "preserved_ci_attempts": [
     {
@@ -215,5 +251,108 @@
       "lint_and_test_run": 36288387996,
       "all_complete": true
     }
-  ]
+  ],
+  "merge_commit": "c232855befa0b3d4373f32166979af326bee0fac",
+  "serving_runtime": {
+    "revision": "c232855befa0b3d4373f32166979af326bee0fac",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00309-4m5",
+        "observed_at": "2026-09-27T02:38:04.344422+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c232855befa0b3d4373f32166979af326bee0fac",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00309-4m5"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00309-4m5",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:4e754ce1db87a5bb41c1bd0ff9ec6cc92678c056ecbee877ec7fc6c3e8c1d673",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00679-j94",
+        "observed_at": "2026-09-27T02:42:24.392213+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:c232855befa0b3d4373f32166979af326bee0fac",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00679-j94"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00679-j94",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:0a52d7b5edf3b5bb2308ea925625f360cd756d48f703e72a4e8bb60b717e65a2",
+          "sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "eee7a9f5ccc80f8a3967d0e0285e60060026f04216e5683f6c863393415a065c",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "run_id": "f9c06284-10e5-4d02-ab49-d12f0c7ea604",
+    "native": {
+      "browser_exercised": false,
+      "browser_requests_read_only": null,
+      "complete_native_state_unchanged": true,
+      "expected_summary": [
+        "0.00",
+        "90.00",
+        "-50.00",
+        "40.00"
+      ],
+      "limits": [
+        "Current native charge fees zero; nonzero fees covered by local ledgerfixtures",
+        "CSV browser evidence separate",
+        "No full Stripe financial/AI/admin/touch claim"
+      ],
+      "passed": true
+    },
+    "native_html": "Successful summary and refund breakdown responses contain the expected labels and amounts; no browser rendering claim",
+    "actual_container_images_matched": 3,
+    "teardown_confirmed": true,
+    "browser": "pending: Mac locked; actual CSV downloads verified locally only"
+  }
 }
