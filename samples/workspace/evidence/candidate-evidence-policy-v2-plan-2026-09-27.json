@@ -1,0 +1,31 @@
+{
+  "schema": "arga.lab.candidate-validation-plan/1",
+  "date": "2026-09-27",
+  "candidate_policy_version": "workspace-evidence-v2",
+  "candidate_revision": "1499a3d7d29f1e5a02b36068601bf7a8b9e02f89",
+  "model": "claude-sonnet-5",
+  "purpose": "Validate a changed provider-neutral source-reconciliation policy after the prior WKS-03 completed business failure; not another attempt of the unchanged candidate",
+  "planned_tasks": [
+    "WKS-03",
+    "WKS-01",
+    "WKS-02",
+    "WKS-04",
+    "WKS-05"
+  ],
+  "attempts_per_task": 1,
+  "infrastructure_retry_limit_per_task": 1,
+  "preserve_all_outcomes": true,
+  "previous_failure_report": "wks-03-final-deployment-retry1-2026-09-24.json",
+  "prior_failure_unchanged": true,
+  "task_contracts_unchanged": true,
+  "api_computer_use_and_mixed_allowed": true,
+  "model_comparison": false,
+  "no_claim_of_full_frontend_fidelity": true,
+  "task_sha256": {
+    "WKS-01": "fc46b2dfe50b87c97eedbd1d2f65c1b05682f5fa6ab64e18d2070de8e1d71204",
+    "WKS-02": "4702e490381dc462dc67a1d110c2fb27150b8a2e7425daf68fadcd980e1eca3f",
+    "WKS-03": "0902790f948c949a9b9f096d3667daf5783623792b449fb1146bb969ec33b8c6",
+    "WKS-04": "e961a5d530788a42b1d918fa8560e268a801e7296dcaf9d00a960ea411bb75fd",
+    "WKS-05": "a70212a046f5c10022e0fe9d8737ba9f3206d4f2536b39f4bb9c579e544a61e0"
+  }
+}

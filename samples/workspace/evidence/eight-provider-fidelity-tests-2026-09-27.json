@@ -1,0 +1,451 @@
+{
+  "schema": "arga.lab.fidelity-tests/1",
+  "date": "2026-09-27",
+  "status": "local_ci_deployment_and_hosted_scope_verified",
+  "source_base": "d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+  "source_revision": "d87389a1faf8dbac1e39c5ff360d0c6beb808847",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1207",
+  "matrix": {
+    "mode": "full",
+    "layers": [
+      "endpoints",
+      "fuzz",
+      "invariants",
+      "variants"
+    ],
+    "fail_on": "any",
+    "total": 17509,
+    "failed": 0,
+    "summaries": [
+      {
+        "checks": 9669,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 9669,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "github"
+      },
+      {
+        "checks": 772,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 772,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "gmail"
+      },
+      {
+        "checks": 364,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 364,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "google_calendar"
+      },
+      {
+        "checks": 114,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 114,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "google_docs"
+      },
+      {
+        "checks": 164,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 164,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "google_sheets"
+      },
+      {
+        "checks": 44,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 44,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "linear"
+      },
+      {
+        "checks": 1116,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 1116,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "notion"
+      },
+      {
+        "checks": 5266,
+        "high": 0,
+        "low": 0,
+        "medium": 0,
+        "passed": 5266,
+        "skipped_reason": "",
+        "status": "checked",
+        "twin": "stripe"
+      }
+    ],
+    "before": {
+      "findings": 115,
+      "severity": "medium",
+      "cause": "22 GitHub native 201/202/204 success responses absent from twin OpenAPI declarations",
+      "runtime_response_behavior_changed": false,
+      "original_result_preserved": true
+    }
+  },
+  "official_reference": {
+    "repository": "https://github.com/github/rest-api-description",
+    "revision": "c6721f32a17a71397ae46be21be90d7f1a173b6e",
+    "file": "descriptions/api.github.com/api.github.com.json",
+    "sha256": "c3e138597750d638b718f0da91228416893eea56d497fda391ab10b2e84b08a1",
+    "operation_statuses": [
+      {
+        "method": "DELETE",
+        "path": "/app/installations/{installation_id}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/apps/apps#delete-an-installation-for-the-authenticated-app"
+      },
+      {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/repos/repos#delete-a-repository"
+      },
+      {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/actions/secrets#delete-a-repository-secret"
+      },
+      {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/actions/variables#delete-a-repository-variable"
+      },
+      {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/git/refs/{ref}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/git/refs#delete-a-reference"
+      },
+      {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/subscription",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/activity/watching#delete-a-repository-subscription"
+      },
+      {
+        "method": "GET",
+        "path": "/orgs/{org}/members/{username}",
+        "status": "204",
+        "description": "Response if requester is an organization member and user is a member",
+        "docs": "https://docs.github.com/rest/orgs/members#check-organization-membership-for-a-user"
+      },
+      {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/actions/variables#update-a-repository-variable"
+      },
+      {
+        "method": "POST",
+        "path": "/app/installations/{installation_id}/access_tokens",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/apps/apps#create-an-installation-access-token-for-an-app"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-runs",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/checks/runs#create-a-check-run"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-suites",
+        "status": "201",
+        "description": "Response when the suite was created",
+        "docs": "https://docs.github.com/rest/checks/suites#create-a-check-suite"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/forks",
+        "status": "202",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/repos/forks#create-a-fork"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/commits",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/git/commits#create-a-commit"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/trees",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/git/trees#create-a-tree"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/repos/webhooks#create-a-repository-webhook"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/issues/issues#create-an-issue"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/pulls/pulls#create-a-pull-request"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/pulls/review-requests#request-reviewers-for-a-pull-request"
+      },
+      {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/statuses/{sha}",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/commits/statuses#create-a-commit-status"
+      },
+      {
+        "method": "PUT",
+        "path": "/app/installations/{installation_id}/suspended",
+        "status": "204",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/apps/apps#suspend-an-app-installation"
+      },
+      {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/contents/{path}",
+        "status": "201",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
+      },
+      {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/update-branch",
+        "status": "202",
+        "description": "Response",
+        "docs": "https://docs.github.com/rest/pulls/pulls#update-a-pull-request-branch"
+      }
+    ]
+  },
+  "regressions": {
+    "eight_provider_modules": 156,
+    "passed": 3207,
+    "failed": 0,
+    "openapi_passed": 142,
+    "openapi_optional_dependency_skips": 4
+  },
+  "additional_validators": {
+    "github": {
+      "passed": 38,
+      "scope_checks": 7,
+      "reference_limit": "Hand-maintained handler-derived catalogue, not all official GitHub endpoints"
+    },
+    "google_calendar": {
+      "passed_endpoints": 38,
+      "reference": "Checked-in Discovery document"
+    },
+    "notion": {
+      "passed_endpoints": 49,
+      "reference_limit": "Validator endpoint catalogue"
+    },
+    "stripe": {
+      "passed_endpoints": 55,
+      "official_spec_endpoints": 559,
+      "unexercised_official_endpoints": 504,
+      "optional_missing_fields": 478,
+      "reference_limit": "Official schema subset; not complete Stripe coverage"
+    }
+  },
+  "artifact_sha256s": {
+    "lab-eight-provider-fidelity-2026-09-27/twin-contract-matrix-20260927-115506.json": "8f983439bc348810070a67a784a9a5762188786c6f83d00aab7eccab4271bd58",
+    "lab-eight-provider-fidelity-fixed-2026-09-27/twin-contract-matrix-20260927-115918.json": "075015c335a88e58a1779426b31cc6dd7fc15c56dd85ccf3ed9e0d2e21eb4cbb",
+    "lab-eight-provider-regressions-2026-09-27.log": "c7e11d06da6c881deb6c8b9b094c5191800969ea9aa86e96eac757ad138cfeff",
+    "lab-eight-provider-regressions-2026-09-27.xml": "a7c3b6f6e7fd109e6a7b6e2927f95e739c9a7cd00615cfd4642ea91dd2f8920e",
+    "lab-eight-provider-regressions-2026-09-27-files.json": "bc55cbec8255cace4f36020754bbeb064813e98414dc9ab23fb9b4d9a01b3f07",
+    "lab-eight-provider-openapi-regressions.log": "29d2e9fd12b07b4403b4cdbf60d01f6e81cd88f0b19338b22da06aba46c4ee72",
+    "lab-provider-github-fidelity-2026-09-27.log": "f65aeb25cafca37531e68db22e097cd3984f52974a75c97e96a033e112abfb4b",
+    "lab-provider-google_calendar-fidelity-2026-09-27.log": "dbc073326a777f0f538fc01cb78f0b7a72bd3e68ef2cfc6cb49b43bb3edf30af",
+    "lab-provider-notion-fidelity-2026-09-27.log": "25e1b986a9fad17c5a99bb1504ee62b4f756730a3b00bcc131ad1592968d493c",
+    "lab-provider-stripe-fidelity-2026-09-27.log": "f2032fc93faf47f8a51570e26fbe884f7feb0017de57aa5e059d2f8c30749e04",
+    "lab-github-contract-ci-complete.log": "8515f434bb62eb0b4f809d92e226981b5dd54cdb10a97066c56eff1de860880f"
+  },
+  "limits": [
+    "Generated contract checks exercise selected available twin routes and invariants. Passing these checks does not prove every real-provider API behavior.",
+    "The four supplemental validators have different scopes; Stripe leaves 504 official endpoints unexercised, and the GitHub catalogue is handler-derived.",
+    "This report does not close the eight full frontend/AI/collaboration audits, exhaustive desktop/mobile visual comparison, physical-touch checks or final ZIP gates."
+  ],
+  "merge_revision": "f7d01fef33a63d5cad3e290b878e33d1b158124d",
+  "ci": {
+    "exact_head": "d87389a1faf8dbac1e39c5ff360d0c6beb808847",
+    "complete_checks": 33,
+    "fresh_merge_state": "CLEAN",
+    "all_complete_success_or_explicit_skip": true,
+    "workflows": [
+      {
+        "conclusion": "success",
+        "databaseId": 36342770920,
+        "name": "Lint & Test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 36342770724,
+        "name": "Twin Fidelity",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 36342770695,
+        "name": "Docker Build",
+        "status": "completed"
+      }
+    ]
+  },
+  "deployment": {
+    "revision": "f7d01fef33a63d5cad3e290b878e33d1b158124d",
+    "runtime_workflow": 36343238345,
+    "twins_workflow": 36343238293,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f7d01fef33a63d5cad3e290b878e33d1b158124d@sha256:7448e958a24a81ed27d4bdba92ab33fd4b10d75260b6ac99205734ef932e1c36",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f7d01fef33a63d5cad3e290b878e33d1b158124d@sha256:1f6581ca63f0195eeed2aa40584eae275515c50f716b7eaec345dc95d0e616e8",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f7d01fef33a63d5cad3e290b878e33d1b158124d@sha256:47382db7f70df1155d6d34110c2e1ec32e0efa878660b2c978c737bda3d076d1"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00313-r58",
+      "arga-api": "arga-api-00683-gzj"
+    },
+    "log_sha256s": {
+      "lab-final-github-response-contracts-f7d01fef-twins-deploy.log": "b1a2b0509d8ed583e83bd2ca7c71d194d775402e6530b718e7d2428ef495ba4e",
+      "lab-final-github-response-contracts-f7d01fef-runtime-deploy.log": "37e1d0e2cf8e8456fc6e6c304fbea6fdf1be2ca9011a916a020b71d148a81526"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "serving_runtime": {
+    "revision": "f7d01fef33a63d5cad3e290b878e33d1b158124d",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00313-r58",
+        "observed_at": "2026-09-27T19:09:28.439757+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f7d01fef33a63d5cad3e290b878e33d1b158124d",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00313-r58"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00313-r58",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:1f6581ca63f0195eeed2aa40584eae275515c50f716b7eaec345dc95d0e616e8",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00683-gzj",
+        "observed_at": "2026-09-27T19:13:38.960817+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:f7d01fef33a63d5cad3e290b878e33d1b158124d",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:ce533392481585cc0da30c3c119262c9a570b565bbde4a9f8c5395368db41dc8",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:ce533392481585cc0da30c3c119262c9a570b565bbde4a9f8c5395368db41dc8"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00683-gzj"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00683-gzj",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:47382db7f70df1155d6d34110c2e1ec32e0efa878660b2c978c737bda3d076d1",
+          "sha256:ce533392481585cc0da30c3c119262c9a570b565bbde4a9f8c5395368db41dc8"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "37e1d0e2cf8e8456fc6e6c304fbea6fdf1be2ca9011a916a020b71d148a81526",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted_verification": {
+    "report": "eight-provider-hosted-fidelity-2026-09-27.json",
+    "github_published_revision": "f7d01fef33a63d5cad3e290b878e33d1b158124d",
+    "native_contract_checks": 24,
+    "all_eight_states_unchanged": true,
+    "all_ten_images_matched": true,
+    "teardown_confirmed": true
+  }
+}

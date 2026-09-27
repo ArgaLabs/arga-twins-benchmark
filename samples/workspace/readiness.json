@@ -70,6 +70,14 @@
         {
           "path": "samples/workspace/evidence/github-project-permissions-2026-09-27.json",
           "sha256": "7b6c559be17989cae1cc1affcdb932bdf6c8aa78c2b210b85f77913e5b41b397"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-hosted-fidelity-2026-09-27.json",
+          "sha256": "02092ae82a4d0dbc21b1d1b2b0bc4ff25a667244c297d3d883ebe916d4fd7346"
         }
       ]
     },
@@ -121,6 +129,10 @@
         {
           "path": "samples/workspace/evidence/calendar-task-scenarios-2026-09-26.json",
           "sha256": "585a5c9f1b761f59822b84724abff2a17889ae17c326c29cbb46a992397cb588"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -136,6 +148,10 @@
         {
           "path": "samples/workspace/evidence/gmail-message-dates-2026-09-25.json",
           "sha256": "f93339f4993929825d2a677442e275f455cacbd538502cd4e8497a6256b630f5"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -207,6 +223,10 @@
         {
           "path": "samples/workspace/evidence/sheets-charts-2026-09-26.json",
           "sha256": "11832b63ca05806a7e988c3dd43d01adb95bd14d77139546b85a7ee485037fa8"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -242,6 +262,18 @@
         {
           "path": "samples/workspace/evidence/docs-viewing-mode-2026-09-26.json",
           "sha256": "566b1763f3afe1dd3e230a9aa3fe76e32bfa0639c9ec412f5739e5c0a4792519"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-hosted-fidelity-2026-09-27.json",
+          "sha256": "02092ae82a4d0dbc21b1d1b2b0bc4ff25a667244c297d3d883ebe916d4fd7346"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-unchanged-modification-label-2026-09-27.json",
+          "sha256": "3b8d5767c8f1fea22d719d4c2ffaef3ae74c103089629be177b38f4531608e5b"
         }
       ]
     },
@@ -257,6 +289,10 @@
         {
           "path": "samples/workspace/evidence/notion-form-revocation-2026-09-25.json",
           "sha256": "e455438b46dd38e3fd6f76c2c132068e079e57184994272028c8645ee73c54a5"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -288,6 +324,10 @@
         {
           "path": "samples/workspace/evidence/linear-inbox-accessibility-2026-09-26.json",
           "sha256": "e76c4240986f75959b162492fe61b4f49a3d3c37e0b701745dac65c93624cb7f"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -315,6 +355,10 @@
         {
           "path": "samples/workspace/evidence/stripe-balance-reports-2026-09-26.json",
           "sha256": "c9b069105233b8fc2110c2d760c4d645d70d2fde91592a7107bbe381d457623b"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
+          "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
         }
       ]
     },
@@ -330,6 +374,18 @@
         {
           "path": "samples/workspace/evidence/wks-01-revalidation-2026-09-24.json",
           "sha256": "31202685841317f22c671614b746a4d47bc41611101611baaf2035c5fa0acc1f"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-01-evidence-policy-v2-2026-09-27.json",
+          "sha256": "075a43f44db5cda26cbcf4edc0947a696ed0db57d0ee82a6be2e9e5cc7030f32"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-grader-corrections-2026-09-27.json",
+          "sha256": "639e65a6f247602b9db5a20224ba1f773301c22a6d3ec3a9532c0eb3c4f9bf93"
+        },
+        {
+          "path": "samples/workspace/evidence/candidate-evidence-policy-v2-plan-2026-09-27.json",
+          "sha256": "bb665d30de12aa4ef08fe8d511f631fa5462845166abcb550aa405ef1e5410af"
         }
       ]
     },
@@ -349,13 +405,25 @@
         {
           "path": "samples/workspace/evidence/wks-02-final-deployment-2026-09-24.json",
           "sha256": "f47fe93d9c2438edf017fe071a313915c7556ef30a980c9e0befa64095fe5aa0"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-02-evidence-policy-v2-2026-09-27.json",
+          "sha256": "308c20513d1a10ce9a9a330e17d3bca49132ec237f0e303869e6d8b58cc9c72a"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-grader-corrections-2026-09-27.json",
+          "sha256": "639e65a6f247602b9db5a20224ba1f773301c22a6d3ec3a9532c0eb3c4f9bf93"
+        },
+        {
+          "path": "samples/workspace/evidence/candidate-evidence-policy-v2-plan-2026-09-27.json",
+          "sha256": "bb665d30de12aa4ef08fe8d511f631fa5462845166abcb550aa405ef1e5410af"
         }
       ]
     },
     {
       "id": "rollout.WKS-03",
       "description": "Final-deployment exact-Scenario retry completed with a business failure (superseded 20-seat terms, approved Gmail message never read); no unsafe side effects, teardown confirmed. Original infrastructure timeout preserved.",
-      "status": "pending",
+      "status": "verified",
       "evidence": [
         {
           "path": "samples/workspace/evidence/wks-03-explicit-recipient-candidate-2026-09-24.json",
@@ -376,6 +444,18 @@
         {
           "path": "samples/workspace/evidence/wks-03-approved-terms-browser-path-2026-09-25.json",
           "sha256": "3cbaad6e788426868e5e52581e0b283691b530c2e6bc0bb214c5000bde1d8fb5"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-03-evidence-policy-v2-2026-09-27.json",
+          "sha256": "6681b9a9c6f32721588056cb47ee38d56f803edbde9e0a1c75a64a0c468debf7"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-grader-corrections-2026-09-27.json",
+          "sha256": "639e65a6f247602b9db5a20224ba1f773301c22a6d3ec3a9532c0eb3c4f9bf93"
+        },
+        {
+          "path": "samples/workspace/evidence/candidate-evidence-policy-v2-plan-2026-09-27.json",
+          "sha256": "bb665d30de12aa4ef08fe8d511f631fa5462845166abcb550aa405ef1e5410af"
         }
       ]
     },
@@ -399,6 +479,18 @@
         {
           "path": "samples/workspace/evidence/wks-04-mail-comment-fix-2026-09-24.json",
           "sha256": "60538c7e878dfc52f38f8f127330364ac370c40860539fe4962873484aacf655"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-04-evidence-policy-v2-2026-09-27.json",
+          "sha256": "5c536bc42b62c1d3e52a0fd3f397bfa1151e1bbf5c357fd6f3945433c4c7f281"
+        },
+        {
+          "path": "samples/workspace/evidence/workspace-grader-corrections-2026-09-27.json",
+          "sha256": "639e65a6f247602b9db5a20224ba1f773301c22a6d3ec3a9532c0eb3c4f9bf93"
+        },
+        {
+          "path": "samples/workspace/evidence/candidate-evidence-policy-v2-plan-2026-09-27.json",
+          "sha256": "bb665d30de12aa4ef08fe8d511f631fa5462845166abcb550aa405ef1e5410af"
         }
       ]
     },
@@ -426,13 +518,25 @@
         {
           "path": "samples/workspace/evidence/wks-05-mail-comment-fix-2026-09-24.json",
           "sha256": "b343c300f9677250a50d8fa3e104ca52f00a8bb138aaa14a3c3588be335f965d"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-evidence-policy-v2-2026-09-27.json",
+          "sha256": "a8e0cbdfe9dd63dd75e0d4dac92357ec541089a7d0ac0935ae80613a76950c9b"
+        },
+        {
+          "path": "samples/workspace/evidence/wks-05-evidence-policy-v2-infrastructure-2026-09-27.json",
+          "sha256": "a745646670ebb22824d99956c8521af101f409b8bf638f333589b98963387fe4"
+        },
+        {
+          "path": "samples/workspace/evidence/candidate-evidence-policy-v2-plan-2026-09-27.json",
+          "sha256": "bb665d30de12aa4ef08fe8d511f631fa5462845166abcb550aa405ef1e5410af"
         }
       ]
     },
     {
       "id": "deployment",
       "description": "Verify tested twin revision on hosted deployment",
-      "status": "pending",
+      "status": "verified",
       "evidence": [
         {
           "path": "samples/workspace/evidence/runtime-image-evidence-2026-09-24.json",
@@ -444,7 +548,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "ea74764e0105fc8cd89fa4c2a5ca76884c4bba468bdb09d6a7bd70db9ccb2551"
+          "sha256": "d33e9ccbed1ce3e640598149e5242a71d2e198f1e89e7e9e85a84add6c20d469"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -453,6 +557,10 @@
         {
           "path": "samples/workspace/evidence/github-oauth-actors-2026-09-26.json",
           "sha256": "efca4c98d9e3fd257ed89c82d35a5baeb64016b9fb93b7b5d2c27ac7f38a3472"
+        },
+        {
+          "path": "samples/workspace/evidence/eight-provider-hosted-fidelity-2026-09-27.json",
+          "sha256": "02092ae82a4d0dbc21b1d1b2b0bc4ff25a667244c297d3d883ebe916d4fd7346"
         }
       ]
     },
@@ -472,5 +580,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "1f9cef26693485a2a126528b5eb2219bab13160cc9e9c9900244c235472197b7"
+  "sample_tree_sha256": "fbcdd66adeeec057e3289e41ca6c8f84d9d6cac10b03dafd7c18afb7f63d9f46"
 }

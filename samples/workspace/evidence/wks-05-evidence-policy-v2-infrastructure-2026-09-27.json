@@ -1,0 +1,143 @@
+{
+  "schema": "arga.lab.candidate-infrastructure-attempt/1",
+  "date": "2026-09-27",
+  "task": "WKS-05",
+  "outcome": "infrastructure_invalid",
+  "attempt_number": 1,
+  "candidate_policy_version": "workspace-evidence-v2",
+  "candidate_revision": "1499a3d7d29f1e5a02b36068601bf7a8b9e02f89",
+  "candidate_model": "claude-sonnet-5",
+  "system_prompt_sha256": "8cb6e8639fb65e9f4564a8384d3ea57099ba9e7c6cd4932d3c9e46785d22be40",
+  "browser_calls": 12,
+  "completed_browser_calls": 11,
+  "tool_calls": 54,
+  "reason": "Browser driver did not answer before its deadline",
+  "cause": "The operator relay missed request 0012 while conversation context was compacted. Its response arrived after the 120-second deadline; the candidate was therefore infrastructure-incomplete and no final report was submitted.",
+  "failed_request": "0012",
+  "late_response_retained": true,
+  "native_verifier_outcome_not_scored": "infrastructure_invalid",
+  "artifact_sha256s": {
+    "browser-trace.json": "b67e932df9fa529638214664e5394f27ce82e99d7f7707dee4b8119b2f42e2d7",
+    "image-comparison.json": "de5bbd6c19c090ae4327a003f378cc4274d415d479f455935543109f7742db51",
+    "publication-catalog.json": "ea74764e0105fc8cd89fa4c2a5ca76884c4bba468bdb09d6a7bd70db9ccb2551",
+    "candidate.json": "2895bb39dff8dbd72f6b3093eaa39ea2146b18b6a30a6f4a5f1d8cb7919682ef",
+    "official-docs-trace.json": "a23456d133a780f0bffc089668f0005458e7feb4f528e2cdae38c934285b70f5",
+    "cleanup.json": "a1bd31b53b1a52a2c6f28bbafb0858c167f1528afff172875f14644f8d3a1489",
+    "runtime-image-evidence.json": "af4845d7218e7426d6f20c30b7d9baf78ca898dc7a02adab2e274fa0d7cfbdc5",
+    "worker-logs.json": "a7f14e59a785cc8776be1ea75452ee2f0ad1555f8d8369f1fcb6b1e2aab9de6e",
+    "baseline-state.json": "bbd97ac79275ea4ca2b800688f0f823cb509fb8336ef178e8935fd38b9616686",
+    "final-state.json": "904dd34abfda883ce80ff5d9b02a00ef7b6d2a82d732355b725991bed75f4adb",
+    "control.json": "2a21a94d12b24002949d6989c198ce22faab0313687abfe84e0d51a62f8987f8",
+    "invocation.json": "74f83d7f315755eae5fa31d60639bb9d443d18c9dbf59aca8d1b4fb01171f7a0",
+    "verifier.json": "62e439682396458e7f53ac896d62c52d0d72f971d31f2d7500d730a0d58208c9",
+    "provider-trace.json": "0f1a9c91b161b94b2761e797e15989e1d1960ba76ce9405e3f4fd72e03e9425e"
+  },
+  "candidate_artifact_sha256s": {
+    "adapter.json": "fcc8fb76f90ad98818c2828ccb232f50ef41f8633fb289d188e777f6ad60337d",
+    "model-invocation.json": "0c14cf09e07bbf9dd148166cc5c16745fcefd0d3b7566d474e8bedca385f6413"
+  },
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "runtime_images": {
+    "status": "complete",
+    "observed_at": "2026-09-27T19:05:46.891584+00:00",
+    "publication_sha256": "ea74764e0105fc8cd89fa4c2a5ca76884c4bba468bdb09d6a7bd70db9ccb2551",
+    "containers": {
+      "github": {
+        "published_revision": "d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+        "image_id": "sha256:4a1d69bab7a5ea18c11c44f4f349e9202d30d14eab6bfaeb8667412c2249cc71",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:4a1d69bab7a5ea18c11c44f4f349e9202d30d14eab6bfaeb8667412c2249cc71",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:63efd58fcb76d43a13b55c2854f39744116c22da0d02b875fcd716c596472605"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:4a1d69bab7a5ea18c11c44f4f349e9202d30d14eab6bfaeb8667412c2249cc71"
+        ],
+        "matched": true
+      },
+      "gmail": {
+        "published_revision": "31ce23293da893a6882b51b318cbcffed1064af4",
+        "image_id": "sha256:35d65b7d5c085b577a7e4322ec5e5b2f1e34e854da6000cb0aba8a993b6b0dd2",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:35d65b7d5c085b577a7e4322ec5e5b2f1e34e854da6000cb0aba8a993b6b0dd2",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:89d45d36ae201f0e1f98206e255e59ee27e641119e6c974c694ce31f81ac9b6f"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:35d65b7d5c085b577a7e4322ec5e5b2f1e34e854da6000cb0aba8a993b6b0dd2"
+        ],
+        "matched": true
+      },
+      "google_calendar": {
+        "published_revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+        "image_id": "sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:16f12ce95a7ca7f35916ccd6830388a5035ee5cd2a8982c723dcc51251dfbb2a",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+        ],
+        "matched": true
+      },
+      "google_docs": {
+        "published_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+        "image_id": "sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:e7848993a27ee2bf23b42d721ea46ed7756da0bcd957865945440ac2a4b51cd3"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36"
+        ],
+        "matched": true
+      },
+      "google_sheets": {
+        "published_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+        "image_id": "sha256:5c3e842813138450902023c055ee057daeed18c3e502a11dcf1347d6d07f99f3",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:5c3e842813138450902023c055ee057daeed18c3e502a11dcf1347d6d07f99f3",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:a145723d7f4419fefb3c55edba0949b38742cc35b1fc62f33e119b303722d361"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:5c3e842813138450902023c055ee057daeed18c3e502a11dcf1347d6d07f99f3"
+        ],
+        "matched": true
+      },
+      "app": {
+        "matched": true,
+        "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-17723d2c26e34da5b431d23942499ac7",
+        "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-17723d2c26e34da5b431d23942499ac7@sha256:2e3a0e1f129cd18ab49666d7939ee2c1eb32fb6a4737ed4eff17fe5138f7c6b8",
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:2e3a0e1f129cd18ab49666d7939ee2c1eb32fb6a4737ed4eff17fe5138f7c6b8"
+        ],
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:2e3a0e1f129cd18ab49666d7939ee2c1eb32fb6a4737ed4eff17fe5138f7c6b8"
+        ],
+        "builder_log_sha256": "537f02f817f3ab249892e7d025c1790a41d6f92375944e2b1f33227fa8c0fe13"
+      },
+      "twin-gateway": {
+        "matched": true,
+        "observed_repo_digests": [
+          "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        ],
+        "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+        "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+      }
+    }
+  },
+  "retry": {
+    "permitted": true,
+    "maximum": 1,
+    "candidate_policy_unchanged": true,
+    "task_seed_contract_unchanged": true,
+    "model": "claude-sonnet-5",
+    "tool_limit": 350,
+    "timeout_seconds": 2100,
+    "browser_response_deadline_seconds": 120,
+    "validation_plan": "candidate-evidence-policy-v2-plan-2026-09-27.json"
+  },
+  "screenshots_retained": false
+}

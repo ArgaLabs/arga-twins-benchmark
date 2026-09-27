@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 328,
+      "files_scanned": 339,
       "image_files": 0,
       "scanned_at": "2026-09-27"
     },
@@ -116,7 +116,7 @@
       "scope": "Package and readiness regression checks; no ZIP created"
     }
   },
-  "limits": "Earlier passing candidate episodes, failed attempts and retry provenance remain preserved in their reports. WKS-03 exhausted its approved infrastructure retry with a business failure caused by unread approved terms; do not retry solely to obtain a pass. WKS-04 and WKS-05 pass recorded revalidation after #1150. Individual frontend reports distinguish local, CI, deployment, native, browser and image verification; no bounded feature result closes an exhaustive provider gate. All eight full frontend/AI/collaboration audits, physical mobile/touch coverage, final-deployment task revalidation and final package gates remain open. The selected hosted Docs, GitHub and Stripe browser gates pass, while full provider and candidate release gates remain open. No final ZIP is authorized by this preflight.",
+  "limits": "Full eight-provider frontend, AI/collaboration, exhaustive visual and physical mobile/touch audits remain open. A passing bounded feature or automated contract result does not close those gates. Candidate trials are functional checks, not a model comparison or reliability estimate. No final ZIP is authorized by this preflight.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,
@@ -125,10 +125,20 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 hosted native/browser/image gates pass within their recorded scope. GitHub Actions recovery #1204 and repository visibility #1205 pass exact-head CI, both deployments, serving image checks, fresh desktop/390px browser/native state checks and all three current-run container-image matches, with teardown confirmed. Failed operator fixture/submission attempts are preserved. PR #1206 corrects the separately reproduced Projects write-grant and linked-content defects; 81 final affected tests and exact-head CI pass, with 6,825 twin and 2,140 root tests. All checks completed and a fresh CLEAN check preceded merge d1da8f17. Both deployments, API/proxy serving images, hosted native and Chrome desktop/390px checks pass. Complete native state matches one allowed status write plus explicit installation suspension; denied writes add no mutation. All three run images match and teardown is confirmed. The most recent all-eight ten-container checkpoint remains c232855b. Full provider and final sample gates remain open.",
+  "latest_browser_gate_status": "September 27: WKS-03 passes fresh preregistered workspace-evidence-v2 validation with unchanged task/seed/contract. WKS-01/02/04 pass saved-artifact rescoring after three documented grader corrections. The strict eight-provider matrix passes 17,509 checks and 3,207 selected provider regressions pass. WKS-05 passes the single permitted infrastructure retry with six Chrome actions. All 24 hosted checks, ten container images, two serving services and exact eight-provider native-state preservation pass, with teardown confirmed; earlier failed and infrastructure-invalid attempts remain preserved.",
   "latest_sample_package_tests": {
     "passed": 58,
     "observed_on": "2026-09-27",
     "log_sha256": "d43ae3a5c396db2e26dd624a8eb122426c9ba2384e87146f2501360dd360b961"
+  },
+  "latest_package_validation": {
+    "date": "2026-09-27",
+    "passed": 69,
+    "deselected": 147,
+    "failed": 0,
+    "scope": "Current sample/protocol and package/readiness regressions after evidence refresh",
+    "log_sha256": "3026dcb902d58117c3a7b0c8edc909509e434e3ca85a250950fabc60cc515fab",
+    "release_gate_rejection_verified": true,
+    "zip_generated": false
   }
 }
