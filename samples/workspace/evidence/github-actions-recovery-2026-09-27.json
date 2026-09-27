@@ -1,0 +1,133 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-27",
+  "provider": "github",
+  "status": "merged_deployment_in_progress",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1204",
+  "source_head": "42c7568e691dd0ab9aa5b4505454ae5cb46aec0b",
+  "changes": [
+    "Actions browser failures return escaped HTML and original status with permitted current controls",
+    "Rejected dispatch preserves selected branch through enable, redirect, reload and retry",
+    "Native API error and state behavior remain unchanged; denied fallback renders no run/job/artifact data"
+  ],
+  "tests": {
+    "initial_recovery_cases": 8,
+    "initial_failed_before_implementation": 8,
+    "github_regressions_before_review_fix": 623,
+    "final_affected_tests": 149,
+    "make_fix": "pass",
+    "pyright": "0 errors",
+    "detector_findings": 0
+  },
+  "review": {
+    "initial": "fix: preserve branch through Enable rather than only displaying it",
+    "final": "ship at sole-fix scope; strict expected native state matches; no independent visual or touch approval",
+    "documenter": "README updated with bounded evidence and unresolved limits"
+  },
+  "browser": {
+    "initial": {
+      "status": "bounded_local_browser_pass",
+      "checks": [
+        "Desktop1465x806 stale two-tab dispatch returns HTML422 in Actions with Workflow is disabled, Enable workflow and selected feature-branch",
+        "390x844 stale-dispatch error fits viewport; Enable succeeds and reload returns active workflow",
+        "390x844 invalid token renders HTML401 Actions unavailable with Bad credentials and navigation, without run/job/artifact content"
+      ],
+      "native_state": "Final complete native state differs only by persisting the original workflow record in active state after disable/enable",
+      "screenshots_retained": false,
+      "physical_touch": false,
+      "viewport_reset": true,
+      "tabs_closed": true,
+      "limits": [
+        "No live-provider mutation/error reference or exhaustive permissions claim",
+        "Existing global repository home reveals private repo metadata to invalid tokens; observed when following View repositories, separate unresolved provider permission gap",
+        "Invalid branch and stale cancel/rerun variants covered by native HTTP regression tests; browser checking is bounded"
+      ]
+    },
+    "final": {
+      "passed": true,
+      "checks": [
+        "Chrome stale non-default feature-branch dispatch renders HTML422 inside Actions",
+        "Enable preserves feature-branch in redirect and expanded dispatch selector; desktop reload keeps it",
+        "390x844 selector retains feature-branch, submission creates exactly one queued feature-branch run and reload preserves outcome"
+      ],
+      "full_native_state_equals_exact_expected": true,
+      "only_changes": [
+        "Original workflow explicitly active after disable/enable",
+        "One feature-branch run at attempt1",
+        "ID counter increments once"
+      ],
+      "screenshots_retained": false,
+      "physical_touch": false,
+      "viewport_reset": true,
+      "tabs_closed": true
+    }
+  },
+  "ci": {
+    "status": "passed",
+    "head": "42c7568e691dd0ab9aa5b4505454ae5cb46aec0b",
+    "all_complete": true,
+    "check_count": 33,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6748,
+    "root_tests_passed": 2140,
+    "lint_and_test_run": 36292019073
+  },
+  "hosted": {
+    "status": "pending"
+  },
+  "source_sha256": {
+    "twins/github/actions_ui.py": "ed5f6a7c84b415727b479ebdc1d4b16269bf74af58b46a73e2be00e2fe158cb4",
+    "twins/github/README.md": "347922a2ab605d2ffd55749711a2f46fdbab150401dd9efb26dd3a8905e29173",
+    "twins/tests/test_github_actions_recovery.py": "3a463940ba47f4d749b50bdae89dcf0aa6c309253f53f31f634a84e5790b1065"
+  },
+  "artifacts_sha256": {
+    "lab-github-actions-recovery-deps.log": "f1fdc268a9bc4d18045f8052f37c5a9765897c11e319fa4684bd24a0a3c04f45",
+    "lab-github-actions-recovery-green.log": "a6914ab9ccbf2fc4aa3f17ca39327f5a8b79ab7b6ed9e98f4c7a422cb777aef5",
+    "lab-github-actions-recovery-review-deps.log": "512b5bf0e41cf3fb107d404721f3e2b933ec87b35768a91504e90ca84f499252",
+    "lab-github-actions-recovery-pyright-corrected.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-github-actions-recovery-review-red-r2.log": "9a6f8c7d10bc9fb61c3cabae77d953b97d9f5b19058c834441847769e46b22d4",
+    "lab-github-actions-recovery-local.log": "0a9d62d49cd020f10e60bcc81d9c6b115a11c6a74df896ae3fbed378b698a5cd",
+    "lab-github-actions-recovery-review-red.log": "8c950c1f1726f23be6de36318c99d556b71289c7efd3df4322149d02d8d05266",
+    "lab-github-actions-recovery-local-r2.log": "329235faae31d0ddb3637868d6f76f32567f2018a5c751292f444dfc0abd63be",
+    "lab-github-actions-recovery-pyright.log": "03a142c0f66f136453e2951fbec1c09c5300d05b8964b80bc475f215e4b8a4dd",
+    "lab-github-actions-recovery-review-make-fix.log": "2e39aaba65b5d8983dacfa256d770f8f8d5d4475a68e479f5798be1184fa0b9a",
+    "lab-github-actions-recovery-review-green.log": "73699fc461d18fdc33ee365a21d53f8fc8a1193f6914634705610a119a747da3",
+    "lab-github-actions-recovery-red.log": "03fb8cc0608f1045287d839a3a2e2535ab1063c8ed73b7e840bf1cdfc1cc4ba3",
+    "lab-github-actions-recovery-review-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-github-actions-recovery-regressions.log": "b44023ff2d925c2cfa58aefbf1ae4859fa85d8850f3d4f91352214e92a1e40c4",
+    "lab-github-actions-recovery-make-fix.log": "bc868f865a15f66aebd55fe8bed3acd4c1679f63502aeec9d6cdbf2759738d3c",
+    "lab-github-actions-recovery-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-github-actions-recovery-local/browser-trace.json": "fd8b89c76076f7f87ca1e83624e12bf2e8cc9aa78a35d4f67a28b9752ecac139",
+    "lab-github-actions-recovery-local/workspace.json": "9bb5c126c62bd56c7bb6ae55643b4b58e0d3a5b130b574722abd2658691ecff3",
+    "lab-github-actions-recovery-local/baseline.json": "7b47d94c6a846dd34b1f8365c416c5b3e4550e7fbf0afb1b6f9df499ffaf1746",
+    "lab-github-actions-recovery-local/browser-result.json": "f19402cc06d5a64dd973382e567b8a5f4d529e09c80e5b541df3d4570c778fb5",
+    "lab-github-actions-recovery-local/final.json": "6847ad331006dc741f271be7312e2c2da09e356d83a3838dd80b02a6db8ee074",
+    "lab-github-actions-recovery-local-r2/browser-trace.json": "9a891426b8d82375b1cf8e010ed544d79f6779ec33afcb8cd3e2b9e2412a9eb1",
+    "lab-github-actions-recovery-local-r2/workspace.json": "1acbb889aac7f61aa8a70b0d33778cd0eecb1df4425c49399a87d0fb7365fe76",
+    "lab-github-actions-recovery-local-r2/baseline.json": "386c38c26f11a060982c6f36325e8b84717aecbf0e476cab25df10e24cef8bcc",
+    "lab-github-actions-recovery-local-r2/branches.json": "51b1a47d65a7877cfb3a70e1710a501d9ec0d43c9c343fee3d10669c2608d2c4",
+    "lab-github-actions-recovery-local-r2/browser-result.json": "ac82692c260e173dc7e2030ef33b3aa68cc054c70d28a690edca9564010c7f6f",
+    "lab-github-actions-recovery-local-r2/final.json": "4f5b74f81dd1412b73fd16d756d314b00f5776907348241ddc87e4313520d2d3",
+    "lab-github-actions-recovery-local-r2/expected-state.json": "4f5b74f81dd1412b73fd16d756d314b00f5776907348241ddc87e4313520d2d3",
+    "lab-github-actions-recovery-premerge-final.json": "79842050bbec4c91c490bddfe379bf7939aaf32740883787009e77486e16cac8",
+    "lab-github-actions-recovery-merge.json": "79a65e4c5d5c4ed5de92f66156a0f3e0fd88e3d20e933a8b339119764760320c",
+    "lab-github-actions-recovery-ci-complete.log": "cb0e7160585c1375e658f4d4a856c12ebb74b441b4e6cc840a4f24e992ca05a7"
+  },
+  "preserved_operator_failures": [
+    "First reviewer-regression run referenced unavailable bs4; replaced with stdlib HTMLParser before genuine reproduction",
+    "First Pyright invocation inferred wrong interpreter; explicit shared interpreter completed with zero errors"
+  ],
+  "limits": [
+    "Global repository-home private-metadata leak remains a separate open defect",
+    "Hosted deployment/browser/image checks pending",
+    "Full provider/AI/collaboration, exhaustive desktop/mobile/keyboard/touch and sample release gates remain open"
+  ],
+  "merge_commit": "5be53e4587d0605844314b77038f78b00e6fea24",
+  "merged_at": "2026-09-27T03:45:21Z",
+  "deployment": {
+    "status": "in_progress",
+    "twins_workflow": 36292328540,
+    "runtime_workflow": 36292328453
+  }
+}

@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 323,
+      "files_scanned": 326,
       "image_files": 0,
       "scanned_at": "2026-09-27"
     },
@@ -125,10 +125,10 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Fresh hosted foreground Chrome now passes Docs failed-save/focus recovery, GitHub native confirmation Cancel/OK and Stripe actual CSV delivery; bounded 390px checks, exact native comparisons, all current-run container images and cleanup pass. The Docs verifier failure that omitted two expected native permission change-feed events is preserved and resolved by a strict full-state expected comparison.",
+  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Fresh hosted foreground Chrome now passes Docs failed-save/focus recovery, GitHub native confirmation Cancel/OK and Stripe actual CSV delivery; bounded 390px checks, exact native comparisons, all current-run container images and cleanup pass. The Docs verifier failure that omitted two expected native permission change-feed events is preserved and resolved by a strict full-state expected comparison. Hosted Actions lifecycle passes strict state checks; its rejection presentation failed and PR #1204 supplies the fix. PR #1204 exact-head CI passes and production deployment is running, with fresh hosted recovery checks pending.",
   "latest_sample_package_tests": {
     "passed": 58,
     "observed_on": "2026-09-27",
-    "log_sha256": "cc924c394b219d2568b4a58d2cfa2259ff11cbc81a87d06a028a92ff17b6642a"
+    "log_sha256": "bcd1fffec89d5c81f8aa4f3c00d5adfe7c7069c8ce45ce8c6f0dfc1b6d91dbe4"
   }
 }

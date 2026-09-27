@@ -37,11 +37,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-actions-access-2026-09-26.json",
-          "sha256": "4c56ac6ca26c77280d59c3d1103e4e16c77a86109ea81162e3301bb3bf08c2c6"
+          "sha256": "768b461de39a5ae78963caf00e8e86af0d0b11a85b7d615a37787e8d257d381a"
         },
         {
           "path": "samples/workspace/evidence/github-actions-controls-2026-09-26.json",
-          "sha256": "1eefdd932632506226e7799a785bd74dd74b2c6f62d9aeb61d2a28d432fe5dff"
+          "sha256": "4f3823b16bdcc04da662511632ed92195f27b14191a9bacbcc10a744da30bee1"
         },
         {
           "path": "samples/workspace/evidence/github-app-scenarios-2026-09-26.json",
@@ -50,6 +50,18 @@
         {
           "path": "samples/workspace/evidence/github-actions-log-controls-2026-09-26.json",
           "sha256": "fc35cff28fa5543f6247aac9c0487f8a71e9004281baca8a2583f685ca667b5c"
+        },
+        {
+          "path": "samples/workspace/evidence/github-actions-recovery-2026-09-27.json",
+          "sha256": "2be6845a24c42688b9caf22a74f82402c7b80a558647ffee19fdedfd9714f88d"
+        },
+        {
+          "path": "samples/workspace/evidence/github-repository-access-audit-2026-09-27.json",
+          "sha256": "e9705dc8640bca8eaeafad159d3ca28936b5d3842019feac4f3217263cff11f5"
+        },
+        {
+          "path": "samples/workspace/evidence/github-repository-visibility-2026-09-27.json",
+          "sha256": "b5054ef086adc872915784d735faece3162c8711bf316c2706a163bf771a5c1c"
         }
       ]
     },
@@ -452,5 +464,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "929a962a9fa58c1613be0016f5834f6c6807d375e6360357faa4c59c16fceae8"
+  "sample_tree_sha256": "a8971994accf36be303399d2907d5cd6e9873e955c2744edb204823526388141"
 }

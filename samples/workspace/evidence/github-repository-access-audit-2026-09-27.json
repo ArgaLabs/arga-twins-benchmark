@@ -1,0 +1,361 @@
+{
+  "checks": [
+    {
+      "actor": "anonymous",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "anonymous",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 404,
+      "private_name_disclosed": false,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "owner",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "outside",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "invalid",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 401,
+      "private_name_disclosed": false,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "limited",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 403,
+      "private_name_disclosed": false,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": true,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/_ui/search?q=confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/_ui/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/_ui/repos/test-org/confidential-marker/branches",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/_ui/repos/test-org/confidential-marker/pulls",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/_ui/repos/test-org/confidential-marker/issues",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    },
+    {
+      "actor": "unselected",
+      "path": "/repos/test-org/confidential-marker",
+      "status": 200,
+      "private_name_disclosed": true,
+      "create_control": false,
+      "full_state_unchanged": true
+    }
+  ],
+  "limit": "Read-only local response audit; no browser visual approval, no exhaustive access matrix.",
+  "schema": "arga.lab.permission-audit/1",
+  "status": "failed_repository_visibility",
+  "release_allowed": false,
+  "source_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+  "provider": "github",
+  "references": [
+    "https://docs.github.com/en/rest/repos/repos"
+  ],
+  "preserved_operator_attempt": "Initial outside-user token was not registered; corrected with explicit native token fixture. No provider mutation was required during the audit.",
+  "limits": [
+    "Read-only local response checks at c232855b; no new hosted/browser approval",
+    "The existing real browser invalid-token repository-home observation independently reproduced private metadata exposure",
+    "No claims about complete collaborator/team/creation/admin or other provider permissions"
+  ],
+  "artifacts_sha256": {
+    "lab-github-repository-access-audit/results.json": "da320d42dbab46dedfaa34190139a25c6baad9a0fa8931b823a131281eca834f",
+    "lab-github-repository-access-audit-r2/results.json": "5928994ceefd45a5e61e5eb2b5a71ef64264ed9d18cf1113cd6a15f7b1721a2e",
+    "lab-github-repository-access-audit.log": "6bd46f7fd83ef9f11a1bac98d29647f97573c8aa8625446381e148a17c1d7b09",
+    "lab-github-repository-access-audit-r2.log": "d479d3bbf75069845f518ac107a60a45da0c58b261de6c277293dbf7258a2407"
+  }
+}

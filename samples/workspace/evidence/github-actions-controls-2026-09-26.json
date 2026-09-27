@@ -123,7 +123,42 @@
     "lab-final-github-actions-controls-ea892cd7/scenario.json": "cfbc5c4ce5038cb0a17d35e2e060090b1a4b1e12520c39e0a9d3cf610999cf47",
     "lab-final-github-actions-controls-ea892cd7/operator-api-trace.json": "9b9c89314a48671cc76d163df59e0367b799f64b667d4b65c6f939e4644601ac",
     "lab-final-github-actions-controls-ea892cd7/final-state.json": "0160294b040655df6b0fc3370b4e1c86303943083585e6ff8b6f7f9009c25049",
-    "lab-final-github-actions-controls-ea892cd7/control.json": "3977ba6354c32881868013f3d5346a8ab5581d6251042b8c12d69c4144b7804a"
+    "lab-final-github-actions-controls-ea892cd7/control.json": "3977ba6354c32881868013f3d5346a8ab5581d6251042b8c12d69c4144b7804a",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-6-before.json": "bc4e4791a185e596a41de070b1e62c01c30861d03e7629eae4a279047820d965",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-7-expected.json": "87cb55ff6c60ae2b149d3868d417e6dd3d73397134b17fcadbb72f5618f42f1d",
+    "lab-final-github-actions-lifecycle-c232855b-r2/browser-trace-0.json": "e626183a46590a6af8e6f5e0e371616413d57e17c825a926fe740ba22b0f78eb",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-4-corrected-expected.json": "19d02249f2ed02c6e08efd4370445c595487f91d9883f0e670cb347e0e11a37d",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-3-expected.json": "2903226b1b448c2634afb924dfeaf920c694f7d02f533d0c6c02a2ec6dcba3b7",
+    "lab-final-github-actions-lifecycle-c232855b-r2/image-comparison.json": "af614a776e3f686c3106666ecb08894cff919159c7f912bca6dad599b1094f34",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-4-after.json": "19d02249f2ed02c6e08efd4370445c595487f91d9883f0e670cb347e0e11a37d",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-1-after.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-3-before.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-4-expected.json": "1cdc4a2aad5de15f5da15d06ae416c521d1de76dfbf67ae9ab12e82259a72b32",
+    "lab-final-github-actions-lifecycle-c232855b-r2/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-6-after.json": "c41d245ad2b3a01629e5544149f171d5e4705da4582752dd59a813edc9a37663",
+    "lab-final-github-actions-lifecycle-c232855b-r2/corrected-native-result.json": "f2ac7a64d0394b63ce2eb4d69eb059c9f3f35e6acc30bc674728175d13c74750",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-3-after.json": "2903226b1b448c2634afb924dfeaf920c694f7d02f533d0c6c02a2ec6dcba3b7",
+    "lab-final-github-actions-lifecycle-c232855b-r2/dispatch-cancel-state.json": "66e0952ac56e5c09cb89207d04b779185b8ea43fe8fb17133a04cf12f5530246",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-5-before.json": "19d02249f2ed02c6e08efd4370445c595487f91d9883f0e670cb347e0e11a37d",
+    "lab-final-github-actions-lifecycle-c232855b-r2/cleanup.json": "78062d7e8c7dcf5fc97538a6deaa4736ea5753bdfca35bb3dcac183e2e5207a4",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-results.json": "966b1c7d26a247539db31151a748a5dc7f59accfb0331d79cff9a32ceecce366",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-2-before.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/runtime-image-evidence.json": "230ac9d8f25e1e35c1c619934c04f5547692e77f47f1e1e70653e68e4a5f203f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-7-before.json": "c41d245ad2b3a01629e5544149f171d5e4705da4582752dd59a813edc9a37663",
+    "lab-final-github-actions-lifecycle-c232855b-r2/browser-result.json": "210e843f8bc5bf993c7c405d3ac1ac5044e8d971a190c134a458e400439e964b",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-5-after.json": "bc4e4791a185e596a41de070b1e62c01c30861d03e7629eae4a279047820d965",
+    "lab-final-github-actions-lifecycle-c232855b-r2/baseline-state.json": "66e0952ac56e5c09cb89207d04b779185b8ea43fe8fb17133a04cf12f5530246",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-2-after.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-4-before.json": "2903226b1b448c2634afb924dfeaf920c694f7d02f533d0c6c02a2ec6dcba3b7",
+    "lab-final-github-actions-lifecycle-c232855b-r2/browser-trace-2.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-1-expected.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/final-state.json": "87cb55ff6c60ae2b149d3868d417e6dd3d73397134b17fcadbb72f5618f42f1d",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-5-expected.json": "bc4e4791a185e596a41de070b1e62c01c30861d03e7629eae4a279047820d965",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-2-expected.json": "babee2c755c432cd6300cc98ec09f37e1dcb9da13e16b62bbd2f287215cf3b6f",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-6-expected.json": "c41d245ad2b3a01629e5544149f171d5e4705da4582752dd59a813edc9a37663",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-1-before.json": "66e0952ac56e5c09cb89207d04b779185b8ea43fe8fb17133a04cf12f5530246",
+    "lab-final-github-actions-lifecycle-c232855b-r2/write-7-after.json": "87cb55ff6c60ae2b149d3868d417e6dd3d73397134b17fcadbb72f5618f42f1d",
+    "lab-final-github-actions-lifecycle-c232855b-r2.log": "9d9f2c34c3ea4630be9ddb04d5a9a2234dbc4865703a872702bbdf0d8c260cd1"
   },
   "merge_commit": "ea892cd71bb130c7cf111e91b232a6ca79d2805d",
   "serving_runtime": {
@@ -276,6 +311,40 @@
     "scope": "Owner/reader workflow and run controls, limited-token direct 403, native log confirmation Cancel/OK, reload and 390px layout",
     "limitations": [
       "Does not certify dispatch/rerun/enable/disable browser mutation lifecycle, complete provider error presentation or physical touch"
+    ]
+  },
+  "hosted_lifecycle_2026_09_27": {
+    "status": "bounded_lifecycle_pass_error_presentation_failed",
+    "run_id": "22cac2c2-f293-41a1-81bb-d25635957b63",
+    "source_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+    "observations": [
+      "Dispatch disclosure selection/cancellation preserves exact full native baseline",
+      "Owner Disable survives reload and hides dispatch",
+      "Stale second-tab dispatch receives native 422 Workflow is disabled with unchanged full state; Chrome displays ERR_BLOCKED_BY_CLIENT rather than an in-app recovery page",
+      "Back and reload recover the disabled workflow; owner Enable restores controls",
+      "Browser dispatch selects feat/conversation-check and creates run 2 queued at attempt 1",
+      "Cancel survives reload, Re-run increments attempt to 2, Cancel persists with Run cancelled log",
+      "Actual 390x844 read/log expansion/reload displays cancelled attempt 2 and wraps branch; width resets afterward"
+    ],
+    "native": {
+      "passed": true,
+      "all_seven_transitions_match_strict_expected_full_state": true,
+      "fields_ignored": [],
+      "original_verifier_failure": "GET /user includes notification_email; native run.actor uses stored user. Original expectation incorrectly copied this response-only field. Corrected expected actor equals exact pre-existing native fixture-owner object.",
+      "browser_final": "One feature-branch run, cancelled at attempt 2; workflow active; native ID counter +1; all other captured state unchanged",
+      "teardown_confirmed": true
+    },
+    "containers_matched": 3,
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "operator_notes": [
+      "First setup used encoded feature-branch GET which returned404; cleanup confirmed and native branch list used for subsequent setup",
+      "Initial viewport override applied to stale tab; second Cancel was desktop. Only subsequent new-tab read/log/reload is claimed as390px.",
+      "Original full-state verifier copied response-only notification_email into actor. Corrected expected actor equals exact pre-existing native user, no fields ignored."
+    ],
+    "limits": [
+      "Full Actions filters, multiworkflow graph/jobs/settings and permission matrix remain open",
+      "Error presentation fix in progress; no full provider release claim"
     ]
   }
 }
