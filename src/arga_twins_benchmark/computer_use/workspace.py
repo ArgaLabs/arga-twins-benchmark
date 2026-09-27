@@ -250,7 +250,7 @@ def resources(snapshot: dict[str, Any]) -> dict[tuple[str, str, str], dict[str, 
                 data = {
                     k: v
                     for k, v in event.items()
-                    if k not in {"created", "updated", "etag", "sequence", "_sync_version"}
+                    if k not in {"created", "updated", "etag", "sequence", "_sync_version", "_main_sync_version"}
                 }
                 add(provider, "event", event["id"], data)
             for field in ("calendars", "calendar_list", "acl", "settings", "watches"):
