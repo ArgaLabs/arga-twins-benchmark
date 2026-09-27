@@ -2,7 +2,7 @@
   "schema": "arga.lab.feature-evidence/1",
   "observed_on": "2026-09-27",
   "provider": "github",
-  "status": "local_browser_gates_pass_rebased_ci_pending",
+  "status": "local_browser_review_ci_pass_merged_deploying",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1203",
   "source_head": "44facf6c2d13db626b327babc1171f80fe9b9ee3",
@@ -47,10 +47,20 @@
     "documenter": "ship;README accurate; no systemchange"
   },
   "ci": {
-    "status": "running",
-    "head": "44facf6c2d13db626b327babc1171f80fe9b9ee3"
+    "status": "passed",
+    "head": "44facf6c2d13db626b327babc1171f80fe9b9ee3",
+    "all_complete": true,
+    "check_count": 34,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6701,
+    "root_tests_passed": 2140,
+    "lint_and_test_run": 36287901476
   },
-  "deployment": "pending; unmerged",
+  "deployment": {
+    "status": "running",
+    "twins_workflow": 36288577063,
+    "runtime_workflow": 36288577061
+  },
   "references": [
     "https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs"
   ],
@@ -79,13 +89,16 @@
     "lab-github-actions-log-controls-local-r3/baseline.json": "0b11e253793d7f73827610e9cc37551fd08fd9aa826846927814a51819255f39",
     "lab-github-actions-log-controls-local-r3/accept-result.json": "bb26a66ace0b1b874b096806bbf57f308f20a246af47e8dd7db287ab2c5d4dc8",
     "lab-github-actions-log-controls-local-r3/final.json": "0b4abacb6eab985758e60fd4d355ce7849abbb5c872afac9e0a8dcb883092ac5",
-    "lab-github-actions-log-controls-local-r3/native-ax-verdict.json": "4a836e6a8138d569c78522ad9f66e1f2efaf694799c8e6404feedaf41f884a02"
+    "lab-github-actions-log-controls-local-r3/native-ax-verdict.json": "4a836e6a8138d569c78522ad9f66e1f2efaf694799c8e6404feedaf41f884a02",
+    "lab-github-actions-log-controls-premerge-final.json": "efde268926dcdb704f601d9241e2e67094ceab838eecf217a024422ceaceb8cd",
+    "lab-github-actions-log-controls-ci-complete-r2.log": "76c0d9dc1b9bf6c307dd9febf38f054bbfbc44c7764029370ec65e8057dd8e94"
   },
   "pull_request_state": {
-    "state": "open",
+    "state": "merged",
     "draft": false,
     "ready_for_review_event": "2026-09-26T13:03:00Z",
-    "note": "PR was externally marked ready after draft creation; state preserved."
+    "note": "PR was externally marked ready after draft creation; state preserved.",
+    "merged_at": "2026-09-27T02:27:41Z"
   },
   "preserved_ci_attempts": [
     {
@@ -113,5 +126,6 @@
     "lab-github-actions-log-controls-local-r2/cancel-result.json",
     "lab-github-actions-log-controls-local-r3/native-ax-verdict.json",
     "lab-github-actions-log-controls-local-r3/accept-result.json"
-  ]
+  ],
+  "merge_commit": "7329619da1bcb2dd7f6b2c8e3ff5289fc6ecf978"
 }

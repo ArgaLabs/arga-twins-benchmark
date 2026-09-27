@@ -4488,7 +4488,7 @@
       "files": [
         {
           "path": "twins/google_docs/document_actions_ui.py",
-          "sha256": "734f15746a8962bf02d0b5e7a3f792f885f7f69a687d934fab514e4ce21f233e",
+          "sha256": "e09405784525ad5b3724ac764e5208f8289369f78e95d36464c0499c8e5186f8",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4741,7 +4741,7 @@
         },
         {
           "path": "twins/google_docs/document_segments_ui.py",
-          "sha256": "18c2d550a39be78f89c6d491549d1800e20dd213b2efe1ec41f765907834c282",
+          "sha256": "eda8820b6914d634337dcf6ee975a8522d85857f457cec90db71b2461b7b6a5e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4796,7 +4796,7 @@
         },
         {
           "path": "twins/google_docs/document_tabs_ui.py",
-          "sha256": "f6a3a93941f1340236c32d4292e8233ad8ec4f24a5b384c9c47f8fb402fb0125",
+          "sha256": "9dbb489e38e726cb243c0b0147cc11d4f36aae564938bf7619034a22cf45eee2",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4868,7 +4868,7 @@
         },
         {
           "path": "twins/google_docs/find_replace_ui.py",
-          "sha256": "5f569a724b792dd5c540515bdf0edb7ca8b943d8083da963a54f56b1a341e5ec",
+          "sha256": "424345557d13cccff3b8d2a232032b5310a5d5e9688a3b882b7944cc92ddf58e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -4991,7 +4991,7 @@
         },
         {
           "path": "twins/google_docs/table_options_ui.py",
-          "sha256": "21056e32eb3496df38f4eb62838361507f35928e9684173c08a76fa4a3f37033",
+          "sha256": "88c0ac4d8d921bf66f83ddd4e3aaacfb300ca42e9c7c64972af865b932790a82",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5194,11 +5194,11 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "764942ef078bd34c544a56535243d497517bdeda5407226ba7f5438b6ac2393d",
+          "sha256": "1b624a9b82ed0e0201468b63b6a9867b685e8caf94358513e4222066aeed848e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 412,
+              "line": 413,
               "dynamic": false,
               "controls": [
                 {
@@ -5555,7 +5555,7 @@
         },
         {
           "path": "twins/google_docs/version_history_ui.py",
-          "sha256": "218e492c5de48bf6335cf53b37ec03b2867d47cdfaf688c7b327ec9452ae1ea1",
+          "sha256": "aa27401f93a2d1cd09234101183b4c7ebbd26a24680fc6365d66537628a141b6",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -12350,7 +12350,7 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+      "sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
       "frontend_route_candidates": [
         {
           "method": "GET",
@@ -12380,7 +12380,7 @@
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1764
+          "line": 1778
         },
         {
           "method": "GET",
@@ -12398,79 +12398,85 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1301
+          "line": 1315
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1336
+          "line": 1350
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1381
+          "line": 1395
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1392
+          "line": 1406
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1413
+          "line": 1427
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1433
+          "line": 1447
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1452
+          "line": 1466
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1463
+          "line": 1477
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1475
+          "line": 1489
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1493
+          "line": 1507
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1504
+          "line": 1518
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1522
+          "line": 1536
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1546
+          "line": 1560
+        },
+        {
+          "method": "GET",
+          "path": "/ui/documents/{file_id}/access",
+          "handler": "docs_ui_access",
+          "line": 1303
         }
       ],
       "markup_expressions": [
@@ -12697,7 +12703,5 @@
         }
       ]
     }
-  ],
-  "source_revision": "a02ad70f51175f7cf34eda75942b008b3c68fb12",
-  "generator_sha256": "d0254ce7fe82dfcfc36af4323916b633bed56df12dd96aa5f18d7a84325fe290"
+  ]
 }

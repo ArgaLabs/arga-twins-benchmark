@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1187",
   "source_head": "42286471a25b9ea65b1491bd59d2a264479fc6b2",
-  "status": "local_browser_and_ci_pass_merged_deploying",
+  "status": "deployed_native_and_images_pass_hosted_focus_pending",
   "release_allowed": false,
   "scope": [
     "Native role/OAuth-scoped document access capabilities",
@@ -49,7 +49,7 @@
     ],
     "native_state": "First two sessions match complete native baseline exactly",
     "screenshots_retained": false,
-    "blocked_session_cleanup": "Third local session stopped. Complete native state changed only in the operator-injected writer-to-reader permission; failed draft never persisted. Current source needs a fresh focus/recovery session.",
+    "blocked_session_cleanup": "Historical third local session stopped with only operator-injected permission change; no failed draft persisted. Fourth local session passed focus recovery and exact complete-state restoration.",
     "preserved_blocked_attempt": "Final native window-focus/revocation/restored-access recovery check: macOS locked",
     "focus_recovery": {
       "passed": true,
@@ -130,10 +130,21 @@
     "lab-docs-viewing-local-r4/final.json": "5f791f31a97e116a7eed40d9c6cbdab029a4dde9369da820b093311329fbcd52",
     "lab-docs-viewing-local-r4/focus-recovery-result.json": "d871c1047f3ff3af64e7ead2398530c824bc47bffb51d4b8223d4b068b659661",
     "lab-docs-viewing-premerge-final.json": "86c349d9536aed55a3f57b7b9a5781835a155ee91e298d47d3efe2ee073328ba",
-    "lab-docs-viewing-ci-complete-r2.log": "c25327aa47ea76b3e013cb76757a62bdd9e1726987e904dc674a68c92e8eb555"
+    "lab-docs-viewing-ci-complete-r2.log": "c25327aa47ea76b3e013cb76757a62bdd9e1726987e904dc674a68c92e8eb555",
+    "lab-final-docs-viewing-59f3c439-deployment.json": "b8226f819135a30023d940b738f85439f523c8cdb261b4dae74163cde3437399",
+    "lab-final-docs-viewing-59f3c439-runtime-attestation.json": "195b5c2b7cc4bcf6d7aaf244f553beaaf92bde1c988585bcd26eeb57bdc75912",
+    "lab-final-docs-viewing-59f3c439-r2/browser-result.json": "aea5c6cf07f7837e1ab9c43d44e39663bae7aab4ed593a887b67fe54e37a3a8d",
+    "lab-final-docs-viewing-59f3c439-r2/native-result.json": "60944f16308d1b50c7300f282e168591f607e084cf4918374a2e7b516186d0a9",
+    "lab-final-docs-viewing-59f3c439-r2/baseline-state.json": "4463f8cedfd62632954422f5f24288aa1851f4fa050bc8ce88fa4299c3bfcbcf",
+    "lab-final-docs-viewing-59f3c439-r2/final-state.json": "4463f8cedfd62632954422f5f24288aa1851f4fa050bc8ce88fa4299c3bfcbcf",
+    "lab-final-docs-viewing-59f3c439-r2/cleanup.json": "ce78c441169bb9f2f3e32fbe0274290f7f1ee3c87aa48cd94e6a3f42cbe82661",
+    "lab-final-docs-viewing-59f3c439-r2/image-comparison.json": "b3ad4ba1a37ba522d3bed7eb1d4713c084504eb1ec76700d9729f3cc02e588c3",
+    "lab-final-docs-viewing-59f3c439-r2/runtime-image-evidence.json": "9a9cbbbfadc6826c805225388fe58d5aa788bf87bd8483ec70dc06f9e4b72e46",
+    "lab-final-docs-viewing-59f3c439-r2/browser-trace-0.json": "321718d56128869a74d2e5aeed7885e592d9f68396a664f12567715a49c54de6",
+    "lab-final-docs-viewing-59f3c439-r2/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19"
   },
   "limits": [
-    "Both deployment workflows and fresh hosted verification pending; localfocusgateandexactheadCIpass",
+    "Both production deployments and serving image checks pass. Fresh hosted native reader denial and all four worker images pass; bounded owner Viewing/reload observed; hosted real focus recovery remains blocked by Mac lock.",
     "No Suggesting, full commenter collaboration, request-access, full menus/admin/realtime/AI claim",
     "No exhaustive visual/mobile/touch parity or final release readiness"
   ],
@@ -157,9 +168,132 @@
     }
   ],
   "deployment": {
-    "status": "running",
+    "revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+    "runtime_workflow": 36287887197,
     "twins_workflow": 36287887217,
-    "runtime_workflow": 36287887197
+    "both": "success",
+    "published_images": {
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:5c3e842813138450902023c055ee057daeed18c3e502a11dcf1347d6d07f99f3",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:0e76eb37b9812b790e2f34ba76378edfc541e0e3907ac317f2f7676e672490cb",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:b6ebedaa4c76f0e9afe1a8cdd6d04760348b0ac63c8ea7df8042d9c1e698afba",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:902f68d1314702cf1bfd9f551bcceadb67772023ad7f8135ff22f20be37042d3",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:59f3c4390e43319f40c25774da694f7fb2f34c40@sha256:f6473822c88c4cf7108b27d1df1c012e492461f89af2d85c6d14aa8b5e783fc8"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00307-t8l",
+      "arga-api": "arga-api-00677-bvt"
+    },
+    "log_sha256s": {
+      "lab-final-docs-viewing-59f3c439-twins-deploy.log": "e8e2a09010e572acdb78195e73ff1b276ca822de3903b25441e75a06cc4a8b96",
+      "lab-final-docs-viewing-59f3c439-runtime-deploy.log": "ff8de38ff0c0f0329234f3a4cf02d97ce30d40797cbc5f864f7b6245199e17ce"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
   },
-  "merge_commit": "59f3c4390e43319f40c25774da694f7fb2f34c40"
+  "merge_commit": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+  "serving_runtime": {
+    "revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00307-t8l",
+        "observed_at": "2026-09-27T02:15:19.380345+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:59f3c4390e43319f40c25774da694f7fb2f34c40",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00307-t8l"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00307-t8l",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:902f68d1314702cf1bfd9f551bcceadb67772023ad7f8135ff22f20be37042d3",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00677-bvt",
+        "observed_at": "2026-09-27T02:20:34.580870+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:59f3c4390e43319f40c25774da694f7fb2f34c40",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:93e4b47c3e57fcb31987df4a5b2d6c33b1070e9031b999ab99840aac7efc95fa",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:93e4b47c3e57fcb31987df4a5b2d6c33b1070e9031b999ab99840aac7efc95fa"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00677-bvt"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00677-bvt",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:93e4b47c3e57fcb31987df4a5b2d6c33b1070e9031b999ab99840aac7efc95fa",
+          "sha256:f6473822c88c4cf7108b27d1df1c012e492461f89af2d85c6d14aa8b5e783fc8"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "ff8de38ff0c0f0329234f3a4cf02d97ce30d40797cbc5f864f7b6245199e17ce",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "status": "native_images_partial_browser_pass_host_focus_pending",
+    "run_id": "24dca045-2ce6-4edb-9a4e-87d883f50165",
+    "native_reader_denial403_full_state_unchanged": true,
+    "matched_actual_containers": 4,
+    "observed_browser": [
+      "Owner switches Editing to Viewing and formatting/edit controls disappear",
+      "Viewing survives reload at 390x844; document body readable",
+      "Mobile tab drawer opens and selecting Protected tab updates URL"
+    ],
+    "pending": [
+      "Verify protected tab body after asynchronous load",
+      "Foreground editor failed-save and real focus revocation/restoration"
+    ],
+    "screenshots_retained": false,
+    "final_complete_state_equals_baseline": true,
+    "teardown_confirmed": true
+  },
+  "preserved_hosted_attempts": [
+    {
+      "run_id": "29b3fff8-3f59-4fcd-baae-c08ab58760d6",
+      "result": "operator_helper_failure",
+      "reason": "Candidate ProviderGateway correctly rejected operator /ui/ endpoint; retry uses authenticated operator provider HTTP without changing candidate policy",
+      "actual_container_images_matched": 4,
+      "teardown_confirmed": true
+    }
+  ]
 }

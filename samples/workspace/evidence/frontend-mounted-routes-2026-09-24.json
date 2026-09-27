@@ -1,7 +1,7 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-26T13:02:37.509847+00:00",
-  "source_revision": "a02ad70f51175f7cf34eda75942b008b3c68fb12",
+  "observed_at": "2026-09-27T02:18:21.617870+00:00",
+  "source_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
   "certifies_exhaustive_coverage": false,
   "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
   "limitations": [
@@ -951,7 +951,7 @@
       "candidate_count": 1
     },
     "google_docs": {
-      "registered_nonoperator_routes": 40,
+      "registered_nonoperator_routes": 41,
       "mounted_frontend_candidates": [
         {
           "path": "/ui/documents/{document_id}/versions",
@@ -1035,7 +1035,7 @@
           "handler": "create_app.<locals>.docs_editor",
           "source": "twins/google_drive/app.py",
           "line": 572,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1055,8 +1055,28 @@
           "handler": "create_app.<locals>.index",
           "source": "twins/google_drive/app.py",
           "line": 771,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/ui/documents/{file_id}/access",
+          "methods": [
+            "GET"
+          ],
+          "handler": "create_app.<locals>.docs_ui_access",
+          "source": "twins/google_drive/app.py",
+          "line": 1302,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
+          "tags": [
+            "Google Docs UI"
+          ],
           "checks": {
             "reference": "pending",
             "success_error_cancel": "pending",
@@ -1072,8 +1092,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_rename",
           "source": "twins/google_drive/app.py",
-          "line": 1300,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1314,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1092,8 +1112,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_export",
           "source": "twins/google_drive/app.py",
-          "line": 1335,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1349,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1112,8 +1132,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_list",
           "source": "twins/google_drive/app.py",
-          "line": 1380,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1394,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1132,8 +1152,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_create",
           "source": "twins/google_drive/app.py",
-          "line": 1391,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1405,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1152,8 +1172,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1409,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1423,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1172,8 +1192,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_update",
           "source": "twins/google_drive/app.py",
-          "line": 1432,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1446,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1192,8 +1212,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_list",
           "source": "twins/google_drive/app.py",
-          "line": 1451,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1465,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1212,8 +1232,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_create",
           "source": "twins/google_drive/app.py",
-          "line": 1462,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1476,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1232,8 +1252,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_update",
           "source": "twins/google_drive/app.py",
-          "line": 1474,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1488,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1252,8 +1272,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1492,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1506,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1272,8 +1292,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_create",
           "source": "twins/google_drive/app.py",
-          "line": 1503,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1517,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1292,8 +1312,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_update",
           "source": "twins/google_drive/app.py",
-          "line": 1521,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1535,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1312,8 +1332,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1545,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1559,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Docs UI"
           ],
@@ -1326,7 +1346,7 @@
           }
         }
       ],
-      "candidate_count": 19
+      "candidate_count": 20
     },
     "google_sheets": {
       "registered_nonoperator_routes": 51,
@@ -1559,7 +1579,7 @@
           "handler": "create_app.<locals>.sheets_editor",
           "source": "twins/google_drive/app.py",
           "line": 590,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1579,7 +1599,7 @@
           "handler": "create_app.<locals>.index",
           "source": "twins/google_drive/app.py",
           "line": 771,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -1596,8 +1616,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_rename",
           "source": "twins/google_drive/app.py",
-          "line": 1300,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1314,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1616,8 +1636,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_export",
           "source": "twins/google_drive/app.py",
-          "line": 1335,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1349,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1636,8 +1656,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_list",
           "source": "twins/google_drive/app.py",
-          "line": 1380,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1394,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1656,8 +1676,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_create",
           "source": "twins/google_drive/app.py",
-          "line": 1391,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1405,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1676,8 +1696,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1409,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1423,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1696,8 +1716,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_permissions_update",
           "source": "twins/google_drive/app.py",
-          "line": 1432,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1446,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1716,8 +1736,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_list",
           "source": "twins/google_drive/app.py",
-          "line": 1451,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1465,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1736,8 +1756,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_create",
           "source": "twins/google_drive/app.py",
-          "line": 1462,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1476,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1756,8 +1776,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_update",
           "source": "twins/google_drive/app.py",
-          "line": 1474,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1488,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1776,8 +1796,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_comments_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1492,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1506,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1796,8 +1816,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_create",
           "source": "twins/google_drive/app.py",
-          "line": 1503,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1517,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1816,8 +1836,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_update",
           "source": "twins/google_drive/app.py",
-          "line": 1521,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1535,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],
@@ -1836,8 +1856,8 @@
           ],
           "handler": "create_app.<locals>.workspace_ui_replies_delete",
           "source": "twins/google_drive/app.py",
-          "line": 1545,
-          "source_sha256": "c663ec5f301196c9965cecf5b9aee9abcd80dfc57f573bc60ca3f2f861af1f97",
+          "line": 1559,
+          "source_sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
           "tags": [
             "Google Sheets UI"
           ],

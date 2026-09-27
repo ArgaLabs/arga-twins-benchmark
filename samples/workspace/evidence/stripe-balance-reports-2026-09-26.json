@@ -5,7 +5,7 @@
   "status": "local_browser_gates_pass_rebased_ci_pending",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1199",
-  "source_head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52",
+  "source_head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
   "changes": [
     "Native balance report projections reconcile opening/activity/fees/payouts/ending by settlement currency",
     "Local calendar date and timezone boundaries, including historical DST; automatic payout effective dates",
@@ -109,7 +109,8 @@
   },
   "ci": {
     "status": "running",
-    "head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52"
+    "head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
+    "lint_and_test_run": 36288698393
   },
   "deployment": "pending; unmerged",
   "limits": [
@@ -125,7 +126,8 @@
     "twins/stripe/balance_reports_ui.py": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
     "twins/stripe/dashboard_ui.py": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
     "twins/stripe/money.py": "312a169e9917f51e66c83ae7bedb9261980e8d4ebe863e9e14eef2c12020cdf8",
-    "twins/tests/test_stripe_balance_reports.py": "b8a32834ac4546da1f8a83488dc68004aa792fb756e489f2637170b0be63e18e"
+    "twins/tests/test_stripe_balance_reports.py": "b8a32834ac4546da1f8a83488dc68004aa792fb756e489f2637170b0be63e18e",
+    "twins/tests/test_gmail_twin.py": "b272a88b1ad78db69e57ca49bb825bd216790cf22a0987745277d97cc36419d3"
   },
   "artifacts_sha256": {
     "lab-stripe-reports-confirm-deps.log": "5f892db9d3b1f32816f5cc71f82b6e804601819744e1a31d1d60273ddf54e921",
@@ -176,7 +178,12 @@
     "lab-stripe-reports-local-r3/summary-download.json": "1fb74ba31b2e4746c65d250535853c4a58b3dd8a5556341d509eeba514478396",
     "lab-stripe-reports-local-r3/activity-download.json": "9b6714a8668298b7324e639059fdc7d312178d19e7d447dd1ea8bb218c9e2ced",
     "lab-stripe-reports-local-r3/after-download-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
-    "lab-stripe-reports-local-r3/request-trace.json": "2eda5e56e8b01a2b73d2fe0c9b40ee39461b590521db09d63a4edc2b9ead39c2"
+    "lab-stripe-reports-local-r3/request-trace.json": "2eda5e56e8b01a2b73d2fe0c9b40ee39461b590521db09d63a4edc2b9ead39c2",
+    "lab-stripe-reports-ci-failure-r2.log": "4f0ce3875c6371537e59b33f66fabe0a0a5aa0d4a01f1e62f4799e8fab746251",
+    "lab-stripe-reports-ci-watch-repro.log": "bd59e925476e987fb44e951f5b801bc010aa23aaf898f6a28d5f6320aeacf7f2",
+    "lab-stripe-reports-ci-watch-regressions.log": "72c24eb6c7f3e1986f28dbb6f3c9568b2877dc8eac51c81d7770b4b8898dddf1",
+    "lab-stripe-reports-ci-head-a82655dc.json": "d244f96066590a269d5bbcc924a8c63b9c493a9685c943d3c79cf298cf3f8a1f",
+    "lab-stripe-reports-ci-log-a82655dc.log": "438bc481988ee28d2177ce2330349abc3ccaf8717c867c7591d23e1428d23aa6"
   },
   "preserved_ci_attempts": [
     {
@@ -190,6 +197,23 @@
       "lint_and_test_run": 36241116012,
       "docker_build_run": 36241116024,
       "fidelity_run": 36241116152
+    },
+    {
+      "head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52",
+      "status": "failed",
+      "run": 36287910500,
+      "failure": "Cross-process Gmail watch test initial publication exceeded one-second fixture timeout under CI load",
+      "local_exact_reproduction": "passed",
+      "fix": "Test fixture explicitly uses five-second publish deadline and ten-second outer client deadline; production timeout and retry behavior unchanged",
+      "focused_watch_tests_passed": 2
+    },
+    {
+      "head": "a82655dce932560a668e910d24f70f729eccbf00",
+      "status": "passed",
+      "twin_tests_passed": 6737,
+      "root_tests_passed": 2140,
+      "lint_and_test_run": 36288387996,
+      "all_complete": true
     }
   ]
 }
