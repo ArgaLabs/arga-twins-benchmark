@@ -285,6 +285,7 @@ def _affirmed_span(text: str, start: int, end: int) -> bool:
     prefix, suffix = _normal(text[:start]), _normal(text[end:])
     return not (
         re.search(r"\b(?:no|not|never|no longer) (?:a |an |the |currently |still |actually )*$", prefix + " ")
+        or re.search(r"\b(?:not true|false|incorrect) that $", prefix + " ")
         or re.match(
             r"(?:(?:is|are|was|were|has been|have been) )?"
             r"(?:not|never|no longer|isn t|isnt|aren t|arent|wasn t|wasnt)\b",
@@ -374,7 +375,8 @@ def _label_equal(actual: Any, expected: Any) -> bool:
             r"(?:(?:mitigation (?:is )?)?"
             + pending_approval
             + r"|approval (?:is |remains )?(?:still )?pending"
-            + r"|mitigation (?:is |has been )?(?:(?:drafted|proposed) (?:but )?(?:is )?)?not (?:yet )?approved)"
+            + r"|mitigation (?:for [a-z][a-z0-9]* \d+ )?(?:is |has been )?"
+            r"(?:(?:drafted|proposed) (?:but )?(?:is )?)?not (?:yet )?approved)"
         ),
     }
     pattern = phrases.get(_normal(expected))
