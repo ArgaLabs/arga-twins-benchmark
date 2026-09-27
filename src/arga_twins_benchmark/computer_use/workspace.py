@@ -489,6 +489,33 @@ def _fact_equal(actual: Any, expected: Any) -> bool:
     return _equal(actual, expected)
 
 
+def _record_identity_fact_equal(actual: Any, expected: Any, baseline: dict[str, Any], prompt: str) -> bool:
+    """Accept a discovered account ID annotated with that account's known name."""
+    if not isinstance(actual, str) or not isinstance(expected, str):
+        return False
+    # A prompt-specified identifier remains exact. Only identities discovered
+    # from provider records may include their verified display-name annotation.
+    if re.search(r"(?<![\w-])" + re.escape(expected) + r"(?![\w-])", prompt):
+        return False
+    users = baseline.get("queries", {}).get("workspace.github", {}).get("body", {}).get("users", {})
+    if not isinstance(users, dict):
+        return False
+    matches = [user for user in users.values() if user.get("login") == expected]
+    if len(matches) != 1 or not matches[0].get("name"):
+        return False
+    name = str(matches[0]["name"])
+    # Keep the identifier exact and the entire value bounded: mentioning the
+    # correct person in a negation or among several candidates is insufficient.
+    for pattern in (
+        r"@?" + re.escape(expected) + r"\s*\(([^()\n]+)\)",
+        r"([^()\n]+?)\s*\(@?" + re.escape(expected) + r"\)",
+    ):
+        match = re.fullmatch(pattern, actual.strip())
+        if match and " ".join(match[1].casefold().split()) == " ".join(name.casefold().split()):
+            return True
+    return False
+
+
 def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any]:
     assertions: list[dict[str, Any]] = []
 
@@ -557,7 +584,14 @@ def grade_workspace_attempt(output: Path, task: dict[str, Any]) -> dict[str, Any
         invocation = json.loads((output / "invocation.json").read_text())
         facts = _facts(invocation.get("final_text", ""))
         for field, expected in verification["result_facts"].items():
-            record("result_fact:" + field, field in facts and _fact_equal(facts[field], expected))
+            record(
+                "result_fact:" + field,
+                field in facts
+                and (
+                    _fact_equal(facts[field], expected)
+                    or _record_identity_fact_equal(facts[field], expected, before_raw, task["prompt"])
+                ),
+            )
     except (KeyError, TypeError, ValueError, OSError) as exc:
         assertions.append({"id": "complete_evidence", "status": "evidence_gap", "detail": type(exc).__name__})
     return {"task_id": task["id"], "assertions": assertions, "grading_basis": "observable_business_outcomes"}

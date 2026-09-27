@@ -552,3 +552,62 @@ def test_unapproved_mitigation_does_not_override_contradiction(text: str) -> Non
     from arga_twins_benchmark.computer_use.workspace import _satisfies
 
     assert not _satisfies({"text": text}, {"status_any": ["awaiting_mitigation_approval"]})
+
+
+@pytest.mark.parametrize(
+    "identity,accepted",
+    [
+        ("morgan-security (Morgan Lee)", True),
+        ("Morgan Lee (morgan-security)", True),
+        ("@morgan-security (morgan lee)", True),
+        ("Morgan Lee (@morgan-security)", True),
+        ("morgan-security (Operations Maintainer)", False),
+        ("ops-maintainer (Morgan Lee)", False),
+        ("not morgan-security (Morgan Lee)", False),
+        ("morgan-security (Morgan Lee) or ops-maintainer", False),
+        ("Morgan Lee (morgan-security, ops-maintainer)", False),
+        ("morgan-security-2 (Morgan Lee)", False),
+        ("Morgan Lee", False),
+    ],
+)
+def test_discovered_identity_annotations_require_the_exact_account_and_known_name(
+    tmp_path: Path, identity: str, accepted: bool
+) -> None:
+    task, data = attempt(tmp_path, "WKS-01")
+    data["invocation"]["final_text"] = json.dumps(
+        {"result_facts": {"release": "v2.4", "reviewer": identity, "disposition": "review_requested"}}
+    )
+    rewrite(tmp_path, data)
+    assert (statuses(tmp_path, task) == {"pass"}) is accepted
+
+
+def test_prompt_specified_identity_does_not_gain_a_display_name_alias(tmp_path: Path) -> None:
+    task, data = attempt(tmp_path, "WKS-01")
+    task["prompt"] += " Report the reviewer identifier morgan-security exactly."
+    data["invocation"]["final_text"] = json.dumps(
+        {
+            "result_facts": {
+                "release": "v2.4",
+                "reviewer": "morgan-security (Morgan Lee)",
+                "disposition": "review_requested",
+            }
+        }
+    )
+    rewrite(tmp_path, data)
+    assert statuses(tmp_path, task) == {"pass", "fail"}
+
+
+def test_final_state_cannot_invent_an_identity_alias(tmp_path: Path) -> None:
+    task, data = attempt(tmp_path, "WKS-01")
+    data["final-state"]["queries"]["workspace.github"]["body"]["users"]["morgan-security"]["name"] = "Invented Name"
+    data["invocation"]["final_text"] = json.dumps(
+        {
+            "result_facts": {
+                "release": "v2.4",
+                "reviewer": "morgan-security (Invented Name)",
+                "disposition": "review_requested",
+            }
+        }
+    )
+    rewrite(tmp_path, data)
+    assert "fail" in statuses(tmp_path, task)
