@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, cast
@@ -79,7 +80,10 @@ def test_candidate_boundaries_trace_and_completion(
     assert result.status == status
     assert [r.url.path for r in requests] == (["/tools", "/complete"] if status == "completed" else ["/tools"])
     assert json.loads((tmp_path / "candidate/model-invocation.json").read_text())["status"] == status
-    assert json.loads((tmp_path / "candidate/adapter.json").read_text())["has_browser_tool"] is False
+    adapter = json.loads((tmp_path / "candidate/adapter.json").read_text())
+    assert adapter["has_browser_tool"] is False
+    assert adapter["candidate_policy_version"] == candidate.CANDIDATE_POLICY_VERSION
+    assert adapter["system_prompt_sha256"] == hashlib.sha256(result.system_prompt.encode()).hexdigest()
 
 
 @pytest.mark.parametrize(
