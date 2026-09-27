@@ -228,3 +228,5 @@ reader/owner mode, cancellation and reload checks pass at selected desktop and
 state is unchanged after restoring the role. Ten worker images and both serving
 images match, and teardown is confirmed. Provider-wide and final sample gates
 remain open.
+
+Sheets explicit dropdown colors and Chip/Arrow/Plain text presentation (#1218) are deployed as `df599900`. The 1,467 local regressions and fresh hosted desktop/390px formula, cancellation, stale-save, selection, undo/redo and reload checks pass. Ten browser writes plus two operator concurrent/restore writes match twelve native revisions; only the intended dropdown appearance remains changed. All ten worker containers and both serving images match; teardown is confirmed. Verifier corrections and twelve rejected incorrect outcomes are preserved. Multiple selection and broader provider/release gates remain open.
