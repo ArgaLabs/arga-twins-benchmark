@@ -2,7 +2,7 @@
   "schema": "arga.lab.feature-evidence/1",
   "observed_on": "2026-09-27",
   "provider": "github",
-  "status": "merged_deployment_in_progress",
+  "status": "deployed_bounded_hosted_native_browser_images_pass",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1204",
   "source_head": "42c7568e691dd0ab9aa5b4505454ae5cb46aec0b",
@@ -74,7 +74,132 @@
     "lint_and_test_run": 36292019073
   },
   "hosted": {
-    "status": "pending"
+    "status": "bounded_native_browser_images_pass",
+    "run_id": "047c6f5c-7f2a-435a-be33-56b28c836d82",
+    "browser": {
+      "status": "bounded_hosted_pass",
+      "passed": true,
+      "run_id": "047c6f5c-7f2a-435a-be33-56b28c836d82",
+      "checks": [
+        "Desktop stale dispatch renders HTML422 with selected feat/conversation-check and Enable",
+        "390x844 recovery page fits; Enable preserves selected branch, reload retains selector value",
+        "390px retry creates exactly one queued feature-branch run; cancel/reload/rerun persist",
+        "Second-tab stale cancel returns HTML422 with current cancelled attempt2 and Re-run control",
+        "Owner GET reload preserves final state; invalid401 and limited403 Actions pages render readable errors without run/job/artifact content"
+      ],
+      "native_write_transitions": 8,
+      "all_exact_full_state_comparisons_pass": true,
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "tabs_closed": true,
+      "limits": [
+        "Selected operator conformance only, not a candidate result",
+        "No exhaustive provider/AI/collaboration, full keyboard/touch or full permission approval"
+      ]
+    },
+    "native": {
+      "all_other_captured_native_state_unchanged": true,
+      "browser_writes": [
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/workflows/4279079153/disable",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/workflows/4279079153/dispatch",
+          "status": 422
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/workflows/4279079153/enable",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/workflows/4279079153/dispatch",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/runs/7/cancel",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/runs/7/rerun",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/runs/7/cancel",
+          "status": 303
+        },
+        {
+          "full_state_matches_expected": true,
+          "method": "POST",
+          "path": "/_ui/repos/fixture-org/comment-check/actions/runs/7/cancel",
+          "status": 422
+        }
+      ],
+      "complete_final_state_preserved_since_last_expected_mutation": true,
+      "only_allowed_final_changes": [
+        "Workflow persisted active after disable/enable",
+        "One explicitly selected feature-branch run created and cancelled, rerun once and cancelled again",
+        "Native ID counter advances once"
+      ],
+      "passed": true
+    },
+    "image_evidence": {
+      "status": "complete",
+      "observed_at": "2026-09-27T03:55:10.441200+00:00",
+      "publication_sha256": "ef64a2d52b8fad5125e23fa747c8d583bb1b5517eda38985269ade5b63c861e7",
+      "containers": {
+        "github": {
+          "published_revision": "5be53e4587d0605844314b77038f78b00e6fea24",
+          "image_id": "sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:e99dd9f3c619044dd5b01a48ab2bad29de23f7b61511de218bff557c475f95f1"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e400575b53db470eab093e824f93c500",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e400575b53db470eab093e824f93c500@sha256:0fa989f238f779091c77def32759e58582f23efc4ba0864697e205e0aea8dfc6",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:0fa989f238f779091c77def32759e58582f23efc4ba0864697e205e0aea8dfc6"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:0fa989f238f779091c77def32759e58582f23efc4ba0864697e205e0aea8dfc6",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038"
+          ],
+          "builder_log_sha256": "82a6860813673b670526bd8c23a6b12ff237919393017d2173c6ff2e5469cc86"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "actual_container_images_matched": 3,
+    "teardown_confirmed": true
   },
   "source_sha256": {
     "twins/github/actions_ui.py": "ed5f6a7c84b415727b479ebdc1d4b16269bf74af58b46a73e2be00e2fe158cb4",
@@ -112,22 +237,253 @@
     "lab-github-actions-recovery-local-r2/expected-state.json": "4f5b74f81dd1412b73fd16d756d314b00f5776907348241ddc87e4313520d2d3",
     "lab-github-actions-recovery-premerge-final.json": "79842050bbec4c91c490bddfe379bf7939aaf32740883787009e77486e16cac8",
     "lab-github-actions-recovery-merge.json": "79a65e4c5d5c4ed5de92f66156a0f3e0fd88e3d20e933a8b339119764760320c",
-    "lab-github-actions-recovery-ci-complete.log": "cb0e7160585c1375e658f4d4a856c12ebb74b441b4e6cc840a4f24e992ca05a7"
+    "lab-github-actions-recovery-ci-complete.log": "cb0e7160585c1375e658f4d4a856c12ebb74b441b4e6cc840a4f24e992ca05a7",
+    "lab-final-github-actions-recovery-5be53e45/fixture.json": "81fd7a4a14e3966d3caf30b76b8f512188e2d7620ff127925308eac9a6a8ac7a",
+    "lab-final-github-actions-recovery-5be53e45/browser-trace-0.json": "9fe3fbadd53b3d99b3b7b174a868b21e2ba8a586a2e68b8812471792d3b22a5a",
+    "lab-final-github-actions-recovery-5be53e45/image-comparison.json": "ed200fcdbfa2c89e6c37cb7e2a286f8575003b6d8ebdc080b6b9bc29b8788068",
+    "lab-final-github-actions-recovery-5be53e45/publication-catalog.json": "ef64a2d52b8fad5125e23fa747c8d583bb1b5517eda38985269ade5b63c861e7",
+    "lab-final-github-actions-recovery-5be53e45/write-1-after.json": "c66a69f2c1963b22c772cc4385b28ab4c5d6cee5a8d91ebcfb38ebfbd32c6286",
+    "lab-final-github-actions-recovery-5be53e45/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-recovery-5be53e45/workspaces.json": "c873a3a156814c9bb9718f680cf32731ca85c88b7f66f17c39d3e366bb2fafb2",
+    "lab-final-github-actions-recovery-5be53e45/installation-token-result.json": "7916c8b7e3671e8368c195c4c6790575def1f74408b202bcd2715d860cef22ae",
+    "lab-final-github-actions-recovery-5be53e45/cleanup.json": "4189fede10de31d1ce0a2eaefafff5507c7f4d017aca4389e308b79e6a27b62d",
+    "lab-final-github-actions-recovery-5be53e45/write-results.json": "5bdd05a2c8d4e5c873f85ce0908dc5503f9075e204cd373c027c9cc1ec1451a0",
+    "lab-final-github-actions-recovery-5be53e45/runtime-image-evidence.json": "887df497ea94dda84afeb2171f329c6214dcf49166e05781453071d00b2ab186",
+    "lab-final-github-actions-recovery-5be53e45/worker-logs.json": "ef9a63477cb0c5bf0e6ed1e9675bae99a4adcf914f44d0ecc90f45db007d079b",
+    "lab-final-github-actions-recovery-5be53e45/scenario.json": "85f04be63ccedf1b34fbda5d420158891f53afd77f3fc500f441679087fee313",
+    "lab-final-github-actions-recovery-5be53e45/browser-result.json": "58270b19ee074ef08db7eef39dd16aa6e762c373903c0abe6498f6a42c1b862f",
+    "lab-final-github-actions-recovery-5be53e45/baseline-state.json": "781349ff603a7d72ff555830968bac1da38d447d4c5aeb7122685d82559aab25",
+    "lab-final-github-actions-recovery-5be53e45/operator-api-trace.json": "d2d350833dee66073f31516d0f27384e6289b30f36ee499654782323e0cde912",
+    "lab-final-github-actions-recovery-5be53e45/browser-trace-2.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-recovery-5be53e45/write-1-expected.json": "0a2bc8980eab738268f8fbe9888f1b2cfaa0d9e14d6f0a2b09340fd134828886",
+    "lab-final-github-actions-recovery-5be53e45/final-state.json": "c66a69f2c1963b22c772cc4385b28ab4c5d6cee5a8d91ebcfb38ebfbd32c6286",
+    "lab-final-github-actions-recovery-5be53e45/control.json": "61e6b0f65713619191f34ba33f0b38403ce0c558e798eeefe8f113168db50d34",
+    "lab-final-github-actions-recovery-5be53e45/write-1-before.json": "781349ff603a7d72ff555830968bac1da38d447d4c5aeb7122685d82559aab25",
+    "lab-final-github-actions-recovery-5be53e45/browser-trace-3.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-recovery-5be53e45-r2/fixture.json": "387006bcd20f1c49d271daece4ae8ed448be760fdf31709085efc0f03f886a69",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-6-before.json": "77f7d33feb1f0a1b59cdb4c4a52b7fa0fc07d687321410aec673a90220b8186b",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-7-expected.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/browser-trace-0.json": "d7a595cc756f9e8462bdae5d9df5061a811ba9fef09bf3e3b084e1eeb999436c",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-3-expected.json": "37fc8bd39ea74a40b2741057120e01dfdfb4047ac012f608f4a9a66045c6cb61",
+    "lab-final-github-actions-recovery-5be53e45-r2/image-comparison.json": "820d7912410977cb3f34f993e9402fbb5e98c46bc01d130a301fb5785fac28e2",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-4-after.json": "288496c4c49c6c71bc98c23f6def6586ac72fa2465281c75a23ba137d6b84396",
+    "lab-final-github-actions-recovery-5be53e45-r2/publication-catalog.json": "ef64a2d52b8fad5125e23fa747c8d583bb1b5517eda38985269ade5b63c861e7",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-1-after.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-3-before.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-4-expected.json": "288496c4c49c6c71bc98c23f6def6586ac72fa2465281c75a23ba137d6b84396",
+    "lab-final-github-actions-recovery-5be53e45-r2/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-6-after.json": "ddbd25cd45fdf186718b44c5edf641f43b9c4bff0517b41880e384bc3cf8aeb6",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-3-after.json": "37fc8bd39ea74a40b2741057120e01dfdfb4047ac012f608f4a9a66045c6cb61",
+    "lab-final-github-actions-recovery-5be53e45-r2/workspaces.json": "2091525ebd3f5e7872dd95016b6ceb70218c877a9eee2c1cb1e5096c7b9ab6ff",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-5-before.json": "288496c4c49c6c71bc98c23f6def6586ac72fa2465281c75a23ba137d6b84396",
+    "lab-final-github-actions-recovery-5be53e45-r2/installation-token-result.json": "7916c8b7e3671e8368c195c4c6790575def1f74408b202bcd2715d860cef22ae",
+    "lab-final-github-actions-recovery-5be53e45-r2/cleanup.json": "a319327c2d52af1f7907e50b703f66e4a690c674fde3c0fdcdafd58d027f94f7",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-results.json": "ff40f604341adf30d5b9ad0311d8d1fc742c89970dbe1b895996ecb35fd550c9",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-2-before.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/runtime-image-evidence.json": "454f9fbed6ca8be7818ff1fa16a3a133479792c11cf16fc5b9242413261e9318",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-8-expected.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/native-result.json": "99fa07a19f56386c2a753a51911dbb448c071a8b16ff103930368ca517f426f9",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-8-after.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/worker-logs.json": "6735905b5eea18aaff93580249cf9e732dab9cedc89cdba8abf65a981f3a925f",
+    "lab-final-github-actions-recovery-5be53e45-r2/scenario.json": "85f04be63ccedf1b34fbda5d420158891f53afd77f3fc500f441679087fee313",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-7-before.json": "ddbd25cd45fdf186718b44c5edf641f43b9c4bff0517b41880e384bc3cf8aeb6",
+    "lab-final-github-actions-recovery-5be53e45-r2/browser-result.json": "91b24a557e2954437b417365b13bad1a734fa537bfae567400d3eecd83faad0d",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-5-after.json": "77f7d33feb1f0a1b59cdb4c4a52b7fa0fc07d687321410aec673a90220b8186b",
+    "lab-final-github-actions-recovery-5be53e45-r2/baseline-state.json": "f6190ab4b505d343f86753798a2dd9c20c2b5be2670d517dafc24f66e062d273",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-2-after.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-4-before.json": "37fc8bd39ea74a40b2741057120e01dfdfb4047ac012f608f4a9a66045c6cb61",
+    "lab-final-github-actions-recovery-5be53e45-r2/operator-api-trace.json": "2f7b894b5355cd54be3b96221daaaba04619ebc9c7dba6990db9f6721124b712",
+    "lab-final-github-actions-recovery-5be53e45-r2/browser-trace-2.json": "a218adc03708d72f9d1ed0cd017babf9db2f68d6c99df16c8a97721823c7b498",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-1-expected.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/final-state.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/control.json": "b2767b175dfbac439b7f4de3c34ea0a8e8736b697fa09951cd7594a4490e3a97",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-5-expected.json": "77f7d33feb1f0a1b59cdb4c4a52b7fa0fc07d687321410aec673a90220b8186b",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-8-before.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-2-expected.json": "fa5beda9048f0b8aac18e61e25e12769152566bcd5cef34b2d8009adf1943528",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-6-expected.json": "ddbd25cd45fdf186718b44c5edf641f43b9c4bff0517b41880e384bc3cf8aeb6",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-1-before.json": "f6190ab4b505d343f86753798a2dd9c20c2b5be2670d517dafc24f66e062d273",
+    "lab-final-github-actions-recovery-5be53e45-r2/write-7-after.json": "f4c3cfc4da9abbbec7465dfa350dc00dada878827970f49bb21a3eceaee1247e",
+    "lab-final-github-actions-recovery-5be53e45-r2/browser-trace-3.json": "dfaafe41cc75334eb2595abd4ff9331da2c76e48aee2c27cf470976c50ee3512",
+    "lab-final-github-actions-recovery-5be53e45-deployment.json": "50d049679a145b3b5a39b2376e28d41f8d0128b0dd40faa8e8df5935a5f118c7",
+    "lab-final-github-actions-recovery-5be53e45-runtime-attestation.json": "88c486e532814c78e7e0a39297ff1e038142725945c2675245aeba2a42f2b7a7",
+    "lab-final-github-actions-recovery-5be53e45-twins-deploy.log": "b98b56267b07804ad75ecc58f995ebff638a6850faaf0fc2446c93ab2e0643a5",
+    "lab-final-github-actions-recovery-5be53e45-runtime-deploy.log": "f65272d59d222fb920284da7c7e8b441d4b5787c1ac4c83d654e746e9c627542"
   },
   "preserved_operator_failures": [
     "First reviewer-regression run referenced unavailable bs4; replaced with stdlib HTMLParser before genuine reproduction",
     "First Pyright invocation inferred wrong interpreter; explicit shared interpreter completed with zero errors"
   ],
   "limits": [
-    "Global repository-home private-metadata leak remains a separate open defect",
-    "Hosted deployment/browser/image checks pending",
-    "Full provider/AI/collaboration, exhaustive desktop/mobile/keyboard/touch and sample release gates remain open"
+    "Selected operator conformance, not candidate retry or exhaustive provider/AI/collaboration approval",
+    "Global repository visibility correction is separately tracked in #1205; operation-grant/admin/API-wide permissions remain open",
+    "Physical touch, full keyboard and final sample release gates remain open"
   ],
   "merge_commit": "5be53e4587d0605844314b77038f78b00e6fea24",
   "merged_at": "2026-09-27T03:45:21Z",
   "deployment": {
-    "status": "in_progress",
+    "revision": "5be53e4587d0605844314b77038f78b00e6fea24",
+    "runtime_workflow": 36292328453,
     "twins_workflow": 36292328540,
-    "runtime_workflow": 36292328453
-  }
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:5be53e4587d0605844314b77038f78b00e6fea24@sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:5be53e4587d0605844314b77038f78b00e6fea24@sha256:699b685d0df513db832c03fe7d3d37790568329bb7d4a05d403d2467cf61a7ac",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:5be53e4587d0605844314b77038f78b00e6fea24@sha256:8256601e80ba20816fefa4664744d5b8fcfb92a230c82b15ca9e3c4bde97510a"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00310-n56",
+      "arga-api": "arga-api-00680-ldj"
+    },
+    "log_sha256s": {
+      "lab-final-github-actions-recovery-5be53e45-twins-deploy.log": "b98b56267b07804ad75ecc58f995ebff638a6850faaf0fc2446c93ab2e0643a5",
+      "lab-final-github-actions-recovery-5be53e45-runtime-deploy.log": "f65272d59d222fb920284da7c7e8b441d4b5787c1ac4c83d654e746e9c627542"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "serving_runtime": {
+    "revision": "5be53e4587d0605844314b77038f78b00e6fea24",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00310-n56",
+        "observed_at": "2026-09-27T03:47:00.445328+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:5be53e4587d0605844314b77038f78b00e6fea24",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00310-n56"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00310-n56",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:699b685d0df513db832c03fe7d3d37790568329bb7d4a05d403d2467cf61a7ac",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00680-ldj",
+        "observed_at": "2026-09-27T03:52:19.429726+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:5be53e4587d0605844314b77038f78b00e6fea24",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:759083e8efcc590f90dfb97fa3eff26b991e642f5f2cbe18b107af60297eae82",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:759083e8efcc590f90dfb97fa3eff26b991e642f5f2cbe18b107af60297eae82"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00680-ldj"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00680-ldj",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:759083e8efcc590f90dfb97fa3eff26b991e642f5f2cbe18b107af60297eae82",
+          "sha256:8256601e80ba20816fefa4664744d5b8fcfb92a230c82b15ca9e3c4bde97510a"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "f65272d59d222fb920284da7c7e8b441d4b5787c1ac4c83d654e746e9c627542",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "preserved_hosted_attempts": [
+    {
+      "run_id": "240067bc-5c39-4161-945e-fb8d2bec4a5d",
+      "browser": {
+        "status": "operator_attempt_failed",
+        "passed": false,
+        "reason": "CUA click/Down/Return on branch control unexpectedly submitted main before stale-state setup; no product recovery conclusion from this attempt",
+        "preserved_native_writes": {
+          "events": [
+            {
+              "full_state_matches_expected": false,
+              "method": "POST",
+              "path": "/_ui/repos/fixture-org/comment-check/actions/workflows/4279079153/dispatch",
+              "status": 303
+            }
+          ]
+        },
+        "recovery": "Accessible setValue selected feat/conversation-check without submission; fresh hosted attempt started",
+        "screenshots_retained": false,
+        "tabs_closed": true,
+        "limits": [
+          "Not a candidate retry; operator verification fixture only",
+          "Fresh attempt must independently satisfy all expected native transitions"
+        ]
+      },
+      "image_evidence": {
+        "status": "complete",
+        "observed_at": "2026-09-27T03:53:21.681683+00:00",
+        "publication_sha256": "ef64a2d52b8fad5125e23fa747c8d583bb1b5517eda38985269ade5b63c861e7",
+        "containers": {
+          "github": {
+            "published_revision": "5be53e4587d0605844314b77038f78b00e6fea24",
+            "image_id": "sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6",
+            "published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6",
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:e99dd9f3c619044dd5b01a48ab2bad29de23f7b61511de218bff557c475f95f1"
+            ],
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:cc33d2074d58bcb288e8286a47f339ec75bc995a14f382dc6ada2ea36691b7f6"
+            ],
+            "matched": true
+          },
+          "app": {
+            "matched": true,
+            "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-0feafc6de01642529e10264f4490cf3e",
+            "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-0feafc6de01642529e10264f4490cf3e@sha256:e2c3e42cbb8030fc5bcb556fdf66584991cc2cbf3e6a70cefc171e3c638029f1",
+            "observed_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:e2c3e42cbb8030fc5bcb556fdf66584991cc2cbf3e6a70cefc171e3c638029f1"
+            ],
+            "published_repo_digests": [
+              "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+              "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:e2c3e42cbb8030fc5bcb556fdf66584991cc2cbf3e6a70cefc171e3c638029f1"
+            ],
+            "builder_log_sha256": "caef566038497f2bf849b5c68347105ad6ad5be6fce9c6c3470a52ae390c56e5"
+          },
+          "twin-gateway": {
+            "matched": true,
+            "observed_repo_digests": [
+              "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+            ],
+            "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+            "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          }
+        }
+      },
+      "teardown_confirmed": true
+    }
+  ]
 }

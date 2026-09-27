@@ -1,0 +1,280 @@
+{
+  "rows": [
+    {
+      "principal": "anonymous",
+      "action": "browser_draft_create",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources",
+        "counters"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "anonymous",
+      "action": "browser_public_update",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "anonymous",
+      "action": "browser_public_remove",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "anonymous",
+      "action": "rest_private_read",
+      "status": 401,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "anonymous",
+      "action": "rest_private_update",
+      "status": 401,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "anonymous",
+      "action": "graphql_private_read",
+      "status": 401,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "outside",
+      "action": "browser_draft_create",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources",
+        "counters"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "outside",
+      "action": "browser_public_update",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "outside",
+      "action": "browser_public_remove",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "outside",
+      "action": "rest_private_read",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "outside",
+      "action": "rest_private_update",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "outside",
+      "action": "graphql_private_read",
+      "status": 200,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "limited",
+      "action": "browser_draft_create",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources",
+        "counters"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "limited",
+      "action": "browser_public_update",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "limited",
+      "action": "browser_public_remove",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "limited",
+      "action": "rest_private_read",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "limited",
+      "action": "rest_private_update",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "limited",
+      "action": "graphql_private_read",
+      "status": 200,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "selected",
+      "action": "browser_draft_create",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources",
+        "counters"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "selected",
+      "action": "browser_public_update",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "selected",
+      "action": "browser_public_remove",
+      "status": 303,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": null
+    },
+    {
+      "principal": "selected",
+      "action": "rest_private_read",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "selected",
+      "action": "rest_private_update",
+      "status": 200,
+      "private_content_disclosed": true,
+      "changed_top_level_state": [
+        "generic_resources"
+      ],
+      "response_type": "application/json"
+    },
+    {
+      "principal": "selected",
+      "action": "graphql_private_read",
+      "status": 200,
+      "private_content_disclosed": false,
+      "changed_top_level_state": [],
+      "response_type": "application/json"
+    }
+  ],
+  "reference_urls": [
+    "https://docs.github.com/en/issues/planning-and-tracking-with-projects/managing-your-project/managing-access-to-your-projects",
+    "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects"
+  ],
+  "limits": [
+    "Local isolated fixtures only; no hosted, browser or full project-permission certification."
+  ],
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-27",
+  "provider": "github",
+  "status": "reproduced_open_defects",
+  "release_allowed": false,
+  "source_revision": "d8f303933f536aead9c5c994b3719df9f0b63d42",
+  "tests": {
+    "regressions_failed_before_fix": 31,
+    "positive_lifecycle_passed": 1
+  },
+  "findings": [
+    "Twelve browser writes succeeded across anonymous, limited, outside and selected-installation actors",
+    "Three REST read cases disclose linked private content and three REST updates mutate those hidden items",
+    "GraphQL literal-owner audit was inconclusive because this compatibility parser expects owner variables; the new variable-based regression suite reproduces the missing write boundary"
+  ],
+  "artifacts_sha256": {
+    "lab-github-project-access-audit/outside-browser_public_update.json": "0d9ad9fead58386a249ea2b05e3507004ca7db89828892b9586d4f9a63e9250d",
+    "lab-github-project-access-audit/selected-rest_private_read.json": "6c948f9d3da8d4934f4413035a1aad14788afe7ecbb8b3b3f4ae497a026dcbe8",
+    "lab-github-project-access-audit/outside-graphql_private_read.json": "40ecd8e191dd20b9c89afb5538f92dbdab66bf25647db3634b1d99bb5e55a1fe",
+    "lab-github-project-access-audit/anonymous-rest_private_update.json": "33411ff50ecb64da24349fa22064c3caa09c5bfda3a11e2a1dc7586b0cfdbd68",
+    "lab-github-project-access-audit/limited-rest_private_read.json": "a00a331596e8f49b6f65f04b1fe3ffec239058ac4b488c98cfd818850a57cb81",
+    "lab-github-project-access-audit/result.json": "e4153618bc8356f31c56c43d3d11e27110acbe9704c4cfd900c62354a2e1efb5",
+    "lab-github-project-access-audit/selected-browser_public_update.json": "4a9ed4c22ee84a7bf2af842949ada72469267e761365c10683178604233cb8fc",
+    "lab-github-project-access-audit/selected-graphql_private_read.json": "b0c3885ac4cc2ab86c5e4f3186f81df0705f230f124b5027d88a3c6f90a6554d",
+    "lab-github-project-access-audit/limited-graphql_private_read.json": "bf60291ef9d705edfe1c99056b790c1e10f3c04fdd8ecd43d1c8555ec480706c",
+    "lab-github-project-access-audit/anonymous-rest_private_read.json": "ac2cdacabff07df132ba64918e61e768e77addfb59022817769703ce4739982c",
+    "lab-github-project-access-audit/selected-browser_public_remove.json": "f70ec6b8b0a19f648aff0c0b51c671fa351ceb6e4faf6a0ef0f4828c61396f96",
+    "lab-github-project-access-audit/outside-rest_private_update.json": "d5291d958f0f283c94d49c6917fb38533befc56d8e12de44f43fb6ac5e35cd29",
+    "lab-github-project-access-audit/limited-browser_draft_create.json": "c93cbb9a776286edab0136ef528c0415f769699e9d465c58a12dd24474ff724c",
+    "lab-github-project-access-audit/selected-browser_draft_create.json": "8de008e3928b7fe55aea3cc607fbf4898b86d467b664eada2c82e671ce39e59a",
+    "lab-github-project-access-audit/outside-browser_draft_create.json": "028f33a3dd4e6c79fbdb0e9c719276e18e35d709e66c7046bbdafe5e4e0d40ea",
+    "lab-github-project-access-audit/outside-browser_public_remove.json": "ef187a151faec613198d76c962b2e941dbb5d367ed43bef616dbd22b55c5b4cc",
+    "lab-github-project-access-audit/limited-rest_private_update.json": "d9f6bfad50907ea209486e9930035fe2b85bdc09a8367af40c517e54f86ac0a4",
+    "lab-github-project-access-audit/limited-browser_public_update.json": "d012b92d237dcb92d6bc99618fbe5c9c95202a2cc85b74077a4fe45c81eef223",
+    "lab-github-project-access-audit/anonymous-browser_public_remove.json": "ca049e1176259c5f91abda54b0bbaf2b2398095f073aaeab801e65a496e1772d",
+    "lab-github-project-access-audit/selected-rest_private_update.json": "0b0fd9c7d7d52173235d18a1e43b43a3cae7d5e9944181ba3c3d6d1cf2365b14",
+    "lab-github-project-access-audit/anonymous-graphql_private_read.json": "fd3988e6b4787c794d644d39243e4fb0883a7af1da37e47f4938625b29addbf8",
+    "lab-github-project-access-audit/outside-rest_private_read.json": "95f3a60f0398a384bf3200b831967ba68b69c9b914e7256c7e3d680a88d928eb",
+    "lab-github-project-access-audit/anonymous-browser_draft_create.json": "7be54bdd8ebe7e54c315286dd2abd68ee73d3ef26e4ae2368d3a3436c4f5c8f1",
+    "lab-github-project-access-audit/anonymous-browser_public_update.json": "d18118289e200526c7aceae82732c380840e183f2fa7857168bd971c179eb9bc",
+    "lab-github-project-access-audit/limited-browser_public_remove.json": "0891ac301b8ff7833b11a2f57bd78b29759da276070bbf4e6a3deee5b3260128",
+    "lab-github-project-permissions-red.log": "96a95c3aa0c577cb07f584cd029c255ad1e7ec01bc01727d2ed758d4f8952931"
+  }
+}

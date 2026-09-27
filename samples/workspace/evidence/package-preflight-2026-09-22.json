@@ -15,7 +15,7 @@
     },
     "package_source_secret_scan": {
       "status": "pass",
-      "files_scanned": 326,
+      "files_scanned": 327,
       "image_files": 0,
       "scanned_at": "2026-09-27"
     },
@@ -111,8 +111,8 @@
       "date": "2026-09-27",
       "status": "pass",
       "passed": 58,
-      "command": ".venv/bin/python -m pytest tests/test_computer_use_sample.py -q",
-      "log_sha256": "a5ae73294094411114fca08959ac25d1339cad0cd7a7cfea6371fd541bca2494",
+      "command": "PYTHONPATH=src /Users/tonghx/validation-server/.venv/bin/python -m pytest tests/test_computer_use_sample.py -q",
+      "log_sha256": "5288537c4bbd435e5a51e69f67af5dd0c2d62ef86e9410d1411b8f2b44e481f2",
       "scope": "Package and readiness regression checks; no ZIP created"
     }
   },
@@ -125,10 +125,10 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Fresh hosted foreground Chrome now passes Docs failed-save/focus recovery, GitHub native confirmation Cancel/OK and Stripe actual CSV delivery; bounded 390px checks, exact native comparisons, all current-run container images and cleanup pass. The Docs verifier failure that omitted two expected native permission change-feed events is preserved and resolved by a strict full-state expected comparison. Hosted Actions lifecycle passes strict state checks; its rejection presentation failed and PR #1204 supplies the fix. PR #1204 exact-head CI passes and production deployment is running, with fresh hosted recovery checks pending.",
+  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 hosted native/browser/image gates pass within their recorded scope. GitHub Actions recovery #1204 and repository visibility #1205 pass exact-head CI, both deployments, serving image checks, fresh desktop/390px browser/native state checks and all three current-run container-image matches, with teardown confirmed. Failed operator fixture/submission attempts are preserved. A separate Projects operation-grant audit reproduces unauthorized writes and private native item disclosure; 31 new regressions fail before correction. The most recent all-eight ten-container checkpoint remains c232855b. Full provider and final sample gates remain open.",
   "latest_sample_package_tests": {
     "passed": 58,
     "observed_on": "2026-09-27",
-    "log_sha256": "bcd1fffec89d5c81f8aa4f3c00d5adfe7c7069c8ce45ce8c6f0dfc1b6d91dbe4"
+    "log_sha256": "5288537c4bbd435e5a51e69f67af5dd0c2d62ef86e9410d1411b8f2b44e481f2"
   }
 }
