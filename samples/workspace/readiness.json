@@ -78,6 +78,10 @@
         {
           "path": "samples/workspace/evidence/eight-provider-hosted-fidelity-2026-09-27.json",
           "sha256": "02092ae82a4d0dbc21b1d1b2b0bc4ff25a667244c297d3d883ebe916d4fd7346"
+        },
+        {
+          "path": "samples/workspace/evidence/github-default-branch-settings-2026-09-27.json",
+          "sha256": "4cbbce9e79c1c53ecdb3e8da7769dfc87c5dbd009563438eeb66f6c39c326a56"
         }
       ]
     },
@@ -152,6 +156,14 @@
         {
           "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
           "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-settings-confirmations-2026-09-27.json",
+          "sha256": "d18b003f99bd7ca4fa06ca9423899c4dfb2112be4c9545bd3bca7cdfaa6a8a13"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-settings-refresh-navigation-2026-09-27.json",
+          "sha256": "4da64d18d5716fa50336fc0b9a74cf8dfbd3ff7d7c58eac343ddb9a17978e2b8"
         }
       ]
     },
@@ -274,6 +286,14 @@
         {
           "path": "samples/workspace/evidence/docs-unchanged-modification-label-2026-09-27.json",
           "sha256": "3b8d5767c8f1fea22d719d4c2ffaef3ae74c103089629be177b38f4531608e5b"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-write-control-validation-2026-09-27.json",
+          "sha256": "72426f1d08d450f34a9450a369a461930a66019eb4723ae777b5e55bc11cce00"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-history-comparison-2026-09-27.json",
+          "sha256": "cb006f5f6f609aff8402921d4c5535ff121c9d075e5d206acaa095b024477a66"
         }
       ]
     },
@@ -548,7 +568,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "d33e9ccbed1ce3e640598149e5242a71d2e198f1e89e7e9e85a84add6c20d469"
+          "sha256": "dfb1d77de29211247cc6ce18fd273ad06fb250115430149c8280f85c578d7fcb"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -580,5 +600,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "fbcdd66adeeec057e3289e41ca6c8f84d9d6cac10b03dafd7c18afb7f63d9f46"
+  "sample_tree_sha256": "b158c694f58ad9f7a5662c96ddff4437d5f6a780bbb8261b91afa9e1647c54b7"
 }

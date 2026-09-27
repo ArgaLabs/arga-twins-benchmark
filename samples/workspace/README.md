@@ -40,6 +40,8 @@ These are single-model functional checks, not model comparisons. Original infras
 
 The evidence directory records each change, provider reference, validation scope, protected-state checks, cleanup and remaining limits. Passing a feature check does not close the provider-wide audit.
 
+The latest scoped fixes include deployed Docs write-control validation (#1210), rich history comparisons (#1211), Gmail settings-removal confirmations and refresh-navigation recovery (#1212/#1214), and GitHub default-branch settings (#1213). Each has fresh hosted native-state, desktop/390px and full container-image evidence with confirmed teardown. The Gmail correction preserves a populated mailbox, an unsent draft and unrelated settings during delayed-refresh navigation. Docs table-header controls (#1215) have local native/desktop/390px/pageless evidence and await production verification. These checks do not revalidate the five candidate runs against the eventual final deployment or close any provider-wide audit.
+
 | Surface | Implemented and checked | Recent evidence |
 | --- | --- | --- |
 | GitHub | Review lifecycle, Actions/project state, requested reviewers, artifact redirects/exact bytes, browser download and mobile deletion | `github-requested-reviewers.json`, `mailbox-cursor-artifacts-production-2026-09-24.json` |
