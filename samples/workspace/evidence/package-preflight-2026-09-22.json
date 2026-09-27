@@ -116,7 +116,7 @@
       "scope": "Package and readiness regression checks; no ZIP created"
     }
   },
-  "limits": "Earlier passing candidate episodes, failed attempts and retry provenance remain preserved in their reports. WKS-03 exhausted its approved infrastructure retry with a business failure caused by unread approved terms; do not retry solely to obtain a pass. WKS-04 and WKS-05 pass recorded revalidation after #1150. Individual frontend reports distinguish local, CI, deployment, native, browser and image verification; no bounded feature result closes an exhaustive provider gate. All eight full frontend/AI/collaboration audits, physical mobile/touch coverage, final-deployment task revalidation and final package gates remain open. Current Docs hosted focus, GitHub hosted Chrome and Stripe hosted browser/download checks remain pending. No final ZIP is authorized by this preflight.",
+  "limits": "Earlier passing candidate episodes, failed attempts and retry provenance remain preserved in their reports. WKS-03 exhausted its approved infrastructure retry with a business failure caused by unread approved terms; do not retry solely to obtain a pass. WKS-04 and WKS-05 pass recorded revalidation after #1150. Individual frontend reports distinguish local, CI, deployment, native, browser and image verification; no bounded feature result closes an exhaustive provider gate. All eight full frontend/AI/collaboration audits, physical mobile/touch coverage, final-deployment task revalidation and final package gates remain open. The selected hosted Docs, GitHub and Stripe browser gates pass, while full provider and candidate release gates remain open. No final ZIP is authorized by this preflight.",
   "latest_package_checks": {
     "date": "2026-09-24",
     "passed": 186,
@@ -125,5 +125,10 @@
     "log_sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a",
     "release_allowed": false
   },
-  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Hosted Docs focus, GitHub log confirmation and Stripe browser download checks remain pending because the Mac is locked."
+  "latest_browser_gate_status": "2026-09-27: Docs #1187, GitHub #1203 and Stripe #1199 are merged and deployed. Local Docs focus recovery, GitHub native confirmation/menu/accessibility and Stripe actual CSV downloads pass. Hosted native checks, serving API/proxy images and fresh worker-image checks pass; all ten containers in the current eight-provider run match their own publications. Fresh hosted foreground Chrome now passes Docs failed-save/focus recovery, GitHub native confirmation Cancel/OK and Stripe actual CSV delivery; bounded 390px checks, exact native comparisons, all current-run container images and cleanup pass. The Docs verifier failure that omitted two expected native permission change-feed events is preserved and resolved by a strict full-state expected comparison.",
+  "latest_sample_package_tests": {
+    "passed": 58,
+    "observed_on": "2026-09-27",
+    "log_sha256": "cc924c394b219d2568b4a58d2cfa2259ff11cbc81a87d06a028a92ff17b6642a"
+  }
 }

@@ -299,5 +299,14 @@
       "container_image_matches": 3,
       "candidate_trial": false
     }
-  ]
+  ],
+  "hosted_browser_2026_09_27": {
+    "status": "bounded_pass",
+    "run_id": "7787bd3a-622c-4981-9df0-721f38ee77a0",
+    "evidence": "github-actions-log-controls-2026-09-26.json#/hosted",
+    "scope": "Owner/reader workflow and run controls, limited-token direct 403, native log confirmation Cancel/OK, reload and 390px layout",
+    "limitations": [
+      "Does not certify dispatch/rerun/enable/disable browser mutation lifecycle, complete provider error presentation or physical touch"
+    ]
+  }
 }

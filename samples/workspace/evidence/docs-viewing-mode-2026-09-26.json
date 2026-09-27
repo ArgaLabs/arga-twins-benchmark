@@ -6,7 +6,7 @@
   ],
   "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1187",
   "source_head": "42286471a25b9ea65b1491bd59d2a264479fc6b2",
-  "status": "deployed_native_and_images_pass_hosted_focus_pending",
+  "status": "deployed_bounded_hosted_native_browser_images_pass",
   "release_allowed": false,
   "scope": [
     "Native role/OAuth-scoped document access capabilities",
@@ -141,10 +141,23 @@
     "lab-final-docs-viewing-59f3c439-r2/image-comparison.json": "b3ad4ba1a37ba522d3bed7eb1d4713c084504eb1ec76700d9729f3cc02e588c3",
     "lab-final-docs-viewing-59f3c439-r2/runtime-image-evidence.json": "9a9cbbbfadc6826c805225388fe58d5aa788bf87bd8483ec70dc06f9e4b72e46",
     "lab-final-docs-viewing-59f3c439-r2/browser-trace-0.json": "321718d56128869a74d2e5aeed7885e592d9f68396a664f12567715a49c54de6",
-    "lab-final-docs-viewing-59f3c439-r2/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19"
+    "lab-final-docs-viewing-59f3c439-r2/browser-trace-1.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "lab-final-docs-viewing-c232855b-browser-r1/browser-trace-0.json": "e346bfd7d15570dc86d8c6d185b37d210bdeca20ca20e2561ada7e514e314db2",
+    "lab-final-docs-viewing-c232855b-browser-r1/image-comparison.json": "4f344d1ef9607442d62b8a4e4e6ea9fc5c19505b9b4aa7e44d50d76b1a494dfa",
+    "lab-final-docs-viewing-c232855b-browser-r1/browser-trace-1.json": "c5585d09b4e8d9f2915292ae4fc102eb2d6793d46431a3dcee8d264ea6c63bf2",
+    "lab-final-docs-viewing-c232855b-browser-r1/corrected-native-result.json": "dfe83b317cfe3df2c512cb07d0cf5473b76cd191933344bb093adec55d42be43",
+    "lab-final-docs-viewing-c232855b-browser-r1/cleanup.json": "685332c5cd34f09e77f9650978b9d473433b9b47b4416b5328d45d8ff30b502b",
+    "lab-final-docs-viewing-c232855b-browser-r1/runtime-image-evidence.json": "ea83e12e5dd69f7c70aec02728d35beb0ce533b7c6a1f4461a380b4ede2c4feb",
+    "lab-final-docs-viewing-c232855b-browser-r1/browser-result.json": "01b24473543b1c4ef5d94ba8cb79c0eca1ab171b961b93355100e4f88f2d2721",
+    "lab-final-docs-viewing-c232855b-browser-r1/baseline-state.json": "3af15e8157d76d55cf95ed5a85853138b983b5a59675afe7af6ab91a9ce21b69",
+    "lab-final-docs-viewing-c232855b-browser-r1/operator-api-trace.json": "b89501485410b97c45d7b30d47bc31d613b8db8d7a4e1d83cde6877c87064ad9",
+    "lab-final-docs-viewing-c232855b-browser-r1/final-state.json": "725d68a8a769025baa71723de35716d8018eed47156854a35e2d5587cd8941e7",
+    "lab-final-docs-viewing-c232855b-browser-r1/expected-state.json": "725d68a8a769025baa71723de35716d8018eed47156854a35e2d5587cd8941e7",
+    "lab-final-docs-viewing-browser-r1.log": "b892bb4c0df27945c11076ff8524249cb523d2bd38b590e93a247005464c7478",
+    "lab-final-verify-docs-expected-events.py": "ea3c801e013715882fa206585a5bd71c30f653a898317c427ebfebe0611d389e"
   },
   "limits": [
-    "Both production deployments and serving image checks pass. Fresh hosted native reader denial and all four worker images pass; bounded owner Viewing/reload observed; hosted real focus recovery remains blocked by Mac lock.",
+    "Production, serving images, fresh hosted native reader denial, all four worker images, real foreground focus recovery and bounded 390px Viewing/tab/reload checks pass. Full native state equals baseline plus exactly two permission change-feed entries; original verifier failure is preserved.",
     "No Suggesting, full commenter collaboration, request-access, full menus/admin/realtime/AI claim",
     "No exhaustive visual/mobile/touch parity or final release readiness"
   ],
@@ -270,21 +283,108 @@
     ]
   },
   "hosted": {
-    "status": "native_images_partial_browser_pass_host_focus_pending",
-    "run_id": "24dca045-2ce6-4edb-9a4e-87d883f50165",
-    "native_reader_denial403_full_state_unchanged": true,
-    "matched_actual_containers": 4,
-    "observed_browser": [
-      "Owner switches Editing to Viewing and formatting/edit controls disappear",
-      "Viewing survives reload at 390x844; document body readable",
-      "Mobile tab drawer opens and selecting Protected tab updates URL"
-    ],
-    "pending": [
-      "Verify protected tab body after asynchronous load",
-      "Foreground editor failed-save and real focus revocation/restoration"
-    ],
-    "screenshots_retained": false,
-    "final_complete_state_equals_baseline": true,
+    "status": "bounded_native_browser_images_pass",
+    "run_id": "b9e54b80-6658-4a69-bad9-6f75ffbaee97",
+    "browser": {
+      "status": "bounded_hosted_pass",
+      "passed": true,
+      "run_id": "b9e54b80-6658-4a69-bad9-6f75ffbaee97",
+      "browser": "Google Chrome via CUA; foreground native controls and 390x844 viewport checks",
+      "observations": [
+        "Native foreground Chrome: failed save blocks Viewing and retains the disposable unsaved draft",
+        "Real tab blur/focus after native writer-to-reader revocation selects disabled Viewing, removes editing controls and retains draft text",
+        "Real tab blur/focus after native writer restoration enables the mode control; Editing restores the retained draft",
+        "Reload with writes still blocked discards the disposable draft and displays the original native text",
+        "390x844 owner Viewing removes editing controls; Protected tab navigation displays Keep this tab unchanged and closes the drawer; tab and Viewing survive reload"
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "owned_tabs_closed": true,
+      "teardown_confirmed": true,
+      "limits": [
+        "Selected flows only; no exhaustive desktop/mobile/provider/AI/collaboration parity claim",
+        "390px pointer checks do not establish physical touch behavior"
+      ],
+      "state_verification": {
+        "passed": true,
+        "original_helper_assertion": "failed: equality omitted expected native permission change-feed entries",
+        "complete_state_matches_strict_expected": true,
+        "expected_native_events": {
+          "count": 2,
+          "times": [
+            "2026-09-26T12:00:00.010000+00:00",
+            "2026-09-26T12:00:00.011000+00:00"
+          ],
+          "paths": [
+            "providers/google_docs/state/changes",
+            "providers/google_drive/state/changes",
+            "queries/google_docs.full/body/changes",
+            "queries/google_drive.full/body/changes"
+          ],
+          "payload": "Exact previous owned-file change snapshot with only time advanced one millisecond per permission PATCH"
+        },
+        "document_contents_revisions_metadata_permissions_and_sibling_state_equal_baseline": true,
+        "full_state_fields_ignored": [],
+        "reader_write403_unchanged_preflight": true,
+        "failed_draft_never_persisted": true
+      },
+      "operator_fault": "503 save failure injected only at operator browser proxy; native permission changes used the Drive API",
+      "preserved_verifier_failure": "Original exact-baseline assertion omitted two expected Drive permission change-feed events. Full comparison to strict expected state passes, with no ignored fields. Original log and snapshots retained."
+    },
+    "actual_container_images_matched": 4,
+    "image_evidence": {
+      "status": "complete",
+      "observed_at": "2026-09-27T03:14:47.179466+00:00",
+      "publication_sha256": "31b30f7af31f83fede850fcf45feba9b18e2bf935e4b09a27c910cc7231afbab",
+      "containers": {
+        "google_docs": {
+          "published_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+          "image_id": "sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:e7848993a27ee2bf23b42d721ea46ed7756da0bcd957865945440ac2a4b51cd3"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:6a98bd724e6b703ad70368b807ad4a150bab90b2b27e154192439910415d2b36"
+          ],
+          "matched": true
+        },
+        "google_drive": {
+          "published_revision": "59f3c4390e43319f40c25774da694f7fb2f34c40",
+          "image_id": "sha256:b6ebedaa4c76f0e9afe1a8cdd6d04760348b0ac63c8ea7df8042d9c1e698afba",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:6a984c1433adeec0343740704d4e3f1b1591c40a88a370262fc096c22a1e0cfe",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:b6ebedaa4c76f0e9afe1a8cdd6d04760348b0ac63c8ea7df8042d9c1e698afba"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:b6ebedaa4c76f0e9afe1a8cdd6d04760348b0ac63c8ea7df8042d9c1e698afba"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-0ddd55713f534cf983bd3eed8263136e",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-0ddd55713f534cf983bd3eed8263136e@sha256:b188faa8bc609caf9dfda0238e59cb38ab8d3c9cf2849b747564e6116683d5e7",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:b188faa8bc609caf9dfda0238e59cb38ab8d3c9cf2849b747564e6116683d5e7"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:b188faa8bc609caf9dfda0238e59cb38ab8d3c9cf2849b747564e6116683d5e7"
+          ],
+          "builder_log_sha256": "473b0f52be5d144b31b4b648c76bb24c4627dcfecfe3902564342d489b341287"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
     "teardown_confirmed": true
   },
   "preserved_hosted_attempts": [
@@ -293,6 +393,24 @@
       "result": "operator_helper_failure",
       "reason": "Candidate ProviderGateway correctly rejected operator /ui/ endpoint; retry uses authenticated operator provider HTTP without changing candidate policy",
       "actual_container_images_matched": 4,
+      "teardown_confirmed": true
+    },
+    {
+      "status": "native_images_partial_browser_pass_host_focus_pending",
+      "run_id": "24dca045-2ce6-4edb-9a4e-87d883f50165",
+      "native_reader_denial403_full_state_unchanged": true,
+      "matched_actual_containers": 4,
+      "observed_browser": [
+        "Owner switches Editing to Viewing and formatting/edit controls disappear",
+        "Viewing survives reload at 390x844; document body readable",
+        "Mobile tab drawer opens and selecting Protected tab updates URL"
+      ],
+      "pending": [
+        "Verify protected tab body after asynchronous load",
+        "Foreground editor failed-save and real focus revocation/restoration"
+      ],
+      "screenshots_retained": false,
+      "final_complete_state_equals_baseline": true,
       "teardown_confirmed": true
     }
   ]

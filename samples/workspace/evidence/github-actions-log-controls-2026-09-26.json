@@ -2,7 +2,7 @@
   "schema": "arga.lab.feature-evidence/1",
   "observed_on": "2026-09-27",
   "provider": "github",
-  "status": "deployed_images_native_access_pass_hosted_log_confirmation_pending",
+  "status": "deployed_bounded_hosted_native_browser_images_pass",
   "release_allowed": false,
   "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1203",
   "source_head": "44facf6c2d13db626b327babc1171f80fe9b9ee3",
@@ -115,7 +115,20 @@
     "lab-final-github-log-controls-7329619d/cleanup.json": "1f714639ede699cccab632a191c655091cd2f996b6f9bc0051fe6ef9c3e8430d",
     "lab-final-github-log-controls-7329619d/operator-api-trace.json": "1df8395d1856901a2223cd4075b672cd07ddf054b18c38c79317f78fd001f33c",
     "lab-final-github-log-controls-7329619d-deployment.json": "244f196f8121dbd563881f7e33e747ed925e9c0924fe2c087a6af8c8f15d8b9a",
-    "lab-final-github-log-controls-7329619d-runtime-attestation.json": "c2acefdb0374e138bf824677cb141edb0025a210ead11e97d40ff30e34906680"
+    "lab-final-github-log-controls-7329619d-runtime-attestation.json": "c2acefdb0374e138bf824677cb141edb0025a210ead11e97d40ff30e34906680",
+    "lab-final-github-log-controls-c232855b-browser-r1/browser-trace-0.json": "b1cd4340364d2fecf73b777518f257f397afdcf1b25743b0cbe67b8bc2a3407b",
+    "lab-final-github-log-controls-c232855b-browser-r1/image-comparison.json": "8b018a075676244dcc8afd54f5c634ef51901ad149af98efa83e2158ba754d2a",
+    "lab-final-github-log-controls-c232855b-browser-r1/gui-baseline-state.json": "49b8232d81863b7a0a264c03950442f7afec48923aabf20c8253fcc8dfee392d",
+    "lab-final-github-log-controls-c232855b-browser-r1/browser-trace-1.json": "0f3c505a759882a31f97ea7cce8476f092165032f365e17fdaa527181f91a5fb",
+    "lab-final-github-log-controls-c232855b-browser-r1/browser-native-result.json": "9cf4e8923b4441f1621398120717027ec9417eddd69a6b82177eafc7c8a16af8",
+    "lab-final-github-log-controls-c232855b-browser-r1/cleanup.json": "8e12336c14841359673b113bf62a25ac309dd6ebf80d1cff8e0a87269342b655",
+    "lab-final-github-log-controls-c232855b-browser-r1/runtime-image-evidence.json": "3e3feee3e335488323518d3f7c91aee97219af3807d4ea266ae0b3b40e030fc4",
+    "lab-final-github-log-controls-c232855b-browser-r1/native-result.json": "c1938a4ae9656e4a9178271bc21074a4ba9dd16460404787b3ba43b76bb8306f",
+    "lab-final-github-log-controls-c232855b-browser-r1/browser-result.json": "01a787de2dd6aeffd113059f6159c4c2d0a0d47f1ebc66ea698961f75a50e986",
+    "lab-final-github-log-controls-c232855b-browser-r1/cancel-state.json": "49b8232d81863b7a0a264c03950442f7afec48923aabf20c8253fcc8dfee392d",
+    "lab-final-github-log-controls-c232855b-browser-r1/operator-api-trace.json": "1278d4848d772299c45ea2b069d7aac06872329c18f2910820e599a3df86d73b",
+    "lab-final-github-log-controls-c232855b-browser-r1/browser-trace-2.json": "d1cb88525eb9fa233c2d9536e520d32707098fc87eb7814341e1d4ae07496408",
+    "lab-final-github-log-controls-c232855b-browser-r1/final-state.json": "6f228426b8d657699b26869f7f7514737b6fb0da1a84b9b345c8f1d404a4cef5"
   },
   "pull_request_state": {
     "state": "merged",
@@ -231,27 +244,114 @@
     ]
   },
   "hosted": {
-    "run_id": "22ac8656-46ae-4be5-9c8a-73f416a4ac13",
-    "native": {
-      "checks": [
-        "limited OAuth and unknown-token reads/writes rejected with unchanged complete native state",
-        "owner reads preserve full native state",
-        "owner disable/enable and dispatch/cancel/rerun persist"
-      ],
-      "complete_protected_state_comparison": true,
-      "denied_paths": 68,
-      "limits": [
-        "installation read/write boundary hosted; body-read revocation covered locally",
-        "native HTML control projection passes; Chrome rendering/reload remains pending and provider error presentation is incomplete",
-        "not a candidate business result or exhaustive provider pass"
-      ],
-      "owner_and_reader_read_paths": 26,
+    "status": "bounded_native_browser_images_pass",
+    "run_id": "7787bd3a-622c-4981-9df0-721f38ee77a0",
+    "browser": {
+      "status": "bounded_hosted_pass",
       "passed": true,
-      "permission_aware_native_html": true
+      "run_id": "7787bd3a-622c-4981-9df0-721f38ee77a0",
+      "browser": "Google Chrome via CUA; foreground native controls and 390x844 viewport checks",
+      "observations": [
+        "Native foreground Chrome opens the real Delete all logs confirmation; Cancel restores focus and exact whole native baseline",
+        "Keyboard Return activates the named command; native OK deletes only the owned twin run logs",
+        "Reload omits log controls while retaining workflow/job metadata and the artifact",
+        "390x844 reader omits all write controls; Actions list has no dispatch/disable controls",
+        "Limited principal sees native 403 on the direct run path",
+        "390x844 owner retains Re-run and artifact controls; workflow dispatch disclosure exposes the branch choice and closes without submission"
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "owned_tabs_closed": true,
+      "teardown_confirmed": true,
+      "limits": [
+        "Selected flows only; no exhaustive desktop/mobile/provider/AI/collaboration parity claim",
+        "390px pointer checks do not establish physical touch behavior"
+      ],
+      "state_verification": {
+        "complete_state_comparison": true,
+        "direct_denials": [
+          403,
+          403,
+          401
+        ],
+        "limits": [
+          "Browser observations recorded separately; no physical touch or exhaustive provider parity inferred"
+        ],
+        "metadata_retained": true,
+        "native_logs_status": 404,
+        "only_browser_change": "owned run logs_deleted=true",
+        "passed": true
+      },
+      "operator_note": "Native URL typeText dropped punctuation and searched a fictional local fixture URL; immediately corrected using native paste. No credentials or private account data were in that URL."
     },
     "actual_container_images_matched": 3,
-    "teardown_confirmed": true,
-    "browser": "pending: Mac locked",
-    "log_deletion_submission": "pending hosted native browser confirmation; this run covers the broader Actions access/control matrix, not a new hosted log-deletion submission"
-  }
+    "image_evidence": {
+      "status": "complete",
+      "observed_at": "2026-09-27T03:14:48.721726+00:00",
+      "publication_sha256": "31b30f7af31f83fede850fcf45feba9b18e2bf935e4b09a27c910cc7231afbab",
+      "containers": {
+        "github": {
+          "published_revision": "7329619da1bcb2dd7f6b2c8e3ff5289fc6ecf978",
+          "image_id": "sha256:405ad0d714ea66c0dc34bfa84aa79067a1bc7ee6f76212548b41831ddc9abe13",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:405ad0d714ea66c0dc34bfa84aa79067a1bc7ee6f76212548b41831ddc9abe13",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:dadfe4e01bd775a9235effd001a22e201dc57b740c5d3728caa8026c072d15af"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:405ad0d714ea66c0dc34bfa84aa79067a1bc7ee6f76212548b41831ddc9abe13"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e93864cd7a0a4caabc1d367313f403c5",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e93864cd7a0a4caabc1d367313f403c5@sha256:69f4603aacf51d6cf0836338044bfbfeae7676f9c628e03ba18b57c7cf2084f5",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:69f4603aacf51d6cf0836338044bfbfeae7676f9c628e03ba18b57c7cf2084f5"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:69f4603aacf51d6cf0836338044bfbfeae7676f9c628e03ba18b57c7cf2084f5"
+          ],
+          "builder_log_sha256": "c86717e52443ffa2cc9045d9e2aa3bba852950c656d87ccb11c9e0d68355fc6e"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "teardown_confirmed": true
+  },
+  "preserved_hosted_attempts": [
+    {
+      "run_id": "22ac8656-46ae-4be5-9c8a-73f416a4ac13",
+      "native": {
+        "checks": [
+          "limited OAuth and unknown-token reads/writes rejected with unchanged complete native state",
+          "owner reads preserve full native state",
+          "owner disable/enable and dispatch/cancel/rerun persist"
+        ],
+        "complete_protected_state_comparison": true,
+        "denied_paths": 68,
+        "limits": [
+          "installation read/write boundary hosted; body-read revocation covered locally",
+          "native HTML control projection passes; Chrome rendering/reload remains pending and provider error presentation is incomplete",
+          "not a candidate business result or exhaustive provider pass"
+        ],
+        "owner_and_reader_read_paths": 26,
+        "passed": true,
+        "permission_aware_native_html": true
+      },
+      "actual_container_images_matched": 3,
+      "teardown_confirmed": true,
+      "browser": "pending: Mac locked",
+      "log_deletion_submission": "pending hosted native browser confirmation; this run covers the broader Actions access/control matrix, not a new hosted log-deletion submission"
+    }
+  ]
 }
