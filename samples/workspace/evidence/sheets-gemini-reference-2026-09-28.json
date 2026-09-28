@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-28",
+  "provider": "google_sheets",
+  "status": "bounded_live_reference_observed_implementation_pending",
+  "fixture": {
+    "title": "Arga fidelity Sheets Gemini 20260928-6ad2",
+    "created_for_this_test": true,
+    "private": true,
+    "content": "Project\\tStatus\\tBudget; Atlas/On schedule/120; Boreal/Review/80",
+    "cleanup": "File moved to trash confirmed in provider UI; no permanent delete"
+  },
+  "observations": [
+    "Gemini menu and Ask Gemini button; assistant with New conversation, View, Close, sources and tools",
+    "Tools menu: Build selected, Create canvas, Create images, Deep Research; other modes not exercised",
+    "Read-only question for A1:C3 returned sum 200 (120 + 80)",
+    "Response controls: Model thoughts, Insert, Copy, More options, Good response, Bad response; More options exposes Retry and Report",
+    "Copy yielded Markdown text: The sum of the Budget in A1:C3 is **200** (120 + 80).",
+    "Insert into occupied selected A1:C3 opens Add this text here? and warns it replaces current cell data; Cancel leaves selected range/header and displayed sum 200",
+    "Insert into empty E1 writes the literal Markdown answer into the cell",
+    "Native Undo clears E1; fresh reload shows E1 blank and original A1 header Project",
+    "Generation exposes Cancel, but cancellation of generation was not exercised"
+  ],
+  "interaction_notes": [
+    "Previously retained test tab was detached and its document already trashed; left untouched and created a new unique fixture.",
+    "First prompt fill did not enable Submit; native paste succeeded.",
+    "Immediate clipboard read after Copy was stale; later read returned the response after the Copied UI state."
+  ],
+  "limits": [
+    "No complete native API snapshot or all-cell state comparison.",
+    "No comprehensive assistant, Build, sources/history, error-path, permission, visual or mobile/touch audit.",
+    "No screenshots retained, no outbound sharing/messages, no pre-existing documents mutated.",
+    "This reference does not claim implementation or release readiness."
+  ],
+  "release_ready": false
+}

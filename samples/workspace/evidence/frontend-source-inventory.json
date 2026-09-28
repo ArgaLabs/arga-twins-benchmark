@@ -3423,18 +3423,18 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 1,
-      "markup_control_occurrences": 111,
+      "route_candidate_count": 4,
+      "markup_control_occurrences": 125,
       "files": [
         {
           "path": "twins/gmail/app.py",
-          "sha256": "76b0d6f3adb0a2aa5250663e601b690bc0baaf67dc940f898cdbbf7835c7744c",
+          "sha256": "535469f98ef6e0ec1e94979648fbe4d9acf72fad42565b43aeca9591f082dfa0",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 618
+              "line": 620
             }
           ],
           "markup_expressions": []
@@ -3923,6 +3923,164 @@
           ]
         },
         {
+          "path": "twins/gmail/gemini.py",
+          "sha256": "2203ad4c26064f3f578b3e314e4121e0adf1809fc036e323efbc9797c127af8e",
+          "frontend_route_candidates": [
+            {
+              "method": "GET",
+              "path": "/ui/gemini",
+              "handler": "settings",
+              "line": 77
+            },
+            {
+              "method": "POST",
+              "path": "/ui/gemini/generate",
+              "handler": "generate",
+              "line": 82
+            },
+            {
+              "method": "POST",
+              "path": "/ui/gemini/drafts/write",
+              "handler": "write_draft",
+              "line": 127
+            }
+          ],
+          "markup_expressions": []
+        },
+        {
+          "path": "twins/gmail/gemini_ui.py",
+          "sha256": "ae70b0a700fe1ec7eea7a04cef01f558979f95535ed606d529a34377725b4c16",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 3,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiOpen",
+                    "type": "button",
+                    "aria-label": "Help me write",
+                    "aria-controls": "composeGemini",
+                    "hidden": null
+                  },
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "line": 9,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiClose",
+                    "type": "button",
+                    "aria-label": "Close Help me write"
+                  },
+                  "text": "Close"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "composeGeminiForm"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "composeGeminiPrompt",
+                    "aria-label": "Describe your message"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiSubmit",
+                    "type": "submit"
+                  },
+                  "text": "Create"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiCancel",
+                    "type": "button",
+                    "hidden": null
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Formalize"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Make friendlier"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Shorten"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Polish"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiUndo",
+                    "type": "button",
+                    "disabled": null
+                  },
+                  "text": "Undo"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiRedo",
+                    "type": "button",
+                    "disabled": null
+                  },
+                  "text": "Redo"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiRetry",
+                    "type": "button",
+                    "hidden": null
+                  },
+                  "text": "Try again"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "composeGeminiReload",
+                    "type": "button",
+                    "hidden": null
+                  },
+                  "text": "Reload drafts"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/gmail/labels_ui.py",
           "sha256": "3afff84f575509c011dc05fb892647476277aa2d8d024e9c125e41671654422d",
           "frontend_route_candidates": [],
@@ -4195,11 +4353,11 @@
         },
         {
           "path": "twins/gmail/ui.py",
-          "sha256": "5365f47232702f3d9a8009f0dbc8c454a08024ed513730a00199e1851e329e5f",
+          "sha256": "195d5afe6c34e2a1c84e3dbdff2e310cf43cffded1f376a0be622b9f69141daf",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 32,
+              "line": 36,
               "dynamic": true,
               "controls": [
                 {

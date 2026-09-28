@@ -114,6 +114,10 @@
         {
           "path": "samples/workspace/evidence/github-apply-suggestions-2026-09-27.json",
           "sha256": "a3b4870c22b6ba67bc468821a5e72d68869a848b321cbc04cdbc651b71800990"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
+          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
         }
       ]
     },
@@ -200,6 +204,14 @@
         {
           "path": "samples/workspace/evidence/gmail-gemini-reference-2026-09-28.json",
           "sha256": "9e78e892209b2a55ae1ce7d5832742a0072a57c1ab6e82ebb9cd337d019d20d4"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-gemini-2026-09-28.json",
+          "sha256": "e68bd32e79bb73b518649779a20c2b114d9f65edc9575ac7c62ee42d7b0e80e2"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
+          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
         }
       ]
     },
@@ -311,6 +323,14 @@
         {
           "path": "samples/workspace/evidence/sheets-pivots-2026-09-27.json",
           "sha256": "98b8e10463c8f7dfbd3681f3c2742a9a760a550ac4b183a4df0b78f8be594c16"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-gemini-reference-2026-09-28.json",
+          "sha256": "4c64d933f7f6fefdc9197861268df5fd1e473f4e3e0b1816275ed5c5dfd410dc"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
+          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
         }
       ]
     },
@@ -386,6 +406,10 @@
         {
           "path": "samples/workspace/evidence/docs-gemini-2026-09-28.json",
           "sha256": "449e695402bf7585a2e122b43528225a3b540c79b959815b87e82e950b7b0720"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
+          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
         }
       ]
     },
@@ -660,7 +684,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "1b1140af2560009a1ea893ab8c1ecf8cd6322ea7e30281ad8cbe6be4a4d6e022"
+          "sha256": "167b64b5b6f62b62eb9b2b3b791dbc2949709d8e33580ea04a4be4ac06e17cb5"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -692,5 +716,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "9ceed8b690c40b6ac78e8ce54c69d2d0385d8bd847f13f0c4ae9a60ee9fb6bb9"
+  "sample_tree_sha256": "109a925879319978bf17b811ab5788bd9e0147f15d051f4d12cedc4bbe3598fb"
 }

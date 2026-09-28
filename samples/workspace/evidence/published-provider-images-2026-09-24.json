@@ -64,13 +64,13 @@
       ]
     },
     "gmail": {
-      "databaseId": 36384243381,
-      "headSha": "750d93d3f8bea16df614d2944f1cd57ba11149d6",
-      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:750d93d3f8bea16df614d2944f1cd57ba11149d6@sha256:8d2e3b368c20321d14caeafdaa46166e67c085bf803725541226589d0bce852f",
-      "log_sha256": "63a491c9441259656b56b0d5bb44f175daa89aef47c190c105509dee9ea3640b",
-      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36384243381",
+      "databaseId": 36394434614,
+      "headSha": "b59d217fb93e128fd453b301234ea12308af2281",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:b59d217fb93e128fd453b301234ea12308af2281@sha256:6f733c1527eccab60d6d1f75778d6761c6ff89db6650c4eb9f268100b73b7a34",
+      "log_sha256": "ead08325d886fec1d6283d66522d01bd6b6c20f5fc58fe6edbae7a49f92a3c52",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36394434614",
       "platform_manifest_digests": [
-        "sha256:a819a4aa8071f434902c5abafd67013a6738d41f53b405e9384471b1d32d1a30"
+        "sha256:2f15cc632e29dd869d93a4d185b1b29c8ceffdda084da3e831c1ba3fe8fb373f"
       ]
     },
     "google_calendar": {
@@ -85,47 +85,44 @@
     }
   },
   "limits": [
-    "Latest API/proxy serving images and all ten fresh Gemini conformance worker containers match immutable publications. Earlier attestations retain their own revisions.",
+    "Latest API/proxy serving images and all ten fresh Gmail assistant conformance worker containers match immutable publications. Earlier attestations retain their own revisions.",
     "Timestamped image observations do not establish exhaustive browser, visual, permission or physical-touch parity."
   ],
   "latest_runtime_deployment": {
-    "revision": "1bb9015d78732142c8ef7dac2fee6668e912f062",
-    "runtime_workflow": 36390243172,
-    "twins_workflow": 36390243390,
+    "revision": "b59d217fb93e128fd453b301234ea12308af2281",
+    "runtime_workflow": 36394434665,
+    "twins_workflow": 36394434614,
     "both": "success",
     "published_images": {
-      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:91a990c7ace557d3aa402cdd8df93d57bb5be7d64a507c33a1dfd2d85fd7fa41",
-      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:b5986604c0797534287ac8241bae097281e6af9e5418c26cc5b696841cb8cd61",
-      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:1a75affbab50ed2834e4be79de99f9d7738d5c02b05e58108c986fe36ae7fd15",
-      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:0a954dfade25e247b8e7c379d9e6374b02aba275d47f17a3b1dd842aa681b941",
-      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:6a3c4d289535ecd37b50c590094e4b4dda31b5e5e3c28cd462394474dcfdbb58",
-      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:9980cedec9a7c791d9129e3528bfe58c789a8ff653d38fd4776df63ecd1466f0"
+      "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:b59d217fb93e128fd453b301234ea12308af2281@sha256:6f733c1527eccab60d6d1f75778d6761c6ff89db6650c4eb9f268100b73b7a34",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:b59d217fb93e128fd453b301234ea12308af2281@sha256:73bbb68e56dab9abc0c0d3ece59c4c94a852e4b199378ceff0fadabd3b10fa4c",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:b59d217fb93e128fd453b301234ea12308af2281@sha256:a93bada8bb13fb1913a75c700a7f5705899dca1364447a8f87379655fbba9f53"
     },
     "runtime_revisions_at_deployment": {
-      "preview-proxy": "preview-proxy-00341-682",
-      "arga-api": "arga-api-00711-dxn"
+      "preview-proxy": "preview-proxy-00342-zpb",
+      "arga-api": "arga-api-00712-524"
     },
     "log_sha256s": {
-      "lab-final-docs-gemini-twins-deploy.log": "15ee0cc3f052c640bad2001f4cbbc9e2217978ecb04870d52043751e712d982a",
-      "lab-final-docs-gemini-runtime-deploy.log": "99d6e9c9feba492185facd0b644c919f21bb47b50af58b4f73132cfcb352899e"
+      "lab-final-gmail-gemini-twins-deploy.log": "ead08325d886fec1d6283d66522d01bd6b6c20f5fc58fe6edbae7a49f92a3c52",
+      "lab-final-gmail-gemini-runtime-deploy.log": "29ef255cecddbb831dc17bd65e4c6ed444475ce06483a6356c08457ec46c5e9e"
     },
     "cloud_run_observations": [
       {
-        "latest_ready_revision": "preview-proxy-00341-682",
-        "observed_at": "2026-09-28T07:12:00.355553+00:00",
+        "latest_ready_revision": "preview-proxy-00342-zpb",
+        "observed_at": "2026-09-28T07:57:50.569322+00:00",
         "region": "us-west1",
-        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:1bb9015d78732142c8ef7dac2fee6668e912f062",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:b59d217fb93e128fd453b301234ea12308af2281",
         "revisions": [
           {
             "containers": [
               {
-                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d",
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:77efad790266f38991464613ad1a021b50819897f8ee1b9c5e96329f19b6e846",
                 "name": "preview-proxy-1",
-                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d"
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:77efad790266f38991464613ad1a021b50819897f8ee1b9c5e96329f19b6e846"
               }
             ],
             "ready": true,
-            "revision": "preview-proxy-00341-682"
+            "revision": "preview-proxy-00342-zpb"
           }
         ],
         "schema": "arga.cloud-run-images/1",
@@ -134,32 +131,32 @@
         "traffic": [
           {
             "percent": 100,
-            "revision": "preview-proxy-00341-682",
+            "revision": "preview-proxy-00342-zpb",
             "tag": null
           }
         ],
         "published_manifest_digests": [
-          "sha256:6a3c4d289535ecd37b50c590094e4b4dda31b5e5e3c28cd462394474dcfdbb58",
-          "sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d"
+          "sha256:73bbb68e56dab9abc0c0d3ece59c4c94a852e4b199378ceff0fadabd3b10fa4c",
+          "sha256:77efad790266f38991464613ad1a021b50819897f8ee1b9c5e96329f19b6e846"
         ],
         "published_manifest_match": true
       },
       {
-        "latest_ready_revision": "arga-api-00711-dxn",
-        "observed_at": "2026-09-28T07:16:14.014566+00:00",
+        "latest_ready_revision": "arga-api-00712-524",
+        "observed_at": "2026-09-28T08:02:52.715855+00:00",
         "region": "us-west1",
-        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:1bb9015d78732142c8ef7dac2fee6668e912f062",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:b59d217fb93e128fd453b301234ea12308af2281",
         "revisions": [
           {
             "containers": [
               {
-                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4",
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:fb656d0be5834f240f8f9a3c52ae544d76b3b6ade4f4c2a8e6c0703ffee7eed3",
                 "name": "api-1",
-                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4"
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:fb656d0be5834f240f8f9a3c52ae544d76b3b6ade4f4c2a8e6c0703ffee7eed3"
               }
             ],
             "ready": true,
-            "revision": "arga-api-00711-dxn"
+            "revision": "arga-api-00712-524"
           }
         ],
         "schema": "arga.cloud-run-images/1",
@@ -168,13 +165,13 @@
         "traffic": [
           {
             "percent": 100,
-            "revision": "arga-api-00711-dxn",
+            "revision": "arga-api-00712-524",
             "tag": null
           }
         ],
         "published_manifest_digests": [
-          "sha256:9980cedec9a7c791d9129e3528bfe58c789a8ff653d38fd4776df63ecd1466f0",
-          "sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4"
+          "sha256:a93bada8bb13fb1913a75c700a7f5705899dca1364447a8f87379655fbba9f53",
+          "sha256:fb656d0be5834f240f8f9a3c52ae544d76b3b6ade4f4c2a8e6c0703ffee7eed3"
         ],
         "published_manifest_match": true
       }
@@ -187,18 +184,14 @@
     "resolution": "Direct user-session GCP authentication remains unavailable; successful deployment CI and owner-scoped Arga CLI worker logs provide the complete bounded image observations."
   },
   "latest_provider_publication": {
-    "revision": "1bb9015d78732142c8ef7dac2fee6668e912f062",
-    "workflow": 36390243390,
+    "revision": "b59d217fb93e128fd453b301234ea12308af2281",
+    "workflow": 36394434614,
     "rebuilt_eight_provider_subset": [
-      "google_docs",
-      "google_sheets"
+      "gmail"
     ],
-    "other_rebuilt": [
-      "google_drive",
-      "google_workspace"
-    ],
+    "other_rebuilt": [],
     "fresh_runtime_status": "complete",
-    "fresh_runtime_evidence": "docs-gemini-2026-09-28.json"
+    "fresh_runtime_evidence": "gmail-gemini-2026-09-28.json"
   },
   "prior_runtime_deployment": {
     "revision": "19518bc12b971a51dacce3acf84778da487acb59",
@@ -6578,6 +6571,98 @@
           "published_manifest_match": true
         }
       ]
+    },
+    {
+      "revision": "1bb9015d78732142c8ef7dac2fee6668e912f062",
+      "runtime_workflow": 36390243172,
+      "twins_workflow": 36390243390,
+      "both": "success",
+      "published_images": {
+        "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:91a990c7ace557d3aa402cdd8df93d57bb5be7d64a507c33a1dfd2d85fd7fa41",
+        "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:b5986604c0797534287ac8241bae097281e6af9e5418c26cc5b696841cb8cd61",
+        "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:1a75affbab50ed2834e4be79de99f9d7738d5c02b05e58108c986fe36ae7fd15",
+        "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:0a954dfade25e247b8e7c379d9e6374b02aba275d47f17a3b1dd842aa681b941",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:6a3c4d289535ecd37b50c590094e4b4dda31b5e5e3c28cd462394474dcfdbb58",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:1bb9015d78732142c8ef7dac2fee6668e912f062@sha256:9980cedec9a7c791d9129e3528bfe58c789a8ff653d38fd4776df63ecd1466f0"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": "preview-proxy-00341-682",
+        "arga-api": "arga-api-00711-dxn"
+      },
+      "log_sha256s": {
+        "lab-final-docs-gemini-twins-deploy.log": "15ee0cc3f052c640bad2001f4cbbc9e2217978ecb04870d52043751e712d982a",
+        "lab-final-docs-gemini-runtime-deploy.log": "99d6e9c9feba492185facd0b644c919f21bb47b50af58b4f73132cfcb352899e"
+      },
+      "cloud_run_observations": [
+        {
+          "latest_ready_revision": "preview-proxy-00341-682",
+          "observed_at": "2026-09-28T07:12:00.355553+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:1bb9015d78732142c8ef7dac2fee6668e912f062",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00341-682"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00341-682",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:6a3c4d289535ecd37b50c590094e4b4dda31b5e5e3c28cd462394474dcfdbb58",
+            "sha256:91098f00708894eadc63e6144cae6258d75b66946c26b72859eed4ede8d8125d"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00711-dxn",
+          "observed_at": "2026-09-28T07:16:14.014566+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:1bb9015d78732142c8ef7dac2fee6668e912f062",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00711-dxn"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00711-dxn",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:9980cedec9a7c791d9129e3528bfe58c789a8ff653d38fd4776df63ecd1466f0",
+            "sha256:e30a47b78db98f28443e3a3f53161cac5a8aee342e139b53ec2e243d2fcbdab4"
+          ],
+          "published_manifest_match": true
+        }
+      ]
     }
   ],
   "prior_provider_publications": [
@@ -7662,6 +7747,17 @@
       "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36384243381",
       "platform_manifest_digests": [
         "sha256:770f3bcd0345cd38e7fdc9d031f5649514d0852ee07735922ecb1d7d71bba0a2"
+      ]
+    },
+    {
+      "provider": "gmail",
+      "databaseId": 36384243381,
+      "headSha": "750d93d3f8bea16df614d2944f1cd57ba11149d6",
+      "image": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:750d93d3f8bea16df614d2944f1cd57ba11149d6@sha256:8d2e3b368c20321d14caeafdaa46166e67c085bf803725541226589d0bce852f",
+      "log_sha256": "63a491c9441259656b56b0d5bb44f175daa89aef47c190c105509dee9ea3640b",
+      "workflow_url": "https://github.com/ArgaLabs/validation-server/actions/runs/36384243381",
+      "platform_manifest_digests": [
+        "sha256:a819a4aa8071f434902c5abafd67013a6738d41f53b405e9384471b1d32d1a30"
       ]
     }
   ],
