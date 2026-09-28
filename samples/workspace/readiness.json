@@ -89,11 +89,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-inline-review-drafts-2026-09-27.json",
-          "sha256": "c814cd4c0816af52aa307d3c4240759883e5231b3248ccec7a4f11c6ee99b436"
+          "sha256": "e2d2e3cf8820a6e1bd7f6deccfcd32bcb0521f4b2e31c9558a5ffb1244ce3ec8"
         },
         {
           "path": "samples/workspace/evidence/github-author-review-decisions-2026-09-27.json",
-          "sha256": "66b15e1896c4c6d4e377cc55d97213a7a209a40d07d678641aaf8b014569083d"
+          "sha256": "ba412e00003b7d15789236db3794d49cb989da4195bb5b8a4c740b6a8f403fbb"
         }
       ]
     },
@@ -624,7 +624,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "2e0cb2f4d2cdd5cdf57cbc68b8414ec4b6e0463f577f57c0862b3a64d9a24e87"
+          "sha256": "f8f5cbcecf9d51096bff874971df7765bdf8b975fc1f48f549a721655335ec47"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -656,5 +656,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "64def9552ec7ac0c885641501f657aa6f4ae868eba294621d044ae7d81fcf233"
+  "sample_tree_sha256": "9a3db2cc10c3e73c369957461443470b0059f1cf0e3d3af78106c87e99503744"
 }

@@ -188,7 +188,7 @@
     }
   },
   "limits": [
-    "Author self-approval restrictions and pending-summary preservation are implemented in #1228; its hosted verification remains pending.",
+    "Author self-approval restrictions and pending-summary preservation are deployed and hosted-verified in #1228; broader review parity remains open.",
     "Pending-comment edit UI, multiline selection, applying suggestions and complete review dialog/menu fidelity remain open",
     "No complete GraphQL, permission, visual, mobile or physical-touch parity claim",
     "Broader eight-provider frontend, AI/collaboration, exhaustive audits and final sample gates remain open"
