@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-28",
+  "status": "bounded_live_reference_only_implementation_pending",
+  "method": "Authenticated Chrome CUA; uniquely named unsent draft with no recipient",
+  "fixture": {
+    "subject": "Arga fidelity Help me write 20260928-8c1f",
+    "created_by_current_test": true,
+    "discarded": true,
+    "cleanup_readback": "No messages matched your search after native Refresh of exact in:drafts query"
+  },
+  "observed": [
+    "Ask Gemini opens an empty panel with More options, Close, sources, Tools and disabled Submit.",
+    "More options exposes Recents, More suggestions, Gems and Settings; opened and returned without changes.",
+    "Compose has Help me write and a Describe your message input.",
+    "Submitting a fictional two-sentence prompt disables Send and compose actions while Cancel is available.",
+    "Generation directly fills the draft body; no separate Insert acceptance was required.",
+    "Undo clears the generated body; Redo restores it. Subject is preserved and recipients remain empty.",
+    "Save & close, full reload, exact draft search and reopening preserve generated text.",
+    "After reopening, the former prompt/Undo controls are not visible in the default composer. No conclusion about retained internal history."
+  ],
+  "prompt": "Write two short sentences for a fictional project update. Atlas is on schedule. Design review is Friday. Use only these facts.",
+  "generated_content_summary": "Greeting placeholder, two Atlas status sentences and the current account signature.",
+  "outbound_email_sent": false,
+  "preexisting_mail_mutated": false,
+  "screenshots_retained": false,
+  "mobile_or_touch_verified": false,
+  "native_api_state_audit": false,
+  "corrections": [
+    "A long typing action timed out after a visible prefix; the remaining prompt was entered in short chunks and the complete text was verified before submission."
+  ],
+  "official_sources": [
+    "https://support.google.com/mail/answer/14355636?hl=en",
+    "https://support.google.com/mail/answer/13955415?hl=en"
+  ],
+  "limits": [
+    "Single account and one compose generation; refinement, cancellation outcome, reply, rich MIME/attachment preservation, permissions, source access, errors and mobile remain pending.",
+    "No Gmail twin AI implementation or exhaustive coverage is established."
+  ]
+}

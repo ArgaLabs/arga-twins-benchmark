@@ -196,6 +196,10 @@
         {
           "path": "samples/workspace/evidence/gmail-settings-refresh-navigation-2026-09-27.json",
           "sha256": "4da64d18d5716fa50336fc0b9a74cf8dfbd3ff7d7c58eac343ddb9a17978e2b8"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-gemini-reference-2026-09-28.json",
+          "sha256": "9e78e892209b2a55ae1ce7d5832742a0072a57c1ab6e82ebb9cd337d019d20d4"
         }
       ]
     },
@@ -378,6 +382,10 @@
         {
           "path": "samples/workspace/evidence/docs-gemini-reference-2026-09-27.json",
           "sha256": "b62a4cd7438d584acebaaaa8085bcede90d5c6b4f55ee2e44ef8fb13897be025"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-gemini-2026-09-28.json",
+          "sha256": "449e695402bf7585a2e122b43528225a3b540c79b959815b87e82e950b7b0720"
         }
       ]
     },
@@ -652,7 +660,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "08a4c7d96cf09c593e504258b49ee23689d7709ab022390aa60615bfc80f0ad5"
+          "sha256": "1b1140af2560009a1ea893ab8c1ecf8cd6322ea7e30281ad8cbe6be4a4d6e022"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -684,5 +692,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "fab4100fe89c3733045a3bcc7e6941389fa152701e8f62a2f82dbd6d0c993536"
+  "sample_tree_sha256": "9ceed8b690c40b6ac78e8ce54c69d2d0385d8bd847f13f0c4ae9a60ee9fb6bb9"
 }

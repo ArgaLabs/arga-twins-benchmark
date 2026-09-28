@@ -4992,11 +4992,11 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 167,
+      "markup_control_occurrences": 177,
       "files": [
         {
           "path": "twins/google_docs/document_actions_ui.py",
-          "sha256": "754eb88a4f33f63dd208ab8125e769cc7d4750db4b7e28b4e04d7e2e3cebdfab",
+          "sha256": "042cb9980e8ed1e7e5303d4d899716bf538666e0d04a78b8c75b1b1e80e31077",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5249,7 +5249,7 @@
         },
         {
           "path": "twins/google_docs/document_segments_ui.py",
-          "sha256": "eda8820b6914d634337dcf6ee975a8522d85857f457cec90db71b2461b7b6a5e",
+          "sha256": "37a6543075019a266b3d81e70cafd590b1cd4152c2e8b2ff4f8280efe2697b9e",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5304,7 +5304,7 @@
         },
         {
           "path": "twins/google_docs/document_tabs_ui.py",
-          "sha256": "9dbb489e38e726cb243c0b0147cc11d4f36aae564938bf7619034a22cf45eee2",
+          "sha256": "3a0fe7e9ad07ddca2809171bef3045f400b6fb14db990fef9055c6d1d9bc6d96",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5498,8 +5498,115 @@
           ]
         },
         {
+          "path": "twins/google_docs/gemini_ui.py",
+          "sha256": "b3979c72e7d8aa34a4dcef85724c307ab2d7de503ab8428626ad141ee508de00",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 41,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "ask-gemini",
+                    "aria-label": "Ask Gemini",
+                    "aria-controls": "gemini-panel",
+                    "hidden": null
+                  },
+                  "text": "{dynamic} Ask Gemini"
+                }
+              ]
+            },
+            {
+              "line": 46,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-expand",
+                    "aria-label": "Expand Gemini"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-clear",
+                    "aria-label": "Clear Gemini history"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-close",
+                    "aria-label": "Close Gemini"
+                  },
+                  "text": "\u00d7"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-reload",
+                    "hidden": null
+                  },
+                  "text": "Reload document"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "gemini-form"
+                  }
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "id": "gemini-prompt",
+                    "aria-label": "Ask Gemini"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-cancel",
+                    "hidden": null
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit",
+                    "id": "gemini-submit",
+                    "aria-label": "Send prompt"
+                  },
+                  "text": "Send"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "gemini-bottom",
+                    "aria-label": "Open Gemini bottom bar",
+                    "hidden": null
+                  },
+                  "text": "{dynamic} Ask Gemini"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_docs/suggestions_ui.py",
-          "sha256": "628c1e47f45f72347196bb445c7905f874730bc527df111aae323c73d9251f42",
+          "sha256": "c54649874c36a78ca3fac20dbe6d3889d3e10954a94a52dd163e7b5ecbba612d",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5781,11 +5888,11 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "3fd61207be9a6fa732c1327f297f356e841f030c156f10efb840795a5361e7c6",
+          "sha256": "fe738577d28cd1afadbe641f261ba138b964058d1343bfeebc4957eb74075fe3",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 414,
+              "line": 415,
               "dynamic": false,
               "controls": [
                 {
@@ -13557,37 +13664,37 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "ff4a8fc862df6f7d6c1be73281d25e89dbf7e592cfbd1a2f3b524a883f78702b",
+      "sha256": "f4e5acb0524401e60bfd0d1cb7c8a3e3a0220f4777bbfd0f393e0cbda4a4bc63",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 774
+          "line": 779
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1064
+          "line": 1069
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1090
+          "line": 1095
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1255
+          "line": 1260
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1780
+          "line": 1785
         },
         {
           "method": "GET",
@@ -13605,90 +13712,90 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1317
+          "line": 1322
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1352
+          "line": 1357
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1397
+          "line": 1402
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1408
+          "line": 1413
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1429
+          "line": 1434
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1449
+          "line": 1454
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1468
+          "line": 1473
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1479
+          "line": 1484
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1491
+          "line": 1496
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1509
+          "line": 1514
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1520
+          "line": 1525
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1538
+          "line": 1543
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1562
+          "line": 1567
         },
         {
           "method": "GET",
           "path": "/ui/documents/{file_id}/access",
           "handler": "docs_ui_access",
-          "line": 1305
+          "line": 1310
         }
       ],
       "markup_expressions": [
         {
-          "line": 840,
+          "line": 845,
           "dynamic": false,
           "controls": [
             {
@@ -13701,7 +13808,7 @@
           ]
         },
         {
-          "line": 956,
+          "line": 961,
           "dynamic": true,
           "controls": [
             {
@@ -13766,7 +13873,7 @@
           ]
         },
         {
-          "line": 868,
+          "line": 873,
           "dynamic": true,
           "controls": [
             {
@@ -13777,7 +13884,7 @@
           ]
         },
         {
-          "line": 882,
+          "line": 887,
           "dynamic": false,
           "controls": [
             {
@@ -13790,7 +13897,7 @@
           ]
         },
         {
-          "line": 927,
+          "line": 932,
           "dynamic": true,
           "controls": [
             {
@@ -13801,7 +13908,7 @@
           ]
         },
         {
-          "line": 863,
+          "line": 868,
           "dynamic": true,
           "controls": [
             {
@@ -13814,7 +13921,7 @@
           ]
         },
         {
-          "line": 865,
+          "line": 870,
           "dynamic": true,
           "controls": [
             {
@@ -13827,7 +13934,7 @@
           ]
         },
         {
-          "line": 904,
+          "line": 909,
           "dynamic": true,
           "controls": [
             {
@@ -13840,7 +13947,7 @@
           ]
         },
         {
-          "line": 908,
+          "line": 913,
           "dynamic": true,
           "controls": [
             {
@@ -13853,7 +13960,7 @@
           ]
         },
         {
-          "line": 918,
+          "line": 923,
           "dynamic": true,
           "controls": [
             {
@@ -13883,7 +13990,7 @@
           ]
         },
         {
-          "line": 946,
+          "line": 951,
           "dynamic": true,
           "controls": [
             {
@@ -13896,7 +14003,7 @@
           ]
         },
         {
-          "line": 951,
+          "line": 956,
           "dynamic": true,
           "controls": [
             {
@@ -13963,6 +14070,25 @@
       ]
     },
     {
+      "path": "twins/google_drive/docs_gemini.py",
+      "sha256": "d19a9e5ad7bc767ee60d144932c02e50e01dea5ef30b7c9c9e421168cdff49cc",
+      "frontend_route_candidates": [
+        {
+          "method": "GET",
+          "path": "/ui/documents/{document_id}/gemini",
+          "handler": "document_gemini_settings",
+          "line": 34
+        },
+        {
+          "method": "POST",
+          "path": "/ui/documents/{document_id}/gemini/generate",
+          "handler": "document_gemini_generate",
+          "line": 40
+        }
+      ],
+      "markup_expressions": []
+    },
+    {
       "path": "twins/google_drive/document_history.py",
       "sha256": "500cd108d36a099f5ebdd5e2296f6b56d2bc2bd26d37a9241a74ce023aa3cc4c",
       "frontend_route_candidates": [
@@ -13995,114 +14121,114 @@
     },
     {
       "path": "twins/google_drive/workspace_editing.py",
-      "sha256": "ed48e0229b7d34c7bde79850091312c9aaf7de89fc122ea605988211f86632e1",
+      "sha256": "eebf02e5913af849505ef0358865f5856e12bb187b67b675d60d2f0c9c01b525",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/ui/documents/{document_id}/suggestions",
           "handler": "document_suggestions_list",
-          "line": 10211
+          "line": 10215
         },
         {
           "method": "POST",
           "path": "/ui/documents/{document_id}/tabs/{tab_id}/duplicate",
           "handler": "duplicate_document_tab",
-          "line": 10227
+          "line": 10231
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/history",
           "handler": "spreadsheet_history_status",
-          "line": 10308
+          "line": 10312
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/history",
           "handler": "spreadsheet_history_action",
-          "line": 10325
+          "line": 10329
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/protection-rules",
           "handler": "spreadsheet_protection_rules",
-          "line": 10363
+          "line": 10367
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/protections",
           "handler": "spreadsheet_protections",
-          "line": 10379
+          "line": 10383
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
           "handler": "spreadsheet_validation_rules",
-          "line": 10388
+          "line": 10392
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
           "handler": "spreadsheet_validation_edit",
-          "line": 10404
+          "line": 10408
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-selection",
           "handler": "spreadsheet_dropdown_selection",
-          "line": 10421
+          "line": 10425
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-source",
           "handler": "spreadsheet_dropdown_source",
-          "line": 10438
+          "line": 10442
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-preview",
           "handler": "spreadsheet_validation_preview",
-          "line": 10456
+          "line": 10460
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/selection-range",
           "handler": "spreadsheet_selection_range",
-          "line": 10463
+          "line": 10467
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-preview",
           "handler": "spreadsheet_filter_preview",
-          "line": 10479
+          "line": 10483
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-cell",
           "handler": "spreadsheet_filter_cell",
-          "line": 10486
+          "line": 10490
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-view",
           "handler": "spreadsheet_filter_view",
-          "line": 10495
+          "line": 10499
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-paste",
           "handler": "spreadsheet_filter_paste",
-          "line": 10504
+          "line": 10508
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-options",
           "handler": "spreadsheet_filter_options",
-          "line": 10513
+          "line": 10517
         }
       ],
       "markup_expressions": []
     }
   ],
   "shared_workspace_binding_status": "candidate sources only; verify Google Docs/Sheets surface guards at runtime",
-  "shared_workspace_route_candidate_count": 42
+  "shared_workspace_route_candidate_count": 44
 }
