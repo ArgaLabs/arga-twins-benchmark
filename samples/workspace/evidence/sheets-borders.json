@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-22",
+  "kind": "local_frontend_feature_verification",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "all_inner_horizontal_vertical_outer_and_individual_presets": "native regression pass",
+    "six_line_styles_and_color_precedence": "native/rendering regression pass",
+    "red_double_borders_via_toolbar": "Chrome pass",
+    "clear_restores_gridlines": "Chrome/native pass",
+    "pending_edit_before_bottom_border": "Chrome/native pass",
+    "arrow_keys_and_escape_restore_focus": "Chrome pass",
+    "native_formulas_and_unrelated_sheet": "pass"
+  },
+  "responsive_measurements": {
+    "document_width": 390,
+    "popup_left": 124,
+    "popup_right": 382,
+    "popup_top": 201.5,
+    "popup_bottom": 376.5
+  },
+  "native_results": {
+    "B2": 11,
+    "B2_bottom_border": {
+      "style": "DASHED",
+      "rgb_hex": "#123456"
+    },
+    "B3_effective": 22,
+    "AE120_effective": 33,
+    "protected_sheet": [
+      "Keep",
+      42
+    ]
+  },
+  "regressions": {
+    "passed": 171,
+    "log": "/tmp/lab-sheets-borders-regressions.txt"
+  },
+  "native_readback_sha256": "65895bcd569796c138a53c0ede6baa409467d9d11c623877d7bb397f65cc41e9",
+  "sources": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request#updatebordersrequest",
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/cells#Border"
+  ],
+  "limitations": [
+    "Local feature verification only; CI, deployment and hosted verification pending.",
+    "Full provider pixel parity, theme-color resolution and exhaustive device coverage remain unverified.",
+    "Merged-cell borders depend on the remaining merged-cell frontend work.",
+    "No screenshot files retained."
+  ],
+  "review_followup": {
+    "issue": "Shared edges and adjacent default gridlines were rendered twice",
+    "resolution": "Resolve visible neighboring border edges to one canonical side, remove its duplicate stroke, and suppress adjacent header gridlines.",
+    "focused_regressions_passed": 62,
+    "log": "/tmp/lab-sheets-borders-review-tests.txt",
+    "chrome_double_border_width_pixels": 3,
+    "chrome_duplicate_stroke_width_pixels": 0,
+    "chrome_transient_visual_inspection": "pass",
+    "screenshots_retained": false,
+    "full_regressions_passed": 178,
+    "full_log": "/tmp/lab-sheets-borders-final-tests.txt"
+  },
+  "frozen_pane_integration": {
+    "regressions_passed": 124,
+    "log": "/tmp/lab-sheets-borders-integration-tests.txt",
+    "chrome_desktop_and_390px": "pass",
+    "double_cell_borders": "3px double native borders retained",
+    "frozen_dividers": "Independent 3px outer shadows retained with range-selection shading",
+    "screenshots_retained": false
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "date": "2026-09-23",
+  "status": "production_hosted_verified",
+  "screenshots_retained": false,
+  "changes": [
+    "Data > Named ranges and name-box dropdown provide creation, edit, navigation and confirmed removal.",
+    "Typing a new valid name in the name box creates a range for the current selection. Existing names navigate across sheets.",
+    "Renaming updates formula references; deleting replaces them with #REF! while keeping cells and converting named protection to a concrete range.",
+    "Sidebar supports quoted sheet names, validation and the inline Select data range / Ok / Done flow. The mobile picker keeps the grid visible."
+  ],
+  "validation": {
+    "regressions": 309,
+    "full_contract_matrix": "passed",
+    "unexpected_5xx": 0,
+    "ruff": "passed",
+    "new_type_diagnostics": 0,
+    "baseline_type_errors": 58,
+    "browser": "Google Chrome through CUA and the sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "Create from Data menu and name box",
+      "Rename and update range with formula recalculation",
+      "Cross-sheet case-insensitive named navigation",
+      "Invalid-name validation",
+      "Cancel and confirm removal",
+      "Metadata retained after reload",
+      "Final desktop/mobile layout",
+      "Menu labels and expanded state track Escape and switching menus",
+      "Inline range picker stages a grid selection until Ok and Done",
+      "Mobile picker leaves the grid visible; invalid bounds reject and Escape/cancel retain original metadata"
+    ],
+    "console_errors": 0,
+    "protected_cells_and_merges_unchanged": true,
+    "capture_sha256s": [
+      "039c8241da2f2a086b520c92b8dc8a83f9fe92b97cf17d0ba6b718fad58674cf",
+      "6731760ea9237ab07f2926f7d8212c9a800bace54c9e46ba027dc9682de86c8e",
+      "bf2bb6df471d7c91183d28a9de21781040bdb4a4c1a3e79681a63f7a0100ef5f",
+      "b718efd33a6b5234c38c7dc2480e27e469ad32a2cd763fef4af274f8b1a5a841"
+    ],
+    "local_formula_variables_preserved": true
+  },
+  "provider_reference": {
+    "date": "2026-09-23",
+    "workbook_id": "1at-rOZnr-PQH0GwFGJIb6Vn1vvQPWemYY8uErp6oxLI",
+    "fixture": "New private disposable workbook, moved to Trash and confirmed after inspection.",
+    "values": [
+      1,
+      2,
+      3
+    ],
+    "created": {
+      "name": "Budget",
+      "range": "Sheet1!A1:A3",
+      "formula": "=SUM(Budget)",
+      "value": 6
+    },
+    "renamed": {
+      "name": "AnnualBudget",
+      "formula": "=SUM(AnnualBudget)",
+      "value": 6
+    },
+    "deleted": {
+      "formula": "=SUM(#REF!)",
+      "value": "#REF!",
+      "cells_unchanged": true
+    },
+    "name_box_creation": {
+      "name": "FreshBudget",
+      "range": "Sheet1!B1",
+      "created_without_sidebar_confirmation": true
+    },
+    "screenshots_retained": false,
+    "range_picker": {
+      "mode": "Inline sidebar; name, delete, cancel and Done disabled while selecting",
+      "grid_selection_updates_range_input": true,
+      "ok_accepts_without_saving": true,
+      "done_commits": true,
+      "cancel_after_ok_preserves_original_range": true
+    }
+  },
+  "references": [
+    "https://support.google.com/docs/answer/63175?hl=en-GB",
+    "https://workspaceupdates.googleblog.com/2021/01/new-name-range-box-in-google-sheets.html",
+    "https://support.google.com/docs/answer/13190535?hl=en-GB",
+    "https://support.google.com/docs/answer/12508718?hl=en"
+  ],
+  "limits": [
+    "Chart, conditional-format and data-validation named-reference rewrite coverage, realtime collaboration and full eight-twin frontend parity remain open."
+  ],
+  "review_fix": {
+    "issue": "Rename converted omitted row/column bounds to fixed coordinates.",
+    "fix": "An unchanged sidebar address writes only the name field; range changes still write native coordinates.",
+    "tests": "Row/column growth, last-cell native writes and named reads.",
+    "browser": "Chrome rename Budget to AnnualBudget, append row 1001, write 17, Summary total changes 6 to 23.",
+    "native_bounds_preserved": true,
+    "protected_cells_and_merges_unchanged": true,
+    "console_errors": 0,
+    "capture_sha256": "a8704d9eda32bdfdb70bea98d9b6c0ae0cc0f077f07093a3bd3452f9d181b3d7"
+  },
+  "combined_editor_validation": {
+    "pr": 1119,
+    "component_prs": [
+      1119,
+      1120
+    ],
+    "tests": 570,
+    "status": "ci_deployed_hosted_passed",
+    "scope": "Docs, Sheets, Workspace and Calendar sharing integration",
+    "ruff": "passed"
+  },
+  "production_validation": "workspace-find-named-production-2026-09-24.json"
+}

@@ -1,0 +1,316 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-27",
+  "provider": "github",
+  "status": "deployed_bounded_hosted_verified",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1206",
+  "source_head": "4a07e270703ab26f2f3ea863b1c9c5a19662c045",
+  "source_base": "d8f303933f536aead9c5c994b3719df9f0b63d42",
+  "changes": [
+    "Enforce current simulated Projects write grants across browser, REST and supported GraphQL operations",
+    "Hide editing controls for readers and filter linked private-repository items",
+    "Recheck grants after awaited request-body reads",
+    "Reject malformed mutation dispatch and unexpected draft contentId; preserve native state on denial",
+    "Add project scope to registered default fixture credentials; retain explicitly seeded scopes"
+  ],
+  "tests": {
+    "original_regressions_failed": 31,
+    "initial_positive_lifecycle_passed": 1,
+    "github_regressions_before_final_review_fixes": 697,
+    "review_reproductions_failed_before_fix": 3,
+    "final_affected_passed": 81,
+    "targeted_pyright_errors": 0,
+    "unchanged_preexisting_wide_graphql_pyright_errors": 58,
+    "detector_findings": 0
+  },
+  "review": {
+    "initial": "Two reproduced GraphQL dispatch/input findings",
+    "final": "ship at two-fix scope; both resolved; no independent visual or full-provider approval",
+    "documenter": "README-only source/evidence handoff complete"
+  },
+  "local_browser": {
+    "status": "bounded_local_pass",
+    "checks": [
+      "Owner status Save and native readback",
+      "Reader table desktop and 390px reload omit write controls",
+      "Reader Board retains saved Done status",
+      "Revoked writer stale submit returns HTML403 without mutation",
+      "Revoked writer fresh view has no write controls",
+      "Anonymous read/reload filters private linked item and omits write controls"
+    ],
+    "strict_full_native_state_matches_expected": true,
+    "write_statuses": [
+      303,
+      403
+    ],
+    "revocation_operator_only": true,
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "viewport_reset": true,
+    "tabs_closed": true,
+    "server_stopped": true
+  },
+  "limits": [
+    "Bounded Projects permission checks pass in the deployed revision; full provider and sample gates remain open",
+    "Coarse personal-owner/organization-member model; full roles, teams, administration and private-project CRUD remain open",
+    "No general GraphQL, exhaustive visual, keyboard or physical-touch certification",
+    "Broader eight-provider frontend/AI/collaboration and sample release gates remain open, including WKS-03; no final ZIP"
+  ],
+  "source_sha256": {
+    "twins/github/README.md": "19532ea00210b59fd79c122f033d2aab8bd8abe3d174178d8ff8e220faaa8d07",
+    "twins/github/config.py": "608fe7554f0b2ce0c9dd16549f7dd24c19d9e918eec21c14bb6b6bc29b032944",
+    "twins/github/handlers/compat.py": "bb67ff2e5043e3c24b24cdd428d4ec6e9890d93a352cc2f45a1d3ea925bca91e",
+    "twins/github/handlers/graphql.py": "09ca396975186290a7648fcbeec2c2174508e4b3dc5b4a6108057bed3835089a",
+    "twins/github/project_access.py": "8c55a901565402b6a2633c7c00a8a95c1e6387a728d26e2af434e10f586a6397",
+    "twins/github/projects_ui.py": "0e94106ac14fdeedb0b3b23a5930dbbff4590f3e47c3104be7093601313108e7",
+    "twins/tests/test_github_operations_state.py": "fedde60808a3129c57a80ad2bab4b1bc0cd857861b39834a3dc3841246fabce6",
+    "twins/tests/test_github_project_access.py": "5208472282728b9236096ebec088f16268917a1626d6f6ac09eb806b01bb3a8a",
+    "twins/tests/test_github_repository_visibility.py": "7ad3c4199de4cfc6500a4f22d2ea73d859b1e85794c0119fb7fe0f6bb536959c"
+  },
+  "artifacts_sha256": {
+    "lab-github-project-permissions-review-green.log": "13012c7339d77704cbd7fbcdb1b1dca509a23d75824109bcc697217e1d33d1c6",
+    "lab-github-project-permissions-affected.log": "cfd6efe000fcc57629d36fc164c3bae1457791f2bc11b1395c5d385cada107bd",
+    "lab-github-project-permissions-pyright.log": "dc89d2c73070232acd149741d6525d22b9b4ff52669b23330e6fb6981233f1b2",
+    "lab-github-project-permissions-regressions.log": "568a6affa131acee64f067b2d79540cb9ec9261015c95b43012e112582bb82ba",
+    "lab-github-project-permissions-review-red.log": "9f2bb9524a581e6e3606647c0254f78ab61e779a8ac3e1a32ee824ebfd376a96",
+    "lab-github-project-permissions-pyright-baseline.log": "b11cebac61c514662ae371a4dcb6cf05388c6ee64022b656ce888c067d0b664f",
+    "lab-github-project-permissions-review-make-fix.log": "f38b9bc33e3d9984bf9c45b0ec4becfe90e8881b77cba403f112b03ef27e56ee",
+    "lab-github-project-permissions-red.log": "96a95c3aa0c577cb07f584cd029c255ad1e7ec01bc01727d2ed758d4f8952931",
+    "lab-github-project-permissions-make-fix.log": "f38b9bc33e3d9984bf9c45b0ec4becfe90e8881b77cba403f112b03ef27e56ee",
+    "lab-github-project-permissions-green.log": "6540c4c385b365d47021cc77d9e98f6943a60ac313965ff790e4f715cbdd3cd9",
+    "lab-github-project-permissions-pyright-final.log": "7cf6ce5069c55278cb6d7f86627206e91982bde8d64943485c15344f2301380a",
+    "lab-github-project-permissions-local.log": "593298cc1d095966bb42e2a626e9c7d9af93d300d43609992d7eee47e0d67cbe",
+    "lab-github-project-permissions-pyright-new.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-github-project-permissions-local/browser-trace.json": "0f22ed39c9775394c61db6bcdf12ac476f4ede4ea81a069542fb5c94377a93e1",
+    "lab-github-project-permissions-local/expected-final.json": "234dff344315dcaf5787e2a4ff51cf0864e6a5f69100dc805d9f43b4f3cd36bc",
+    "lab-github-project-permissions-local/workspace.json": "ac547fe2eec3a6a0572fb0253a5ba7e35785501eea18ac5a52f02a622f5a06e9",
+    "lab-github-project-permissions-local/typecheck-comparison-final.json": "f14ccf1f3a1993433a736c1c27dc51cc13a32cbc4b8be57d16a393c2fa9de1c6",
+    "lab-github-project-permissions-local/baseline.json": "e31906ce1e7caeb6de023f36f97f4194f4f1f6b33661362cf3a7e87632c28859",
+    "lab-github-project-permissions-local/branches.json": "27bb7e415569901e2c2cf4ba254a184a583d258c5e7e07617cdbb0868b3d5515",
+    "lab-github-project-permissions-local/typecheck-comparison.json": "f14ccf1f3a1993433a736c1c27dc51cc13a32cbc4b8be57d16a393c2fa9de1c6",
+    "lab-github-project-permissions-local/browser-result.json": "2cb4e827bf42b9e5028ddc77e57e12221aa9c113ff642ec1201bd56cf11f5c1b",
+    "lab-github-project-permissions-local/final.json": "234dff344315dcaf5787e2a4ff51cf0864e6a5f69100dc805d9f43b4f3cd36bc",
+    "lab-github-project-permissions-local/grant-change.json": "234dff344315dcaf5787e2a4ff51cf0864e6a5f69100dc805d9f43b4f3cd36bc",
+    "lab-github-project-permissions-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-final-github-project-permissions-d1da8f17/browser-trace-0.json": "2d5dda5190c88794cbd53d1b7b7a448577c4a41eb167044be095ec1f63a2d437",
+    "lab-final-github-project-permissions-d1da8f17/image-comparison.json": "5015cd6cfae78eb44480624a917afd4232790e09f9d462ad78de17ef0ce44c8c",
+    "lab-final-github-project-permissions-d1da8f17/publication-catalog.json": "8b7487051345d18b38c694787246445edd5e4176529b426f11082fcbd8526d43",
+    "lab-final-github-project-permissions-d1da8f17/browser-trace-1.json": "57a4b9318e0e272068496872e8ba53186bf8d4374b15cc1165aeebef5f9ff4a5",
+    "lab-final-github-project-permissions-d1da8f17/browser-native-result.json": "13a600aa75968e48a9da0a78294263d27323c58143d15127112939f43e4e1ad5",
+    "lab-final-github-project-permissions-d1da8f17/after-owner-save.json": "993d0bfb6b54141d62bfb09f0ae7fe834454983d6a15fa7d8455cb5791e1a4db",
+    "lab-final-github-project-permissions-d1da8f17/cleanup.json": "12398ce61021871da4849c1fca1ed65a37e71224c27f299b708d5f667401a2ab",
+    "lab-final-github-project-permissions-d1da8f17/runtime-image-evidence.json": "2f8004a5d9ea5eb2f85884debce7c46494dbb0fdbdfb357e9a24f640703f2955",
+    "lab-final-github-project-permissions-d1da8f17/native-result.json": "6c6f14d5ce8599c7efec4fb7d94a6fece0273054e728bdc82c964ef4d08232bb",
+    "lab-final-github-project-permissions-d1da8f17/expected-final-state.json": "33a4ff79d38ec99dd0c07eb16e8468751acec4aecb11af160d0e8fd62dd6c98d",
+    "lab-final-github-project-permissions-d1da8f17/browser-result.json": "944962c6cca5586fd34a85a5428b59f6c81d9c9cee88bad362baadec3c0e0a04",
+    "lab-final-github-project-permissions-d1da8f17/baseline-state.json": "238d77dc26b17a20e9588d86f9cda07071688acf9ef901f44a9f63bb1ac154ce",
+    "lab-final-github-project-permissions-d1da8f17/operator-api-trace.json": "8978ada10d6a95898c099422b78abef8dc49acf5cd4a902fbd5ec78bc295e2ff",
+    "lab-final-github-project-permissions-d1da8f17/browser-trace-2.json": "f308f1d84416ca19a51f11dba72f55221d4bd0707ac6f800f4295ff02c410ee3",
+    "lab-final-github-project-permissions-d1da8f17/after-suspension.json": "33a4ff79d38ec99dd0c07eb16e8468751acec4aecb11af160d0e8fd62dd6c98d",
+    "lab-final-github-project-permissions-d1da8f17/final-state.json": "33a4ff79d38ec99dd0c07eb16e8468751acec4aecb11af160d0e8fd62dd6c98d",
+    "lab-final-github-project-permissions-d1da8f17/browser-trace-3.json": "37576400976ac29e1157ca3866cffeb3b19bff04524d377fd35972208dad6943",
+    "lab-final-github-project-permissions-d1da8f17-runtime-attestation.json": "60cefcbf0cdbee8ffd4d687a6951c172a6845d2f8a2618e557e41fd7cfa29eec",
+    "lab-final-github-project-permissions-d1da8f17-deployment.json": "73748477ea32ce08119aa9686df82d7e64e101c838d61c62265fae425edbae78",
+    "lab-github-project-permissions-premerge-final.json": "503a97b6fb17091dfb51deae87d5487aed0dafd8e8de56822bea26187b12535c",
+    "lab-github-project-permissions-premerge.json": "db7eb9ddd41d67bb8594c00dada021f3c3dfe7d899be6ec77d6bccb35bc07c46",
+    "lab-github-project-permissions-merge.json": "faabf1f2733eac9b745d48ee4aacef206f44a09b84193a811b2ae465ef0ba766",
+    "lab-github-project-permissions-ci-complete.log": "a5a1532b149107be4055952ef65ce92263d36fbe63cb467c329d4116628ec01d",
+    "lab-final-hosted-github-project-permissions.py": "62a5dee379b430e1bdc9ae3653d8bbe85eda3d61986db7317a9f0c5af1e0b8ca"
+  },
+  "ci": {
+    "status": "passed",
+    "head": "4a07e270703ab26f2f3ea863b1c9c5a19662c045",
+    "all_complete": true,
+    "check_count": 33,
+    "premerge_state": "CLEAN",
+    "lint_and_test_run": 36294252898,
+    "twin_tests_passed": 6825,
+    "root_tests_passed": 2140
+  },
+  "merge_commit": "d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+  "merged_at": "2026-09-27T04:32:07Z",
+  "deployment": {
+    "revision": "d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+    "runtime_workflow": 36294590853,
+    "twins_workflow": 36294591026,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:d1da8f17d06d23eaea1cd9768adea3678fedfd7a@sha256:4a1d69bab7a5ea18c11c44f4f349e9202d30d14eab6bfaeb8667412c2249cc71",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d1da8f17d06d23eaea1cd9768adea3678fedfd7a@sha256:9656a43431249cd4de51d510892d77b72089fe4cc4201caaf0264d8783375660",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:d1da8f17d06d23eaea1cd9768adea3678fedfd7a@sha256:6f7840e0db7283deef1f9fde48915b80d323a92b31d952451d36e00cf174d1c8"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00312-bnx",
+      "arga-api": "arga-api-00682-gwv"
+    },
+    "log_sha256s": {
+      "lab-final-github-project-permissions-d1da8f17-twins-deploy.log": "92a9a8d30d21682424294ddc5cc1d448c77e93a7c96cc3b8f96077d21975bb25",
+      "lab-final-github-project-permissions-d1da8f17-runtime-deploy.log": "8c726ef8094c281a586273b0dd8287d1db477ee15daa80eb43503677c19fd337"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "runtime_attestation": {
+    "revision": "d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00312-bnx",
+        "observed_at": "2026-09-27T04:33:16.262551+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00312-bnx"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00312-bnx",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:9656a43431249cd4de51d510892d77b72089fe4cc4201caaf0264d8783375660",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00682-gwv",
+        "observed_at": "2026-09-27T04:37:42.804120+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:d1da8f17d06d23eaea1cd9768adea3678fedfd7a",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:f2318bbb2fd4d12765bb850d25b54d6f6b0aae8989676eec39ab6877ae518c7d",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:f2318bbb2fd4d12765bb850d25b54d6f6b0aae8989676eec39ab6877ae518c7d"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00682-gwv"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00682-gwv",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:6f7840e0db7283deef1f9fde48915b80d323a92b31d952451d36e00cf174d1c8",
+          "sha256:f2318bbb2fd4d12765bb850d25b54d6f6b0aae8989676eec39ab6877ae518c7d"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "8c726ef8094c281a586273b0dd8287d1db477ee15daa80eb43503677c19fd337",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "run_id": "0b88793f-3e06-4734-a29b-c9f2ee3048d0",
+    "native": {
+      "all_rejections_preserve_complete_native_state": true,
+      "both_reviewer_cases_pass": true,
+      "checks": [
+        {
+          "actor": "anonymous",
+          "denied_browser_writes": 3,
+          "full_state_unchanged": true,
+          "project_owner": "fixture-org"
+        },
+        {
+          "actor": "reader",
+          "denied_browser_writes": 3,
+          "full_state_unchanged": true,
+          "project_owner": "fixture-org"
+        },
+        {
+          "actor": "limited",
+          "denied_browser_writes": 3,
+          "full_state_unchanged": true,
+          "project_owner": "fixture-org"
+        },
+        {
+          "actor": "outside",
+          "denied_browser_writes": 3,
+          "full_state_unchanged": true,
+          "project_owner": "fixture-owner"
+        },
+        {
+          "actor": "selected",
+          "denied_browser_writes": 3,
+          "full_state_unchanged": true,
+          "project_owner": "fixture-org"
+        }
+      ],
+      "limitations": [
+        "Personal-owner/organization-member fixture model; no full project-role or GraphQL parity claim"
+      ],
+      "passed": true
+    },
+    "browser": {
+      "status": "bounded_hosted_pass",
+      "checks": [
+        "Owner saves the public linked item's status to Done and receives the rendered saved value",
+        "Reader table omits write controls while retaining authorized linked content and saved status",
+        "Reader 390px reload and Board preserve read-only content and Done status",
+        "Limited reader omits private linked content on desktop and 390px reload",
+        "Installation writer loads an editable form; explicit native suspension then makes its stale Save return HTML403",
+        "Revoked installation Projects navigation and 390px reload remain denied",
+        "Separate reader reload retains the permitted Done status after the stale write is rejected"
+      ],
+      "viewports": [
+        [
+          1465,
+          806
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "owned_tabs_closed": true,
+      "limits": [
+        "Bounded simulated Projects grant and linked-content behavior; full roles, teams and administration remain open",
+        "No independent visual approval, exhaustive keyboard/touch or complete provider certification"
+      ]
+    },
+    "browser_native": {
+      "browser_write_statuses": [
+        303,
+        403
+      ],
+      "complete_state_matches_single_allowed_status_change_and_explicit_installation_suspension": true,
+      "denied_stale_write_adds_no_mutation": true,
+      "passed": true
+    },
+    "cleanup_confirmed": true,
+    "all_three_container_images_match": true,
+    "fixture_note": "Outside-user write checks target a personal project because Scenario seeding enrolls all seeded users in each organization. A separate selected installation exercises organization read/write grants and native suspension."
+  }
+}

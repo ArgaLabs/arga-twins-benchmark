@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "c9b8fb67-a3af-406f-9713-ee9216966540",
+  "scenario_id": "7bd302e1-2dff-436e-b95f-f10a56b8402f",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "runtime_workflow": 35986499616,
+    "twins_workflow": 35986499613,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/stripe/dashboard_ui.py:_LAYOUT_STYLES": "a193acb9cd6bee9a5aff2166e7b349bc04c791289bd7fe78e9e8f117d7dac191"
+    },
+    "scope": "Complete served style block; not container digest attestation."
+  },
+  "viewports": [
+    "1465x862",
+    "390x844"
+  ],
+  "native_checks": [
+    "Five currency ledgers match native balances after EUR refund, payout and reversal.",
+    "Every native charge, transaction, customer, event and full captured state is exactly unchanged by browser inspection."
+  ],
+  "browser_checks": [
+    "Desktop EUR gross revenue \u20ac45.00 and all payment currencies.",
+    "Balances show USD12, EUR40, JPY2300, ISK5 and BIF1500.",
+    "390px balances and ISK currency selection; reload preserves selection; no page overflow."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "f08d3be94ddb22946412bc2e76b348cda818287ee36b5755b958fda40e5f9811",
+    "native-after.json": "f08d3be94ddb22946412bc2e76b348cda818287ee36b5755b958fda40e5f9811",
+    "baseline-state.json": "0a25da910344b9df5c140deb738a246e72b46c13a3f4c8ef4dd08ec3dfc809fb",
+    "final-state.json": "0a25da910344b9df5c140deb738a246e72b46c13a3f4c8ef4dd08ec3dfc809fb",
+    "browser-trace.json": "ab0b8570500f94df6e06feb24c738c79c1c25c9ca8cbb3a05afda88f42a75e86",
+    "operator-api-trace.json": "a61b3f6a8472f06d05bf0c8d13f2a6378dab52b23a463331677ac0a136a5ecd2",
+    "cleanup.json": "1c53c90f46a0d7e803eb1aee5a8f574db2a5e9e206ac0a6ff2586dec5459fa4b"
+  },
+  "limits": [
+    "This is a bounded manual hosted flow, not full provider parity or an additional scored candidate rollout.",
+    "Successful exact-commit deployment plus served block fingerprints are not per-container digest attestation.",
+    "No complete pixel comparison or physical-touch/mobile device audit."
+  ]
+}

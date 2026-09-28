@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "scored_candidate": false,
+  "provider": "google_sheets",
+  "browser": "Google Chrome via CUA",
+  "deployment": {
+    "revision": "5d47a150989379eeff2fd2f20250bacbcc9358fe",
+    "run": 35817388954,
+    "conclusion": "success"
+  },
+  "source": {
+    "revision": "5d47a150989379eeff2fd2f20250bacbcc9358fe",
+    "module": "twins/google_sheets/dimensions_ui.py",
+    "script_sha256": "673261d2b04af373ae783311a93c3541b2cc0efff39c11ed74e6a68909786849",
+    "script_matches": true
+  },
+  "checks": {
+    "append_rows": true,
+    "resize_and_unhide": true,
+    "unrelated_hidden_rows_preserved": true,
+    "trailing_columns_unhidden": true,
+    "pending_edit_preserved": true,
+    "formula_coordinates_preserved": true,
+    "protected_sheet_unchanged": true
+  },
+  "browser_checks": {
+    "pending_C3_edit_before_row_insert": "9",
+    "row_insert_moved_formula": "C4=9,D4=18",
+    "row_delete_restored_formula": "D3 = C3*2",
+    "column_insert_shifted_formula": "E3 = D3*2",
+    "reverse_shift_selection": "A5:L7",
+    "resize_rows_2_4_pixels": [
+      48,
+      48,
+      48
+    ],
+    "hide_unhide_rows_2_4": "pass",
+    "unhide_trailing_columns_K_L": "pass",
+    "append_5_rows_selection": "A31:L35",
+    "append_5_rows_native_count": 35
+  },
+  "responsive_measurements": {
+    "width": 390,
+    "height": 844,
+    "document_width": 390,
+    "menu_left": 24,
+    "menu_right": 244,
+    "dialog_left": 20,
+    "dialog_right": 370
+  },
+  "cleanup": "torn_down",
+  "artifacts_sha256": {
+    "frontend-source-check.json": "85c584ee22ac19fa7df7f95de4bdb3ab09bc68bac55ed2081280e13582a17ee0",
+    "operator-setup.json": "bfdcfd3940cb88f1a33c1459f5adb32a632af4cd8d9374537c0c148ddf744013",
+    "manual-native-readback.json": "90962da47ca07ea8359bcf0de1185b51392e4c77e0a8e8c516cdbed525e55912",
+    "baseline-state.json": "6e3f8cdb75faa834815379971041147857ed8725f7ca6bb3994a80d8d6714f50",
+    "final-state.json": "906b0589864d6694fbed6db01cc8344e2e2c8f802bd3386f1f1a049b4c71193c",
+    "google_sheets-browser-trace.json": "2e0d4bfa518e2fc792bb5c0a4d273f8d6bf77d12db1e3172a58dd66d1e779919",
+    "cleanup.json": "0954ae760eccaaff27facf44cd1455a39672dd2a25da52191c265651cfc42af0"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous browser candidate rollout or a full provider audit.",
+    "Native layout fixture augmentation remains recorded separately because the new Scenario runner has not yet deployed.",
+    "390px desktop Chrome emulation does not establish exhaustive mobile-device or pixel parity.",
+    "No screenshots retained."
+  ]
+}

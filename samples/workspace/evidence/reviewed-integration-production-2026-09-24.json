@@ -1,0 +1,150 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_and_api_conformance",
+  "scored_candidate": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1133",
+  "production_deployments": [
+    {
+      "conclusion": "success",
+      "databaseId": 35970124476,
+      "headSha": "85b310a09572b3e49be4aa5136a4f33600f0f3af",
+      "status": "completed",
+      "updatedAt": "2026-09-24T07:38:28Z",
+      "url": "https://github.com/ArgaLabs/validation-server/actions/runs/35970124476",
+      "workflowName": "Deploy Runtime"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 35970124531,
+      "headSha": "85b310a09572b3e49be4aa5136a4f33600f0f3af",
+      "status": "completed",
+      "updatedAt": "2026-09-24T07:35:42Z",
+      "url": "https://github.com/ArgaLabs/validation-server/actions/runs/35970124531",
+      "workflowName": "Deploy Twins"
+    }
+  ],
+  "gmail": {
+    "filters": {
+      "attached_email_search": true,
+      "kind": "operator_provider_api_after_cua_filter_creation",
+      "matching_delivery": [
+        {
+          "endpoint": "import",
+          "id": "880fcb7c79887b43",
+          "labels": [
+            "Label_e2ca2daf07b1d6"
+          ],
+          "threadId": "ece1997cb4577190"
+        },
+        {
+          "endpoint": "insert",
+          "id": "1c30d29afea6ad9f",
+          "labels": [
+            "Label_e2ca2daf07b1d6"
+          ],
+          "threadId": "ece1997cb4577190"
+        }
+      ],
+      "matching_filter_count": 1,
+      "nonmatching_id": "d087601ae5b2bc6c",
+      "protected_message_unchanged": true,
+      "scored_candidate": false,
+      "sent_id": "3393fe751916fa8b",
+      "status": "passed"
+    },
+    "two_drafts_native_mime": "passed",
+    "protected_mail_unchanged": true,
+    "native_reply_all_recipients_threading_inline_bytes": "passed",
+    "forward_rich_text_and_inline_bytes": "passed",
+    "forward_rfc822_attachment": "failed_missing_reference.eml",
+    "no_browser_send": true
+  },
+  "google_docs": {
+    "row_minimum_pt": 48,
+    "native_row_only_changed": true,
+    "protected_document_and_tabs_unchanged": true
+  },
+  "notion": {
+    "native_existing_pages_sources_databases_unchanged": true,
+    "one_new_row": "Hosted new row",
+    "saved_view_filter_sort_visibility_and_grouping": true,
+    "layouts_inspected": [
+      "table",
+      "board",
+      "gallery",
+      "list"
+    ],
+    "mobile_new_row_count": 4
+  },
+  "linear": {
+    "resource_mentions_saved_as_distinct_native_urls": true,
+    "project_clicks_show_distinct_issue_sets": true,
+    "mobile_document_edit_persisted": true,
+    "protected_issue_document_comment_and_projects_unchanged": true,
+    "native_url_direct_navigation": "Native provider-style project URL is not served at that same path by the twin (404); in-app mention links resolve by project ID."
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/gmail/message_actions_ui.py:SCRIPT": "f0efaf932332d815dfa8562def6b6e2d46810241169d874b88970a9943cfa29d",
+      "twins/google_docs/document_actions_ui.py:ACTION_SCRIPT": "042721dc27708c1fb82b7731e6f3cb023ce91159b2a488ba82bb3652f8da8320",
+      "twins/google_docs/structured_ui.py:STRUCTURED_SCRIPT": "5a257a3b01ffc7209d750c27e0264646ab2a2056a505b1bfb52320d5851a0051",
+      "twins/google_docs/table_resize_ui.py:TABLE_RESIZE_SCRIPT": "41c72aa700ba124b856167cad2d87616c11bdc47a5ab968ae6f160577d8323e3",
+      "twins/linear/mentions.py:SCRIPT": "9b1146c3999820590dc7d09e447f4843f1d98476434574573dc51ae2f23beb96",
+      "twins/notion/database_ui.py:SCRIPT": "4950f34222f638680d16a3f79f33b1545d6f2b8a6362872649c7f6ef20369755"
+    },
+    "scope": "Complete served code blocks; not container digest attestation."
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "screenshots_retained": false,
+  "limits": [
+    "Bounded feature checks, not full eight-twin parity",
+    "Viewport checks do not establish physical-touch support"
+  ],
+  "status": "partial_failure",
+  "browser_observations": {
+    "google_docs": {
+      "desktop_height_px_before": 49,
+      "desktop_height_px_after": 81,
+      "mobile_height_px_after": 65,
+      "reload_persisted": true
+    },
+    "gmail": {
+      "inline_pixel_natural_width": 1,
+      "desktop_reply_recipients_verified": true,
+      "forward_composer_inspected_at_390px": true
+    },
+    "notion": {
+      "filtered_sorted_names": [
+        "Gamma",
+        "Beta"
+      ],
+      "after_new_row": [
+        "Gamma",
+        "Beta",
+        "Hosted new row"
+      ],
+      "saved_filter_reopened": true
+    }
+  },
+  "harness_correction": {
+    "initial_insert_path": "/messages/insert returned 405",
+    "corrected_path": "/messages",
+    "first_successful_import_reused": true,
+    "original_trace_retained": true
+  },
+  "artifact_sha256": {
+    "native-before.json": "6f72e7ac82a1c8da58b0a0dc65f28fb1a06e5af564489d33a9567ae0d2a104c2",
+    "native-after.json": "cbb85d94adbd88f5f8b4d3edd2e34e45e09f452d5f9f46359c03d3e29da7a0a6",
+    "baseline-state.json": "b89b0556c34e17772975c1921e02c895a4a95d31886a976935453af344baf217",
+    "final-state.json": "f647820fff507eec65bc381453ad418486503f95ef3bf27976fb0b280962f9a3",
+    "operator-api-trace.json": "212753f5469ba4170c6fe9fba81e37ea7f98532727defd2f228c9e599d5fd947",
+    "gmail-filter-probe-trace.json": "9c3f0c52d879c9f9f4917028e6cae7fec65fbe9f0f6f6e952a769d7fc372566f",
+    "gmail-browser-trace.json": "0723a3491155bb763664bea48ca95a6a5db097116486822deba03dd6c37db4de",
+    "google_docs-browser-trace.json": "e49839cc134b1603fc2f2ae0970816fd3ab9bd1b5275eea61b8bc0b29b152552",
+    "linear-browser-trace.json": "137a7436d1657022a0bc9c1e7b14262642d9b84227bb57468241f2103d6d9503",
+    "notion-browser-trace.json": "7e450a794a9b4bde89155f81544d55de9320416b1c0ec4130051f27bcd7a09d2"
+  }
+}

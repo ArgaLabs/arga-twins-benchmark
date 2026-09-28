@@ -1,0 +1,108 @@
+{
+  "date": "2026-09-24",
+  "status": "passed",
+  "kind": "manual_hosted_cua_and_native_api_validation",
+  "scored_candidate_rollout": false,
+  "run_id": "4f86415a-3c0f-41b7-96ab-1840e46119cf",
+  "scenario_id": "7f7cec84-2ec5-44d2-86d4-4f4285ca6569",
+  "exact_seed": "samples/workspace/evidence/sheets-moves-hosted-seed.json",
+  "browser": "Google Chrome through CUA and sample BrowserProxy",
+  "screenshots_retained": false,
+  "viewports": [
+    "desktop",
+    "390x844"
+  ],
+  "deployment": {
+    "sheets_moves": {
+      "pr": 1116,
+      "merge_commit": "8fa8f8e4c4bcae575466b80a09df63f815e25de9",
+      "twins_run": 35936340939,
+      "runtime_run": 35936340904,
+      "status": "success"
+    },
+    "sheets_ranges": {
+      "pr": 1117,
+      "merge_commit": "0277430adefe07da892323e9f4c2bdcb61f7ef88",
+      "twins_run": 35938353981,
+      "runtime_run": 35938354040,
+      "status": "success"
+    },
+    "calendar_revocation": {
+      "pr": 1118,
+      "merge_commit": "eb05493164d5622159c5d781826cd6d66c5fc054",
+      "twins_run": 35940056249,
+      "runtime_run": 35940056326,
+      "status": "success"
+    }
+  },
+  "frontend_code_fingerprints": {
+    "expected_commit": "0277430adefe07da892323e9f4c2bdcb61f7ef88",
+    "matched": {
+      "twins/google_sheets/dimensions_ui.py:DIMENSION_SCRIPT": "31ec00bdc44adf9dc2049b3eeb3a0e89a92c7ebc0e2294bebec50f5831b72cfa",
+      "twins/google_sheets/grid_format_ui.py:GRID_SCRIPT": "20cd0c84b2d2cf9f9a9104a625f1e4ab760eda9040e789c3a8d4193782a87c83"
+    },
+    "scope": "Served Sheets frontend script blocks, not a per-container image digest."
+  },
+  "sheets": {
+    "whole_rows_moved": "2:3 to 3:4 through Edit > Move > Rows down",
+    "whole_column_moved": "B:B to C:C through mobile Edit > Move > Columns right",
+    "summary_values": [
+      1,
+      3,
+      "Protected summary",
+      3
+    ],
+    "open_range_normalization": "A:B5 to A5:B12",
+    "out_of_bounds": "A13 rejected with unchanged selection",
+    "merged_selection": "Selecting 7:7 expands to include the complete 7:8 merged region; observed in the first run",
+    "partial_merged_move_native_api": {
+      "status": "passed",
+      "operation": "moveDimension splitting K7:L8 merge",
+      "status_code": 400,
+      "exact_native_state_unchanged": true
+    },
+    "native_workbook_equals_deterministic_expected": true,
+    "protected_workbook_exactly_unchanged": true,
+    "browser_mutating_batch_requests": 2,
+    "reload_persistence": true,
+    "console_errors": 0
+  },
+  "calendar": {
+    "group_event_visible_in_search": true,
+    "after_read_status": 404,
+    "after_write_status": 404,
+    "before_status": 200,
+    "groups": [],
+    "same_existing_token": true,
+    "owner_calendar_events_acl_exactly_unchanged": true,
+    "browser_mutations": 0
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down"
+  },
+  "prior_attempt": {
+    "run_id": "14f03182-05c3-4bff-a581-1577a2233e00",
+    "status": "operator_capture_error",
+    "reason": "Public provider endpoint correctly returned 404 for administrative account lookup. Corrected operator script to use private admin endpoint with proxy authorization; added preflight and captured Sheets final state before the account reset.",
+    "cleanup": "torn_down",
+    "counted_as_complete": false
+  },
+  "capture_sha256s": {
+    "baseline-state.json": "8333cf4a61297c9a35db9ed6c5b665524afbfea6f3744956795cfe2137a685cf",
+    "sheets-native-before.json": "151af5d98d5ce9c47a554f65636cb056abf4c975c4dde02fa747e9618af393f8",
+    "sheets-native-after.json": "70b9dac90b58c82924cfb9fd887eee3fc41c821bf49697bd42a7068eed59285a",
+    "calendar-owner-before.json": "9f85dc98302798f39b872cca779bb2557530486be45d9566239ec959442e1a00",
+    "calendar-owner-after.json": "9f85dc98302798f39b872cca779bb2557530486be45d9566239ec959442e1a00",
+    "calendar-group-revocation.json": "2cbce41c952fc74a828abf308132bf777b9525963de2f19f499f019642331908",
+    "sheets-native-negative.json": "63d6597a370b0bb7cf0230b2409ef21aec78f85b86cb2a5fda22e2f5b1324bef",
+    "final-state.json": "a750f32a4a0cf8cdcc357723ec1f6951986fbe7ad130d48eaea376e5a94f7529",
+    "google_sheets-browser-trace.json": "ad8a318b39724350debe518b3a3e1cd8174797a0d568cdb6594f9bb465c9d4c8",
+    "google_calendar-browser-trace.json": "e935f4473898d17421e0020aca8579105da50a7ed54fe8aece09b645d5fc65bf",
+    "cleanup.json": "e76d8f2f9a7d710c7401ee69860d1c3fc4e8b7b7bba43dde539f37406afa9889"
+  },
+  "limits": [
+    "This is manual feature validation, not an additional candidate rollout or complete frontend parity.",
+    "Fingerprint checks attest served frontend script blocks, not per-container image digests.",
+    "Full eight-twin reference/mobile/control audits and subsequent named-range/Docs-find deployments remain separate gates."
+  ]
+}

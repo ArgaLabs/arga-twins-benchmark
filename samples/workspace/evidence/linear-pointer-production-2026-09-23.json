@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-23",
+  "kind": "manual_hosted_cua_feature_verification",
+  "provider": "linear",
+  "scored_candidate": false,
+  "status": "passed",
+  "run_id": "8ebf8a5d-7f00-4399-ac26-2f62feb676bd",
+  "seed": "samples/workspace/evidence/linear-table-hosted-seed.json",
+  "fix": {
+    "pull_request": 1105,
+    "merge_sha": "1ea7872a1d9da9603370187d53020e082d1b078f",
+    "deploy_twins": 35833193583,
+    "deploy_runtime": 35833193626,
+    "deployment_conclusions": "success"
+  },
+  "browser": {
+    "tool": "Google Chrome via CUA",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "Desktop pointer Save persists table-cell edit after reload",
+      "Mobile pointer Save persists second cell edit and inserted table row after reload",
+      "Mobile pointer Comment persists a table comment",
+      "Mobile document scroll width equals 390px viewport"
+    ],
+    "screenshots_retained": false
+  },
+  "native_readback": {
+    "protected_issue_unchanged": true,
+    "seeded_comment_unchanged": true,
+    "new_comments": 1,
+    "target_issue_fields_changed": [
+      "description",
+      "updated_at"
+    ],
+    "unrelated_provider_resources_unchanged": true
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "artifacts_sha256": {
+    "scenario.json": "704185948ba6a7d23ca95b2b5456a744ccce7dafe9bc120eb12bbca1d79a296a",
+    "baseline-state.json": "5d4cf37f905afd34f9dc3e6fe823e697cd651087f3cd4c3238388ebbf7e1d9fa",
+    "final-state.json": "58896d01f7fd2b6be337230623e4f4b065025e7a184bec29811a0cde5c0f94ea",
+    "linear-browser-trace.json": "49af05aeabe43451fe433e7ee6ab9c3ad8fdd9f7ce6a0eec866a78247c53be04",
+    "cleanup.json": "48d8b2d141602249b80eeffed7216b8455dda999d1d9421d08b70202793a3dd3"
+  },
+  "limits": [
+    "Manual feature check, not a scored candidate rollout",
+    "Full Linear feature/reference/mobile parity remains open"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "1a29e3b5-2e85-49b3-9bb4-4c7da6a21e02",
+  "scenario_id": "a21690cd-4913-4c62-96d6-0df37c7a4a8d",
+  "deployment": {
+    "revision": "82b34341cf8748a4c2863fb5d4b4b32acb94ab76",
+    "runtime_workflow": 36040782835,
+    "twins_workflow": 36040782678,
+    "both": "success",
+    "published_images": {
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:1c9d0d4731475d06268b71c55073abd722e1239dd4e6e97666541f4d0ac7beb3",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:90f9e46a1798d0557058cb019e74d616debe7906395b2f330b58abd5ab4fde4f",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:1ff21a9b6e67b9f62a5524b6972e5ae0f38d6c43facb01f9b4b61fa3a64ba3dd",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:de706d65940f667bb668d58e444449c8308159bd466cfb8c3a8b2f027cd791c5",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:3a4516396f5e1408a2ec15dcdf059566f6aef2100ffb7d81b0ca05d3e958cc1c",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:688442fbee704f4983ab97457cc9e6b3ccb21bf6932826b43b903d1e124d4114"
+    },
+    "runtime_revisions_at_deployment": {
+      "arga-api": "arga-api-00627-6nx",
+      "preview-proxy": "preview-proxy-00257-ngq"
+    },
+    "attestation_limit": "Build/push and deploy logs prove published images and traffic at deployment time; running instance image inspection is still blocked by GCP reauthentication."
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_sheets/filters_ui.py:FILTER_SCRIPT": "7be7496a4ea164690323216fec11240d19ca9ae3b2bb7018eb8a28d8b8941bcc"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "viewports": [
+    "desktop default",
+    "390x844"
+  ],
+  "native_checks": [
+    "Explicit Scenario clock is 2026-09-24T12:30Z before and after browser flows.",
+    "Final native condition is DATE_AFTER/YESTERDAY and derived hidden rows leave Today and Tomorrow visible.",
+    "All native rowData, cell values, formulas, formats, metadata and the protected sheet are exactly unchanged.",
+    "Unrelated Workspace content and provider collections are unchanged."
+  ],
+  "browser_checks": [
+    "Before today and past-week outcomes match the disposable provider reference.",
+    "Reopening restores past-week; switching to exact date starts with a clean input.",
+    "Cancel and mobile reload preserve the saved preset.",
+    "=TODAY() retains Today; after yesterday retains Today and Tomorrow and survives reload.",
+    "Desktop and 390px screenshots inspected transiently; no page overflow."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "1ad59dde2a7741867b48334fab713f0a0fab36fc4d34eed9bde5267097b7338f",
+    "native-after.json": "7b4a19fed4fce71941dd2d6d7a34d9c3ef1f41ad288609990f59e2a9f88158ea",
+    "baseline-state.json": "e70e694569f38489016a8f24ece7637da25e1974d3552d48c911d2cfb6d09367",
+    "final-state.json": "a8f2ec96a3dc38866df0f99e1afe61483f8e3b1f42883d73ff68fb9be3af2588",
+    "browser-trace.json": "8766dce8b5450989efb4252614c06bcd6ed3317d36b78017b810b5f8b688336e",
+    "operator-api-trace.json": "5989c3c8b8587295b19e2b93c59b2d341f3c4a2f0edff56427195d39d5962e9d",
+    "cleanup.json": "f893781acd1558a6f9c889495428eaa488097467a7672ccf9eba0162fedf25a1"
+  },
+  "limits": [
+    "Bounded manual hosted flow, not full Sheets/eight-provider parity or a scored candidate run.",
+    "Served code-block fingerprints do not attest every container layer.",
+    "Exhaustive pixel/physical-mobile coverage remains open."
+  ],
+  "retry_provenance": {
+    "first_run_id": "45659946-8d97-4883-9cc6-ddbe6d585658",
+    "reason": "Setup compared the served filter script to the pre-1147 source. The new Data validation menu entry correctly changed the served block. No browser mutation occurred.",
+    "repair": "Compared against current main source; fresh run reused the same Scenario.",
+    "prior_cleanup_sha256": "7916009b387c2d33e419327153427ebc3ce63843d43ecb1a310d4f93510b8ffa"
+  }
+}

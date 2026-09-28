@@ -1,0 +1,161 @@
+{
+  "date": "2026-09-23",
+  "status": "local_verified_ci_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Render owned and shared subscriptions from native CalendarList state; remove fictitious Birthdays and Holidays rows.",
+    "Expose Subscribe to calendar and Create new calendar through the sidebar add menu and Settings.",
+    "Restore hidden subscriptions with PATCH so custom names, colors and reminders survive repeat subscriptions.",
+    "Show browser time zone without provider endpoint metadata.",
+    "Use an accessible in-page unsubscribe/delete confirmation with Cancel initially focused and Escape cancellation."
+  ],
+  "validation": {
+    "calendar_regressions": 67,
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "browser": "Google Chrome through CUA with actual sample BrowserProxy",
+    "browser_flows": [
+      "Desktop owned/shared calendar grouping",
+      "Subscribe to accessible shared calendar",
+      "Missing calendar error and retry",
+      "Restore hidden subscription with preserved name, color and reminder",
+      "Repeat subscription retains preferences (before confirmation-only change)",
+      "Read-only calendar metadata controls disabled",
+      "Unsubscribe Cancel and Escape leave subscription in place",
+      "Confirmed unsubscribe removes only the personal subscription",
+      "Create new calendar menu opens the existing creation form; form closed without submitting"
+    ],
+    "viewport_checks": [
+      {
+        "width": 390,
+        "height": 844,
+        "scope": "subscription form and sidebar actions"
+      },
+      {
+        "width": 320,
+        "height": 568,
+        "scope": "subscription error/retry and unsubscribe confirmation"
+      },
+      {
+        "width": 740,
+        "height": 390,
+        "scope": "Create calendar form, including submit control, inspected in native Chrome screenshot"
+      }
+    ],
+    "calendar_metadata_unchanged": true,
+    "event_state_unchanged": true,
+    "native_writes": [
+      {
+        "provider": "google_calendar",
+        "method": "POST",
+        "path": "/calendar/v3/users/me/calendarList",
+        "status": 200
+      },
+      {
+        "provider": "google_calendar",
+        "method": "DELETE",
+        "path": "/calendar/v3/users/me/calendarList/calendar-4@example.test",
+        "status": 204
+      },
+      {
+        "provider": "google_calendar",
+        "method": "PATCH",
+        "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+        "status": 200
+      }
+    ],
+    "console_errors": 0
+  },
+  "references": [
+    "https://support.google.com/calendar/answer/37100?hl=en&co=GENIE.Platform%3DDesktop",
+    "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/insert"
+  ],
+  "limits": [
+    "CI, deployment and fresh hosted verification pending.",
+    "Subscription currently supports calendars already accessible to the account; requesting new access from an owner is not implemented.",
+    "This focused check is not exhaustive Calendar feature or pixel parity.",
+    "The original browser JavaScript confirmation stalled automation and was cancelled through native Chrome; the replacement in-page confirmation passed. Extension screenshots later showed stale frames; the landscape form was verified in the actual Chrome window instead."
+  ],
+  "review_followup": {
+    "finding": "Unsubscribed entries were excluded from restore discovery, causing display preferences to reset.",
+    "fix": "Include showDeleted=true and restore the saved entry through native PATCH.",
+    "validation": {
+      "calendar_regressions": 67,
+      "chrome_unsubscribe_resubscribe": "passed",
+      "preserved_preferences": {
+        "summaryOverride": "On-call shared",
+        "backgroundColor": "#188038",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 30
+          }
+        ]
+      },
+      "calendar_metadata_unchanged": true,
+      "event_state_unchanged": true,
+      "native_writes": [
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 200
+        },
+        {
+          "provider": "google_calendar",
+          "method": "DELETE",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 204
+        },
+        {
+          "provider": "google_calendar",
+          "method": "PATCH",
+          "path": "/calendar/v3/users/me/calendarList/calendar-3@example.test",
+          "status": 200
+        }
+      ]
+    }
+  },
+  "cross_account_review_followup": {
+    "finding": "The original form could only discover calendars already present in the active account state.",
+    "fixes": [
+      "Resolve user, domain, group and public ACL grants within the same workspace on every native request.",
+      "Keep owner calendar/event records shared and subscription preferences account-local.",
+      "Resolve shared primary calendars by owner email without automatically subscribing.",
+      "Apply role updates and revocation to existing tokens and CalendarList incremental sync.",
+      "Redact private event details for reader roles and enforce writer/private restrictions.",
+      "Seed account identities, owner calendars, ACLs and subscriptions through exact Scenario configuration; reset clears previous owners.",
+      "Preserve private-event incremental sync while hiding details, retain free/busy caller aliases, and protect the data owner primary calendar from shared-manager deletion."
+    ],
+    "validation": {
+      "calendar_regressions": 81,
+      "pyright": "passed",
+      "ruff": "passed",
+      "chrome_cua": [
+        "Desktop subscription by another owner email",
+        "Other calendars placement and disabled owner settings",
+        "390px unsubscribe and resubscribe by ID",
+        "Reload preserves nickname, color, popup reminder and shared event visibility"
+      ],
+      "all_owner_calendar_metadata_unchanged": true,
+      "all_owner_event_state_unchanged": true,
+      "owner_account_state_unchanged": true,
+      "sdk_and_scenario_generator_tests": 145,
+      "contract_matrix": {
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "unexpected_5xx": 0,
+        "status": "passed"
+      }
+    },
+    "references": [
+      "https://developers.google.com/workspace/calendar/api/concepts/sharing",
+      "https://developers.google.com/workspace/calendar/api/v3/reference/acl"
+    ],
+    "limits": [
+      "Cross-owner event transfer and shared MCP collaboration remain outside this focused subscription correction.",
+      "CI, production deployment and hosted cross-account validation are pending."
+    ]
+  }
+}

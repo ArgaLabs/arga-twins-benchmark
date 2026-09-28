@@ -1,0 +1,78 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_validation",
+  "status": "native_outcomes_pass_ui_defect_found",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "2111aa02-6fff-4c88-a4f6-3c9f78732e21",
+  "scenario_id": "d5f4b904-9c20-4de0-8daf-4961bf228c1d",
+  "deployment": {
+    "revision": "82b34341cf8748a4c2863fb5d4b4b32acb94ab76",
+    "runtime_workflow": 36040782835,
+    "twins_workflow": 36040782678,
+    "both": "success",
+    "published_images": {
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:1c9d0d4731475d06268b71c55073abd722e1239dd4e6e97666541f4d0ac7beb3",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:90f9e46a1798d0557058cb019e74d616debe7906395b2f330b58abd5ab4fde4f",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:1ff21a9b6e67b9f62a5524b6972e5ae0f38d6c43facb01f9b4b61fa3a64ba3dd",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:de706d65940f667bb668d58e444449c8308159bd466cfb8c3a8b2f027cd791c5",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:3a4516396f5e1408a2ec15dcdf059566f6aef2100ffb7d81b0ca05d3e958cc1c",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:82b34341cf8748a4c2863fb5d4b4b32acb94ab76@sha256:688442fbee704f4983ab97457cc9e6b3ccb21bf6932826b43b903d1e124d4114"
+    },
+    "runtime_revisions_at_deployment": {
+      "arga-api": "arga-api-00627-6nx",
+      "preview-proxy": "preview-proxy-00257-ngq"
+    },
+    "attestation_limit": "Build/push and deploy logs prove published images and traffic at deployment time; running instance image inspection is still blocked by GCP reauthentication."
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_sheets/validation_ui.py:VALIDATION_SCRIPT": "8ee9ea8594bc4b7702fd41b532d53e40029c5c626bd0253d921b57430406d11a"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "viewports": [
+    "1063x862",
+    "390x844"
+  ],
+  "browser_checks": [
+    "Created strict dropdown with help text; keyboard Alt+Down choices and native selection. Invalid typed value restores Active.",
+    "Edited list to range source; changing source Closed to Review refreshes available choices, and Review saves to E3.",
+    "Checkbox click and Space toggle once each; rule removal preserves native TRUE/FALSE after mobile reload.",
+    "Warning mode accepts 5 and marks it invalid; strict mode rejects G3=4 without writing a value.",
+    "Relative =H2>C2 rule on H2:H5 accepts H3=35 and rejects 25 against C3=30.",
+    "Mobile rule reopen preserves H2:H5, =H2>C2 and strict mode; cancellation does not save =H2>100. Mobile width is 390px with no page overflow."
+  ],
+  "native_checks": [
+    "All original A:D cells, formulas, formats and metadata unchanged.",
+    "Complete protected sheet and unrelated provider collections unchanged.",
+    "Exactly eight expected new values and ten expected validation bindings remain.",
+    "Relative predicates are shifted correctly for each row; rejected values and removed checkbox rules are absent."
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "surface": "Sheets validation rejection",
+      "trigger": "Reject 25 in H3 after committing valid 35 with =H3>C3.",
+      "observed": "35 is restored correctly but the red validation-invalid marker remains until refresh.",
+      "followup_branch": "bug/lab-sheets-rejected-value-marker"
+    }
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "scenario.json": "82e6782b21f268d0d11808d3d9cfd085b80152bc8d74d00f7f6136ee08509c8e",
+    "native-before.json": "41c668d7279c3ec4a44ed187a030d155ace0f7a5ea512799977eaef40af377ce",
+    "native-after.json": "253c6dde2eb28fe4c7bfac226e306f042998271691c8b51d8019a560f763e133",
+    "baseline-state.json": "97e676e1d58d46f698b1ad4eebaacb7effdb6e1e2a110853ad573b172fb47169",
+    "final-state.json": "37c648bb86fb53bc4ad4b84bb3b61bf7557e7bd526ed7cef443b8889976af6ee",
+    "browser-trace.json": "28e97c2ce195618aeb6eb29feca4c7eafb632f054b05f7a78e463f2ad9c1ecaa",
+    "operator-api-trace.json": "0953a4bbdf4bb7a1486773416432c779284a93a2de1820a08ce395ffa6696772",
+    "cleanup.json": "aa3a8a6cb822009b3290c9283af52d162359c4108cf3665121906c905ad6ea6f"
+  },
+  "limits": [
+    "Queued-write restoration is covered locally; a controlled hosted delayed-write replay remains pending.",
+    "A UI defect prevents this record from closing the complete hosted validation gate until the fix is deployed and replayed.",
+    "These bounded manual checks do not establish all-condition, full Sheets/eight-provider, physical touch or exhaustive visual parity.",
+    "Live per-container image inspection remains pending GCP reauthentication."
+  ]
+}

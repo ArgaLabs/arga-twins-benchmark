@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "5ca77292-1e77-4d9b-89c9-3bb46069bc74",
+  "scenario_id": "fff5bfee-f4f3-438c-b9dd-4d74e76e38e3",
+  "deployment": {
+    "revision": "ca16789bcf0268cf6ed898384390086c796ddd51",
+    "runtime_workflow": 35992062998,
+    "twins_workflow": 35992062995,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_sheets/filters_ui.py:FILTER_SCRIPT": "c7a6d27e54da116bb42c4efc326efe5cedd42f87b47cebba1b38182cb5977e7e"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "viewports": [
+    "desktop default",
+    "390x844"
+  ],
+  "native_checks": [
+    "Header unchanged; all five complete cell rows preserved as a permutation.",
+    "Final descending budget order is Delta, Beta, Gamma, Alpha, Empty; blank values sort last.",
+    "=15+5 formula and all other native user-entered values preserved.",
+    "Protected sheet is exactly unchanged in native readback and captured state.",
+    "Other Workspace content and unrelated provider collections unchanged; native basic filter removed."
+  ],
+  "browser_checks": [
+    "Create a filter, apply >=20, exclude 40 and Closed, and verify narrowed value choices.",
+    "Search and cancel preserve saved criteria after mobile reload.",
+    "Filter sort, remove filter, then perform header-aware advanced range sort.",
+    "Desktop and 390px layouts inspected transiently; final order persists after reload."
+  ],
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "ed79ee9f1ab7511ff8e80d34dea494b837e726e1ea4e8c2d63b8ffabcb3c2765",
+    "native-after.json": "c5641300095fb7981f3659943cc53650f19a1b79cbf06dbd92b3aeb539eaf305",
+    "baseline-state.json": "c6957b00ef35ee991353563dabb7c9d217ab840fc1507023479f54a65fd72903",
+    "final-state.json": "ddf9cb35cefd2946e814da9a3332b6cf87253549b003bf06d709ce31f6303024",
+    "browser-trace.json": "d0003beb01a8884b3b2a550afafe8f66e3798a1dc35ac27cc6ea28ed99ffce7d",
+    "operator-api-trace.json": "56e65405565c74038980d06dfa28bc18d52b1025fc7cbdc89591ccdcd872b1c5",
+    "cleanup.json": "bedae67053299745f27c2766601a032a6b24b7017c1a463d841cd21bc3fd4359"
+  },
+  "limits": [
+    "Bounded hosted operator check, not a scored candidate rollout or full provider parity.",
+    "Deployment plus served source-block fingerprints are not per-container digest attestation.",
+    "No exhaustive pixel/physical-mobile audit."
+  ]
+}

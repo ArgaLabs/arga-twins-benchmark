@@ -1,0 +1,174 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "notion"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1167",
+  "source_head": "2cea0003735ad0f03c2b0a8d256ab893eca9747b",
+  "status": "merged_deployed_fresh_hosted_native_images_verified",
+  "release_allowed": false,
+  "scope": [
+    "Recheck current token capabilities and page grants after database-view form reads",
+    "Recheck group ownership and capabilities after group form reads",
+    "Handle groups removed during pending form submission without mutation or unhandled exception"
+  ],
+  "tests": {
+    "before_failed": 14,
+    "focused_passed": 15,
+    "all_notion_passed": 187,
+    "warnings": 3,
+    "make_fix": "pass",
+    "source_review": "ship; no concrete blockers",
+    "review_case_before_failed": 1,
+    "review_correction": "Source review passes: removed group returns 404 for workspace and group owners."
+  },
+  "source_files": {
+    "twins/notion/README.md": "83013496a4d2241c8c0525f29c12a36260dfd81b9fd8cbc1e6f5288f3a2c9629",
+    "twins/notion/database_ui.py": "9c00ef4e7e62d58241e8bc1b12232aade14a3eb5fe46357649e0110a69efd7eb",
+    "twins/notion/groups_ui.py": "89012688e9aa7c05691d6bc1a1e5785f80de55961e1772a026cd3584541fc212",
+    "twins/tests/test_notion_form_revocation.py": "db2dd2127c268f530b34f93a08552cfbdf8528a88478c12f6915fd497a7600ae"
+  },
+  "artifacts": {
+    "lab-notion-form-revocation-before.log": "12786ae4262be7c6ba538f22ca4adfa275958b115c35ac292ecc02c7355f8d67",
+    "lab-notion-form-revocation-focused.log": "e0424771a4fdcb0496f94b42abb79e6d8c140ef08b78194e095edcfcbe95c883",
+    "lab-notion-form-revocation-regressions.log": "b56b98ba71411759d9b67b025e7eec11b3d94a52f38a32594c42f66c35075035",
+    "lab-notion-form-revocation-makefix.log": "11424e9c3d38e499ff6036c42eeff74b65b6519b629367a38a59bd0e09b74651",
+    "lab-notion-form-owner-removal-before.log": "135e025071e28eed6443a41678fda19b8a111fbdf955bccc5fa3c5e8c40d6d47",
+    "lab-notion-form-revocation-focused-final.log": "5c85078d8e09861df2e37aa49c90a9220ba26ca8dde37f66a5c877d69f22c0a6",
+    "lab-notion-form-revocation-regressions-final.log": "a8b98bf740fe04ef6a3d78618922a21dbe3c6fb3b4aa776dcae9d1534fffba3b",
+    "lab-notion-form-revocation-makefix-final.log": "748b77207ddf71779dd62bc817618a423d2c71d510697d7cee03c3b84c6db1ef",
+    "lab-final-notion-form-revocation-current-pr.json": "a7685bb28b64d302e420a7e08d185ed0e099fbcd8946a25c4b726f920081c02c",
+    "lab-final-notion-form-revocation-full-ci.log": "9dc3e2c4b7eec90309f7974699e99bc3dc84c1c80bdd3b1c79a9fae54d067170",
+    "hosted-7854c3c7/native-checks.json": "b3de1217e2b92b21583e95edfee90dcf68f970108522f092bdde5fd9fa7cc554",
+    "hosted-7854c3c7/image-comparison.json": "3bef030f57c4db187a8c93c6a053557609d48136b9f0b461801368823467641e",
+    "hosted-7854c3c7/cleanup.json": "b067744d242a272fce3abee8cfd4ee25b70471ec4528ea28cbc8a877d65a833d",
+    "hosted-7854c3c7/final-state.json": "f5dbf1d3c26ada8ed2863fdba0c1c7dab50c4892e6514b42cfefe3fffb28f99a",
+    "hosted-7854c3c7/runtime-image-evidence.json": "d7a0b5ae584abb5b1e147c60483695b050da919b6b44ad69f66e4ca6ee479a85",
+    "hosted-7854c3c7/operator-api-trace.json": "7173b229ea6b34c499c636985d8fc74289967ebd5624d5707aaa36d2e30ef590",
+    "lab-final-notion-form-revocation-deployment.json": "bc7b710547128a96eb6036f753a00fce2b11e2397aaf4c241ec0203bc1035422",
+    "lab-final-notion-form-revocation-runtime-attestation.json": "5845e2ee13693df59fb0f8cedf0c355b5dc0657051af4b06012a266a2189aeba",
+    "lab-final-notion-form-revocation-twins-deploy.log": "a6b9569d68cad0cf87c8d9cd5b3f7435ea97adc4a83ba35421af8adfe9e46513",
+    "lab-final-notion-form-revocation-runtime-deploy.log": "823e9bcb86c5bcf0c7d5a518db2a33071e0325971444acf1ee379e0669779554"
+  },
+  "limits": [
+    "Hosted form checks verify normal, denied and stale-revision HTTP paths. In-flight revocation is covered by deterministic local tests.",
+    "No browser or provider-reference fidelity claim; the real Notion reference requires sign-in.",
+    "Teamspaces, guests, advanced properties, AI/collaboration and full Notion audit remain open."
+  ],
+  "initial_source_head": "c74103ada4693aa629a161fb5d858180bf2200b9",
+  "review_comment": "https://github.com/ArgaLabs/validation-server/pull/1167#discussion_r4108699171",
+  "ci_head": "161daf442a5c949bd805216435d8ed7ba66b5c36",
+  "base_update": "Merged main5f67b252 after combined Workspace delivery; exact-head CI restarted.",
+  "merge_commit": "7854c3c7c6741dbff191a6604f109f86f6b7772a",
+  "merged_at": "2026-09-25T21:48:31Z",
+  "ci": {
+    "head": "161daf442a5c949bd805216435d8ed7ba66b5c36",
+    "status": "pass",
+    "twins_passed": 5839,
+    "twins_skipped": 145,
+    "twins_deselected": 3,
+    "root_passed": 2130,
+    "root_skipped": 2,
+    "lint_and_test_run": 36191226607,
+    "docker_run": 36191226626,
+    "fidelity_run": 36191226534
+  },
+  "production": {
+    "status": "success",
+    "twins_run": 36193524592,
+    "runtime_run": 36193524509,
+    "revision": "7854c3c7c6741dbff191a6604f109f86f6b7772a"
+  },
+  "hosted": {
+    "native": {
+      "checks": [
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/views/1d31fc5c-5f00-0e82-cb48-45db3b69be35",
+          "status": 403
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/views/1d31fc5c-5f00-0e82-cb48-45db3b69be35",
+          "status": 403
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/views/1d31fc5c-5f00-0e82-cb48-45db3b69be35",
+          "status": 403
+        },
+        {
+          "saved_view_success_and_native_reload": "pass"
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/groups",
+          "status": 403
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/groups/a728bb19-4cef-eca8-3ecf-e7a5819e072e",
+          "status": 403
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/groups/a728bb19-4cef-eca8-3ecf-e7a5819e072e",
+          "status": 409
+        },
+        {
+          "native_state_unchanged": true,
+          "path": "/ui/groups/a728bb19-4cef-eca8-3ecf-e7a5819e072e/delete",
+          "status": 403
+        },
+        {
+          "group_success_stale_revision_reload": "pass"
+        }
+      ],
+      "gui_tested": false,
+      "inflight_revocation": "Covered by deterministic local tests; hosted checks cover normal and denied form paths only.",
+      "protected_page_unchanged": true,
+      "status": "pass"
+    },
+    "images": {
+      "status": "complete",
+      "observed_at": "2026-09-25T21:55:56.405058+00:00",
+      "publication_sha256": "732aff5381f31045739da515f67610739465c6d976b76237668569debab492b4",
+      "containers": {
+        "notion": {
+          "published_revision": "7854c3c7c6741dbff191a6604f109f86f6b7772a",
+          "image_id": "sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:10ca596bd6a885aba8ea34da16c98e1b2e7a3c9b4826fce9d33e58f92db8062d",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:29f16cefd6870da6cfdae5cdf5e794127895a4fae0cdbfcfaa48962f0b447646"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:576a831bbb62f02c2ed2b6d87ae563d12238e24d60c0d34a467b51408765a18d"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:576a831bbb62f02c2ed2b6d87ae563d12238e24d60c0d34a467b51408765a18d"
+          ],
+          "builder_log_sha256": "e4f87446951d50e042f8ad6745978cd1c048f4778d167443c6d78c85fb2ab5d0"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "cleanup": "torn_down",
+    "gui_tested": false
+  }
+}

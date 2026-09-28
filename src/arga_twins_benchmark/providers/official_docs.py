@@ -28,6 +28,8 @@ SUPPORTED_DOC_PROVIDERS: Final = frozenset(
         "gmail",
         "google_calendar",
         "google_drive",
+        "google_docs",
+        "google_sheets",
         "hubspot",
         "jira",
         "linear",

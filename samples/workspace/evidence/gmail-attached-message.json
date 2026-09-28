@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-24",
+  "scope": "Gmail RFC822 attachments, browser forwarding and draft reopening",
+  "provider_reference": {
+    "source": "Previously captured isolated official Gmail import conformance",
+    "sha256": "bf44c2463288c5fac753e8071030706d88e85a26711876dbf013cae3edb9f0a9",
+    "observed": "message/rfc822 payload exposes both body.attachmentId and nested parts",
+    "fixture_cleanup_confirmed": true
+  },
+  "implemented": [
+    "Expose attached RFC822 messages through the native attachment endpoint while retaining nested searchable MIME parts",
+    "Preserve message/rfc822 bytes with 8bit MIME transfer encoding when forwarding",
+    "Do not duplicate nested files as separate forward attachments",
+    "Exclude attached-message HTML from the outer displayed/quoted body"
+  ],
+  "tests": {
+    "focused_passed": 59,
+    "all_gmail_passed": 199,
+    "overlapping_counts_not_additive": true,
+    "ruff": "pass",
+    "log_sha256": "f05b033634b28e3ea6dce487093e2f735da5e61850942da951b3f586821993ef",
+    "review_followup": {
+      "attached_message_tests_passed": 22,
+      "all_gmail_tests_passed": 217,
+      "scope": "Exact attachment bytes through import/insert and two browser MIME/draft round trips, including CRLF, custom folding, signed MIME bodies, trailing newlines, base64 and quoted-printable input",
+      "ruff": "pass",
+      "log_sha256": "110585eaaa8cb5d7164f315f21b09e9bc38415e5edc122696a880454f609f176"
+    }
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Original message exposes Download reference.eml",
+      "Forward includes reference.eml and the inline image",
+      "Saved draft reopens at 390px retaining both files",
+      "Exact native attachment bytes match source after reopening",
+      "Rich body and Unicode survive; no recipients, threading headers or hidden Bcc added"
+    ],
+    "original_messages_unchanged": true,
+    "sent_messages": 0,
+    "capture_sha256": "360970a379e451453180ec0922819730944667a88202b73b7ae2b2c04b3c0a87",
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending"
+}

@@ -1,0 +1,448 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-27",
+  "provider": "github",
+  "status": "deployed_bounded_hosted_verified",
+  "release_allowed": false,
+  "changes": [
+    "Repository catalog/search filter by current principal membership or installation selection",
+    "Repository browser pages and Projects deep links return generic HTML denials before private rendering",
+    "Native repository metadata by name/ID uses the same visibility check",
+    "Public repository Projects omit hidden sibling linked rows/options and reject forged hidden add/update/remove"
+  ],
+  "tests": {
+    "initial_focused": 29,
+    "failed_before_fix": 28,
+    "github_regressions_before_projects_refinement": 644,
+    "review_finding_red": 9,
+    "final_affected_passed": 42,
+    "new_module_projects_tests_pyright_errors": 0,
+    "unchanged_preexisting_frontend_pyright_errors": 19,
+    "detector_findings": 0,
+    "rebased_affected_passed": 50
+  },
+  "review": {
+    "initial": "fix: Projects route bypass and sibling private item disclosure; canonical direction absent",
+    "verdict": "ship at three-fix scope; all resolved; no independent visual/touch or full permission approval",
+    "documenter": "README source/evidence review complete; bounded scope and exclusions retained"
+  },
+  "browser": [
+    {
+      "status": "bounded_local_pass",
+      "checks": [
+        "Owner catalog and private repository remain accessible",
+        "Selected installation catalog omits private repository and search returns zero matches",
+        "Direct private URL renders generic HTML404 with no private content",
+        "390x844 reload retains denial and View repositories recovers to permitted catalog",
+        "Invalid-token catalog renders HTML401 with no private content and reload preserves denial"
+      ],
+      "full_native_state_unchanged": true,
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "tabs_closed": true,
+      "limits": [
+        "Existing creation/App/profile/Scenario controls and complete operation grants remain unaudited and are not certified by this visibility correction",
+        "No new hosted verification or exhaustive provider approval"
+      ]
+    },
+    {
+      "status": "bounded_local_pass",
+      "checks": [
+        "Selected installation table shows permitted item and omits forbidden sibling item",
+        "Expanded Add item picker contains only permitted repository PR",
+        "390x844 reload and Board preserve visible item and omit forbidden sibling",
+        "Private sibling Projects direct link returns generic HTML404 and reload preserves denial"
+      ],
+      "full_native_state_unchanged": true,
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "tabs_closed": true,
+      "limits": [
+        "No independent visual approval or complete Project operation-grant certification"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "twins/github/repository_access.py": "744b3ce6b525e0621b394afb8ce792f6fff40fbdcfa07314858a5f420959ae8e",
+    "twins/github/frontend.py": "86b84525fd220e4e2f59cca5728126db26064d8ea99ccc71a89a2283d461914d",
+    "twins/github/operations_ui.py": "6a3ad9ba5afc61063c03b025fcfd1ebd3dc043a6ad4b8a0e246c00c5d266133f",
+    "twins/github/projects_ui.py": "096a62fee9e8c6db4469e83d4e85c0ba80fafd5aa67164244e7d924002bda81d",
+    "twins/github/handlers/repos.py": "c4a395e06a1ea33ba1ff3812f88dfed35f164f238d1b66a6698ae073661e76fc",
+    "twins/tests/test_github_repository_visibility.py": "e1d5997deaf27a8bad2983259dabec3cbdd49ba952adced308d563c3f4dbf37f",
+    "twins/github/README.md": "3b35030a1298cba520c6745da75c3ff898ad76ca6444b711c4c4f7dc6d15b874"
+  },
+  "artifacts_sha256": {
+    "lab-github-repository-visibility-pyright-new.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-github-repository-visibility-pyright.log": "0c92e7820cc8f39db24ddee07442ad8e68917e8e46a44c02b6aff2c9fb15ef3c",
+    "lab-github-repository-visibility-review-red.log": "3d05b29699b138d59f377a6bb30a36aa8c08d6b4a343472235be7d18b699226f",
+    "lab-github-repository-visibility-review-green.log": "1b461022d72a7c3dfb2b05f85170b6de9add579a4b16e844305422f6ffdd872a",
+    "lab-github-repository-visibility-green.log": "f81bea7c5c4f840ad443e25e93afcbb265f5d0f25e42b45ce96464c3c6523415",
+    "lab-github-repository-visibility-local-r2.log": "30c9b5ba5fa812834c0487469fa7e6bcde0a60087141b6d36197680e66da910f",
+    "lab-github-repository-visibility-local.log": "cde8888c6939bdb80db0a9ee6c42113694bd150a1f21bdb09678d6c1159961b5",
+    "lab-github-repository-visibility-pyright-baseline.log": "4f7eca910359b5810e92ade186b638afc0576b3d2d8c4b2734e96526f3f92381",
+    "lab-github-repository-visibility-review-make-fix.log": "097501a059cf1eaeead95d265c353553bf020b1ea587a8603da8b1ab8f038a48",
+    "lab-github-repository-visibility-review-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-github-repository-visibility-make-fix.log": "10f1001d4b5e7b945c82806cc6e40e06836c24453dc4a0aaa6d23ca287ec59a3",
+    "lab-github-repository-visibility-red.log": "cb1ddb5bf78c3a27214c5323c8b83881a8d3d9fedcfdb8bfe636f624aa1f2f80",
+    "lab-github-repository-visibility-regressions.log": "105a6467a94928684a101106a09f5ce1ddc5e1929963a9179461172ced78a125",
+    "lab-github-repository-visibility-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-github-repository-visibility-local/browser-trace.json": "a108ba4dceca9b00883d00cd8d4d6c9d5a4ffb43e8286f1142cd49c14d1ba28b",
+    "lab-github-repository-visibility-local/workspace.json": "69b718d7cf98df27da35cca6687d81b4c66fe2cc3f7486d6809af5f7e11f4dd4",
+    "lab-github-repository-visibility-local/baseline.json": "e4ef745d5ffb5aa693c890906a673e8898b29d67c144e66ed35dced196986fcc",
+    "lab-github-repository-visibility-local/branches.json": "27bb7e415569901e2c2cf4ba254a184a583d258c5e7e07617cdbb0868b3d5515",
+    "lab-github-repository-visibility-local/typecheck-comparison.json": "f4bde9ba4483c2322f57c67cfc789a7c74f04a29373ae014bfc21b5d20f148d8",
+    "lab-github-repository-visibility-local/browser-result.json": "1220360faddd9e0e5dda68f36a2935d0124c551a534a6822288cc6d2a16f53da",
+    "lab-github-repository-visibility-local/final.json": "e4ef745d5ffb5aa693c890906a673e8898b29d67c144e66ed35dced196986fcc",
+    "lab-github-repository-visibility-local-r2/browser-trace.json": "7e46ce8a0c005aaa802feb81e31c89abc88408a5748f37feefc8c14695b25370",
+    "lab-github-repository-visibility-local-r2/workspace.json": "b6edb028de002293de3a641eeae642f895c2b265845cd94ba5767c8c443cbcfa",
+    "lab-github-repository-visibility-local-r2/baseline.json": "c1eb192f2b5704dc2b3030542b89b4b4aabcfbe5672c8b697f0c96072490daa0",
+    "lab-github-repository-visibility-local-r2/branches.json": "27bb7e415569901e2c2cf4ba254a184a583d258c5e7e07617cdbb0868b3d5515",
+    "lab-github-repository-visibility-local-r2/browser-result.json": "6f3e6ab32827498bae76199b30f6dbc4324e48f6fd0562084c873f5b99ab581b",
+    "lab-github-repository-visibility-local-r2/final.json": "c1eb192f2b5704dc2b3030542b89b4b4aabcfbe5672c8b697f0c96072490daa0",
+    "lab-github-repository-visibility-rebased-tests.log": "564d50dc77804cc8cb3d641f740e712096955cf5e330760395eddaa068783d08",
+    "lab-github-repository-visibility-premerge-final.json": "a552a0e6edcd28b54d22cbe9f6036d2a36471ffcbd30e32ad9637b50275ffb51",
+    "lab-github-repository-visibility-merge.json": "870643acd04209682d6dd64bf6cf4e7b5ce748659d024d8db5af533e6ff6d47d",
+    "lab-github-repository-visibility-ci-complete.log": "303648beec566c4ebc52c65c880df210a60eb79d82d4164df868c5cb5942794e",
+    "lab-final-github-repository-visibility-d8f30393/image-comparison.json": "1c041543308f40bf54dd83af388b6031a26d3718238e46d68a8e7ef662c319b5",
+    "lab-final-github-repository-visibility-d8f30393/publication-catalog.json": "7bdba779c19ec969da3ec665472ce626b8b1a6f11e98573c0072baca37321c1a",
+    "lab-final-github-repository-visibility-d8f30393/attempt-result.json": "318d6907bfcc5d495bd15f6dfe88d286c7868645bd66985888df344f7b0dc563",
+    "lab-final-github-repository-visibility-d8f30393/installation-token-result.json": "10782575a93ecfa26e1044c04e5af3d3d5853804eaae74264d7e9b0d685cc1f7",
+    "lab-final-github-repository-visibility-d8f30393/cleanup.json": "912c47d26df2f5d46b5fde8be023ef82f8c200925c5eddec82133f2550f9a852",
+    "lab-final-github-repository-visibility-d8f30393/runtime-image-evidence.json": "647c2e5941534bea7aeaabbbb9a0c0461180e8e40934e1c126eb1a7de7bffcff",
+    "lab-final-github-repository-visibility-d8f30393/baseline-state.json": "16b722df6690fe642e1d844ae5a717fe5f975a8a220f1ee617270e5fc8417e20",
+    "lab-final-github-repository-visibility-d8f30393/operator-api-trace.json": "fd09311042151502649b829260df50aab7f8b2eb5297588c5d202a26cb55a958",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-trace-0.json": "61a4ddc1fa5c776e7cd87482a4a6967426378c75996b525b6425c0b96afbbdbc",
+    "lab-final-github-repository-visibility-d8f30393-r2/image-comparison.json": "65ba02f9f28c84ecb587d04bf6a902fda4d6fa2dfbb5bb06da72eddb221b1372",
+    "lab-final-github-repository-visibility-d8f30393-r2/publication-catalog.json": "7bdba779c19ec969da3ec665472ce626b8b1a6f11e98573c0072baca37321c1a",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-trace-1.json": "8d2d503bec21283517a21ec14da875a3ee9f70c30ecfefe38bfdf52f8a47dd22",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-native-result.json": "c3a1383cd35af05f094bed0228e88f3ea01e81b31a328c7d75c9c9c18aaf4f58",
+    "lab-final-github-repository-visibility-d8f30393-r2/installation-token-result.json": "10782575a93ecfa26e1044c04e5af3d3d5853804eaae74264d7e9b0d685cc1f7",
+    "lab-final-github-repository-visibility-d8f30393-r2/cleanup.json": "eef918767c9f2275edc3b616d58a5ae0cf9016f78d70a391807ea27f6eeefbb2",
+    "lab-final-github-repository-visibility-d8f30393-r2/runtime-image-evidence.json": "85f222a232c3de36ad45252311764fe86453fdd8d539cd1d34ca947a3cd06ecb",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-trace-4.json": "2c3d12f7608291483b7caa5913c99abfc86e2d2081d267eece16ca00e2b9fd31",
+    "lab-final-github-repository-visibility-d8f30393-r2/native-result.json": "1fedd5257231775393603e950a85d28e12440b2d9b60aa13d26707d37d85a511",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-result.json": "300ca5500ae45785c3164b8ed26ef05ffdf9181c4a3f7e23dc4e6ad46a7c8f6a",
+    "lab-final-github-repository-visibility-d8f30393-r2/baseline-state.json": "6a290fd4ee57d71e8d085aff3ef1d5d100cbc1d9ee1fa469165c144385bb745c",
+    "lab-final-github-repository-visibility-d8f30393-r2/operator-api-trace.json": "a436bbce3eb6ee45665a37d0447cef6c5065c4812882da5f747241e827a4b9ac",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-trace-2.json": "65e70e67c493126a8c10efba48b88d59a775a13725d70a82ad16fa3f9febed92",
+    "lab-final-github-repository-visibility-d8f30393-r2/final-state.json": "6a290fd4ee57d71e8d085aff3ef1d5d100cbc1d9ee1fa469165c144385bb745c",
+    "lab-final-github-repository-visibility-d8f30393-r2/browser-trace-3.json": "ec3b351373397c5e40d64947791ca0e8e6c1edc0e437d069040197c6dde10ea3",
+    "lab-final-github-repository-visibility-d8f30393-deployment.json": "e84ba9ec8b06b08db190bc1f6391149c8fd064ae9b92aa59536708219332e22d",
+    "lab-final-github-repository-visibility-d8f30393-runtime-attestation.json": "e7f5a21d8e58e9c84e91c3764492061009e27d3676a79d8c5f8957bac95534c8"
+  },
+  "limits": [
+    "Bounded hosted visibility checks pass; native Project operation grants remain a separate reproduced open defect.",
+    "No complete operation grants, API-wide access, creation/profile/App/Scenario/admin, teams/collaborators or full provider certification",
+    "No physical touch or exhaustive visual approval"
+  ],
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1205",
+  "source_head": "f489cf17092de935039661005dc10d2d00a30fa0",
+  "source_base": "5be53e4587d0605844314b77038f78b00e6fea24",
+  "ci": {
+    "status": "passed",
+    "head": "f489cf17092de935039661005dc10d2d00a30fa0",
+    "all_complete": true,
+    "check_count": 33,
+    "premerge_state": "CLEAN",
+    "twin_tests_passed": 6786,
+    "root_tests_passed": 2140,
+    "lint_and_test_run": 36292593224
+  },
+  "merge_commit": "d8f303933f536aead9c5c994b3719df9f0b63d42",
+  "merged_at": "2026-09-27T03:57:50Z",
+  "deployment": {
+    "revision": "d8f303933f536aead9c5c994b3719df9f0b63d42",
+    "runtime_workflow": 36292926539,
+    "twins_workflow": 36292926611,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:d8f303933f536aead9c5c994b3719df9f0b63d42@sha256:2033727caab4c70ecce2d20b1289464c02506e08c46814cb6ade146277c6954e",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d8f303933f536aead9c5c994b3719df9f0b63d42@sha256:5afe3877fede7e8e0956a0f25cb4122595d255e1e4acfeca07a63be48957cc81",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:d8f303933f536aead9c5c994b3719df9f0b63d42@sha256:5e0d7127158b45c94369b051466ac2aa142378c7b60b6bbc96795d3b8365c381"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00311-bjl",
+      "arga-api": "arga-api-00681-8wk"
+    },
+    "log_sha256s": {
+      "lab-final-github-repository-visibility-d8f30393-twins-deploy.log": "5cca2a6fc4119a2e03d6ec8caf3f0991d2dfee17c46b5c79d7b5188a851ee987",
+      "lab-final-github-repository-visibility-d8f30393-runtime-deploy.log": "9f57b3dc719f7006d694bde9b625159baf356553676ca2481524d1b24306d017"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "runtime_attestation": {
+    "revision": "d8f303933f536aead9c5c994b3719df9f0b63d42",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00311-bjl",
+        "observed_at": "2026-09-27T03:59:12.981642+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d8f303933f536aead9c5c994b3719df9f0b63d42",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00311-bjl"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00311-bjl",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:5afe3877fede7e8e0956a0f25cb4122595d255e1e4acfeca07a63be48957cc81",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00681-8wk",
+        "observed_at": "2026-09-27T04:03:28.737207+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:d8f303933f536aead9c5c994b3719df9f0b63d42",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:f55c94600f606fb3879f0d5e46d719d31605ea5f49e5a76523d8b9a2333e2587",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:f55c94600f606fb3879f0d5e46d719d31605ea5f49e5a76523d8b9a2333e2587"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00681-8wk"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00681-8wk",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:5e0d7127158b45c94369b051466ac2aa142378c7b60b6bbc96795d3b8365c381",
+          "sha256:f55c94600f606fb3879f0d5e46d719d31605ea5f49e5a76523d8b9a2333e2587"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "9f57b3dc719f7006d694bde9b625159baf356553676ca2481524d1b24306d017",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "run_id": "5ef8c2d2-a7fb-4bf0-aede-46129521ad6a",
+    "native": {
+      "all_denied_reads_writes_preserve_complete_state": true,
+      "checks": [
+        {
+          "actor": "anonymous",
+          "status": 404,
+          "surface": "private browser"
+        },
+        {
+          "actor": "anonymous",
+          "status": 404,
+          "surface": "private browser/branches"
+        },
+        {
+          "actor": "anonymous",
+          "status": 404,
+          "surface": "private browser/pulls"
+        },
+        {
+          "actor": "anonymous",
+          "status": 404,
+          "surface": "private browser/issues"
+        },
+        {
+          "actor": "anonymous",
+          "status": 404,
+          "surface": "private browser/projects"
+        },
+        {
+          "actor": "limited",
+          "status": 403,
+          "surface": "private browser"
+        },
+        {
+          "actor": "limited",
+          "status": 403,
+          "surface": "private browser/branches"
+        },
+        {
+          "actor": "limited",
+          "status": 403,
+          "surface": "private browser/pulls"
+        },
+        {
+          "actor": "limited",
+          "status": 403,
+          "surface": "private browser/issues"
+        },
+        {
+          "actor": "limited",
+          "status": 403,
+          "surface": "private browser/projects"
+        },
+        {
+          "actor": "outside",
+          "status": 404,
+          "surface": "private browser"
+        },
+        {
+          "actor": "outside",
+          "status": 404,
+          "surface": "private browser/branches"
+        },
+        {
+          "actor": "outside",
+          "status": 404,
+          "surface": "private browser/pulls"
+        },
+        {
+          "actor": "outside",
+          "status": 404,
+          "surface": "private browser/issues"
+        },
+        {
+          "actor": "outside",
+          "status": 404,
+          "surface": "private browser/projects"
+        },
+        {
+          "actor": "reader",
+          "status": 404,
+          "surface": "private browser"
+        },
+        {
+          "actor": "reader",
+          "status": 404,
+          "surface": "private browser/branches"
+        },
+        {
+          "actor": "reader",
+          "status": 404,
+          "surface": "private browser/pulls"
+        },
+        {
+          "actor": "reader",
+          "status": 404,
+          "surface": "private browser/issues"
+        },
+        {
+          "actor": "reader",
+          "status": 404,
+          "surface": "private browser/projects"
+        },
+        {
+          "actor": "unknown",
+          "status": 401,
+          "surface": "private browser"
+        },
+        {
+          "actor": "unknown",
+          "status": 401,
+          "surface": "private browser/branches"
+        },
+        {
+          "actor": "unknown",
+          "status": 401,
+          "surface": "private browser/pulls"
+        },
+        {
+          "actor": "unknown",
+          "status": 401,
+          "surface": "private browser/issues"
+        },
+        {
+          "actor": "unknown",
+          "status": 401,
+          "surface": "private browser/projects"
+        }
+      ],
+      "limits": [
+        "Repository visibility only; no full operation-grant or API-wide permission certification"
+      ],
+      "passed": true,
+      "project_sibling_rows_and_options_filtered": true
+    },
+    "browser": {
+      "status": "bounded_hosted_pass",
+      "checks": [
+        "Owner catalog/private repository rendering",
+        "Selected installation catalog omits private repository; private-title search has zero matches",
+        "Public Projects table, Board and Add item picker omit linked private content",
+        "390px reload and Board preserve permitted content",
+        "Private Projects HTML404 reload and View repositories recovery",
+        "Invalid-token catalog HTML401 and 390px reload",
+        "Outside principal private repository HTML404 and catalog recovery",
+        "Limited-token HTML403 presentation and reload at 390px"
+      ],
+      "viewports": [
+        [
+          1465,
+          806
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "owned_tabs_closed": true,
+      "limits": [
+        "Project mutation controls remain improperly available; separate access audit/tests preserve this open defect",
+        "Creation/profile/App/admin/full-provider parity not certified"
+      ]
+    },
+    "browser_native": {
+      "all_browser_requests_read_only": true,
+      "full_native_state_unchanged": true,
+      "passed": true
+    },
+    "cleanup_confirmed": true,
+    "all_three_container_images_match": true,
+    "fixture_note": "Personally owned private repository plus organization-owned public repository; both are linked into the organization project. The seeded outside user is an organization member but does not own the private personal repository. Same-organization installation selection is covered separately by local regression fixtures."
+  },
+  "preserved_attempts": [
+    {
+      "run_id": "21ae35ad-9e2d-423a-8174-cdfdce0b7de0",
+      "status": "operator_fixture_setup_failed",
+      "assertion": "Intended outside actor received 200 instead of 404",
+      "root_cause": "Scenario reset adds every seeded user to every seeded organization; outside actor was an organization member",
+      "correction": "Use a personally owned private repository; the outside principal has no ownership. Keep public sibling linked Project items in the organization project.",
+      "cleanup_confirmed": true,
+      "candidate_retry": false,
+      "all_three_container_images_match": true
+    }
+  ],
+  "subsequent_projects_correction": {
+    "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1206",
+    "evidence": "github-project-permissions-2026-09-27.json",
+    "status": "deployed_bounded_hosted_verified",
+    "original_observations_preserved": true
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-04",
+  "kind": "hosted_candidate_mail_comment_fix_revalidation",
+  "environment": "production",
+  "purpose": "Revalidate tasks affected by Gmail send and GitHub native comment fixes after #1150 production deployment, with unchanged deterministic task seeds and candidate instructions. Earlier attempts remain preserved.",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 17,
+  "official_docs_calls": 3,
+  "model_tool_calls": 22,
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "required_4",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_github_issue_comment",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:github:issue_comment:7",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:e2lzpX0O3KcQMA82KeVrtvaiAXg",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:6FRrviMmsXFYlYlwwjd8uXlKbKQ/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:incident",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:deployment",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:disposition",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "previous_outcomes_preserved": true,
+  "previous_trial": "wks-04-final-deployment-2026-09-24.json",
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "sample_code_revision": "2dd176d18cf60d0356a89ea36f0f9ebfd07c62d2",
+  "deployment_provenance": {
+    "revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+    "runtime_workflow": 36068186587,
+    "twins_workflow": 36068186452,
+    "both": "success",
+    "published_images": {
+      "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
+      "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:d253aabb27ef219cebbd461af9d632e7b02273eb836f37201bb1b15f6a8ef7f3",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:6d8cc76a46b76a3a79b15afc18d806c25eb956a937f05c797eae58d201ac62b7"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": [
+        "preview-proxy-00261-57l"
+      ],
+      "arga-api": [
+        "arga-api-00631-cm9"
+      ]
+    },
+    "log_sha256s": {
+      "lab-final-mail-comment-twins-deploy.log": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
+      "lab-final-mail-comment-runtime-deploy.log": "66b74136d21529977a0bc0335c67d06c17f1122f011f2788947f30042af3af39"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains blocked by GCP reauthentication."
+  },
+  "seed_config_sha256": "e55e7033c595567fbc722ab869be77eba9cffefc8ebc8c0a045733f95fe7539e",
+  "artifact_sha256s": {
+    "candidate.json": "508ca2d6101cdc75b2731aec9c94f7c0334917181324db7691c01dffd4a703ec",
+    "baseline-state.json": "f078a3750ceb65d2c772d34e003cc89a068bc10fe58309ec3ceb199e8c1a298b",
+    "final-state.json": "f319b7702979951561d1c2956441feed7053ca7a3cd28b795abd255e9d0cebd4",
+    "invocation.json": "d1b6dbf0c88c0f340f7dc45f4ef22f50a8ec07b7c4f12adc85344c5b6eb2a650",
+    "provider-trace.json": "3350ed68d098b9876b501ab0c68cf6559293f2d00f8257f24ac3581801aff6b5",
+    "official-docs-trace.json": "cebc048df8f506d970f1c762e1f0606e4c82bb212b68364526b6ad20b5deee7a",
+    "browser-trace.json": "4ee97e71a4cdb2f0c4895bdba0cbaab15c6f5fdec97cc79f582290a0054846d7",
+    "verifier.json": "a71ad5fe29c8af11cc2e493edda5d932e2754fa5e824404b9c897c34d3b96f0f",
+    "cleanup.json": "32961f7152725562bbfe6b6cde120af1bd04281bfbc8e23a12be492975d9cad6"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "11fabba297f7a3be4a38ff672b01ca1ecae7a39fde146db9bc8484248ba0ceec",
+    "adapter.json": "a013f7e8976527772fa9fddee529ad2beb2bcadb187cdee31e18005becd7d6d1"
+  },
+  "limits": [
+    "Functional trial, not a model comparison or exhaustive frontend audit.",
+    "Actual interaction mode is reported; availability of browser tools does not establish browser-agent coverage.",
+    "Published images and deployment logs do not attest every current running container."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "scored_candidate": false,
+  "provider": "google_sheets",
+  "browser": "Google Chrome via CUA",
+  "deployment": {
+    "revision": "cce5f0d2fc0219b529232e31f09822893359f857",
+    "twins_run": 35822433983,
+    "runtime_run": 35822434271,
+    "conclusions": "success"
+  },
+  "scenario": "Saved deterministic Scenario through Arga CLI, with native dimensions and frozen counts in seed_config; no post-seed fixture augmentation",
+  "checks": {
+    "seeded_row_and_column_freeze": "pass",
+    "distant_CV5000_navigation": "pass; 352 rendered cells, pinned A1 remains visible",
+    "change_to_two_rows_and_two_columns": "pass",
+    "pending_B2_edit_before_freeze": "pass; native B2=9, dependent CV5000=27",
+    "no_rows_and_no_columns": "pass; final native counts both zero",
+    "custom_sizes_and_hidden_dimensions_preserved": "pass",
+    "protected_sheet_full_state_unchanged": "pass",
+    "mobile_390px": "pass; document width 390, menu left 69.90625/right 289.90625"
+  },
+  "cleanup": "torn_down",
+  "artifacts_sha256": {
+    "scenario.json": "faee013036e63ccd250daa17e0f73b4ac07ace332860959344aa4092ad820e3a",
+    "baseline-state.json": "39a7a53f30e21950200dc117b92ebef91680a67a7861372b048726c7d89890bb",
+    "native-readback.json": "1d4eff626754cf0dc2a97e22c80486ddf78af51a7a3ed7f10145591bd45af3c1",
+    "final-state.json": "ff0bb2b908548ca4723d11852bad771088eafe3a598f3c85292bfac1cb5adc9c",
+    "google_sheets-browser-trace.json": "ce675472dbd1b8352df8ca21b3e9234192fdd1de13b9ce61788885e2811cbfb6",
+    "cleanup.json": "6d7f3a3cf7955ef263c908ccd89edbd431d2d39b982b7fae57a6d52830a99595"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous browser candidate rollout or complete provider audit.",
+    "390px Chrome emulation does not establish exhaustive mobile-device or pixel parity.",
+    "No screenshot files retained."
+  ]
+}

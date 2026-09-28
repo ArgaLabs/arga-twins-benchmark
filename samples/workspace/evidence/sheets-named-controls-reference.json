@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-23",
+  "workbook_id": "1at-rOZnr-PQH0GwFGJIb6Vn1vvQPWemYY8uErp6oxLI",
+  "fixture": "New private disposable workbook, moved to Trash and confirmed after inspection.",
+  "values": [
+    1,
+    2,
+    3
+  ],
+  "created": {
+    "name": "Budget",
+    "range": "Sheet1!A1:A3",
+    "formula": "=SUM(Budget)",
+    "value": 6
+  },
+  "renamed": {
+    "name": "AnnualBudget",
+    "formula": "=SUM(AnnualBudget)",
+    "value": 6
+  },
+  "deleted": {
+    "formula": "=SUM(#REF!)",
+    "value": "#REF!",
+    "cells_unchanged": true
+  },
+  "name_box_creation": {
+    "name": "FreshBudget",
+    "range": "Sheet1!B1",
+    "created_without_sidebar_confirmation": true
+  },
+  "screenshots_retained": false,
+  "range_picker": {
+    "mode": "Inline sidebar; name, delete, cancel and Done disabled while selecting",
+    "grid_selection_updates_range_input": true,
+    "ok_accepts_without_saving": true,
+    "done_commits": true,
+    "cancel_after_ok_preserves_original_range": true
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_queued_validation_replay",
+  "status": "desktop_and_390px_pass",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "76a97cfc-4e2c-4015-a9f2-7c3c975c6711",
+  "scenario_id": "df0c31dd-c08d-40f3-a13d-7d3d3ba62ebb",
+  "deployment": {
+    "revision": "64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f",
+    "runtime_workflow": 36061759454,
+    "twins_workflow": 36061759415,
+    "both": "success",
+    "published_images": {
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:d4b1742e8032e175bf5d0ad62c1d683fedca1602c4d93eee16cdf06c52942840",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:f30efb1fedba482170b9f46587acbdcbb5f96da399c763ace5e4172ec5808cec",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:456fa37f03982cbc8d352fc34765db7f45203717cc9f27d97a93d23484d33a22"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00260-f47",
+      "arga-api": "arga-api-00630-4cx"
+    },
+    "log_sha256s": {
+      "lab-final-marker-twins-deploy.log": "e871c715c96528f8a2822600e972f696df4286c3d1fb8c6727e97a6003dc4723",
+      "lab-final-marker-runtime-deploy.log": "9c930d56a1648ebe2e55d2bd020d956be5647d047a72738183d1b5370bc76a4c"
+    },
+    "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_sheets/validation_ui.py:VALIDATION_SCRIPT": "5eb4712ffbc16ce829fd96005b55c8553116056240eb0df07eb861eef5580ac9"
+    },
+    "scope": "Complete served code block; not container digest attestation."
+  },
+  "browser_observations": {
+    "actual_viewport": {
+      "width": 1063,
+      "height": 806,
+      "documentWidth": 1063
+    },
+    "desktop_checks": [
+      {
+        "case": "queued valid H3=45 then rejected H3=25",
+        "value": "45",
+        "saved": "45",
+        "invalid": false
+      },
+      {
+        "case": "injected failed G2=15 then rejected G2=4",
+        "value": "5",
+        "saved": "5",
+        "invalid": true
+      },
+      {
+        "case": "after reload reject H3=25",
+        "value": "45",
+        "saved": "45",
+        "invalid": false
+      },
+      {
+        "case": "after reload reject G2=4",
+        "value": "5",
+        "saved": "5",
+        "invalid": true
+      }
+    ],
+    "reload_initial_markers": {
+      "H3": false,
+      "G2": false,
+      "open_gap": "Existing invalid G2 marker absent before focus after reload."
+    },
+    "mobile_status": "blocked",
+    "mobile_reason": "Chrome viewport capability accepted 390x844 but actual DOM and screenshot remained 1063x806, including after reload. No mobile pass claimed.",
+    "screenshots_retained": false,
+    "viewport_reset": true
+  },
+  "native_checks": [
+    "Exactly H3 changes from 35 to 45 and spreadsheet source_version increments once.",
+    "Rejected H3=25 and G2=4 never become native values; injected failed G2=15 never reaches the provider.",
+    "G2 retains its pre-existing invalid 5; all rules, formats, other values and the complete protected sheet remain unchanged.",
+    "Unrelated provider collections and other Workspace editor state remain unchanged."
+  ],
+  "transport_scope": "Only the operator test proxy delays one H3 PUT and injects a 503 before one G2 PUT reaches the provider. This is not evidence of a production outage.",
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "scenario.json": "02efedb9f7e52037f17c4e46aeb9517ca281947fc4ea8b6b9b2746bf09e85145",
+    "native-before.json": "e1898d1cb2099d97dca92d8a0be7414dba43d5099dcb5565d76d8de28b762613",
+    "native-after.json": "24cd14ae36aeb0a7148f759e1a5c3cc1b2ffdb278080c6f163499df9d74df10a",
+    "baseline-state.json": "e79a40d95d2c4910bc63dca680e1f85f8a7317c371f57d26d0396513dd0f06b3",
+    "final-state.json": "bba73fb759fa05556ef5ad7e82247daec113a449ea110b9359e09fe1899a1c1c",
+    "browser-trace.json": "28b1558692ca7994fc0c9656f1ea11f0454944c0c335fcd45d9a90e2e13da34c",
+    "operator-api-trace.json": "92ad483a0ebc3fc9a9ad2588a9f26653f6667e060f02b2c2d9ec424a2c94343d",
+    "cleanup.json": "3aee06eef7f3a4ac6c81a9f267a052bef40d3f5a5174c79dae85fc050c672957",
+    "browser-observations.json": "b862ec52a6beae909656ebdacbdd3c1ede478dd258a287a100caece7588e2e96"
+  },
+  "limits": [
+    "Initial invalid marker rendering before focus on reload remains a separate open gap.",
+    "Bounded desktop/390px Chrome verification is not exhaustive Sheets, eight-provider, visual or physical touch parity.",
+    "Direct current-container image attestation remains pending GCP reauthentication."
+  ],
+  "mobile_replay": {
+    "status": "pass",
+    "run_id": "db175dd1-1d1b-438e-ab3e-cacf990afc8c",
+    "scenario_id": "df0c31dd-c08d-40f3-a13d-7d3d3ba62ebb",
+    "browser_observations": {
+      "actual_viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390
+      },
+      "mobile_checks": [
+        {
+          "case": "queued valid H3=45 then rejected H3=25",
+          "value": "45",
+          "saved": "45",
+          "invalid": false
+        },
+        {
+          "case": "injected failed G2=15 then rejected G2=4",
+          "value": "5",
+          "saved": "5",
+          "invalid": true
+        },
+        {
+          "case": "after reload reject H3=25",
+          "value": "45",
+          "saved": "45",
+          "invalid": false
+        },
+        {
+          "case": "after reload reject G2=4",
+          "value": "5",
+          "saved": "5",
+          "invalid": true
+        }
+      ],
+      "dialog_observation": "Rejection text and OK fit the 390px viewport; narrow grid scrolls to the selected cell.",
+      "input_mode": "Desktop Chrome pointer and keyboard at 390px; no physical touch claim",
+      "screenshots_retained": false,
+      "initial_before_focus_marker": "Covered separately by PR #1153; not claimed here"
+    },
+    "native_outcome": "Exactly H3 changes 35 to 45; source version increments once; G2, all rules, protected sheet and unrelated collections remain unchanged. Only source-file revision/time metadata and appended change history vary.",
+    "changed_file_metadata_fields": [
+      "headRevisionId",
+      "modifiedByMeTime",
+      "modifiedTime",
+      "version",
+      "viewedByMeTime"
+    ],
+    "cleanup_confirmation": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "frontend_fingerprints": {
+      "matched": {
+        "twins/google_sheets/validation_ui.py:VALIDATION_SCRIPT": "5eb4712ffbc16ce829fd96005b55c8553116056240eb0df07eb861eef5580ac9"
+      },
+      "scope": "Complete served code block; not container digest attestation."
+    },
+    "runtime_deployment_provenance": {
+      "revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+      "runtime_workflow": 36068186587,
+      "twins_workflow": 36068186452,
+      "both": "success",
+      "published_images": {
+        "twin-github": "us-west1-docker.pkg.dev/arga-labs/arga/twin-github:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:2af16456bea0b7148575c8378ede178d679958d3b69b62a5f19e7b8ae13f5196",
+        "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:3519f8862269002670e936de3205cb1592055c90691b633ffb92cb99475fd136",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:d253aabb27ef219cebbd461af9d632e7b02273eb836f37201bb1b15f6a8ef7f3",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f82d437e6d16d1d24e24311c89f48cc07581194a@sha256:6d8cc76a46b76a3a79b15afc18d806c25eb956a937f05c797eae58d201ac62b7"
+      },
+      "runtime_revisions_at_deployment": {
+        "preview-proxy": [
+          "preview-proxy-00261-57l"
+        ],
+        "arga-api": [
+          "arga-api-00631-cm9"
+        ]
+      },
+      "log_sha256s": {
+        "lab-final-mail-comment-twins-deploy.log": "322ca3c52ac9750c57fdd32a2075b35d79068d912fc89be3cfb5368c33492330",
+        "lab-final-mail-comment-runtime-deploy.log": "66b74136d21529977a0bc0335c67d06c17f1122f011f2788947f30042af3af39"
+      },
+      "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains blocked by GCP reauthentication."
+    },
+    "capture_sha256s": {
+      "scenario.json": "02efedb9f7e52037f17c4e46aeb9517ca281947fc4ea8b6b9b2746bf09e85145",
+      "native-before.json": "b3652318ca82da17974c62483d8beb5b7c24175800a381cf9af8131cdfe188b1",
+      "native-after.json": "62ece85e7a86b2bf440f709ef22cc827bc3f980e6a8d7a47c0133094ba0ca932",
+      "baseline-state.json": "3ffab8f74b48aa0ef284206712a6235758f0c6df96513d868c1c6215a58fa469",
+      "final-state.json": "4ee16e6511968c2cf0db4f92c09a4e5e4573c41e92706ee37a47cc95a1dd2086",
+      "browser-trace.json": "f0d93d4270e1c3da8daca2815bbc4cd817eff524b372b35aac1adc9d6f069c17",
+      "operator-api-trace.json": "c042e8e1818a98ed3f00ac5a7c8403ec17d6d25caf8190f859fe652ab8d4384f",
+      "cleanup.json": "e7db5578f8a6fb6199f4bef87b6d812205052c5f70887ebc304d2136a17c57f5",
+      "browser-observations.json": "0609871b2105c7b6113cdddc575419014e7282043970af984054d5322ac604da"
+    }
+  }
+}

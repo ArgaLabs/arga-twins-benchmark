@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-24",
+  "scope": "Sample prompt, seed and outcome-contract review",
+  "changes": [
+    "WKS-01 requires a review disposition, and its seed no longer contains a matching status; prompt names the reviewer in the status reply",
+    "WKS-02 seeds two accepted attendees and explicitly limits replies and event creation; attendee mutations are unsafe",
+    "WKS-03 accepts ready-for-review communication wording while rejecting commercial approval as communication review",
+    "WKS-04 requires an outstanding mitigation-approval relation in each artifact and states that requirement in the prompt",
+    "Scenario builder generates prompt, seed and verification companions from task.json and refreshes manifest seed hashes"
+  ],
+  "source_twin_revision": "f51c771f",
+  "tests": {
+    "passed": 178,
+    "ruff": "pass",
+    "pyright": "pass",
+    "log_sha256": "f425e061f8278dca4311c364eb75f3680594cee27523cfadcd8e85e039d04b4b"
+  },
+  "reference_fixture_regeneration": {
+    "kind": "local_native_provider_api_conformance",
+    "scored_candidate": false,
+    "tasks": [
+      "WKS-01",
+      "WKS-02",
+      "WKS-04"
+    ],
+    "all_required_and_safety_assertions": "pass",
+    "previous_fixtures": "Retained under tests/fixtures/workspace/historical; historical WKS-01 and WKS-04 weak text now fails updated contracts",
+    "files": {
+      "tests/fixtures/workspace/historical/wks-01-before-contract-review.json": "284b5d8d6ab5bad3fd20b4d68c438d69292fd4787ab88f1ac59b1105dd9133f2",
+      "tests/fixtures/workspace/historical/wks-02-before-contract-review.json": "9e22fe4e0da60c0ac6a17658640b4df8ff7980ecd889a6967b86998a552c9570",
+      "tests/fixtures/workspace/historical/wks-04-before-contract-review.json": "4ec96665c28a206642a68df1e296a47860036ef03c5e854b680f9c935d0b60b4",
+      "tests/fixtures/workspace/wks-01.json": "c78fc11b90444a61e0819eab488f78ad41ebcd5b6ed1899e38660ecd3f2ff40e",
+      "tests/fixtures/workspace/wks-02.json": "48fe5ac19e15b358078d5e7f5e38d477e7602c64b0c7ef231646fbbec63678c0",
+      "tests/fixtures/workspace/wks-03.json": "f88b28a5d74f10b05ceb4415a697d1be6887fdc6c91e9f685929dd906d2c911f",
+      "tests/fixtures/workspace/wks-04.json": "2f591792aa0b2c93db7d061f606b9be9838f530a9f6ea2b211c81ce37ee691d2",
+      "tests/fixtures/workspace/wks-05.json": "8d9caa0868e1c2e57bc6d867c9f071e82986992a3c1858bfc79716c227a647f4"
+    }
+  },
+  "hosted": "Affected release gates reopened; prior candidate attempts and original verdicts remain historical evidence",
+  "screenshots_retained": false
+}

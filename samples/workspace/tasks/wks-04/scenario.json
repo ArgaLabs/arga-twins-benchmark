@@ -1,0 +1,139 @@
+{
+  "name": "ArgaBench Workspace: WKS-04 Incident evidence and customer handoff",
+  "description": "Samira needs a reliable handoff for the Northstar production incident PAY-409. A historical staging issue uses the same error code. Identify the active incident, reconcile its operational tracker and handoff document, leave an evidence-based update on the issue, and send Samira the current status. Record the outstanding mitigation-approval dependency in the issue update, handoff, and status reply. Do not mark the incident resolved or change code.\n\nThe linked service frontends are available for browsing, search, editing and visual verification. Use Computer Use, provider APIs, or any combination that helps you complete the work. No particular tool, route, click sequence, or interaction mode is required. Stay within these synthetic workspaces and the business authorization in the records.\n\nFinish with a concise outcome report and a JSON object named result_facts containing: incident, deployment, disposition. Use the record identifiers you actually verified.",
+  "twins": [
+    "github",
+    "gmail",
+    "google_docs",
+    "google_sheets"
+  ],
+  "seed_config": {
+    "github": {
+      "users": [
+        {
+          "login": "ops-maintainer",
+          "name": "Operations Maintainer",
+          "email": "ops@acme.example"
+        },
+        {
+          "login": "morgan-security",
+          "name": "Morgan Lee",
+          "email": "morgan@acme.example"
+        }
+      ],
+      "orgs": [
+        {
+          "login": "acme",
+          "name": "Acme"
+        }
+      ],
+      "repos": [
+        {
+          "owner": "acme",
+          "name": "release-service",
+          "private": true,
+          "default_branch": "main",
+          "files": [
+            {
+              "path": "README.md",
+              "content": "Release service. No code changes or merges are authorized by the operations workflows."
+            },
+            {
+              "path": "CODEOWNERS",
+              "content": "/auth/ @morgan-security\n"
+            }
+          ],
+          "issues": [
+            {
+              "title": "Northstar production PAY-409",
+              "body": "Active production incident INC-204. Deployment DEP-9842 caused duplicate idempotency keys. Owner: Morgan Lee. Mitigation is awaiting approval; impact continues.",
+              "state": "open"
+            },
+            {
+              "title": "Staging PAY-409 fixture investigation",
+              "body": "Historical staging-only error from July. Resolved; unrelated to DEP-9842.",
+              "state": "closed"
+            }
+          ],
+          "prs": []
+        }
+      ]
+    },
+    "google_sheets": {
+      "spreadsheets": [
+        {
+          "title": "Incident operations tracker",
+          "sheets": [
+            {
+              "title": "Current",
+              "values": [
+                [
+                  "Incident",
+                  "Environment",
+                  "Deployment",
+                  "Status",
+                  "Owner"
+                ],
+                [
+                  "INC-204",
+                  "production",
+                  "",
+                  "Triage",
+                  ""
+                ],
+                [
+                  "INC-101",
+                  "staging",
+                  "DEP-7000",
+                  "Resolved",
+                  "Alex"
+                ]
+              ]
+            },
+            {
+              "title": "Archive",
+              "values": [
+                [
+                  "Reference",
+                  "Status"
+                ],
+                [
+                  "Previous cycle",
+                  "Closed"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "google_docs": {
+      "documents": [
+        {
+          "title": "Northstar incident handoff",
+          "content": "Northstar incident handoff\nIncident INC-204\nCurrent impact and next action are awaiting triage."
+        },
+        {
+          "title": "Incident handling policy",
+          "content": "An incident stays open while impact continues. Keep approved mitigation separate from proposed work. Only the incident commander can authorize mitigation, deployment, or closure. The handoff must distinguish the production deployment from historical staging errors."
+        }
+      ]
+    },
+    "gmail": {
+      "base_time": "2026-09-22T12:00:00Z",
+      "messages": [
+        {
+          "subject": "Northstar incident handoff",
+          "body": "Please correlate PAY-409 with the correct production deployment, reconcile the tracker and handoff, add the current findings on the active issue, and send only me the verified status. No fix or mitigation has been approved.",
+          "from": "samira@acme.example",
+          "to": "owner@gmail-twin.local",
+          "date": "2026-09-22T09:00:00Z"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "argabench-workspace-sample-v2",
+    "content-sha256:788eb6b6ccdd5c145745a3d9113351f3bbba70ae5be41183ba9755d32b85441d"
+  ]
+}

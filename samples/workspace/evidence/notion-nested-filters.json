@@ -1,0 +1,93 @@
+{
+  "date": "2026-09-24",
+  "status": "local_checks_passed",
+  "tests": {
+    "notion_suite_passed": 153,
+    "final_filter_tests_passed": 23,
+    "final_filter_tests_overlap": true
+  },
+  "browser": "Chrome via CUA",
+  "desktop": "Created and saved Count >= 2 AND (Name = Gamma OR Name = Beta); matching rows Beta and Gamma",
+  "mobile_390": "Removed the Beta alternative, saved and reloaded; only Gamma remains",
+  "native_state_checks": [
+    {
+      "artifact_sha256": "1dad797814304da01182651207cdebe60296623162356c6bc47dee32153c1bff",
+      "artifact": "lab-notion-nested-filters-browser-result.json",
+      "changed_fields": [
+        "views",
+        "events",
+        "counters"
+      ],
+      "saved_filter": {
+        "and": [
+          {
+            "property": "Count",
+            "number": {
+              "greater_than_or_equal_to": 2
+            }
+          },
+          {
+            "or": [
+              {
+                "property": "Name",
+                "title": {
+                  "equals": "Gamma"
+                }
+              },
+              {
+                "property": "Name",
+                "title": {
+                  "equals": "Beta"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "artifact_sha256": "eea08017e587cccd7d7791bf0adbbb8fe522f0baccf620c19628e54d91341efa",
+      "artifact": "lab-notion-nested-filters-mobile-result.json",
+      "changed_fields": [
+        "views",
+        "events",
+        "counters"
+      ],
+      "saved_filter": {
+        "and": [
+          {
+            "property": "Count",
+            "number": {
+              "greater_than_or_equal_to": 2
+            }
+          },
+          {
+            "or": [
+              {
+                "property": "Name",
+                "title": {
+                  "equals": "Gamma"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "screenshots_retained": false,
+  "limits": [
+    "No hosted validation yet",
+    "Desktop and 390px Chrome checks cover this filter workflow; not exhaustive provider or physical mobile-device parity"
+  ],
+  "review_followup": {
+    "comment": 4091560925,
+    "detail": "Preserve native emptiness-key precedence and inactive sibling operators when opening and saving; display false emptiness predicates as their equivalent inverse without mutating the native rule.",
+    "notion_suite_passed": 158,
+    "new_native_and_browser_model_cases": 5,
+    "counts_overlap": true
+  },
+  "ci": "passed",
+  "deployment": "both production workflows passed",
+  "hosted_validation": "passed; see notion-nested-filters-production-2026-09-24.json"
+}

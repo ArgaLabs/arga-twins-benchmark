@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-23",
+  "provider": "gmail",
+  "kind": "manual_local_cua_check",
+  "status": "local_verified_hosted_pending",
+  "screenshots_retained": false,
+  "viewports": [
+    {
+      "width": 320,
+      "height": 568
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 740,
+      "height": 390
+    },
+    "default_desktop"
+  ],
+  "changes": [
+    "Scroll the newly loaded active folder into view without applying a stale request",
+    "Give folders their own full-width mobile row with 44px targets",
+    "Expose Create label on mobile",
+    "Keep collapsed mobile menu and header in the same two-column layout",
+    "Wrap narrow pagination as a whole instead of splitting the counter into multiple lines"
+  ],
+  "checks": [
+    "More to All Mail to Mail rail returns to visible Inbox with horizontal scroll offset zero",
+    "Settings Back to inbox restores Inbox results",
+    "Mobile label dialog opens and cancels",
+    "Mobile menu collapses and reopens",
+    "Desktop layout inspected after restoring viewport"
+  ],
+  "validation": {
+    "focused_tests_passed": 26,
+    "make_fix": "passed",
+    "git_diff_check": "passed",
+    "native_mail_state_exactly_unchanged": true
+  },
+  "limits": [
+    "This is a targeted responsive check, not full provider pixel parity or real-device coverage",
+    "Production deployment and hosted verification of this revision remain pending"
+  ],
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1113"
+}

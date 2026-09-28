@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-24",
+  "scope": "Gmail incoming message filter label actions and full body query matching",
+  "status": "local_and_live_provider_pass_hosted_pending",
+  "sources": [
+    "https://developers.google.com/workspace/gmail/api/guides/filter_settings",
+    "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.filters",
+    "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/import"
+  ],
+  "implemented": [
+    "All criteria are conjunctive; recipient criteria cover To/Cc/Bcc; subjects normalize case and whitespace.",
+    "Query and negated query search complete decoded MIME bodies, excluding attachment contents and HTML script/style text.",
+    "Label actions apply to native insert and import before history/watch notifications, preserving existing thread siblings.",
+    "Drafts and sends bypass incoming filter classification.",
+    "Malformed field types and invalid label actions fail atomically; saved query strings are permissive, and invalid operator terms do not match without blocking delivery."
+  ],
+  "validation": {
+    "gmail_tests": {
+      "passed": 185,
+      "log_sha256": "1f76275614edd3e7d4c7033c9f717842567fc83cc9bcbf2bb3aff487e046e9b5"
+    },
+    "contract_matrix": {
+      "mode": "full",
+      "checks": 772,
+      "passed": 772,
+      "findings": 0,
+      "report_sha256": "ff0b7dca449a4af195498e5ac5449894bea36f76fae9932e349a0466b6147d9c"
+    },
+    "ruff": "pass",
+    "protected_thread_and_other_mailbox": "pass",
+    "reset": "pass",
+    "chrome_cua": {
+      "desktop": "pass",
+      "mobile_390px": "pass",
+      "flow": [
+        "Create filter through Settings; import matching and unmatched mail through native API.",
+        "Confirm label folder and unread Inbox counts.",
+        "Edit exclusion criterion at 390px, import excluded mail and verify unchanged Inbox/UNREAD labels.",
+        "Reload and verify saved rule, exact protected-thread message, other account settings and label membership."
+      ],
+      "native_artifact_sha256": "b3f953035652d13f7e84f0c0a5deb357e53631427413fcfdfe3dd7206ece0ea4"
+    },
+    "live_provider": {
+      "status": "pass",
+      "evidence": "gmail-filter-provider-reference.json"
+    }
+  },
+  "limits": [
+    "Filter forwarding and automatic forwarding delivery remain unimplemented.",
+    "This evidence does not establish full Gmail frontend parity.",
+    "Hosted validation remains pending."
+  ],
+  "screenshots_retained": false,
+  "review_fixes": [
+    {
+      "comment": 4089961150,
+      "result": "pass",
+      "details": "Direct live-provider checks supersede the earlier strict rejection approach: Gmail accepts malformed query strings. Nonmatching invalid terms now preserve OR/negation semantics and cannot crash delivery; invalid field types remain rejected or safely ignored in legacy snapshots."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "source_revision": "3c977d14971a5babd96162f422d7e39e19ce9324",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35790393529",
+  "deployment_status": "success",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "font_family": "pass",
+    "font_size": "pass",
+    "strikethrough": "pass",
+    "link": "pass",
+    "native_api_persistence": "pass",
+    "reload": "pass",
+    "mobile_toolbar_reachability": "pass",
+    "mobile_link_dialog": "pass"
+  },
+  "observed_native_text_style": {
+    "fontSize": {
+      "magnitude": 18,
+      "unit": "PT"
+    },
+    "weightedFontFamily": {
+      "fontFamily": "Georgia"
+    },
+    "link": {
+      "url": "https://example.com/hosted-format-smoke"
+    },
+    "underline": true,
+    "strikethrough": true,
+    "foregroundColor": {
+      "color": {
+        "rgbColor": {
+          "red": 0.06666667,
+          "green": 0.33333334,
+          "blue": 0.8
+        }
+      }
+    }
+  },
+  "artifacts_sha256": {},
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/docs-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "manual-format-readback.json": "1492de0e32dcb8d401b476c1633454311c9b2dc053a7341da2e49c2a85bd06f7",
+    "browser-trace.json": "20438d1d69b0b25c1e47e7fe34eaeef206329f54b4e8c0eb1fb8c127f8eca3f0",
+    "cleanup.json": "c335cf796a094be828a5894b50662153cf4e6f58ee9a05288f62650d10d7e8db",
+    "verifier.json": "418591a21ce9d36ce3284253da58b40a70c4432e277dbc3b0b45546b07fa65f6"
+  },
+  "limitations": [
+    "Manual feature smoke only; not a scored autonomous candidate episode or full Docs parity.",
+    "The runner was intentionally aborted after the manual smoke and records infrastructure_invalid; this is not counted as a benchmark result.",
+    "The CLI does not expose the running container digest; deployment provenance and observed new controls are recorded without claiming per-container attestation."
+  ]
+}

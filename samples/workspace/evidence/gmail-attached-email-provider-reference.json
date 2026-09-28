@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-24",
+  "provider": "gmail",
+  "comparison": "Disposable live Gmail users.messages.import, users.messages.list and incoming settings filter",
+  "checks": {
+    "attachment-only": {
+      "filter_applied": true,
+      "search_matches_created_message": true
+    },
+    "top-level": {
+      "filter_applied": true,
+      "search_matches_created_message": true
+    }
+  },
+  "cleanup": {
+    "messages_trashed": 2,
+    "filters_deleted": 1,
+    "labels_deleted": 1,
+    "confirmed": true,
+    "messages_sent": 0,
+    "preexisting_mail_touched": 0
+  },
+  "private_capture_sha256": "bf44c2463288c5fac753e8071030706d88e85a26711876dbf013cae3edb9f0a9",
+  "decision": "Preserve matching words inside an attached message/rfc822 body. The suggested subtree exclusion contradicts the observed live provider behavior.",
+  "limits": "Does not establish general attachment text extraction for arbitrary file formats.",
+  "screenshots_retained": false
+}

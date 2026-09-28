@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-22",
+  "provider": "github",
+  "scope": "Partial authenticated Actions reference inspection; not a complete audit",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    "390x844"
+  ],
+  "method": "Read-only live workflow summary and run-options menu, transient visual inspection; no production workflow actions or artifact downloads/deletions. No screenshot files retained.",
+  "observed_reference_controls": [
+    "Workflow run sidebar with status filtering, job links, Usage and Workflow file",
+    "Run trigger/actor/commit/branch/status/duration/artifact metadata",
+    "Dependency graph with fit/zoom controls and job summaries",
+    "Annotations, artifact name/size/digest/download controls and run-options menu",
+    "Mobile Summary dropdown replacing the desktop sidebar"
+  ],
+  "source_gaps": [
+    {
+      "source": "twins/github/actions_ui.py",
+      "finding": "The UI lists one ci.yml workflow and renders flat job sections with a single run-level log; run graph, sidebar, usage, file, summaries, annotations and artifacts are not reproduced."
+    },
+    {
+      "source": "twins/github/handlers/compat.py",
+      "finding": "The native workflow fixture is also single-workflow; artifact download returns metadata instead of a real archive."
+    },
+    {
+      "source": "twins/github/projects_ui.py",
+      "finding": "Projects is a fixed owner-level Roadmap with table/board cards and Status edits. Multi-project lifecycle, saved views, richer fields and insights need backing state and UI."
+    }
+  ],
+  "full_parity": false,
+  "reference_docs": [
+    "https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects",
+    "https://docs.github.com/en/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/managing-your-views"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_sheets"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/arga-twins-benchmark/pull/14",
+  "status": "local_browser_proxy_checks_pass_hosted_confirmation_pending",
+  "release_allowed": false,
+  "scope": [
+    "Forward the Sheets warning-consent request header and native revision response header through the mediated sample browser",
+    "Restrict forwarding to Sheets grid write paths and methods; reject unsupported Sheets confirmation routes without upstream writes",
+    "Preserve invalid consent for native rejection instead of silently converting to an ordinary write",
+    "Do not forward browser cookies or return upstream authentication/session headers; provider/control-plane boundaries unchanged"
+  ],
+  "tests": {
+    "browser_adapter_passed": 55,
+    "new_warning_regressions": 6,
+    "reproduced_old_proxy_failures": 6,
+    "ruff": "pass",
+    "pyright": "0 errors, 0 warnings with explicit worktree Python",
+    "typecheck_initial_attempt": "Default Python had missing dependencies; rerun with --pythonpath .venv/bin/python passed.",
+    "sample_regressions_passed": 209
+  },
+  "source_files": {
+    "src/arga_twins_benchmark/computer_use/proxy.py": "aa60861b85988446e84a697c04d1153fa94ab1e6c49486a369095cbcd3f15e31",
+    "tests/test_computer_use_sample.py": "2a74a2435f82ed4a9e8feaf64909ceaf60ad258a873c6be73b7153fb8cc79393"
+  },
+  "artifacts": {
+    "lab-final-proxy-warning-tests.log": "af4d663c03c92decbdbe8fcd9bc2231005be7aebe1b1a15b511b7345d7bce6e8",
+    "lab-final-proxy-warning-original.log": "e4a925f552f35b5c5cdbe1596bbbe3e8832f401d342d8265d21095c02ebfb96f",
+    "lab-final-proxy-warning-typecheck-venv.log": "f552d237ad0bd249c05f97eb62dbc65d2d0e4a5fe2346608e10fb7838dba9ed1",
+    "lab-final-proxy-warning-sample-regressions.log": "1c0a87d9ca219cbccda180787c9993cce1c840b7287038dec35961326cb5ea30"
+  },
+  "limits": [
+    "Local mocked upstream tests verify forwarding and unchanged state on preflight/stale consent. Fresh deployed confirmation protocol still pending.",
+    "No browser GUI, visual or touch claim. Broader release gates remain open."
+  ],
+  "screenshots_retained": false
+}

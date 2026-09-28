@@ -1,0 +1,74 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_api_conformance",
+  "scored_candidate": false,
+  "environment": "production",
+  "source_revision": "47243201b66741787d87bfa78379ccf67faf5a2e",
+  "pr": "https://github.com/ArgaLabs/validation-server/pull/1136",
+  "deployment": {
+    "twins": {
+      "run": 35977281544,
+      "attempt": 2,
+      "conclusion": "success"
+    },
+    "runtime": {
+      "run": 35977281530,
+      "attempt": 2,
+      "conclusion": "success"
+    },
+    "first_attempt": "Runtime proxy image build hit Docker Hub HTTP 502; successful retry retained same revision"
+  },
+  "outcome": "pass",
+  "checks": [
+    "Duplicate-name native project URLs open distinct issue sets",
+    "Native comment URL redirects to the exact issue activity anchor",
+    "Native user URL opens correct profile",
+    "Native document URL supports save/redirect/reload at 390px",
+    "Other documents, projects, issues, users and comments unchanged through native reads"
+  ],
+  "attempts": [
+    {
+      "operator_directory": "lab-linear-native-links-hosted-2026-09-24-r1",
+      "outcome": "operator_reload_race_preserved",
+      "description": "Immediate reload raced save response, then a stale retry was rejected without duplicate content",
+      "cleanup": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "artifacts_sha256": {
+        "scenario.json": "653f546d3c2cac6c9edf056e1457235b9800b32e5f057d995702cbe342482c6a",
+        "baseline-state.json": "bc68b4d022f5b5f34d5e1d0d7f56bc67534235ca61e9a58f29c53263fa129fc4",
+        "final-state.json": "2957f767863c504717051a7cf61a8db37de36a1d163d8684afa965a8fdccdffc",
+        "native-before.json": "2f30316ca84f7879636087176b9b97218bb8b562cf104a56e8c6c2de09c17539",
+        "native-after.json": "3cab272194d0ff153ef22f9bee603017eb1f842c05e295d109452def23153331",
+        "operator-api-trace.json": "9c0045939611af9108261295ebedbf83da5cc8bc4a6917fc351d60345a5a94a2",
+        "browser-trace.json": "70f4690784618cb853d407b41e80f2f96a557dec18f7ae50b562312426cd9bb5",
+        "cleanup.json": "2af42cf36b4e6c851c01214592bf735714d6965141d2c2b230699785948aa87d"
+      }
+    },
+    {
+      "operator_directory": "lab-linear-native-links-hosted-2026-09-24-r2",
+      "outcome": "pass",
+      "description": "Chrome waited for save navigation, then reloaded and confirmed persisted text at 390px",
+      "cleanup": {
+        "confirmed_status": "torn_down",
+        "outcome": "terminal_without_twins"
+      },
+      "artifacts_sha256": {
+        "scenario.json": "653f546d3c2cac6c9edf056e1457235b9800b32e5f057d995702cbe342482c6a",
+        "baseline-state.json": "e05d2c0c5411a7d4a675c744c369d60efc8a40628c2c1582496d9c41836859a7",
+        "final-state.json": "747dbfc61029eec511ee51cc5c08a86b8094022254f6bd8f852ccb11bb8766b6",
+        "native-before.json": "eb935bb37ea2993d5049fb6fdb57ae0e5650d071c160561394d963bca03197ee",
+        "native-after.json": "e722613db81a4e3146dd770d50ec7f1d6bcb84e537577f4bbab3ba95082a2f71",
+        "operator-api-trace.json": "1df3df8a97c59fe6418f28ddbfe00f462a2a9f27ae1c7e069926ae4add7989cc",
+        "browser-trace.json": "0742f4c8a31f26f37cd34a15905ff5088a8d346ab449c46654e7a61028dee137",
+        "cleanup.json": "3d7324ada7f05429342a5671f40cc33be3072d251846e5c71edf85e5dd7e60c5"
+      }
+    }
+  ],
+  "screenshots_retained": false,
+  "limits": [
+    "The original project-link change opens filtered issue lists; overview is separate PR #1139",
+    "These checks do not establish full Linear parity"
+  ]
+}

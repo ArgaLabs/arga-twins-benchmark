@@ -1,0 +1,521 @@
+{
+  "schema_version": 1,
+  "provider": "stripe",
+  "feature": "Dashboard Assistant navigation and native conversation recovery",
+  "recorded_at": "2026-09-28T10:10:00.918878+00:00",
+  "status": "implementation_and_local_native_checks_complete_release_pending",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1241",
+  "source_revision": "d76d4c0a43842a1a22eec27da4c78918f52f29e6",
+  "merged": false,
+  "deployed": false,
+  "source_sha256": {
+    "app/validate/scenario_generator.py": "5c30b04fb5ac20ad1a09480fda757a7fc35c9f427522c0606fd52f3029f41796",
+    "docs/twins/stripe-assistant.md": "01f5871b7542a06c90979b70d801c65e310c58aa5af28058ed76bd34658b8351",
+    "twins/stripe/README.md": "23a1575540ab3bf78ab8ec1cfb57e6cbf413176a0c07dfd64bba1dfaf886a375",
+    "twins/stripe/app.py": "6905eeb15d5aa2d292dffb9af602867a5ba0e9af43b4361d54278c131bdcad3a",
+    "twins/stripe/assistant.py": "580cc5e308fb305f766bab86a1c266e0270075877350150d6c064e776787ef0b",
+    "twins/stripe/assistant_config.py": "c9701ae93c9cda51266b57989e94afafcc3cf5799cb3c31398c7345eeec305bc",
+    "twins/stripe/assistant_ui.py": "571edc1fb902f373e4a2557aa7826225b9ac535e3cb7d3bc152c4d67dc272282",
+    "twins/stripe/dashboard_ui.py": "eef5d1790909c5038a9bb92b8aa3d90bbd0c7d617eb3431586aa9ce3ee67df64",
+    "twins/stripe/scenario_runner.py": "dc400b0f24f8718e99e636c07990006ed00e4077531d52988dbcff06f0f0ee39",
+    "twins/stripe/store.py": "50cf7f1c2fccca6eaedeca5d1eb1f2e5f93a5d8831a15cdd4269115dc445b021",
+    "twins/tests/test_stripe_assistant.py": "4c189caf7a5a5c3f663461bf911b019e2135266e51d31eb139e5e0c848602adf",
+    "twins/tests/test_stripe_assistant_ui.py": "cffa35a57c125cefb452f15e4cd7ee052b4368056b77600487ef284fe1a47936"
+  },
+  "reference": {
+    "date": "2026-09-28",
+    "source": "authenticated Stripe Dashboard Help",
+    "question": "Where can I view balance transaction reports? Please only explain navigation; do not contact support or change account settings.",
+    "observed": [
+      "navigation answer describing Reports and Balance summary",
+      "question and answer persist after full page reload",
+      "More options includes Developer docs, Support articles and Restart conversation",
+      "menu Escape cancellation",
+      "pending question appears in conversation and composer clears",
+      "approximately 345px desktop pane, full viewport at 390px"
+    ],
+    "not_exercised": [
+      "attachments",
+      "ratings",
+      "Restart conversation in real account",
+      "human support contact",
+      "financial/admin actions",
+      "role/account variants",
+      "physical touch"
+    ],
+    "owned_fixture": "One navigation-only assistant turn remains in real conversation history; no human support message or financial/admin action submitted.",
+    "attempts_preserved": [
+      "Blank Email us form unexpectedly opened during initial Help loading and was cancelled without sending.",
+      "Initial Help wait timed out during loading; fresh observed state then worked.",
+      "Two clipped browser screenshot attempts timed out; native capture succeeded."
+    ],
+    "image_retention": "ephemeral inspection only, no screenshot files"
+  },
+  "implementation": {
+    "scenario_enabled_only": true,
+    "live_adapter": "optional operator callback, unconfigured by default",
+    "native_state": [
+      "assistant_config",
+      "assistant_conversations with versions, turns and restart archives"
+    ],
+    "no_financial_or_account_mutations": true,
+    "permissions_limit": "Browser session separation within existing dashboard scope; not account/team/role parity."
+  },
+  "tests": {
+    "focused": 45,
+    "stripe_scenario_export_regressions": 290,
+    "qualification": "Focused and broader regressions rerun after recovery, capacity and IME corrections.",
+    "make_fix": "pass",
+    "copied_image_source_import": "pass",
+    "javascript_execution": "pending display, close/reopen, definite rejection, lost acknowledgement, reload/retry and focus recovery"
+  },
+  "local_browser": {
+    "desktop_round_1_revision": "uncommitted version before pending-question, focus, capacity, bootstrap recovery and IME corrections",
+    "desktop_round_1": "pass at 1440x900 within recorded functional scope; loading mismatch corrected afterwards",
+    "corrected_desktop_final": "pending",
+    "mobile_twin": "pending",
+    "native": {
+      "status": "PASS",
+      "scope": "local complete native state for three messages and one archive restart",
+      "checkpoints": [
+        "after-read-failure",
+        "while-delayed",
+        "before-rejection",
+        "after-rejection",
+        "after-lost-ack",
+        "after-menu-cancel",
+        "after-restart",
+        "final-state"
+      ],
+      "negative_controls_rejected": [
+        "changed balance",
+        "missing customer",
+        "missing archive",
+        "duplicate turn",
+        "wrong answer",
+        "wrong version",
+        "incorrect count"
+      ],
+      "native_financial_and_account_state_unchanged": true,
+      "desktop_browser_round_1": "PASS with loading mismatch subsequently corrected",
+      "mobile_browser_round_1": "PENDING: stale Chrome debugger target; native host locked",
+      "hosted_native": "PENDING",
+      "final_release_gate": false
+    },
+    "native_checkpoint_sha256": {
+      "baseline": "04337cd34d7b1a6a7f68dc7693fbf239da56e336e36e9df1cc6bf9562e0da77b",
+      "after-read-failure": "04337cd34d7b1a6a7f68dc7693fbf239da56e336e36e9df1cc6bf9562e0da77b",
+      "while-delayed": "04337cd34d7b1a6a7f68dc7693fbf239da56e336e36e9df1cc6bf9562e0da77b",
+      "before-rejection": "74fd3b9988ceb32dd0a709b8ddc9d678154de3aaba5d7dc405700f7cc72dc235",
+      "after-rejection": "74fd3b9988ceb32dd0a709b8ddc9d678154de3aaba5d7dc405700f7cc72dc235",
+      "after-lost-ack": "5dd1ca4c5111174a3a9caa15b21b571edcd8112b3d9265732ac9fb65d16d18c3",
+      "after-menu-cancel": "5dd1ca4c5111174a3a9caa15b21b571edcd8112b3d9265732ac9fb65d16d18c3",
+      "after-restart": "e502c1924b9c80ff42f2e55e53382a6bb1a1f65220007812abedcad3f3c68356",
+      "final-state": "e502c1924b9c80ff42f2e55e53382a6bb1a1f65220007812abedcad3f3c68356"
+    },
+    "verifier_sha256": "a3106dc141443491d7f1afeb822761af4a15a6e575c70e03b0361ed232178d3c",
+    "console_warnings_errors_observed": [],
+    "attempts_preserved": [
+      "400 Send action completed despite a post-action browser DOM timeout; fresh AX state verified expected rejection without repeating the action.",
+      "Viewport changes failed on a stale retained Docs debugger target; target reconnect and close also failed.",
+      "Native Chrome access reported Mac locked with automatic unlock paused; manual unlock requested.",
+      "Viewport reset also failed on the same stale target."
+    ],
+    "cleanup": {
+      "local_server": "stopped with final state captured",
+      "owned_local_tab": "closed",
+      "viewport_reset": "blocked by stale retained target"
+    }
+  },
+  "ci": {
+    "revision": "d76d4c0a43842a1a22eec27da4c78918f52f29e6",
+    "checks": [
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108881294774",
+        "name": "docker-build",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800831",
+        "name": "migrations",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800861",
+        "name": "typecheck",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880810474",
+        "name": "twin-fidelity",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880801281",
+        "name": "lint",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800910",
+        "name": "Pytest twins (2/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800920",
+        "name": "Pytest twins (6/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800774",
+        "name": "Pytest twins (1/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800908",
+        "name": "Pytest twins (3/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800733",
+        "name": "root-tests",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800870",
+        "name": "Pytest twins (5/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880800833",
+        "name": "Pytest twins (4/6)",
+        "state": "IN_PROGRESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407788800/job/108880727355",
+        "name": "detect-backend-ci",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://vercel.com/github",
+        "name": "Vercel Preview Comments",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880626581",
+        "name": "Build Twin images (stripe, twins/Dockerfile)",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880626493",
+        "name": "Build Preview Proxy image",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880626556",
+        "name": "Build API image",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880629259",
+        "name": "Validate Worker image config",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880628817",
+        "name": "Build Bots image",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880615727",
+        "name": "stripe",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880628573",
+        "name": "Build Flow Runner image",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880615717",
+        "name": "stripe-sdk",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880615642",
+        "name": "twin-contract-matrix",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880617667",
+        "name": "slack",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880617403",
+        "name": "google-workspace-cli-mcp",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880617326",
+        "name": "google-workspace-real",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880617268",
+        "name": "linkedin-sdk",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880616930",
+        "name": "microsoft-graph-sdk",
+        "state": "SKIPPED"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782134/job/108880534639",
+        "name": "changes",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://github.com/ArgaLabs/validation-server/actions/runs/36407782130/job/108880534506",
+        "name": "prepare",
+        "state": "SUCCESS"
+      },
+      {
+        "link": "https://vercel.com/argalabs/validation-server/CkzscmomZoB74m8gUfBwgdXysj6m",
+        "name": "Vercel",
+        "state": "SUCCESS"
+      }
+    ],
+    "all_complete": false
+  },
+  "independent_review": {
+    "disposition": "fix",
+    "scope": "Independent source and recorded-evidence review only; not visual, physical-touch, hosted, deployment, or release approval.",
+    "head": "f7ff5c6da38aeffb853abe7a3759aa20d237a3ea",
+    "artifact": "/Users/tonghx/validation-server-lab-stripe-assistant",
+    "evidence_limits": [
+      "No retained screenshots requested or required by this source review; user requires ephemeral inspection.",
+      "Corrected desktop and local mobile visual/focus inspection remain pending because the recorded browser/host access failed.",
+      "PRODUCT.md, DESIGN.md, detector output, and a QUALITY BAR card were not supplied as review inputs.",
+      "Code-led bounded extension: no approved comp, concept roll, identity change, or broader Stripe parity is implied."
+    ],
+    "persistence": {
+      "status": "pass_at_documented_source_scope",
+      "details": "Read all 12 changed files against origin/main. The surface brief and README record the inherited Stripe dashboard, feature boundaries, synthetic Scenario behavior, known inspection failure, and pending release gates. No source or external state was changed.",
+      "evidence": [
+        "Recorded focused result: 39 passed after the final correction.",
+        "Recorded regression result: 284 passed before the final focus-only correction; affected 39 tests rerun.",
+        "Verification script compares eight complete native checkpoints to exact expected states and checks seven corrupt-state controls.",
+        "Independent production-JS harness probes reproduced each listed finding; no browser used."
+      ]
+    },
+    "fidelity": [
+      {
+        "element": "TYPE",
+        "status": "match",
+        "evidence": "Source inherits the dashboard sans typography with 14px desktop and 16px narrow pane text; rendered metrics and contrast are unverified."
+      },
+      {
+        "element": "MATERIAL",
+        "status": "match",
+        "evidence": "Native HTML controls and consistent SVG icons; no raster or physical-material promise exists in the supplied contract."
+      },
+      {
+        "element": "GROUND",
+        "status": "match",
+        "evidence": "Source declares white pane, muted slate text, purple controls; rendered ground is unverified."
+      },
+      {
+        "element": "Pane topology",
+        "status": "match",
+        "evidence": "345px desktop pane, full-width at <=700px, bottom composer and menu match the source contract; mobile viewport and keyboard behavior remain unverified."
+      },
+      {
+        "element": "Conversation integrity",
+        "status": "match",
+        "evidence": "Config identity/snapshot and conversation version rechecked after awaits; safe link whitelist, output bounds, idempotent replay, session separation, restart archives, and read-only financial boundary supported by code and recorded tests."
+      },
+      {
+        "element": "Failure recovery",
+        "status": "contradicted",
+        "evidence": "Capacity errors lose their recovery instruction; an initial settings failure silently removes the only entry point."
+      },
+      {
+        "element": "Keyboard composition",
+        "status": "contradicted",
+        "evidence": "Enter sends during active IME composition."
+      }
+    ],
+    "ceiling": {
+      "status": "not_assessed_visually",
+      "details": "The bounded extension should retain the incumbent design. No unused visual device or replacement world is requested. Current JS tests stub event listeners, body children, and matchMedia(false), so they cannot establish mobile inert/focus trapping, menu keyboard semantics, or actual browser focus. Corrected desktop, mobile, physical touch, hosted checks and broader release gates remain pending."
+    },
+    "material_fixes": [
+      {
+        "id": "F1",
+        "priority": "P2",
+        "file": "twins/stripe/assistant_ui.py",
+        "lines": [
+          112,
+          117
+        ],
+        "related": "twins/stripe/assistant.py:111-112,144-145",
+        "title": "Preserve actionable capacity-rejection recovery",
+        "reproduction": "At 100 turns, submit another question; or after 20 archives, invoke Restart. The server returns 409 with an explicit restart/new-session instruction. The UI discards that reason, presents only 'Reload the conversation before continuing', and disables Restart. Reload and retry repeats the same failure.",
+        "evidence": "Executed production JS with a noncommitting 409: uncertain=true, restart disabled, generic status, repeated reload/send returns to the same lock. Server branches provide the concrete cap conditions.",
+        "fix": "Distinguish known non-mutating capacity rejections from uncertain/conflicting writes, preserve the actionable reason and draft, and provide the instructed recovery. Add executed UI regressions for both limits."
+      },
+      {
+        "id": "F2",
+        "priority": "P2",
+        "file": "twins/stripe/assistant_ui.py",
+        "lines": [
+          129
+        ],
+        "title": "Provide recovery after the initial settings read fails",
+        "reproduction": "Fail the first /ui/assistant/settings fetch, then restore connectivity. The catch is empty and Help starts hidden, so there is no visible error, retry control, or subsequent automatic settings read; the enabled feature remains inaccessible until a full document reload.",
+        "evidence": "Executed production-JS initial-load failure probe returned helpHidden=true, paneHidden=true, empty status.",
+        "fix": "Expose a bounded initialization retry or recoverable error/entry point while respecting confirmed disabled configurations. Add a failed-first-settings/successful-retry regression."
+      },
+      {
+        "id": "F3",
+        "priority": "P2",
+        "file": "twins/stripe/assistant_ui.py",
+        "lines": [
+          124
+        ],
+        "title": "Do not submit when Enter confirms IME composition",
+        "reproduction": "Enter a question using Chinese/Japanese/Korean IME and press Enter to confirm the current candidate. The handler ignores event.isComposing, prevents the composition confirmation, sends the unfinished text, clears the draft and locks the composer.",
+        "evidence": "Executed the production handler with key=Enter and isComposing=true: one message request was created and the draft was cleared.",
+        "fix": "Guard composition confirmation before Enter submission and add an executed regression proving composing Enter creates no request and preserves the draft."
+      }
+    ],
+    "keep": "Preserve the run-local native state, idempotent request IDs, archived history, post-await state checks, escaped text, whitelisted navigation links, inherited Stripe pane, and explicit limits on parity/release claims."
+  },
+  "independent_fix_verdict": {
+    "disposition": "ship",
+    "scope": "Verdict pass on F1-F3 at source and executable-test scope only. This resolves the three scored fixes, not the whole surface or release.",
+    "base_head": "f7ff5c6da38aeffb853abe7a3759aa20d237a3ea",
+    "reviewed_state": "Uncommitted corrections in the same worktree",
+    "original_review": "/tmp/stripe-assistant-finish-review.json",
+    "original_disposition": "fix",
+    "verdict": [
+      {
+        "id": "F1",
+        "original_finding": {
+          "id": "F1",
+          "priority": "P2",
+          "file": "twins/stripe/assistant_ui.py",
+          "lines": [
+            112,
+            117
+          ],
+          "related": "twins/stripe/assistant.py:111-112,144-145",
+          "title": "Preserve actionable capacity-rejection recovery",
+          "reproduction": "At 100 turns, submit another question; or after 20 archives, invoke Restart. The server returns 409 with an explicit restart/new-session instruction. The UI discards that reason, presents only 'Reload the conversation before continuing', and disables Restart. Reload and retry repeats the same failure.",
+          "evidence": "Executed production JS with a noncommitting 409: uncertain=true, restart disabled, generic status, repeated reload/send returns to the same lock. Server branches provide the concrete cap conditions.",
+          "fix": "Distinguish known non-mutating capacity rejections from uncertain/conflicting writes, preserve the actionable reason and draft, and provide the instructed recovery. Add executed UI regressions for both limits."
+        },
+        "score": "resolved",
+        "evidence": "Backend conversation_limit/archive_limit codes distinguish both definite capacity rejections. UI preserves each actionable message and draft, leaves More/Restart enabled, and does not force reload. Exact native-state backend test and executed UI test passed.",
+        "locations": [
+          "twins/stripe/assistant.py:111",
+          "twins/stripe/assistant.py:147",
+          "twins/stripe/assistant_ui.py:97",
+          "twins/stripe/assistant_ui.py:99",
+          "twins/stripe/assistant_ui.py:113",
+          "twins/stripe/assistant_ui.py:118"
+        ]
+      },
+      {
+        "id": "F2",
+        "original_finding": {
+          "id": "F2",
+          "priority": "P2",
+          "file": "twins/stripe/assistant_ui.py",
+          "lines": [
+            129
+          ],
+          "title": "Provide recovery after the initial settings read fails",
+          "reproduction": "Fail the first /ui/assistant/settings fetch, then restore connectivity. The catch is empty and Help starts hidden, so there is no visible error, retry control, or subsequent automatic settings read; the enabled feature remains inaccessible until a full document reload.",
+          "evidence": "Executed production-JS initial-load failure probe returned helpHidden=true, paneHidden=true, empty status.",
+          "fix": "Expose a bounded initialization retry or recoverable error/entry point while respecting confirmed disabled configurations. Add a failed-first-settings/successful-retry regression."
+        },
+        "score": "resolved",
+        "evidence": "Failed bootstrap settings sets settingsFailed and leaves Help available. Clicking Help retries loading. Successful settings clears the failure flag; a confirmed disabled configuration hides Help. Added executed test passed, plus independent production-JS probes of the real bootstrap without an injected load and a confirmed-disabled response both passed.",
+        "locations": [
+          "twins/stripe/assistant_ui.py:69",
+          "twins/stripe/assistant_ui.py:76",
+          "twins/stripe/assistant_ui.py:104",
+          "twins/stripe/assistant_ui.py:130"
+        ]
+      },
+      {
+        "id": "F3",
+        "original_finding": {
+          "id": "F3",
+          "priority": "P2",
+          "file": "twins/stripe/assistant_ui.py",
+          "lines": [
+            124
+          ],
+          "title": "Do not submit when Enter confirms IME composition",
+          "reproduction": "Enter a question using Chinese/Japanese/Korean IME and press Enter to confirm the current candidate. The handler ignores event.isComposing, prevents the composition confirmation, sends the unfinished text, clears the draft and locks the composer.",
+          "evidence": "Executed the production handler with key=Enter and isComposing=true: one message request was created and the draft was cleared.",
+          "fix": "Guard composition confirmation before Enter submission and add an executed regression proving composing Enter creates no request and preserves the draft."
+        },
+        "score": "resolved",
+        "evidence": "Enter handling excludes both isComposing and keyCode 229. Both executed cases preserve the draft, avoid preventDefault, and issue no message request.",
+        "locations": [
+          "twins/stripe/assistant_ui.py:125"
+        ]
+      }
+    ],
+    "remaining": {
+      "scored_fixes": "clear",
+      "adjacent_regressions": [],
+      "adjacent_check": "No material regression identified in the changed recovery paths. Unreadable HTTP 200 acknowledgement now retains uncertainty and blocks resend until native readback confirms exactly one committed turn; its executed test passed. Unknown 409 conflicts remain uncertain in source.",
+      "unpassed_gates": [
+        "Corrected desktop ephemeral visual/focus inspection",
+        "Local mobile ephemeral visual/inert/focus inspection",
+        "Physical touch verification",
+        "Hosted verification",
+        "Deployment/image attestation",
+        "Broader release gates"
+      ],
+      "evidence_limits": "No browser actions or screenshots performed or retained. The verdict gives no visual, physical-touch, hosted, deployment or release approval."
+    },
+    "validation": {
+      "provided_focused_suite": "45 passed; read /tmp/stripe-assistant-focused.txt",
+      "independent_affected_tests": "6 passed in 0.48s: backend and UI capacity, initial settings recovery, both IME flags, unreadable successful acknowledgement",
+      "independent_bootstrap_probes": [
+        "Initial failure then direct Help retry passed",
+        "Confirmed disabled remains hidden passed"
+      ],
+      "broader_rerun": "Not consumed in this verdict; parent reports it running independently"
+    }
+  },
+  "sample_package_validation": {
+    "setup_attempts_preserved": [
+      "Benchmark main virtualenv first imported the older installed package without computer_use.",
+      "Adding current src exposed missing Starlette in that older virtualenv."
+    ],
+    "corrected_command": "PYTHONPATH=src /Users/tonghx/validation-server/.venv/bin/python -m pytest tests/test_computer_use_sample.py -q",
+    "result": "60 passed"
+  },
+  "hosted_preparation": {
+    "harness_syntax": "pass",
+    "verifier_wrapper_and_other_provider_corruption_tests": "pass, synthetic only",
+    "executed": false,
+    "harness_sha256": "051e618b1c6956ea9f942768f67b10f0f1e3b5cffb3a413ad386c226e622c343"
+  },
+  "release_gates": {
+    "corrected_local_visuals": false,
+    "hosted_native_and_browser": false,
+    "deployment_and_image_attestation": false,
+    "all_eight_frontend_fidelity": false,
+    "exhaustive_visual_and_physical_touch": false,
+    "final_sample_release": false,
+    "final_zip_generated": false
+  }
+}

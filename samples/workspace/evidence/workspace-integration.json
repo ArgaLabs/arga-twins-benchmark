@@ -1,0 +1,63 @@
+{
+  "date": "2026-09-22",
+  "kind": "integrated_local_regression_verification",
+  "providers": [
+    "gmail",
+    "google_docs",
+    "google_sheets",
+    "google_drive",
+    "google_workspace"
+  ],
+  "components": [
+    "Gmail select-all-matching with synchronous query-race guards and draft-safe mutations",
+    "Docs tabs/lifecycle, selected-tab edits, exports and document-wide named-range isolation",
+    "Sheets merged-cell semantics/rendering and native borders with frozen-pane integration"
+  ],
+  "tests": {
+    "passed": 573,
+    "failed": 0,
+    "duration_seconds": 93.39,
+    "log": "samples/workspace/evidence/regression-log-summaries.json#lab-workspace-integrated-tests.txt",
+    "scope": "All Google Docs, Google Sheets, Google Workspace, Gmail twin tests and shared Workspace editing tests"
+  },
+  "generated_javascript": {
+    "docs": "pass",
+    "sheets": "pass",
+    "gmail": "pass"
+  },
+  "ruff": "pass",
+  "source_sha256": {
+    "twins/gmail/mailbox_ui.py": "1f1ff1dd43ec6e82ffcab09157928cc1b86bb3761f0341cd6afacb92115ac3e8",
+    "twins/google_docs/document_tabs_ui.py": "c3d40620b81a5f4a781fdb6375b691213f34acb9baae38074abc712f2f7b7fbb",
+    "twins/google_drive/workspace_editing.py": "6acedd7d1608c42f80c755775a81cec2d12577fb80058294817dbbc208b5dba0",
+    "twins/google_sheets/borders_ui.py": "7c5d992dbc2afdf92022ae663237b82e640de9c93db3ba3e34527c586f424945",
+    "twins/google_sheets/merges_ui.py": "eea41ecd25f69ee0a029ba0a0240fa21e56dc8239e5638698ec170f17808c815"
+  },
+  "feature_browser_records": [
+    "docs-document-tabs.json",
+    "gmail-all-matching.json",
+    "sheets-borders.json",
+    "sheets-merged-cells.json"
+  ],
+  "limitations": [
+    "CI and hosted validation of this exact combined source remain pending.",
+    "Feature regressions and manual browser checks do not establish full provider parity or five browser-agent rollouts.",
+    "No screenshot files retained; final sample ZIP remains gated."
+  ],
+  "review_followup": {
+    "issue": "Malformed mergeType values must return a validation error and roll back earlier batch writes.",
+    "tests": {
+      "passed": 70,
+      "failed": 0,
+      "duration_seconds": 4.09,
+      "new_cases": 6,
+      "log": "samples/workspace/evidence/regression-log-summaries.json#lab-workspace-merge-type-tests.txt"
+    },
+    "ruff": "pass",
+    "source_revision": "e079ef5a",
+    "source_sha256": {
+      "twins/google_drive/workspace_editing.py": "f0139281ab2ca37745b51922ae34c2d54cb3e909acacfbaf18e73063e2360762"
+    }
+  },
+  "source_revision": "0e2bbdd2"
+}

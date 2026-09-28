@@ -1,0 +1,301 @@
+{
+  "schema": "arga.lab.native-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_calendar"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1189",
+  "source_head": "d5628ed9791a1096f0dc1f2c381fa0c2c3b226b1",
+  "status": "deployed_hosted_native_browser_images_pass",
+  "release_allowed": false,
+  "scope": [
+    "Unconfigured clocks follow actual current UTC instead of advancing 37 seconds per timestamp request and freezing while idle",
+    "Explicit base_time retains deterministic steps and reaches runtime during Scenario reset; undated seed events follow that clock while explicit dates stay unchanged",
+    "A subsequent unpinned Scenario restores live time; invalid clock resets preserve every account and the clock",
+    "Scenario export retains clock choice without native mutation",
+    "Event and recurring-instance lists return the authenticated user's current subscription default reminders across aliases and pagination"
+  ],
+  "tests": {
+    "final_calendar_workspace_export_scenario_generator_passed": 314,
+    "clock_export_reset_cases": 15,
+    "reminder_metadata_cases": 4,
+    "reminder_cases_failed_before_fix": 4,
+    "make_fix": "pass",
+    "diff_check": "pass"
+  },
+  "reference": {
+    "source": "https://developers.google.com/workspace/calendar/api/concepts/reminders",
+    "observed_on": "2026-09-26",
+    "relevant_contract": "Default reminders are user-specific CalendarList metadata and are also returned by Events list. This metadata is separate from timed reminder delivery and change-notification delivery."
+  },
+  "source_files": {
+    "app/validate/scenario_generator.py": "ab2ee72ad4c4982eaba4c67ec202d0197011fb3da86ed7e9477422f117950d95",
+    "twins/google_calendar/app.py": "e927f97d71ab6264607efc80acdce7b8ca22580babb31bda52c5432e6663a7dc",
+    "twins/google_calendar/store.py": "d32f7a480c491b22d3e9c42abbbab33256a22f89c50ce9c00ce6461dc4942e77",
+    "twins/google_calendar/scenario_runner.py": "945768d96d13573d99061e57f78d4fc241c2054fc9453596ea1f0fc1ae6d1e1c",
+    "twins/google_calendar/README.md": "a518651fd110e3d8c354b917add2fe02852c532a1dad0248e280ea98dadbdbc2",
+    "twins/tests/test_google_calendar_clock.py": "d6227d2541404e6e2aa9d131bf74c04d053aec662fca0342d7e402073fd2b616",
+    "twins/tests/test_google_calendar_sharing.py": "322d9959f04ae17508035012138ac02f82f3d2ec4a03e1079b32a14326f70125"
+  },
+  "artifacts_sha256": {
+    "lab-calendar-live-clock-focused.log": "36983d4fcdd66eb5188a9854d9df22940912f8a420fec9bf8348be0df4f7a106",
+    "lab-calendar-live-clock-regressions.log": "de83a2890d1b5a3762d6be6464bf4b64fddaa807e300ceba57cd5405ab959f3d",
+    "lab-calendar-default-reminders-red.log": "32d14bda6d1ed3f36adc2d1abbd614e0bae4b1617f947937b1e1b1914f2804d3",
+    "lab-calendar-default-reminders-green.log": "eeec9a0e7557eb29f30cb4f412780ac2ac3d684f50061467ebddf04ac19712b3",
+    "lab-calendar-clock-reminders-final.log": "dd36fdd17e33e636a530fa310c910ceb87881e4a186182fe848b4676e38d2490",
+    "lab-calendar-scenario-clock-make-fix.log": "c0c71526d8e8c202c78ce6100e01c718c5a9e057e02f04f5f36cd6e14d6fbe5a",
+    "lab-final-hosted-calendar-clock-reminders.py": "7c5748f37f184c585ab5f288c2d38f07019917a413a1d63155bc9f9ec15e279f",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/browser-trace.json": "b650665f8bc0ad0e971b2612b0286a084fcc574ba43c989e9cd3f0f6bb834fef",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/image-comparison.json": "5807f893c952a7937c29f4964829934b623f5f2d0096b2486b79491ae936d7e3",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/workspace.json": "28c04625a9882311351268bd3f962a437f85aaeb9e358e92f64d2744e0856886",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/publication-catalog.json": "254cc7d2bb69818f51e2eab0d788c33abe19de642fbdd9f9a501d281d0558e54",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/browser-observations.json": "f037492d87a6997b37afebbb8855b888c23924f6d37327103c234907f1067953",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/gui-baseline-state.json": "91a62fbff44639cf11353235fec9c4a454b27e037abb144f3b6f7d8188b72450",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/gui-final-state.json": "91a62fbff44639cf11353235fec9c4a454b27e037abb144f3b6f7d8188b72450",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/cleanup.json": "cdc9fe57658edb7b2d070b82592c8e075bfab96c3ddd06e3c8cb1cd111af4124",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/runtime-image-evidence.json": "12bccdda8293fd14bd4d63da6a04bf2d062a86392e109c6f95b4e8def32e0a36",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/native-result.json": "30ff12c9337f0c21d9e8267e9a4f270d1531e10c70878c2fe87ea377a6ba4599",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/worker-logs.json": "c10b7788afddb5891141a37d0091a213471dd85600f5f877c7143c7976f5e99c",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/scenario.json": "b99fa98f7e9f49845f93659ba91c5009fcb6314a200a5d08be2fe0ecbd0b71a2",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/operator-api-trace.json": "ae272f40427a7a45f1b72ee0207e8c54966e10cc06b4f8ce7626bec14cf5414d",
+    "lab-final-calendar-clock-reminders-f8baeedd/live/control.json": "7c039991eb168ebfead53947845a81df6d3c07c67c375352f6b176ec32b08d1c",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/browser-trace.json": "b650665f8bc0ad0e971b2612b0286a084fcc574ba43c989e9cd3f0f6bb834fef",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/image-comparison.json": "a51d818873c879386465c16ef50074647e3d8b421c6fbc82d0e548eac589a344",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/workspace.json": "c1574bb7f8ef400b9221d711945275816c0a22da950afccbeb5063bf8fc6b834",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/publication-catalog.json": "254cc7d2bb69818f51e2eab0d788c33abe19de642fbdd9f9a501d281d0558e54",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/browser-observations.json": "639e1c375cc2da974d86f797df42c58611083c9aa1c20f7c2d882e31df02f097",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/gui-baseline-state.json": "52c14bf291aa56038a9718a99d5cd5ca3383ed75344fa7066ee866fdd253094f",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/gui-final-state.json": "52c14bf291aa56038a9718a99d5cd5ca3383ed75344fa7066ee866fdd253094f",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/cleanup.json": "3cf56ca17cf8d17ff776a59188118f2736dcd66871d1036183cdddc0c5db1e12",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/runtime-image-evidence.json": "3099ab11655da5b0aa32f567d50c953df76272edfc501edc19195c478b7d758f",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/native-result.json": "d1c5e9f770f10ae4c3122f0c59b77986e0d7f5f3148c7329ffc4a8f60d46eb72",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/worker-logs.json": "b07b4f3ea886b39a39428b7d1ba713d62960cc9d3989e0f1d92d5cba3b11b8d8",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/scenario.json": "085eae685084a4f9522190254f26794dcd654000b9d77d29feed494345565c97",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/operator-api-trace.json": "40333fa4cc39abb289d8dbff8e5d2d77916e831c26e1d981abefc50bd33c7299",
+    "lab-final-calendar-clock-reminders-f8baeedd/fixed/control.json": "ee4767e85b60ce907d1d86b29e8c66bb36b49f56733461dfe09dec13640b32a9",
+    "lab-final-calendar-clock-reminders-f8baeedd-helper.log": "484b5f01ff35afabebd998747497cb701441cd75880975544fb49a87abf929d2",
+    "lab-final-calendar-clock-reminders-premerge-d5628ed9.json": "35419169619b4d158387fcbb33ac410dfd3c8237fccae73d3c34b721d455c239",
+    "lab-calendar-clock-reminders-ci.log": "837c4e8cde45a95dfe0acf0f501982ec8cde2d7b696beb0166359e038dab0d87",
+    "lab-final-calendar-clock-reminders-f8baeedd-deployment.json": "573e8a8fcce978452a1d67656e3a46f13933a4b147cbb3ebc587d62d90fce2ea",
+    "lab-final-calendar-clock-reminders-f8baeedd-runtime-attestation.json": "0b1fb15fe4b35b6aed74a45bb4f76dba413914515043bf59eab5fbf01e43b531",
+    "lab-final-calendar-clock-reminders-f8baeedd-twins-deploy.log": "fd63329239e76f9c6d2eef0095f3818917e0955ff8454f4c12f44ef4e3f2f3d0",
+    "lab-final-calendar-clock-reminders-f8baeedd-runtime-deploy.log": "27cacd49f174e76abc342571dbfca1ea7a729bb68fb60f291113e056e9140e54"
+  },
+  "operator_test_corrections": [
+    "Initial fixture assumed a primary calendar existed in empty state; it now creates an owned calendar",
+    "Initial GET assertion expected byte-identical event-time JSON; existing API normalizes Z to +00:00 and adds UTC timeZone. Final assertion preserves the same instant and native timestamp fields."
+  ],
+  "hosted": {
+    "status": "pass",
+    "runs": {
+      "live": {
+        "native": {
+          "checks": [
+            "Scenario clock reaches runtime timestamps and undated events while explicit historical dates survive",
+            "Eight native writes use current UTC without per-request drift, or the explicit deterministic step; seeded events unchanged",
+            "Scenario export preserves live/fixed choice without native mutation",
+            "Owner and reader get their own current defaults across IDs, aliases, instances and later pages; reads preserve both complete account states",
+            "Reader preference edits preserve complete owner state",
+            "Invalid clock reset preserves both complete account states"
+          ],
+          "limits": [
+            "No timed reminder delivery or event-level override isolation claim"
+          ],
+          "mode": "live",
+          "passed": true,
+          "probe_created_at": [
+            "2026-09-26T08:57:29.883772+00:00",
+            "2026-09-26T08:57:29.964244+00:00",
+            "2026-09-26T08:57:30.045289+00:00",
+            "2026-09-26T08:57:30.137058+00:00",
+            "2026-09-26T08:57:30.216766+00:00",
+            "2026-09-26T08:57:30.295765+00:00",
+            "2026-09-26T08:57:30.374771+00:00",
+            "2026-09-26T08:57:30.455247+00:00"
+          ]
+        },
+        "browser": {
+          "surface": "Chrome CUA accessibility actions through the hosted BrowserProxy",
+          "checks": [
+            "Open owner Calendar and read settings",
+            "Email notification at 60 minutes visible before and after true browser reload",
+            "Calendar identity, UTC calendar zone and reader ACL visible",
+            "Complete owner and reader native state unchanged after browser reads"
+          ],
+          "visible_week": "2026-09-20 through 2026-09-26 in America/Vancouver",
+          "visible_event_titles": [
+            "Recurring reminder fixture",
+            "Undated clock fixture"
+          ],
+          "limits": [
+            "No visual/mobile/touch or native host focus claim",
+            "Fixed Scenario clock anchors seeded/native dates; browser default view still uses current browser week"
+          ],
+          "screenshots_retained": false
+        },
+        "complete_both_account_states_unchanged": true,
+        "all_three_images_matched": true,
+        "teardown_confirmed": true
+      },
+      "fixed": {
+        "native": {
+          "checks": [
+            "Scenario clock reaches runtime timestamps and undated events while explicit historical dates survive",
+            "Eight native writes use current UTC without per-request drift, or the explicit deterministic step; seeded events unchanged",
+            "Scenario export preserves live/fixed choice without native mutation",
+            "Owner and reader get their own current defaults across IDs, aliases, instances and later pages; reads preserve both complete account states",
+            "Reader preference edits preserve complete owner state",
+            "Invalid clock reset preserves both complete account states"
+          ],
+          "limits": [
+            "No timed reminder delivery or event-level override isolation claim"
+          ],
+          "mode": "fixed",
+          "passed": true,
+          "probe_created_at": [
+            "2024-03-14T12:00:50+00:00",
+            "2024-03-14T12:01:00+00:00",
+            "2024-03-14T12:01:10+00:00",
+            "2024-03-14T12:01:20+00:00",
+            "2024-03-14T12:01:30+00:00",
+            "2024-03-14T12:01:40+00:00",
+            "2024-03-14T12:01:50+00:00",
+            "2024-03-14T12:02:00+00:00"
+          ]
+        },
+        "browser": {
+          "surface": "Chrome CUA accessibility actions through the hosted BrowserProxy",
+          "checks": [
+            "Open owner Calendar and read settings",
+            "Email notification at 60 minutes visible before and after true browser reload",
+            "Calendar identity, UTC calendar zone and reader ACL visible",
+            "Complete owner and reader native state unchanged after browser reads"
+          ],
+          "visible_week": "2026-09-20 through 2026-09-26 in America/Vancouver",
+          "visible_event_titles": [
+            "Recurring reminder fixture"
+          ],
+          "limits": [
+            "No visual/mobile/touch or native host focus claim",
+            "Fixed Scenario clock anchors seeded/native dates; browser default view still uses current browser week"
+          ],
+          "screenshots_retained": false
+        },
+        "complete_both_account_states_unchanged": true,
+        "all_three_images_matched": true,
+        "teardown_confirmed": true
+      }
+    }
+  },
+  "limits": [
+    "No timed reminder/email or daily agenda delivery implementation",
+    "Personal event-level override isolation and broader notification/access/AI/collaboration remain open",
+    "No exhaustive frontend/visual/mobile/touch or sample release claim"
+  ],
+  "screenshots_retained": false,
+  "merged_revision": "f8baeedd45c5d0678f13b00fdb084b0bd882a64b",
+  "ci": {
+    "head": "d5628ed9791a1096f0dc1f2c381fa0c2c3b226b1",
+    "twin_tests_passed": 6318,
+    "root_tests_passed": 2134,
+    "all_exact_head_checks_complete": true,
+    "fresh_clean_merge_verified": true
+  },
+  "deployment": {
+    "revision": "f8baeedd45c5d0678f13b00fdb084b0bd882a64b",
+    "runtime_workflow": 36230959401,
+    "twins_workflow": 36230959424,
+    "both": "success",
+    "published_images": {
+      "twin-google_calendar": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar:f8baeedd45c5d0678f13b00fdb084b0bd882a64b@sha256:76147c0f33fe24fdb8cad3c36f20c3c6f3e0f3bbdbca2f9013c61ba5ce9a2cc5",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f8baeedd45c5d0678f13b00fdb084b0bd882a64b@sha256:46abb5bae25b100dd33817482f292b1ce92a19ae4073edbdce89888afccfc99b",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:f8baeedd45c5d0678f13b00fdb084b0bd882a64b@sha256:551f984e4eae2c846ca900678d6a7629d46e2816df758e68f4055ee05ddffc38"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00293-xgb",
+      "arga-api": "arga-api-00663-sq5"
+    },
+    "log_sha256s": {
+      "lab-final-calendar-clock-reminders-f8baeedd-twins-deploy.log": "fd63329239e76f9c6d2eef0095f3818917e0955ff8454f4c12f44ef4e3f2f3d0",
+      "lab-final-calendar-clock-reminders-f8baeedd-runtime-deploy.log": "27cacd49f174e76abc342571dbfca1ea7a729bb68fb60f291113e056e9140e54"
+    },
+    "serving_runtime": {
+      "revision": "f8baeedd45c5d0678f13b00fdb084b0bd882a64b",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00293-xgb",
+          "observed_at": "2026-09-26T08:51:26.181583+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:f8baeedd45c5d0678f13b00fdb084b0bd882a64b",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00293-xgb"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00293-xgb",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:46abb5bae25b100dd33817482f292b1ce92a19ae4073edbdce89888afccfc99b",
+            "sha256:4975900c84a4c843e61a09eed11d99be73307d08d9295cac9826f460464616c9"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00663-sq5",
+          "observed_at": "2026-09-26T08:55:38.667562+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:f8baeedd45c5d0678f13b00fdb084b0bd882a64b",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:85b3feec7c6c4a796016cd53877680e651e85e4e0463962a6853574550567a9b",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:85b3feec7c6c4a796016cd53877680e651e85e4e0463962a6853574550567a9b"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00663-sq5"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00663-sq5",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:551f984e4eae2c846ca900678d6a7629d46e2816df758e68f4055ee05ddffc38",
+            "sha256:85b3feec7c6c4a796016cd53877680e651e85e4e0463962a6853574550567a9b"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "27cacd49f174e76abc342571dbfca1ea7a729bb68fb60f291113e056e9140e54",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  }
+}

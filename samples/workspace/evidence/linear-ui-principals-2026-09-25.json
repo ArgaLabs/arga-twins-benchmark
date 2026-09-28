@@ -1,0 +1,370 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1170",
+  "source_head": "e9cef1a189cc81ce73f4f1c3ca762181eb2a9d5a",
+  "status": "production_identity_and_oauth_verified_bounded_desktop_pass_scope_gap_open",
+  "release_allowed": false,
+  "scope": [
+    "Explicit browser authentication uses the native token; read-only credentials cannot mutate as the default owner",
+    "Opaque run-scoped HttpOnly browser-session identity survives ordinary navigation and form submission",
+    "One-hour server authorization on the twin clock; expired/unknown sessions reject requests instead of default-viewer fallback",
+    "Revocation, session reset and scope changes during form reads reject mutations with resource state preserved",
+    "My issues, comment/document/project attribution and author controls use the request principal without changing the default user"
+  ],
+  "tests": {
+    "focused_passed": 34,
+    "linear_regressions_passed": 223,
+    "skipped": 0,
+    "warnings": 3,
+    "reproduced_old_frontend_failures": 27,
+    "make_fix": "pass",
+    "diff_check": "pass",
+    "independent_source_review": "Pass after resolving headerless-form identity loss and expiring-cookie fallback; native GraphQL cookie isolation and mid-form revocation independently checked",
+    "documentation_review": "Combined OAuth review passed on e9cef1a1, including exact-response replay after subsequent rotation.",
+    "prior_browser_only_regressions_passed": 198,
+    "oauth_focused_passed": 25
+  },
+  "source_files": {
+    "twins/linear/frontend_auth.py": "d3f376f82f5ab0940e6f366b3e4b8c7336917878b6853fd0509cc25680f76d94",
+    "twins/linear/frontend.py": "ddf18814637b38241125df454fa07857d4a79ac4a9829ffb896ce6068c8901f4",
+    "twins/linear/comment_ui.py": "a7842f2408891efa09c910f85ca5d32564eb8b2c9c2de16eb449124e34052210",
+    "twins/linear/project_ui.py": "067e5ae78e5663275086ab3e8266a81e920036fdc804c832fa2acc2bdd1ce3e4",
+    "twins/linear/store.py": "86c9715729c51cb8ca6228d28862fbf32bced84971bf051538594df3fffce6f7",
+    "twins/linear/README.md": "2d852f85f26fd3faeb62e54eb54ff26b5ea0d99cf1378d0cdda65745c22866ce",
+    "twins/tests/test_linear_ui_principals.py": "fd6eba1c7a63c1e2bada44c0bd581f1f06b0cc7dc0abe7d18f55d1bc885b8500",
+    "twins/linear/models.py": "3c53b6ea032e355bdaa69b0e87afe48a4a19ee6f2ef2aed42fa3005fbd44ee80",
+    "twins/linear/oauth.py": "6919055ac31714555607b99c24f7edef1a4f39200fd4fea2141736537bd7a375",
+    "twins/linear/runtime.py": "649b83589ba53cf6b8212c0546996b98c3f50483ab57b65ce287bc1f5ca6550c",
+    "twins/tests/test_linear_oauth_lifecycle.py": "abe4ad6ba17fb753330c2cf35c567b217d16c4852d39b2152bca0ad8e75158fb"
+  },
+  "artifacts": {
+    "lab-linear-ui-principals-original-reproduced.log": "9cf0d589bce3eaf21652826e72eeb65c4dd9bd670f7003433d588075f496181f",
+    "lab-linear-ui-principals-focused-final.log": "61f0b4d623b0968371d63b274c8225f25e018e89670c6897ea0eb4f3dc43c101",
+    "lab-linear-ui-principals-regressions-final.log": "de0a7eb97a35d2ecb1f2fb5a8be75ba94179a744a29472fa71408d1136c42cc7",
+    "lab-linear-ui-principals-makefix-final.log": "033834de5ecb478b63670138b3995cfd20b5090ff58dca12ca2212bf561e0d4d"
+  },
+  "limits": [
+    "Fresh native/HTTP and bounded desktop browser identity checks pass; mobile/touch and exhaustive visual coverage remain pending.",
+    "A read/write-only token incorrectly rejects comment creation. This discovered scope gap is preserved; a follow-up fix is in progress.",
+    "Known expired/revoked OAuth credentials fail closed; PKCE, app actors, client credentials and consent-screen coverage remain open.",
+    "Private-team membership, workspace roles, complete read-only controls, AI, uploads, notifications and realtime remain open.",
+    "All broader frontend/sample gates including WKS-03 remain open; no final ZIP."
+  ],
+  "screenshots_retained": false,
+  "oauth_lifecycle": {
+    "focused_passed": 25,
+    "linear_regressions_passed": 223,
+    "scope": [
+      "24-hour expiry on twin clock",
+      "Configured-client validation and Basic/form refresh",
+      "Rotation with 30-minute exact-response replay including later rotation",
+      "Grant-family revocation and consumed-refresh retry invalidation"
+    ],
+    "review_correction": "Independent review passed: exact cached response remains recoverable after later rotation, without reactivating retired access.",
+    "regression_log_sha256": "691a007ebf5a532f6f18a387bd8baf11351afb518af89eb931a1485432dea7b0",
+    "limits": [
+      "PKCE, app actors, client credentials, consent UI and complete permissions remain open",
+      "Real-provider OAuth handshake comparison remains open"
+    ]
+  },
+  "ci": {
+    "workflow": 36212880730,
+    "head": "e9cef1a189cc81ce73f4f1c3ca762181eb2a9d5a",
+    "status": "success",
+    "twin_passed": 6033,
+    "twin_skipped": 145,
+    "twin_deselected": 3,
+    "root_passed": 2130,
+    "root_skipped": 2
+  },
+  "merge_revision": "4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+  "deployment": {
+    "revision": "4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+    "runtime_workflow": 36214195439,
+    "twins_workflow": 36214195437,
+    "both": "success",
+    "published_images": {
+      "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:4372d366858bb45e35ecb241d0e3f27b02bcd89b@sha256:9918c71f533497b6a28ba8de7db17e4b25fd7275b10b20c33cb5ee1117de7695",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:4372d366858bb45e35ecb241d0e3f27b02bcd89b@sha256:018697c784d7b5f7c0e1e352b2f0db63785c1ad2286a5c4d2c23d57e29c3a08d",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:4372d366858bb45e35ecb241d0e3f27b02bcd89b@sha256:fe08e01905bf1d41a0382f13d81b22ec3614f8e2f1baf60cb18efe8556c8c4fa"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00278-hg9",
+      "arga-api": "arga-api-00648-5tv"
+    },
+    "log_sha256s": {
+      "lab-final-linear-principals-4372d366-twins-deploy.log": "3e073cd721ca8eb3887e629411719c9acf0cee48ddb401fbde6e03f939cb862c",
+      "lab-final-linear-principals-4372d366-runtime-deploy.log": "7e282f9e2b8ca9bebce38b907d6779b92a4e007f0094c22b749d33403b66ab70"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "serving_runtime": {
+    "revision": "4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00278-hg9",
+        "observed_at": "2026-09-26T03:15:39.504129+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00278-hg9"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00278-hg9",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:018697c784d7b5f7c0e1e352b2f0db63785c1ad2286a5c4d2c23d57e29c3a08d",
+          "sha256:59de23a8325a5258c9042cc4be7a0ccd9c1512a2f19c1610906cd941c8a2d11b"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00648-5tv",
+        "observed_at": "2026-09-26T03:20:36.056209+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:01f069f1d587903631ab5cf53f16d566251645afd22bcce45a5f1687b2b3b44a",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:01f069f1d587903631ab5cf53f16d566251645afd22bcce45a5f1687b2b3b44a"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00648-5tv"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00648-5tv",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:01f069f1d587903631ab5cf53f16d566251645afd22bcce45a5f1687b2b3b44a",
+          "sha256:fe08e01905bf1d41a0382f13d81b22ec3614f8e2f1baf60cb18efe8556c8c4fa"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "7e282f9e2b8ca9bebce38b907d6779b92a4e007f0094c22b749d33403b66ab70",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "native": {
+      "added_comments": 3,
+      "checks": [
+        "opaque HttpOnly cookie without browser expiry retains identity",
+        "read-only session form rejects without native changes",
+        "invalid explicit header rejects without default fallback",
+        "headerless writer creates and edits as teammate",
+        "foreign-author and stale-revision rejections preserve native state",
+        "My issues uses session principal",
+        "cookie-only native GraphQL stays unauthorized",
+        "expired session fails closed; explicit credentials recover",
+        "OAuth exchange validates configured client without consuming valid codes on failure",
+        "OAuth access expires at exactly 24 hours on twin clock",
+        "Basic and form refresh rotate tokens without changing principal or expanding scopes",
+        "30-minute refresh replay survives later rotation without reactivating retired access",
+        "Replay expires at the 30-minute boundary with complete native state preserved",
+        "Consumed-refresh revocation removes the grant and replay paths while preserving an unrelated grant",
+        "mediated browser preserves teammate attribution and keeps auth cookies private"
+      ],
+      "gui_tested": false,
+      "limits": "GUI observations are separate. Mid-form races, reset and cross-run isolation are local deterministic checks; no exhaustive visual/touch claim.",
+      "permitted_changes": "Allowlisted target-issue comments; browser/OAuth auth ledgers; explicitly advanced clock and normal mutation bookkeeping. Every pre-existing business resource is unchanged.",
+      "protected_resources_unchanged": true,
+      "status": "pass"
+    },
+    "gui": {
+      "status": "pass",
+      "browser": "Google Chrome via CUA",
+      "checks": [
+        "Canceled draft cleared; complete provider state matched GUI baseline",
+        "Submitted Hosted Chrome teammate note; rendered author ada",
+        "True address-bar reload retained comment and author",
+        "Owner-only comment menu exposed Copy link and no Edit",
+        "Teammate comment exposed Copy link and Edit"
+      ],
+      "scope": "Bounded desktop author/session interaction. No mobile, touch, real-provider mutation or exhaustive visual-parity claim.",
+      "writer_scope_limit": "Explicit read/write/comments:create credential used because production read/write-only comment creation failed in preserved retry2."
+    },
+    "containers": {
+      "status": "complete",
+      "observed_at": "2026-09-26T03:28:16.894870+00:00",
+      "publication_sha256": "10984e3c0329aa004fd8aa3a2ed4ebbc3cbdc87cf45be4a7ba3b1a61eeee4331",
+      "containers": {
+        "linear": {
+          "published_revision": "4372d366858bb45e35ecb241d0e3f27b02bcd89b",
+          "image_id": "sha256:9918c71f533497b6a28ba8de7db17e4b25fd7275b10b20c33cb5ee1117de7695",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:2615c827b923b1bc9072ed1f1d1f9dd7cc477e7c5e380356490303ecf125b236",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:9918c71f533497b6a28ba8de7db17e4b25fd7275b10b20c33cb5ee1117de7695"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:9918c71f533497b6a28ba8de7db17e4b25fd7275b10b20c33cb5ee1117de7695"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:a08f61bc3f471fc650d310c5408ce98a4ad72386ac05be02edb62f1e477ff8c0"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:a08f61bc3f471fc650d310c5408ce98a4ad72386ac05be02edb62f1e477ff8c0"
+          ],
+          "builder_log_sha256": "301635335da7fb3a708b490d79dee23ca020dc3d8009a4f7af97e6c57a270efa"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifact_sha256": {
+      "native-checks.json": "2983d7b3b9a202c7d0f35bdac8129e27b78cb416c0ab33b71436c23cf9488bab",
+      "image-comparison.json": "2132661a7892cdbb954c824c22cff9512b4ae8804a884c29cf2f445a953a508b",
+      "publication-catalog.json": "10984e3c0329aa004fd8aa3a2ed4ebbc3cbdc87cf45be4a7ba3b1a61eeee4331",
+      "proxy-http-trace.json": "67b785a7160728b2d7281ab20277ce964b1bcb2ad66f486d1efd0a9960c03707",
+      "gui-baseline-state.json": "bebeb85b7223636779b47cb2244f8f5004ed388f1eec887e89c5e1eb3c29fae5",
+      "gui-after-cancel-state.json": "bebeb85b7223636779b47cb2244f8f5004ed388f1eec887e89c5e1eb3c29fae5",
+      "gui-workspaces.json": "4bb83d180dfa200a36b3a15d4837e118973d010d6496acd7b5ed22bb4acd552e",
+      "gui-final-state.json": "4ce92f084a3480ec4d2756349e48e5b01a7d459e5fbb52198339b2bb73535c29",
+      "operator-oauth-pairs.json": "3d17f24e70655c35d1cadcf9f3a6b8ddd88a9111c9800659ee8e3e1579530d2d",
+      "cleanup.json": "5acd2a880d53d042f83c011c2c566e298fd70d1695ee879048543925f8bc2885",
+      "runtime-image-evidence.json": "6ccfd740258664720da3d26c6b813a0d66cf6d405e21b4e4a904f02d20005ad6",
+      "http-trace.json": "1440fb40921b58a0de42d62de1ece68e2ca8c41d1d98947573439aec180800ad",
+      "worker-logs.json": "9806facc93099e3bd96ceb1326b5634655df022c8cb1fbff0253401831bd8304",
+      "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+      "baseline-state.json": "891977bd90c97b08cad3a94c6cd76612e1b662e1d4a80ea9bb49d7b4c18fcb01",
+      "operator-fixture-config.json": "75225e07aacdb55cc1580fc1c8f1bd0c33c4bcc18763644f0915e648972405c5",
+      "gui-observations.json": "dee6ebd1fdc4256e372c7bc816a41565b8391f08dc9b5bbd704a469372a3e0c3",
+      "final-state.json": "4ce92f084a3480ec4d2756349e48e5b01a7d459e5fbb52198339b2bb73535c29",
+      "control.json": "fc07df69f075c5e905137ce510e2cea8d4f07102965800a7554e913e86093151"
+    },
+    "preserved_attempts": [
+      {
+        "attempt": 0,
+        "result": "Verifier omitted the admin gateway cookie; HTTP 401 before fixture setup",
+        "teardown": "torn_down",
+        "evidence_sha256": {
+          "image-comparison.json": "c52df68750b0ad40f3dcd3f084a4cdc6cab825d03a3a6d3889ff34e2f49a35e6",
+          "publication-catalog.json": "10984e3c0329aa004fd8aa3a2ed4ebbc3cbdc87cf45be4a7ba3b1a61eeee4331",
+          "cleanup.json": "34937fb2f5cfe23bf99383e922961782266f6b3ff24486d251e486d22f67e97d",
+          "runtime-image-evidence.json": "50d9ac837abce74c0ac61974495e39b0091011d6e6c20d09f49358d525a17d83",
+          "worker-logs.json": "7ff7ee967c50ac98094445431b204ae13bee876257263d0e114b4a9c9c938844",
+          "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+          "control.json": "1f5deaf2e213b303a3a7141671cb82d72ce8a8ad70dfaaf2b880491d9c33d6b8"
+        }
+      },
+      {
+        "attempt": 1,
+        "result": "Verifier added only provider authentication; gateway cookie still omitted; HTTP 401",
+        "teardown": "torn_down",
+        "evidence_sha256": {
+          "cleanup.json": "d965910ce9143507399ed3a0f2f345e2ebbdb9a7461908fa362b32d42d6d8d84",
+          "runtime-image-evidence.json": "2a5c998b73e05269eb4bb46f2ddab67b443c0b17c85d484b09021a2c6e035a98",
+          "worker-logs.json": "10ac451c5328c0cff222d1ec32fef26bd321c981c83656bb758b38a01500d682",
+          "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+          "control.json": "278bb27c0d97ef607b0235ac0616de9f8459b1e4b05e40dc43db105ca211d2b7"
+        }
+      },
+      {
+        "attempt": 2,
+        "result": "Product scope mismatch: read/write credential rejected commentCreate; explicit comments:create scope used only for subsequent identity verification",
+        "teardown": "torn_down",
+        "evidence_sha256": {
+          "cleanup.json": "4315ec0a222490ab7cba744cda65b7e5018297745a2f04a887841484b7137a73",
+          "runtime-image-evidence.json": "cd29b25e2bca000c5166ec67dac65d7130321e0994e280b341eda860bf045d42",
+          "http-trace.json": "741c7afc665546627cfa78db16b4b35fed2e64b5d57eb0e942cd43a0538b4e91",
+          "worker-logs.json": "c82598f36de7ce7afa0f76d662646bb4effc91570c435213e9144fdfdebbd04f",
+          "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+          "baseline-state.json": "12937d64ed40510388de6a7c946779e101a7bc1c08766986f931c525e8539e88",
+          "operator-fixture-config.json": "eaaae4176b10ac74e9a657cdd968a6a993ea0444dea729592d4e3241f82b808a",
+          "control.json": "fb4bcdb2e73176501c1c56b7fe384903eca8bf3caff543b5da4118afc1c9db83"
+        }
+      },
+      {
+        "attempt": 3,
+        "result": "Verifier asserted one literal Cache-Control value; hosted proxy combines no-store directives; corrected to check directive membership",
+        "teardown": "torn_down",
+        "evidence_sha256": {
+          "cleanup.json": "1bcf9435e6ebb69c72cd1db42c367f4e676ad562afe1c2da0164332c750d9106",
+          "runtime-image-evidence.json": "f983d4e4cddfa96d8881256613b7ad475ae4b95e8762d882882b97f25a733ca4",
+          "http-trace.json": "3c4db153f6b53d3525c19850f0daf1deb7141dc56df2530f3801a92c73bd1075",
+          "worker-logs.json": "269dfc0358ca64ff4f4809372ea0e8e61fc20e0601530cf4e7de18107e101110",
+          "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+          "baseline-state.json": "891977bd90c97b08cad3a94c6cd76612e1b662e1d4a80ea9bb49d7b4c18fcb01",
+          "operator-fixture-config.json": "75225e07aacdb55cc1580fc1c8f1bd0c33c4bcc18763644f0915e648972405c5",
+          "control.json": "ee616c8a4d278405dbb9e8fa8747c534f89f0eb2c461b2afd346249ddf92c8ae"
+        }
+      },
+      {
+        "attempt": 4,
+        "result": "All bounded checks passed with the explicit comments:create scope",
+        "teardown": "torn_down",
+        "evidence_sha256": {
+          "native-checks.json": "2983d7b3b9a202c7d0f35bdac8129e27b78cb416c0ab33b71436c23cf9488bab",
+          "image-comparison.json": "2132661a7892cdbb954c824c22cff9512b4ae8804a884c29cf2f445a953a508b",
+          "publication-catalog.json": "10984e3c0329aa004fd8aa3a2ed4ebbc3cbdc87cf45be4a7ba3b1a61eeee4331",
+          "proxy-http-trace.json": "67b785a7160728b2d7281ab20277ce964b1bcb2ad66f486d1efd0a9960c03707",
+          "gui-baseline-state.json": "bebeb85b7223636779b47cb2244f8f5004ed388f1eec887e89c5e1eb3c29fae5",
+          "gui-after-cancel-state.json": "bebeb85b7223636779b47cb2244f8f5004ed388f1eec887e89c5e1eb3c29fae5",
+          "gui-workspaces.json": "4bb83d180dfa200a36b3a15d4837e118973d010d6496acd7b5ed22bb4acd552e",
+          "gui-final-state.json": "4ce92f084a3480ec4d2756349e48e5b01a7d459e5fbb52198339b2bb73535c29",
+          "operator-oauth-pairs.json": "3d17f24e70655c35d1cadcf9f3a6b8ddd88a9111c9800659ee8e3e1579530d2d",
+          "cleanup.json": "5acd2a880d53d042f83c011c2c566e298fd70d1695ee879048543925f8bc2885",
+          "runtime-image-evidence.json": "6ccfd740258664720da3d26c6b813a0d66cf6d405e21b4e4a904f02d20005ad6",
+          "http-trace.json": "1440fb40921b58a0de42d62de1ece68e2ca8c41d1d98947573439aec180800ad",
+          "worker-logs.json": "9806facc93099e3bd96ceb1326b5634655df022c8cb1fbff0253401831bd8304",
+          "scenario.json": "98c76f2fce0847c6e12e8a07c54b37e9f3adbed5158635927f635b7f547d918f",
+          "baseline-state.json": "891977bd90c97b08cad3a94c6cd76612e1b662e1d4a80ea9bb49d7b4c18fcb01",
+          "operator-fixture-config.json": "75225e07aacdb55cc1580fc1c8f1bd0c33c4bcc18763644f0915e648972405c5",
+          "gui-observations.json": "dee6ebd1fdc4256e372c7bc816a41565b8391f08dc9b5bbd704a469372a3e0c3",
+          "final-state.json": "4ce92f084a3480ec4d2756349e48e5b01a7d459e5fbb52198339b2bb73535c29",
+          "control.json": "fc07df69f075c5e905137ce510e2cea8d4f07102965800a7554e913e86093151"
+        }
+      }
+    ]
+  }
+}

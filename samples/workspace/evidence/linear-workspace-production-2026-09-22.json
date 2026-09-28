@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "scored_candidate": false,
+  "source_revision": "f143744c2b77ba1df180d699cc57145711459627",
+  "tested_revision": "d868b2ef67c29d21fddb2986a7873197abce6799",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35797550094",
+  "deployment_status": "success",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "source_fingerprints": {
+    "google_docs": {
+      "source_file": "twins/google_docs/structured_ui.py",
+      "script_sha256": "c2f97985b0929f44b38a20bb1031a001c41e754398ed3a6d3afddb6dd908dba8",
+      "exact_script_present": true
+    },
+    "google_sheets": {
+      "source_file": "twins/google_sheets/sheet_tabs_ui.py",
+      "script_sha256": "cc87151f79561d86c1669350c18fbcfeed64ca8477c1dc0fdf1328d15f69b74e",
+      "exact_script_present": true
+    },
+    "linear": {
+      "source_file": "twins/linear/rich_editor.py",
+      "script_sha256": "21d351322cdc5dc09622fa1b8d790ed26bf44c22d2a70c8d9582900dee8ab1fe",
+      "exact_script_present": true
+    }
+  },
+  "per_container_digest_attestation": false,
+  "checks": {
+    "docs_title": "pass",
+    "docs_table_cells": "pass",
+    "docs_inline_object_metadata_unchanged": "pass",
+    "sheets_order_visibility_color": "pass",
+    "sheets_edit_saved_before_duplicate": "pass",
+    "sheets_protected_archive_unchanged": "pass",
+    "linear_description_table": "pass",
+    "linear_relative_image_source_retained": "pass",
+    "linear_slash_table_comment": "pass",
+    "docs_title_and_table_save_reload": "pass",
+    "linear_table_edit_and_slash_table_comment": "pass",
+    "sheets_add_duplicate_rename_color_move_hide_show_delete_reload": "pass",
+    "mobile_page_width_and_reachable_controls": "pass"
+  },
+  "observations": [
+    "Docs title changed to Hosted structure verified while the fourth native table cell changed to Verified after rename. Both persisted after reload; inline-object metadata remained unchanged and the image loaded.",
+    "Linear description table changed to Verified in production; its relative image source ./diagram.png was retained. A slash-menu table comment persisted as native Markdown.",
+    "Sheets saved B2 before duplication, renamed the copy, moved it left, changed its color, hid and showed it, and added then deleted a disposable Sheet4. Native order, values, visibility and color matched the UI; Archive remained unchanged.",
+    "An action during the initial tab move reached Original while the controls were reordering. Original was restored, and hide/show were repeated with explicit completion waits against Hosted copy.",
+    "Docs, Linear and Sheets were inspected at 390 by 844; document scroll width equaled 390. This checks these flows only. No screenshot files were retained."
+  ],
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/linear-workspace-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "scenario.json": "181527843bb543fc8bac45e8403eddba8ec91ee382364ebb89b7147e07fa2aa4",
+    "baseline-state.json": "884b2b23ebc166232f29e627835fd975bca4d024761cd53e14055ae6dd63eeb7",
+    "operator-fixture-setup.json": "66298b915deba3e23dcc41feb82cd9b8f4916c6a4a2e7c0a5cfd01935f7bda51",
+    "docs-structured-fixture-before.json": "776372c0b451df58279049fe60347f0f6bab6543314b1d8274a0a38bd92801ab",
+    "frontend-source-check.json": "4d7d61cb369621bb66387fc58e217fc077b8619ecbda5c7e463e9e080647283a",
+    "manual-native-readback.json": "13d7f324fe290844814929200a295da440af6c61d824126ae0a52d9e39e0b3f6",
+    "final-state.json": "26ee858a9901def169026d38122a0c31fe7c8b4d4b448fbde51113a755b3c896",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d",
+    "google_docs-browser-trace.json": "f5684259c105dea904ed79eaff0bea50f3a43fff0639b1d873a0386fd54c5e0b",
+    "google_sheets-browser-trace.json": "35ac44a7d315d75277456d5d93f0dd0b3644eb1b49b2585f02f0d562a0947ea9",
+    "linear-browser-trace.json": "286f3799e24b422c08cb9589c690ca06f5a327166bb4fdb84e1c51c94575ead0",
+    "cleanup.json": "9216eb38edf2e2f36446620682acbf729cea2853c9849fb8d5be82af4c2966a3"
+  },
+  "limitations": [
+    "Manual operator smoke, not a scored autonomous candidate rollout or exhaustive provider parity.",
+    "Synthetic Docs image/table setup used the native API before browser actions and is not candidate work.",
+    "Linear relative-image retention was checked; the fixture has no diagram.png asset, so image loading was not claimed.",
+    "No pixel-by-pixel reference comparison or complete mobile feature inventory was performed.",
+    "The Arga CLI does not expose the running container digest; source fingerprints and behavior corroborate the deployment without per-container attestation."
+  ],
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
+}

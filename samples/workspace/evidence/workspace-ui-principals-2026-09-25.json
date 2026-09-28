@@ -1,0 +1,54 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-25",
+  "providers": [
+    "google_docs",
+    "google_sheets"
+  ],
+  "status": "local_pass_ci_browser_deployment_pending",
+  "release_allowed": false,
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1165",
+  "source_head": "dddeed9e4725144fc441c0f22638b7b39075f1b7",
+  "scope": [
+    "Principal-filtered initial file catalogs and previews",
+    "OAuth scope and file read authorization before deep-link rendering",
+    "Browser requests retain the resolved request bearer identity",
+    "Explicit invalid credentials and API-key-only requests cannot become the default owner",
+    "Literal script-safe JSON bootstrap values using one-pass substitution"
+  ],
+  "tests": {
+    "before_failed": 16,
+    "focused_passed": 20,
+    "docs_sheets_workspace_passed": 1027,
+    "skipped": 0,
+    "make_fix": "pass",
+    "source_review": "Ship within this bounded scope; no concrete blockers found"
+  },
+  "source_files": {
+    "twins/google_docs/README.md": "64ca38bafe81d5764ead0f8ebd040d6869a42d1db84ebab8d7a3369f70dd6fa0",
+    "twins/google_docs/ui.py": "669671463c9e5e5981bc54b4a080fb5f7fd97cdaa94bf22614f15562a71865c7",
+    "twins/google_drive/app.py": "1c1fb39c7c3bfb4d21b812b97aa0cbcb5af03ae4ef90abf867cd7af2a1c1dfa8",
+    "twins/google_sheets/README.md": "6c890df22f628d58f8b48f5f7f04735405701cc2286e616ebd03df30095169e9",
+    "twins/google_sheets/ui.py": "6c88bd2ece4f68c0619ffd0836cf24416f3e22032b01827cdb68bf0e187cbd76",
+    "twins/tests/test_google_workspace_ui_principals.py": "b64417073f5d84c4a772f52ac84f74e1209d147b2460dd1bff041d2ad0f9c6fa"
+  },
+  "artifacts": {
+    "lab-workspace-ui-principals-before.log": "4fa14c82f0828e359f74a90e05efce0a87e425a4bf80b7aa6bb64de3b1904ab4",
+    "lab-workspace-ui-principals-focused.log": "e7ebde93f038cf59acf20a4651a5f4ae793f5e86a7f7daf31a9eecc5b7702152",
+    "lab-workspace-ui-principals-regressions.log": "336c1ed299ff2229e221e11aa3de87e3901d10a768ddc15c327717e13190bb48",
+    "lab-workspace-ui-principals-makefix.log": "b7af31a0f1ec06a4767d81b3ecf93746818b26b6ab77ee0efa469525984eaa6b"
+  },
+  "browser": {
+    "status": "blocked_host_locked",
+    "screenshots_retained": false,
+    "physical_touch_tested": false
+  },
+  "limits": [
+    "Included in combined PR #1166; final CI, deployment and hosted verification remain pending. This original PR remains open until verified combined delivery.",
+    "Complete reader-mode controls, access requests, group and inherited permissions and multi-user frontend parity remain open.",
+    "This bootstrap authorization fix does not close the exhaustive AI/collaboration or full sample release gates."
+  ],
+  "combined_delivery_pr": "https://github.com/ArgaLabs/validation-server/pull/1166",
+  "combined_delivery_evidence": "workspace-permissions-combined-2026-09-25.json",
+  "combined_delivery_status": "Delivered in #1166 main5f67b252; production, fresh hosted native/HTTP bootstrap, five worker images and teardown pass. This PR closed as incorporated. GUI remains pending."
+}

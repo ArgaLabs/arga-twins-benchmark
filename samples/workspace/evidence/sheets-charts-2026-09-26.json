@@ -1,0 +1,366 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "google_sheets",
+    "google_drive"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1183",
+  "source_head": "14329efee0f4f0cf9d9e2f7c80f716e0410e835a",
+  "status": "deployed_hosted_native_desktop_390px_five_container_pass",
+  "release_allowed": false,
+  "scope": [
+    "Native column/bar/line/area/scatter/pie/doughnut rendering and editing",
+    "Source/title/type/customization, move/resize/delete and source-cell preservation",
+    "Native placement field masks and cross-sheet collection moves",
+    "Reader denial, atomic invalid batches, source-preserving type changes, numeric scatter scale",
+    "Selected-chart synchronization, per-chart error isolation and visible initial read recovery"
+  ],
+  "tests": {
+    "focused_passed": 16,
+    "integrated_workspace_passed": 1332,
+    "make_fix": "pass",
+    "rendered_javascript_syntax": "pass",
+    "detector_findings": 0,
+    "ci": "All exact-head checks complete; fresh CLEAN snapshot verified before squash merge"
+  },
+  "browser": {
+    "rounds": 2,
+    "final_desktop": [
+      1465,
+      806
+    ],
+    "final_mobile": [
+      390,
+      844
+    ],
+    "reference": "/tmp/lab-sheets-charts-reference/verification.json",
+    "final_observations": [
+      "Desktop: native-backed Line chart title Quarterly comparison, three source points Revenue 10/20/15 and Expenses 8/12/9; axes, title and legend fit the 600x371 chart",
+      "Native-style white 320px chart editor at right with Setup and Customize, type, range, X-axis, series and checkboxes",
+      "390px: editor x54..374 fits within viewport, close and all setup controls visible; native chart remains full size in scrollable grid behind panel",
+      "Native reference also uses a 320px editor at 390px and shows narrow-grid warning; no physical touch hardware tested"
+    ],
+    "earlier_findings": [
+      "First local CSV fixture seeded numeric-looking strings; empty-data message was accurate; corrected via native USER_ENTERED values and preserved original seed snapshot",
+      "Chart panel excess empty-status spacing corrected",
+      "A screenshot attempt targeted another selected tab after Chrome focus changed; no image returned; fresh owned tab used for final valid captures"
+    ],
+    "screenshots_retained": false,
+    "independent_visual_review_limit": "User forbids retaining screenshots. All images inspected inline in primary CUA session; reviewer must not claim independent pixel comparison from this text record.",
+    "reviewer_fixes": {
+      "date": "2026-09-26",
+      "chrome": "CUA",
+      "checks": [
+        "Two valid charts and one missing-source error coexist",
+        "A editor title Quarterly comparison switches to B Second chart on single click",
+        "B title saved; Tab focus stays at Horizontal axis title",
+        "Remove Revenue then Line\u2192Column preserves Expenses only",
+        "Invalid range rejected; Cancel leaves previous native spec exact",
+        "ArrowRight stores offsetX=10; Shift+ArrowRight stores width=610; native values persisted after reload",
+        "Injected top-level 503 exposes Reload charts at initial viewport; transient screenshot confirms visible at y236",
+        "Reload charts after removing fault renders both valid charts and the separate missing-source error and removes top-level notice"
+      ],
+      "native_delta": "Exactly B title, series removal, type; then intended move/resize only",
+      "regressions": {
+        "focused_passed": 16,
+        "workspace_passed": 1082
+      },
+      "screenshots_retained": false,
+      "physical_touch_tested": false
+    }
+  },
+  "real_reference": {
+    "fixture": "Arga fidelity 2026-09-26 charts 01",
+    "spreadsheet_id": "1kmnX1by6vjgbgoQjB5g1l-yBgKb6OfV1TxQGchcdpoA",
+    "observed_on": "2026-09-26",
+    "desktop": [
+      1465,
+      806
+    ],
+    "narrow": [
+      390,
+      844
+    ],
+    "checks": [
+      "Native creation from A1:C4 defaults to Column; headers row 1, labels column A, two series",
+      "Changed to Line and title Quarterly comparison; persisted on reload",
+      "Native range dialog invalid!A0 closes into visible invalid range error; previous chart remains; restoring A1:C4 recovers",
+      "Chart options Edit, Delete, Download, Publish, Copy, Move to own sheet, Alt text observed",
+      "390px editor fits with scroll; provider warns window is too small for grid"
+    ],
+    "exported_chart_xml": "chart1.xml",
+    "cleanup": "File moved to trash confirmed; fixture is recoverable. Tab closed.",
+    "screenshots_retained": false,
+    "limits": "No touch hardware; native chart API JSON unavailable; XLSX chart XML preserves native series source references and title."
+  },
+  "review": {
+    "disposition": "ship",
+    "scope": "Four material findings resolved; independent pixel verification unavailable",
+    "documentation": "README checked; inherits current Sheets editor; no system redesign"
+  },
+  "source_files": {
+    "twins/google_sheets/ui.py": "6714997f31b630f3b5c8ed11f0cb562dd375b072627faf4a2a03e0125c6fc529",
+    "twins/google_sheets/chart_model_ui.py": "428c7c25e7d8bcccd3992c36e91e763d2a7ae5fea4587a3509aae17482ae560b",
+    "twins/google_sheets/charts_ui.py": "366a32c5a71708e450845a2de39df83e049759806e91c39eef4511f578b44fe3",
+    "twins/google_sheets/README.md": "a3213b755c982a5bd3115b2ca4fe2313573708de47a66e9fa23a15c488f48bcb",
+    "twins/google_drive/workspace_editing.py": "f328f3ee3a484cd3f2d513dd4e5ead80ec3367d7ebd414dca315a7b53ee919ad",
+    "twins/tests/test_google_sheets_charts_ui.py": "09e83c09586a7cbf031314e2e956ea3db2e6447b6c3d66642bcee665303b11af"
+  },
+  "artifacts_sha256": {
+    "lab-sheets-charts-workspace-final.log": "7c7fd49eb16393fb5f7e8e66ff20d6b128f66768cdc01c02145782cfc34cb296",
+    "lab-sheets-charts-review-tests2.log": "d7c9b809730a56a92b1201fb24c83f8b1b66fcab77d3135be9bb0bb18e36766d",
+    "lab-sheets-charts-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "reviewer-fixture-baseline.json": "302c231cb06d9830f3f5f0dea3e667d378304617417b201fb72b26a9f098b9fb",
+    "reviewer-gui-state.json": "835933b1bc918108c56fc3fba7ebfdd3952fce48b7d904e8b5b20eaf9de54968",
+    "reviewer-moved-state.json": "cd61761b4f3ff2931b6c3c48857344c4fe37d46f0b5e077b11e329ad7f18740a",
+    "reviewer-deleted-state.json": "1f993deda752c61d2c009367fb96d7216d14820f8dd96848de2e43f386561b7f",
+    "chart1.xml": "d8dc073a5c2f2485e24ef8ade7b78b279c3a2ad156a9f534333b15c51ceaba13",
+    "lab-final-sheets-charts-premerge-14329efe.json": "53db31e74ebe13637e35d2e46f6dd779078dae25287219057698edaaa79751d0"
+  },
+  "limits": [
+    "Exact-head CI, both production workflows, native/selected desktop/390px checks, all five runtime images, exact native-state allowlist and teardown pass; broader chart/editor coverage remains open",
+    "Additional chart families, chart-sheet/export/publishing/copy controls, full customization and exact rendering parity remain open",
+    "Native basic-to-pie conversion retains only first series; rectangular data rebuild does not retain custom noncontiguous source layout",
+    "Source range maximum 10,000 cells; no full provider/touch or sample gate closure",
+    "Reader UI currently offers edit controls and relies on native403; permission error and Not saved are visible, while top-level header can remain Saving after denial"
+  ],
+  "screenshots_retained": false,
+  "merge_commit": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+  "hosted": {
+    "status": "bounded_native_and_browser_chart_pass",
+    "revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+    "browser": "Google Chrome CUA",
+    "viewports": [
+      "1465x806",
+      "390x844"
+    ],
+    "native_checks": {
+      "checks": [
+        "Cross-sheet insertion/collection transfer and partial position masks preserve native chart identity and omitted geometry",
+        "Reader mutation denied with all three native provider snapshots exactly unchanged",
+        "Invalid destination rolls back preceding native spec mutation across all three snapshots",
+        "All seven native chart specs persist without rewriting source cells"
+      ],
+      "gui_tested": false,
+      "status": "pass"
+    },
+    "gui_checks": [
+      "Column to Line and title edit persist in native spec",
+      "Remove Expenses preserves domain and Revenue native source",
+      "Invalid source shows error; Cancel preserves all three provider states exactly",
+      "Header drag updates offset by 40/20; Shift+Right increases width by10; reload retains chart",
+      "Insert Chart creates second native column chart from A1:C4; narrow Setup controls fit; Delete removes only that new chart",
+      "Reader mutation displays insufficient-permissions and Not saved; all three provider states exactly unchanged"
+    ],
+    "native_delta": {
+      "version_increments": 7,
+      "change_feed_appends": 7,
+      "new_owner_page_histories": 2,
+      "existing_chart": "9001 with exact title/type/one-series/position changes only",
+      "transient_chart": "9002 created then deleted; next_chart_id9003",
+      "source_cells_and_other_resources": "exactly unchanged"
+    },
+    "images_matched": 5,
+    "serving_api_and_proxy_images_match": true,
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "cleanup": "torn_down",
+    "limits": [
+      "Selected chart paths only; no exhaustive chart/editor/visual/mobile/touch claim",
+      "Reader UI currently offers edit controls and relies on native403; permission error and Not saved are visible, while top-level header can remain Saving after denial",
+      "No candidate rerun or WKS-03 reclassification"
+    ],
+    "release_allowed": false,
+    "artifacts_sha256": {
+      "after-reader-denial.json": "7d3426e5ced9882f63ac9bd626280d7ad643b01dda7a961f9870068b94d4593e",
+      "before-reader-denial.json": "7d3426e5ced9882f63ac9bd626280d7ad643b01dda7a961f9870068b94d4593e",
+      "cancelled-state.json": "11565887359c65b5bb47860f2392146c0d64b894d2ef294ac0aa763850ea53e3",
+      "cleanup.json": "7ee93d723e6d0a977f2b3b517f0fe32d2ca864b167ac37d28cd56103836753ab",
+      "control.json": "a511ea9b02e1eb0aadab0f2c7c50c23a40fed64e621dd247da1d0ed5d9039c26",
+      "created-state.json": "cc128f76f150ce9a9e04d487531ab3bf6b7f63791917dfc2fa024e2f670ee3a8",
+      "edited-state.json": "11565887359c65b5bb47860f2392146c0d64b894d2ef294ac0aa763850ea53e3",
+      "final-state.json": "7d3426e5ced9882f63ac9bd626280d7ad643b01dda7a961f9870068b94d4593e",
+      "gui-baseline-state.json": "035ed17ca065ffc804f134af95ef1d15493cebc396ae345a57a5f7c0a6cdaace",
+      "gui-final-state.json": "7d3426e5ced9882f63ac9bd626280d7ad643b01dda7a961f9870068b94d4593e",
+      "gui-workspaces.json": "5a56c2afe7db5177a7742c7d6dc3c638c635c3f502a2c0be0ef77a92c63607a2",
+      "image-comparison.json": "9022872fc5672e88475dedf68d4b69b25319c7e9ff3e2eec4e85560d50f580f7",
+      "moved-state.json": "851b72c005d5329ea36ff72a6fff4b51dd202081cad15ddaa814e4b4a2e06ad1",
+      "native-checks.json": "e1fbf0bc7e418e0f326ad457b88d3c0ac5b40c4f2d746142c6f160fb3bda637c",
+      "operator-api-trace.json": "468f91c9f01be7c2a276c88b290b0a2c22890e39432681afe28538a865a4d567",
+      "owner-proxy-http-trace.json": "1376c6299ee27a0a2fe0b9cd8171d410e43506c949bc5ac0b04ff4b23d850c6e",
+      "publication-catalog.json": "8960fc4e6b42d882589c20ceb715240538cd6ce55bc2975564d562d723d606d9",
+      "reader-proxy-http-trace.json": "ef373cf0c4a7c3cc22cb370660812a2dc14f6c784665dde7455cfe1909cb71d4",
+      "resized-state.json": "700e21ad23c0e7ab8a310769ae4a14a24741c007da6214ff11259eef97be675a",
+      "runtime-image-evidence.json": "c6df376bf13b85af0a693a93d6ae448a1a6cb427c1f11c72ea205025e6e22bbc",
+      "scenario.json": "182d3fbffe7b35396008dbcf7715865f9a3edb4048d29b15222a8ce30628a1e1",
+      "verification.json": "d25d654168f7b89673dfc5cfc6ff0ad13b6708e2a18cfeb53a4a96eb2cb2ce99",
+      "worker-logs.json": "640fc9252665d631c7ec3ffcee37d0a52ec5f3e150df87a0e7f2beb9b0347bfe"
+    }
+  },
+  "deployment": {
+    "revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+    "runtime_workflow": 36226049463,
+    "twins_workflow": 36226049418,
+    "both": "success",
+    "published_images": {
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:52524aa6714bed9b72891d5d6c1fb590aeea164211f7fd4a035038d3f9558d85",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:0a3850adfa2be6219fc919b4648ee88539af9b8ea7afeb216c02870bc3c37247",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:9a4e67f86addb6b7e2b57c5006cfc8a99a5c307ca69f59edeb45ca699171c108",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:dea71a4e404c5a75db2cdfcc80560150ffb2d563379e95cdb8d4ec1adc401228",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:ced129006c9e0e07d75f97b51c8874367b0f4853ab9f6d7f3c77dfe484341bfa",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:5d95bdf73293c84521cfad453f7d36a38b702bed@sha256:6a79e68bd2bd38e79faa25270abdf25e9039ce86225c48febfa2af55f28cb780"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00288-v2j",
+      "arga-api": "arga-api-00658-hkd"
+    },
+    "log_sha256s": {
+      "lab-final-sheets-charts-5d95bdf7-twins-deploy.log": "51366d9af4f9cf3d0f74e995850d2ecd60632c8012443e96c1ee0abf9608b20e",
+      "lab-final-sheets-charts-5d95bdf7-runtime-deploy.log": "a98c19259bfffd2a75d23e66446c42b39659d4f2557f1605d006179b8496e9ea"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately.",
+    "cloud_run": {
+      "revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00288-v2j",
+          "observed_at": "2026-09-26T07:13:04.514202+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:5d95bdf73293c84521cfad453f7d36a38b702bed",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00288-v2j"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00288-v2j",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+            "sha256:ced129006c9e0e07d75f97b51c8874367b0f4853ab9f6d7f3c77dfe484341bfa"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00658-hkd",
+          "observed_at": "2026-09-26T07:18:14.885472+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:5d95bdf73293c84521cfad453f7d36a38b702bed",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:53a892531b4bb6761bba44de898a80dfec5d42eed1616b7051a63c429726a9b1",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:53a892531b4bb6761bba44de898a80dfec5d42eed1616b7051a63c429726a9b1"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00658-hkd"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00658-hkd",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:53a892531b4bb6761bba44de898a80dfec5d42eed1616b7051a63c429726a9b1",
+            "sha256:6a79e68bd2bd38e79faa25270abdf25e9039ce86225c48febfa2af55f28cb780"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "a98c19259bfffd2a75d23e66446c42b39659d4f2557f1605d006179b8496e9ea",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    }
+  },
+  "images": {
+    "status": "complete",
+    "observed_at": "2026-09-26T07:19:09.267491+00:00",
+    "publication_sha256": "8960fc4e6b42d882589c20ceb715240538cd6ce55bc2975564d562d723d606d9",
+    "containers": {
+      "google_docs": {
+        "published_revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+        "image_id": "sha256:9a4e67f86addb6b7e2b57c5006cfc8a99a5c307ca69f59edeb45ca699171c108",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:9a4e67f86addb6b7e2b57c5006cfc8a99a5c307ca69f59edeb45ca699171c108",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:fb4bb8e74f80ebedd7ed0a2ddae605fac11b9373f31188a8e7ab51e60075eeff"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:9a4e67f86addb6b7e2b57c5006cfc8a99a5c307ca69f59edeb45ca699171c108"
+        ],
+        "matched": true
+      },
+      "google_drive": {
+        "published_revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+        "image_id": "sha256:dea71a4e404c5a75db2cdfcc80560150ffb2d563379e95cdb8d4ec1adc401228",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:bccb22e6f4bab7e33d9eb40ea435ac2a73f798989fd7a9b71be13d2fc3160dd8",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:dea71a4e404c5a75db2cdfcc80560150ffb2d563379e95cdb8d4ec1adc401228"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive@sha256:dea71a4e404c5a75db2cdfcc80560150ffb2d563379e95cdb8d4ec1adc401228"
+        ],
+        "matched": true
+      },
+      "google_sheets": {
+        "published_revision": "5d95bdf73293c84521cfad453f7d36a38b702bed",
+        "image_id": "sha256:0a3850adfa2be6219fc919b4648ee88539af9b8ea7afeb216c02870bc3c37247",
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:0a3850adfa2be6219fc919b4648ee88539af9b8ea7afeb216c02870bc3c37247",
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:6171b42e4e1c6f7772828e109858fd66567b9a97754931bc939aecc2a1518d14"
+        ],
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:0a3850adfa2be6219fc919b4648ee88539af9b8ea7afeb216c02870bc3c37247"
+        ],
+        "matched": true
+      },
+      "app": {
+        "matched": true,
+        "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-ae591bc8b33647d3a7a639aef94b69f7",
+        "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-ae591bc8b33647d3a7a639aef94b69f7@sha256:d4999affd32f69a0f6e8c4894ecc8020bd92930e77166bc80547a93769e5137c",
+        "observed_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:d4999affd32f69a0f6e8c4894ecc8020bd92930e77166bc80547a93769e5137c"
+        ],
+        "published_repo_digests": [
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+          "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:d4999affd32f69a0f6e8c4894ecc8020bd92930e77166bc80547a93769e5137c"
+        ],
+        "builder_log_sha256": "22056e8b75523151ce0becb579e6f5bdc386503d4e36d745f4b049323030ac31"
+      },
+      "twin-gateway": {
+        "matched": true,
+        "observed_repo_digests": [
+          "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        ],
+        "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+        "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+      }
+    }
+  }
+}

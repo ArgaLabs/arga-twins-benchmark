@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-24",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "problem": "The document paper used viewport-relative width, so opening both sidebars squeezed fixed-width tables and caused character-by-character wrapping.",
+  "change": "Keep the 816px document canvas and its margins at all viewport sizes. Scroll the document workspace horizontally when needed instead of changing its layout.",
+  "validation": {
+    "regressions": 278,
+    "viewports": [
+      "1280x900",
+      "910x806",
+      "390x844"
+    ],
+    "page_width_px": 816,
+    "cell_width_px": 311.5,
+    "cell_height_px": 48.046875,
+    "desktop_scroll_left_px": 546,
+    "mobile_scroll_left_px": 390,
+    "mobile_body_scroll_width_px": 390,
+    "native_document": "exactly unchanged",
+    "capture_sha256": "ddbac8e18c2e9ac184f13b8cf16be3845ea8eb94d5cfb0bd6483966a211a0a0f",
+    "browser": "Google Chrome through CUA; screenshots inspected transiently"
+  },
+  "limits": [
+    "Production deployment and hosted recheck pending.",
+    "This fixes canvas compression; document page-size controls, pagination and full provider parity remain separate work."
+  ]
+}

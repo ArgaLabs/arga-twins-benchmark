@@ -1,0 +1,416 @@
+{
+  "date": "2026-09-27",
+  "status": "deployed_fresh_hosted_native_desktop_390px_pass",
+  "scope": [
+    "Readonly current source choices with individually staged colors",
+    "Race-safe source previews preserve current form and original stale-save revision",
+    "Current scopes and file permission rechecked after body read"
+  ],
+  "real_reference": {
+    "artifact": "sheets-range-dropdown-reference-20260927.json",
+    "sha256": "fdd87804e58d75ad8b3da9cf27c9dbd963fcc3d15f1ce22eaeb9f1e73736d56c"
+  },
+  "tests": {
+    "focused": 103,
+    "workspace_editor_regressions": 1515,
+    "native_browser": {
+      "passed": true,
+      "native_commits": 6,
+      "successful_browser_writes": 5,
+      "operator_source_writes": 1,
+      "failed_browser_writes": [
+        503,
+        409,
+        409
+      ],
+      "allowed_changes": [
+        "A1:A2 Open blue and PENDING green colors",
+        "A1 Open selection",
+        "Options!A2 Archived operator source edit"
+      ],
+      "all_other_values_formulas_permissions_unrelated_state_unchanged": true,
+      "cancellation_failure_and_stale_writes_preserve_exact_state": true,
+      "negative_oracles": {
+        "value": "rejected",
+        "formula": "rejected",
+        "rule": "rejected",
+        "color": "rejected",
+        "permissions": "rejected",
+        "extra revision": "rejected",
+        "foreign history": "rejected",
+        "source cell": "rejected"
+      },
+      "browser": [
+        "Invalid source range shows recovery error and blocks save",
+        "Correcting the source preserves staged Open color",
+        "503 retry preserves staged colors",
+        "Refresh updates Closed to Archived without rebasing the open form",
+        "Repeated stale 409 rejection, close/reopen recovery",
+        "390px palette and 44px color targets",
+        "Undo/Redo and reload retain native colors",
+        "No browser console errors"
+      ],
+      "limits": [
+        "Physical touch not exercised.",
+        "Named/duplicate/blank/formula sources additionally checked in second real-provider fixture; named-source save verified in separate local run."
+      ]
+    },
+    "design_detector": [],
+    "initial_findings": [
+      "Existing isolated renderer test needed its new preview helper stub; 101 tests passed before fixing that test harness.",
+      "Native verifier initially treated seeded empty A1 as absent. Corrected to retain its existing empty string representation; full state then matched.",
+      "First detector invocation used unsupported --format json. Re-ran with the documented --json flag."
+    ],
+    "named_source_and_related_regressions": 115,
+    "named_source_browser": {
+      "passed": true,
+      "native_commits": 1,
+      "only_final_change": "Open blue color for A1:A2 named-range dropdown",
+      "named_range_source_and_all_values_formulas_permissions_other_state_unchanged": true,
+      "reload_preserves_named_source_and_color": true
+    },
+    "review_driven_fix": "Real named-range reference exposed the existing A1-only sidebar source parser; it now accepts known named sources while retaining native version-checked validation."
+  },
+  "source_sha256": {
+    "twins/google_drive/app.py": "46ec6e6f5d490f1b63c628d52ff4c3025050f2c26b30203c809a139323ed6407",
+    "twins/google_drive/runtime.py": "02cd230b375f923476dd65b2d5eaa0b83a5df996832836fb57d7fbdf854cd722",
+    "twins/google_drive/sheet_validation.py": "fdae5bc8fac39bb84894ce3691fa8518662e8d7f930f124bae1780c63bc09438",
+    "twins/google_drive/workspace_editing.py": "348452c1f851dc76d62dc1e75e9344fbc493ea3d7b9fec4d8e6b09e1ac348915",
+    "twins/google_sheets/dropdown_ui.py": "7b1278eff2378514c13468789728cbe870bfbae76e343cd0868cf74ebb046428",
+    "twins/google_sheets/dropdown_range_ui.py": "6b5d762997227e281ae43f76dab0f45fa91ede038bc90265a8a67cd81fbb8d2a",
+    "twins/google_sheets/validation_ui.py": "f687406ac7d2158ff910afd9e4101725803e8e618bcde954e496101f0aa41b98",
+    "twins/google_sheets/README.md": "f59b5568e1f8f68a1af6abdbfc96b2f080a4326d47ea6db1273f1912d2025435",
+    "twins/tests/test_google_sheets_dropdown_range.py": "f9e4f5e5168a86f1f49e7a04cac04fb8618df171fcfd4f94f3259e06181becd1",
+    "twins/tests/test_google_sheets_validation_controls.py": "17981d57fd993a13fc8ab44e61c07b2e29256fd2719b8b8dcf9b11bed3619271"
+  },
+  "artifact_sha256": {
+    "sheets-range-dropdown-first-tests.txt": "041a3aeb1038e5da5965a54af884385cf77965ae0c8e5ee4ee6a01186e1bfdd7",
+    "sheets-range-dropdown-focused-tests.txt": "a5fbe9b56859bc2046b72a44f787edaceee4909cf3c95566802fe9a92a7f7bd4",
+    "sheets-range-dropdown-all-tests.txt": "7bde2ff29b9c85a11eb65b272405fc9c22728c1f31503ca76f4ba05ff8cb01c1",
+    "verify-sheets-range-dropdown-local.py": "d523d6e4a7a12aacbccbf1c6bb0743fd3b6f237a22ea606d086bd4f8a468079e",
+    "sheets-range-dropdown-impeccable.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "sheets-range-dropdown-named-tests.txt": "d3aba879012c264c3da0003d3be0ddac84278311ddc2f5f82c6e57be24873b3b",
+    "sheets-range-dropdown-final-tests.txt": "9e0b70ece61669c533f62bbf5cfdba3acb8fd381948a91bf312ef6d8eec9eef5"
+  },
+  "local_artifact_sha256": {
+    "browser-trace.json": "da801408e03798d645d4f9f392b0b2917efc77ee449bb4eaf7ac17a94f931af0",
+    "checkpoint.json": "722c56b234dbee4511ead42f424d870d0fbe949998663e2f2e6ff4e7c44172a8",
+    "concurrent.json": "722c56b234dbee4511ead42f424d870d0fbe949998663e2f2e6ff4e7c44172a8",
+    "baseline.json": "2c66d0c59643b8b1e43efd93f2d00f09ca733fe0fb546fd711d0b0860a19245d",
+    "after-failed-save.json": "2c66d0c59643b8b1e43efd93f2d00f09ca733fe0fb546fd711d0b0860a19245d",
+    "after-stale-save.json": "722c56b234dbee4511ead42f424d870d0fbe949998663e2f2e6ff4e7c44172a8",
+    "verification.json": "ca15b447527ba6878ce24d0d4d8729e934fca776c51ebac3ac0ae7ddb3216173",
+    "after-cancellation.json": "2c66d0c59643b8b1e43efd93f2d00f09ca733fe0fb546fd711d0b0860a19245d",
+    "final.json": "dbc4ccb30cd267353b8cd27b2f21935b6584b3e51d5f26f822cb8c11f7b1fa11"
+  },
+  "limits": [
+    "390px desktop emulation is not physical touch or mobile-app parity.",
+    "All eight-provider AI/collaboration and exhaustive visual/permission states and final sample gates remain open. No final ZIP generated.",
+    "Unrelated GitHub preservation in this run compares the compact admin summary, not its complete resource snapshot. Workspace native state is fully compared; a later full GitHub snapshot must be used for comprehensive final-deployment preservation claims."
+  ],
+  "real_edge_reference": {
+    "artifact": "sheets-range-dropdown-edges-reference-20260927.json",
+    "sha256": "c1a703796993805665bacbccf1454ce355e1f7405af783db66130496836cad36"
+  },
+  "named_source_artifact_sha256": {
+    "browser-trace.json": "34208a778d65d9e5e8c07f36b7f38231b04cfdd7267c7fb5d4acb9bcb1060d41",
+    "baseline.json": "66c088fa5772cd2f6c7ff4f860aeb25e45053c48fa8491bc1e3025ddf6c4ea0a",
+    "verification.json": "12d64b65909e7905fc1b86671e1677293f508ad9c64b40012f331aa6040578cb",
+    "final.json": "6c3f2a6618ee51dbb70d3c0aa8e968729341d4d43ca2d47cdd89f9131f65250f"
+  },
+  "deployment": {
+    "pr": 1220,
+    "merge_revision": "24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+    "source_revision": "28e371774e59c25555bcbd0c5c781b5d8cd64b5d",
+    "exact_head_checks": 36,
+    "fresh_merge_state": "CLEAN",
+    "twins_workflow": 36360235342,
+    "runtime_workflow": 36360235334,
+    "both_workflows": "success",
+    "serving_images": {
+      "revision": "24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00325-gw8",
+          "observed_at": "2026-09-27T23:55:15.349479+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00325-gw8"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00325-gw8",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:59bb2314e2c10e589dd1e1f3c20840b408656d80b3e6cfa1cc1b09b62c76c6f6",
+            "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00695-b8x",
+          "observed_at": "2026-09-27T23:59:14.852161+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e6808b77a765aea7aefb7d7c68a0d7f3706f08992a670d66eacaf5e22dc847ae",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e6808b77a765aea7aefb7d7c68a0d7f3706f08992a670d66eacaf5e22dc847ae"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00695-b8x"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00695-b8x",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:c1c8a7808bc46fedfd07df35f200b4fb8f2921ae85a8c9af13bc957204690cdc",
+            "sha256:e6808b77a765aea7aefb7d7c68a0d7f3706f08992a670d66eacaf5e22dc847ae"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "929dc02e563bbb2c4a34c4bd3e21435e8f1a8bb90ffcd216d0363173d3fa3068",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    },
+    "worker_images": {
+      "status": "complete",
+      "observed_at": "2026-09-28T00:00:54.052203+00:00",
+      "publication_sha256": "3629bc0b4ebc7e5e8ce2bf5bc6e018c0eee4cf3559497d78e8720ff91f5e80bc",
+      "containers": {
+        "github": {
+          "published_revision": "0b9adb6191a772c397ade3858e7c6cbd88eda031",
+          "image_id": "sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:affbf13aa7207c96378f589b58051880fde165abf802abc4da98929c3d3daa29"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4"
+          ],
+          "matched": true
+        },
+        "gmail": {
+          "published_revision": "ecd5a11ae7f273224ff7bb2a99a2d3ccbf09bfef",
+          "image_id": "sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:7840d808ed3fc22532a0c40e8775a8a33f0136345f5a473d07e9ae01618e3604",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0"
+          ],
+          "matched": true
+        },
+        "google_calendar": {
+          "published_revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+          "image_id": "sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:16f12ce95a7ca7f35916ccd6830388a5035ee5cd2a8982c723dcc51251dfbb2a",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "matched": true
+        },
+        "google_docs": {
+          "published_revision": "24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+          "image_id": "sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:1d3b124fd3539de1a93308041917e979f6c829fc81aff484c46955c174056939",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+          "image_id": "sha256:f917b59ba086d9b72ca9ceb5d69bb1a1e575880e4bc0396cfe0c13ded9b8c43d",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:3a7e7f146ae233741192e2adc7c08859995581602ff30a47c30ce54e17ca0665",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:f917b59ba086d9b72ca9ceb5d69bb1a1e575880e4bc0396cfe0c13ded9b8c43d"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:f917b59ba086d9b72ca9ceb5d69bb1a1e575880e4bc0396cfe0c13ded9b8c43d"
+          ],
+          "matched": true
+        },
+        "linear": {
+          "published_revision": "ace7a2b81d94daa980cc63bc1656c937a3b63fa5",
+          "image_id": "sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:512530f81f5d79a8fa5e4d06bcaae351d74a334ad0f21f2874f024db3220bd55"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183"
+          ],
+          "matched": true
+        },
+        "notion": {
+          "published_revision": "31ce23293da893a6882b51b318cbcffed1064af4",
+          "image_id": "sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:2349a5eac4ae35486e8167a4cd0983ff52b298253e41296b3e3cbcc403ac24dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "matched": true
+        },
+        "stripe": {
+          "published_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+          "image_id": "sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:988163ff134aea11b480683fcb63cbf069eda86fd8fb205810b2d63ca155586a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-72c590a9a18543878120b7e85cba47b8",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-72c590a9a18543878120b7e85cba47b8@sha256:f9117b26fe9040ee67d9cfb86326661385dfce26be46002b3a072480a04ed920",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:f9117b26fe9040ee67d9cfb86326661385dfce26be46002b3a072480a04ed920"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:f9117b26fe9040ee67d9cfb86326661385dfce26be46002b3a072480a04ed920"
+          ],
+          "builder_log_sha256": "2091832c7b0a9ab5885ab4315a2fcc0c6ef0540b3beddb540af8be5863d05e47"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    }
+  },
+  "hosted": {
+    "verification": {
+      "passed": true,
+      "native_commits": 13,
+      "successful_browser_writes": 11,
+      "operator_concurrent_and_restore_writes": 2,
+      "repeated_stale_writes": [
+        409,
+        409
+      ],
+      "only_final_change": "A1:A2 Open blue and PENDING green colors",
+      "all_native_values_formulas_file_permissions_and_unrelated_states_unchanged": true,
+      "docs_sheets_native_file_metadata_and_changefeed_identical": true,
+      "provider_specific_links_unchanged": true,
+      "cancellation_and_stale_rejection_preserve_exact_state": true
+    },
+    "native_preflight": {
+      "invalid_flag_stale_revision_and_nonchip_multi_preserve_full_state": true,
+      "passed": true
+    },
+    "negative_oracles": {
+      "cell value": "rejected",
+      "formula": "rejected",
+      "source range": "rejected",
+      "color": "rejected",
+      "rule": "rejected",
+      "permissions": "rejected",
+      "extra revision": "rejected",
+      "foreign history": "rejected",
+      "provider link": "rejected",
+      "unrelated provider": "rejected",
+      "Docs metadata": "rejected",
+      "extra browser write": "rejected"
+    },
+    "browser": {
+      "method": "Chrome CUA",
+      "widths": [
+        1465,
+        390
+      ],
+      "passed": [
+        "Cancel staged color preserves all eight native states",
+        "Named source color save and colored selection",
+        "Keyboard clear, Undo restores Open and dependent formula, Redo restores empty",
+        "Source Closed to Archived refresh preserves staged colors and stale form revision",
+        "Two repeated stale writes return 409 and preserve exact concurrent state",
+        "Close/reopen sidebar recovers current revision",
+        "Restore source, reload preserves named source and colors",
+        "390px 44px color controls and palette cancellation",
+        "No console errors"
+      ],
+      "driver_notes": [
+        "Double-click entered cell text editing; leaving that mode committed an unchanged empty cell.",
+        "Empty locator fill did not clear the intended value; native snapshots exposed Open after the first history cycle. Used actual keyboard Select All/Backspace, then verified clear/Undo/Redo in both A1 and its dependent formula.",
+        "The operator flow therefore has eleven browser commits and two concurrent/restore commits, all recorded. The verifier allows exactly thirteen revisions and only the intended final colors. This is not a candidate scoring trajectory."
+      ],
+      "physical_touch": "not exercised",
+      "screenshots_retained": false
+    },
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifact_sha256": {
+      "browser-trace.json": "e639aaa352a288c2254185756c3540a107dcab2060ff0619f85b747d35a769ab",
+      "image-comparison.json": "bf59c1448934b33c01575dbf140a249cf525cdf6ef81724313dd04cad7547772",
+      "publication-catalog.json": "3629bc0b4ebc7e5e8ce2bf5bc6e018c0eee4cf3559497d78e8720ff91f5e80bc",
+      "checkpoint.json": "6700b77acea3c394728e8939ad7a2ee4df7f8276a45a1130f1ffb20a859a959f",
+      "concurrent.json": "6700b77acea3c394728e8939ad7a2ee4df7f8276a45a1130f1ffb20a859a959f",
+      "cleanup.json": "09ac7407324e5e5f0bc86aed68c2623903a6f434e3809407a9c92ce497e326d9",
+      "runtime-image-evidence.json": "e7878450edc3bf2b8a645b4cd5c6fcce522902de1037a40fd47831bceb19f866",
+      "baseline.json": "4d24a9d5cfb5d335db92971f7d92a94a9420c9bc2b801d542d5ca9aeaf32548b",
+      "restored-concurrent.json": "0bfc5365cfc3eb32d8da83c757a198d90b48befcf56b3bce0209cc711008e466",
+      "native-result.json": "776c4d7deb56f6c004f77bc5e831f68052784636f3eb5dd8d773a1f267e71192",
+      "after-stale-save.json": "6700b77acea3c394728e8939ad7a2ee4df7f8276a45a1130f1ffb20a859a959f",
+      "scenario.json": "1b2f0c1b4d79e7efef8ce127f63a2f6469510eeddeb5c7b5f659048ef1543692",
+      "verification.json": "4cb77275e6ca066dfaae9fedff68ed102efdd805a8206203d317053d4e07ea9a",
+      "operator-api-trace.json": "1708e831ce421e09fb4cbf53e26b041491d30f1e127753b5eaf519b020d0dd00",
+      "after-cancellation.json": "4d24a9d5cfb5d335db92971f7d92a94a9420c9bc2b801d542d5ca9aeaf32548b",
+      "final-state.json": "0bfc5365cfc3eb32d8da83c757a198d90b48befcf56b3bce0209cc711008e466",
+      "negative-oracles.json": "d593fd2d5ef4d80d613cb38071078588a0cdb8d6ef112d2e04d61d05367a0e9c"
+    }
+  }
+}

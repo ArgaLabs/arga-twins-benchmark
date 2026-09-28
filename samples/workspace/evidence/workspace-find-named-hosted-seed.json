@@ -1,0 +1,102 @@
+{
+  "google_sheets": {
+    "spreadsheets": [
+      {
+        "title": "Hosted named range validation",
+        "sheets": [
+          {
+            "properties": {
+              "sheetId": 0,
+              "title": "Plan",
+              "gridProperties": {
+                "rowCount": 1000,
+                "columnCount": 26
+              }
+            },
+            "values": [
+              [
+                1,
+                "=SUM(Budget)"
+              ],
+              [
+                2
+              ],
+              [
+                3
+              ]
+            ]
+          },
+          {
+            "properties": {
+              "sheetId": 1,
+              "title": "Summary",
+              "gridProperties": {
+                "rowCount": 1000,
+                "columnCount": 26
+              }
+            },
+            "values": [
+              [
+                "=SUM(Budget)",
+                "Protected summary",
+                "=\"Budget\""
+              ]
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "addNamedRange": {
+              "namedRange": {
+                "name": "Budget",
+                "range": {
+                  "sheetId": 0,
+                  "startColumnIndex": 0,
+                  "endColumnIndex": 1
+                }
+              }
+            }
+          },
+          {
+            "mergeCells": {
+              "range": {
+                "sheetId": 0,
+                "startRowIndex": 6,
+                "endRowIndex": 8,
+                "startColumnIndex": 10,
+                "endColumnIndex": 12
+              },
+              "mergeType": "MERGE_ALL"
+            }
+          }
+        ]
+      },
+      {
+        "title": "Protected workbook",
+        "sheets": [
+          {
+            "title": "Protected",
+            "values": [
+              [
+                "Do not change",
+                "=1+2"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "google_docs": {
+    "documents": [
+      {
+        "title": "Hosted find and replace validation",
+        "content": "\ud83d\ude42 Budget budget caf\u00e9 cafe A12 A34 protected text\n"
+      },
+      {
+        "title": "Protected document",
+        "content": "Do not change this document.\n"
+      }
+    ]
+  }
+}

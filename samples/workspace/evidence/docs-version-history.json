@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-24",
+  "scope": "Google Docs rich version preview, naming, restore, and copy synchronized with Drive",
+  "references": [
+    "https://support.google.com/docs/answer/190843?hl=en"
+  ],
+  "changes": [
+    "Capture complete document structures including tabs, formatting, tables and inline objects on native Docs edits and Drive updates",
+    "Preview any tab without mutating current editor state; name versions and filter named versions; enforce 40 named versions",
+    "Restore as a new revision while retaining current metadata and prior versions; copy a selected rich version into a new document",
+    "Require edit permission and write scopes even for history reads; stale revisions and invalid mutations rejected",
+    "Persist history only in run-scoped shared state and clear it on reset/permanent file deletion"
+  ],
+  "tests": {
+    "docs_and_workspace_passed": 175,
+    "history_cases": 7,
+    "counts_overlap": true,
+    "ruff": "pass",
+    "log_sha256": "8848f86030d311348913c9bc5ed98152ff231b518c3fe44a81a13012344b5f21"
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Preview version 2 retaining bold release text, table and two document tabs",
+      "Save named version and restore it with in-page confirmation",
+      "Reload at 390px, filter named versions and switch historical tab previews",
+      "Copy version 2 into Mobile approved copy; reload retains content and table",
+      "Document width and scroll width both 390"
+    ],
+    "protected_state": "Complete stored rich document state equals selected version except new revision number; copied state also matches; protected document unchanged",
+    "snapshot_sha256": "f4fc68a3c103b3d3037d580fe18371adb1589a07b6423af26f16e0469c367c38",
+    "screenshots_retained": false,
+    "initial_attempt": "Native confirm dialog stalled while Mac was locked; replaced with accessible in-page confirmation, rerun passed"
+  },
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "docs-history-production-2026-09-24.json"
+  },
+  "limits": [
+    "Historical edits before rich snapshots were introduced cannot reconstruct lost rich content",
+    "Detailed author-colored text differences, grouped version expansion, history deletion, and copy destination/sharing selectors remain open",
+    "No full Docs feature or exhaustive visual/mobile parity claim"
+  ],
+  "review_followup": [
+    "Reject malformed/non-object bodies atomically through shared Drive validation",
+    "Clear stale selected version and disable restore/copy/name while preview loads; ignore stale response errors"
+  ]
+}

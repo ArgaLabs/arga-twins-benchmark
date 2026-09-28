@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-02",
+  "kind": "hosted_candidate_revalidation",
+  "environment": "production",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 12,
+  "official_docs_calls": 0,
+  "model_tool_calls": 13,
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/1c30d29afea6ad9f",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_calendar:event:d22b5544a010ae3e1c8de05077",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:o9ujByvsYcUPZ65-5pBS6dGQMAM/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:reference",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:start_utc",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:end_utc",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "previous_episode": "wks-02-reviewed-contract-candidate-2026-09-24.json",
+  "previous_outcome_preserved": true,
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "deployment_provenance": {
+    "gmail": {
+      "revision": "94ab59654534b22747af9b50a86ea63a13fd52c4",
+      "runtime_workflow": 36058896495,
+      "twins_workflow": 36058896553,
+      "both": "success",
+      "published_images": {
+        "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:402a12a9d260aa489ecc1d41309a211f974fe405613853e785ad0772c9e7fbc4",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:a839ed4f6e0615d53853368df20df3f7a99396e6fb701214b9d48967a6a16914",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:679d060cbac403cfd8bb6380f3af9623958f425837a3c242bb2efd58ca5c2058"
+      },
+      "runtime_revisions_at_deployment": {
+        "arga-api": "arga-api-00629-gd9",
+        "preview-proxy": "preview-proxy-00259-fdd"
+      },
+      "log_sha256s": {
+        "lab-final-gmail-runtime-deploy.log": "fb492dceaa62a5e3f585352b40c6f52eb25a9fd88bc0c75ebd93d01cdde9866c",
+        "lab-final-gmail-twins-deploy.log": "053e8f4c741b08d855c19ee4f8b461cdc6964102016496e2ce465d3d206f06f9"
+      },
+      "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+    },
+    "limits": [
+      "Published image/deploy logs are not direct running-container attestation.",
+      "Sheets #1149 and complete final release verification remain pending."
+    ]
+  },
+  "artifact_sha256s": {
+    "candidate.json": "edac5ccdcefa8348baeeaccbd57e86edff90626a594a494d367111c91d783cad",
+    "baseline-state.json": "0a51e67e690c55a32d0f0aa22027245906e4fd987f8b4fde42b81cddd5dd02ed",
+    "final-state.json": "66c137f518c871e2a18f50e7794dab1723eb36e9a6408e7f27616c99fd21bb2a",
+    "invocation.json": "9a540c0a8a9b4e4c62a6d9e6299ca5e712f329010cf4af34bc37f67db6080222",
+    "provider-trace.json": "c079aa28834753f47e15d2be1cb0d54915a6f05a7857c7b2a584f7c05d5e0b83",
+    "official-docs-trace.json": "1a46c0402c164e450fc729a327a7f36d64cf4e4425fc9fd7063a788623706f19",
+    "browser-trace.json": "3d446402edf582843daf7fb22f697c0a4b6fdd258a014fd9388265fec77006f4",
+    "verifier.json": "bbd6badeb6a97eebf613abea55fe70b5cabbcd6b964a96c577691c7313270fcd",
+    "cleanup.json": "52c935721d6717d9ae6e814d3068b8b5634035b1f41fb9e4c4334100f1512bff"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "83829623d13aa7918d295a8602c69b4afad65ad7d28d08a80a93777a889f5038",
+    "adapter.json": "e0002e5495c3305297c395f2ba4792d284bcb4e99b52e8bb4e104a325b908424"
+  },
+  "limits": [
+    "Single functional trial, not a model comparison.",
+    "API-only trajectory does not establish browser-agent coverage."
+  ]
+}

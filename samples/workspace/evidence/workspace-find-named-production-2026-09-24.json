@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-24",
+  "status": "passed",
+  "kind": "manual_hosted_cua_smoke",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "production": {
+    "pr": 1119,
+    "integrated_pr": 1120,
+    "merge_revision": "2c321a1bb561b61288b4fa8df8d0ad956800e126",
+    "ci": "all applicable checks passed",
+    "deploy_twins": {
+      "run_id": 35942743296,
+      "conclusion": "success"
+    },
+    "deploy_runtime": {
+      "run_id": 35942743215,
+      "conclusion": "success"
+    }
+  },
+  "run_id": "2273af41-0168-487a-98f9-0aabc2491f9f",
+  "scenario_id": "159d1d89-330c-4c0c-b4ad-9a3d065404b2",
+  "fixture": "workspace-find-named-hosted-seed.json",
+  "provisioning_reset_capture_teardown": "Arga CLI lifecycle; exact saved Scenario; provider-native readback",
+  "browser": "Google Chrome through CUA and sample BrowserProxy",
+  "viewports": [
+    "desktop",
+    "390x844"
+  ],
+  "sheets": {
+    "flows": [
+      "Rename API-created whole-column Budget range to AnnualBudget",
+      "Append one row and edit A1001 to 17",
+      "Formula total increases from 6 to 23, including cross-sheet SUM",
+      "Mobile inline picker creates ReviewCells and removal confirmation deletes it",
+      "Reload retains native formula results"
+    ],
+    "open_ended_range": {
+      "sheetId": 0,
+      "startColumnIndex": 0,
+      "endColumnIndex": 1
+    },
+    "final_summary_values": [
+      23,
+      "Protected summary",
+      "Budget"
+    ],
+    "native_state_matches_local_preflight": "exact after excluding generated spreadsheetId/spreadsheetUrl/namedRangeId",
+    "protected_workbook_exactly_unchanged": true
+  },
+  "docs": {
+    "flows": [
+      "Create two additional document tabs and a two-cell table through the UI",
+      "Middle-tab single replacement advances into final tab before wrapping",
+      "Current-tab regex replaces three editable newlines and preserves cell terminators",
+      "Mobile invalid-regex feedback, scoped cell replacement and diacritic counts 2 then 1",
+      "Reopen saved final-tab link and inspect separate cells at 390px"
+    ],
+    "tab_2_text": "Reviewed second tab protected\n",
+    "first_cell_text": "Cell 1 Cell two\n",
+    "second_cell_text": "Protected cell\n",
+    "protected_document_exactly_unchanged": true,
+    "seeded_first_tab_exactly_unchanged": true,
+    "table_shape_preserved": {
+      "rows": 1,
+      "columns": 2
+    },
+    "console_errors": 0
+  },
+  "frontend_fingerprints": {
+    "matched": {
+      "twins/google_docs/find_replace_ui.py:FIND_SCRIPT": "2d0e4a46aa257764ed4964e183a33592aabaa96663940147662204f480829843",
+      "twins/google_sheets/named_ranges_ui.py:NAMED_RANGE_SCRIPT": "e9a4c2011629b0738483c5c90cdeac0b69b23ffc09c132405df035d5a7f14012"
+    },
+    "scope": "Served frontend blocks, not per-container digest attestation."
+  },
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "78d3f614f27bb8f6b38e0b3bf66ba056a3bd06877d799a5b237a7ec572b908fa",
+    "docs-pre-find.json": "9f8c77892726bad0978989902ae8217b0910e585777ea1f3abaab2a9211e5e4c",
+    "native-after.json": "baaaefa32f0bd04f6d8c3ec22cee4cfaf33603dda4de8f8e8f860ca8033bf3df",
+    "final-state.json": "1fa7fc9c2f937d458385f7ffd479c503b5f1cffc45c807f3fe5eddd1334df6ca",
+    "google_docs-browser-trace.json": "30af7da4c276800dc69a78f0874be3a579871295e69e6bdcefdde2755443aaac",
+    "google_sheets-browser-trace.json": "e4c68577964b9d3e1efea36c606668d83e6541e25aa57b6a6256d591ed9c0403",
+    "cleanup.json": "144a0da6a6cc47cf76e5875603f08a0ae314e5639bede1b6b671b44f955a4c5d"
+  },
+  "limits": [
+    "Manual feature validation is not a scored autonomous candidate episode.",
+    "Served frontend code blocks match tested source; this is not per-container image digest attestation.",
+    "Full eight-twin feature, visual and mobile parity remain open."
+  ]
+}

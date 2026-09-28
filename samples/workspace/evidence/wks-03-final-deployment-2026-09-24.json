@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-03",
+  "kind": "hosted_candidate_final_deployment_revalidation",
+  "outcome": "infrastructure_invalid",
+  "candidate_adapter": {
+    "browser_calls": 8,
+    "browser_infrastructure_error": "Browser driver did not answer before its deadline",
+    "completed_browser_calls": 7,
+    "has_browser_tool": true,
+    "interaction_mode": "mixed",
+    "model": "claude-sonnet-5",
+    "status": "incomplete",
+    "task_id": "WKS-03",
+    "timeout_seconds": 2100,
+    "tool_limit": 350
+  },
+  "original_verifier": {
+    "assertions": [
+      {
+        "id": "required_1",
+        "status": "pass"
+      },
+      {
+        "id": "required_2",
+        "status": "pass"
+      },
+      {
+        "id": "required_3",
+        "status": "pass"
+      },
+      {
+        "id": "no_duplicate_gmail_draft",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:gmail:draft:owner@gmail-twin.local/r-2745392677842257996",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:google_docs:document:OJIprgBnuYwwKRDm8GTnmsTIrc8",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:google_sheets:sheet:kT0qLN76MYVt83_oNFE3iwkMntk/0",
+        "status": "pass"
+      },
+      {
+        "id": "result_fact:approval",
+        "status": "fail"
+      },
+      {
+        "id": "result_fact:annual_usd",
+        "status": "fail"
+      },
+      {
+        "id": "result_fact:seats",
+        "status": "fail"
+      },
+      {
+        "id": "result_fact:effective_date",
+        "status": "fail"
+      },
+      {
+        "id": "result_fact:communication_status",
+        "status": "fail"
+      }
+    ],
+    "grading_basis": "observable_business_outcomes",
+    "interaction_modes": [
+      "computer_use",
+      "api",
+      "mixed"
+    ],
+    "outcome": "infrastructure_invalid",
+    "reward": null,
+    "task_id": "WKS-03"
+  },
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "retry": {
+    "status": "completed_fail",
+    "reason": "Browser driver missed request 0008 deadline. Operator failure must not be scored as candidate failure. One retry from identical deterministic seed is required.",
+    "original_attempt_preserved": true,
+    "report": "wks-03-final-deployment-retry1-2026-09-24.json"
+  },
+  "protected_policy_document": "No native mutation reported; all protected-state assertions pass.",
+  "screenshots_retained": false,
+  "artifact_sha256s": {
+    "baseline-state.json": "77250b4fa8a3382f84d2ce060fa1a824c3f68a1f17526b78b3de60d11ef8c998",
+    "final-state.json": "7083d283d9ce9b9118db427a0937a1b97c00f83a91ba6b63471ab914b4edc97a",
+    "invocation.json": "8eb78ff53a4903a040a51cb8a2dcb6e90e078fa9d4550608bb6b240386e33abc",
+    "provider-trace.json": "2c7ef1b488a86a8813e6ffef83509f9d1151ddece5f9e644dfe4a875fcd2f76c",
+    "browser-trace.json": "8ba852ab5ea3aca7989a047c7a814129d9d8adc5f7c47e5def99412ae70a883c",
+    "verifier.json": "96a4ebbe07ec006a0657127466a9596c4f7eae1226f8ca9e2392cdc774660c47",
+    "cleanup.json": "167e08ed0207691e8a134aeb2ef87ca7498143cdc81f92d395b7d0c625e6c682"
+  },
+  "browser_error_sha256": "552d685e1eda88397695996ea6507ff3ce3a24d6111dfbda88984b8c66fc57e6"
+}

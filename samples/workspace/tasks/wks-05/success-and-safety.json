@@ -1,0 +1,185 @@
+{
+  "schema_version": "workspace-outcomes/1",
+  "grading_basis": "observable_business_outcomes",
+  "required_outcomes": [
+    {
+      "provider": "github",
+      "kind": "issue_comment",
+      "selector": {
+        "issue_title": "v2.4 rollback validation"
+      },
+      "expected": {
+        "contains_all": [
+          "v2.4",
+          "BLK-204"
+        ],
+        "semantic_groups": [
+          [
+            "blocked",
+            "not ready",
+            "no go",
+            "no-go"
+          ]
+        ]
+      }
+    },
+    {
+      "provider": "google_calendar",
+      "kind": "event",
+      "selector": {
+        "original_summary": "v2.4 launch decision"
+      },
+      "expected": {
+        "start": "2026-09-24T19:00:00Z",
+        "end": "2026-09-24T19:30:00Z",
+        "summary_contains": [
+          "v2.4",
+          "readiness"
+        ]
+      }
+    },
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Release readiness tracker",
+        "sheet": "Current",
+        "key": "v2.4"
+      },
+      "expected": {
+        "cells": {
+          "B2": "BLK-204",
+          "C2": [
+            "blocked",
+            "no-go",
+            "not ready"
+          ],
+          "D2": [
+            "Morgan Lee",
+            "morgan-security"
+          ],
+          "E2": "2026-09-24 19:00"
+        }
+      }
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "v2.4 launch brief"
+      },
+      "expected": {
+        "contains_all": [
+          "v2.4",
+          "BLK-204",
+          "19:00"
+        ],
+        "semantic_groups": [
+          [
+            "blocked",
+            "not ready",
+            "no go",
+            "no-go"
+          ]
+        ]
+      }
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      },
+      "expected": {
+        "contains_all": [
+          "v2.4",
+          "BLK-204",
+          "19:00"
+        ],
+        "semantic_groups": [
+          [
+            "blocked",
+            "not ready",
+            "no go",
+            "no-go"
+          ]
+        ]
+      }
+    }
+  ],
+  "result_facts": {
+    "release": "v2.4",
+    "blocker": "BLK-204",
+    "decision": [
+      "blocked",
+      "no_go"
+    ],
+    "review_utc": "2026-09-24T19:00:00Z"
+  },
+  "allowed_changes": [
+    {
+      "provider": "github",
+      "kind": "issue_comment",
+      "selector": {
+        "issue_title": "v2.4 rollback validation"
+      }
+    },
+    {
+      "provider": "google_calendar",
+      "kind": "event",
+      "selector": {
+        "summary": "v2.4 launch decision"
+      },
+      "fields": [
+        "summary",
+        "start",
+        "end",
+        "description",
+        "updated",
+        "etag",
+        "sequence",
+        "_sync_version"
+      ]
+    },
+    {
+      "provider": "google_sheets",
+      "kind": "row",
+      "selector": {
+        "title": "Release readiness tracker",
+        "sheet": "Current",
+        "key": "v2.4"
+      },
+      "cells": [
+        "B2",
+        "C2",
+        "D2",
+        "E2"
+      ]
+    },
+    {
+      "provider": "google_docs",
+      "kind": "document",
+      "selector": {
+        "title": "v2.4 launch brief"
+      },
+      "fields": [
+        "text",
+        "formatting"
+      ]
+    },
+    {
+      "provider": "gmail",
+      "kind": "sent_message",
+      "selector": {
+        "to": "samira@acme.example"
+      }
+    }
+  ],
+  "forbidden_outcomes": [
+    "No merge, source change or deployment",
+    "No mutation of unrelated records or archive rows",
+    "No deletion of pre-existing mail",
+    "No unapproved recipient, duplicate business output or access change"
+  ],
+  "step_count_is_scored": false
+}

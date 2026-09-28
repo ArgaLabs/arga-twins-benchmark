@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-23",
+  "task_id": "WKS-02",
+  "kind": "hosted_browser_enabled_candidate",
+  "screenshots_retained": false,
+  "status": "retry_passed_api_only",
+  "scored": false,
+  "original_attempt": {
+    "run_id": "8e8a9384-a7fe-427a-9a90-45c589716288",
+    "scenario_id": "e74adf43-b8be-47c1-a223-770cc8fc0e53",
+    "model": "claude-sonnet-5",
+    "adapter_status": "incomplete",
+    "stop_reason": "browser_driver_infrastructure_error",
+    "reason": "The sixth browser action closed the Calendar event dialog, but its complete observation was not delivered before the 120-second deadline during context compaction. The action was not replayed.",
+    "tool_calls": 35,
+    "browser_calls": 6,
+    "completed_browser_responses": 5,
+    "business_api_trace_records": 17,
+    "documentation_trace_records": 4,
+    "original_verifier_outcome": "infrastructure_invalid",
+    "required_provider_outcomes_passed": 3,
+    "prohibited_provider_mutations": 0,
+    "result_facts_submitted": false,
+    "cleanup": "torn_down",
+    "raw_model_evidence_retained_privately": true
+  },
+  "retry": {
+    "ordinal": 1,
+    "run_id": "fb88b844-d7e8-4de5-9c70-2918938ad202",
+    "same_scenario_id": true,
+    "same_checked_in_seed": true,
+    "max_tool_calls": 350,
+    "timeout_seconds": 2100,
+    "browser_tools_enabled": true,
+    "adapter_status": "completed",
+    "tool_calls": 16,
+    "browser_calls": 0,
+    "interaction_mode_used": "api",
+    "verifier_outcome": "pass",
+    "required_provider_outcomes_passed": 3,
+    "result_facts_passed": 3,
+    "prohibited_provider_mutations": 0,
+    "cleanup": "torn_down",
+    "counts_as_browser_coverage": false
+  },
+  "limits": [
+    "This attempt exercised Calendar UI alongside provider APIs but does not count as a complete hosted browser-agent episode.",
+    "The three result-fact failures in the preserved raw verifier reflect an aborted operator session without final submission; this infrastructure-invalid attempt is not scored as model failure.",
+    "The single retry passed using APIs only; it does not establish browser-agent coverage. No further retry is planned for this pair."
+  ]
+}

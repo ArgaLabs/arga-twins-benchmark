@@ -1,0 +1,79 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_smoke",
+  "environment": "production",
+  "source_revision": "2ff02bd0eddf6e490656ead53b3d45d015466b9d",
+  "tested_head": "cd7766b782dbb57404f46f43fb27e78b08c998e4",
+  "deployment_run": "https://github.com/ArgaLabs/validation-server/actions/runs/35802548861",
+  "deployment_status": "success",
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "deployed_script_matches_tested_source": "pass",
+    "multi_paragraph_font_preserves_text_and_boundaries": "pass",
+    "native_paragraph_alignment": "pass",
+    "table_insertion": "pass",
+    "pending_cell_edit_survives_row_and_column_insertion": "pass",
+    "image_by_url_inserted_and_loaded": "pass",
+    "native_page_break": "pass",
+    "native_api_readback": "pass",
+    "protected_document_unchanged": "pass",
+    "mobile_document_and_insert_menu_bounds": "pass"
+  },
+  "responsive_measurements": {
+    "width": 390,
+    "document_scroll_width": 390,
+    "menu_left": 12,
+    "menu_right": 232,
+    "menu_bottom": 275.5
+  },
+  "cleanup_confirmed": true,
+  "operator_evidence_directory": "runs/hosted/docs-controls-production-cua-smoke",
+  "operator_artifacts_sha256": {
+    "frontend-source-check.json": "d64279dbd1b35825c5d2d446dd26424cd16b933e07cc233b9e4e43e3b4fa8ea9",
+    "manual-native-readback.json": "3a6e9d867b857e91427453d4f1b37e07611cf9f502af0be5bd5894d26f7b73cd",
+    "google_docs-browser-trace.json": "3496084f6f7a5e55d40cda0a14c79cbd1948535991fb843d76fc8724217ed449",
+    "cleanup.json": "c5124ec6989f96c778e2a4b8d359aaee487ea996eefd8dd04afb08b0ffa230d2",
+    "manual-session.json": "5fedb6f65810993bf3c5c732601057882eae0cd33fc86b048b4bf8148c57649d"
+  },
+  "limitations": [
+    "Manual feature verification, not a scored autonomous candidate episode or complete Docs parity.",
+    "Per-container image digest is not exposed; exact hosted script fingerprints and deployment provenance are recorded.",
+    "Image upload/Drive picker, table resize/merge/properties, document tabs, history/suggesting, full menus, admin, AI and complete collaboration remain open.",
+    "No screenshot files retained."
+  ],
+  "ci_check_summary": {
+    "verified_at": "2026-09-24",
+    "revision": "cd7766b782dbb57404f46f43fb27e78b08c998e4",
+    "check_runs_total": 29,
+    "check_run_conclusions": {
+      "success": 21,
+      "skipped": 8
+    },
+    "legacy_statuses": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "url": "https://vercel.com/argalabs/validation-server/GGz9WHZpjwadMX3FWCr5LmM73rjn"
+      }
+    ],
+    "scope": "GitHub CI and deployment statuses, separate from the feature assertions in checks. Skipped jobs are not passed feature checks.",
+    "previous_ambiguous_count": 30
+  },
+  "manual_session_marker": {
+    "artifact_verified_at": "2026-09-24",
+    "kind": "generic_per_run_completion_marker",
+    "content": {
+      "kind": "manual_hosted_cua_smoke",
+      "scored_candidate": false,
+      "status": "captured"
+    },
+    "scope": "This file is written independently for each run with identical generic metadata. It is not a unique session transcript. Native readback, browser traces, source checks and cleanup artifacts provide the run-specific evidence."
+  }
+}

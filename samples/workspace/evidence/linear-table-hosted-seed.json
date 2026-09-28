@@ -1,0 +1,28 @@
+{
+  "linear": {
+    "teams": [
+      {
+        "key": "HST",
+        "name": "Hosted table checks"
+      }
+    ],
+    "issues": [
+      {
+        "team_key": "HST",
+        "title": "Hosted table controls",
+        "description": "## Release checks\n\n| Check | Result |\n| --- | --- |\n| Desktop | Pending |\n| Mobile | Pending |\n\nKeep this paragraph."
+      },
+      {
+        "team_key": "HST",
+        "title": "Protected hosted issue",
+        "description": "This issue must remain unchanged."
+      }
+    ],
+    "comments": [
+      {
+        "issue_identifier": "HST-1",
+        "body": "| Result | Browser |\n| --- | --- |\n| Seeded | Keep this comment |"
+      }
+    ]
+  }
+}

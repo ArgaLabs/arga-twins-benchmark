@@ -1,0 +1,109 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-02",
+  "kind": "hosted_candidate_final_deployment_revalidation",
+  "environment": "production",
+  "purpose": "Revalidate all four Sheets-dependent tasks after #1149 production deployment with unchanged deterministic task seeds and candidate instructions. Earlier attempts remain preserved.",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 16,
+  "official_docs_calls": 1,
+  "model_tool_calls": 18,
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/1c30d29afea6ad9f",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_calendar:event:d22b5544a010ae3e1c8de05077",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:75kcbdUm5PwjACEczztoc6e7BJk/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:reference",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:start_utc",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:end_utc",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "previous_outcomes_preserved": true,
+  "previous_trial": "wks-02-revalidation-2026-09-24.json",
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "sample_code_revision": "ccc466312980e8895447940b4558a2cdad0b2bec",
+  "deployment_provenance": {
+    "revision": "64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f",
+    "runtime_workflow": 36061759454,
+    "twins_workflow": 36061759415,
+    "both": "success",
+    "published_images": {
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:d4b1742e8032e175bf5d0ad62c1d683fedca1602c4d93eee16cdf06c52942840",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:f30efb1fedba482170b9f46587acbdcbb5f96da399c763ace5e4172ec5808cec",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:456fa37f03982cbc8d352fc34765db7f45203717cc9f27d97a93d23484d33a22"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00260-f47",
+      "arga-api": "arga-api-00630-4cx"
+    },
+    "log_sha256s": {
+      "lab-final-marker-twins-deploy.log": "e871c715c96528f8a2822600e972f696df4286c3d1fb8c6727e97a6003dc4723",
+      "lab-final-marker-runtime-deploy.log": "9c930d56a1648ebe2e55d2bd020d956be5647d047a72738183d1b5370bc76a4c"
+    },
+    "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+  },
+  "seed_config_sha256": "b1c2396d4cdd63ae0ab9a58691ae8a16bce7f7f1ae661b1b1f0a1f437688a500",
+  "artifact_sha256s": {
+    "candidate.json": "461ceb2e6036a9f1382b0c273c85ef9f68a1ce4234a73976c8a549b0a780135a",
+    "baseline-state.json": "714463e863a7c2a2d1d5483efbf21832d64d29b1a09d5e71120b772e678344bd",
+    "final-state.json": "261b3ba572759999f27b45c2cc46bae8e94f49ee7051b6adca7db19ea589595d",
+    "invocation.json": "b7638cb83d7f47eb6bbf932c160d28103118538b73dfaaceb9f945f55b002134",
+    "provider-trace.json": "3376a1836493785921485a8a71a0a6510263aca9e54e7f2eec9159595e154e43",
+    "official-docs-trace.json": "b48bb9edcf28328ea5e1f079fe22345a4a88a4f04126f1f9733bbaa1cb5a434e",
+    "browser-trace.json": "3d446402edf582843daf7fb22f697c0a4b6fdd258a014fd9388265fec77006f4",
+    "verifier.json": "c404f491f217d78d14d35f61e7cd1cbc0aa0c551f51467d951e7f819cb097708",
+    "cleanup.json": "b5e050fec886cce94220450c7c3302cf344a3e11398c92562d20eb129c6dd73b"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "1eea83b899c9c984a7bf622c58028db42544ded8dd81ed7829bc11df1ac07d7b",
+    "adapter.json": "e0002e5495c3305297c395f2ba4792d284bcb4e99b52e8bb4e104a325b908424"
+  },
+  "limits": [
+    "Functional trial, not a model comparison or exhaustive frontend audit.",
+    "Actual interaction mode is reported; availability of browser tools does not establish browser-agent coverage.",
+    "Published images and deployment logs do not attest every current running container."
+  ]
+}

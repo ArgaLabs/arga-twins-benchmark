@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_and_api_conformance",
+  "scored_candidate": false,
+  "environment": "production",
+  "provider": "gmail",
+  "status": "pass",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1135",
+  "tested_head": "8c0e37f6d11a5d86e7c5ad86dd1caf26b47d1ef4",
+  "deployment": {
+    "revision": "ee10e4f7986d060dfd70086867f3c04205b0b061",
+    "twins_run": 35974916026,
+    "runtime_run": 35974916252,
+    "conclusion": "success"
+  },
+  "browser": "Google Chrome via CUA",
+  "viewports": [
+    "default desktop",
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "source_eml_attachment_visible": "pass",
+    "forward_preserves_eml_and_inline_image": "pass",
+    "save_and_reload_draft_preserves_attachment": "pass",
+    "exact_rfc822_bytes": "pass",
+    "exact_inline_image_bytes": "pass",
+    "original_messages_and_raw_mime_unchanged": "pass",
+    "no_sent_message_created": "pass",
+    "exactly_one_unsent_draft": "pass",
+    "unrelated_settings_labels_and_state_unchanged": "pass",
+    "desktop_mobile_transient_visual_inspection": "pass"
+  },
+  "rfc822_attachment_bytes": 214,
+  "rfc822_attachment_sha256": "5380e46c9016953fc02f518af66288e46b2a68908fc07c84bf58ae0c15a15435",
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "frontend_fingerprint": {
+    "matched": {
+      "twins/gmail/message_actions_ui.py:SCRIPT": "f0efaf932332d815dfa8562def6b6e2d46810241169d874b88970a9943cfa29d"
+    },
+    "scope": "Complete served UI code block; backend wire behavior is checked through exact native attachment bytes, not a container digest attestation."
+  },
+  "operator_evidence_directory": "lab-gmail-attached-message-hosted-2026-09-24-r2",
+  "artifacts_sha256": {
+    "browser-trace.json": "18a1c76907151914d44ba91d5dc3bb0a88ad471204d1d13cad5af5b85f620be5",
+    "native-after.json": "603c216d26c161ffb687a82cc1ed305f8227c7388418a02d42a96ef42191d11f",
+    "workspaces.json": "17f48b264a31515b9e75a224623cd318cfbb4cb46890821f87cca6532dcc7d7a",
+    "cleanup.json": "1589490e3c19563d3f4ce4e0170bc24537bf649c1380ff9cdfe3c5efdaf35a3a",
+    "native-before.json": "86292c529b0ea56550cd25d8ad9bbc75484e23c12f8f87b6670579386ce25f33",
+    "scenario.json": "a6db58a58f649ed7f4e93fe232f5f917754ce3d2d563298740cc36acb64715e2",
+    "baseline-state.json": "87d9fa529138bf01245bb344fc5d839dafad400545e7acb4a5612096b6394087",
+    "operator-api-trace.json": "2930ca9b1cbcd444d83045b8c87b9e2dfd36d1ddd43073527ddb8691467467d4",
+    "final-state.json": "7bf5f5a4373079ebca4689e024581a5eb1d74d59f4cf7204c533c0b0e718ea6d",
+    "frontend-code-fingerprints.json": "802e5fbdea64c76dc85eabb16c4429d327baa89dc0cdfcc4214eb5b4001d8674"
+  },
+  "harness_correction": {
+    "original_directory": "lab-gmail-attached-message-hosted-2026-09-24-r1",
+    "error": "TrustedStateCapturer role/provider mapping was reversed; corrected before browser work",
+    "same_exact_scenario": true,
+    "original_cleanup_confirmed": true
+  },
+  "screenshots_retained": false,
+  "limits": [
+    "Manual attachment workflow; not an autonomous candidate episode or full Gmail parity",
+    "UI script identity and backend byte behavior verified; no container digest attestation"
+  ]
+}

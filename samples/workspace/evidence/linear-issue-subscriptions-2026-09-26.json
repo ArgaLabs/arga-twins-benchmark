@@ -1,0 +1,354 @@
+{
+  "schema": "arga.lab.frontend-evidence/1",
+  "observed_on": "2026-09-26",
+  "providers": [
+    "linear"
+  ],
+  "source_pr": "https://github.com/ArgaLabs/validation-server/pull/1174",
+  "source_head": "3b2675550632e9ff280117d28dbc79767cfce188",
+  "depends_on": "https://github.com/ArgaLabs/validation-server/pull/1172",
+  "status": "ci_production_and_fresh_hosted_native_desktop_390px_pass_with_limits",
+  "release_allowed": false,
+  "scope": [
+    "Native issueSubscribe/issueUnsubscribe and validated subscriberIds",
+    "Activity self toggle and searchable member picker with error/focus recovery",
+    "Documented shortcuts and browser-actor Subscribed list",
+    "Incremental membership and preserved unsaved draft/revision protection",
+    "Atomic description input validation",
+    "Notification/subscription introspection, interfaces, enums, argument/input/payload types"
+  ],
+  "references": [
+    "https://linear.app/docs/notifications",
+    "https://github.com/linear/linear/blob/689ccc1e905d97df14272621b96a8614c5d3c2cb/packages/sdk/src/schema.graphql"
+  ],
+  "reference_mode": "Existing authenticated issue viewed read-only; picker opened and dismissed without changing any real subscription",
+  "tests": {
+    "linear_passed": 322,
+    "warnings": 3,
+    "make_fix": "pass",
+    "javascript_syntax": "pass",
+    "detector_findings": 0,
+    "review_before_failed": 17,
+    "review_focused_passed": 23,
+    "combined_linear_workspace_passed": 1606
+  },
+  "review": {
+    "initial": "fix: native payload typename differed from official IssuePayload",
+    "final": "single listed IssuePayload fix independently confirmed for both operations",
+    "scope": "Source/native only; no independent visual approval",
+    "documentation": "README updated by scoped documenter; incumbent design files preserved",
+    "github_review_fixes": [
+      "Malformed descriptions reject before issue/subscriber/counter/notification writes",
+      "Implemented notification/subscription metadata and native typenames now agree with the pinned provider schema"
+    ]
+  },
+  "local_desktop": {
+    "status": "pass",
+    "checks": [
+      "Unsaved title remains through subscription changes",
+      "Injected failure leaves original checkbox state and history intact",
+      "Space retry succeeds with focus on selected checkbox",
+      "Escape restores picker opener",
+      "Cmd+Shift+S unsubscribe and Shift+S subscribe"
+    ]
+  },
+  "local_mobile": {
+    "status": "pass",
+    "viewport": "390x844",
+    "checks": [
+      "Picker fits",
+      "Search and empty state",
+      "Checkbox unsubscribe",
+      "Reload preserves membership and discards only the intentionally unsaved draft",
+      "Subscribed list navigation"
+    ],
+    "physical_touch_tested": false
+  },
+  "native_comparison": {
+    "status": "pass",
+    "native_state": "Only the selected issue subscriber list changed; all notification history, issue draft contents and other business resources preserved. Confirmation returns the subscriber list to baseline.",
+    "allowed_bookkeeping": [
+      "sync_id",
+      "consumed injected subscription failure"
+    ],
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "viewport_restored": true,
+    "server_stopped": true
+  },
+  "source_files": {
+    "twins/linear/frontend.py": "942613cf970b9f9f7849b98a17103e30e5dd5b24d50b11538850b4977e1153c3",
+    "twins/linear/graphql/resolvers.py": "d2dd358aca3204ed0205104e93e78a83b3a49f0558411c097e4ba369fe6a55b9",
+    "twins/linear/subscription_ui.py": "8e51e84767f2eec17936e45fae3609899fa54ab1ecdca339baba6b5f035696f8",
+    "twins/linear/README.md": "f378a1821eb64eeaee58547246f37c770086bc83dd1a77dfcdf5d479ebda877a",
+    "twins/tests/test_linear_issue_subscriptions.py": "ce56c7eeca465a15641ec96d8341d214da552fe058c54e615f218b3f004dc90a",
+    "twins/linear/graphql/notification_schema.py": "f2a50b37440908e88ee3af6cc71eb75bc23310a8f0506097b54ca94833233b3a",
+    "twins/linear/graphql/serializers.py": "b99219d514edbabc6c40b06e99b2c689486e4b2d37a303aa27e701974cfcf814",
+    "twins/linear/runtime.py": "42a62a931295503d6e779656acd722db4f9ef54981af29b39f581d7e72b31429",
+    "twins/linear/notifications.py": "9cf47aa504070556d84d851277c32b5394091f7516bea11fcc88179f4d4dfe10",
+    "twins/tests/test_linear_notification_contract.py": "ca53e151eca5a60010fe99a67543fbb095a4b6756a6a5edbeb319987d8be8a22"
+  },
+  "artifacts": {
+    "lab-linear-subscriptions-all-tests-final.log": {
+      "sha256": "571865662c01927ab3e1e5bc6c866663e9d66ca7d53d1de98754f5827c69ea4b",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-makefix-final.log": {
+      "sha256": "346894845c4d651a031eb3e6b3a6be470617fde4b691784241642bb3e130b1a6",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-detector.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/baseline.json": {
+      "sha256": "67e07eb82eb64a46d7f75ebe1a902bdda115925227d2638da00c59a67bc20996",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/final.json": {
+      "sha256": "1ca780becaf25ae5a64f3d00540e23583a682c8b7d868871b64bcadb1725f417",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser/verification-summary.json": {
+      "sha256": "f49ee27fc92945b91e6e247470ddee0c12a026cc7257f7522a75ccd4b3d9a5f0",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/baseline.json": {
+      "sha256": "67e07eb82eb64a46d7f75ebe1a902bdda115925227d2638da00c59a67bc20996",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/final.json": {
+      "sha256": "d43b32265cb0b2cb96bc8efa40c97460a65aba6402eacdfd0638aa80e6ae359d",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-browser-confirmation/verification-summary.json": {
+      "sha256": "f49ee27fc92945b91e6e247470ddee0c12a026cc7257f7522a75ccd4b3d9a5f0",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-notification-contract-valid-before.log": {
+      "sha256": "ca4e3b91c121f2469fd61aaae6bd24d9273aff5079a36247f97bc557840e6666",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-notification-contract-final.log": {
+      "sha256": "cbb37630aea154af18027e3438827cae55f1f2cd89d27b0243a6715903bf8526",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-linear-subscriptions-review-regressions.log": {
+      "sha256": "0084d7cad53336ca8bb66be65878e27770ae4f691610ff57576c0488b1b60fe9",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-fixes-combined-regressions.log": {
+      "sha256": "e7298acb6803310f5c8815d8e7169e8c15b95635cdfc196245b7fe952682c5f2",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-fixes-makefix.log": {
+      "sha256": "1ef252272309f9b78060c5bee7abc8d6e03ba0bbfd656437fa0c687c12a8894e",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-final-linear-subscriptions-d32c2830/gui-checks.json": {
+      "sha256": "0547b70c45788c3f2fd0e9d9327587136aaca7389d4f27f37e0d9da2664fe735",
+      "retention": "Local operator artifact; not bundled"
+    },
+    "lab-collaboration-ci-3b267555.log": {
+      "sha256": "56f477e21727c258e59ee74634d6e67db97f6e5be7543f2d652126fe05991260",
+      "retention": "Local operator artifact; not bundled"
+    }
+  },
+  "limits": [
+    "Production and fresh hosted checks pass within the recorded scope; complete provider parity remains open",
+    "Assignee-specific picker policy, complete notification settings, project notifications, private-team/workspace permissions, external delivery, realtime and AI remain open",
+    "Selected desktop/390px checks do not establish exhaustive visual or physical-touch parity",
+    "Full eight-provider audit and sample release including WKS-03 remain open"
+  ],
+  "screenshots_retained": false,
+  "prior_source_head": "160857fca36a90aed896eb73b350542022009339",
+  "head_update": "Exact-head CI passed; merged and deployed; fresh hosted native/browser/image checks recorded.",
+  "merge_commit": "d32c283000b42a01ef6278f80209c1bc9afffb21",
+  "ci": {
+    "head": "3b2675550632e9ff280117d28dbc79767cfce188",
+    "status": "pass",
+    "twins_passed": 6143,
+    "root_passed": 2134
+  },
+  "deployment": {
+    "revision": "d32c283000b42a01ef6278f80209c1bc9afffb21",
+    "runtime_workflow": 36220448850,
+    "twins_workflow": 36220448814,
+    "both": "success",
+    "published_images": {
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:05fc1bae73e701b5cc7d2b05e8faf0027df6689de7fcd7f7fd84fa56e9c7c72d",
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:50e7a404d94c20bca0d091d84000528a7ae28fb57cedbf72c9bdded263cbc5ca",
+      "twin-linear": "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:36296ce1173480b39b8046bf6b68dc596f44d9584bb93ea3f1d08dd3f2c230cd",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:438c65e8c35e268201fbe70292a717c4fbef54371b50635aa6d3c6d5a5d62917",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:4165419e5bf2f310ed19fb73bbd115f8942ea8baeca5054204cb25705d9b7453",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:60e014df061ee32d9d13aeca5d2f87fc8d5ce230c83f16fa8fca5821a9b5c717",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:d32c283000b42a01ef6278f80209c1bc9afffb21@sha256:88132b1775ce38d65dc67cb5fb799752587ca203d42dfc1a098fcb0a164cf31f"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00282-zvm",
+      "arga-api": "arga-api-00652-m7n"
+    },
+    "log_sha256s": {
+      "lab-final-collaboration-d32c2830-twins-deploy.log": "90b77c38cc7a13c05c8c182d34e0f5096ce21d2d96c68eac5b0d4287d3a6a6b9",
+      "lab-final-collaboration-d32c2830-runtime-deploy.log": "a603b5508978047375b8ff45e2c016a9f9ef74f55ad9a85e7a2333634c231f25"
+    },
+    "cloud_run_observations": [
+      {
+        "latest_ready_revision": "preview-proxy-00282-zvm",
+        "observed_at": "2026-09-26T05:20:26.160445+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:d32c283000b42a01ef6278f80209c1bc9afffb21",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00282-zvm"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00282-zvm",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:60e014df061ee32d9d13aeca5d2f87fc8d5ce230c83f16fa8fca5821a9b5c717",
+          "sha256:7fd4fbb99d2ae326b0e3682e0b2b5df8410e1a0726ed96844073a4e349497317"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00652-m7n",
+        "observed_at": "2026-09-26T05:25:23.858084+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:d32c283000b42a01ef6278f80209c1bc9afffb21",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:880daad496ee47fd058b4fe198f298797b050a06eccb03f032b13763adea8d4c",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:880daad496ee47fd058b4fe198f298797b050a06eccb03f032b13763adea8d4c"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00652-m7n"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00652-m7n",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:880daad496ee47fd058b4fe198f298797b050a06eccb03f032b13763adea8d4c",
+          "sha256:88132b1775ce38d65dc67cb5fb799752587ca203d42dfc1a098fcb0a164cf31f"
+        ],
+        "published_manifest_match": true
+      }
+    ]
+  },
+  "hosted": {
+    "status": "pass",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "checks": [
+      "Native issueSubscribe/issueUnsubscribe, reader rejection and membership validation pass",
+      "Injected subscription failure preserves every native field except consuming its one-shot rule",
+      "Unsaved issue title retained on failure, keyboard retry and subscription changes",
+      "Space retries with checkbox focus; Escape restores opener",
+      "Cmd+Shift+S and Shift+S change self subscription",
+      "Mobile member search and empty state, keyboard/checkbox change, dismissal and reload",
+      "Subscribed list reflects current native memberships",
+      "Final business state exactly restored; only four expected sync increments, consumed failure and owner browser sessions differ"
+    ],
+    "native_checks": {
+      "checks": [
+        "recipient lists isolated; foreign read/archive rejected unchanged",
+        "invalid dates and read-only mutation preserve every native resource",
+        "read-only Inbox exposes no writes and rejects open-as-read",
+        "native read/unread and snooze visibility obey exact clock boundary",
+        "past custom snooze rejects without native mutation",
+        "archive/unarchive retains issue and foreign notification",
+        "read/write scope creates native and browser comments as teammate; owner receives notification without self-delivery",
+        "unrelated issue preserved throughout native conformance",
+        "issue subscriptions use actor-scoped native IssuePayload, reject reader/invalid members, and browser writes preserve comment/notification history",
+        "above 2,000 open notifications, oldest is archived and remains queryable; foreign recipient unchanged"
+      ],
+      "gui_tested": false,
+      "status": "pass"
+    },
+    "images": {
+      "status": "complete",
+      "observed_at": "2026-09-26T05:26:38.618128+00:00",
+      "publication_sha256": "9aa0dc751ee129fc307e7cd6868a23ba1a83459b1b72ef5e47a8243ff9c0e548",
+      "containers": {
+        "linear": {
+          "published_revision": "d32c283000b42a01ef6278f80209c1bc9afffb21",
+          "image_id": "sha256:36296ce1173480b39b8046bf6b68dc596f44d9584bb93ea3f1d08dd3f2c230cd",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:36296ce1173480b39b8046bf6b68dc596f44d9584bb93ea3f1d08dd3f2c230cd",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:9522c5cd02e7e50d830820d151d3041e4b15d57310cd39040508df97f90a6274"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:36296ce1173480b39b8046bf6b68dc596f44d9584bb93ea3f1d08dd3f2c230cd"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-a01c1cf7e94145948999852768effe8e",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-a01c1cf7e94145948999852768effe8e@sha256:ee7b4737ded14fb09f44905038fc2a3fddf82e611e020cbcc1afe177dc44cd0a",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:ee7b4737ded14fb09f44905038fc2a3fddf82e611e020cbcc1afe177dc44cd0a"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:ee7b4737ded14fb09f44905038fc2a3fddf82e611e020cbcc1afe177dc44cd0a"
+          ],
+          "builder_log_sha256": "91b90848324a9ad7e9e387dbc2e645d80e77e14967a32c3abad10c71dbb61dce"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "teardown": "torn_down",
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "limits": [
+      "No exhaustive mobile or physical-touch parity",
+      "Existing Inbox popover AX naming and dark-theme contrast findings remain open"
+    ],
+    "artifact_sha256": {
+      "gui-failure-baseline-state.json": "6569a1efd350f3e8f2568328819ee96ca57d99e0b9279936e1ae5e7f32760469",
+      "gui-after-failure-state.json": "185f0205b232bc49312a2c39373c43854c50b4faa81388a6a46e5c3fb77551e3",
+      "gui-final-state.json": "71edefd1ef52e0589c33d848b6ed710576aca885a7975f15f56205a541b25f79",
+      "native-checks.json": "f4c90f0407884b93a363971184a742ca082611ffbc6720b858e970e878a5bde5",
+      "image-comparison.json": "848a604d3493631c9a06e7270d8808e9b91c7ecd0855278ea632173f239acff3",
+      "cleanup.json": "8d4bfe83e60a7cc4aa7029865a04227887595b21724882fddd2629d7577b0fc2"
+    }
+  }
+}

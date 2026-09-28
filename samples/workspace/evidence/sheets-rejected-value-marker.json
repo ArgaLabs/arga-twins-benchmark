@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-24",
+  "status": "production_deployed_hosted_desktop_and_390px_pass",
+  "trigger": "Rejecting an invalid edit restored the committed value but incorrectly marked that restored value as invalid.",
+  "change": "Accepted proposals update their marker; rejecting a proposal revalidates the last committed value and restores its value, formula field and validity marker.",
+  "validation": {
+    "focused_tests": 84,
+    "all_sheets_tests": 419,
+    "make_fix": "pass",
+    "desktop_and_390px": "Chrome CUA: H3=35 with =H3>C3 rejects 25; value remains 35 and validation-invalid is false immediately after dismissal.",
+    "queued_writes": "Executable JS regressions cover both successful and failed preceding PUTs, restoring the latest committed value and its recomputed marker.",
+    "already_invalid": "Restored invalid values are revalidated independently of a cleared or stale DOM marker.",
+    "native_snapshot_unchanged": true,
+    "focused_review_tests": 57,
+    "pyright": "pass"
+  },
+  "evidence_sha256s": {
+    "lab-final-marker-tests.log": "99a1531dda48011f27e600d8f8909d247d6af0a4f4f3c8f0b8d5b9e38882a9cb",
+    "lab-final-marker-all-sheets-tests.log": "19841404bdd003a4f6ec2e9006091f2099b894fd4e7c789d36687c3214576ad3",
+    "lab-final-marker-browser-result.json": "40dca2bb005a462ee8e6e1e3af4b6e7d210bb2702213fbb8b5d6c114fd087052",
+    "lab-final-marker-review-tests.log": "cb7b80a3d906e8ec7cc539fc87a973827a7c9f7e926f60020fd8dc5d6105c271",
+    "lab-final-marker-review-all-sheets-complete-env.log": "e4750a9138e8639890a291c424aa5816db2542861a47de86418725c22b569d68"
+  },
+  "screenshots_retained": false,
+  "design_scan": "One pre-existing warning for the validation hint border; unchanged and outside the marker logic fix.",
+  "limits": [
+    "Full CI, review and both production workflows passed. Hosted queued desktop and fresh 390px replays pass; actual touch-device and exhaustive parity remain pending.",
+    "Not a complete frontend parity audit."
+  ],
+  "review_followup": "A failed preceding PUT may have cleared a marker without changing native state. Recompute validity for savedEnteredValue before displaying the rejected edit restoration.",
+  "environment_retry": {
+    "initial": "418 passed; one export test failed because the root environment lacked python-docx.",
+    "resolution": "Reran with the declared twins google-workspace and dev dependency groups: all 419 passed.",
+    "original_log_sha256": "513a4103cbef26c56e401451e108df040774548b137249eff039564ca4c6d152"
+  },
+  "merge_revision": "64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f",
+  "ci": {
+    "head": "ef60f267cee4f3d522b5fa8dee662e1aa65168d7",
+    "lint_workflow": 36059142323,
+    "all_required_checks": "pass",
+    "root_tests": {
+      "passed": 2106,
+      "skipped": 2
+    },
+    "twins_tests": {
+      "passed": 5226,
+      "skipped": 145,
+      "deselected": 3
+    },
+    "log_sha256": "f1b8e6bcb57950ec89ddc620ef8b732d3f215b75101e429502637e6e83c94bf9"
+  },
+  "deployment": {
+    "revision": "64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f",
+    "runtime_workflow": 36061759454,
+    "twins_workflow": 36061759415,
+    "both": "success",
+    "published_images": {
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:d4b1742e8032e175bf5d0ad62c1d683fedca1602c4d93eee16cdf06c52942840",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:f30efb1fedba482170b9f46587acbdcbb5f96da399c763ace5e4172ec5808cec",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:64c8c14bc9bebb18e5a03122365b57bdbc5bfd8f@sha256:456fa37f03982cbc8d352fc34765db7f45203717cc9f27d97a93d23484d33a22"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00260-f47",
+      "arga-api": "arga-api-00630-4cx"
+    },
+    "log_sha256s": {
+      "lab-final-marker-twins-deploy.log": "e871c715c96528f8a2822600e972f696df4286c3d1fb8c6727e97a6003dc4723",
+      "lab-final-marker-runtime-deploy.log": "9c930d56a1648ebe2e55d2bd020d956be5647d047a72738183d1b5370bc76a4c"
+    },
+    "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+  },
+  "hosted_evidence": "sheets-queued-validation-production-2026-09-24.json"
+}

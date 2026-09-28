@@ -1,0 +1,158 @@
+{
+  "date": "2026-09-24",
+  "kind": "live_provider_cua_reference",
+  "provider": "Google Docs",
+  "screenshots_retained": false,
+  "browser": "Google Chrome via CUA",
+  "fixture": "Uniquely prefixed disposable 2-by-3 table with A\u2013F cells. Created by this test; existing documents untouched.",
+  "before": {
+    "columns": [
+      {
+        "widthType": "EVENLY_DISTRIBUTED"
+      },
+      {
+        "widthType": "EVENLY_DISTRIBUTED"
+      },
+      {
+        "widthType": "EVENLY_DISTRIBUTED"
+      }
+    ],
+    "rows": [
+      {
+        "minRowHeight": {
+          "unit": "PT"
+        }
+      },
+      {
+        "minRowHeight": {
+          "unit": "PT"
+        }
+      }
+    ]
+  },
+  "after_interior_column_drag": {
+    "columns": [
+      {
+        "width": {
+          "magnitude": 192,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      },
+      {
+        "width": {
+          "magnitude": 120,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      },
+      {
+        "width": {
+          "magnitude": 156,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      }
+    ],
+    "rows": [
+      {
+        "minRowHeight": {
+          "unit": "PT"
+        }
+      },
+      {
+        "minRowHeight": {
+          "unit": "PT"
+        }
+      }
+    ]
+  },
+  "after_row_and_outer_column_drags": {
+    "columns": [
+      {
+        "width": {
+          "magnitude": 192,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      },
+      {
+        "width": {
+          "magnitude": 120,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      },
+      {
+        "width": {
+          "magnitude": 174,
+          "unit": "PT"
+        },
+        "widthType": "FIXED_WIDTH"
+      }
+    ],
+    "rows": [
+      {
+        "minRowHeight": {
+          "magnitude": 47.14892578125,
+          "unit": "PT"
+        }
+      },
+      {
+        "minRowHeight": {
+          "unit": "PT"
+        }
+      }
+    ]
+  },
+  "observed_actions": [
+    {
+      "action": "interior_column_border_drag",
+      "css_pixels": 48,
+      "result_widths_pt": [
+        192,
+        120,
+        156
+      ]
+    },
+    {
+      "action": "first_row_bottom_border_drag",
+      "css_pixels": 32,
+      "result_min_row_height_pt": 47.14892578125
+    },
+    {
+      "action": "outer_right_column_border_drag",
+      "css_pixels": 24,
+      "result_widths_pt": [
+        192,
+        120,
+        174
+      ]
+    }
+  ],
+  "verified": [
+    "Interior column drag adjusts adjacent columns inversely, preserving their combined width.",
+    "Outer column drag changes total table width.",
+    "Row drag writes native minRowHeight.",
+    "All test-created documents confirmed trashed."
+  ],
+  "cleanup": {
+    "created_documents": 1,
+    "trashed_documents": 1,
+    "outbound_notifications": 0,
+    "existing_documents_mutated": 0
+  },
+  "limits": [
+    "Column dimension deltas agree with the twin, but default row geometry differs: the observed provider rows were about 32px and the twin rows about 36.33px.",
+    "Native provider row minimum height was 47.14892578125pt after a 32px drag; exact pixel-to-native row geometry parity remains open.",
+    "This is a desktop pointer comparison, not physical touch, all-table-options or exhaustive pixel certification."
+  ],
+  "capture_sha256": {
+    "docs-resize-reference.json": "0bbee5d430d2aa83a899b987d74e1f2af1bac05442c78350bfe0b4ff8c04d85d",
+    "docs-resize-reference-interior.json": "77073bd2096f0b1c64027b8d649a55d99e8f2d6e25c83d784157d161c16bfebf"
+  },
+  "references": [
+    "https://support.google.com/docs/answer/1696711",
+    "https://developers.google.com/workspace/docs/api/how-tos/tables"
+  ]
+}

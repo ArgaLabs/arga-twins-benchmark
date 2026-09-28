@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-24",
+  "scope": "Frontend navigation for URLs emitted by native Linear resources",
+  "provider_reference": [
+    "https://linear.app/docs/documents",
+    "https://linear.app/docs/editor"
+  ],
+  "trigger": "Hosted integration found provider-style project paths returned 404 while local query links worked",
+  "implemented": [
+    "Workspace-scoped project, document, issue, profile and comment paths",
+    "Stable project/document suffixes survive title changes and disambiguate duplicate names",
+    "Unique legacy project paths retained; ambiguous names and other workspace keys return 404",
+    "Comment URLs redirect to the exact activity entry; native document pages use the existing revision-safe editor"
+  ],
+  "tests": {
+    "all_linear_passed": 114,
+    "focused_passed": 17,
+    "counts_overlap": true,
+    "ruff": "pass",
+    "log_sha256": "ea96ddb86c41f27a4476ceffb0ff93639c1b848b471a38691d116f013079f146",
+    "archive_review_followup": {
+      "all_linear_passed": 116,
+      "archived_native_project_and_document_urls": "pass",
+      "archives_not_mutated_by_read": "pass",
+      "ruff": "pass",
+      "log_sha256": "5f8972b6bd734d65cbc805a8d091169e408c9ae0481d493b30adf0a0ce45434b"
+    }
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "checks": [
+      "Two same-name native project URLs open distinct issue sets",
+      "Native document URL supports mobile editing and save/reopen",
+      "Native comment URL redirects to its issue and exact activity anchor"
+    ],
+    "native_document_content": "Ship the Linear twin Native link edit.",
+    "other_resources": "unchanged",
+    "snapshot_sha256": "80f73e5cb3da11e36c5a04af3f7c4fc40f1b33072d07607a4e9e33a7fbdce69a",
+    "screenshots_retained": false
+  },
+  "ci": "passed",
+  "deployment": "both production workflows passed on retry",
+  "hosted_validation": "passed; see linear-native-links-production-2026-09-24.json",
+  "limits": [
+    "Project path opens existing issue list; full project overview remains separate",
+    "Does not establish full Linear visual/feature/mobile parity"
+  ]
+}

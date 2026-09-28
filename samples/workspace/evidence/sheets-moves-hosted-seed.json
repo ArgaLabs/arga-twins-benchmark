@@ -1,0 +1,163 @@
+{
+  "google_sheets": {
+    "spreadsheets": [
+      {
+        "title": "Hosted dimension move validation",
+        "sheets": [
+          {
+            "properties": {
+              "sheetId": 0,
+              "title": "Plan",
+              "gridProperties": {
+                "rowCount": 12,
+                "columnCount": 12
+              }
+            },
+            "values": [
+              [
+                0,
+                "=A2",
+                "=SUM(A1:A2)",
+                "=SUM(A1:A3)",
+                "=SUM(A2:A3)",
+                "=SUM(A2:A4)",
+                "=SUM(A3:A4)",
+                "=SUM(A3:A5)",
+                "=SUM(A1:A4)",
+                "=SUM(A1:A5)"
+              ],
+              [
+                1,
+                "=SUM(A2:A3)"
+              ],
+              [
+                2,
+                "=SUM(A1:A3)"
+              ],
+              [
+                3,
+                "=SUM(A2:A4)"
+              ],
+              [
+                4,
+                "=\"A2\""
+              ]
+            ]
+          },
+          {
+            "properties": {
+              "sheetId": 1,
+              "title": "Summary",
+              "gridProperties": {
+                "rowCount": 12,
+                "columnCount": 12
+              }
+            },
+            "values": [
+              [
+                "='Plan'!$A$2",
+                "=SUM(Plan!A2:A4)",
+                "Protected summary",
+                "=SUM(MoveBlock)"
+              ]
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "addNamedRange": {
+              "namedRange": {
+                "name": "MoveBlock",
+                "range": {
+                  "sheetId": 0,
+                  "startRowIndex": 1,
+                  "endRowIndex": 4,
+                  "startColumnIndex": 0,
+                  "endColumnIndex": 1
+                }
+              }
+            }
+          },
+          {
+            "mergeCells": {
+              "range": {
+                "sheetId": 0,
+                "startRowIndex": 6,
+                "endRowIndex": 8,
+                "startColumnIndex": 10,
+                "endColumnIndex": 12
+              },
+              "mergeType": "MERGE_ALL"
+            }
+          },
+          {
+            "updateCells": {
+              "start": {
+                "sheetId": 0,
+                "rowIndex": 0,
+                "columnIndex": 10
+              },
+              "rows": [
+                {
+                  "values": [
+                    {
+                      "userEnteredValue": {
+                        "formulaValue": "=SUM(MoveBlock)"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "fields": "userEnteredValue"
+            }
+          }
+        ]
+      },
+      {
+        "title": "Protected workbook",
+        "sheets": [
+          {
+            "title": "Protected",
+            "values": [
+              [
+                "Do not change",
+                "=1+2"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "google_calendar": {
+    "email": "viewer@example.test",
+    "groups": [
+      "team@example.test"
+    ],
+    "calendars": [
+      {
+        "id": "group-planning@example.test",
+        "name": "Group planning",
+        "owner_email": "planner@example.test",
+        "timeZone": "America/Vancouver",
+        "acl": [
+          {
+            "scope": {
+              "type": "group",
+              "value": "team@example.test"
+            },
+            "role": "writer"
+          }
+        ],
+        "subscribed": true,
+        "events": [
+          {
+            "summary": "Protected group event",
+            "start": "2026-09-24T16:00:00Z",
+            "end": "2026-09-24T16:30:00Z"
+          }
+        ]
+      }
+    ]
+  }
+}

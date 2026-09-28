@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-27",
+  "status": "bounded_live_reference_only_implementation_pending",
+  "method": "Authenticated Chrome CUA; disposable private fixture",
+  "fixture": {
+    "id": "1xo-J8aUdofh0i9H1yZIXVqMK0j-_DNRip9THo5QVRgI",
+    "title": "Arga fidelity Gemini preview 20260927-7f9a",
+    "trashed": true,
+    "trash_confirmation": "File moved to trash",
+    "shared": false
+  },
+  "observed": [
+    "Ask Gemini button, Gemini menu, bottom bar and side panel are enabled for the current account.",
+    "Gemini menu offers Create a new doc, Add new text, Refine selected text, Listen to this tab, Listen to document summary, Show Gemini bottom bar and Ask something else. Only the documented bounded actions below were exercised.",
+    "Cancel while generating showed Canceled request.",
+    "A fictional two-sentence status request directly inserted a title and paragraph into the document; no separate Insert or Apply action was required.",
+    "Native document Copy read back the resulting title and paragraph before and after full reload.",
+    "Full reload preserved document content but returned the visible Gemini side panel to its empty suggestions state. No conclusion about hidden or historical conversation storage.",
+    "A selected-text Refine control focused the Gemini composer; no refinement request was submitted.",
+    "Undo clicked after full reload did not remove the text; undo-before-reload remains untested.",
+    "Closing Gemini exposed the collapsed bottom bar."
+  ],
+  "prompt": "Write two short sentences for a fictional project status note. Atlas is on schedule. Design review Friday.",
+  "document_readback": "Project Atlas Status Update\nProject Atlas remains on schedule to meet its upcoming target dates. The design review is scheduled for this Friday.",
+  "corrections": [
+    "A CUA fill action submitted stale synthetic clipboard content (East 20 5 25); the request was cancelled. No private source was transmitted. Subsequent prompt entered in short keyboard chunks and verified before submission.",
+    "The live behavior supersedes the older plan assumption that every generated edit requires a separate preview acceptance."
+  ],
+  "screenshots_retained": false,
+  "mobile_or_touch_verified": false,
+  "native_api_state_audit": false,
+  "outbound_human_message": false,
+  "preexisting_document_mutated": false,
+  "limits": [
+    "Single account, one new private document and one generation request; eligibility, selected-range targeting, errors, source access, concurrency and revocation remain open.",
+    "No twin Gemini implementation or provider-wide AI coverage established."
+  ],
+  "official_sources": [
+    "https://support.google.com/docs/answer/14206696?hl=en"
+  ],
+  "reference_note": "Current official documentation distinguishes generation, refinement acceptance/rejection and side-panel insertion; account-specific live behavior was recorded separately."
+}

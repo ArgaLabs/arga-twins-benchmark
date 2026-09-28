@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-24",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "features": [
+    "Inline @ picker for active people, issues, projects and documents using native resource records.",
+    "Enter/Tab selection, arrow navigation, Escape dismissal and no-results state.",
+    "Mentions serialize to provider URL Markdown; API-created URL mentions render as linked chips in comments and editors.",
+    "Profile and document links open twin pages; document edits write native GraphQL content with a stale-revision guard.",
+    "Insertion retains the existing paragraph and subsequent typing; wrapped chips keep a clickable rectangular area."
+  ],
+  "validation": {
+    "linear_regressions": 101,
+    "test_report_sha256": "69c8e4615419275b412716ef1a917f030ce0872cfae48333e7e4102b5c9d5a01",
+    "ruff": "passed",
+    "generated_js_syntax": "passed",
+    "browser": "Chrome CUA via sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "desktop_flows": [
+      "Person, document, issue-ID and project search/selection",
+      "Comment submit via keyboard with all four canonical URLs",
+      "Readback as native Markdown and rendered chips"
+    ],
+    "mobile_flows": [
+      "No-results search and Escape",
+      "Enter selection, immediate native undo/redo and comment submission",
+      "Wrapped document mention follows semantic link without coordinate fallback after chip layout fix",
+      "Document native save/reload with mention preserved in a single paragraph"
+    ],
+    "protected_issues_users_and_existing_comments": "unchanged",
+    "final_document_markdown": "Ship the Linear twin with https://linear.app/linear-twin/profiles/ada\u00a0review",
+    "capture_hashes": {
+      "lab-linear-mentions-browser-flow-result.json": "0b45e85b5d649677db358c0b8bb8803aa0f49d36de3e9d6296af8c1567f1c318",
+      "lab-linear-mentions-browser-result.json": "23d2a44304687e06c3fa48c52b491d01a210f9ab39c2a279d770b0b86517c166"
+    },
+    "integrated_gmail_linear_regressions": 289,
+    "integrated_report_sha256": "ea18e009ef86d0c167ef0d6b1308e7cf40048abee1bb1625ad36b62c0857001c"
+  },
+  "references": [
+    "https://linear.app/docs/editor",
+    "https://linear.app/developers/graphql#adding-mentions-in-markdown"
+  ],
+  "limitations": [
+    "Provider documentation comparison; no authenticated live Linear UI or pixel-level comparison in this change.",
+    "Mention notifications, automatic relations, date/PR mentions, AI agents, cross-user realtime collaboration and complete profile/document feature sets remain open.",
+    "Resource rename/URL alias behavior requires separate provider conformance.",
+    "CI, production deployment and hosted checks pending."
+  ],
+  "review_fixes": [
+    "Person mention catalog uses the same stable URL as GraphQL User.url and also recognizes documented workspace profile URLs.",
+    "Native document slug identities are unique and deterministic from resource IDs, remain stable after rename, and preserve old-title mention URLs. Duplicate-title documents keep distinct links."
+  ]
+}

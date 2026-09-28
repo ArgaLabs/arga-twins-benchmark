@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-24",
+  "source_revision": "9f7b369cee7f87bc87409e2fdfb577f8535ab1b6",
+  "scope": "Equivalent incident approval wording; no candidate task or required outcome changed",
+  "full_pytest": {
+    "passed": 1191,
+    "skipped": 26,
+    "log_sha256": "c35a9b8e872c0079198e0e3c6e0080e5d8d28e822282087ecd8ab8c74e71bfa3"
+  },
+  "workspace_outcomes": {
+    "passed": 134,
+    "log_sha256": "1d9a10e8c91c00421b8edeca46b44ea30a936bb2c94ed90359184b267b4de87e"
+  },
+  "ruff_changed_files": "pass",
+  "pyright_changed_files": {
+    "result": "pass",
+    "log_sha256": "f552d237ad0bd249c05f97eb62dbc65d2d0e4a5fe2346608e10fb7838dba9ed1"
+  },
+  "pyright_repository": {
+    "result": "preexisting_errors",
+    "errors": 1196,
+    "baseline_revision": "5de0cd1281b86735685c8ab6cdbc19b126d3845f",
+    "comparison": "Identical diagnostic locations and messages in unchanged baseline and updated source, using the same interpreter.",
+    "baseline_log_sha256": "fc181a18692a9a0d555456094b650d9dd9780a02e132713d217f42475b158c11",
+    "updated_log_sha256": "cf1e671ae6089a89d11a3e0cf5cbd5099d0aad28c4ffdf8338248ebaacd7e2b1"
+  },
+  "same_attempt_regrading": {
+    "WKS-01": "pass",
+    "WKS-02": "pass",
+    "WKS-03": "fail",
+    "WKS-04": "pass",
+    "WKS-05": "pass"
+  },
+  "limits": [
+    "The original WKS-04 failure is preserved separately from its corrected same-state score.",
+    "WKS-03 remains a genuine candidate business failure.",
+    "No final ZIP or all-provider parity claim."
+  ]
+}

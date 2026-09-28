@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "status": "bounded_rich_mime_and_canvas_pass_two_frontend_bugs_found",
+  "kind": "manual_hosted_cua_smoke",
+  "scored_candidate": false,
+  "pr": "https://github.com/ArgaLabs/validation-server/pull/1122",
+  "merge_commit": "61fb78b6bcd258b160e6ca81de9acc5b40d22eab",
+  "deployment": {
+    "twins": {
+      "run": 35955970570,
+      "conclusion": "success"
+    },
+    "runtime": {
+      "run": 35955970641,
+      "conclusion": "success"
+    }
+  },
+  "run_id": "c7d072e2-1ecc-4d83-ba74-933921411310",
+  "scenario_id": "6893d975-cca0-4882-ab16-4fea4ac7af96",
+  "scenario_seed_file": "samples/workspace/evidence/gmail-rich-docs-geometry-hosted-seed.json",
+  "served_code_fingerprints": {
+    "matched": {
+      "twins/gmail/compose_formatting_ui.py:SCRIPT": "1298d68b4c97abcad3826279fbd6af4e53ec455aa1beca17fd9512a42b79b197",
+      "twins/google_docs/ui.py:fixed-canvas": "35ce9fd25af71c6135cef4f8d0db67f14dfc986857f15ff85de23f4a0730b11f"
+    },
+    "scope": "Served frontend blocks, not per-container digest attestation."
+  },
+  "gmail": {
+    "subject": "Hosted formatted caf\u00e9 draft",
+    "cc": "reviewer@example.test",
+    "bcc": "archive@example.test",
+    "bold_italic_link_and_cid_preserved": true,
+    "remote_url_preserved_in_native_html": true,
+    "remote_image_dom_src_absent_before_and_after_formatting_and_reader": true,
+    "formatting_sequence": [
+      "select all body",
+      "italic",
+      "bulleted list",
+      "undo",
+      "save and close",
+      "reload mobile",
+      "reopen",
+      "send"
+    ],
+    "attachment_parts": [
+      {
+        "mime": "image/png",
+        "filename": null,
+        "content_id": "<test-image>",
+        "bytes": 68,
+        "sha256": "acbe50d0e245c09c0739807dec9820cf618bb1093b58a6bbdf1a10978f454b63"
+      },
+      {
+        "mime": "application/octet-stream",
+        "filename": "terms.bin",
+        "content_id": null,
+        "bytes": 4,
+        "sha256": "dfb8b48c3a682a28b07b529062dbcf4b24bff460c9516d2cc68c857601ba99fb"
+      },
+      {
+        "mime": "application/octet-stream",
+        "filename": "orphan.bin",
+        "content_id": null,
+        "bytes": 12,
+        "sha256": "3ac54182425eb061cb27f34a36239e6782b397ba12adaaffcac3eed8414e785d"
+      }
+    ],
+    "reader_download_cards": [
+      "terms.bin",
+      "orphan.bin"
+    ],
+    "inline_png_displayed": true,
+    "protected_message_exact_unchanged": true,
+    "send_state_passed": true,
+    "post_send_stale_row_race_reproduced": true,
+    "refresh_recovered_correct_sent_reader": true
+  },
+  "google_docs": {
+    "protected_document_and_first_tab_exact_unchanged": true,
+    "new_tab_table_after_valid_paragraph_insertion": {
+      "rows": 1,
+      "columns": 2
+    },
+    "geometry": [
+      {
+        "viewport": [
+          910,
+          806
+        ],
+        "body_width": 910,
+        "page_width": 816,
+        "cell_widths": [
+          311.5,
+          311.5
+        ],
+        "cell_heights": [
+          36.328125,
+          36.328125
+        ],
+        "workspace_width": 318,
+        "workspace_scroll_width": 864
+      },
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "body_width": 390,
+        "page_width": 816,
+        "cell_widths": [
+          311.5,
+          311.5
+        ],
+        "cell_heights": [
+          36.328125,
+          36.328125
+        ],
+        "workspace_width": 390,
+        "workspace_scroll_width": 816
+      }
+    ],
+    "transient_desktop_and_mobile_screenshots_inspected": true,
+    "empty_tab_terminal_cursor_insert_failed_without_mutation": true
+  },
+  "follow_up": "mailbox-load-and-docs-cursor.json records the local fixes; their deployment and hosted regression are pending.",
+  "artifact_hashes": {
+    "native-before.json": "de3b8839f4a2876804bb36a6b0073de4e2ed4179fedd8f58e38e9064541b5eb4",
+    "native-after.json": "d387731f3172bedd8524dd1bbc10472b9c1f87156794bb4ebda6cc6d1dd99d6c",
+    "baseline-state.json": "84c9bdb40d2664e529748df9399f5ada2b348cf248e06f5052dc2406950e5e21",
+    "final-state.json": "53c834b2e42b41326ca84a78ed08eb6505a32d322a9a8feddc6e62a1925a0966",
+    "gmail-browser-trace.json": "76dfb080ea9bae503a35c0bc19cc06c06b726415a2a3fb18d64f132703e67570",
+    "google_docs-browser-trace.json": "14256a05fe881a3a545a6b19a2bd56a3a66c4400dc68300d4b9035f712966f6a",
+    "cleanup.json": "34b7bf3c248a1a3a15814dafe39c1108549ec14659dd39e0219a3230c3565e17"
+  },
+  "cleanup_status": "torn_down",
+  "limitations": [
+    "Manual bounded control check, not scored agent rollout",
+    "Full eight-provider parity and exhaustive visual/mobile checks remain incomplete",
+    "No screenshots retained"
+  ]
+}

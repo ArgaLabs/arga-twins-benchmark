@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-24",
+  "scope": "Sheets filter choices reflect saved conditions and other columns while retaining the selected column value exclusions.",
+  "provider_reference": "twins/tests/fixtures/google_sheets_filter_choices_reference.json",
+  "changes": [
+    "Read-only authenticated Sheets UI endpoint derives choices from the persisted native filter and formatted cell values.",
+    "Keep conditions staged until OK; reopening a saved filter recomputes its choices.",
+    "Search counts and select-all counts update for the displayed choices."
+  ],
+  "tests": {
+    "passed": 348,
+    "log_sha256": "a6c3b5e597aca91a44725dd9774e65c93fbed0bd1f026d7c3f701c27784c0abe",
+    "ruff": "pass",
+    "contract_matrix": "All four layers passed across Docs, Drive and Sheets with zero findings and zero unexpected 5xx."
+  },
+  "browser": {
+    "surface": "Google Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "flows": [
+      "Initial five values; unsaved >=20 retains five; save and reopen yields 20/30/40.",
+      "Exclude 40 and Closed; reopening C shows 20 checked and 40 unchecked, with 30 absent.",
+      "Stage >=35, search 4, Select all 1, Cancel and mobile reload preserve saved >=20 and excluded 40.",
+      "Mobile dialog fits within 390px with no page overflow; desktop and mobile screenshots inspected transiently."
+    ],
+    "native_snapshot_sha256": "2cddb8b2ad9c5606d32f55580c37c7b9d2731d1cf6ce7efec698d018aaf58606",
+    "protected_sheet_unchanged": true,
+    "cells_formulas_formats_and_metadata_unchanged": true,
+    "screenshots_retained": false
+  },
+  "ci": "pending",
+  "deployment": "pending",
+  "hosted_validation": "pending",
+  "limits": [
+    "This is a bounded filter-choice improvement, not full Sheets parity.",
+    "Saved and temporary filter views, color/relative-date filtering, charts, protection, undo, and broader visual/mobile coverage remain open."
+  ]
+}

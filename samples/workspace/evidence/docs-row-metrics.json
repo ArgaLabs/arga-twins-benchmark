@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-24",
+  "scope": "Default Arial table row metrics and native minimum-height border accounting; not exhaustive typography or pixel parity",
+  "screenshots_retained": false,
+  "provider": {
+    "fixture": "Unique disposable document, 2-by-3 table with A\u2013F cells",
+    "before_min_height_pt": 36,
+    "observed_rendered_row_height_px": 49,
+    "drag_css_pixels": 32,
+    "after_native_min_height_pt": 60,
+    "cleanup_confirmed": true,
+    "preexisting_documents_mutated": 0,
+    "notifications_sent": 0,
+    "capture_sha256": "98d938c859860042234d71c971f6f51db43474173e2063c3be8392b6572840fa"
+  },
+  "twin": {
+    "browser": "Chrome through CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "before_min_height_pt": 36,
+    "before_row_height_px": 49,
+    "after_32px_drag_min_height_pt": 60,
+    "after_32px_drag_row_height_px": 81,
+    "after_mobile_minus16px_drag_min_height_pt": 48,
+    "after_mobile_minus16px_drag_row_height_px": 65,
+    "default_second_row_height_px": 31.921875,
+    "all_table_text_preserved": true,
+    "protected_tab_unchanged": true,
+    "reload_persistence": true
+  },
+  "limits": [
+    "Default provider row visually about 32px versus twin 31.921875px; this closes the large default-height discrepancy, not subpixel certification.",
+    "Mixed fonts, multiline spacing, every border/merged configuration and physical touch remain open.",
+    "CI, deployment and hosted verification pending."
+  ],
+  "references": [
+    "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents#TableRowStyle",
+    "https://support.google.com/docs/answer/1696711"
+  ],
+  "tests": {
+    "passed": 311,
+    "ruff": "pass",
+    "command": "UV_NO_SYNC=1 uv run pytest twins/tests/test_google_docs*.py twins/tests/test_google_workspace*.py -q"
+  }
+}

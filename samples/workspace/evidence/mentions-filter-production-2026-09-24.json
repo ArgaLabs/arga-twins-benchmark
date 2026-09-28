@@ -1,0 +1,69 @@
+{
+  "date": "2026-09-24",
+  "revision": "45af59ee27436bd2ba7114435f5d35acf27d24eb",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1127",
+  "production_deployments": {
+    "runtime": {
+      "run_id": 35963137339,
+      "conclusion": "success"
+    },
+    "twins": {
+      "run_id": 35963137342,
+      "conclusion": "success"
+    }
+  },
+  "cli_lifecycle": {
+    "scenario": "Exact checked-in merge-filter-mentions-hosted-seed.json reused through CLI",
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    }
+  },
+  "frontend_fingerprints": {
+    "matched": {
+      "twins/google_docs/document_actions_ui.py:ACTION_SCRIPT": "042721dc27708c1fb82b7731e6f3cb023ce91159b2a488ba82bb3652f8da8320",
+      "twins/linear/mentions.py:SCRIPT": "9b1146c3999820590dc7d09e447f4843f1d98476434574573dc51ae2f23beb96"
+    },
+    "scope": "Complete served code blocks; not container digest attestation."
+  },
+  "linear": {
+    "outcome": "bounded checks pass",
+    "browser": "Chrome CUA desktop and 390px",
+    "checks": [
+      "Person, issue, project and document picker entries inserted into one issue comment",
+      "Reload preserved native plain-URL Markdown and four clickable mention chips",
+      "Person chip opened Ada Lovelace profile; document chip opened the document editor",
+      "Mobile document mention inserted via picker, saved and survived reload",
+      "Transient mobile screenshot inspected; no screenshot retained"
+    ],
+    "native_comment": "Hosted validation for\u00a0https://linear.app/users/user_twin_teammate\u00a0\u00a0https://linear.app/linear-twin/issue/HST-2/protected-issue\u00a0\u00a0https://linear.app/linear-twin/project/hosted-roadmap\u00a0\u00a0https://linear.app/linear-twin/document/hosted-launch-plan-17aa79779909",
+    "native_document_content": "Mobile mention: https://linear.app/linear-twin/issue/HST-2/protected-issue\u00a0Keep this paragraph together.",
+    "protected_issue_document_comment_users_projects_unchanged": true
+  },
+  "gmail": {
+    "outcome": "blocked by reproduced product bug",
+    "failure": {
+      "method": "POST",
+      "path": "/gmail/v1/users/me/settings/filters",
+      "status": 403,
+      "reason": "Scenario reset assigns only gmail.modify to its mock owner; settings.basic is absent"
+    },
+    "mailbox_labels_filters_unchanged": true,
+    "fix_pr": "https://github.com/ArgaLabs/validation-server/pull/1129",
+    "replay_required": true
+  },
+  "google_docs": {
+    "outcome": "no browser mutations in this run",
+    "all_native_documents_unchanged": true
+  },
+  "harness_notes": [
+    "An earlier provisioning attempt failed during operator fingerprint import and was torn down; that error was fixed before this run.",
+    "A Chrome back action timed out after completing navigation. Reconnecting showed the correct issue page; the saved state was preserved."
+  ],
+  "screenshots_retained": false,
+  "limits": [
+    "Not a candidate rollout",
+    "No claim of full provider parity",
+    "Notification delivery, project URL collision handling and full collaboration remain separate follow-ups"
+  ]
+}

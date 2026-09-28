@@ -1,0 +1,343 @@
+{
+  "date": "2026-09-27",
+  "feature": "Gmail settings removal confirmations",
+  "status": "deployed_hosted_native_pass_race_resolved_by_1214",
+  "release_allowed": false,
+  "source_sha256": {
+    "twins/gmail/settings_confirmation_ui.py": "0f00508e6ed9e0647f47329f46e53fb062779b8c6dfe7fbdf72cc9113d60fa0d",
+    "twins/gmail/settings_ui.py": "de0686744b496bd1dac8c3ca7179786bf306ba933f10f0bd76f57fda6ef6e083",
+    "twins/tests/test_gmail_settings_confirmations.py": "cbb3d5b4e3092ab5c81b07e50ffc1e127250baad7d580b28462793b2b063c49f",
+    "twins/gmail/README.md": "5f5d7b594c0b86094becb32c508ea7bec2cd0a53e43202d71a39018025b3911c"
+  },
+  "reference": {
+    "method": "Chrome CUA",
+    "url": "https://support.google.com/mail/answer/6579",
+    "observed": [
+      "Real filter removal opens Confirm delete filter with Cancel and OK",
+      "Escape returns focus to the delete link and keeps the existing filter",
+      "280px centered confirmation with dimmed backdrop"
+    ],
+    "mutations": "None; existing reference filter preserved",
+    "screenshots_retained": false
+  },
+  "tests": {
+    "gmail_regressions": 262,
+    "new_lifecycle_cases": 10,
+    "detector_findings": [],
+    "final_affected_tests": 27,
+    "gmail_regressions_scope": "Final integrated regression run after both review fixes"
+  },
+  "browser": {
+    "widths": [
+      1465,
+      390
+    ],
+    "passed": [
+      "Exact-target confirmations for filters, aliases, delegates, forwarding addresses and labels",
+      "Escape and Cancel preserve complete native mailbox state",
+      "Injected delete failure remains open with Retry; successful retry deletes only the selected filter",
+      "Successful deletion removes only the selected settings/label and switches affected forwarding off",
+      "All messages, threads, drafts, history and other mailbox resources unchanged",
+      "Focus returns to initiating control on cancel and section tab on success",
+      "Reload retains native results",
+      "Final mobile cancel/reload preserves complete native state",
+      "Injected read failure after successful deletion removes stale write controls; Retry loading settings only repeats reads",
+      "Slow-refresh check keeps the initiating Delete button disabled after success",
+      "Actual failed settings read displays Changes saved, but settings could not refresh",
+      "Retry loading settings restores the section-tab keyboard focus"
+    ],
+    "physical_touch": "not exercised",
+    "evidence_sha256": {
+      "/tmp/lab-gmail-settings-confirmations-local/trace.json": "3f99f40557d9da98365b6220c596a4b21fbc8b0fde3244dc7754a69d49e7755e",
+      "/tmp/lab-gmail-settings-confirmations-local/checkpoint.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local/baseline.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local/after-failure.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local/after-cancellation.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local/final.json": "c3a0a1fcba05b9b3cb4f8538c15b82c4fffeeb77c0d83c32560d9f156e373823",
+      "/tmp/lab-gmail-settings-confirmations-local-r3/trace.json": "c9eb298cacb42aa85d98fd4bb81bbac6496b9a8428c0f853b18a197328149f7c",
+      "/tmp/lab-gmail-settings-confirmations-local-r3/baseline.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local-r3/final.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local-r4/trace.json": "cbfa633e2d99368959ad763e55c6b6970372478c9cabaf108d50c17ae75b697b",
+      "/tmp/lab-gmail-settings-confirmations-local-r4/baseline.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local-r4/final.json": "5bb1b6f29425e465a59098e7759a35a56e944abf2da3dbcd09ab184873b00c26",
+      "/tmp/lab-gmail-settings-confirmations-local-r5/trace.json": "43124662c9a24a557665c1b3a21429c3c329d03cb75296e31b5eb29e4fe0611f",
+      "/tmp/lab-gmail-settings-confirmations-local-r5/baseline.json": "d62263ab2a7ae8942b9597506c0014ab70d2149a82736118c26e54fdc7a190e7",
+      "/tmp/lab-gmail-settings-confirmations-local-r5/final.json": "5bb1b6f29425e465a59098e7759a35a56e944abf2da3dbcd09ab184873b00c26"
+    }
+  },
+  "limits": [
+    "Live visual comparison directly covers the filter dialog; remaining confirmations reuse its interaction pattern with target-specific copy",
+    "Shared Gmail settings shell, admin/delegation enforcement, AI/collaboration and exhaustive parity remain open"
+  ],
+  "review_corrections": [
+    {
+      "comment_id": 4116901658,
+      "fix": "Disable initiating removal control before closing; focus the section while reads are pending."
+    },
+    {
+      "comment_id": 4116901663,
+      "fix": "Propagate boolean render/mailbox read failures into the real removal callback; clear stale controls and give saved-but-refresh-failed guidance."
+    }
+  ],
+  "deployment": {
+    "merge_revision": "db3a9a61492c7697454fd95604db77b9c2ac4634",
+    "pr": 1212,
+    "exact_head_checks": 33,
+    "fresh_merge_state": "CLEAN",
+    "twins_workflow": 36350157000,
+    "runtime_workflow": 36350156976,
+    "both_workflows": "success",
+    "serving_images": {
+      "revision": "db3a9a61492c7697454fd95604db77b9c2ac4634",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00317-5vc",
+          "observed_at": "2026-09-27T21:02:33.092890+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:db3a9a61492c7697454fd95604db77b9c2ac4634",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00317-5vc"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00317-5vc",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:4b6bf3343a0122c867a0e3951176c4d16d5bb895851e65a41ad8723204a24e4f",
+            "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00687-pjx",
+          "observed_at": "2026-09-27T21:06:38.579516+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:db3a9a61492c7697454fd95604db77b9c2ac4634",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e046cf74bf8d2089fe9478b733e4d518dd2727e3a251670b9ea687af9f51e335",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:e046cf74bf8d2089fe9478b733e4d518dd2727e3a251670b9ea687af9f51e335"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00687-pjx"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00687-pjx",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:727f3879432e54b21a991d9bea62fdeaa89cb5c4f5cd26aab3e340281fce4597",
+            "sha256:e046cf74bf8d2089fe9478b733e4d518dd2727e3a251670b9ea687af9f51e335"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "338b3561a9293b563f997365075163ef09135cce9f9005b2b7aeb1a39803cc65",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    },
+    "runtime_images": {
+      "status": "complete",
+      "observed_at": "2026-09-27T21:07:58.906028+00:00",
+      "publication_sha256": "a60ad5a4d6300f43f390b3f7ac5e5ee40ea27d401b58e6df1d54c74aa5327ab8",
+      "containers": {
+        "github": {
+          "published_revision": "f7d01fef33a63d5cad3e290b878e33d1b158124d",
+          "image_id": "sha256:7448e958a24a81ed27d4bdba92ab33fd4b10d75260b6ac99205734ef932e1c36",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:7448e958a24a81ed27d4bdba92ab33fd4b10d75260b6ac99205734ef932e1c36",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:99b31df9a5bff9635b979f6a46a34aba0c740781f823bc9e765bf5e45720d825"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:7448e958a24a81ed27d4bdba92ab33fd4b10d75260b6ac99205734ef932e1c36"
+          ],
+          "matched": true
+        },
+        "gmail": {
+          "published_revision": "db3a9a61492c7697454fd95604db77b9c2ac4634",
+          "image_id": "sha256:e04a7388fe6891a46c3acda8a2b866c96ed9ac0cd1a26347ec05d09478253819",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:0ed1c05a8941a4e7b66486d6caa0c129999e873943bb2e2191ce4b20086a0bd4",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:e04a7388fe6891a46c3acda8a2b866c96ed9ac0cd1a26347ec05d09478253819"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:e04a7388fe6891a46c3acda8a2b866c96ed9ac0cd1a26347ec05d09478253819"
+          ],
+          "matched": true
+        },
+        "google_calendar": {
+          "published_revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+          "image_id": "sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:16f12ce95a7ca7f35916ccd6830388a5035ee5cd2a8982c723dcc51251dfbb2a",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "matched": true
+        },
+        "google_docs": {
+          "published_revision": "5e97f4bf4c48e9240b3b81850d5e30790c9702bc",
+          "image_id": "sha256:95a4fe3504bd0328b4b287eeb063650e6fd3b62896c8bdfd09d54850f3227818",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:508b87e94d83c9578ac88349f7c2c3a2be4ad94f5a86194f87599b6971b88efe",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:95a4fe3504bd0328b4b287eeb063650e6fd3b62896c8bdfd09d54850f3227818"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:95a4fe3504bd0328b4b287eeb063650e6fd3b62896c8bdfd09d54850f3227818"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "5e97f4bf4c48e9240b3b81850d5e30790c9702bc",
+          "image_id": "sha256:9f5486fcd4dde4e2007829f4c1f626ab52d5a2970d48ceeb2c0cc5c3b34da8b0",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:29c3cdc28ffd185d208d9ab15b88170c6689de3d8ccf73647bfe12f1f897091c",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:9f5486fcd4dde4e2007829f4c1f626ab52d5a2970d48ceeb2c0cc5c3b34da8b0"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:9f5486fcd4dde4e2007829f4c1f626ab52d5a2970d48ceeb2c0cc5c3b34da8b0"
+          ],
+          "matched": true
+        },
+        "linear": {
+          "published_revision": "ace7a2b81d94daa980cc63bc1656c937a3b63fa5",
+          "image_id": "sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:512530f81f5d79a8fa5e4d06bcaae351d74a334ad0f21f2874f024db3220bd55"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183"
+          ],
+          "matched": true
+        },
+        "notion": {
+          "published_revision": "31ce23293da893a6882b51b318cbcffed1064af4",
+          "image_id": "sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:2349a5eac4ae35486e8167a4cd0983ff52b298253e41296b3e3cbcc403ac24dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "matched": true
+        },
+        "stripe": {
+          "published_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+          "image_id": "sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:988163ff134aea11b480683fcb63cbf069eda86fd8fb205810b2d63ca155586a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e9040854c9ea415d9e6923b577fbf96b",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-e9040854c9ea415d9e6923b577fbf96b@sha256:d6ef39658b0a9dc671403332ac32c705d8ab75f6fff1529973c0a7098f45270e",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:d6ef39658b0a9dc671403332ac32c705d8ab75f6fff1529973c0a7098f45270e"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:d6ef39658b0a9dc671403332ac32c705d8ab75f6fff1529973c0a7098f45270e"
+          ],
+          "builder_log_sha256": "aa34fe2c44c5bfad76572c6ed7a6e1e7c88c99499fc2a11449b9a31d7e5e8352"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    }
+  },
+  "hosted": {
+    "verification": {
+      "complete_cancellation_state_unchanged": true,
+      "confirmed_removal_count": 5,
+      "containers_observed": 10,
+      "image_digest_matching": "pending publication comparison",
+      "native_state": "Only the exact five fixture settings/label removals and associated forwarding reset; all messages, other mailbox resources and seven sibling providers unchanged",
+      "passed": true
+    },
+    "browser": {
+      "method": "Chrome CUA",
+      "widths": [
+        1465,
+        390
+      ],
+      "passed": [
+        "Five target-specific confirmations and successful removals",
+        "Escape filter cancellation preserves all eight provider states",
+        "Mobile label cancel and confirm",
+        "Reload retains removals"
+      ],
+      "failure": "Historical #1212 finding: switching settings tabs while the post-removal refresh was pending showed a false warning. Corrected and fresh-hosted verified in #1214; see resolution.",
+      "physical_touch": "not exercised",
+      "screenshots_retained": false
+    },
+    "native_state": "Only the exact five fixture removals and affected forwarding reset; all seven sibling providers unchanged. The hosted Gmail fixture has zero messages; populated-mailbox preservation is covered locally.",
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifact_sha256": {
+      "browser-trace.json": "ac9b3782f039e9195dace0874f60d1f6f241a8d76f0cc5b09642912ebe1d48fd",
+      "image-comparison.json": "66249077dda4320467b6d89ac9807595e78cb639f793eb0ff004dd5f4442d082",
+      "publication-catalog.json": "a60ad5a4d6300f43f390b3f7ac5e5ee40ea27d401b58e6df1d54c74aa5327ab8",
+      "checkpoint.json": "6b35afadff43693d1af21c972943f9bef8c8c94da76efe28a41ee8bc9cdcd4d1",
+      "cleanup.json": "2924c30abdee9d4d02419626ef9129b89891f69f7c2587ea03f1a2498a7047ae",
+      "runtime-image-evidence.json": "d26d81c768a509e599979fe492bde042aa39cbda987c833db50fe856fdbe5bc2",
+      "baseline.json": "6b35afadff43693d1af21c972943f9bef8c8c94da76efe28a41ee8bc9cdcd4d1",
+      "scenario.json": "79a9992311e06796c51cac79387172756d901f7d5f2fe835f745e972d11abc01",
+      "verification.json": "7e2289d39f42d383194c620b7744e51dca52e957d4ea4defda431ae74c415baa",
+      "fixtures.json": "1786f485c1825205831a6747640974e5e22df6bab224ad50e9b1ebf131d1efd3",
+      "after-cancellation.json": "6b35afadff43693d1af21c972943f9bef8c8c94da76efe28a41ee8bc9cdcd4d1",
+      "final-state.json": "2b5f9c5be7a471917d946931b958a00a6579546e093bfc079aa0f6d181d8e67f"
+    }
+  },
+  "resolution": {
+    "pr": 1214,
+    "evidence": "gmail-settings-refresh-navigation-2026-09-27.json",
+    "fresh_hosted": "pass_with_populated_mailbox_and_protected_settings"
+  }
+}

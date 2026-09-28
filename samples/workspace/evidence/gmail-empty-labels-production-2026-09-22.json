@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "scored_candidate": false,
+  "provider": "gmail",
+  "browser": "Google Chrome via CUA",
+  "deployment": {
+    "revision": "a36130ef6c181a5008515326fdde95f1423ee178",
+    "twins_run": 35820619627,
+    "runtime_run": 35820619618,
+    "conclusions": "success"
+  },
+  "scenario_seed_only": true,
+  "operator_fixture_augmentation": false,
+  "checks": {
+    "explicit_empty_labels": [],
+    "inbox_messages": 52,
+    "drafts": 2,
+    "archived_fixture_not_in_inbox": true,
+    "global_archived_search_result": 1,
+    "inbox_last_page_conversations": [
+      "Hosted conversation 02",
+      "Hosted conversation 01"
+    ],
+    "distinct_mobile_draft_rows": 2,
+    "mobile_width": 390,
+    "mobile_document_scroll_width": 390,
+    "native_state_unchanged": true
+  },
+  "cleanup": "torn_down",
+  "private_artifact_sha256": {
+    "scenario.json": "5bc7704131991bf26c86d9c5312f95a33fe350ef4fb36b1d9878d5d95c2b225d",
+    "baseline-state.json": "ec25c3e7123ee2fe896da5305c7c03aab7e62ed216e208142f5655b98713ea99",
+    "final-state.json": "ec25c3e7123ee2fe896da5305c7c03aab7e62ed216e208142f5655b98713ea99",
+    "native-checks.json": "d0d48e53a0fd5b8c08add3c3071968a080326810657b1a3c46b5397a5c37fafa",
+    "gmail-browser-trace.json": "503d3a0269d27df2cb2d8674e5ae8437562e04a23d35eb8ed32b8e2413b4aec6",
+    "cleanup.json": "7ca5bdab07e1e34b0160ff55ec701e4a14551259f64a7a83fe4059dceeaf1700"
+  },
+  "limitations": [
+    "Manual feature checks, not an autonomous candidate rollout or full Gmail reference parity.",
+    "Select-all-matching remains pending deployment and hosted verification.",
+    "No screenshot files retained."
+  ]
+}

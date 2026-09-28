@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-24",
+  "kind": "manual_hosted_cua_smoke",
+  "status": "native_pass_visual_layout_fix_pending",
+  "scored_candidate": false,
+  "screenshots_retained": false,
+  "run_id": "55f3c038-a16c-434b-ad31-f92ee4096b67",
+  "scenario_id": "e7d4b126-f40c-467f-a939-81b7ee4f7d5c",
+  "deployment": {
+    "revision": "45864e2430c309844c4aceb64f91f6ac760f4f71",
+    "runtime_workflow": 35952778637,
+    "twins_workflow": 35952778701,
+    "both": "success"
+  },
+  "frontend_code_fingerprints": {
+    "matched": {
+      "twins/google_docs/table_options_ui.py:TABLE_OPTIONS_SCRIPT": "7d921e073c4d715039e8834f64550787a0449ddee687eb8c6cbb5a51741cec4e"
+    },
+    "scope": "Served frontend blocks, not per-container digest attestation."
+  },
+  "viewports": [
+    "910x806",
+    "390x844"
+  ],
+  "native_checks": {
+    "column_width_pt": 108,
+    "row_minimum_height_pt": 43.2,
+    "cell_padding_pt": 7.2,
+    "alignment": "MIDDLE",
+    "border_width_pt": 2.25,
+    "border_color": "red",
+    "background": "transparent after mobile clear",
+    "protected_document": "exactly unchanged",
+    "protected_first_tab": "exactly unchanged",
+    "neighbor": "text unchanged; only matching shared border propagated"
+  },
+  "browser_checks": [
+    "Create a separate tab and two-column table",
+    "Change width, height, padding, alignment, border color/width and background",
+    "Reject 0.069 inch with restored saved value and actionable error",
+    "Mobile panel scroll keeps close available; transparent action works",
+    "Close/reload preserves table and native styles"
+  ],
+  "visual_issue": {
+    "status": "reproduced",
+    "description": "At 910px with both sidebars open, the paper shrinks and the neighboring cell wraps one letter per line. A local fixed-page-width repair is under validation in PR #1122."
+  },
+  "cleanup": "torn_down",
+  "capture_sha256s": {
+    "native-before.json": "3ba619c4f7d88beabc2e2509a03f3ed57e284842de5af6658bf02723f199e707",
+    "native-after.json": "d287362a191a50ae75e034845a7adaf41b63746ae7821b6623b333c546d0244b",
+    "final-state.json": "b49b30f383f6a038f5c0503cb3a7948cf6ff64b6ef37c8017a77191fc3f93107",
+    "cleanup.json": "1c341ed0933c7a5fed4882191f683bbf31996e41547f236b85c147361abbc205"
+  },
+  "limits": [
+    "Served frontend block matched tested source; this is not full image-digest attestation.",
+    "Native behavior passes, but the layout issue prevents calling this a full visual pass."
+  ]
+}

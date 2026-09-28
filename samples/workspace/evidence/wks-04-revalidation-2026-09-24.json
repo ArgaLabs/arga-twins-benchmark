@@ -1,0 +1,270 @@
+{
+  "date": "2026-09-24",
+  "task": "WKS-04",
+  "kind": "hosted_candidate_revalidation",
+  "environment": "production",
+  "outcome": "pass",
+  "candidate_model": "claude-sonnet-5",
+  "candidate_status": "completed",
+  "has_browser_tool": true,
+  "browser_calls": 0,
+  "completed_browser_calls": 0,
+  "actual_interaction_mode": "api",
+  "business_api_calls": 14,
+  "official_docs_calls": 2,
+  "model_tool_calls": 17,
+  "assertions": [
+    {
+      "id": "required_1",
+      "status": "pass"
+    },
+    {
+      "id": "required_2",
+      "status": "pass"
+    },
+    {
+      "id": "required_3",
+      "status": "pass"
+    },
+    {
+      "id": "required_4",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_github_issue_comment",
+      "status": "pass"
+    },
+    {
+      "id": "no_duplicate_gmail_sent_message",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:github:issue_comment:7",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_docs:document:bQdWxTYtoNwiUSuBT3u2VLLWXrU",
+      "status": "pass"
+    },
+    {
+      "id": "authorized_change:google_sheets:sheet:kK05YR4e4JLY1E-NR9TmeRAfJiQ/0",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:incident",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:deployment",
+      "status": "pass"
+    },
+    {
+      "id": "result_fact:disposition",
+      "status": "pass"
+    }
+  ],
+  "cleanup_confirmation": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "previous_outcomes_preserved": true,
+  "screenshots_retained": false,
+  "model_comparison": false,
+  "sample_code_revision": "5de0cd1281b86735685c8ab6cdbc19b126d3845f",
+  "deployment_provenance": {
+    "gmail": {
+      "revision": "94ab59654534b22747af9b50a86ea63a13fd52c4",
+      "runtime_workflow": 36058896495,
+      "twins_workflow": 36058896553,
+      "both": "success",
+      "published_images": {
+        "twin-gmail": "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:402a12a9d260aa489ecc1d41309a211f974fe405613853e785ad0772c9e7fbc4",
+        "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:a839ed4f6e0615d53853368df20df3f7a99396e6fb701214b9d48967a6a16914",
+        "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:94ab59654534b22747af9b50a86ea63a13fd52c4@sha256:679d060cbac403cfd8bb6380f3af9623958f425837a3c242bb2efd58ca5c2058"
+      },
+      "runtime_revisions_at_deployment": {
+        "arga-api": "arga-api-00629-gd9",
+        "preview-proxy": "preview-proxy-00259-fdd"
+      },
+      "log_sha256s": {
+        "lab-final-gmail-runtime-deploy.log": "fb492dceaa62a5e3f585352b40c6f52eb25a9fd88bc0c75ebd93d01cdde9866c",
+        "lab-final-gmail-twins-deploy.log": "053e8f4c741b08d855c19ee4f8b461cdc6964102016496e2ce465d3d206f06f9"
+      },
+      "attestation_limit": "Successful build, push and deployment logs; direct current running-container attestation requires GCP reauthentication."
+    },
+    "limits": [
+      "Published image/deploy logs are not direct running-container attestation.",
+      "Sheets #1149 and complete final release verification remain pending."
+    ]
+  },
+  "artifact_sha256s": {
+    "candidate.json": "d07457c0aa4a1483316b39a66dcf207ae1bd1aadf035e7c0436ef42523495eb2",
+    "baseline-state.json": "bbf49327550ec4bcc0634109a7a4faa7f11573939adc2d47023a6a14b04ee706",
+    "final-state.json": "f5d9e23c396e922bdc4cb41a7dde765cc505299720d1aba3014eb31a30032ae7",
+    "invocation.json": "903c57d8f585d4893e35e989f74407e96e8270e2df6587655708e260d240c977",
+    "provider-trace.json": "91d9d38f91f818c70739fca37f98b5ef5af298b27bb44f21b20b0a5ee1aa0fb0",
+    "official-docs-trace.json": "73604e21e5e80fcd5ca1d6a5c7f106067aa9412af51e3cb553880efb1eaa3209",
+    "browser-trace.json": "4ee97e71a4cdb2f0c4895bdba0cbaab15c6f5fdec97cc79f582290a0054846d7",
+    "verifier.json": "07a69b0e95988c56c8028a88d3113201ecf1f2974d20b029b7fddefe5788c03f",
+    "cleanup.json": "5cd22a70214919537f0bd15e1a97d94fbc3b9bf3d5c9589ad7dbda5ba8c6b6f0"
+  },
+  "candidate_artifact_sha256s": {
+    "model-invocation.json": "7abe1f740f16d0e0c949f4c19b881c50caed6be250add898359bf37ec6cc1629",
+    "adapter.json": "a013f7e8976527772fa9fddee529ad2beb2bcadb187cdee31e18005becd7d6d1"
+  },
+  "limits": [
+    "Single functional trial, not a model comparison.",
+    "The actual interaction mode is reported; tool availability alone does not establish browser-agent coverage."
+  ],
+  "original_verifier": {
+    "assertions": [
+      {
+        "id": "required_1",
+        "status": "fail"
+      },
+      {
+        "id": "required_2",
+        "status": "pass"
+      },
+      {
+        "id": "required_3",
+        "status": "pass"
+      },
+      {
+        "id": "required_4",
+        "status": "fail"
+      },
+      {
+        "id": "no_duplicate_github_issue_comment",
+        "status": "pass"
+      },
+      {
+        "id": "no_duplicate_gmail_sent_message",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:github:issue_comment:7",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:google_docs:document:bQdWxTYtoNwiUSuBT3u2VLLWXrU",
+        "status": "pass"
+      },
+      {
+        "id": "authorized_change:google_sheets:sheet:kK05YR4e4JLY1E-NR9TmeRAfJiQ/0",
+        "status": "pass"
+      },
+      {
+        "id": "result_fact:incident",
+        "status": "pass"
+      },
+      {
+        "id": "result_fact:deployment",
+        "status": "pass"
+      },
+      {
+        "id": "result_fact:disposition",
+        "status": "pass"
+      }
+    ],
+    "grading_basis": "observable_business_outcomes",
+    "interaction_modes": [
+      "computer_use",
+      "api",
+      "mixed"
+    ],
+    "outcome": "fail",
+    "reward": 0,
+    "task_id": "WKS-04"
+  },
+  "regrading": {
+    "kind": "same_captured_state_no_new_candidate_run",
+    "reason": "The original status matcher rejected equivalent wording: mitigation has been drafted but is NOT yet approved. The fix accepts the auxiliary is and the ordinary IC abbreviation while preserving negation checks.",
+    "original_result_preserved": true,
+    "corrected_result": {
+      "task_id": "WKS-04",
+      "assertions": [
+        {
+          "id": "required_1",
+          "status": "pass"
+        },
+        {
+          "id": "required_2",
+          "status": "pass"
+        },
+        {
+          "id": "required_3",
+          "status": "pass"
+        },
+        {
+          "id": "required_4",
+          "status": "pass"
+        },
+        {
+          "id": "no_duplicate_github_issue_comment",
+          "status": "pass"
+        },
+        {
+          "id": "no_duplicate_gmail_sent_message",
+          "status": "pass"
+        },
+        {
+          "id": "authorized_change:github:issue_comment:7",
+          "status": "pass"
+        },
+        {
+          "id": "authorized_change:gmail:sent_message:owner@gmail-twin.local/880fcb7c79887b43",
+          "status": "pass"
+        },
+        {
+          "id": "authorized_change:google_docs:document:bQdWxTYtoNwiUSuBT3u2VLLWXrU",
+          "status": "pass"
+        },
+        {
+          "id": "authorized_change:google_sheets:sheet:kK05YR4e4JLY1E-NR9TmeRAfJiQ/0",
+          "status": "pass"
+        },
+        {
+          "id": "result_fact:incident",
+          "status": "pass"
+        },
+        {
+          "id": "result_fact:deployment",
+          "status": "pass"
+        },
+        {
+          "id": "result_fact:disposition",
+          "status": "pass"
+        }
+      ],
+      "grading_basis": "observable_business_outcomes",
+      "outcome": "pass",
+      "reward": 1,
+      "interaction_modes": [
+        "computer_use",
+        "api",
+        "mixed"
+      ]
+    },
+    "verifier_regraded_sha256": "430c35ae62712c07837c3db9a15bfa500485674ecd61907a354814390e0d504c",
+    "grader_source_sha256": "4d1dda48b171675a588458850d76ae93c5b4ca0b2c19c728652356d8beaa226b",
+    "test_log_sha256": "1d9a10e8c91c00421b8edeca46b44ea30a936bb2c94ed90359184b267b4de87e",
+    "tests_passed": 134,
+    "grader_revision": "9f7b369cee7f87bc87409e2fdfb577f8535ab1b6"
+  },
+  "all_fresh_attempts_regraded": {
+    "WKS-01": "pass",
+    "WKS-02": "pass",
+    "WKS-03": "fail",
+    "WKS-04": "pass",
+    "WKS-05": "pass"
+  }
+}

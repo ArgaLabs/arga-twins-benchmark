@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-24",
+  "status": "local_verified_ci_deployment_hosted_pending",
+  "screenshots_retained": false,
+  "changes": [
+    "Rich compose toolbar uses native HTML/plain MIME alternatives and the existing draft/send APIs.",
+    "Font, size, emphasis, color/highlight, alignment, lists, indent, quote, strike, clear-format, undo/redo and validated link insertion/editing.",
+    "Safe HTML message rendering, HTML signatures, plain-text preference persistence and sanitized paste.",
+    "Binary and filename-free CID attachments survive draft rebuild; CID images render in compose and sent messages.",
+    "Inline images keep their MIME references when browser formatting clones editor nodes."
+  ],
+  "validation": {
+    "regressions": 145,
+    "ruff": "passed",
+    "generated_javascript_syntax": "passed",
+    "browser": "Google Chrome through CUA and the sample BrowserProxy",
+    "viewports": [
+      "desktop",
+      "390x844"
+    ],
+    "flows": [
+      "Existing API draft opens with HTML and binary attachment",
+      "Italic formatting and close/reopen preserve rich content",
+      "Invalid link URL rejected; valid URL inserted; existing link destination restored; cancel preserves content",
+      "Send/readback retains rich HTML, Unicode and binary attachment",
+      "Formatted send-as signature loads on new compose",
+      "Plain-text mode strips HTML and persists across reload/reopen",
+      "Mobile font/size/alignment/underline, list, indent/outdent, strike, undo/redo, color/highlight and quote controls",
+      "Mobile rich draft save/reload/send and protected native-state readback",
+      "Filename-free inline image loads from native attachment data in editor and sent message",
+      "Repeated clone-producing list/indent/undo/redo flow retains original CID in native MIME"
+    ],
+    "protected_message": "exactly unchanged in all captures",
+    "account_settings": "exactly unchanged in all captures",
+    "captures": {
+      "browser": "e6acf9996d3ed8210aa496d64f9f5a62defdc3923eaa32f189a003190f40fb53",
+      "inline": "c624a36f3d748e32145a88d0ebe601abd754f307560593659ac7ba4c019b18e8",
+      "mobile": "61473f887170e1a7d11912b405994f65a80025997d49092469bba6bd335625a2",
+      "cloned-image": "d79a0b75c4c651f4152cc6110c3af39b15ac588b56246a9f838400fa03debe0d"
+    }
+  },
+  "references": [
+    "https://support.google.com/mail/answer/8260?hl=en"
+  ],
+  "limits": [
+    "CI, production deployment and fresh hosted validation pending.",
+    "Official formatting help and local desktop/mobile inspection inform this implementation; exhaustive provider visual comparison remains open.",
+    "Full compose menus/Drive picker, account/admin/AI, filter delivery and full eight-twin parity remain outside this change."
+  ],
+  "review_fixes": {
+    "remote_images": "No request on reader open or draft open/save. One controlled localhost image request follows the explicit display action; URL retained in native MIME.",
+    "inline_fallback": "Referenced raster hides its card only after successful load; unsupported SVG and unreferenced inline file retain visible download controls.",
+    "capture_sha256": "85f1fce2200c8ed19ac285cd005126f195c42390b6aa0a749e899de998fd9d85",
+    "protected_message": "exactly unchanged",
+    "account_settings": "exactly unchanged"
+  }
+}

@@ -1,0 +1,339 @@
+{
+  "date": "2026-09-24",
+  "status": "merged_deployed_hosted_desktop_and_390px_pass",
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1153",
+  "revision": "3ad66f3646ec3632ba43ea4c61b453126039f142",
+  "base_revision": "f82d437e6d16d1d24e24311c89f48cc07581194a",
+  "observed_gap": "Invalid native seeded cell values were not marked after load/reload until focused.",
+  "changes": [
+    "Batch read-only validation statuses before grid render without saving proposed values.",
+    "Share one isolated snapshot and common formula engine where possible; bound batches to 500 targets.",
+    "Discard delayed grid/validation results after switching sheets; update named ranges atomically with current grid.",
+    "A stored dropdown criterion whose source sheet was deleted returns per-cell unavailable state, leaving healthy cells and workbook readable."
+  ],
+  "checks": {
+    "google_sheets_frontend_regressions_passed": 439,
+    "make_fix": "pass",
+    "changed_file_pyright": "0 errors",
+    "desktop_viewport": {
+      "width": 1063,
+      "height": 806
+    },
+    "before_focus_invalid_marker": "pass",
+    "valid_formula_cell_unmarked": "pass",
+    "sheet_switch_reload": "pass",
+    "deleted_source_workbook_load": "pass",
+    "unavailable_rule_title_and_aria_description": "pass",
+    "complete_before_after_native_equality_both_fixtures": "pass"
+  },
+  "review": {
+    "initial": "fix: deleted dropdown source must not block loading readable grid",
+    "verdict": "Resolved, independently reproduced: grid/batch return 200, broken rule unavailable, healthy rule valid, malformed target 400, native state unchanged.",
+    "documentation": "Read-only incumbent comparison complete; no design files initialized."
+  },
+  "original_regression_failure": "Existing isolated loadSheet harness lacked the added preview helper. Expanded it to test delayed grid and delayed validation responses; final 439-test suite passes.",
+  "detector": "One inherited unchanged validation-hint border-left warning; no CSS/layout changes.",
+  "limits": [
+    "Physical touch and exhaustive provider fidelity remain pending. Hosted desktop/390px checks cover only the recorded validation-marker flows.",
+    "Formula criteria still build separate engines; reviewer measured 101 engine builds for 100 formula-rule cells in a 10,000-cell workbook, about 0.60s locally.",
+    "No retained screenshots; transient desktop images inspected.",
+    "No exhaustive provider or eight-twin parity claim."
+  ],
+  "source_hashes": {
+    "twins/google_drive/sheet_validation.py": "7ac2d24fa1267b744b31191fda56e3f27904bba6eeeb233e907a09be671b94a0",
+    "twins/google_sheets/ui.py": "2f5c5470ad731cfedb4d7902510ea82afdd2e11b906955c58704794150914516",
+    "twins/google_sheets/validation_ui.py": "c411bd42ad3175649fdb99536691212b864cebc2151df2fd437ab9929a93bf98",
+    "twins/tests/test_google_sheets_validation_controls.py": "2ec7fe25f9058239a4bd4578c87e643089ab3e5c5034261c1597fd921801904d",
+    "twins/tests/test_google_sheets_grid_format_ui.py": "41c0de418af3ce4556db75d2690287f2546839eed33ed3611e97ec4533bb1163"
+  },
+  "private_evidence_sha256": {
+    "lab-final-sheets-initial-marker-local/result.json": "895e5a2b22e1ee98e3cb064ee6f4b82db2b89a5eb8c0f6ad60b4f2596e0557ab",
+    "lab-final-sheets-initial-marker-broken-local/result.json": "b671c2676acb301f2a8308f6334791f09cafd5fe399ad107d37e73b8805dd1b5",
+    "lab-final-sheets-initial-marker-focused-tests.log": "44a0280dc774bfca79be83429ad0913701bf798c6719ccc9d4a2eaee34801423",
+    "lab-final-sheets-initial-marker-provider-tests.log": "40c17162601d91cc674f4f28d6499a44acb839cd1effe2d82811220136480754",
+    "lab-final-sheets-initial-marker-provider-tests-v3.log": "e736de8801feacad2d42a67d081a02851bdcae050627c9e87cb51e005d9d051d",
+    "lab-final-sheets-initial-marker-pyright.log": "46a6c7834c9080ada23a415afd925abecc37d531f5c6e3d14ad0a7ff579096cb",
+    "lab-final-sheets-initial-marker-design-detect.json": "a429f071a0bcc9b82f00d7ab81c5464426947693f33ad0f0dc5ae2575f1b33db",
+    "lab-final-sheets-initial-marker-ci-final.log": "1d70275cdd12c0426f0b5d0caca738eb16cadeed708832b156fb2ff7eb03ab3e",
+    "lab-final-sheets-initial-marker-ci-head80a.log": "084beb81490e81d05d082e927b484da6a66da186ad8b7a2cc3278a1c14d46abe"
+  },
+  "previous_change_revision": null,
+  "change_revision": "80a07713771f7058ec71723179a20233ee95afc2",
+  "ci": {
+    "status": "passed",
+    "workflow": 36072517925,
+    "head_revision": "80a07713771f7058ec71723179a20233ee95afc2",
+    "passed_previous_head": {
+      "revision": "b3cad87bd5ba81f80c3aaa69766c52b1d7b21c58",
+      "workflow": 36070435901,
+      "twin_tests": {
+        "passed": 5286,
+        "skipped": 145,
+        "deselected": 3
+      },
+      "root_tests": {
+        "passed": 2106,
+        "skipped": 2
+      }
+    },
+    "earlier_cancelled_workflow": 36068468717,
+    "branch_update": "Main advanced with unrelated Check payroll PR #1152 (ec558b2d); GitHub rejected stale-base merge. Merged main and reran CI without changing the Sheets patch.",
+    "twin_tests": {
+      "passed": 5307,
+      "skipped": 145,
+      "deselected": 3
+    },
+    "root_tests": {
+      "passed": 2106,
+      "skipped": 2
+    }
+  },
+  "local_390px": {
+    "status": "pass",
+    "revision": "b3cad87bd5ba81f80c3aaa69766c52b1d7b21c58",
+    "observations": {
+      "viewport": [
+        390,
+        844
+      ],
+      "documentWidth": 390,
+      "initial_invalid_G2": true,
+      "broken_rule_G3": {
+        "invalid_marker": true,
+        "description": "Validation unavailable: Unable to parse range: 'Missing options'!A1:A4"
+      },
+      "relative_formula_H3_valid": true,
+      "after_reload_horizontal_scroll_before_cell_focus": {
+        "selected": "A1",
+        "G2_invalid": true,
+        "G3_unavailable": true,
+        "H3_invalid": false
+      },
+      "after_sheet_switch": {
+        "selected": "A1",
+        "G2_invalid": true,
+        "G3_unavailable": true,
+        "H3_invalid": false
+      },
+      "screenshots_retained": false,
+      "physical_touch_tested": false
+    },
+    "complete_native_state_unchanged": true,
+    "artifact_sha256s": {
+      "result.json": "0c05344e8a035668988771da19d9e8ba5c7536ec22fe71ce3b4a44361da02355",
+      "browser-observations.json": "63bd8ea7bc1cbdccb082bf58257ce8f8c4c793c754b6f003367907581efd0b3a"
+    }
+  },
+  "deployment": {
+    "revision": "3ad66f3646ec3632ba43ea4c61b453126039f142",
+    "runtime_workflow": 36074534617,
+    "twins_workflow": 36074534749,
+    "both": "success",
+    "published_images": {
+      "twin-google_docs": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:67ec42539288c363b8edbafc2b991e39a6f9bd8f581178d081ad727489019c93",
+      "twin-google_workspace": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_workspace:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:c1856307315126048985585aeec479268ccd1f4df0226028ef4a27b2dc3412cc",
+      "twin-google_drive": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_drive:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:b12299c733dfdd968c93ca391f0d102b5c14b9c10d6a4e922c0c8a236232eadc",
+      "twin-google_sheets": "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:9d04fc35283cde74ce91c6b2f7f08b428097c627cdc6072d497cb3d7ceb68c5b",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:c54bc3236b38ec3586943b6676afc6afc4b380336a0919f3c02487baf1f1be0d",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:3ad66f3646ec3632ba43ea4c61b453126039f142@sha256:59da58094481ca75a1ca980af0e79dc11e710f1c8d71e84f5b47d5be5db5d61b"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00264-pjn",
+      "arga-api": "arga-api-00634-jkf"
+    },
+    "log_sha256s": {
+      "lab-final-sheets-initial-marker-twins-deploy.log": "b0b8b311be96256d88c9b10387898cece255a7cc8ee947d1e57e601467f9d35d",
+      "lab-final-sheets-initial-marker-runtime-deploy.log": "f5711dbfc57d6c964162ad43279b06d9643701be52bce48f21c0391fb2d7b120"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; direct current running-container attestation remains pending GCP reauthentication."
+  },
+  "hosted": {
+    "status": "pass",
+    "observations": [
+      {
+        "phase": "desktop-initial",
+        "viewport": [
+          1459,
+          806
+        ],
+        "document_width": 1459,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      },
+      {
+        "phase": "desktop-reload",
+        "viewport": [
+          1459,
+          806
+        ],
+        "document_width": 1459,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      },
+      {
+        "phase": "desktop-sheet-switch",
+        "viewport": [
+          1459,
+          806
+        ],
+        "document_width": 1459,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      },
+      {
+        "phase": "mobile-initial-horizontal-scroll",
+        "viewport": [
+          390,
+          844
+        ],
+        "document_width": 390,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      },
+      {
+        "phase": "mobile-reload-horizontal-scroll",
+        "viewport": [
+          390,
+          844
+        ],
+        "document_width": 390,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      },
+      {
+        "phase": "mobile-sheet-switch-horizontal-scroll",
+        "viewport": [
+          390,
+          844
+        ],
+        "document_width": 390,
+        "selected": "A1",
+        "cells": [
+          {
+            "a1": "G2",
+            "value": "5",
+            "class": "grid-cell validation-invalid"
+          },
+          {
+            "a1": "G3",
+            "value": "Open",
+            "class": "grid-cell validation-invalid",
+            "title_and_aria_description": "Validation unavailable: Unable to parse range: DeletedChoices!A1:A3"
+          },
+          {
+            "a1": "H3",
+            "value": "35",
+            "class": "grid-cell"
+          }
+        ]
+      }
+    ],
+    "native_document_exact_equal": true,
+    "complete_captured_workspace_exact_equal": true,
+    "teardown": "torn_down",
+    "served_code_fingerprints": {
+      "matched": {
+        "twins/google_sheets/validation_ui.py:VALIDATION_SCRIPT": "04028aca5a56d4f6606020d7997c6b1d75a16562f35ee67e2cc660bf1b332317"
+      },
+      "scope": "Complete served code block; not container digest attestation."
+    },
+    "screenshots_retained": false,
+    "physical_touch_tested": false,
+    "artifact_sha256s": {
+      "browser-observations.json": "c6f14634bd7118f204bd179837b9716358e2b7c294ca32508273f13863af6cdd",
+      "result.json": "05b867613ae6a10ebf274ce928d833ef9db291388b1b7769c461402476271f72",
+      "native-before.json": "ef9544f8afd1480e6f7f1da05fa714a10685f656635f778a874cd292bea4ad06",
+      "native-after.json": "ef9544f8afd1480e6f7f1da05fa714a10685f656635f778a874cd292bea4ad06",
+      "baseline-state.json": "d7dfdeaf76244cf7ecd3ef7fca71547fa9ae04a54bc98d960b196a729134e40d",
+      "final-state.json": "d7dfdeaf76244cf7ecd3ef7fca71547fa9ae04a54bc98d960b196a729134e40d",
+      "cleanup.json": "3cd4b46732147f1e198538dd4018b5e774495d0571c8ff365d3d3c3dd4465c21",
+      "frontend-code-fingerprints.json": "0068bd56deabef2b8292f47b4bc30caedbe047b6a0d10376deb5ac4465b1ff59",
+      "browser-trace.json": "3054637bb6087b3ca2c22f9673215e58da5d329fb7074928d44d989e427ed3c6"
+    }
+  }
+}

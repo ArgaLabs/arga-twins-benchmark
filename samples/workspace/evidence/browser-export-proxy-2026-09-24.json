@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-24",
+  "status": "fixed_and_verified",
+  "source_revision": "5bf2ce3",
+  "problem": "A substring XML MIME check decoded binary Open XML Office ZIP archives as text, corrupting browser-proxy downloads.",
+  "change": "Only explicit text, JSON, JavaScript, XML and structured +json/+xml media types are sanitized as text. Binary bodies are byte-preserved. Rewritten textual responses declare UTF-8 while retaining other MIME parameters.",
+  "verification": {
+    "new_regressions": 9,
+    "scoped_regressions": 186,
+    "full_benchmark": {
+      "passed": 1203,
+      "skipped": 26
+    },
+    "ruff": "pass",
+    "pyright": {
+      "baseline_errors": 1196,
+      "current_errors": 1196,
+      "normalized_added": 0,
+      "normalized_removed": 0,
+      "status": "unchanged existing baseline, not clean"
+    },
+    "hosted": "20 Docs exports pass content/tab isolation and archive checks through patched proxy; complete captured native state unchanged.",
+    "source_hashes": {
+      "src/arga_twins_benchmark/computer_use/proxy.py": "ceb22a23ef60f33479592483d8d6849d15851ee7ae2a2fda49dfcb5960ebc6aa",
+      "tests/test_computer_use_sample.py": "d3fc92e313b2e9f6ac847f27af175f80138924163ffbb5483ff8c5db427f2d3b"
+    },
+    "logs": [
+      {
+        "name": "lab-final-sample-gates-v7.log",
+        "sha256": "c9eb441c8324dbd131fb015679b4b62471b8cd8eefae91aa7745f7db3d25d72a"
+      },
+      {
+        "name": "lab-final-sample-full-regression-v8.log",
+        "sha256": "606651863743ac4bee2a119101a039f1e1f181cae02968d1e5d800d42c5dc385"
+      },
+      {
+        "name": "lab-final-sample-pyright-v8-comparison.json",
+        "sha256": "1a94bdd315e43f2e41191db460c6e1549982c9ed4874cf6714fd6f08b168ae9f"
+      }
+    ]
+  },
+  "limits": [
+    "HTTP export verification does not establish browser download UI parity.",
+    "Full eight-provider parity and sample release gates remain incomplete."
+  ],
+  "screenshots_retained": false
+}

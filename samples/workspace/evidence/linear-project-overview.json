@@ -1,0 +1,77 @@
+{
+  "date": "2026-09-24",
+  "scope": "Linear project overview and native content/membership state",
+  "provider_reference": [
+    "https://linear.app/docs/project-overview",
+    "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql"
+  ],
+  "implemented": [
+    "Native and sidebar project links open Overview with Issues and Updates navigation",
+    "Project name, summary, Markdown content, state, priority, lead, teams, members, dates, color and icon persist through GraphQL",
+    "Project content and memberIds are independent native fields and exact Scenario seed fields",
+    "Create project documents; create/edit/reorder/delete milestones; create/edit/delete own project updates",
+    "Revision checks reject stale writes; invalid fields and foreign resources are rejected before updates"
+  ],
+  "tests": {
+    "all_linear_passed": 133,
+    "ruff": "pass",
+    "log_sha256": "bfa4fc2c483dd8e061f8c7bf69c3dad71d1ec63138275dc7282fcea2d8d64be6",
+    "cases": [
+      "Native/UI readback and protected record preservation",
+      "Summary/content/membership independence",
+      "Invalid and stale forms, invalid native members/content",
+      "Existing inactive members and archived teams retained",
+      "Exact Markdown whitespace retained",
+      "Foreign project milestones and other authors updates protected",
+      "Duplicate project names and stable native/mention links"
+    ]
+  },
+  "browser": {
+    "surface": "Chrome CUA",
+    "widths": [
+      "desktop default",
+      390
+    ],
+    "flows": [
+      "Save summary, paused state and two members",
+      "Create resource document",
+      "Create milestone and move it above seeded milestone",
+      "Post and edit project update at 390px, reload persisted text"
+    ],
+    "mobile_document_scroll_width": 390,
+    "mobile_viewport_width": 390,
+    "offscreen_visible_controls": 0,
+    "native_protected_records": "unchanged",
+    "snapshot_sha256": "389f5b8898ac969a2698a3a324bdb2d494bf744225296de08f44e7691d363752",
+    "screenshots_retained": false
+  },
+  "ci": "pass via exact release integration PR #1143",
+  "deployment": {
+    "revision": "229a7b50f0e5837d8047a84cc66cab3ebfff7d12",
+    "twins_workflow": 35986499613,
+    "runtime_workflow": 35986499616,
+    "status": "pass"
+  },
+  "hosted_validation": {
+    "status": "pass",
+    "report": "linear-project-production-2026-09-24.json"
+  },
+  "limits": [
+    "External resource links, inline project comments, project graphs and configurable statuses remain incomplete",
+    "This bounded check does not establish full Linear feature/visual/mobile parity"
+  ],
+  "review_followup": {
+    "combined_linear_and_scenario_tests_passed": 278,
+    "counts_include_previous_linear_suite": true,
+    "disabled_project_updates": "History remains readable; create/edit/delete controls absent; direct writes still rejected",
+    "natural_language_scenario_schema": "Advertises independent description/content/member_ids; exact generator example seeds through native runner",
+    "ruff": "pass",
+    "log_sha256": "f9ce3ca5f24dd9bcb6982c3a9f8b0322d52261336a58bfbf94ee17f5b5705c3e"
+  },
+  "ci_dependency_followup": {
+    "failure": "Cross-package generator test imported backend anthropic dependency in the lightweight twin environment",
+    "resolution": "Move generator-to-runner integration test into backend tests; do not add backend dependencies to the twin runtime",
+    "combined_tests_passed": 278,
+    "log_sha256": "b91096adf70b6d02f0beca22101539cd12a56e1a1483f40adcf32f886b99b149"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-23",
+  "provider": "gmail",
+  "kind": "manual_hosted_chrome_cua",
+  "scored_candidate": false,
+  "run_id": "e8f78552-46ac-462d-bc60-b76e9184ec5c",
+  "status": "passed",
+  "screenshots_retained": false,
+  "deployment_sha": "fa0dc188f017ecc5d770f4bf636933bd247e2e27",
+  "viewports": [
+    "desktop",
+    "390x844"
+  ],
+  "checks": [
+    "More exposes All Mail",
+    "All Mail lists 53 conversations, including the protected archived conversation; Spam excluded",
+    "Older All Mail page contains conversations 51\u201353; selecting it selects three items",
+    "Mail returns to Inbox 1\u201350 of 52 and clears all selection",
+    "All Mail exits Settings",
+    "Mobile unmatched search shows zero results; All Mail clears it and restores 53 conversations",
+    "Mobile Back to inbox exits Settings and restores Inbox 1\u201350 of 52"
+  ],
+  "native_readback": {
+    "entire_snapshot_exactly_unchanged": true,
+    "provider_sha256": "cfd5a0580b8eaa3965ee9254fb67a7c6362741fecf5cd1ccfe0ace61e1944fed"
+  },
+  "cleanup": {
+    "confirmed_status": "torn_down",
+    "outcome": "terminal_without_twins"
+  },
+  "limits": [
+    "This fixture has no separate sent-only conversation; that membership case is covered by local tests.",
+    "Mobile folder strip can leave the active Inbox item outside its scrolled visible area after navigation; broader visual parity remains open.",
+    "Manual flow verification does not establish independent browser-agent coverage."
+  ]
+}

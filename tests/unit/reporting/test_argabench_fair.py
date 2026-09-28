@@ -252,6 +252,23 @@ def test_cross_system_correlation_does_not_pool_sibling_records() -> None:
     assert "jira" in assertion["detail"]
 
 
+def test_dev05_full_grader_requires_selected_resources_even_with_a_correct_report(tmp_path: Path) -> None:
+    task = _task("DEV-05")
+    _write_attempt(
+        tmp_path,
+        task,
+        baseline={},
+        final={},
+        final_text=(
+            "paycore-2026.08-r17 c91d-7a40 remains blocked_pending_owner_review and unmerged. "
+            "billing-storage owns the migration under .github/CODEOWNERS."
+        ),
+    )
+    verdict = grade_argabench_fair_attempt(tmp_path, task)
+    assert _assertion(verdict, "required_selector.target_pull_request")["status"] == "fail"
+    assert _assertion(verdict, "required_selector.delivery_gate")["status"] == "fail"
+
+
 def test_dev05_explicit_selectors_require_the_linked_changed_path_and_comment() -> None:
     resources = [
         CanonicalResource(

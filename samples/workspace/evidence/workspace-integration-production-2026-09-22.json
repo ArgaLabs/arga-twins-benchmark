@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-22",
+  "kind": "manual_hosted_cua_feature_verification",
+  "scored_candidate": false,
+  "providers": [
+    "gmail",
+    "google_docs",
+    "google_sheets"
+  ],
+  "browser": "Google Chrome via CUA",
+  "deployment": {
+    "revision": "559f01efff38fb0eddcc6b6ad2acdd471649e350",
+    "twins_run": 35826008791,
+    "runtime_run": 35826008636,
+    "conclusions": "success"
+  },
+  "scenario": "Saved deterministic Scenario through Arga CLI; no post-seed augmentation",
+  "checks": {
+    "gmail_all_matching_archive": "pass; exactly 52 received conversations archived; draft records and protected archived mail unchanged",
+    "gmail_search_selection_invalidation": "pass",
+    "docs_tabs": "pass; create, rename, nested subtab, duplicate subtree, isolated edit and duplicate deletion; originals and protected document unchanged",
+    "docs_deep_link": "pass; new browser tab opens the selected nested tab",
+    "docs_mobile_390px": "pass; menu x162,width220; dialog x19,width352; transient images inspected",
+    "sheets_merge": "pass; hidden C2 discard warning, cancellation, merge, unmerge and remerge B2:F2",
+    "sheets_borders": "pass; native double outer perimeter and frozen-divider rendering",
+    "sheets_native_edit": "pass; B2=9, B3 formula=B2*2 renders 18 after reload",
+    "sheets_protected_state": "pass; protected sheet, native dimensions and frozen counts unchanged",
+    "sheets_mobile_390px": "pass; merge menu x10,width220; transient image inspected"
+  },
+  "discovered_bugs": {
+    "gmail_folder_search": "Clicking Drafts retains the active search; fixed in follow-up bug/lab-gmail-folder-search, deployment pending",
+    "sheets_formula_display": "Native recalculation succeeds, but dependent visible formula remains stale until reload; follow-up required"
+  },
+  "cleanup": "torn_down",
+  "artifacts_sha256": {
+    "scenario.json": "a0c220f3d3a08b58a24f155c2db0eff35b02061fca3292d58506ce8b7bd8b17c",
+    "baseline-state.json": "21ba22ec83e2a83e57c1ecfaa12b8d9545f1a5049bdb11dfa6c895de0d0d1a98",
+    "final-state.json": "f0cd57dd7e6505f7617205fcc45ccbfde1be067bd6a9c385553d78066fab8a03",
+    "gmail-browser-trace.json": "236f7b64e2a58740b872da9b78175d5705de240a31e9bccfd297586d286dd7fe",
+    "google_docs-browser-trace.json": "3342eea8c4fbf8fb11e32a112c9b1c4901f54f1de0b9d253f35f9b7e6036ef87",
+    "google_sheets-browser-trace.json": "63f0173e9a0e51621bb4b95d5d83e5c01cdb3f59a07a2d85704d69fd009a42a8",
+    "cleanup.json": "a6ebd701ef212c56c2d169ff038342e10fc9d5ee6392846a427b5e03c83a5838"
+  },
+  "limitations": [
+    "Manual feature verification, not an autonomous browser candidate rollout or full provider audit.",
+    "390px emulation does not establish exhaustive device or pixel parity.",
+    "Irregular merged-perimeter provider-reference parity remains open.",
+    "No screenshot files retained."
+  ]
+}

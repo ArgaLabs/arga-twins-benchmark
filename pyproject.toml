@@ -15,11 +15,17 @@ dependencies = [
     "typer>=0.15.0",
 ]
 
+[project.optional-dependencies]
+computer-use = ["starlette>=0.45", "uvicorn>=0.34", "python-multipart>=0.0.20"]
+
 [project.scripts]
 arga-bench = "arga_twins_benchmark.cli:app"
 
 [dependency-groups]
 dev = [
+    "starlette>=0.45",
+    "uvicorn>=0.34",
+    "python-multipart>=0.0.20",
     "pyright>=1.1.400",
     "pytest>=8.3.0",
     "ruff>=0.9.0",

@@ -1,0 +1,525 @@
+{
+  "schema": "arga.lab.feature-evidence/1",
+  "observed_on": "2026-09-27",
+  "provider": "stripe",
+  "status": "deployed_bounded_hosted_native_browser_images_pass",
+  "release_allowed": false,
+  "pull_request": "https://github.com/ArgaLabs/validation-server/pull/1199",
+  "source_head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
+  "changes": [
+    "Native balance report projections reconcile opening/activity/fees/payouts/ending by settlement currency",
+    "Local calendar date and timezone boundaries, including historical DST; automatic payout effective dates",
+    "Category drilldown retains route and category across filter errors and period changes",
+    "CSV summary/itemized configuration, category defaults, supported column selection and editable error recovery",
+    "Read-only forms and exports preserve complete native account state"
+  ],
+  "tests": {
+    "integrated_passed": 231,
+    "focused_report_cases": 39,
+    "review_regressions_failed_before_fix": 4,
+    "make_fix": "pass",
+    "static_detector_findings": 0
+  },
+  "browser_rounds": [
+    {
+      "native_unchanged": true,
+      "browser_requests_get_only": true,
+      "browser_checks": [
+        "Desktop totals and USD activity/payout values",
+        "Invalid timezone rejects and recovers using retained fields",
+        "Itemized column selection and summary toggling",
+        "Cancel returns to report",
+        "390px layout and currency selection",
+        "JPY reload retains range and currency"
+      ],
+      "browser_download": {
+        "status": "blocked_by_chrome",
+        "visible_error": "ERR_BLOCKED_BY_CLIENT",
+        "matching_new_files": [],
+        "server_export_status": [
+          200
+        ],
+        "no_security_bypass_attempted": true
+      },
+      "finding": "Activity and payout amount columns incorrectly share Summary Net amount heading; fix to Amount",
+      "screenshots_retained": false,
+      "limits": [
+        "Shared dashboard shell and filter composition differ from the real report",
+        "Native keyboard/focus unavailable while Mac locked; no physical touch proof",
+        "CSV browser download not certified"
+      ]
+    },
+    {
+      "scope": "Bounded confirmation after activity/payout heading correction",
+      "passed": true,
+      "checks": [
+        "Desktop and390px corrected Amount headers",
+        "Refund drill-down contains one txn_refund at gross/net -$20.00 and reloads",
+        "Native full state unchanged; all requests GET"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Earlier browser CSV download blocked by Chrome and remains unverified",
+        "Global Stripe shell/filter layout differs from live reference",
+        "No native keyboard/focus or physical touch claim"
+      ]
+    },
+    {
+      "scope": "Reviewer-directed fixes only; desktop and 390px Chrome",
+      "passed": true,
+      "checks": [
+        "Refund drilldown retains category and route during invalid Timezone submission and correction to UTC",
+        "Refund selected by default in export dialog",
+        "Deselecting all nine columns produces400 with original date/currency/timezone/category and itemized settings",
+        "Error recovery exposes all column choices; Net can be selected at390px with retry control visible",
+        "Complete native state unchanged; all requests GET; owned tab closed and viewport reset"
+      ],
+      "screenshots_retained": false,
+      "limits": [
+        "Successful CSV download not retried because prior browser block remains open; rendered default and corrected form submissions pass HTTP tests",
+        "No independent reviewer visual approval; no native keyboard/focus or physical touch claim",
+        "Global shell/filter differences and full Stripe parity remain open"
+      ]
+    },
+    {
+      "passed": true,
+      "summary_download": "Chrome native Done;217bytes;4rows net14.70,86.30,-50.00,51.00",
+      "activity_download": "Chrome native Done;369bytes;2chargerows with selected source_id/exchange_rate and embeddednewlinequotes preserved",
+      "complete_state_matches_fresh_fixed_fixture": true,
+      "browser_security_changed": false,
+      "prior_extension_ERR_BLOCKED_BY_CLIENT_preserved": true,
+      "physical_touch": false
+    }
+  ],
+  "review": {
+    "scope": "Independent source and supplied text/native evidence only; no screenshots retained or independent visual approval",
+    "first_disposition": "fix",
+    "material_findings": [
+      "Drilldown export lost its category",
+      "Filter application lost drilldown context",
+      "Columns error lacked editable recovery"
+    ],
+    "verdict": "ship",
+    "scored_findings": [
+      "resolved",
+      "resolved",
+      "resolved"
+    ],
+    "documenter": "Bounded documentation accepted; missing date presets/Clear/timezone picker/AI and native input limitations explicitly documented"
+  },
+  "ci": {
+    "status": "passed",
+    "head": "eb920a4f024f83672e86bb598aca0dd2f57a09db",
+    "lint_and_test_run": 36288698393,
+    "all_complete": true,
+    "premerge_state": "CLEAN",
+    "check_count": 34,
+    "twin_tests_passed": 6740,
+    "root_tests_passed": 2140
+  },
+  "deployment": {
+    "revision": "c232855befa0b3d4373f32166979af326bee0fac",
+    "runtime_workflow": 36289029008,
+    "twins_workflow": 36289028995,
+    "both": "success",
+    "published_images": {
+      "twin-stripe": "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe:c232855befa0b3d4373f32166979af326bee0fac@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+      "preview-proxy": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c232855befa0b3d4373f32166979af326bee0fac@sha256:4e754ce1db87a5bb41c1bd0ff9ec6cc92678c056ecbee877ec7fc6c3e8c1d673",
+      "api": "us-west1-docker.pkg.dev/arga-labs/arga/api:c232855befa0b3d4373f32166979af326bee0fac@sha256:0a52d7b5edf3b5bb2308ea925625f360cd756d48f703e72a4e8bb60b717e65a2"
+    },
+    "runtime_revisions_at_deployment": {
+      "preview-proxy": "preview-proxy-00309-4m5",
+      "arga-api": "arga-api-00679-j94"
+    },
+    "log_sha256s": {
+      "lab-final-stripe-reports-c232855b-twins-deploy.log": "b530868f92a0cdd40e7233caa2c87c93ac6652efa49e03cbcf279cd81f487a07",
+      "lab-final-stripe-reports-c232855b-runtime-deploy.log": "eee7a9f5ccc80f8a3967d0e0285e60060026f04216e5683f6c863393415a065c"
+    },
+    "attestation_limit": "Successful build/push/deployment logs; serving Cloud Run image observations and fresh worker-container attestation are recorded separately."
+  },
+  "limits": [
+    "Global dashboard shell/filter composition differ from live Stripe; date presets, Clear and timezone picker missing",
+    "PDF, scheduling, report email delivery, warehouse export, complete column catalog, permissions, broader analytics/AI remain open",
+    "Summary/itemizedactual filedownloads now verified in foregroundChrome; earlierextension failurespreserved",
+    "Physical touch and fullprovider/AI/collaboration/samplegates pending"
+  ],
+  "source_sha256": {
+    "twins/stripe/README.md": "8448f24c350caf21f201637b13b02bb51dbc707497ac6dca0ac1fa77071a9320",
+    "twins/stripe/app.py": "4ce76d218666a07f3118f703cb6dd42b279631618d62ebc0c845bb952d99626a",
+    "twins/stripe/balance_reports.py": "3ce00e203f3139b72cde3c5edc6f16a07a212a59967678518e01bc4084100737",
+    "twins/stripe/balance_reports_ui.py": "367975fc3ab60bb20932d07933a09b8bfb7a51b6a84b8675c772837d62b068f6",
+    "twins/stripe/dashboard_ui.py": "6f2714c7e7e4a971b7fa7cd71e6b4d358d911ca5e729eaf12e168e5e714a722e",
+    "twins/stripe/money.py": "312a169e9917f51e66c83ae7bedb9261980e8d4ebe863e9e14eef2c12020cdf8",
+    "twins/tests/test_stripe_balance_reports.py": "b8a32834ac4546da1f8a83488dc68004aa792fb756e489f2637170b0be63e18e",
+    "twins/tests/test_gmail_twin.py": "b272a88b1ad78db69e57ca49bb825bd216790cf22a0987745277d97cc36419d3"
+  },
+  "artifacts_sha256": {
+    "lab-stripe-reports-confirm-deps.log": "5f892db9d3b1f32816f5cc71f82b6e804601819744e1a31d1d60273ddf54e921",
+    "lab-stripe-reports-confirm-make-fix.log": "7252d9b900e8209e75ee42d6d70650d92ad0b2d6d1146d2473e1a65cfaed8083",
+    "lab-stripe-reports-confirm-tests.log": "472fd779a9c56401fa8968188268f853b8ca4bb9c4381962dab99d8bd769d51c",
+    "lab-stripe-reports-core-integrated.log": "f53f539c434c88f08757e5f4d4d282e93f42e795c86e04dfd31623070754d911",
+    "lab-stripe-reports-core-tests-r2.log": "65d8a7f431d729f4f7887c83a2395ca869ffd1d6236d1a205d62cd6130cfccde",
+    "lab-stripe-reports-core-tests.log": "d8ccefbd892337918b6db706399e38d8c049cf31f39cb66e432253852576eb7b",
+    "lab-stripe-reports-deps.log": "2e0a5cd37b56530367df77c4b4a687b5ac2f2c1380a675bec3746b616b64ac69",
+    "lab-stripe-reports-integrated.log": "add8801bb90ecd7acd350c6b079b07726c9f85aa8ddfe3278e940e0a6be73a86",
+    "lab-stripe-reports-local-r1.log": "e4229d51c0fc34c10e7d553d1aefe5cce852c10e7d1c0224ea4428b37ea4805a",
+    "lab-stripe-reports-local-r2.log": "9071c325bca70e137c4799ba41ca236857db75f022d288a8023a807278e464fb",
+    "lab-stripe-reports-local.log": "f64c017f366170a9aaef5226fb040819f02538fe6b5f8a8a94e383f5dc0f0a1a",
+    "lab-stripe-reports-make-fix-r2.log": "ffc99158cb8014d5223d1df76560105164616a237a00137f4f707b2209cd1e18",
+    "lab-stripe-reports-make-fix.log": "36fff06719e470be5c1a447ba98e37632014a93ce560515799a900eaf2cade18",
+    "lab-stripe-reports-review-deps.log": "c7d0fc9d1f35f6b9b7b517d201e0d0de263a7bba43b47fe7565157c9e523d118",
+    "lab-stripe-reports-review-green.log": "6af5301b83ffebc529cce5639b872d8972f5565e3b3f82496237073ae0554a40",
+    "lab-stripe-reports-review-integrated.log": "6c6f2c21d4650de5cce69bba04097901e60b090886faefeba29cde2f08489e91",
+    "lab-stripe-reports-review-make-fix.log": "dca7c341e3fa80aab257e5fbfe9c88c72ace05671c3a0a48590217b610cfeebf",
+    "lab-stripe-reports-review-red.log": "9e0fe48435cbea7a7058a2c0f03083493d890da5e618c4a5a86ac558f1f81ebb",
+    "lab-stripe-reports-review-server.log": "e0d15a1a02f678d26d0ae582f3ccf6c8a05c8bcd1ef8d9385fe9ec289ca66044",
+    "lab-stripe-reports-ui-deps-final.log": "0bf052a93c70cbf69f1dff047df359ef0cbda900d7269b65aad00b567b0a01ac",
+    "lab-stripe-reports-ui-deps.log": "5f892db9d3b1f32816f5cc71f82b6e804601819744e1a31d1d60273ddf54e921",
+    "lab-stripe-reports-ui-make-fix-final.log": "3d49a5e09691dccc9185da9ba752c37b84ae3aa504b933db1a90547b39f42c3a",
+    "lab-stripe-reports-ui-make-fix.log": "3d49a5e09691dccc9185da9ba752c37b84ae3aa504b933db1a90547b39f42c3a",
+    "lab-stripe-reports-ui-tests.log": "e5fb0b35594ebe819e82b972b34328ba599008bab2f8387104577b26b4841709",
+    "lab-stripe-reports-local-r1/download-baseline.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-stripe-reports-local-r1/workspace.json": "8c8ae12794529d874f1d4a579f13a613c87530f70e8b3eb9052395cac9d30ff4",
+    "lab-stripe-reports-local-r1/browser-native-result.json": "187684eaa4a002b6b38d0ad8ac021ca5333205d40b694d322ac5fae0b75d35c2",
+    "lab-stripe-reports-local-r1/baseline-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-local-r1/request-trace.json": "594f84c5c16fffc21034ba7b6a98e4626f6c6b5eacedafcb8eb28ed587135275",
+    "lab-stripe-reports-local-r1/final-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-local-r2/workspace.json": "23b376e080fe8b7c3547d813ee3d95bc5392b7788fadd4ada1028ea5729ac5d4",
+    "lab-stripe-reports-local-r2/browser-native-result.json": "d33716ac0f206c7dc5411ab2ffd27a2e3e127b22005dc69b5d4d6d5064471c77",
+    "lab-stripe-reports-local-r2/baseline-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-local-r2/request-trace.json": "3be7339ff9aff861fe39fe56c26f2e449c0e86b267873687ff57b971db377a2d",
+    "lab-stripe-reports-local-r2/final-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-review-r1/workspace.json": "1d0eac362c1dc69f6ee7d13a260e87228687bc380e9c11ffa8c3007448c3e0df",
+    "lab-stripe-reports-review-r1/browser-native-result.json": "03c209828e811d2e33f2963fa024b9a71db2f868144b46bdeda3a04ed8015866",
+    "lab-stripe-reports-review-r1/baseline-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-review-r1/request-trace.json": "035c989b203cd79d6a06dc87b8dc3c5786476c857a9cdca2d4d028d4acb78be9",
+    "lab-stripe-reports-review-r1/final-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-detector.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "lab-stripe-reports-ci-current.json": "d22a2d0c0fe81c65bc9a4944cfc5912528534692e3f1dff3153de982424626e8",
+    "lab-stripe-reports-ci-complete.log": "69e478add7302515d98363dcd94e89396ac67a328e3dcff8a23d1f5f33bc45ac",
+    "lab-stripe-reports-local-r3/workspace.json": "290253a3d4be55cfaca3cb17d46aad595ee9148acfa1640521078ba904dede4f",
+    "lab-stripe-reports-local-r3/download-result.json": "e9b8ae3993ccc9d835fa33c3016575a6fea84c0ea15a2169fbb2a35e88b32115",
+    "lab-stripe-reports-local-r3/summary-download.json": "1fb74ba31b2e4746c65d250535853c4a58b3dd8a5556341d509eeba514478396",
+    "lab-stripe-reports-local-r3/activity-download.json": "9b6714a8668298b7324e639059fdc7d312178d19e7d447dd1ea8bb218c9e2ced",
+    "lab-stripe-reports-local-r3/after-download-state.json": "4ca5d1df2bd865c7dd107b7810d35e6c197ad9a3c5233be0147d6013379310d9",
+    "lab-stripe-reports-local-r3/request-trace.json": "2eda5e56e8b01a2b73d2fe0c9b40ee39461b590521db09d63a4edc2b9ead39c2",
+    "lab-stripe-reports-ci-failure-r2.log": "4f0ce3875c6371537e59b33f66fabe0a0a5aa0d4a01f1e62f4799e8fab746251",
+    "lab-stripe-reports-ci-watch-repro.log": "bd59e925476e987fb44e951f5b801bc010aa23aaf898f6a28d5f6320aeacf7f2",
+    "lab-stripe-reports-ci-watch-regressions.log": "72c24eb6c7f3e1986f28dbb6f3c9568b2877dc8eac51c81d7770b4b8898dddf1",
+    "lab-stripe-reports-ci-head-a82655dc.json": "d244f96066590a269d5bbcc924a8c63b9c493a9685c943d3c79cf298cf3f8a1f",
+    "lab-stripe-reports-ci-log-a82655dc.log": "438bc481988ee28d2177ce2330349abc3ccaf8717c867c7591d23e1428d23aa6",
+    "lab-stripe-reports-premerge-final.json": "8e08d4adb471f3bd7c95e47316569d9d28874e18175affbb24c7bbb5c4d4b4d4",
+    "lab-stripe-reports-ci-log-eb920a4f.log": "6e6d409e4a13a3ab46ebb9e5fb2c8348bef9568670beb392399c3e8225610af2",
+    "lab-final-stripe-reports-c232855b/native-result.json": "ec9b692df1b931971e5bc6db87dae3fd1f565d55712159c6594d6f526d6ee7b3",
+    "lab-final-stripe-reports-c232855b/browser-pending.json": "0f68dc47f4eacb818bb645f3bd037427b5bb69b16dfb6fb7f8de78ffe4fa0e66",
+    "lab-final-stripe-reports-c232855b/image-comparison.json": "a901fa26c1446f0ea4da8fadf1f1d706e9069dedb69f6aa8134decbccb4c6211",
+    "lab-final-stripe-reports-c232855b/runtime-image-evidence.json": "531e018ddb46221698d135381e86b660612b81bfb4efe514a4fbb4391a2e3747",
+    "lab-final-stripe-reports-c232855b/baseline-state.json": "85b3f44772e8df0d9ed858dc4a6bead2aed4286c41252a46ad569ca11c76fe69",
+    "lab-final-stripe-reports-c232855b/final-state.json": "85b3f44772e8df0d9ed858dc4a6bead2aed4286c41252a46ad569ca11c76fe69",
+    "lab-final-stripe-reports-c232855b/cleanup.json": "2cb56ee64cb0c75bc9292643fb40f6bda2e7b31617c035c0e0b274a0e2fbd0c1",
+    "lab-final-stripe-reports-c232855b/operator-api-trace.json": "2f6393b4996357a96cac88f6365151f08ce6c5ad0bf87065cd0523678cc572fd",
+    "lab-final-stripe-reports-c232855b/summary-csv.json": "dd03d7ae2bdc38759e4e623a731955e51ec970f146072b8e9d00f5dac6471e76",
+    "lab-final-stripe-reports-c232855b/refund-csv.json": "cdd5090e4be87e8d69e0327d89230710dfd084c955aa1ea422812bf20ea866ae",
+    "lab-final-stripe-reports-c232855b-browser-r1/image-comparison.json": "50d5c92ba60598d14badeb385f144e979b41122ca6a8b6a9eac538be4af7c98a",
+    "lab-final-stripe-reports-c232855b-browser-r1/itemized-browser.json": "6d6ad0ef0f549a97c85125050661868a4ab00f8a6b67c1ec5ead20d5e54e33c1",
+    "lab-final-stripe-reports-c232855b-browser-r1/summary-browser.csv": "3241a9a9f9ec8cac9fd50b09eb618ef64d61f0c76746d4f7c49bc2fc8827b8cd",
+    "lab-final-stripe-reports-c232855b-browser-r1/cleanup.json": "6674d9a20c5049adf43b21faaec950f0391fda46254ef5b05f94ba7c649cc470",
+    "lab-final-stripe-reports-c232855b-browser-r1/runtime-image-evidence.json": "8e4e352ad90bde3506d2267e67b53ccea8ffb4d018197fa3252d7e0e537d0d7d",
+    "lab-final-stripe-reports-c232855b-browser-r1/native-result.json": "f9448eb68b55cabebbb145592853ae71b45b0b95cf945d397a9f5a87d45d4936",
+    "lab-final-stripe-reports-c232855b-browser-r1/browser-result.json": "249e6663f158b40392f433688e742f19f7c2e30bc2dbe60fe95b0d67a3e5d821",
+    "lab-final-stripe-reports-c232855b-browser-r1/itemized-browser.csv": "094083b8f8c85df55fc8c59b43ee11c708523946226904aeac81f83c5214c36e",
+    "lab-final-stripe-reports-c232855b-browser-r1/baseline-state.json": "e682e0315301b10311fa0daaf78bf53c18af5bc54419fda8d400f5e8da2ea1d1",
+    "lab-final-stripe-reports-c232855b-browser-r1/operator-api-trace.json": "2f6393b4996357a96cac88f6365151f08ce6c5ad0bf87065cd0523678cc572fd",
+    "lab-final-stripe-reports-c232855b-browser-r1/download-cleanup.json": "132232009f68be2ba648341d03483db6fe686fd34699191e3949b3f2b6c63b08",
+    "lab-final-stripe-reports-c232855b-browser-r1/final-state.json": "e682e0315301b10311fa0daaf78bf53c18af5bc54419fda8d400f5e8da2ea1d1",
+    "lab-final-stripe-reports-c232855b-browser-r1/summary-browser.json": "d1e995198d04f754dbced946bd67a0d60f7983173cd989a0c346e5aae1b2dc77"
+  },
+  "preserved_ci_attempts": [
+    {
+      "status": "passed",
+      "preserved_attempt": "Draft-triggered Actions skipped under repository policy; not counted as passing CI",
+      "head": "486ec063ce41885a66aed0767a644b8824ee0f58",
+      "all_complete": true,
+      "merge_state_at_check": "CLEAN",
+      "twin_tests_passed": 6581,
+      "root_tests_passed": 2134,
+      "lint_and_test_run": 36241116012,
+      "docker_build_run": 36241116024,
+      "fidelity_run": 36241116152
+    },
+    {
+      "head": "7d6e6c63f4e092d78f0c1a88d0f1f64c96ff6e52",
+      "status": "failed",
+      "run": 36287910500,
+      "failure": "Cross-process Gmail watch test initial publication exceeded one-second fixture timeout under CI load",
+      "local_exact_reproduction": "passed",
+      "fix": "Test fixture explicitly uses five-second publish deadline and ten-second outer client deadline; production timeout and retry behavior unchanged",
+      "focused_watch_tests_passed": 2
+    },
+    {
+      "head": "a82655dce932560a668e910d24f70f729eccbf00",
+      "status": "passed",
+      "twin_tests_passed": 6737,
+      "root_tests_passed": 2140,
+      "lint_and_test_run": 36288387996,
+      "all_complete": true
+    }
+  ],
+  "merge_commit": "c232855befa0b3d4373f32166979af326bee0fac",
+  "serving_runtime": {
+    "revision": "c232855befa0b3d4373f32166979af326bee0fac",
+    "cloud_run": [
+      {
+        "latest_ready_revision": "preview-proxy-00309-4m5",
+        "observed_at": "2026-09-27T02:38:04.344422+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:c232855befa0b3d4373f32166979af326bee0fac",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d",
+                "name": "preview-proxy-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+              }
+            ],
+            "ready": true,
+            "revision": "preview-proxy-00309-4m5"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "preview-proxy",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "preview-proxy-00309-4m5",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:4e754ce1db87a5bb41c1bd0ff9ec6cc92678c056ecbee877ec7fc6c3e8c1d673",
+          "sha256:cb37c11711ff21271822d03f30d940b3970905d5dcc0fe847be5dffad9e12c9d"
+        ],
+        "published_manifest_match": true
+      },
+      {
+        "latest_ready_revision": "arga-api-00679-j94",
+        "observed_at": "2026-09-27T02:42:24.392213+00:00",
+        "region": "us-west1",
+        "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:c232855befa0b3d4373f32166979af326bee0fac",
+        "revisions": [
+          {
+            "containers": [
+              {
+                "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c",
+                "name": "api-1",
+                "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c"
+              }
+            ],
+            "ready": true,
+            "revision": "arga-api-00679-j94"
+          }
+        ],
+        "schema": "arga.cloud-run-images/1",
+        "service": "arga-api",
+        "status": "complete",
+        "traffic": [
+          {
+            "percent": 100,
+            "revision": "arga-api-00679-j94",
+            "tag": null
+          }
+        ],
+        "published_manifest_digests": [
+          "sha256:0a52d7b5edf3b5bb2308ea925625f360cd756d48f703e72a4e8bb60b717e65a2",
+          "sha256:92826e83df1a383fb531bae8d5355086e52e5014f052a875a8fbf331520f695c"
+        ],
+        "published_manifest_match": true
+      }
+    ],
+    "log_sha256": "eee7a9f5ccc80f8a3967d0e0285e60060026f04216e5683f6c863393415a065c",
+    "status": "complete",
+    "limits": [
+      "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+    ]
+  },
+  "hosted": {
+    "status": "bounded_native_browser_images_pass",
+    "run_id": "7033a71a-3298-46cb-8a3a-495306c8bde0",
+    "browser": {
+      "status": "bounded_hosted_pass",
+      "passed": true,
+      "run_id": "7033a71a-3298-46cb-8a3a-495306c8bde0",
+      "browser": "Google Chrome via CUA; foreground native controls and 390x844 viewport checks",
+      "observations": [
+        "Native foreground Chrome Summary Download CSV reaches Done; actual 216-byte file has net amounts 0.00, 90.00, -50.00, 40.00",
+        "Refund drilldown defaults to Itemized and Refund; Source Id and Exchange Rate checkboxes add the requested columns",
+        "Actual itemized CSV reaches Done; 253-byte file contains exactly one refund with gross/net -20.00, fee 0.00 and the refund source ID",
+        "Refund category and result survive native reload",
+        "390x844 report and export dialog fit the viewport; invalid timezone displays Choose a valid time zone, correction to UTC restores the report",
+        "Mobile Cancel closes export and restores focus to Export Summary"
+      ],
+      "screenshots_retained": false,
+      "physical_touch_tested": false,
+      "viewport_reset": true,
+      "owned_tabs_closed": true,
+      "teardown_confirmed": true,
+      "limits": [
+        "Selected flows only; no exhaustive desktop/mobile/provider/AI/collaboration parity claim",
+        "390px pointer checks do not establish physical touch behavior"
+      ],
+      "state_verification": {
+        "browser_exercised": true,
+        "browser_requests_read_only": true,
+        "complete_native_state_unchanged": true,
+        "expected_summary": [
+          "0.00",
+          "90.00",
+          "-50.00",
+          "40.00"
+        ],
+        "limits": [
+          "Current native charge fees zero; nonzero fees covered by local ledgerfixtures",
+          "CSV browser evidence separate",
+          "No full Stripe financial/AI/admin/touch claim"
+        ],
+        "passed": true
+      },
+      "summary_download": {
+        "passed": true,
+        "bytes": 216,
+        "sha256": "3241a9a9f9ec8cac9fd50b09eb618ef64d61f0c76746d4f7c49bc2fc8827b8cd",
+        "rows": [
+          {
+            "category": "starting_balance",
+            "currency": "usd",
+            "description": "Starting balance (2026-08-01)",
+            "net_amount": "0.00"
+          },
+          {
+            "category": "activity",
+            "currency": "usd",
+            "description": "Activity",
+            "net_amount": "90.00"
+          },
+          {
+            "category": "payouts",
+            "currency": "usd",
+            "description": "Total payouts",
+            "net_amount": "-50.00"
+          },
+          {
+            "category": "ending_balance",
+            "currency": "usd",
+            "description": "Ending balance (2026-08-31)",
+            "net_amount": "40.00"
+          }
+        ]
+      },
+      "itemized_download": {
+        "passed": true,
+        "bytes": 253,
+        "sha256": "094083b8f8c85df55fc8c59b43ee11c708523946226904aeac81f83c5214c36e",
+        "rows": [
+          {
+            "balance_transaction_id": "txn_jh5dnzrIFntdti4232ZtmLCO",
+            "created": "2026-08-15 12:00:00",
+            "available_on": "2026-08-15 12:00:00",
+            "currency": "usd",
+            "gross": "-20.00",
+            "fee": "0.00",
+            "net": "-20.00",
+            "reporting_category": "refund",
+            "description": "",
+            "source_id": "re_8Ey28xQDyWSyIGUQiDEAtZx4",
+            "exchange_rate": ""
+          }
+        ],
+        "browser_download_done_observed": true
+      },
+      "download_cleanup": {
+        "only_new_verified_downloads_removed": true,
+        "preserved_native_download_history": true,
+        "files": [
+          {
+            "filename": "balance-summary-2026-08-01.csv",
+            "archived_sha256": "3241a9a9f9ec8cac9fd50b09eb618ef64d61f0c76746d4f7c49bc2fc8827b8cd"
+          },
+          {
+            "filename": "balance-activity-2026-08-01.csv",
+            "archived_sha256": "094083b8f8c85df55fc8c59b43ee11c708523946226904aeac81f83c5214c36e"
+          }
+        ]
+      }
+    },
+    "actual_container_images_matched": 3,
+    "image_evidence": {
+      "status": "complete",
+      "observed_at": "2026-09-27T03:14:54.956105+00:00",
+      "publication_sha256": "31b30f7af31f83fede850fcf45feba9b18e2bf935e4b09a27c910cc7231afbab",
+      "containers": {
+        "stripe": {
+          "published_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+          "image_id": "sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:988163ff134aea11b480683fcb63cbf069eda86fd8fb205810b2d63ca155586a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-18924e9d56574156b7d4a756941fb23d",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-18924e9d56574156b7d4a756941fb23d@sha256:9b006f47653e82cf0f23781907f6801b69750c302bd7cb4b210e43e70f648147",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:9b006f47653e82cf0f23781907f6801b69750c302bd7cb4b210e43e70f648147"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:9b006f47653e82cf0f23781907f6801b69750c302bd7cb4b210e43e70f648147"
+          ],
+          "builder_log_sha256": "9d91c4fe7df116587533f404ca20419a6b368c186939bb1d5648f5c861c5f22d"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    },
+    "teardown_confirmed": true
+  },
+  "preserved_hosted_attempts": [
+    {
+      "run_id": "f9c06284-10e5-4d02-ab49-d12f0c7ea604",
+      "native": {
+        "browser_exercised": false,
+        "browser_requests_read_only": null,
+        "complete_native_state_unchanged": true,
+        "expected_summary": [
+          "0.00",
+          "90.00",
+          "-50.00",
+          "40.00"
+        ],
+        "limits": [
+          "Current native charge fees zero; nonzero fees covered by local ledgerfixtures",
+          "CSV browser evidence separate",
+          "No full Stripe financial/AI/admin/touch claim"
+        ],
+        "passed": true
+      },
+      "native_html": "Successful summary and refund breakdown responses contain the expected labels and amounts; no browser rendering claim",
+      "actual_container_images_matched": 3,
+      "teardown_confirmed": true,
+      "browser": "pending: Mac locked; actual CSV downloads verified locally only"
+    }
+  ]
+}
