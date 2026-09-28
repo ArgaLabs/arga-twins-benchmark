@@ -259,6 +259,10 @@
         {
           "path": "samples/workspace/evidence/sheets-dropdown-ordering-2026-09-27.json",
           "sha256": "aff9a7752e5f846798a7fe6413bd11f860746bfa49e19b6926cf908b2022ef1f"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-noncontiguous-selection-2026-09-27.json",
+          "sha256": "ca93e830ace146b3aa98f1f40417900812b1d8f3e44e04e1bcf1816c46be6acb"
         }
       ]
     },
@@ -596,7 +600,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "314e85cbf795cdbff133b899195babd0f85144a8ba3cd086372de8ae629fb356"
+          "sha256": "5920d64ded879ea5319b4f10baeeed98de6660d6c056c85460f56eb28db04f9a"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -628,5 +632,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "3e9fd6ba2379823dae6c70dbcae90f0c59da125874dea87e8adf8782c7c1e3ea"
+  "sample_tree_sha256": "ef777dee3fe395dbdc16a180b5220710e22c20dc41384c7060d5170d13e9109a"
 }

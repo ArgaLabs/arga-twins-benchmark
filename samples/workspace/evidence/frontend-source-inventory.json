@@ -6018,7 +6018,7 @@
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
-          "sha256": "7c5d992dbc2afdf92022ae663237b82e640de9c93db3ba3e34527c586f424945",
+          "sha256": "89202a298e868e332e91668e0895c255b77b1175326959990e88842887ecb6d1",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6416,7 +6416,7 @@
         },
         {
           "path": "twins/google_sheets/clipboard_ui.py",
-          "sha256": "4593e44e919647f89d2e93e45c1012adf0efc79b7b6f4dd52d07606baa2e6d1a",
+          "sha256": "54553b2ddcc9117f86214033ab9b96225a060abd2c2547b35e57db748a3a35cd",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6680,7 +6680,7 @@
         },
         {
           "path": "twins/google_sheets/filter_views_ui.py",
-          "sha256": "4aca61c7ab616e4d3ad999e7de618228694e6721c04a14691edd60522501bfee",
+          "sha256": "4ceecaa0cdfb3cc272733ae802d57919c375f079430c361fb8fc8b09d1f9bfb1",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -6755,7 +6755,7 @@
         },
         {
           "path": "twins/google_sheets/filters_ui.py",
-          "sha256": "79a82a4c0a78457a34d601a9228b8f4ec8c067963cf43b307cf0c3dfee82dd85",
+          "sha256": "0c71b94add57464ef26521f220fff59b02aa79404d931dff81f7ce16c62b9f71",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -7025,7 +7025,7 @@
         },
         {
           "path": "twins/google_sheets/grid_format_ui.py",
-          "sha256": "3c937c76cdfba2612ef37aac2ae913842ac33afca124b67457bf3e3e05297916",
+          "sha256": "0f73904e48f77860f795a92fcf8a0cdd2d846a55b3474792770f4c714648b188",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -7332,7 +7332,7 @@
         },
         {
           "path": "twins/google_sheets/merges_ui.py",
-          "sha256": "eea41ecd25f69ee0a029ba0a0240fa21e56dc8239e5638698ec170f17808c815",
+          "sha256": "79eae587afba9f993af847c0279258d981f5f81e170a61c1b4cc992ea9e28dbb",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
