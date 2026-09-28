@@ -3949,7 +3949,7 @@
         },
         {
           "path": "twins/gmail/gemini_ui.py",
-          "sha256": "ae70b0a700fe1ec7eea7a04cef01f558979f95535ed606d529a34377725b4c16",
+          "sha256": "af90707e1998a7a8d29fbf57b12fbba6f43b3545c6b728bf7f6ec28801466b7c",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {

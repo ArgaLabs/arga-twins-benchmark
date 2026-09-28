@@ -117,7 +117,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
+          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
         }
       ]
     },
@@ -211,7 +211,11 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
+          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
+        },
+        {
+          "path": "samples/workspace/evidence/gmail-compose-transitions-2026-09-28.json",
+          "sha256": "92ba6aa1435b93a099d5d29581d96ae7092f6fae9d0549d907b79a65e987a0a9"
         }
       ]
     },
@@ -330,7 +334,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
+          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
         }
       ]
     },
@@ -409,7 +413,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "9f3ad0c5bee8ebc8ddd006765de0c29a3d0f48356a543cd4b3b8ee017044e41b"
+          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
         }
       ]
     },
@@ -684,7 +688,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "167b64b5b6f62b62eb9b2b3b791dbc2949709d8e33580ea04a4be4ac06e17cb5"
+          "sha256": "1c66ca020d0e43bb04e6b698b3c8b692fbd04bc423354b990451d32c95a3c034"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -716,5 +720,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "109a925879319978bf17b811ab5788bd9e0147f15d051f4d12cedc4bbe3598fb"
+  "sample_tree_sha256": "1a163c38fe6102883131be1a6fae65e51a3fd0a55639431b1eb826a58a69d602"
 }

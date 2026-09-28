@@ -1,19 +1,12 @@
 {
   "schema": "arga-mounted-frontend-routes/1",
-  "observed_at": "2026-09-28T08:01:23.925444+00:00",
-  "source_revision": "b59d217fb93e128fd453b301234ea12308af2281",
+  "observed_at": "2026-09-28T08:58:08.517250+00:00",
   "certifies_exhaustive_coverage": false,
-  "scope": "Local FastAPI route registration. No server requests, browser execution, permission checks or provider parity are claimed.",
-  "limitations": [
-    "Client-side menus, routes, dialogs and permission-dependent states still require live browser enumeration.",
-    "Frontend candidates use path, response type, tags and handler module hints; native API routes supporting browser actions need separate mapping.",
-    "Administrative and Scenario-export routes are excluded from provider frontend candidates.",
-    "Every route check remains pending; registration does not establish functional behavior or coverage."
-  ],
-  "generator_sha256": "e95c92b6be482927a1adfc21db8f664145e3fa58b2f55092d02bc98328b32013",
+  "source_revision": "4f4c73ec",
+  "scope": "Local FastAPI route registration; no server requests, browser executions, permission checks or provider parity are claimed.",
   "providers": {
     "github": {
-      "registered_nonoperator_routes": 1294,
+      "registered_nonoperator_routes": 1295,
       "mounted_frontend_candidates": [
         {
           "path": "/",
@@ -880,6 +873,24 @@
           }
         },
         {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_frontend_routes.<locals>.export_scenario",
+          "source": "twins/github/frontend.py",
+          "line": 1150,
+          "source_sha256": "196cb9394c40a77644721dfe15ea3c883f55109b2bc73f986096f2d7113ceee3",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
           "path": "/_ui/search",
           "methods": [
             "GET"
@@ -972,10 +983,10 @@
           }
         }
       ],
-      "candidate_count": 53
+      "candidate_count": 54
     },
     "gmail": {
-      "registered_nonoperator_routes": 107,
+      "registered_nonoperator_routes": 108,
       "mounted_frontend_candidates": [
         {
           "path": "/ui/gemini",
@@ -1032,6 +1043,24 @@
           }
         },
         {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
           "path": "/",
           "methods": [
             "GET"
@@ -1050,11 +1079,29 @@
           }
         }
       ],
-      "candidate_count": 4
+      "candidate_count": 5
     },
     "google_calendar": {
-      "registered_nonoperator_routes": 58,
+      "registered_nonoperator_routes": 59,
       "mounted_frontend_candidates": [
+        {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
         {
           "path": "/",
           "methods": [
@@ -1074,10 +1121,10 @@
           }
         }
       ],
-      "candidate_count": 1
+      "candidate_count": 2
     },
     "google_docs": {
-      "registered_nonoperator_routes": 45,
+      "registered_nonoperator_routes": 46,
       "mounted_frontend_candidates": [
         {
           "path": "/ui/documents/{document_id}/gemini",
@@ -1243,6 +1290,24 @@
           "tags": [
             "Google Docs UI"
           ],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
           "checks": {
             "reference": "pending",
             "success_error_cancel": "pending",
@@ -1550,10 +1615,10 @@
           }
         }
       ],
-      "candidate_count": 24
+      "candidate_count": 25
     },
     "google_sheets": {
-      "registered_nonoperator_routes": 55,
+      "registered_nonoperator_routes": 56,
       "mounted_frontend_candidates": [
         {
           "path": "/ui/spreadsheets/{spreadsheet_id}/history",
@@ -1876,6 +1941,24 @@
           }
         },
         {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
           "path": "/",
           "methods": [
             "GET"
@@ -2154,11 +2237,29 @@
           }
         }
       ],
-      "candidate_count": 30
+      "candidate_count": 31
     },
     "notion": {
-      "registered_nonoperator_routes": 155,
+      "registered_nonoperator_routes": 156,
       "mounted_frontend_candidates": [
+        {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
         {
           "path": "/",
           "methods": [
@@ -2556,11 +2657,29 @@
           }
         }
       ],
-      "candidate_count": 22
+      "candidate_count": 23
     },
     "linear": {
-      "registered_nonoperator_routes": 43,
+      "registered_nonoperator_routes": 44,
       "mounted_frontend_candidates": [
+        {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
         {
           "path": "/oauth/authorize",
           "methods": [
@@ -3174,10 +3293,10 @@
           }
         }
       ],
-      "candidate_count": 34
+      "candidate_count": 35
     },
     "stripe": {
-      "registered_nonoperator_routes": 665,
+      "registered_nonoperator_routes": 666,
       "mounted_frontend_candidates": [
         {
           "path": "/",
@@ -3188,6 +3307,24 @@
           "source": "twins/stripe/app.py",
           "line": 106,
           "source_sha256": "4ce76d218666a07f3118f703cb6dd42b279631618d62ebc0c845bb952d99626a",
+          "tags": [],
+          "checks": {
+            "reference": "pending",
+            "success_error_cancel": "pending",
+            "reload_native_state": "pending",
+            "permissions": "pending",
+            "desktop_mobile_touch": "pending"
+          }
+        },
+        {
+          "path": "/_ui/scenarios/export",
+          "methods": [
+            "POST"
+          ],
+          "handler": "register_scenario_export_route.<locals>.export_scenario",
+          "source": "twins/scenario_export.py",
+          "line": 102,
+          "source_sha256": "0be0fece12b1eb501f9ab941fc49c69edc02c7c367c6b54f74ad0ecd3199a128",
           "tags": [],
           "checks": {
             "reference": "pending",
@@ -3720,7 +3857,7 @@
           }
         }
       ],
-      "candidate_count": 30
+      "candidate_count": 31
     }
   }
 }
