@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-27",
+  "pr": 1231,
+  "status": "local_pass_rebased_ci_hosted_pending",
+  "source_revision": "82cb7bef8dba3891ffbda96e73c688cc260e46f9",
+  "base_revision": "574da44524d3e57f07c2703a5a13f7e332058b7e",
+  "scope": [
+    "Edit native private pending review comments on line, file and unplaced threads",
+    "Current author/write authority, post-body-read revocation, stale-body and submitted-review protection",
+    "Cancellation restores original draft/focus; rejected saves preserve typed text; final submission publishes edited text once"
+  ],
+  "official_sources": [
+    "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request"
+  ],
+  "tests": {
+    "red": "9 failed, 3 passed before implementation",
+    "focused_before_rebase": 46,
+    "all_github_before_rebase": 819,
+    "rebased_affected": 48,
+    "ruff": "pass",
+    "diff_check": "pass",
+    "warnings": "Three dependency deprecation warnings in broad suite; one focused"
+  },
+  "local_browser": {
+    "passed": true,
+    "successful_browser_writes": 4,
+    "rejected_browser_writes": 2,
+    "operator_concurrent_native_edit": 1,
+    "cancellation_and_rejection_preserve_full_state": true,
+    "review_count": 1,
+    "comments": 1,
+    "pending_comment_private_before_submission": true,
+    "reviewer_and_owner_reload_verified": true,
+    "unrelated_full_native_state_preserved": true,
+    "negative_mutations_rejected": [
+      "duplicate_review",
+      "duplicate_comment",
+      "missing_comment",
+      "wrong_summary",
+      "wrong_review_state",
+      "wrong_line",
+      "protected_pr",
+      "counter_drift",
+      "token_drift"
+    ],
+    "desktop_browser_verified": true,
+    "mobile_viewport_verified": false,
+    "physical_touch_exercised": false,
+    "console_warnings_and_errors": []
+  },
+  "source_sha256": {
+    "twins/github/frontend.py": "16ef757c8448482afc21ae32600a44838b6ec274da381ca2e4f9d9579f127ea4",
+    "twins/github/pending_comment_ui.py": "2f3c6f085347709381f1d9b4a6de82d38794961567a626b6fa6b0e0e56dda0b0",
+    "twins/github/review_ui_script.py": "a58c50d7b270a5bc732d68fef28c43ef0e696d17b69810effa815374594ad179",
+    "twins/tests/test_github_inline_review_workflow.py": "0dc6c473215ebdf7362980d121ff172dc06945b18783180d0cd66d75fc883d05",
+    "twins/tests/test_github_pending_comment_edit.py": "a37a5b673679321e3be6dbfb8dcab8ff414f9b20c172f477f3775a608e261020"
+  },
+  "artifact_sha256": {
+    "browser-trace-0.json": "0f3c7a7cb596f96ef50c51af9496d4924360ab41ee6be6e264b2aa54eef1cd67",
+    "checkpoint.json": "9e66228c1699710f3063033ee6cc25e4a544e7db871f3b0e0ce0767b2ba85bee",
+    "browser-trace-1.json": "b37c865c9c9e8f103bd1417a6405aff0c24cf92bd4bbef490f86765ba6019fa5",
+    "before-stale.json": "9e66228c1699710f3063033ee6cc25e4a544e7db871f3b0e0ce0767b2ba85bee",
+    "after-stale.json": "9e66228c1699710f3063033ee6cc25e4a544e7db871f3b0e0ce0767b2ba85bee",
+    "after-cancel.json": "7201bbff8a1cb433d3d4dd7761b147494ee2a68b54e4ab7fb20d1ffbcb7bd5d5",
+    "baseline.json": "8977cf14f359a1dbb0de78600b4bee5caa33f143358c53f4c15803d6a8dc549e",
+    "verification.json": "f288e35dd6fe6decd4ef1f118aea80141b438742d7fe87492d479782f22f04c8",
+    "operator-api-trace.json": "02f897d0cad0df8cf5a30c629c9aad599826bd32bdad1141941d736dc2fcd8ab",
+    "final.json": "22b8b54f9d4b46745061f8156fca955779edb0c198f34dc62bd3781a2a849f39",
+    "before-cancel.json": "7201bbff8a1cb433d3d4dd7761b147494ee2a68b54e4ab7fb20d1ffbcb7bd5d5",
+    "after-rejection.json": "7201bbff8a1cb433d3d4dd7761b147494ee2a68b54e4ab7fb20d1ffbcb7bd5d5"
+  },
+  "test_artifact_sha256": {
+    "github-pending-comment-edit-tests.txt": "3f7226870878921775319f79b995793eb2cd61680b53c9bd5c93536bc26b97f2",
+    "github-pending-comment-edit-format.txt": "33c76328dc8841ae17e10b6224a38891f243d5831881b77a66ad6f63639cf5ae",
+    "github-pending-comment-edit-rebased-tests.txt": "c7068792eabd75e480e8872846ce207ea2d69d7201d765fc28c31b2dca38718a",
+    "github-pending-comment-edit-broad-tests.txt": "9dce255a4f4176c5a0e93880d5c905de97475cff917f70bc6356a5e4a7558a62",
+    "github-pending-comment-edit-red.txt": "c5bce3082c02e0364e48540c1a7a0f9e802f03bf9f8d467bd9ff34de200c0dea"
+  },
+  "verifier_sha256": "b2a66b959ac2def7c201ea035e4d06b19f3ac5005a39acfbe4d9a390cea8ee21",
+  "corrections": [
+    "Existing duplicate-reply assertion counted both visible text and hidden edit textarea. Updated it to count the rendered paragraph; full regression suite passed.",
+    "Added an explicit comment-author condition to editor visibility after local Chrome verification, covered by automated authorization checks.",
+    "Rebased onto #1230 to inherit ambiguous-error locking; 48 affected tests pass after rebase."
+  ],
+  "limits": [
+    "CI, deployment, hosted image/state verification and mobile browser coverage pending.",
+    "Local desktop Chrome tested before the final owner-only visibility guard and #1230 rebase; final affected tests cover these changes, hosted comparison remains required.",
+    "Real GitHub visual comparison, published-comment editing, multiline selection, suggestions and broader review/AI/collaboration gates remain open.",
+    "No exhaustive visual or physical-touch coverage claimed; full release remains blocked."
+  ]
+}

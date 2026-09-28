@@ -1,8 +1,8 @@
 {
   "date": "2026-09-27",
   "pr": 1230,
-  "status": "local_pass_ci_and_hosted_pending",
-  "source_revision": "fe29df831066a358a3279f25292b705d4d1fdb74",
+  "status": "merged_production_deployment_and_hosted_pending",
+  "source_revision": "8e90f512ced1fddf907bf85e6b6e1718daefe7f4",
   "scope": "Prevent accidental replay of GitHub review writes after ambiguous 5xx responses; preserve draft and require reload; known 4xx permits correction and retry.",
   "tests": {
     "red": "2 failed, 8 passed before fix",
@@ -60,5 +60,351 @@
     "Hosted deployment and image attestation remain pending.",
     "Chrome viewport override did not change the tested tab width; this run establishes desktop recovery only.",
     "Physical touch, provider-wide review/AI/collaboration and exhaustive fidelity remain open."
-  ]
+  ],
+  "local_test_source_revision": "fe29df831066a358a3279f25292b705d4d1fdb74",
+  "rebase_note": "Rebased onto merged pivot revision 52df3ad7; GitHub source/test contents unchanged; exact-head CI running.",
+  "merge_revision": "574da44524d3e57f07c2703a5a13f7e332058b7e",
+  "ci": {
+    "headRefOid": "8e90f512ced1fddf907bf85e6b6e1718daefe7f4",
+    "mergeStateStatus": "CLEAN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:22Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789296363",
+        "name": "changes",
+        "startedAt": "2026-09-28T04:38:11Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:19Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789295766",
+        "name": "detect-backend-ci",
+        "startedAt": "2026-09-28T04:38:11Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789295985",
+        "name": "prepare",
+        "startedAt": "2026-09-28T04:38:11Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:49Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789349361",
+        "name": "Build API image",
+        "startedAt": "2026-09-28T04:38:26Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:40Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334424",
+        "name": "lint",
+        "startedAt": "2026-09-28T04:38:22Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:17Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789403021",
+        "name": "twin-contract-matrix",
+        "startedAt": "2026-09-28T04:38:41Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:47Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789349375",
+        "name": "Build Preview Proxy image",
+        "startedAt": "2026-09-28T04:38:26Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:58Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334338",
+        "name": "typecheck",
+        "startedAt": "2026-09-28T04:38:22Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:03Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789403140",
+        "name": "github",
+        "startedAt": "2026-09-28T04:38:41Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:23Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789350641",
+        "name": "Build Bots image",
+        "startedAt": "2026-09-28T04:38:23Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404378",
+        "name": "google-workspace-cli-mcp",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:42:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334352",
+        "name": "root-tests",
+        "startedAt": "2026-09-28T04:38:21Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:23Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789350339",
+        "name": "Build Flow Runner image",
+        "startedAt": "2026-09-28T04:38:23Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404218",
+        "name": "google-workspace-real",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:42:55Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334475",
+        "name": "Pytest twins (1/6)",
+        "startedAt": "2026-09-28T04:38:21Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:43:51Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334379",
+        "name": "Pytest twins (2/6)",
+        "startedAt": "2026-09-28T04:38:22Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:42:44Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334474",
+        "name": "Pytest twins (3/6)",
+        "startedAt": "2026-09-28T04:38:21Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:44:58Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334430",
+        "name": "Pytest twins (4/6)",
+        "startedAt": "2026-09-28T04:38:22Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:43:59Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334477",
+        "name": "Pytest twins (5/6)",
+        "startedAt": "2026-09-28T04:38:21Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:42:50Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334406",
+        "name": "Pytest twins (6/6)",
+        "startedAt": "2026-09-28T04:38:22Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404259",
+        "name": "slack",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:00Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789349424",
+        "name": "Build Twin images (github, twins/Dockerfile)",
+        "startedAt": "2026-09-28T04:38:26Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:59Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108789334334",
+        "name": "migrations",
+        "startedAt": "2026-09-28T04:38:21Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:23Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789350678",
+        "name": "Validate Worker image config",
+        "startedAt": "2026-09-28T04:38:23Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404007",
+        "name": "stripe-sdk",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:45:06Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108790674429",
+        "name": "twins-tests",
+        "startedAt": "2026-09-28T04:45:02Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404213",
+        "name": "linkedin-sdk",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:55Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555903/job/108789640685",
+        "name": "docker-build",
+        "startedAt": "2026-09-28T04:39:51Z",
+        "status": "COMPLETED",
+        "workflowName": "Docker Build"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:45:12Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555836/job/108790701027",
+        "name": "lint-and-test",
+        "startedAt": "2026-09-28T04:45:09Z",
+        "status": "COMPLETED",
+        "workflowName": "Lint & Test"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:38Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789404083",
+        "name": "microsoft-graph-sdk",
+        "startedAt": "2026-09-28T04:38:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:39:23Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/ArgaLabs/validation-server/actions/runs/36378555849/job/108789531615",
+        "name": "twin-fidelity",
+        "startedAt": "2026-09-28T04:39:19Z",
+        "status": "COMPLETED",
+        "workflowName": "Twin Fidelity"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:07Z",
+        "conclusion": "NEUTRAL",
+        "detailsUrl": "https://www.cubic.dev/pr/ArgaLabs/validation-server/pull/1230",
+        "name": "cubic \u00b7 AI code reviewer",
+        "startedAt": "2026-09-28T04:38:08Z",
+        "status": "COMPLETED",
+        "workflowName": ""
+      },
+      {
+        "__typename": "StatusContext",
+        "context": "Vercel",
+        "startedAt": "2026-09-28T04:38:27Z",
+        "state": "SUCCESS",
+        "targetUrl": "https://vercel.com/argalabs/validation-server/7kbHU1uPTdqDxXzWcWk9gtRExrca"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-28T04:38:27Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://vercel.com/github",
+        "name": "Vercel Preview Comments",
+        "startedAt": "2026-09-28T04:38:27Z",
+        "status": "COMPLETED",
+        "workflowName": ""
+      }
+    ]
+  }
 }

@@ -34,5 +34,9 @@
   "limits": [
     "Single account, one new private document and one generation request; eligibility, selected-range targeting, errors, source access, concurrency and revocation remain open.",
     "No twin Gemini implementation or provider-wide AI coverage established."
-  ]
+  ],
+  "official_sources": [
+    "https://support.google.com/docs/answer/14206696?hl=en"
+  ],
+  "reference_note": "Current official documentation distinguishes generation, refinement acceptance/rejection and side-panel insertion; account-specific live behavior was recorded separately."
 }

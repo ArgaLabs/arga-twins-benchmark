@@ -97,7 +97,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-review-error-recovery-2026-09-27.json",
-          "sha256": "bd3df9467f00468c4d7f4c16d2c589a89a72f3b8f331bff3d8f375d16e1fffae"
+          "sha256": "1ceeb9b8f6e635f1430bf82476edbbdc7b24433d95dbcd31d772357f577256e6"
+        },
+        {
+          "path": "samples/workspace/evidence/github-pending-comment-edit-2026-09-27.json",
+          "sha256": "87b555f24eb14e438c6d97c2e89bdafe86d850b354b29d2036dd7be5e1472f02"
         }
       ]
     },
@@ -290,7 +294,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-pivots-2026-09-27.json",
-          "sha256": "f3ce9056bb9b2c9d791f00346fa4774e7cc3b76a728cfd91b5859f03f2532d6b"
+          "sha256": "98b8e10463c8f7dfbd3681f3c2742a9a760a550ac4b183a4df0b78f8be594c16"
         }
       ]
     },
@@ -361,7 +365,7 @@
         },
         {
           "path": "samples/workspace/evidence/docs-gemini-reference-2026-09-27.json",
-          "sha256": "4534699315baa4520eea62285eb23178ade2d51d98b7e53d4cdfd11ad0139d27"
+          "sha256": "b62a4cd7438d584acebaaaa8085bcede90d5c6b4f55ee2e44ef8fb13897be025"
         }
       ]
     },
@@ -636,7 +640,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "f8f5cbcecf9d51096bff874971df7765bdf8b975fc1f48f549a721655335ec47"
+          "sha256": "278e94350e0d1965b271c107801e83d7682fac4d36be4b206dbea8170aec568c"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -668,5 +672,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "8f906e40b6d94d4a90c284ac47adaf6086125574fb014046f9372b3025902f75"
+  "sample_tree_sha256": "9023c1b907495b6b79b4f4d76af6b334482e9642cec140db9c0520ca7bf5e91a"
 }
