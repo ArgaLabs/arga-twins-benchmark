@@ -97,11 +97,15 @@
         },
         {
           "path": "samples/workspace/evidence/github-review-error-recovery-2026-09-27.json",
-          "sha256": "5b0f37b32651143ad9da96df956a4ad9cf8e1debb24bc4994f1853442b048d60"
+          "sha256": "4f9f695a5d85af4268c3ac7af50e2e59db42093b4867d7a9ca916c4f43940684"
         },
         {
           "path": "samples/workspace/evidence/github-pending-comment-edit-2026-09-27.json",
-          "sha256": "d5f863341e7dabe437d19458e2dc17f70f87878fd22485193e076d56c36c432e"
+          "sha256": "21f790d7d7ffb74e9194612000a10b0b994d493136d58bf705d2d3736cdfacb9"
+        },
+        {
+          "path": "samples/workspace/evidence/github-multiline-reviews-2026-09-27.json",
+          "sha256": "8051250b8882aca6d7d108353e0371d0e0f4b6b71fddf165aaeecead9d98c403"
         }
       ]
     },
@@ -640,7 +644,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "c258204584bc41035ef257a987176ea9dc96065bc7f71308651f586cdd6edc8c"
+          "sha256": "33d6927bc7acc19a144e762cde504f260eee6ffe5a366194a68c8c5d1fa19dbe"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -672,5 +676,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "6c2be4f320cac9736c54b8b81d5d996b9538bcd0f461d7d5f67b56018214c229"
+  "sample_tree_sha256": "f2fbf3e024340e2f5f7ccae9be9f85691f81f5047212092c01695792f371adac"
 }

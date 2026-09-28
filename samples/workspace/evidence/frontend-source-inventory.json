@@ -26,8 +26,8 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 50,
-      "markup_control_occurrences": 318,
+      "route_candidate_count": 51,
+      "markup_control_occurrences": 324,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
@@ -574,138 +574,144 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "8383628471bcb96ff66abac8021eb6a92fab02a7e3131e279e509602d82cec07",
+          "sha256": "ddf012ac08fc749faa0682fe66f61c099e7b6e4a8517de45452ae7268af34efd",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1122
+              "line": 1125
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1131
+              "line": 1134
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1241
+              "line": 1244
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1333
+              "line": 1336
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1555
+              "line": 1558
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1642
+              "line": 1645
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1733
+              "line": 1736
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1848
+              "line": 1851
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2049
+              "line": 2065
+            },
+            {
+              "method": "POST",
+              "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/edit",
+              "handler": "edit_pending_comment_ui",
+              "line": 2071
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2060
+              "line": 2082
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2108
+              "line": 2130
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2150
+              "line": 2172
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2193
+              "line": 2215
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2265
+              "line": 2287
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2344
+              "line": 2366
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2386
+              "line": 2408
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2399
+              "line": 2421
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2531
+              "line": 2553
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2605
+              "line": 2627
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2835
+              "line": 2857
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2887
+              "line": 2909
             }
           ],
           "markup_expressions": [
             {
-              "line": 265,
+              "line": 266,
               "dynamic": true,
               "controls": [
                 {
@@ -762,7 +768,7 @@
               ]
             },
             {
-              "line": 360,
+              "line": 361,
               "dynamic": true,
               "controls": [
                 {
@@ -790,7 +796,7 @@
               ]
             },
             {
-              "line": 574,
+              "line": 575,
               "dynamic": true,
               "controls": [
                 {
@@ -803,7 +809,7 @@
               ]
             },
             {
-              "line": 597,
+              "line": 598,
               "dynamic": true,
               "controls": [
                 {
@@ -869,10 +875,11 @@
                   }
                 },
                 {
-                  "tag": "label",
+                  "tag": "button",
                   "attributes": {
-                    "role": "button"
-                  }
+                    "type": "button"
+                  },
+                  "text": "Cancel"
                 },
                 {
                   "tag": "button",
@@ -895,7 +902,7 @@
               ]
             },
             {
-              "line": 664,
+              "line": 665,
               "dynamic": true,
               "controls": [
                 {
@@ -908,7 +915,7 @@
               ]
             },
             {
-              "line": 703,
+              "line": 705,
               "dynamic": true,
               "controls": [
                 {
@@ -967,7 +974,7 @@
               ]
             },
             {
-              "line": 1061,
+              "line": 1064,
               "dynamic": true,
               "controls": [
                 {
@@ -1020,7 +1027,7 @@
               ]
             },
             {
-              "line": 822,
+              "line": 825,
               "dynamic": true,
               "controls": [
                 {
@@ -1055,7 +1062,7 @@
               ]
             },
             {
-              "line": 1170,
+              "line": 1173,
               "dynamic": true,
               "controls": [
                 {
@@ -1104,7 +1111,7 @@
               ]
             },
             {
-              "line": 1212,
+              "line": 1215,
               "dynamic": true,
               "controls": [
                 {
@@ -1124,7 +1131,7 @@
               ]
             },
             {
-              "line": 1356,
+              "line": 1359,
               "dynamic": true,
               "controls": [
                 {
@@ -1179,7 +1186,7 @@
               ]
             },
             {
-              "line": 1429,
+              "line": 1432,
               "dynamic": true,
               "controls": [
                 {
@@ -1190,7 +1197,7 @@
               ]
             },
             {
-              "line": 1440,
+              "line": 1443,
               "dynamic": true,
               "controls": [
                 {
@@ -1210,7 +1217,7 @@
               ]
             },
             {
-              "line": 1515,
+              "line": 1518,
               "dynamic": true,
               "controls": [
                 {
@@ -1251,7 +1258,7 @@
               ]
             },
             {
-              "line": 1595,
+              "line": 1598,
               "dynamic": true,
               "controls": [
                 {
@@ -1264,7 +1271,7 @@
               ]
             },
             {
-              "line": 1602,
+              "line": 1605,
               "dynamic": true,
               "controls": [
                 {
@@ -1319,7 +1326,7 @@
               ]
             },
             {
-              "line": 1623,
+              "line": 1626,
               "dynamic": true,
               "controls": [
                 {
@@ -1332,7 +1339,7 @@
               ]
             },
             {
-              "line": 1691,
+              "line": 1694,
               "dynamic": true,
               "controls": [
                 {
@@ -1345,7 +1352,7 @@
               ]
             },
             {
-              "line": 1700,
+              "line": 1703,
               "dynamic": true,
               "controls": [
                 {
@@ -1400,7 +1407,7 @@
               ]
             },
             {
-              "line": 1753,
+              "line": 1756,
               "dynamic": true,
               "controls": [
                 {
@@ -1455,7 +1462,7 @@
               ]
             },
             {
-              "line": 1777,
+              "line": 1780,
               "dynamic": true,
               "controls": [
                 {
@@ -1482,7 +1489,7 @@
               ]
             },
             {
-              "line": 1951,
+              "line": 1967,
               "dynamic": true,
               "controls": [
                 {
@@ -1537,7 +1544,7 @@
               ]
             },
             {
-              "line": 1976,
+              "line": 1992,
               "dynamic": true,
               "controls": [
                 {
@@ -1579,7 +1586,7 @@
               ]
             },
             {
-              "line": 2302,
+              "line": 2324,
               "dynamic": true,
               "controls": [
                 {
@@ -1612,7 +1619,7 @@
               ]
             },
             {
-              "line": 2321,
+              "line": 2343,
               "dynamic": true,
               "controls": [
                 {
@@ -1632,7 +1639,7 @@
               ]
             },
             {
-              "line": 2560,
+              "line": 2582,
               "dynamic": true,
               "controls": [
                 {
@@ -1703,7 +1710,7 @@
               ]
             },
             {
-              "line": 2846,
+              "line": 2868,
               "dynamic": true,
               "controls": [
                 {
@@ -1777,7 +1784,7 @@
               ]
             },
             {
-              "line": 650,
+              "line": 651,
               "dynamic": true,
               "controls": [
                 {
@@ -1805,7 +1812,7 @@
               ]
             },
             {
-              "line": 658,
+              "line": 659,
               "dynamic": true,
               "controls": [
                 {
@@ -1833,7 +1840,7 @@
               ]
             },
             {
-              "line": 1005,
+              "line": 1008,
               "dynamic": true,
               "controls": [
                 {
@@ -1852,19 +1859,6 @@
               ]
             },
             {
-              "line": 1045,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "{dynamic}"
-                  },
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
               "line": 1048,
               "dynamic": true,
               "controls": [
@@ -1878,7 +1872,20 @@
               ]
             },
             {
-              "line": 1148,
+              "line": 1051,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 1151,
               "dynamic": true,
               "controls": [
                 {
@@ -1891,7 +1898,7 @@
               ]
             },
             {
-              "line": 1165,
+              "line": 1168,
               "dynamic": true,
               "controls": [
                 {
@@ -1904,7 +1911,7 @@
               ]
             },
             {
-              "line": 1167,
+              "line": 1170,
               "dynamic": true,
               "controls": [
                 {
@@ -1917,7 +1924,7 @@
               ]
             },
             {
-              "line": 1199,
+              "line": 1202,
               "dynamic": true,
               "controls": [
                 {
@@ -1930,7 +1937,7 @@
               ]
             },
             {
-              "line": 1350,
+              "line": 1353,
               "dynamic": true,
               "controls": [
                 {
@@ -1943,7 +1950,7 @@
               ]
             },
             {
-              "line": 1398,
+              "line": 1401,
               "dynamic": true,
               "controls": [
                 {
@@ -1956,7 +1963,7 @@
               ]
             },
             {
-              "line": 1405,
+              "line": 1408,
               "dynamic": true,
               "controls": [
                 {
@@ -1969,7 +1976,7 @@
               ]
             },
             {
-              "line": 1424,
+              "line": 1427,
               "dynamic": true,
               "controls": [
                 {
@@ -1982,7 +1989,7 @@
               ]
             },
             {
-              "line": 1598,
+              "line": 1601,
               "dynamic": true,
               "controls": [
                 {
@@ -1995,7 +2002,7 @@
               ]
             },
             {
-              "line": 1676,
+              "line": 1679,
               "dynamic": true,
               "controls": [
                 {
@@ -2008,7 +2015,7 @@
               ]
             },
             {
-              "line": 1684,
+              "line": 1687,
               "dynamic": true,
               "controls": [
                 {
@@ -2021,7 +2028,7 @@
               ]
             },
             {
-              "line": 1819,
+              "line": 1822,
               "dynamic": true,
               "controls": [
                 {
@@ -2034,7 +2041,7 @@
               ]
             },
             {
-              "line": 1937,
+              "line": 1953,
               "dynamic": true,
               "controls": [
                 {
@@ -2054,7 +2061,7 @@
               ]
             },
             {
-              "line": 2286,
+              "line": 2308,
               "dynamic": true,
               "controls": [
                 {
@@ -2067,7 +2074,7 @@
               ]
             },
             {
-              "line": 2299,
+              "line": 2321,
               "dynamic": true,
               "controls": [
                 {
@@ -2080,7 +2087,7 @@
               ]
             },
             {
-              "line": 610,
+              "line": 611,
               "dynamic": true,
               "controls": [
                 {
@@ -2093,7 +2100,7 @@
               ]
             },
             {
-              "line": 1695,
+              "line": 1698,
               "dynamic": true,
               "controls": [
                 {
@@ -2883,6 +2890,61 @@
                     "value": "{dynamic}"
                   },
                   "text": "{dynamic}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/github/pending_comment_ui.py",
+          "sha256": "2f3c6f085347709381f1d9b4a6de82d38794961567a626b6fa6b0e0e56dda0b0",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 24,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Edit"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "edit-review-comment-{dynamic}",
+                    "method": "post",
+                    "action": "/_ui/repos/{dynamic}/pull/{dynamic}/comments/{dynamic}/edit"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "expected_body",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "name": "body",
+                    "aria-label": "Edit pending comment"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Update comment"
                 }
               ]
             }

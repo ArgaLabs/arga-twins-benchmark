@@ -57,7 +57,7 @@
   },
   "verifier_sha256": "879d617951bd5c3572529d777bf5bccd001f36c4710987df46d82dbd9dd4ba53",
   "limitations": [
-    "Bounded hosted recovery, native privacy/state, ten worker and two serving images pass. Accessible cancellation correction is pending #1231 deployment.",
+    "Bounded hosted recovery, native privacy/state, ten worker and two serving images pass. The accessible cancellation correction also passes #1231 hosted checks.",
     "Physical touch, provider-wide review/AI/collaboration and exhaustive fidelity remain open."
   ],
   "local_test_source_revision": "fe29df831066a358a3279f25292b705d4d1fdb74",
@@ -793,5 +793,10 @@
   "corrections": [
     "Chrome AX activation of the label-based Cancel hid an uncertain form while retaining its disabled draft; normal browser click was blocked. A real cancel button fix and fresh accessibility/mobile check are included in #1231. This issue is not marked closed by #1230.",
     "Viewport override initially targeted another tab. Both lost-acknowledgement submissions ran at 1465px. A new tab was explicitly verified at viewport/document width 390 for readback, reload, composer and cancellation."
-  ]
+  ],
+  "accessible_cancel_followup": {
+    "pr": 1231,
+    "status": "hosted_pass",
+    "evidence": "github-pending-comment-edit-2026-09-27.json"
+  }
 }

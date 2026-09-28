@@ -1,0 +1,98 @@
+{
+  "date": "2026-09-27",
+  "pr": 1232,
+  "status": "local_pass_graphql_correction_ci_pending",
+  "source_revision": "456e7e64ef4e357c899da590c6ed2602da98728f",
+  "base_revision": "756a6e5b4fcdf8e88c63524187326dae0120c62e",
+  "scope": [
+    "Diff line-number Shift-click, mouse drag and keyboard range selection with native plus controls",
+    "Native REST/GraphQL/UI range fields and reply inheritance",
+    "Draft persistence across refresh, cancellation, rejection/retry and private pending reviews"
+  ],
+  "tests": {
+    "initial_red": "24 failed before implementation",
+    "rebased_affected": 100,
+    "all_github_before_graphql_error_correction": 855,
+    "graphql_errors_red": "6 failed before correction",
+    "graphql_range_privacy_state_final": 104,
+    "ruff": "pass",
+    "diff_check": "pass"
+  },
+  "local_browser": {
+    "passed": true,
+    "desktop_shift_click_mouse_drag_and_keyboard_range_selection": true,
+    "mobile_submission_and_reload_width": 390,
+    "document_width": 390,
+    "range_draft_preserved_across_reply_refresh": true,
+    "range_reply_inherits_location": true,
+    "cancellation_and_rejection_preserve_full_state": true,
+    "browser_commits": 4,
+    "rejections": 1,
+    "review_count": 1,
+    "comments": 3,
+    "pending_private_then_published_after_reload": true,
+    "full_unrelated_native_state_unchanged": true,
+    "negative_controls_rejected": [
+      "range_start",
+      "reply_range",
+      "end_line",
+      "comments",
+      "review",
+      "counter",
+      "protected"
+    ],
+    "console_warnings_and_errors": [],
+    "physical_touch_exercised": false,
+    "screenshots_retained": false,
+    "native_plus_and_cancel_accessibility_verified": true,
+    "source_limit": "Bounded local run on the rebased source; CI, hosted rollout, live-provider visuals and physical touch remain open."
+  },
+  "source_sha256": {
+    "twins/github/frontend.py": "79954ed3eee6257d2f93187690b5a9c77ac235c7ea98b59442c0d6d9caa28a99",
+    "twins/github/handlers/graphql.py": "5365e9012d5f5a7f1b9ec719dd395186f73598b92a34530f098b8ac77e9155f2",
+    "twins/github/handlers/reviews.py": "9378253019673ba706832ac141e52f1fe3d5f3ac6ed11c829d931606fc5b61d7",
+    "twins/github/inline_review.py": "cefd27aed241a5c102dafc7a4623c34d1db72c7ac780b2912e60d99676ae1fa1",
+    "twins/github/review_range_ui.py": "63d2bb17f06ed78619586a67962eab8f1f6b0737a40e8e8ead60a80f0c3cbe8c",
+    "twins/github/review_ranges.py": "084fa8115a165b4e2a2e578dd7bfa7518583c1f7de6b653a5ec1830e473e6546",
+    "twins/github/review_ui_script.py": "bae05950dbb368799fedd2f22a412d79ba32048dd00bfa41e8950b4ee7617e83",
+    "twins/tests/test_github_multiline_review_comments.py": "bea3d67a8080da8289649e221877d2a574e1f829c5e2ff169a890f39e0580d17",
+    "twins/tests/test_github_review_comments.py": "0ae5278221317e9b257b2fecfb56137669d21e6fc413b90074679307a0009aa0"
+  },
+  "artifact_sha256": {
+    "browser-trace-0.json": "9daead35e967737c9358cbe03ff41f511ac720acb1f7d85d02b4852ba1a07c8b",
+    "checkpoint.json": "a78a05501402baa4aef70e4e40ace4c0ab1efae55b2787c2ffe4840ed83ef103",
+    "browser-trace-1.json": "b37c865c9c9e8f103bd1417a6405aff0c24cf92bd4bbef490f86765ba6019fa5",
+    "after-cancel.json": "64c13240d780267f82056dc58d7f4c173292bbc1c5199bce11970923356f4f04",
+    "baseline.json": "64c13240d780267f82056dc58d7f4c173292bbc1c5199bce11970923356f4f04",
+    "verification.json": "226b509647f4ac3e276b53e66ce8609f20b57bb72ad980f64427d6d8fcacdae8",
+    "pending.json": "a78a05501402baa4aef70e4e40ace4c0ab1efae55b2787c2ffe4840ed83ef103",
+    "final.json": "8751cd9b5808b8037fff028e6fdb50a6757084a69c4a79b837127100e2da8e0d",
+    "after-rejection.json": "64c13240d780267f82056dc58d7f4c173292bbc1c5199bce11970923356f4f04"
+  },
+  "test_artifact_sha256": {
+    "github-multiline-review-final-broad-tests.txt": "0d9bfad9c05e65bd4a56c81816209fca30f4873775547d2491288a5a07c65758",
+    "github-multiline-review-rebased-format.txt": "820535fee957c32ed192abd3817b1a64bc4c6427afb4a651133cbe42ea1ee836",
+    "github-multiline-review-rebased-tests.txt": "d2f85b6e4403e88b08e0cfe3a417eaef9bb0e58929c2723c575f1a971ebab431",
+    "github-multiline-review-tests.txt": "8822f3fee2c41392438abd9dfad144ddfd22970f42a3b375844144975ee540ba",
+    "github-multiline-review-button-tests.txt": "4137f8ee4d2cafe0e053f61b4b61bb4df7f1c7083e74d52377c13e334e381dd7",
+    "github-multiline-graphql-errors-fix.txt": "7a03ce39a716657044e5648be9216cf8b7c17ad74c59ef3803007395ac4f2811",
+    "github-multiline-review-red.txt": "a8d0b3a3ec545f52aea600e65fc9345416c9d4b69db05299d3f3ff8cb7e0a765",
+    "github-multiline-review-final-format.txt": "820535fee957c32ed192abd3817b1a64bc4c6427afb4a651133cbe42ea1ee836",
+    "github-multiline-graphql-errors-red.txt": "d896729c066c38f37768c6f7045f16a93642fa2d72cd14075ab2d4664b45bcd5",
+    "github-multiline-graphql-errors-tests.txt": "b1212b1681840f758907deefdf89911bc934cedc0a7ea43285baa96dc789c3af",
+    "github-multiline-review-broad-tests.txt": "482796412b6332ad273a6b259fce8f8057aa9d4bea111611a4d92c4bc2cd0f8d",
+    "github-multiline-review-format.txt": "b382e718ee74a76b4dd54d0e83b28200bbf9e395a48c6080a2c016e589047566"
+  },
+  "verifier_sha256": "dc8a4d64d29fe17fbf2dbf15b21e7bdd4cd48cbd69070c7f559f6c69eabbc4b9",
+  "corrections": [
+    "Rebased on #1231 and replaced range triggers with native buttons for accessibility and cancellation focus.",
+    "Review found malformed GraphQL ranges escaped as HTTP 422. Prevalidate before mutation and return HTTP 200 with null field and UNPROCESSABLE error; six failing regressions now pass."
+  ],
+  "limits": [
+    "CI, production rollout and hosted image/native/browser verification pending.",
+    "Local browser flow predates the GraphQL error-envelope correction; 104 final focused regressions cover that correction.",
+    "Range API shape validation is covered; complete historical/current API coordinate validation remains open.",
+    "Multiline suggestions, plus-icon dragging, physical touch, live provider visual parity and broader review/AI/collaboration remain open."
+  ],
+  "full_release_complete": false
+}
