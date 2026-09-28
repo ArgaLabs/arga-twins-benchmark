@@ -255,6 +255,10 @@
         {
           "path": "samples/workspace/evidence/sheets-range-dropdown-colors-2026-09-27.json",
           "sha256": "168202b8a6ce663e575467372048640cad9d75e3daf8bb457e0dcecb2faada51"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-dropdown-ordering-2026-09-27.json",
+          "sha256": "aff9a7752e5f846798a7fe6413bd11f860746bfa49e19b6926cf908b2022ef1f"
         }
       ]
     },
@@ -592,7 +596,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "b9ec8a7ffa6daa156ea57c33fd83776e831ec82206703700a84991699586ddd2"
+          "sha256": "314e85cbf795cdbff133b899195babd0f85144a8ba3cd086372de8ae629fb356"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -624,5 +628,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "67f69710e8e893ed7ed33953d0f9e0c23d4f02a9442724f30e86126235e13f5f"
+  "sample_tree_sha256": "3e9fd6ba2379823dae6c70dbcae90f0c59da125874dea87e8adf8782c7c1e3ea"
 }

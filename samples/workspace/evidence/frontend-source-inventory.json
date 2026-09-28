@@ -26,53 +26,53 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 48,
-      "markup_control_occurrences": 296,
+      "route_candidate_count": 50,
+      "markup_control_occurrences": 312,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
-          "sha256": "a98ae3728b20a44956bcf4252f43594aae343927f152bf497e0b80b04726c4f6",
+          "sha256": "ed5f6a7c84b415727b479ebdc1d4b16269bf74af58b46a73e2be00e2fe158cb4",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions",
               "handler": "actions",
-              "line": 36
+              "line": 122
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}",
               "handler": "run_detail",
-              "line": 62
+              "line": 226
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download",
               "handler": "artifact_download",
-              "line": 158
+              "line": 230
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/delete",
               "handler": "artifact_delete",
-              "line": 162
+              "line": 234
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/workflows/{workflow_id}/{action}",
               "handler": "workflow_action",
-              "line": 168
+              "line": 240
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/actions/runs/{run_id}/{action}",
               "handler": "run_action",
-              "line": 185
+              "line": 264
             }
           ],
           "markup_expressions": [
             {
-              "line": 32,
+              "line": 67,
               "dynamic": true,
               "controls": [
                 {
@@ -120,7 +120,7 @@
               ]
             },
             {
-              "line": 47,
+              "line": 94,
               "dynamic": true,
               "controls": [
                 {
@@ -138,7 +138,7 @@
               ]
             },
             {
-              "line": 53,
+              "line": 106,
               "dynamic": true,
               "controls": [
                 {
@@ -168,7 +168,7 @@
               ]
             },
             {
-              "line": 83,
+              "line": 148,
               "dynamic": true,
               "controls": [
                 {
@@ -186,7 +186,35 @@
               ]
             },
             {
-              "line": 56,
+              "line": 90,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "ref",
+                    "value": "{dynamic}"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 103,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}",
+                    "disabled": null
+                  },
+                  "text": "{dynamic} (unavailable)"
+                }
+              ]
+            },
+            {
+              "line": 111,
               "dynamic": true,
               "controls": [
                 {
@@ -199,7 +227,7 @@
               ]
             },
             {
-              "line": 86,
+              "line": 151,
               "dynamic": true,
               "controls": [
                 {
@@ -227,7 +255,7 @@
               ]
             },
             {
-              "line": 106,
+              "line": 171,
               "dynamic": true,
               "controls": [
                 {
@@ -238,7 +266,7 @@
               ]
             },
             {
-              "line": 142,
+              "line": 207,
               "dynamic": true,
               "controls": [
                 {
@@ -261,7 +289,7 @@
               ]
             },
             {
-              "line": 50,
+              "line": 97,
               "dynamic": true,
               "controls": [
                 {
@@ -274,7 +302,7 @@
               ]
             },
             {
-              "line": 137,
+              "line": 202,
               "dynamic": true,
               "controls": [
                 {
@@ -284,6 +312,26 @@
                     "aria-label": "Download {dynamic}"
                   },
                   "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 54,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/_ui/repos/{dynamic}/actions"
+                  },
+                  "text": "Back to Actions"
+                },
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/"
+                  },
+                  "text": "View repositories"
                 }
               ]
             }
@@ -526,138 +574,138 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "d73c6e68cfe7611d1d9e016f1d1e033a46b033ae324a6a7d60518b374b422235",
+          "sha256": "d13f8e760b33c728b9885b3ce42e80900c1d740d0bbbd10d716927aeef0bdae6",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1158
+              "line": 1162
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1167
+              "line": 1171
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1277
+              "line": 1281
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1369
+              "line": 1373
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1583
+              "line": 1595
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1670
+              "line": 1682
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1761
+              "line": 1773
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1876
+              "line": 1888
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2070
+              "line": 2082
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2153
+              "line": 2165
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2201
+              "line": 2213
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2243
+              "line": 2255
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2286
+              "line": 2298
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2358
+              "line": 2370
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2437
+              "line": 2449
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2479
+              "line": 2491
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2492
+              "line": 2504
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2624
+              "line": 2636
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2698
+              "line": 2710
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2928
+              "line": 2940
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2980
+              "line": 2992
             }
           ],
           "markup_expressions": [
             {
-              "line": 263,
+              "line": 264,
               "dynamic": true,
               "controls": [
                 {
@@ -714,7 +762,7 @@
               ]
             },
             {
-              "line": 358,
+              "line": 359,
               "dynamic": true,
               "controls": [
                 {
@@ -742,7 +790,7 @@
               ]
             },
             {
-              "line": 674,
+              "line": 675,
               "dynamic": true,
               "controls": [
                 {
@@ -799,7 +847,7 @@
               ]
             },
             {
-              "line": 731,
+              "line": 732,
               "dynamic": true,
               "controls": [
                 {
@@ -812,7 +860,7 @@
               ]
             },
             {
-              "line": 770,
+              "line": 771,
               "dynamic": true,
               "controls": [
                 {
@@ -870,7 +918,7 @@
               ]
             },
             {
-              "line": 1100,
+              "line": 1101,
               "dynamic": true,
               "controls": [
                 {
@@ -923,7 +971,7 @@
               ]
             },
             {
-              "line": 885,
+              "line": 886,
               "dynamic": true,
               "controls": [
                 {
@@ -957,7 +1005,7 @@
               ]
             },
             {
-              "line": 1206,
+              "line": 1210,
               "dynamic": true,
               "controls": [
                 {
@@ -1006,7 +1054,7 @@
               ]
             },
             {
-              "line": 1248,
+              "line": 1252,
               "dynamic": true,
               "controls": [
                 {
@@ -1026,7 +1074,7 @@
               ]
             },
             {
-              "line": 1385,
+              "line": 1396,
               "dynamic": true,
               "controls": [
                 {
@@ -1081,7 +1129,7 @@
               ]
             },
             {
-              "line": 1457,
+              "line": 1469,
               "dynamic": true,
               "controls": [
                 {
@@ -1092,7 +1140,7 @@
               ]
             },
             {
-              "line": 1468,
+              "line": 1480,
               "dynamic": true,
               "controls": [
                 {
@@ -1112,7 +1160,7 @@
               ]
             },
             {
-              "line": 1543,
+              "line": 1555,
               "dynamic": true,
               "controls": [
                 {
@@ -1153,7 +1201,7 @@
               ]
             },
             {
-              "line": 1623,
+              "line": 1635,
               "dynamic": true,
               "controls": [
                 {
@@ -1166,7 +1214,7 @@
               ]
             },
             {
-              "line": 1630,
+              "line": 1642,
               "dynamic": true,
               "controls": [
                 {
@@ -1221,7 +1269,7 @@
               ]
             },
             {
-              "line": 1651,
+              "line": 1663,
               "dynamic": true,
               "controls": [
                 {
@@ -1234,7 +1282,7 @@
               ]
             },
             {
-              "line": 1719,
+              "line": 1731,
               "dynamic": true,
               "controls": [
                 {
@@ -1247,7 +1295,7 @@
               ]
             },
             {
-              "line": 1728,
+              "line": 1740,
               "dynamic": true,
               "controls": [
                 {
@@ -1302,7 +1350,7 @@
               ]
             },
             {
-              "line": 1781,
+              "line": 1793,
               "dynamic": true,
               "controls": [
                 {
@@ -1357,7 +1405,7 @@
               ]
             },
             {
-              "line": 1805,
+              "line": 1817,
               "dynamic": true,
               "controls": [
                 {
@@ -1384,7 +1432,7 @@
               ]
             },
             {
-              "line": 1972,
+              "line": 1984,
               "dynamic": true,
               "controls": [
                 {
@@ -1439,7 +1487,7 @@
               ]
             },
             {
-              "line": 1997,
+              "line": 2009,
               "dynamic": true,
               "controls": [
                 {
@@ -1481,7 +1529,7 @@
               ]
             },
             {
-              "line": 2395,
+              "line": 2407,
               "dynamic": true,
               "controls": [
                 {
@@ -1514,7 +1562,7 @@
               ]
             },
             {
-              "line": 2414,
+              "line": 2426,
               "dynamic": true,
               "controls": [
                 {
@@ -1534,7 +1582,7 @@
               ]
             },
             {
-              "line": 2653,
+              "line": 2665,
               "dynamic": true,
               "controls": [
                 {
@@ -1605,7 +1653,7 @@
               ]
             },
             {
-              "line": 2939,
+              "line": 2951,
               "dynamic": true,
               "controls": [
                 {
@@ -1679,7 +1727,7 @@
               ]
             },
             {
-              "line": 717,
+              "line": 718,
               "dynamic": true,
               "controls": [
                 {
@@ -1707,7 +1755,7 @@
               ]
             },
             {
-              "line": 725,
+              "line": 726,
               "dynamic": true,
               "controls": [
                 {
@@ -1735,7 +1783,7 @@
               ]
             },
             {
-              "line": 1046,
+              "line": 1047,
               "dynamic": true,
               "controls": [
                 {
@@ -1748,7 +1796,7 @@
               ]
             },
             {
-              "line": 1084,
+              "line": 1085,
               "dynamic": true,
               "controls": [
                 {
@@ -1761,7 +1809,7 @@
               ]
             },
             {
-              "line": 1087,
+              "line": 1088,
               "dynamic": true,
               "controls": [
                 {
@@ -1774,7 +1822,7 @@
               ]
             },
             {
-              "line": 1184,
+              "line": 1188,
               "dynamic": true,
               "controls": [
                 {
@@ -1787,7 +1835,7 @@
               ]
             },
             {
-              "line": 1201,
+              "line": 1205,
               "dynamic": true,
               "controls": [
                 {
@@ -1800,7 +1848,7 @@
               ]
             },
             {
-              "line": 1203,
+              "line": 1207,
               "dynamic": true,
               "controls": [
                 {
@@ -1813,7 +1861,7 @@
               ]
             },
             {
-              "line": 1235,
+              "line": 1239,
               "dynamic": true,
               "controls": [
                 {
@@ -1826,7 +1874,20 @@
               ]
             },
             {
-              "line": 1426,
+              "line": 1390,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/_ui/repos/{dynamic}/settings"
+                  },
+                  "text": "Settings"
+                }
+              ]
+            },
+            {
+              "line": 1438,
               "dynamic": true,
               "controls": [
                 {
@@ -1839,7 +1900,7 @@
               ]
             },
             {
-              "line": 1433,
+              "line": 1445,
               "dynamic": true,
               "controls": [
                 {
@@ -1852,7 +1913,7 @@
               ]
             },
             {
-              "line": 1452,
+              "line": 1464,
               "dynamic": true,
               "controls": [
                 {
@@ -1865,7 +1926,7 @@
               ]
             },
             {
-              "line": 1626,
+              "line": 1638,
               "dynamic": true,
               "controls": [
                 {
@@ -1878,7 +1939,7 @@
               ]
             },
             {
-              "line": 1704,
+              "line": 1716,
               "dynamic": true,
               "controls": [
                 {
@@ -1891,7 +1952,7 @@
               ]
             },
             {
-              "line": 1712,
+              "line": 1724,
               "dynamic": true,
               "controls": [
                 {
@@ -1904,7 +1965,7 @@
               ]
             },
             {
-              "line": 1847,
+              "line": 1859,
               "dynamic": true,
               "controls": [
                 {
@@ -1917,7 +1978,7 @@
               ]
             },
             {
-              "line": 1958,
+              "line": 1970,
               "dynamic": true,
               "controls": [
                 {
@@ -1937,7 +1998,7 @@
               ]
             },
             {
-              "line": 2379,
+              "line": 2391,
               "dynamic": true,
               "controls": [
                 {
@@ -1950,7 +2011,7 @@
               ]
             },
             {
-              "line": 2392,
+              "line": 2404,
               "dynamic": true,
               "controls": [
                 {
@@ -1963,7 +2024,7 @@
               ]
             },
             {
-              "line": 1723,
+              "line": 1735,
               "dynamic": true,
               "controls": [
                 {
@@ -2312,60 +2373,60 @@
         },
         {
           "path": "twins/github/operations_ui.py",
-          "sha256": "78b574c9ef887f640c6fe235d58494f8e46a365e2e432b6f692a3d997dc98047",
+          "sha256": "6a3ad9ba5afc61063c03b025fcfd1ebd3dc043a6ad4b8a0e246c00c5d266133f",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/search",
               "handler": "search_workspace",
-              "line": 92
+              "line": 94
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues",
               "handler": "issue_list",
-              "line": 137
+              "line": 139
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}",
               "handler": "issue_detail",
-              "line": 168
+              "line": 170
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/edit",
               "handler": "edit_issue",
-              "line": 189
+              "line": 191
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/comments",
               "handler": "comment",
-              "line": 200
+              "line": 202
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviewers",
               "handler": "reviewers",
-              "line": 208
+              "line": 210
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews",
               "handler": "create_review",
-              "line": 221
+              "line": 223
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews/{review_id}/{action}",
               "handler": "change_review",
-              "line": 231
+              "line": 233
             }
           ],
           "markup_expressions": [
             {
-              "line": 39,
+              "line": 40,
               "dynamic": true,
               "controls": [
                 {
@@ -2402,7 +2463,7 @@
               ]
             },
             {
-              "line": 77,
+              "line": 78,
               "dynamic": true,
               "controls": [
                 {
@@ -2467,7 +2528,7 @@
               ]
             },
             {
-              "line": 130,
+              "line": 132,
               "dynamic": true,
               "controls": [
                 {
@@ -2492,7 +2553,7 @@
               ]
             },
             {
-              "line": 153,
+              "line": 155,
               "dynamic": true,
               "controls": [
                 {
@@ -2538,7 +2599,7 @@
               ]
             },
             {
-              "line": 176,
+              "line": 178,
               "dynamic": true,
               "controls": [
                 {
@@ -2581,7 +2642,7 @@
               ]
             },
             {
-              "line": 64,
+              "line": 65,
               "dynamic": true,
               "controls": [
                 {
@@ -2638,7 +2699,7 @@
               ]
             },
             {
-              "line": 34,
+              "line": 35,
               "dynamic": true,
               "controls": [
                 {
@@ -2674,7 +2735,7 @@
               ]
             },
             {
-              "line": 72,
+              "line": 73,
               "dynamic": true,
               "controls": [
                 {
@@ -2703,7 +2764,7 @@
               ]
             },
             {
-              "line": 149,
+              "line": 151,
               "dynamic": true,
               "controls": [
                 {
@@ -2716,7 +2777,7 @@
               ]
             },
             {
-              "line": 110,
+              "line": 112,
               "dynamic": true,
               "controls": [
                 {
@@ -2729,7 +2790,7 @@
               ]
             },
             {
-              "line": 127,
+              "line": 129,
               "dynamic": true,
               "controls": [
                 {
@@ -2742,7 +2803,7 @@
               ]
             },
             {
-              "line": 158,
+              "line": 160,
               "dynamic": true,
               "controls": [
                 {
@@ -2758,36 +2819,36 @@
         },
         {
           "path": "twins/github/projects_ui.py",
-          "sha256": "83a9ffbf69f8575dcbdb6da0b5014decb58a70876601307bf9098c2afb3c7f12",
+          "sha256": "0e94106ac14fdeedb0b3b23a5930dbbff4590f3e47c3104be7093601313108e7",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/projects",
               "handler": "project",
-              "line": 17
+              "line": 26
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/projects/items",
               "handler": "add_item",
-              "line": 67
+              "line": 82
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/projects/items/{item_id}",
               "handler": "update_item",
-              "line": 81
+              "line": 102
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/projects/items/{item_id}/remove",
               "handler": "remove_item",
-              "line": 92
+              "line": 117
             }
           ],
           "markup_expressions": [
             {
-              "line": 62,
+              "line": 75,
               "dynamic": true,
               "controls": [
                 {
@@ -2841,7 +2902,7 @@
               ]
             },
             {
-              "line": 63,
+              "line": 78,
               "dynamic": true,
               "controls": [
                 {
@@ -2903,7 +2964,7 @@
               ]
             },
             {
-              "line": 38,
+              "line": 49,
               "dynamic": true,
               "controls": [
                 {
@@ -2945,7 +3006,7 @@
               ]
             },
             {
-              "line": 33,
+              "line": 44,
               "dynamic": true,
               "controls": [
                 {
@@ -2958,7 +3019,7 @@
               ]
             },
             {
-              "line": 58,
+              "line": 71,
               "dynamic": true,
               "controls": [
                 {
@@ -2967,6 +3028,132 @@
                     "value": "{dynamic}"
                   },
                   "text": "{dynamic} #{dynamic} \u00b7 {dynamic}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/github/repository_access.py",
+          "sha256": "744b3ce6b525e0621b394afb8ce792f6fff40fbdcfa07314858a5f420959ae8e",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 101,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/"
+                  },
+                  "text": "View repositories"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/github/repository_settings_ui.py",
+          "sha256": "5a7246f9f7470cc0da9aa1bd3d7705a00769159bf84cf777278023bc029e4512",
+          "frontend_route_candidates": [
+            {
+              "method": "GET",
+              "path": "/_ui/repos/{owner}/{repo}/settings",
+              "handler": "settings",
+              "line": 82
+            },
+            {
+              "method": "POST",
+              "path": "/_ui/repos/{owner}/{repo}/settings/default-branch",
+              "handler": "change_branch",
+              "line": 88
+            }
+          ],
+          "markup_expressions": [
+            {
+              "line": 51,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "/_ui/repos/{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                },
+                {
+                  "tag": "a",
+                  "attributes": {
+                    "href": "{dynamic}"
+                  },
+                  "text": "General"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "open-branch-switch",
+                    "type": "button"
+                  },
+                  "text": "Switch to another branch"
+                },
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "branch-switch",
+                    "aria-labelledby": "branch-switch-title"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "close-branch-switch",
+                    "type": "button",
+                    "aria-label": "Close"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "method": "post",
+                    "action": "{dynamic}/default-branch"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "expected_branch",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "select",
+                  "attributes": {
+                    "name": "default_branch",
+                    "aria-label": "Default branch"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Update"
+                }
+              ]
+            },
+            {
+              "line": 47,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "{dynamic}"
+                  },
+                  "text": "{dynamic}"
                 }
               ]
             }
@@ -2980,7 +3167,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 1,
-      "markup_control_occurrences": 108,
+      "markup_control_occurrences": 111,
       "files": [
         {
           "path": "twins/gmail/app.py",
@@ -3658,13 +3845,49 @@
           ]
         },
         {
-          "path": "twins/gmail/settings_ui.py",
-          "sha256": "ecc5e0c59d3852cd09ca23c10b0bb44114259db7a06c7ca9250855ff6f7db314",
+          "path": "twins/gmail/settings_confirmation_ui.py",
+          "sha256": "0f00508e6ed9e0647f47329f46e53fb062779b8c6dfe7fbdf72cc9113d60fa0d",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 32,
+              "line": 21,
               "dynamic": false,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "gmail-setting-confirm",
+                    "aria-labelledby": "gmail-setting-confirm-title"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "gmail-setting-confirm-cancel",
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "gmail-setting-confirm-save",
+                    "type": "button"
+                  },
+                  "text": "OK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/gmail/settings_ui.py",
+          "sha256": "bcfd43e613e9aff74645cd31797637b961562742e9d9c07173bab9647f1248c7",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 40,
+              "dynamic": true,
               "controls": [
                 {
                   "tag": "button",
@@ -4512,11 +4735,11 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 154,
+      "markup_control_occurrences": 160,
       "files": [
         {
           "path": "twins/google_docs/document_actions_ui.py",
-          "sha256": "e09405784525ad5b3724ac764e5208f8289369f78e95d36464c0499c8e5186f8",
+          "sha256": "754eb88a4f33f63dd208ab8125e769cc7d4750db4b7e28b4e04d7e2e3cebdfab",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5019,11 +5242,11 @@
         },
         {
           "path": "twins/google_docs/table_options_ui.py",
-          "sha256": "88c0ac4d8d921bf66f83ddd4e3aaacfb300ca42e9c7c64972af865b932790a82",
+          "sha256": "19c5ccf47c9960c5a1a83de5e434ba7d5f74beee3931532e9b2adaa81a67f6e3",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 24,
+              "line": 25,
               "dynamic": false,
               "controls": [
                 {
@@ -5074,6 +5297,22 @@
                     "id": "table-row-height",
                     "type": "number",
                     "aria-label": "Minimum row height"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "table-header-pinned",
+                    "type": "checkbox",
+                    "aria-label": "Pin header row(s)"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "table-header-count",
+                    "type": "number",
+                    "aria-label": "Pinned header rows"
                   }
                 },
                 {
@@ -5222,7 +5461,7 @@
         },
         {
           "path": "twins/google_docs/ui.py",
-          "sha256": "1b624a9b82ed0e0201468b63b6a9867b685e8caf94358513e4222066aeed848e",
+          "sha256": "803e20ff5c2085d830cc0b280ec7189fd9fd6de96f9160e922d547332d32e1d4",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -5582,12 +5821,63 @@
           ]
         },
         {
-          "path": "twins/google_docs/version_history_ui.py",
-          "sha256": "aa27401f93a2d1cd09234101183b4c7ebbd26a24680fc6365d66537628a141b6",
+          "path": "twins/google_docs/version_comparison_ui.py",
+          "sha256": "1458634d1d4f3c874b0c2b31a50094b3078684b7bbd5707e3dfb6b5b9038ce0a",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
               "line": 9,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "checkbox",
+                    "id": "version-highlight-changes",
+                    "disabled": null
+                  }
+                }
+              ]
+            },
+            {
+              "line": 11,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "version-previous-edit",
+                    "aria-label": "Previous edit"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "version-next-edit",
+                    "aria-label": "Next edit"
+                  },
+                  "text": ""
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "version-comparison-retry",
+                    "hidden": null
+                  },
+                  "text": "Retry comparison"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_docs/version_history_ui.py",
+          "sha256": "382e4998977c8cdf70ae0fae8a77c69a00d345c5bba9a773075deef712b11db3",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 16,
               "dynamic": false,
               "controls": [
                 {
@@ -5724,7 +6014,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 254,
+      "markup_control_occurrences": 263,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -6259,6 +6549,71 @@
                     "value": "1000",
                     "aria-label": "Rows to add"
                   }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_sheets/dropdown_range_ui.py",
+          "sha256": "6b5d762997227e281ae43f76dab0f45fa91ede038bc90265a8a67cd81fbb8d2a",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 3,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "dropdown-range-refresh",
+                    "type": "button"
+                  },
+                  "text": "Refresh values"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "twins/google_sheets/dropdown_ui.py",
+          "sha256": "7b1278eff2378514c13468789728cbe870bfbae76e343cd0868cf74ebb046428",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 25,
+              "dynamic": false,
+              "controls": [
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "dropdown-color-picker",
+                    "aria-labelledby": "dropdown-color-title"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "dropdown-custom-color",
+                    "type": "color",
+                    "aria-label": "Custom dropdown color"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "dropdown-color-reset",
+                    "type": "button"
+                  },
+                  "text": "Reset"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "id": "dropdown-color-close",
+                    "type": "button"
+                  },
+                  "text": "Done"
                 }
               ]
             }
@@ -7453,7 +7808,7 @@
         },
         {
           "path": "twins/google_sheets/ui.py",
-          "sha256": "6714997f31b630f3b5c8ed11f0cb562dd375b072627faf4a2a03e0125c6fc529",
+          "sha256": "9c228e9b24cd5ba640d412fafed2bdc6383102a994b07d5a17b05f92f5cf7b1c",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
@@ -7665,11 +8020,11 @@
         },
         {
           "path": "twins/google_sheets/validation_ui.py",
-          "sha256": "83ff7cf7bf6bf2740ad4d0c5f32d43f9e9eb70d079bb4be6ccf843ae6ddfd465",
+          "sha256": "af06c3b199f15abb681dff28c1a4df8f3535bbc59697ea10b8293e807eff7e71",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 41,
+              "line": 45,
               "dynamic": false,
               "controls": [
                 {
@@ -7722,6 +8077,13 @@
                   }
                 },
                 {
+                  "tag": "input",
+                  "attributes": {
+                    "id": "validation-multiple",
+                    "type": "checkbox"
+                  }
+                },
+                {
                   "tag": "summary",
                   "attributes": {},
                   "text": "Advanced options"
@@ -7764,6 +8126,30 @@
                   "attributes": {
                     "id": "validation-show",
                     "type": "checkbox"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "radio",
+                    "name": "dropdown-display-style",
+                    "value": "CHIP"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "radio",
+                    "name": "dropdown-display-style",
+                    "value": "ARROW"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "radio",
+                    "name": "dropdown-display-style",
+                    "value": "PLAIN_TEXT"
                   }
                 },
                 {
@@ -12738,37 +13124,37 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "dfac44a0c6cc4061df683cebd79b6bd50f06e37813bdac2ad8cb28ab8e331a8e",
+      "sha256": "46ec6e6f5d490f1b63c628d52ff4c3025050f2c26b30203c809a139323ed6407",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 772
+          "line": 773
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1062
+          "line": 1063
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1088
+          "line": 1089
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1253
+          "line": 1254
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1778
+          "line": 1779
         },
         {
           "method": "GET",
@@ -12786,90 +13172,90 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1315
+          "line": 1316
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1350
+          "line": 1351
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1395
+          "line": 1396
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1406
+          "line": 1407
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1427
+          "line": 1428
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1447
+          "line": 1448
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1466
+          "line": 1467
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1477
+          "line": 1478
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1489
+          "line": 1490
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1507
+          "line": 1508
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1518
+          "line": 1519
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1536
+          "line": 1537
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1560
+          "line": 1561
         },
         {
           "method": "GET",
           "path": "/ui/documents/{file_id}/access",
           "handler": "docs_ui_access",
-          "line": 1303
+          "line": 1304
         }
       ],
       "markup_expressions": [
         {
-          "line": 838,
+          "line": 839,
           "dynamic": false,
           "controls": [
             {
@@ -12882,7 +13268,7 @@
           ]
         },
         {
-          "line": 954,
+          "line": 955,
           "dynamic": true,
           "controls": [
             {
@@ -12947,7 +13333,7 @@
           ]
         },
         {
-          "line": 866,
+          "line": 867,
           "dynamic": true,
           "controls": [
             {
@@ -12958,7 +13344,7 @@
           ]
         },
         {
-          "line": 880,
+          "line": 881,
           "dynamic": false,
           "controls": [
             {
@@ -12971,7 +13357,7 @@
           ]
         },
         {
-          "line": 925,
+          "line": 926,
           "dynamic": true,
           "controls": [
             {
@@ -12982,7 +13368,7 @@
           ]
         },
         {
-          "line": 861,
+          "line": 862,
           "dynamic": true,
           "controls": [
             {
@@ -12995,7 +13381,7 @@
           ]
         },
         {
-          "line": 863,
+          "line": 864,
           "dynamic": true,
           "controls": [
             {
@@ -13008,7 +13394,7 @@
           ]
         },
         {
-          "line": 902,
+          "line": 903,
           "dynamic": true,
           "controls": [
             {
@@ -13021,7 +13407,7 @@
           ]
         },
         {
-          "line": 906,
+          "line": 907,
           "dynamic": true,
           "controls": [
             {
@@ -13034,7 +13420,7 @@
           ]
         },
         {
-          "line": 916,
+          "line": 917,
           "dynamic": true,
           "controls": [
             {
@@ -13064,7 +13450,7 @@
           ]
         },
         {
-          "line": 944,
+          "line": 945,
           "dynamic": true,
           "controls": [
             {
@@ -13077,7 +13463,7 @@
           ]
         },
         {
-          "line": 949,
+          "line": 950,
           "dynamic": true,
           "controls": [
             {
