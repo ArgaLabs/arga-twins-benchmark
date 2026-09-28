@@ -1,7 +1,7 @@
 {
   "schema": "arga-frontend-source-inventory/1",
   "certifies_exhaustive_coverage": false,
-  "scope": "Statically discoverable route and markup candidates in eight provider source directories.",
+  "scope": "Statically discoverable route and markup candidates in eight provider source directories plus shared Workspace modules.",
   "required_runtime_checks": [
     "provider reference",
     "success",
@@ -16,7 +16,7 @@
   ],
   "limitations": [
     "Source occurrences are not unique rendered controls, tested routes, or implemented provider features.",
-    "Runtime JavaScript menus, generated routes, shared modules, role variants and native dialogs require separate live enumeration.",
+    "Runtime JavaScript menus, generated routes, other shared modules, role variants and native dialogs require separate live enumeration.",
     "Dynamic text is represented by {dynamic}; false positives and source-only fragments must be resolved during live audit.",
     "Every provider remains pending. This inventory must not be used to mark a release gate verified."
   ],
@@ -13476,6 +13476,188 @@
           ]
         }
       ]
+    },
+    {
+      "path": "twins/google_drive/collaboration_ui.py",
+      "sha256": "53a6c9d928438cfb5d269a7120d92337b86ae3f874df1ca63d2ba93c065827f0",
+      "frontend_route_candidates": [],
+      "markup_expressions": [
+        {
+          "line": 20,
+          "dynamic": false,
+          "controls": [
+            {
+              "tag": "dialog",
+              "attributes": {
+                "id": "comments-dialog",
+                "aria-labelledby": "comments-title"
+              }
+            },
+            {
+              "tag": "button",
+              "attributes": {
+                "id": "close-comments",
+                "aria-label": "Close comments"
+              },
+              "text": "\u00d7"
+            },
+            {
+              "tag": "input",
+              "attributes": {
+                "id": "show-resolved-comments",
+                "type": "checkbox"
+              }
+            },
+            {
+              "tag": "form",
+              "attributes": {
+                "id": "new-comment-form"
+              }
+            },
+            {
+              "tag": "textarea",
+              "attributes": {
+                "id": "new-comment"
+              }
+            },
+            {
+              "tag": "button",
+              "attributes": {},
+              "text": "Comment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "twins/google_drive/document_history.py",
+      "sha256": "500cd108d36a099f5ebdd5e2296f6b56d2bc2bd26d37a9241a74ce023aa3cc4c",
+      "frontend_route_candidates": [
+        {
+          "method": "GET",
+          "path": "/ui/documents/{document_id}/versions",
+          "handler": "document_history_list",
+          "line": 74
+        },
+        {
+          "method": "GET",
+          "path": "/ui/documents/{document_id}/versions/{version_id}",
+          "handler": "document_history_get",
+          "line": 85
+        },
+        {
+          "method": "GET",
+          "path": "/ui/documents/{document_id}/versions/{version_id}/comparison",
+          "handler": "document_history_comparison",
+          "line": 91
+        },
+        {
+          "method": "POST",
+          "path": "/ui/documents/{document_id}/versions/{version_id}",
+          "handler": "document_history_action",
+          "line": 106
+        }
+      ],
+      "markup_expressions": []
+    },
+    {
+      "path": "twins/google_drive/workspace_editing.py",
+      "sha256": "348452c1f851dc76d62dc1e75e9344fbc493ea3d7b9fec4d8e6b09e1ac348915",
+      "frontend_route_candidates": [
+        {
+          "method": "POST",
+          "path": "/ui/documents/{document_id}/tabs/{tab_id}/duplicate",
+          "handler": "duplicate_document_tab",
+          "line": 9969
+        },
+        {
+          "method": "GET",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "handler": "spreadsheet_history_status",
+          "line": 10046
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/history",
+          "handler": "spreadsheet_history_action",
+          "line": 10063
+        },
+        {
+          "method": "GET",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/protection-rules",
+          "handler": "spreadsheet_protection_rules",
+          "line": 10101
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/protections",
+          "handler": "spreadsheet_protections",
+          "line": 10117
+        },
+        {
+          "method": "GET",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
+          "handler": "spreadsheet_validation_rules",
+          "line": 10126
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
+          "handler": "spreadsheet_validation_edit",
+          "line": 10142
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-selection",
+          "handler": "spreadsheet_dropdown_selection",
+          "line": 10159
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-source",
+          "handler": "spreadsheet_dropdown_source",
+          "line": 10176
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/validation-preview",
+          "handler": "spreadsheet_validation_preview",
+          "line": 10194
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-preview",
+          "handler": "spreadsheet_filter_preview",
+          "line": 10201
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-cell",
+          "handler": "spreadsheet_filter_cell",
+          "line": 10208
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-view",
+          "handler": "spreadsheet_filter_view",
+          "line": 10217
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-paste",
+          "handler": "spreadsheet_filter_paste",
+          "line": 10226
+        },
+        {
+          "method": "GET",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/filter-options",
+          "handler": "spreadsheet_filter_options",
+          "line": 10235
+        }
+      ],
+      "markup_expressions": []
     }
-  ]
+  ],
+  "shared_workspace_binding_status": "candidate sources only; verify Google Docs/Sheets surface guards at runtime",
+  "shared_workspace_route_candidate_count": 40
 }
