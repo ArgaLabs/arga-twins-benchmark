@@ -105,7 +105,7 @@
         },
         {
           "path": "samples/workspace/evidence/github-multiline-reviews-2026-09-27.json",
-          "sha256": "6077635f5c598c9fd1e63a3d97e2e8feb6a1f654e4e8d1756e6781b08f379adc"
+          "sha256": "3a1b7c8c09b1bdabdf856699413322d632093e010d013bc110559bb2e7b18cf3"
         },
         {
           "path": "samples/workspace/evidence/github-range-suggestion-composer-2026-09-27.json",
@@ -648,7 +648,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "33d6927bc7acc19a144e762cde504f260eee6ffe5a366194a68c8c5d1fa19dbe"
+          "sha256": "80542957127854f7c08eeba3092344055a127c3b07d2c5c1a4b462f14b48449f"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -680,5 +680,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "ba9266795593f4541ae94b146c8ed22dbc01d6aaa73abc460c6bd32be6209a54"
+  "sample_tree_sha256": "5814dbec986d9110e5e79023e7b80835055c25539155206fd72b7e851547b375"
 }

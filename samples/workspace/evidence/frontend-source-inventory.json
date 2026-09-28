@@ -27,7 +27,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 51,
-      "markup_control_occurrences": 324,
+      "markup_control_occurrences": 327,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
@@ -574,144 +574,144 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "ddf012ac08fc749faa0682fe66f61c099e7b6e4a8517de45452ae7268af34efd",
+          "sha256": "79954ed3eee6257d2f93187690b5a9c77ac235c7ea98b59442c0d6d9caa28a99",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1125
+              "line": 1143
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1134
+              "line": 1152
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1244
+              "line": 1262
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1336
+              "line": 1354
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1558
+              "line": 1576
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1645
+              "line": 1663
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1736
+              "line": 1754
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1851
+              "line": 1869
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2065
+              "line": 2083
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/edit",
               "handler": "edit_pending_comment_ui",
-              "line": 2071
+              "line": 2089
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2082
+              "line": 2100
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2130
+              "line": 2148
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2172
+              "line": 2190
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2215
+              "line": 2233
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2287
+              "line": 2305
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2366
+              "line": 2384
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2408
+              "line": 2426
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2421
+              "line": 2439
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2553
+              "line": 2571
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2627
+              "line": 2645
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2857
+              "line": 2875
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2909
+              "line": 2927
             }
           ],
           "markup_expressions": [
             {
-              "line": 266,
+              "line": 268,
               "dynamic": true,
               "controls": [
                 {
@@ -768,7 +768,7 @@
               ]
             },
             {
-              "line": 361,
+              "line": 363,
               "dynamic": true,
               "controls": [
                 {
@@ -796,20 +796,35 @@
               ]
             },
             {
-              "line": 575,
+              "line": 580,
               "dynamic": true,
               "controls": [
                 {
-                  "tag": "label",
+                  "tag": "button",
                   "attributes": {
-                    "aria-label": "Add comment on {dynamic} line {dynamic}",
-                    "role": "button"
-                  }
+                    "type": "button",
+                    "aria-label": "Add comment on {dynamic} line {dynamic}"
+                  },
+                  "text": "+"
                 }
               ]
             },
             {
-              "line": 598,
+              "line": 585,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "aria-label": "Select line {dynamic} of {dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 610,
               "dynamic": true,
               "controls": [
                 {
@@ -841,6 +856,22 @@
                     "type": "hidden",
                     "name": "line",
                     "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "start_line",
+                    "value": ""
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "start_side",
+                    "value": ""
                   }
                 },
                 {
@@ -902,7 +933,7 @@
               ]
             },
             {
-              "line": 665,
+              "line": 679,
               "dynamic": true,
               "controls": [
                 {
@@ -915,7 +946,7 @@
               ]
             },
             {
-              "line": 705,
+              "line": 721,
               "dynamic": true,
               "controls": [
                 {
@@ -974,7 +1005,7 @@
               ]
             },
             {
-              "line": 1064,
+              "line": 1082,
               "dynamic": true,
               "controls": [
                 {
@@ -1027,7 +1058,7 @@
               ]
             },
             {
-              "line": 825,
+              "line": 841,
               "dynamic": true,
               "controls": [
                 {
@@ -1062,7 +1093,7 @@
               ]
             },
             {
-              "line": 1173,
+              "line": 1191,
               "dynamic": true,
               "controls": [
                 {
@@ -1111,7 +1142,7 @@
               ]
             },
             {
-              "line": 1215,
+              "line": 1233,
               "dynamic": true,
               "controls": [
                 {
@@ -1131,7 +1162,7 @@
               ]
             },
             {
-              "line": 1359,
+              "line": 1377,
               "dynamic": true,
               "controls": [
                 {
@@ -1186,7 +1217,7 @@
               ]
             },
             {
-              "line": 1432,
+              "line": 1450,
               "dynamic": true,
               "controls": [
                 {
@@ -1197,7 +1228,7 @@
               ]
             },
             {
-              "line": 1443,
+              "line": 1461,
               "dynamic": true,
               "controls": [
                 {
@@ -1217,7 +1248,7 @@
               ]
             },
             {
-              "line": 1518,
+              "line": 1536,
               "dynamic": true,
               "controls": [
                 {
@@ -1258,7 +1289,7 @@
               ]
             },
             {
-              "line": 1598,
+              "line": 1616,
               "dynamic": true,
               "controls": [
                 {
@@ -1271,7 +1302,7 @@
               ]
             },
             {
-              "line": 1605,
+              "line": 1623,
               "dynamic": true,
               "controls": [
                 {
@@ -1326,7 +1357,7 @@
               ]
             },
             {
-              "line": 1626,
+              "line": 1644,
               "dynamic": true,
               "controls": [
                 {
@@ -1339,7 +1370,7 @@
               ]
             },
             {
-              "line": 1694,
+              "line": 1712,
               "dynamic": true,
               "controls": [
                 {
@@ -1352,7 +1383,7 @@
               ]
             },
             {
-              "line": 1703,
+              "line": 1721,
               "dynamic": true,
               "controls": [
                 {
@@ -1407,7 +1438,7 @@
               ]
             },
             {
-              "line": 1756,
+              "line": 1774,
               "dynamic": true,
               "controls": [
                 {
@@ -1462,7 +1493,7 @@
               ]
             },
             {
-              "line": 1780,
+              "line": 1798,
               "dynamic": true,
               "controls": [
                 {
@@ -1489,7 +1520,7 @@
               ]
             },
             {
-              "line": 1967,
+              "line": 1985,
               "dynamic": true,
               "controls": [
                 {
@@ -1544,7 +1575,7 @@
               ]
             },
             {
-              "line": 1992,
+              "line": 2010,
               "dynamic": true,
               "controls": [
                 {
@@ -1586,7 +1617,7 @@
               ]
             },
             {
-              "line": 2324,
+              "line": 2342,
               "dynamic": true,
               "controls": [
                 {
@@ -1619,7 +1650,7 @@
               ]
             },
             {
-              "line": 2343,
+              "line": 2361,
               "dynamic": true,
               "controls": [
                 {
@@ -1639,7 +1670,7 @@
               ]
             },
             {
-              "line": 2582,
+              "line": 2600,
               "dynamic": true,
               "controls": [
                 {
@@ -1710,7 +1741,7 @@
               ]
             },
             {
-              "line": 2868,
+              "line": 2886,
               "dynamic": true,
               "controls": [
                 {
@@ -1784,7 +1815,7 @@
               ]
             },
             {
-              "line": 651,
+              "line": 665,
               "dynamic": true,
               "controls": [
                 {
@@ -1812,7 +1843,7 @@
               ]
             },
             {
-              "line": 659,
+              "line": 673,
               "dynamic": true,
               "controls": [
                 {
@@ -1840,7 +1871,7 @@
               ]
             },
             {
-              "line": 1008,
+              "line": 1026,
               "dynamic": true,
               "controls": [
                 {
@@ -1859,7 +1890,7 @@
               ]
             },
             {
-              "line": 1048,
+              "line": 1066,
               "dynamic": true,
               "controls": [
                 {
@@ -1872,7 +1903,7 @@
               ]
             },
             {
-              "line": 1051,
+              "line": 1069,
               "dynamic": true,
               "controls": [
                 {
@@ -1885,7 +1916,7 @@
               ]
             },
             {
-              "line": 1151,
+              "line": 1169,
               "dynamic": true,
               "controls": [
                 {
@@ -1898,7 +1929,7 @@
               ]
             },
             {
-              "line": 1168,
+              "line": 1186,
               "dynamic": true,
               "controls": [
                 {
@@ -1911,7 +1942,7 @@
               ]
             },
             {
-              "line": 1170,
+              "line": 1188,
               "dynamic": true,
               "controls": [
                 {
@@ -1924,7 +1955,7 @@
               ]
             },
             {
-              "line": 1202,
+              "line": 1220,
               "dynamic": true,
               "controls": [
                 {
@@ -1937,7 +1968,7 @@
               ]
             },
             {
-              "line": 1353,
+              "line": 1371,
               "dynamic": true,
               "controls": [
                 {
@@ -1950,7 +1981,7 @@
               ]
             },
             {
-              "line": 1401,
+              "line": 1419,
               "dynamic": true,
               "controls": [
                 {
@@ -1963,7 +1994,7 @@
               ]
             },
             {
-              "line": 1408,
+              "line": 1426,
               "dynamic": true,
               "controls": [
                 {
@@ -1976,7 +2007,7 @@
               ]
             },
             {
-              "line": 1427,
+              "line": 1445,
               "dynamic": true,
               "controls": [
                 {
@@ -1989,7 +2020,7 @@
               ]
             },
             {
-              "line": 1601,
+              "line": 1619,
               "dynamic": true,
               "controls": [
                 {
@@ -2002,7 +2033,7 @@
               ]
             },
             {
-              "line": 1679,
+              "line": 1697,
               "dynamic": true,
               "controls": [
                 {
@@ -2015,7 +2046,7 @@
               ]
             },
             {
-              "line": 1687,
+              "line": 1705,
               "dynamic": true,
               "controls": [
                 {
@@ -2028,7 +2059,7 @@
               ]
             },
             {
-              "line": 1822,
+              "line": 1840,
               "dynamic": true,
               "controls": [
                 {
@@ -2041,7 +2072,7 @@
               ]
             },
             {
-              "line": 1953,
+              "line": 1971,
               "dynamic": true,
               "controls": [
                 {
@@ -2061,7 +2092,7 @@
               ]
             },
             {
-              "line": 2308,
+              "line": 2326,
               "dynamic": true,
               "controls": [
                 {
@@ -2074,7 +2105,7 @@
               ]
             },
             {
-              "line": 2321,
+              "line": 2339,
               "dynamic": true,
               "controls": [
                 {
@@ -2087,7 +2118,7 @@
               ]
             },
             {
-              "line": 611,
+              "line": 625,
               "dynamic": true,
               "controls": [
                 {
@@ -2100,7 +2131,7 @@
               ]
             },
             {
-              "line": 1698,
+              "line": 1716,
               "dynamic": true,
               "controls": [
                 {
