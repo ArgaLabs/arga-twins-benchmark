@@ -283,6 +283,10 @@
         {
           "path": "samples/workspace/evidence/sheets-selection-shortcuts-2026-09-27.json",
           "sha256": "e992b785290073ff1871200293921b38e81d6f6c0c1b3fc0f56007e7783b4728"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-pivots-2026-09-27.json",
+          "sha256": "09370e1d6e64d8ad75103a9e33b5ffac3127fd0def740d9e2b06bd178102a560"
         }
       ]
     },
@@ -656,5 +660,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "9a3db2cc10c3e73c369957461443470b0059f1cf0e3d3af78106c87e99503744"
+  "sample_tree_sha256": "f5986126df2f24005fe932af1d69cec9d93b30b66aa0c251903b68dc740645db"
 }

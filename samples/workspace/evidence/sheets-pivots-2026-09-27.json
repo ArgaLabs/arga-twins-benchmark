@@ -1,0 +1,470 @@
+{
+  "date": "2026-09-27",
+  "pr": 1229,
+  "status": "local_native_browser_pass_ci_hosted_pending",
+  "source_revision": "8bef1e9db24736a7688931eb44fa412e71a95002",
+  "scope": [
+    "Native CellData.pivotTable definitions, effective generated cells and formulas",
+    "Creation, grouping, totals, 13 aggregations, percentage display, multiple values and visible-value filters",
+    "Undo/redo, protected anchors, restart and sibling file synchronization, calculated-value exports",
+    "Full pivot copy/cut and partial value copy; source recalculation and direct pivot dependencies",
+    "Committed-write/failed-read and uncertain acknowledgement recovery without duplicate creation"
+  ],
+  "official_sources": [
+    "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/pivot-tables",
+    "https://developers.google.com/workspace/sheets/api/guides/pivot-tables"
+  ],
+  "references": [
+    {
+      "observed_at": "2026-09-28T03:25:00Z",
+      "provider": "google_sheets",
+      "method": "Chrome CUA",
+      "fixture_title": "Arga fidelity pivot reference 20260927-7f21",
+      "fixture_id": "1w2HIU0diOSxVNF2n7lE6Sgcn9P2mGbY9vMpdfQLA9VM",
+      "fixture_private_to_current_account": true,
+      "source_values": [
+        [
+          "Region",
+          "Product",
+          "Revenue"
+        ],
+        [
+          "West",
+          "A",
+          10
+        ],
+        [
+          "East",
+          "A",
+          20
+        ],
+        [
+          "West",
+          "B",
+          15
+        ],
+        [
+          "East",
+          "B",
+          5
+        ]
+      ],
+      "entry": "Insert > Pivot table",
+      "create_dialog": {
+        "source_label": "Data range",
+        "default_destination": "New sheet",
+        "alternative_destination": "Existing sheet",
+        "existing_destination_placeholder": "e.g., Sheet1!F10",
+        "empty_source_error": "Please enter a valid range.",
+        "cancelled_without_new_sheet": true,
+        "selection_inferred_source": "Sheet1!A1:C5"
+      },
+      "editor": {
+        "pane": "Pivot table editor",
+        "source_editable": true,
+        "sections": [
+          "Rows",
+          "Columns",
+          "Values",
+          "Filters"
+        ],
+        "source_fields": [
+          "Region",
+          "Product",
+          "Revenue"
+        ],
+        "row_column_controls": [
+          "Order",
+          "Sort by",
+          "Show totals"
+        ],
+        "value_controls": [
+          "Summarize by",
+          "Show as"
+        ],
+        "aggregations": [
+          "SUM",
+          "COUNTA",
+          "COUNT",
+          "COUNTUNIQUE",
+          "AVERAGE",
+          "MAX",
+          "MIN",
+          "MEDIAN",
+          "PRODUCT",
+          "STDEV",
+          "STDEVP",
+          "VAR",
+          "VARP"
+        ],
+        "show_as": [
+          "Default",
+          "% of row",
+          "% of column",
+          "% of grand total"
+        ],
+        "suggestion_used": "Sum of Revenue for each Region by Product"
+      },
+      "clipboard_readback_initial": "SUM of Revenue\tProduct\t\t\nRegion\tA\tB\tGrand Total\nEast\t20\t5\t25\nWest\t10\t15\t25\nGrand Total\t30\t20\t50",
+      "source_change": "Sheet1!C2 10 to 20",
+      "clipboard_readback_after_source_change_and_reload": "SUM of Revenue\tProduct\t\t\nRegion\tA\tB\tGrand Total\nEast\t20\t5\t25\nWest\t20\t15\t35\nGrand Total\t40\t20\t60",
+      "clear_all_clears_fields_and_undo_restores": true,
+      "reopen_note": "Edit button while copied multi-cell selection did not open pane; Escape then anchor A1 and Edit opened correctly. No blind retry.",
+      "gemini_observation": "Fresh-sheet Build side panel opened with prompt, selected Sheet1 context, Create and edit sheets, and disabled Submit; closed without asking AI to generate.",
+      "screenshots_retained": false,
+      "cleanup": "File moved to trash alert confirmed for unique fixture; no permanent deletion",
+      "limits": [
+        "Desktop only",
+        "No real-provider API resource snapshot was captured; output readback used visible selected cells copied through native UI",
+        "No filters, multi-level groups, sorting changes, calculated fields, date/histogram grouping, error collision, mobile or permission completeness claim",
+        "No twin pivot implementation or fidelity pass yet"
+      ]
+    },
+    {
+      "method": "Chrome CUA with native grid clipboard",
+      "title": "Arga fidelity pivot layouts 20260927-92bc",
+      "spreadsheet_id": "1mtrEthZlCX6p3uOGssX6HldHhFw6SExEpD97iP5mMbo",
+      "row_only": [
+        [
+          "Region"
+        ],
+        [
+          "East"
+        ],
+        [
+          "West"
+        ],
+        [
+          "Grand Total"
+        ]
+      ],
+      "nested_rows": [
+        [
+          "Region",
+          "Product"
+        ],
+        [
+          "East",
+          "A"
+        ],
+        [
+          "",
+          "B"
+        ],
+        [
+          "East Total"
+        ],
+        [
+          "West",
+          "A"
+        ],
+        [
+          "",
+          "B"
+        ],
+        [
+          "West Total"
+        ],
+        [
+          "Grand Total"
+        ]
+      ],
+      "nested_subtotals": "Product Show totals controls East Total and West Total; Region Show totals controls Grand Total",
+      "vertical_values": [
+        [
+          "Region",
+          "Product",
+          "Values"
+        ],
+        [
+          "East",
+          "A",
+          "SUM of Revenue",
+          20
+        ],
+        [
+          "",
+          "",
+          "SUM of Revenue",
+          20
+        ],
+        [
+          "",
+          "B",
+          "SUM of Revenue",
+          5
+        ],
+        [
+          "",
+          "",
+          "SUM of Revenue",
+          5
+        ],
+        [
+          "West",
+          "A",
+          "SUM of Revenue",
+          10
+        ],
+        [
+          "",
+          "",
+          "SUM of Revenue",
+          10
+        ],
+        [
+          "",
+          "B",
+          "SUM of Revenue",
+          15
+        ],
+        [
+          "",
+          "",
+          "SUM of Revenue",
+          15
+        ],
+        [
+          "Grand Total",
+          "",
+          "SUM of Revenue",
+          50
+        ],
+        [
+          "",
+          "",
+          "SUM of Revenue",
+          50
+        ]
+      ],
+      "nested_columns": [
+        [
+          "SUM of Revenue",
+          "Product",
+          "Revenue"
+        ],
+        [
+          "",
+          "A",
+          "",
+          "A Total",
+          "B",
+          "",
+          "B Total",
+          "Grand Total"
+        ],
+        [
+          "Region",
+          10,
+          20,
+          "",
+          5,
+          15
+        ],
+        [
+          "East",
+          "",
+          20,
+          20,
+          5,
+          "",
+          5,
+          25
+        ],
+        [
+          "West",
+          10,
+          "",
+          10,
+          "",
+          15,
+          15,
+          25
+        ],
+        [
+          "Grand Total",
+          10,
+          20,
+          30,
+          5,
+          15,
+          20,
+          50
+        ]
+      ],
+      "cleanup": "File moved to trash alert confirmed; owned reference tab closed.",
+      "screenshots_retained": false,
+      "physical_touch_exercised": false,
+      "limits": [
+        "Current authenticated account and these fixtures only",
+        "No real REST snapshot or provider-wide mobile/permission parity claimed"
+      ]
+    },
+    {
+      "reference_id": "125EI7FSAgxPG8TnTcS7CgOC7HCaWpWAEQl58lCDGuxo",
+      "title": "Arga fidelity pivot clipboard 20260927-31db",
+      "cleanup": "File moved to trash alert verified; tab closed",
+      "observed": [
+        "Full A1:D5 normal copy to F1 preserved Edit pivot table affordance and original source range.",
+        "Cut F1:I5 to F8 left F1:I5 empty and reproduced output at F8:I12.",
+        "Partial A3:D3 copy to K1 produced East,20,5,25.",
+        "Final clipboard A1:N12 verified original, moved and partial output."
+      ],
+      "limitations": [
+        "Source-change recalculation of copied live pivot not exercised.",
+        "Attempted numeric editing entered details drilldown sheets three times; all remained within fixture and were trashed with it. No generic generated-value edit behavior claim.",
+        "No real API state capture, transpose comparison or physical touch."
+      ]
+    }
+  ],
+  "tests": {
+    "broad_workspace_drive_sheets": 1347,
+    "final_affected": 62,
+    "warnings": "Three existing dependency deprecation warnings in broad run; one in focused tests",
+    "ruff": "pass",
+    "generated_javascript_parse": "pass",
+    "diff_check": "pass"
+  },
+  "local_browser": {
+    "verifications": [
+      {
+        "fixture": "initial",
+        "result": "PASS",
+        "verified_browser_writes": 11,
+        "negative_controls_rejected": 6,
+        "scope": "Full exposed Sheets/Drive snapshot; not all eight providers."
+      },
+      {
+        "fixture": "layout",
+        "result": "PASS",
+        "verified_browser_writes": 13,
+        "negative_controls_rejected": 6,
+        "scope": "Full exposed Sheets/Drive snapshot; not all eight providers."
+      },
+      {
+        "fixture": "recovery",
+        "result": "PASS",
+        "verified_browser_writes": 3,
+        "negative_controls_rejected": 6,
+        "scope": "Full exposed Sheets/Drive snapshot; not all eight providers."
+      },
+      {
+        "fixture": "clipboard",
+        "result": "PASS",
+        "verified_browser_writes": 4,
+        "negative_controls_rejected": 6,
+        "scope": "Full exposed Sheets/Drive snapshot; not all eight providers."
+      }
+    ],
+    "method": "Chrome CUA",
+    "desktop_and_390px": true,
+    "physical_touch": false,
+    "screenshots_retained": false,
+    "console_errors_or_warnings": [],
+    "source_value_after_recalculation": 20,
+    "basic_total_after_recalculation": 60,
+    "filtered_vertical_percentage": "80%",
+    "recovery_commits": 3,
+    "final_clipboard_commits": 4,
+    "final_clipboard": {
+      "original_total": 60,
+      "moved_total": 60,
+      "old_anchor_empty": true,
+      "partial_copy_total": 25
+    }
+  },
+  "corrections": [
+    "Initial native protection test expected 403 rather than established 400; corrected assertion after inspecting route behavior.",
+    "Live nested-layout comparison corrected subtotal ownership, vertical measures, nested column headings and blank cross-buckets.",
+    "CUA empty fill and textarea onchange did not always commit; actual keyboard selection/typing and native snapshots verified the intended action.",
+    "Early locator selectors for live Name box and local Edit menu timed out; fresh DOM/native control observations selected the correct controls.",
+    "Live numeric input attempts opened three details sheets; generic pivot value-edit behavior is not claimed. All were test-owned and trashed with the reference workbook.",
+    "Broad clipboard adapter regression: seven tests failed after payload tuple expansion; adapter corrected and complete 1347-test rerun passed.",
+    "Initial final clipboard native verifier rejected two empty cell records left by cut; fixed, added a regression, reran 62 affected tests and the same browser flow in a fresh fixture. Earlier capture is preserved.",
+    "Snapshot verifier accounts for recorded changefeed serialization (localhost provider links and absent expanded permissions), while requiring full file metadata and permissions to remain exact. It rejects six deliberate state changes per successful run."
+  ],
+  "limits": [
+    "Hosted deployment, fresh eight-provider state verification and complete image attestation pending.",
+    "Calculated fields, advanced grouping/sorting/filter conditions, suggestions and drilldown UI remain open.",
+    "Indirect formula cycles, complete range transformations, filtered/transpose clipboard and generated-cell editing parity remain open.",
+    "XLSX exports include calculated values but do not preserve editable pivot definitions.",
+    "Complete desktop/mobile visual parity, physical touch, AI/collaboration and all provider-wide release gates remain open."
+  ],
+  "source_sha256": {
+    "twins/google_drive/run_state.py": "32a5f5411c1c60388c9364b63f7dde09642e28da2664fdca52a7de6fea225bc8",
+    "twins/google_drive/sheet_history.py": "1dc1e6056d0f47c334d5816f8a26fa831a927fca04719c05c8448d98e7292b15",
+    "twins/google_drive/sheet_pivots.py": "2fa51c092c19ed2463eadd68f1e4a898f72ba401bb3e313def0f6935cf008511",
+    "twins/google_drive/sheet_protection.py": "a8bbc227f60878effdea69f17f1dcbfedbeb7001897cbc6b34ffaee9ac849e05",
+    "twins/google_drive/sheet_view_clipboard.py": "a38a86beebcf813aa33fcc0e8488ef222a5e0e96554ae7be0be017518248d396",
+    "twins/google_drive/workspace_editing.py": "a42c9b59f746d9affbc7e9723faea4c9094e0390a94eea2c5e9954b9d113b1b6",
+    "twins/google_sheets/charts_ui.py": "b74635f8c504ce9f63e68aa64319a6f9675c39b7f87f6570780354520106a791",
+    "twins/google_sheets/pivots_ui.py": "bcf6b296a989cb588d64ef973b8d378b11925fae1d52fbeb1f4f3d21e5f23cbc",
+    "twins/google_sheets/ui.py": "d36b3ac5e1ec72e7bfc5be6c907b0b0f9d804e72863a7999414632a86275c4d5",
+    "twins/tests/test_google_sheets_pivots.py": "2d0041ef6b19dce2d59ae4ff10b0017008c37c7cefffd4e734d2524277e184f9",
+    "twins/tests/test_google_sheets_pivots_ui.py": "192fd00d409d1b1e4500ab6ee29048e837aee97195f19c1e60201fe67b459680"
+  },
+  "artifact_sha256": {
+    "sheets-pivots-layout-tests.txt": "aca6b5c754f624804dd904459eb07715fb5492d57c2ce67d51dc1a44c18b42ca",
+    "sheets-pivots-dimensions-tests.txt": "4dffaaa5cd1780f51d8246a03dc25d4449826b0fd3b393251c398c6b7210ac5b",
+    "sheets-pivots-view-clipboard-tests.txt": "50baf35ef1630856d7e43b8079ae5dd4518807c1988f778389426fb5c2c19124",
+    "sheets-pivots-sync-tests.txt": "04ebed18b4ff3d935908a086719d7f224399ecf23fbf76d70f0cbc5477ec5109",
+    "sheets-pivots-chain-tests.txt": "12ed3781fef27b9102208350edb11801a6219cbab0bb11b3a8f504dc16d4d53e",
+    "sheets-pivots-native-related-tests.txt": "a694e99d72e47297e5d1a32c42df7772741f442cb9a13acde22951e9e279db53",
+    "sheets-pivots-ui-initial-tests.txt": "7d5bcca60e15a89b4c280dbae3fd55d6044c1f9bfb8fc30df1c3c798070d65c4",
+    "sheets-pivots-clipboard-format.txt": "c5b2d03e42e3d60b58ba332917ea47e8f72815ad0db4db34af338118e7715e99",
+    "sheets-pivots-native-initial-tests.txt": "f3284833d219ddbaaab934906074abf9d34110a2fee66414806eb19fc3d65adf",
+    "sheets-pivots-red-tests.txt": "8360497472068dd0b27785f8818a59cdbff05deb54190fcc8fb20efedda13c30",
+    "sheets-pivots-final-format.txt": "c5b2d03e42e3d60b58ba332917ea47e8f72815ad0db4db34af338118e7715e99",
+    "sheets-pivots-broad-tests.txt": "31707e9fcd27ad3dfce67d801b0c0ee11208b8effa1c6163ff557fcfed091b29",
+    "sheets-pivots-local-verification.txt": "b7486fb4ef618fa7424eea173e9df123b51ade0934f09edcfad41e4a48994023",
+    "sheets-pivots-chain-format.txt": "c5b2d03e42e3d60b58ba332917ea47e8f72815ad0db4db34af338118e7715e99",
+    "sheets-pivots-storage-tests.txt": "bd74a7310672231b719a32f2ab466cff04c1704f0537a8bbcce83bbd8ef118b2",
+    "sheets-pivots-final-focused-tests.txt": "03e99f5d9f566c85aac51c8d8bc25caf3fc6f9f1ce999cdfa6100f394bb26c78",
+    "sheets-pivots-clipboard-tests.txt": "fdbb217785780925c963adb274a370ba583383598dfcdae53a026d44e1c3f99a",
+    "sheets-pivots-make-fix.txt": "70245dfdd2405eef9ce010ed35b4b86ee475423751216a34c986d6f609c43792",
+    "sheets-pivots-final-broad-tests.txt": "6fdebca11486aa002b14292d5fd8a3cd9056d5198738a9baad2ae47880d6a5dd",
+    "sheets-pivots-layout-format-tests.txt": "0c0f36e35b263c8aeae3fa3cd690d6dfc05d3030e32189b38776acbd3c214f20",
+    "sheets-pivots-expanded-red-tests.txt": "a86385c4699ec0dccb42ba2282a4cfd4295cb94b39c47936d42abe8f79c95af9",
+    "sheets-pivots-clipboard-view-format.txt": "8a4b9a41e06e97c9762a7d3d8dc18fd7a2fdd00a8c4cd0b7a9853404a36a8c8c",
+    "sheets-pivots-final-broad-fixed-tests.txt": "1cf8f130fe0dcad04659f9abfe14c7a5281991f058ee9ad91a957a80806202cf",
+    "sheets-pivots-empty-copy-format.txt": "5386c48985d29ed494cab02c7740cbe7e2fa31a2a5c7c2bb58e6c4a4e18f6941",
+    "sheets-pivots-layout-format-final-tests.txt": "86db4c14d4c5247ba31ed05c2b732729f3c5e5c5444ffe293e529f847918ca2b"
+  },
+  "verifier_sha256": "cc9474bffa5cf75d67a2b5f98f20ac656616099bd04512415f0eeb114c7598d2",
+  "local_artifact_sha256": {
+    "lab-sheets-pivots-initial-local": {
+      "browser-trace.json": "7df2cfd1a8864dfafd56ad4aff7b9b948df992a5c7be1d81eb7a9a75c44647d4",
+      "checkpoint.json": "0ed459d277c8c52a44e4872ab68e677782070e4015bdda5c372d7c4b4051b6b4",
+      "after-cancel.json": "7af51d22d922ba72a1e618f0f980700753f3868bc22d5d18b051cff17f461ed4",
+      "baseline.json": "b087d14fc1b4e57976980a9c8180da8365635a943bfcfd6b3f2dd0a8e2f9a046",
+      "after-failure.json": "0ed459d277c8c52a44e4872ab68e677782070e4015bdda5c372d7c4b4051b6b4",
+      "before-failure.json": "0ed459d277c8c52a44e4872ab68e677782070e4015bdda5c372d7c4b4051b6b4",
+      "final.json": "c90b12e545602c7bd1e59097a5e73b2ffc0a0123cab30f4ff501372d8fe13498",
+      "before-cancel.json": "7af51d22d922ba72a1e618f0f980700753f3868bc22d5d18b051cff17f461ed4"
+    },
+    "lab-sheets-pivots-layout-local": {
+      "browser-trace.json": "38c803c359ea954fb65b0128d169fc5e186aa9cf9eed3cb6011d856fd8000b6e",
+      "checkpoint.json": "0f0e8028625e07916d0f858aad518980fe34af7a2b24f4ea744ea72aebc64a27",
+      "baseline.json": "f172be1ee64b1082e3e25fa869d5b04f8350fb688341872a6a148e8bbe22c024",
+      "final.json": "ce8ce0a8d7133ee7f0e8ed1a9c7582c2204a23aabb9dcfc54091bcf446db4339"
+    },
+    "lab-sheets-pivots-recovery-local": {
+      "browser-trace.json": "61821a42aac4d99ccdd5247f93d4f24f6bf85cde3b165fbf24bbcc20f556e116",
+      "after-create.json": "1762e77fa8c10f2cd987cc6730e3617b781c3a33b0ed016aae2c7d6cdbc5f241",
+      "checkpoint.json": "aeb05b3ce5d7154f0fe3611405d9ba986c09dd2af873c4a4306fad9dc34b4ba7",
+      "baseline.json": "64e28092031c0e44401ad39c0b3ae5f01872990843b534f553966c95e2e3f1ce",
+      "after-lost-ack.json": "d453b862a222f95fc35ab7f5a7053bbd2f83ae2af68e4536efd768fdd4826d36",
+      "final.json": "aeb05b3ce5d7154f0fe3611405d9ba986c09dd2af873c4a4306fad9dc34b4ba7"
+    },
+    "lab-sheets-pivots-clipboard-local": {
+      "browser-trace.json": "c359e06eb644a26f94791259e5587b90dc8e3010ae1377b263f1a17ce6cf93f7",
+      "baseline.json": "ec2186d00cdef8f3bbdb37cd81b6657f998d788f893b306cb6c6e52cda10e435",
+      "final.json": "4a5c61fc46837fdb6976a09ca6663b01599fc0fc7e6ddefed85468a0f19bfb14"
+    },
+    "lab-sheets-pivots-clipboard-final-local": {
+      "browser-trace.json": "e88f49f60d564538a8112d75cd930fc75508c5afdac25fa7379439d844004bac",
+      "baseline.json": "cfae03c36793a770a57cda7cce4c52dcf2a45baf3d019f50d6102c396ec24ea5",
+      "final.json": "66482eeb6ca0de9cb475b894a9bf13d58567aea28093200003d140b7509c4765"
+    }
+  }
+}
