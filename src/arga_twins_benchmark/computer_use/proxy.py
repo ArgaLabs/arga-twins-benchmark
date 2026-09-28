@@ -159,7 +159,10 @@ class BrowserProxy:
         body = await bounded_body(request)
         if path.rstrip("/") == "/graphql" and introspection_query(request, body):
             return JSONResponse({"error": "Use official provider documentation"}, status_code=403)
-        headers = provider_request_headers(self.provider, self.env)
+        # HTTP header names are case-insensitive. Normalize runner defaults so
+        # a browser's Accept replaces GitHub's REST default, rather than adding
+        # a second value which can turn a JSON write acknowledgement into a redirect.
+        headers = {name.lower(): value for name, value in provider_request_headers(self.provider, self.env).items()}
         for name in ("content-type", "accept", "if-match", "idempotency-key", "notion-version"):
             if name in request.headers:
                 headers[name] = request.headers[name]

@@ -320,6 +320,39 @@ def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
     asyncio.run(exercise())
 
 
+@pytest.mark.parametrize("accept", ["application/json", "text/html"])
+def test_browser_accept_overrides_provider_default_without_duplicate_headers(accept: str) -> None:
+    async def exercise() -> None:
+        seen = []
+
+        def upstream(request: httpx.Request) -> httpx.Response:
+            seen.append(request)
+            return httpx.Response(200, json={"saved": True})
+
+        client = httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+        proxy = BrowserProxy(
+            "github",
+            {"base_url": "https://twin.example", "env": {"GITHUB_TOKEN": "synthetic-runner-token"}},
+            client=client,
+        )
+        proxy.origin = "http://local.test"
+        async with (
+            client,
+            httpx.AsyncClient(transport=httpx.ASGITransport(app=proxy.app), base_url=proxy.origin) as browser,
+        ):
+            response = await browser.post(
+                "/_ui/repos/org/repo/pull/1/comments",
+                headers={"Accept": accept, "Authorization": "Bearer browser-spoof", "Cookie": "private=cookie"},
+                data={"body": "Proposal", "intent": "review"},
+            )
+            assert response.status_code == 200
+        assert seen[0].headers.get_list("accept") == [accept]
+        assert seen[0].headers["authorization"] == "Bearer synthetic-runner-token"
+        assert "cookie" not in seen[0].headers
+
+    asyncio.run(exercise())
+
+
 @pytest.mark.parametrize(
     ("method", "path"),
     [
