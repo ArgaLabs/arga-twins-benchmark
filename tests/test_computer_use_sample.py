@@ -323,7 +323,7 @@ def test_proxy_shares_upstream_state_but_hides_credentials() -> None:
 @pytest.mark.parametrize("accept", ["application/json", "text/html"])
 def test_browser_accept_overrides_provider_default_without_duplicate_headers(accept: str) -> None:
     async def exercise() -> None:
-        seen = []
+        seen: list[httpx.Request] = []
 
         def upstream(request: httpx.Request) -> httpx.Response:
             seen.append(request)
