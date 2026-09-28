@@ -2,7 +2,7 @@
   "date": "2026-09-27",
   "pr": 1231,
   "status": "local_pass_rebased_ci_hosted_pending",
-  "source_revision": "82cb7bef8dba3891ffbda96e73c688cc260e46f9",
+  "source_revision": "cfbd54de9017719ea4f0425d9b2d2e996d0f6b31",
   "base_revision": "574da44524d3e57f07c2703a5a13f7e332058b7e",
   "scope": [
     "Edit native private pending review comments on line, file and unplaced threads",
@@ -19,7 +19,11 @@
     "rebased_affected": 48,
     "ruff": "pass",
     "diff_check": "pass",
-    "warnings": "Three dependency deprecation warnings in broad suite; one focused"
+    "warnings": "Three dependency deprecation warnings in broad suite; one focused",
+    "refresh_red": "1 failed, 13 passed before correction",
+    "refresh_focused": 52,
+    "final_affected": 70,
+    "final_all_github": 825
   },
   "local_browser": {
     "passed": true,
@@ -49,11 +53,13 @@
     "console_warnings_and_errors": []
   },
   "source_sha256": {
-    "twins/github/frontend.py": "16ef757c8448482afc21ae32600a44838b6ec274da381ca2e4f9d9579f127ea4",
+    "twins/github/frontend.py": "ddf012ac08fc749faa0682fe66f61c099e7b6e4a8517de45452ae7268af34efd",
     "twins/github/pending_comment_ui.py": "2f3c6f085347709381f1d9b4a6de82d38794961567a626b6fa6b0e0e56dda0b0",
-    "twins/github/review_ui_script.py": "a58c50d7b270a5bc732d68fef28c43ef0e696d17b69810effa815374594ad179",
+    "twins/github/review_ui_script.py": "1155d3b03f6fb7cbbc434762e3e94b04049bd59069e58d34c408b2f280f522a3",
     "twins/tests/test_github_inline_review_workflow.py": "0dc6c473215ebdf7362980d121ff172dc06945b18783180d0cd66d75fc883d05",
-    "twins/tests/test_github_pending_comment_edit.py": "a37a5b673679321e3be6dbfb8dcab8ff414f9b20c172f477f3775a608e261020"
+    "twins/tests/test_github_pending_comment_edit.py": "a37a5b673679321e3be6dbfb8dcab8ff414f9b20c172f477f3775a608e261020",
+    "twins/tests/test_github_review_ui_async.py": "104287b026036f97cae41c5f64a9cb93ef62ee7b7f81a508f532a1f5bea7a53e",
+    "twins/tests/test_github_review_comments.py": "3083225bbd4306ce5055479650ae197d0e5e68b92d603fba8bc91bd31d62f7e4"
   },
   "artifact_sha256": {
     "browser-trace-0.json": "0f3c7a7cb596f96ef50c51af9496d4924360ab41ee6be6e264b2aa54eef1cd67",
@@ -74,18 +80,59 @@
     "github-pending-comment-edit-format.txt": "33c76328dc8841ae17e10b6224a38891f243d5831881b77a66ad6f63639cf5ae",
     "github-pending-comment-edit-rebased-tests.txt": "c7068792eabd75e480e8872846ce207ea2d69d7201d765fc28c31b2dca38718a",
     "github-pending-comment-edit-broad-tests.txt": "9dce255a4f4176c5a0e93880d5c905de97475cff917f70bc6356a5e4a7558a62",
-    "github-pending-comment-edit-red.txt": "c5bce3082c02e0364e48540c1a7a0f9e802f03bf9f8d467bd9ff34de200c0dea"
+    "github-pending-comment-edit-red.txt": "c5bce3082c02e0364e48540c1a7a0f9e802f03bf9f8d467bd9ff34de200c0dea",
+    "github-pending-edit-refresh-format.txt": "33c76328dc8841ae17e10b6224a38891f243d5831881b77a66ad6f63639cf5ae",
+    "github-pending-edit-refresh-tests.txt": "b2f71d1a06d42b2c918a9d15f3a22f05f352710ecc13eda538159f9e1b00a5b3",
+    "github-pending-edit-cancel-tests.txt": "8f8afc0f5836aef94b3b561a3e541b3a60aac022f729514442eb52fae2fb6fd1",
+    "github-pending-edit-final-broad-tests.txt": "ca7c887861fc577b8c44122f229efc8dc066c30cded6ade6b11cec5d6462346f",
+    "github-pending-edit-cancel-format.txt": "33c76328dc8841ae17e10b6224a38891f243d5831881b77a66ad6f63639cf5ae",
+    "github-pending-edit-refresh-red.txt": "04453149500ce9b18422e81bddd71aef8534e640896a52a4f42056a0af4c90cf"
   },
   "verifier_sha256": "b2a66b959ac2def7c201ea035e4d06b19f3ac5005a39acfbe4d9a390cea8ee21",
   "corrections": [
     "Existing duplicate-reply assertion counted both visible text and hidden edit textarea. Updated it to count the rendered paragraph; full regression suite passed.",
     "Added an explicit comment-author condition to editor visibility after local Chrome verification, covered by automated authorization checks.",
-    "Rebased onto #1230 to inherit ambiguous-error locking; 48 affected tests pass after rebase."
+    "Rebased onto #1230 to inherit ambiguous-error locking; 48 affected tests pass after rebase.",
+    "Review identified that unopened prefilled editors were preserved as local drafts. Compare textarea value with defaultValue; preserve opened, focused or changed drafts and refresh untouched editors. A failing regression and real browser concurrent-edit test demonstrate the correction.",
+    "Hosted #1230 AX activation hid a locked label-based composer. Replaced Cancel with a native button, with reset/focus and disabled-state handling. Local 390px AX cancellation, uncertain lock and Escape checks pass."
   ],
   "limits": [
-    "CI, deployment, hosted image/state verification and mobile browser coverage pending.",
+    "Final CI and hosted deployment/image/state verification pending; final local 390px cancellation and refresh follow-up passes.",
     "Local desktop Chrome tested before the final owner-only visibility guard and #1230 rebase; final affected tests cover these changes, hosted comparison remains required.",
     "Real GitHub visual comparison, published-comment editing, multiline selection, suggestions and broader review/AI/collaboration gates remain open.",
     "No exhaustive visual or physical-touch coverage claimed; full release remains blocked."
-  ]
+  ],
+  "local_followup": {
+    "passed": true,
+    "mobile_width": 390,
+    "document_width": 390,
+    "accessible_cancel_clears_and_focuses_trigger": true,
+    "uncertain_cancel_disabled_and_escape_keeps_draft": true,
+    "untouched_editor_refreshed_to_concurrent_native_edit": true,
+    "browser_commits": 2,
+    "operator_native_patch": 1,
+    "review_count": 1,
+    "comments": 2,
+    "full_unrelated_native_state_unchanged": true,
+    "negative_controls_rejected": [
+      "comments",
+      "review",
+      "counter",
+      "protected"
+    ],
+    "console_warnings_and_errors": [],
+    "physical_touch_exercised": false,
+    "screenshots_retained": false,
+    "artifact_sha256": {
+      "browser-trace-0.json": "67e3d89936aa4a854d9e54b9a194b3ed1c93534a958788fd8fe30465d4e88026",
+      "checkpoint.json": "275c3bca879f66dad3d92953daccb5fbe6517269faa56fedd2e64a6c6e7cfe46",
+      "browser-trace-1.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "after-cancel.json": "275c3bca879f66dad3d92953daccb5fbe6517269faa56fedd2e64a6c6e7cfe46",
+      "baseline.json": "275c3bca879f66dad3d92953daccb5fbe6517269faa56fedd2e64a6c6e7cfe46",
+      "verification.json": "570e8734b2b5d5d3d3e56fa1b3ec6584b904272101c41e2fa47a13ee88b1e4b0",
+      "operator-api-trace.json": "02f897d0cad0df8cf5a30c629c9aad599826bd32bdad1141941d736dc2fcd8ab",
+      "final.json": "c25e8989659b9e85abd5ca61852eb7fb50f7efda9da55f01f1934aee1f383a2c"
+    },
+    "verifier_sha256": "604381aadf7e2a827a2d0fced8534e973955ce71c34410adf103b27bcff4eaca"
+  }
 }
