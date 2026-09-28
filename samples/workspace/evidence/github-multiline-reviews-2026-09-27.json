@@ -92,7 +92,7 @@
     "Both deployment workflows, two serving images, ten fresh worker containers and bounded desktop/390px/native hosted checks pass.",
     "Local browser flow predates the GraphQL error-envelope correction; final focused regressions and six hosted rejection cases cover the correction.",
     "Range API shape validation is covered; complete historical/current API coordinate validation remains open.",
-    "Live reference follow-up found Enter and full-range suggestion composer gaps; #1233 covers these locally and is pending deployment. Applying suggestions, plus-icon dragging, physical touch, full visuals and broader review/AI/collaboration remain open."
+    "Live reference follow-up found Enter and full-range suggestion composer gaps; #1233 covers these with bounded local and hosted checks. Applying suggestions, plus-icon dragging, physical touch, full visuals and broader review/AI/collaboration remain open."
   ],
   "full_release_complete": false,
   "merge_revision": "300986870e14f9cc5387739efdf8bb1629e8f52f",
