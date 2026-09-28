@@ -86,6 +86,14 @@
         {
           "path": "samples/workspace/evidence/github-public-repo-settings-2026-09-27.json",
           "sha256": "804dd189020c476a8c969069bd0850331e6b96113da05fbfdb4c71ba93a1981f"
+        },
+        {
+          "path": "samples/workspace/evidence/github-inline-review-drafts-2026-09-27.json",
+          "sha256": "c814cd4c0816af52aa307d3c4240759883e5231b3248ccec7a4f11c6ee99b436"
+        },
+        {
+          "path": "samples/workspace/evidence/github-author-review-decisions-2026-09-27.json",
+          "sha256": "66b15e1896c4c6d4e377cc55d97213a7a209a40d07d678641aaf8b014569083d"
         }
       ]
     },
@@ -616,7 +624,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "83dc1d4de21ee1a83ad4010abeac290d97bb33c0bf36c396c026f666d399fb3a"
+          "sha256": "2e0cb2f4d2cdd5cdf57cbc68b8414ec4b6e0463f577f57c0862b3a64d9a24e87"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -648,5 +656,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "4607194e0dfa5951118718057fb2af06d3036990775a439b1f8faa57e577526c"
+  "sample_tree_sha256": "64def9552ec7ac0c885641501f657aa6f4ae868eba294621d044ae7d81fcf233"
 }

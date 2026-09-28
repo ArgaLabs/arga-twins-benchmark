@@ -27,7 +27,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 50,
-      "markup_control_occurrences": 312,
+      "markup_control_occurrences": 318,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
@@ -574,138 +574,138 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "d13f8e760b33c728b9885b3ce42e80900c1d740d0bbbd10d716927aeef0bdae6",
+          "sha256": "8383628471bcb96ff66abac8021eb6a92fab02a7e3131e279e509602d82cec07",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1162
+              "line": 1122
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1171
+              "line": 1131
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1281
+              "line": 1241
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1373
+              "line": 1333
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1595
+              "line": 1555
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1682
+              "line": 1642
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1773
+              "line": 1733
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1888
+              "line": 1848
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2082
+              "line": 2049
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2165
+              "line": 2060
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2213
+              "line": 2108
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2255
+              "line": 2150
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2298
+              "line": 2193
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2370
+              "line": 2265
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2449
+              "line": 2344
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2491
+              "line": 2386
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2504
+              "line": 2399
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2636
+              "line": 2531
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2710
+              "line": 2605
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2940
+              "line": 2835
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2992
+              "line": 2887
             }
           ],
           "markup_expressions": [
             {
-              "line": 264,
+              "line": 265,
               "dynamic": true,
               "controls": [
                 {
@@ -762,7 +762,7 @@
               ]
             },
             {
-              "line": 359,
+              "line": 360,
               "dynamic": true,
               "controls": [
                 {
@@ -790,7 +790,20 @@
               ]
             },
             {
-              "line": 675,
+              "line": 574,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "label",
+                  "attributes": {
+                    "aria-label": "Add comment on {dynamic} line {dynamic}",
+                    "role": "button"
+                  }
+                }
+              ]
+            },
+            {
+              "line": 597,
               "dynamic": true,
               "controls": [
                 {
@@ -804,6 +817,7 @@
                   "tag": "form",
                   "attributes": {
                     "method": "POST",
+                    "id": "{dynamic}-form",
                     "action": "/_ui/repos/{dynamic}/pull/{dynamic}/comments"
                   }
                 },
@@ -832,22 +846,56 @@
                   }
                 },
                 {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "expected_head",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "subject_type",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
                   "tag": "textarea",
                   "attributes": {
+                    "id": "{dynamic}-body",
                     "name": "body"
+                  }
+                },
+                {
+                  "tag": "label",
+                  "attributes": {
+                    "role": "button"
                   }
                 },
                 {
                   "tag": "button",
                   "attributes": {
-                    "type": "submit"
+                    "type": "submit",
+                    "name": "intent",
+                    "value": "comment"
                   },
-                  "text": "Add comment"
+                  "text": "Comment"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit",
+                    "name": "intent",
+                    "value": "review"
+                  },
+                  "text": "{dynamic}"
                 }
               ]
             },
             {
-              "line": 732,
+              "line": 664,
               "dynamic": true,
               "controls": [
                 {
@@ -860,13 +908,14 @@
               ]
             },
             {
-              "line": 771,
+              "line": 703,
               "dynamic": true,
               "controls": [
                 {
                   "tag": "form",
                   "attributes": {
                     "method": "POST",
+                    "id": "reply-{dynamic}",
                     "action": "/_ui/repos/{dynamic}/pull/{dynamic}/comments"
                   }
                 },
@@ -918,7 +967,7 @@
               ]
             },
             {
-              "line": 1101,
+              "line": 1061,
               "dynamic": true,
               "controls": [
                 {
@@ -971,13 +1020,14 @@
               ]
             },
             {
-              "line": 886,
+              "line": 822,
               "dynamic": true,
               "controls": [
                 {
                   "tag": "form",
                   "attributes": {
                     "method": "POST",
+                    "id": "reply-{dynamic}",
                     "action": "/_ui/repos/{dynamic}/pull/{dynamic}/comments"
                   }
                 },
@@ -1005,7 +1055,7 @@
               ]
             },
             {
-              "line": 1210,
+              "line": 1170,
               "dynamic": true,
               "controls": [
                 {
@@ -1054,7 +1104,7 @@
               ]
             },
             {
-              "line": 1252,
+              "line": 1212,
               "dynamic": true,
               "controls": [
                 {
@@ -1074,7 +1124,7 @@
               ]
             },
             {
-              "line": 1396,
+              "line": 1356,
               "dynamic": true,
               "controls": [
                 {
@@ -1129,7 +1179,7 @@
               ]
             },
             {
-              "line": 1469,
+              "line": 1429,
               "dynamic": true,
               "controls": [
                 {
@@ -1140,7 +1190,7 @@
               ]
             },
             {
-              "line": 1480,
+              "line": 1440,
               "dynamic": true,
               "controls": [
                 {
@@ -1160,7 +1210,7 @@
               ]
             },
             {
-              "line": 1555,
+              "line": 1515,
               "dynamic": true,
               "controls": [
                 {
@@ -1201,7 +1251,7 @@
               ]
             },
             {
-              "line": 1635,
+              "line": 1595,
               "dynamic": true,
               "controls": [
                 {
@@ -1214,7 +1264,7 @@
               ]
             },
             {
-              "line": 1642,
+              "line": 1602,
               "dynamic": true,
               "controls": [
                 {
@@ -1269,7 +1319,7 @@
               ]
             },
             {
-              "line": 1663,
+              "line": 1623,
               "dynamic": true,
               "controls": [
                 {
@@ -1282,7 +1332,7 @@
               ]
             },
             {
-              "line": 1731,
+              "line": 1691,
               "dynamic": true,
               "controls": [
                 {
@@ -1295,7 +1345,7 @@
               ]
             },
             {
-              "line": 1740,
+              "line": 1700,
               "dynamic": true,
               "controls": [
                 {
@@ -1350,7 +1400,7 @@
               ]
             },
             {
-              "line": 1793,
+              "line": 1753,
               "dynamic": true,
               "controls": [
                 {
@@ -1405,7 +1455,7 @@
               ]
             },
             {
-              "line": 1817,
+              "line": 1777,
               "dynamic": true,
               "controls": [
                 {
@@ -1432,7 +1482,7 @@
               ]
             },
             {
-              "line": 1984,
+              "line": 1951,
               "dynamic": true,
               "controls": [
                 {
@@ -1487,7 +1537,7 @@
               ]
             },
             {
-              "line": 2009,
+              "line": 1976,
               "dynamic": true,
               "controls": [
                 {
@@ -1529,7 +1579,7 @@
               ]
             },
             {
-              "line": 2407,
+              "line": 2302,
               "dynamic": true,
               "controls": [
                 {
@@ -1562,7 +1612,7 @@
               ]
             },
             {
-              "line": 2426,
+              "line": 2321,
               "dynamic": true,
               "controls": [
                 {
@@ -1582,7 +1632,7 @@
               ]
             },
             {
-              "line": 2665,
+              "line": 2560,
               "dynamic": true,
               "controls": [
                 {
@@ -1653,7 +1703,7 @@
               ]
             },
             {
-              "line": 2951,
+              "line": 2846,
               "dynamic": true,
               "controls": [
                 {
@@ -1727,7 +1777,7 @@
               ]
             },
             {
-              "line": 718,
+              "line": 650,
               "dynamic": true,
               "controls": [
                 {
@@ -1755,7 +1805,7 @@
               ]
             },
             {
-              "line": 726,
+              "line": 658,
               "dynamic": true,
               "controls": [
                 {
@@ -1783,7 +1833,7 @@
               ]
             },
             {
-              "line": 1047,
+              "line": 1005,
               "dynamic": true,
               "controls": [
                 {
@@ -1792,11 +1842,17 @@
                     "href": "{dynamic}"
                   },
                   "text": "{dynamic}"
+                },
+                {
+                  "tag": "label",
+                  "attributes": {
+                    "role": "button"
+                  }
                 }
               ]
             },
             {
-              "line": 1085,
+              "line": 1045,
               "dynamic": true,
               "controls": [
                 {
@@ -1809,7 +1865,7 @@
               ]
             },
             {
-              "line": 1088,
+              "line": 1048,
               "dynamic": true,
               "controls": [
                 {
@@ -1822,7 +1878,7 @@
               ]
             },
             {
-              "line": 1188,
+              "line": 1148,
               "dynamic": true,
               "controls": [
                 {
@@ -1835,7 +1891,7 @@
               ]
             },
             {
-              "line": 1205,
+              "line": 1165,
               "dynamic": true,
               "controls": [
                 {
@@ -1848,7 +1904,7 @@
               ]
             },
             {
-              "line": 1207,
+              "line": 1167,
               "dynamic": true,
               "controls": [
                 {
@@ -1861,7 +1917,7 @@
               ]
             },
             {
-              "line": 1239,
+              "line": 1199,
               "dynamic": true,
               "controls": [
                 {
@@ -1874,7 +1930,7 @@
               ]
             },
             {
-              "line": 1390,
+              "line": 1350,
               "dynamic": true,
               "controls": [
                 {
@@ -1887,7 +1943,7 @@
               ]
             },
             {
-              "line": 1438,
+              "line": 1398,
               "dynamic": true,
               "controls": [
                 {
@@ -1900,7 +1956,7 @@
               ]
             },
             {
-              "line": 1445,
+              "line": 1405,
               "dynamic": true,
               "controls": [
                 {
@@ -1913,7 +1969,7 @@
               ]
             },
             {
-              "line": 1464,
+              "line": 1424,
               "dynamic": true,
               "controls": [
                 {
@@ -1926,7 +1982,7 @@
               ]
             },
             {
-              "line": 1638,
+              "line": 1598,
               "dynamic": true,
               "controls": [
                 {
@@ -1939,7 +1995,7 @@
               ]
             },
             {
-              "line": 1716,
+              "line": 1676,
               "dynamic": true,
               "controls": [
                 {
@@ -1952,7 +2008,7 @@
               ]
             },
             {
-              "line": 1724,
+              "line": 1684,
               "dynamic": true,
               "controls": [
                 {
@@ -1965,7 +2021,7 @@
               ]
             },
             {
-              "line": 1859,
+              "line": 1819,
               "dynamic": true,
               "controls": [
                 {
@@ -1978,7 +2034,7 @@
               ]
             },
             {
-              "line": 1970,
+              "line": 1937,
               "dynamic": true,
               "controls": [
                 {
@@ -1998,7 +2054,7 @@
               ]
             },
             {
-              "line": 2391,
+              "line": 2286,
               "dynamic": true,
               "controls": [
                 {
@@ -2011,7 +2067,7 @@
               ]
             },
             {
-              "line": 2404,
+              "line": 2299,
               "dynamic": true,
               "controls": [
                 {
@@ -2024,7 +2080,20 @@
               ]
             },
             {
-              "line": 1735,
+              "line": 610,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Add a suggestion"
+                }
+              ]
+            },
+            {
+              "line": 1695,
               "dynamic": true,
               "controls": [
                 {
@@ -2373,55 +2442,55 @@
         },
         {
           "path": "twins/github/operations_ui.py",
-          "sha256": "6a3ad9ba5afc61063c03b025fcfd1ebd3dc043a6ad4b8a0e246c00c5d266133f",
+          "sha256": "e5e77da2c2a2f737ec1bb544d43b21823bee9962e55cc4c1f2e704c99d3addc5",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/_ui/search",
               "handler": "search_workspace",
-              "line": 94
+              "line": 107
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues",
               "handler": "issue_list",
-              "line": 139
+              "line": 152
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}",
               "handler": "issue_detail",
-              "line": 170
+              "line": 183
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/edit",
               "handler": "edit_issue",
-              "line": 191
+              "line": 204
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/issues/{number}/comments",
               "handler": "comment",
-              "line": 202
+              "line": 215
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviewers",
               "handler": "reviewers",
-              "line": 210
+              "line": 223
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews",
               "handler": "create_review",
-              "line": 223
+              "line": 236
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{number}/reviews/{review_id}/{action}",
               "handler": "change_review",
-              "line": 233
+              "line": 252
             }
           ],
           "markup_expressions": [
@@ -2463,7 +2532,27 @@
               ]
             },
             {
-              "line": 78,
+              "line": 54,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "APPROVE"
+                  },
+                  "text": "Approve"
+                },
+                {
+                  "tag": "option",
+                  "attributes": {
+                    "value": "REQUEST_CHANGES"
+                  },
+                  "text": "Request changes"
+                }
+              ]
+            },
+            {
+              "line": 91,
               "dynamic": true,
               "controls": [
                 {
@@ -2475,6 +2564,7 @@
                   "tag": "form",
                   "attributes": {
                     "method": "post",
+                    "id": "new-review",
                     "action": "{dynamic}/reviews"
                   }
                 },
@@ -2502,20 +2592,6 @@
                 {
                   "tag": "option",
                   "attributes": {
-                    "value": "APPROVE"
-                  },
-                  "text": "Approve"
-                },
-                {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "REQUEST_CHANGES"
-                  },
-                  "text": "Request changes"
-                },
-                {
-                  "tag": "option",
-                  "attributes": {
                     "value": "PENDING"
                   },
                   "text": "Save pending review"
@@ -2528,7 +2604,7 @@
               ]
             },
             {
-              "line": 132,
+              "line": 145,
               "dynamic": true,
               "controls": [
                 {
@@ -2553,7 +2629,7 @@
               ]
             },
             {
-              "line": 155,
+              "line": 168,
               "dynamic": true,
               "controls": [
                 {
@@ -2599,7 +2675,7 @@
               ]
             },
             {
-              "line": 178,
+              "line": 191,
               "dynamic": true,
               "controls": [
                 {
@@ -2642,14 +2718,22 @@
               ]
             },
             {
-              "line": 65,
+              "line": 75,
               "dynamic": true,
               "controls": [
                 {
                   "tag": "form",
                   "attributes": {
                     "method": "post",
+                    "id": "submit-review-{dynamic}",
                     "action": "{dynamic}/submit"
+                  }
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "name": "body",
+                    "aria-label": "Pending review summary"
                   }
                 },
                 {
@@ -2666,20 +2750,6 @@
                   "text": "Comment"
                 },
                 {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "APPROVE"
-                  },
-                  "text": "Approve"
-                },
-                {
-                  "tag": "option",
-                  "attributes": {
-                    "value": "REQUEST_CHANGES"
-                  },
-                  "text": "Request changes"
-                },
-                {
                   "tag": "button",
                   "attributes": {},
                   "text": "Submit pending review"
@@ -2688,6 +2758,7 @@
                   "tag": "form",
                   "attributes": {
                     "method": "post",
+                    "id": "discard-review-{dynamic}",
                     "action": "{dynamic}/delete"
                   }
                 },
@@ -2735,7 +2806,7 @@
               ]
             },
             {
-              "line": 73,
+              "line": 86,
               "dynamic": true,
               "controls": [
                 {
@@ -2764,7 +2835,7 @@
               ]
             },
             {
-              "line": 151,
+              "line": 164,
               "dynamic": true,
               "controls": [
                 {
@@ -2777,7 +2848,7 @@
               ]
             },
             {
-              "line": 112,
+              "line": 125,
               "dynamic": true,
               "controls": [
                 {
@@ -2790,7 +2861,7 @@
               ]
             },
             {
-              "line": 129,
+              "line": 142,
               "dynamic": true,
               "controls": [
                 {
@@ -2803,7 +2874,7 @@
               ]
             },
             {
-              "line": 160,
+              "line": 173,
               "dynamic": true,
               "controls": [
                 {
@@ -3035,11 +3106,11 @@
         },
         {
           "path": "twins/github/repository_access.py",
-          "sha256": "744b3ce6b525e0621b394afb8ce792f6fff40fbdcfa07314858a5f420959ae8e",
+          "sha256": "5be667d90b4d5506421e32c100d8c36411b60616b29842a006c5a097ce1292f7",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 101,
+              "line": 103,
               "dynamic": true,
               "controls": [
                 {

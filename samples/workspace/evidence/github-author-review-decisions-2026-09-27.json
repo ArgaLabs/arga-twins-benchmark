@@ -1,0 +1,138 @@
+{
+  "date": "2026-09-27",
+  "pr": 1228,
+  "status": "merged_ci_pass_production_hosted_pending",
+  "source_revision": "813d831bbc4d178b4842ed5e8add1db583845b27",
+  "scope": [
+    "PR author cannot APPROVE or REQUEST_CHANGES through REST, GraphQL or browser review create/submit",
+    "Denials happen before any native mutation and retain pending reviews",
+    "Browser author controls show disabled decisions and explanation; comment and pending submission remain available",
+    "Independent reviewer decisions remain available"
+  ],
+  "real_reference": {
+    "date": "2026-09-27",
+    "url": "https://github.com/ArgaLabs/validation-server/pull/1209/changes",
+    "method": "Chrome CUA",
+    "observed": [
+      "File-header Comment on this file opens a composer with Write/Preview, formatting, Cancel, Comment and Start a review",
+      "Line Add comment opens an inline composer with Add a suggestion, Cancel, Comment and Start a review",
+      "Add a suggestion inserts a fenced suggestion block containing the selected line",
+      "Submit review opens Finish your review, summary editor, Comment/Approve/Request changes choices and Cancel",
+      "For the PR author, Approve and Request changes are disabled with explanatory text; empty Comment submission is disabled"
+    ],
+    "mutations": "No review or comment posted. Generated suggestion template cancelled, all editors closed; reference tab closed.",
+    "screenshots_retained": false,
+    "limits": [
+      "No real pending review created or submitted",
+      "No actual mobile or physical touch comparison in this reference observation"
+    ]
+  },
+  "official_source": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request",
+  "tests": {
+    "focused_author_cases": 14,
+    "affected_after_pending_summary_fix": 158,
+    "all_github_and_mixed_frontends": 811,
+    "related_review_regressions": 82,
+    "ruff": "pass",
+    "initial_red": "13 failed, one passed",
+    "initial_broad": "15 failed, 764 passed, 20 errors from older review fixtures approving their own author PR; fixtures now assign a distinct contributor author",
+    "final_broad": "811 passed, 3 dependency deprecation warnings"
+  },
+  "local_browser": {
+    "passed": true,
+    "browser": "Chrome CUA",
+    "successful_browser_writes": 4,
+    "author_comment_and_pending_submission": "passed",
+    "author_approve_and_request_changes_controls_disabled": true,
+    "other_reviewer_approval": "passed",
+    "reload_consistent": true,
+    "widths": [
+      1465,
+      390
+    ],
+    "mobile_scroll_width": 390,
+    "native_state_exact_except_intended_reviews_and_counter": true,
+    "negative_mutations_rejected": [
+      "author_approved",
+      "reviewer_rejected",
+      "wrong_body",
+      "unexpected_token",
+      "protected_file",
+      "missing_review"
+    ],
+    "physical_touch_exercised": false,
+    "screenshots_retained": false
+  },
+  "pending_summary_browser": {
+    "passed": true,
+    "browser": "Chrome CUA",
+    "pending_summary_retained_after_reload": true,
+    "unchanged_submit_preserves_native_summary": true,
+    "html_characters_render_as_text": true,
+    "browser_writes": 2,
+    "native_state_exact_except_intended_review_and_counter": true,
+    "screenshots_retained": false
+  },
+  "corrections": [
+    "Initial author browser session exposed background polling closing an empty composer; corrected in prerequisite PR #1227 and rerun successfully",
+    "Local verifier incorrectly expected created_at on native review; removed that unsupported field assertion, preserving submitted_at, body, actor, decision, association and exact unrelated state checks; corrected verifier passed the same immutable capture"
+  ],
+  "source_sha256": {
+    "twins/github/handlers/graphql.py": "3620bd3f967387da93ff18ad018e7da33f193c4848b0f6e95e91e196327c3e38",
+    "twins/github/handlers/reviews.py": "1eb4b632012737a381cc1f631488d0535f7ba9050c2450eaef6e2d8ee3b2dc3d",
+    "twins/github/operations_ui.py": "e5e77da2c2a2f737ec1bb544d43b21823bee9962e55cc4c1f2e704c99d3addc5",
+    "twins/github/review_access.py": "91039833aea07bd39755c7d2dc2bb2ca9786301f32f7a86b87822aee2088285a",
+    "twins/tests/test_github_author_review.py": "d5dfb0552b8219b8d82925e6a662ad514b1539335d5d991b2713d68da5041c57",
+    "twins/tests/test_github_review_comments.py": "4bd6c80d174af2ed9d3d6559d8e18ee349f30d0a3ac57a9855212230c356689a",
+    "twins/tests/test_github_review_connections.py": "5336d3f338006a2335567e772fb31d9ba97586c6bc2e59f7110785b62ae8f2ea",
+    "twins/tests/test_github_review_states.py": "f97c38ea312b660e077fb5f7d9a0cabdabe8453b53418ee774fd3565b895fcd3",
+    "twins/tests/test_github_timeline.py": "6ebf83881b2a390e9f29a6898ffb70be0275d1156953d470a000809f624bf380"
+  },
+  "artifact_sha256": {
+    "github-author-review-summary-final-tests.txt": "ff8ae2490b4d9981982c258eff4f22e150503d61e19077ddbf768ad80eda9ab5",
+    "github-author-review-related-tests.txt": "816b2453e34f0f0d67bd727c412f5b5d91deac0589a8353d14e0335502e3bff9",
+    "github-author-review-summary-red-tests.txt": "5e3285fc23a1ca823ff28fb6a0fe0d6669ee3eb5df131f8daae104cd2e444d72",
+    "github-author-review-local-verifier-initial.txt": "e30e421068fc76835dbe9249a8a2e41c90b73bcc0c25d6f719eca2d5db71a3bd",
+    "github-author-review-focused-tests.txt": "884b99a8ef53f758b6abaf03122e79366fd1b562dbec68c2b46e8aa1e3897970",
+    "github-author-review-all-final-tests.txt": "5960b3b70492563c62912b0192a3257c06e762d59eb538503f3d380e9429846b",
+    "github-author-review-fix.txt": "2b3288dd48ce0ae2ebcb506fda93cd2b611b715edc0ae229d20aa048fdd47ee8",
+    "github-author-review-all-initial-tests.txt": "4f89a1fdef4afe6dfb6b196946621d0f22077dc560dd67910536b95a92e10d35",
+    "github-author-review-red-tests.txt": "18f8a7739d4e248241847e5845cc4124b8392094afa4b5424fa7dca514c73ecd"
+  },
+  "local_artifact_sha256": {
+    "lab-github-author-review-local": {
+      "browser-trace-0.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "browser-trace-1.json": "fa5ae08cbecda6b190e356bbe642770d68e3927080d0110a0a9f0b5bce898afa",
+      "baseline.json": "b5f1c513fa75e0c180bd2d385eb3cc705b26dc1a10c51440ab590fc24b5a06df",
+      "final.json": "fc8e2612876b7abf5715cc82b5e2bfa8f7eb816a7c1bc15f99d2c84b51ed6369"
+    },
+    "lab-github-author-review-final-local": {
+      "browser-trace-0.json": "fa5ae08cbecda6b190e356bbe642770d68e3927080d0110a0a9f0b5bce898afa",
+      "browser-trace-1.json": "164385180bed1af9074f1c496cfa15bfc23d30e8c78938eaa71e223f9941d273",
+      "baseline.json": "34bc76e71089f6c159987dda184f96aacfb09f8ed9f830ed5590ab2f464da62d",
+      "verification.json": "d0c3bd7c046901ed37cd262089719a222444484c48119eadb966e57e1af9f8ac",
+      "final.json": "dde6daccc5ea95946c5aa097b29ead942e6748dac2f29414b14f277b3b683b4e"
+    },
+    "lab-github-author-review-summary-local": {
+      "browser-trace-0.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "browser-trace-1.json": "62139c5ef29bad093832164a07a14f44ae02fae8bab13f547c6ad2013fde9c01",
+      "baseline.json": "5945d967f7b36b2f4fa5cef6fb7ddfdda24b176f391161f8651f16c4dfb8b3d4",
+      "verification.json": "7def916cf6735e6be7e4174c06714347216c347ad63b70d03511f1dcbbf1f05b",
+      "final.json": "12de28f3dac54b13c75f62f88a6a2de8c5d0f1b6c53bdd39e07948a20cddc2d9"
+    }
+  },
+  "limits": [
+    "Live reference author-disabled choices observed on desktop only",
+    "Native mobile/touch and complete review dialog fidelity not established",
+    "Pending comment editing, multiline selection, applying suggestions, broader review flows, eight-provider AI/collaboration and final release gates remain open"
+  ],
+  "deployment": {
+    "merge_revision": "5c96af6997962d4e624bd4802a2eac5f688f6e37",
+    "source_revision": "813d831bbc4d178b4842ed5e8add1db583845b27",
+    "exact_head_checks": 33,
+    "fresh_merge_state": "CLEAN",
+    "twins_workflow": 36373979637,
+    "runtime_workflow": 36373979597,
+    "both_workflows": "in progress"
+  }
+}
