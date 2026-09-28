@@ -1,7 +1,7 @@
 {
   "date": "2026-09-27",
   "pr": 1232,
-  "status": "local_pass_graphql_correction_ci_pending",
+  "status": "merged_deploying_hosted_pending",
   "source_revision": "456e7e64ef4e357c899da590c6ed2602da98728f",
   "base_revision": "756a6e5b4fcdf8e88c63524187326dae0120c62e",
   "scope": [
@@ -89,10 +89,32 @@
     "Review found malformed GraphQL ranges escaped as HTTP 422. Prevalidate before mutation and return HTTP 200 with null field and UNPROCESSABLE error; six failing regressions now pass."
   ],
   "limits": [
-    "CI, production rollout and hosted image/native/browser verification pending.",
+    "Merged after all exact-head checks; both deployments and fresh hosted verification pending.",
     "Local browser flow predates the GraphQL error-envelope correction; 104 final focused regressions cover that correction.",
     "Range API shape validation is covered; complete historical/current API coordinate validation remains open.",
     "Multiline suggestions, plus-icon dragging, physical touch, live provider visual parity and broader review/AI/collaboration remain open."
   ],
-  "full_release_complete": false
+  "full_release_complete": false,
+  "merge_revision": "300986870e14f9cc5387739efdf8bb1629e8f52f",
+  "exact_head_ci_checks": 33,
+  "real_provider_followup": {
+    "provider": "GitHub",
+    "observed_at": "2026-09-27",
+    "reference": "https://github.com/ArgaLabs/validation-server/pull/1232/changes",
+    "account": "authenticated repository author",
+    "desktop_width": 1465,
+    "actions": [
+      "Selected right line 30 then Shift-clicked right line 33",
+      "Enter opened Comment view with Add a comment on lines R30 to R33",
+      "Add a suggestion inserted all four selected source lines, including two empty lines",
+      "Native Cancel removed the unsent composer; no review/comment submitted"
+    ],
+    "remaining_gaps": [
+      "Full review toolbar, file tree, diff display, complete suggestions/apply, published edits and AI/collaboration",
+      "Physical touch and exhaustive mobile/reference comparisons"
+    ],
+    "operator_limit": "An ambiguous locator and later Playwright deadlines were followed by current DOM/AX inspection; native accessibility activation completed suggestion and cancellation.",
+    "screenshots_retained": false,
+    "implementation_followup_pr": 1233
+  }
 }

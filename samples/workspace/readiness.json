@@ -105,7 +105,11 @@
         },
         {
           "path": "samples/workspace/evidence/github-multiline-reviews-2026-09-27.json",
-          "sha256": "8051250b8882aca6d7d108353e0371d0e0f4b6b71fddf165aaeecead9d98c403"
+          "sha256": "6077635f5c598c9fd1e63a3d97e2e8feb6a1f654e4e8d1756e6781b08f379adc"
+        },
+        {
+          "path": "samples/workspace/evidence/github-range-suggestion-composer-2026-09-27.json",
+          "sha256": "6211665c55ea47982846d4c37fe1a827920cf1af7ed5a3ceecace8e3fba1b0ad"
         }
       ]
     },
@@ -676,5 +680,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "f2fbf3e024340e2f5f7ccae9be9f85691f81f5047212092c01695792f371adac"
+  "sample_tree_sha256": "ba9266795593f4541ae94b146c8ed22dbc01d6aaa73abc460c6bd32be6209a54"
 }

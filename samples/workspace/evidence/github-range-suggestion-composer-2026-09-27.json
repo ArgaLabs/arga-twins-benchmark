@@ -1,0 +1,116 @@
+{
+  "date": "2026-09-27",
+  "pr": 1233,
+  "status": "local_pass_ci_hosted_pending",
+  "source_revision": "ca73a00c1b447fc4f5bd4d44c50211b09583d1e3",
+  "base_revision": "300986870e14f9cc5387739efdf8bb1629e8f52f",
+  "scope": [
+    "Enter opens an existing selected diff range; Space and Shift+Enter retain keyboard selection",
+    "Suggestions include every right-side selected line, including blank lines, indentation and literal text",
+    "Recompute suggestion source after refresh; preserve open/uncertain drafts and hide incomplete/mixed ranges"
+  ],
+  "reference": {
+    "provider": "GitHub",
+    "observed_at": "2026-09-27",
+    "reference": "https://github.com/ArgaLabs/validation-server/pull/1232/changes",
+    "account": "authenticated repository author",
+    "desktop_width": 1465,
+    "actions": [
+      "Selected right line 30 then Shift-clicked right line 33",
+      "Enter opened Comment view with Add a comment on lines R30 to R33",
+      "Add a suggestion inserted all four selected source lines, including two empty lines",
+      "Native Cancel removed the unsent composer; no review/comment submitted"
+    ],
+    "remaining_gaps": [
+      "Full review toolbar, file tree, diff display, complete suggestions/apply, published edits and AI/collaboration",
+      "Physical touch and exhaustive mobile/reference comparisons"
+    ],
+    "operator_limit": "An ambiguous locator and later Playwright deadlines were followed by current DOM/AX inspection; native accessibility activation completed suggestion and cancellation.",
+    "screenshots_retained": false
+  },
+  "local_browser": {
+    "passed": true,
+    "desktop_shift_click_and_keyboard_enter_opens_selected_range": true,
+    "complete_suggestion_source_including_blank_lines_and_indentation": true,
+    "mobile_submission_and_reload_width": 390,
+    "document_width": 390,
+    "range_draft_preserved_across_reply_refresh": true,
+    "range_reply_inherits_location": true,
+    "cancellation_and_rejection_preserve_full_state": true,
+    "browser_commits": 4,
+    "rejections": 1,
+    "review_count": 1,
+    "comments": 3,
+    "pending_private_then_published_after_reload": true,
+    "full_unrelated_native_state_unchanged": true,
+    "negative_controls_rejected": [
+      "range_start",
+      "reply_range",
+      "end_line",
+      "comments",
+      "review",
+      "counter",
+      "protected"
+    ],
+    "console_warnings_and_errors": [],
+    "physical_touch_exercised": false,
+    "screenshots_retained": false,
+    "native_state_cancel_preserved": true,
+    "source_limit": "Bounded local composer check with a real-provider reference; CI, hosted rollout, suggestion application and exhaustive visuals/touch remain open."
+  },
+  "tests": {
+    "affected": 76,
+    "range_composer_modes": 8,
+    "broad": 869,
+    "ruff": "pass",
+    "diff_check": "pass",
+    "warnings": "Three existing dependency deprecations"
+  },
+  "source_sha256": {
+    "twins/github/frontend.py": "a4ab59e5707178283b32940ab967a9e128f0245f1c4a439e653ed88af7f3db06",
+    "twins/github/review_range_ui.py": "80ac8aa543be77e5e1e4f5206e1ac62f2be24cc30495f9f7ea512aa499c1cad6",
+    "twins/tests/test_github_range_suggestion_composer.py": "3f176503c8174bdc573e1039cf725b2f7e625aa401d2c86b64a40840fe22e51c"
+  },
+  "artifact_sha256": {
+    "browser-trace-0.json": "d53cdc95bc9b4bcc85e41d32c665c6becbd0086120027695d5bd095d9d57dc89",
+    "checkpoint.json": "b584674170b96bcd7ed34877740c63676b7fc9fd7cb2c020d8214211a0161612",
+    "browser-trace-1.json": "b37c865c9c9e8f103bd1417a6405aff0c24cf92bd4bbef490f86765ba6019fa5",
+    "after-cancel.json": "9b23f1417e86e8cef5623e751dc9e4f2c9695383595802c529c221dab682d5e0",
+    "baseline.json": "9b23f1417e86e8cef5623e751dc9e4f2c9695383595802c529c221dab682d5e0",
+    "verifier-correction.json": "f794402f8f2b128d26db39bc83ebb98c218d99456d2d8296b07b455ba44ebb5e",
+    "verification.json": "1dd6a4a5aea6069cedc18ca81f6dddfe0081fa42678d50a941198a4d30980276",
+    "pending.json": "b584674170b96bcd7ed34877740c63676b7fc9fd7cb2c020d8214211a0161612",
+    "final.json": "8be19369426c531903d8dfe6f76c610fb8ab110ce90b64d8f265266e190d7d9c",
+    "after-rejection.json": "9b23f1417e86e8cef5623e751dc9e4f2c9695383595802c529c221dab682d5e0"
+  },
+  "test_artifact_sha256": {
+    "github-range-suggestions-tests.txt": "234cb594bc9e2f4efa5c868b6b39ce82554bf5030f7c9f2a8db976910fb188e9",
+    "github-range-suggestions-fix.txt": "7853f276240e0093703ad161a2bf4bc0bf7c378137585f05ebe3270c8df17cd4",
+    "github-range-suggestions-final-tests.txt": "74fca84a4737b8068cc1740ab1772a1ea39271b9ba1b9dac8249596aa4a421b5",
+    "github-range-suggestions-broad-tests.txt": "e8e11b6b7ba8811741dbb62d9ffe5a949bb4d787d9df788ea96a46f3b9a36c30"
+  },
+  "verifier_sha256": "fcda67114d68d900bd0a490cfd07a0871de47ef9bfb3776827a8512f4f27989a",
+  "corrections": [
+    {
+      "initial_verification": "failed",
+      "reason": "Expected LF and terminal newline; browser multipart FormData supplied CRLF and existing inline handler trims outer whitespace.",
+      "correction": "Expect exact CRLF body with only native outer trimming; preserve all blank lines inside suggestion fences."
+    }
+  ],
+  "limits": [
+    "CI, production deployment and hosted state/image checks pending.",
+    "Suggestions currently persist as native review comment bodies; applying suggestions and complete review UI remain open.",
+    "Real-provider reference covers two desktop composer interactions and cancellation only. Full desktop/mobile visual, physical touch and AI/collaboration gates stay open."
+  ],
+  "full_release_complete": false,
+  "official_application_reference": {
+    "url": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/incorporating-feedback-in-your-pull-request",
+    "observed_requirements": [
+      "Write access, including explicitly allowed maintainer edits on forks",
+      "One single or batched application creates one commit on the pull request compare branch",
+      "Suggesters and the person applying changes are co-authors; the person applying is the committer",
+      "Commit suggestion or Add suggestion to batch followed by Commit suggestions, editable commit message, and Commit changes"
+    ],
+    "implementation_status": "pending"
+  }
+}
