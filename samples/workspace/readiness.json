@@ -94,6 +94,10 @@
         {
           "path": "samples/workspace/evidence/github-author-review-decisions-2026-09-27.json",
           "sha256": "ba412e00003b7d15789236db3794d49cb989da4195bb5b8a4c740b6a8f403fbb"
+        },
+        {
+          "path": "samples/workspace/evidence/github-review-error-recovery-2026-09-27.json",
+          "sha256": "bd3df9467f00468c4d7f4c16d2c589a89a72f3b8f331bff3d8f375d16e1fffae"
         }
       ]
     },
@@ -286,7 +290,7 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-pivots-2026-09-27.json",
-          "sha256": "09370e1d6e64d8ad75103a9e33b5ffac3127fd0def740d9e2b06bd178102a560"
+          "sha256": "f3ce9056bb9b2c9d791f00346fa4774e7cc3b76a728cfd91b5859f03f2532d6b"
         }
       ]
     },
@@ -354,6 +358,10 @@
         {
           "path": "samples/workspace/evidence/docs-text-suggestions-2026-09-27.json",
           "sha256": "6dfbf562fa8ca83c7fd229bd8880e2948f1b25a1fcdbffb5accb5bde9bf1702a"
+        },
+        {
+          "path": "samples/workspace/evidence/docs-gemini-reference-2026-09-27.json",
+          "sha256": "4534699315baa4520eea62285eb23178ade2d51d98b7e53d4cdfd11ad0139d27"
         }
       ]
     },
@@ -660,5 +668,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "f5986126df2f24005fe932af1d69cec9d93b30b66aa0c251903b68dc740645db"
+  "sample_tree_sha256": "8f906e40b6d94d4a90c284ac47adaf6086125574fb014046f9372b3025902f75"
 }

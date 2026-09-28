@@ -1,0 +1,64 @@
+{
+  "date": "2026-09-27",
+  "pr": 1230,
+  "status": "local_pass_ci_and_hosted_pending",
+  "source_revision": "fe29df831066a358a3279f25292b705d4d1fdb74",
+  "scope": "Prevent accidental replay of GitHub review writes after ambiguous 5xx responses; preserve draft and require reload; known 4xx permits correction and retry.",
+  "tests": {
+    "red": "2 failed, 8 passed before fix",
+    "focused": 45,
+    "all_github": 804,
+    "warnings": "Three dependency deprecation warnings in broad suite",
+    "ruff": "pass",
+    "diff_check": "pass"
+  },
+  "local_browser": {
+    "passed": true,
+    "committed_writes_with_lost_acknowledgement": 2,
+    "review_count": 1,
+    "comments": 1,
+    "pending_comment_private_before_submission": true,
+    "reviewer_and_owner_reload_verified": true,
+    "unrelated_full_native_state_preserved": true,
+    "negative_mutations_rejected": [
+      "duplicate_review",
+      "duplicate_comment",
+      "missing_comment",
+      "wrong_summary",
+      "wrong_review_state",
+      "wrong_line",
+      "protected_pr",
+      "counter_drift",
+      "token_drift"
+    ],
+    "desktop_browser_verified": true,
+    "mobile_viewport_verified": false,
+    "physical_touch_exercised": false,
+    "console_warnings_and_errors": []
+  },
+  "source_sha256": {
+    "twins/github/review_ui_script.py": "62c5b423fd32f0ac061a7bfdd080ac93122dbbafe72aba76fed7621139bf897f",
+    "twins/tests/test_github_review_ui_async.py": "1c91797dac3ae6c719f03624b87defddfc82fd89aa947ccad31125b25304e3d2"
+  },
+  "artifact_sha256": {
+    "browser-trace-0.json": "7a12784f3774f6477bccdf5e500f56f59c822a0943b447be407aa2d0bbc41685",
+    "checkpoint.json": "153c148f48f9e10e8ea783d3570db4455f444e98f708ff4b09aa9d989831b2b6",
+    "browser-trace-1.json": "b37c865c9c9e8f103bd1417a6405aff0c24cf92bd4bbef490f86765ba6019fa5",
+    "baseline.json": "bcf26e5a09c46084cfd07d2e107a24b25457894f4c8ea7b6d70cba644e8ec544",
+    "verification.json": "afe6a9688779b63be9c43c90bbc37264623a6cafc461fb818b926f6d630cc183",
+    "pending.json": "fd9240bbab05f178a860d496bd566749b2abb65b0dd8ef1cc623043e936366cf",
+    "final.json": "153c148f48f9e10e8ea783d3570db4455f444e98f708ff4b09aa9d989831b2b6"
+  },
+  "test_artifact_sha256": {
+    "github-review-recovery-red-tests.txt": "b69d7bdc4de54cbb5ada4e6718d0810d176e55d4de3d436870427e638abf82e2",
+    "github-review-recovery-broad-tests.txt": "b638a978001239ad6bc728377b699a210eb3fd76ceef02f155283c72d29bd7da",
+    "github-review-recovery-format.txt": "6bec284ebf6c6eed373543a835bcb25862821ae0a213bcb287f5a7908c2d4f2c",
+    "github-review-recovery-focused-tests.txt": "2883ddfb4f16f6301b3c193c370d3f1528ca18f214d73767d3a7ac82ae23bb00"
+  },
+  "verifier_sha256": "879d617951bd5c3572529d777bf5bccd001f36c4710987df46d82dbd9dd4ba53",
+  "limitations": [
+    "Hosted deployment and image attestation remain pending.",
+    "Chrome viewport override did not change the tested tab width; this run establishes desktop recovery only.",
+    "Physical touch, provider-wide review/AI/collaboration and exhaustive fidelity remain open."
+  ]
+}

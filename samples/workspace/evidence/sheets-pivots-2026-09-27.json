@@ -2,7 +2,7 @@
   "date": "2026-09-27",
   "pr": 1229,
   "status": "local_native_browser_pass_ci_hosted_pending",
-  "source_revision": "8bef1e9db24736a7688931eb44fa412e71a95002",
+  "source_revision": "289c5f53d959f55aab9191161429ade1425ddc03",
   "scope": [
     "Native CellData.pivotTable definitions, effective generated cells and formulas",
     "Creation, grouping, totals, 13 aggregations, percentage display, multiple values and visible-value filters",
@@ -319,11 +319,16 @@
   ],
   "tests": {
     "broad_workspace_drive_sheets": 1347,
-    "final_affected": 62,
+    "final_affected": 69,
     "warnings": "Three existing dependency deprecation warnings in broad run; one in focused tests",
     "ruff": "pass",
     "generated_javascript_parse": "pass",
-    "diff_check": "pass"
+    "diff_check": "pass",
+    "review_red": "6 failed, 1 passed before fixes",
+    "final_affected_source_revision": "69e53492459c0193203c28696525414cf8178056",
+    "ci_portability_fix_affected": 56,
+    "ci_portability_fix_source_revision": "289c5f53d959f55aab9191161429ade1425ddc03",
+    "ci_original_failure": "Linux E2BIG when complete editor script was passed to node -e; stdin parser check replaces argv payload."
   },
   "local_browser": {
     "verifications": [
@@ -371,7 +376,8 @@
       "moved_total": 60,
       "old_anchor_empty": true,
       "partial_copy_total": 25
-    }
+    },
+    "validated_source_revision": "8bef1e9db24736a7688931eb44fa412e71a95002"
   },
   "corrections": [
     "Initial native protection test expected 403 rather than established 400; corrected assertion after inspecting route behavior.",
@@ -381,7 +387,9 @@
     "Live numeric input attempts opened three details sheets; generic pivot value-edit behavior is not claimed. All were test-owned and trashed with the reference workbook.",
     "Broad clipboard adapter regression: seven tests failed after payload tuple expansion; adapter corrected and complete 1347-test rerun passed.",
     "Initial final clipboard native verifier rejected two empty cell records left by cut; fixed, added a regression, reran 62 affected tests and the same browser flow in a fresh fixture. Earlier capture is preserved.",
-    "Snapshot verifier accounts for recorded changefeed serialization (localhost provider links and absent expanded permissions), while requiring full file metadata and permissions to remain exact. It rejects six deliberate state changes per successful run."
+    "Snapshot verifier accounts for recorded changefeed serialization (localhost provider links and absent expanded permissions), while requiring full file metadata and permissions to remain exact. It rejects six deliberate state changes per successful run.",
+    "PR review identified omitted visible-value filters, RAW COUNTUNIQUE numeric identity and stale source bounds after cell-range shifts. All three were reproduced and fixed; 69 affected tests pass. Hosted preflight now repeats the deployed checks.",
+    "Linux CI rejected the complete editor script as an oversized command-line argument. Changed syntax verification to node --check via stdin; 56 affected tests pass locally. CI rerun pending."
   ],
   "limits": [
     "Hosted deployment, fresh eight-provider state verification and complete image attestation pending.",
@@ -393,15 +401,15 @@
   "source_sha256": {
     "twins/google_drive/run_state.py": "32a5f5411c1c60388c9364b63f7dde09642e28da2664fdca52a7de6fea225bc8",
     "twins/google_drive/sheet_history.py": "1dc1e6056d0f47c334d5816f8a26fa831a927fca04719c05c8448d98e7292b15",
-    "twins/google_drive/sheet_pivots.py": "2fa51c092c19ed2463eadd68f1e4a898f72ba401bb3e313def0f6935cf008511",
+    "twins/google_drive/sheet_pivots.py": "086392400ec01af41e8319c8a8340fbcceca1ba41dd5ae8170353d178fb4d365",
     "twins/google_drive/sheet_protection.py": "a8bbc227f60878effdea69f17f1dcbfedbeb7001897cbc6b34ffaee9ac849e05",
     "twins/google_drive/sheet_view_clipboard.py": "a38a86beebcf813aa33fcc0e8488ef222a5e0e96554ae7be0be017518248d396",
-    "twins/google_drive/workspace_editing.py": "a42c9b59f746d9affbc7e9723faea4c9094e0390a94eea2c5e9954b9d113b1b6",
+    "twins/google_drive/workspace_editing.py": "ed48e0229b7d34c7bde79850091312c9aaf7de89fc122ea605988211f86632e1",
     "twins/google_sheets/charts_ui.py": "b74635f8c504ce9f63e68aa64319a6f9675c39b7f87f6570780354520106a791",
     "twins/google_sheets/pivots_ui.py": "bcf6b296a989cb588d64ef973b8d378b11925fae1d52fbeb1f4f3d21e5f23cbc",
     "twins/google_sheets/ui.py": "d36b3ac5e1ec72e7bfc5be6c907b0b0f9d804e72863a7999414632a86275c4d5",
-    "twins/tests/test_google_sheets_pivots.py": "2d0041ef6b19dce2d59ae4ff10b0017008c37c7cefffd4e734d2524277e184f9",
-    "twins/tests/test_google_sheets_pivots_ui.py": "192fd00d409d1b1e4500ab6ee29048e837aee97195f19c1e60201fe67b459680"
+    "twins/tests/test_google_sheets_pivots.py": "81253f311c58bc1c5f299696be5d13aeae0c7da71ff052bb6847fd4549f3e143",
+    "twins/tests/test_google_sheets_pivots_ui.py": "507bb04b3f7e3f288cc46d450b2cfa652db750356636893cb3378979f2f7402b"
   },
   "artifact_sha256": {
     "sheets-pivots-layout-tests.txt": "aca6b5c754f624804dd904459eb07715fb5492d57c2ce67d51dc1a44c18b42ca",
@@ -428,7 +436,13 @@
     "sheets-pivots-clipboard-view-format.txt": "8a4b9a41e06e97c9762a7d3d8dc18fd7a2fdd00a8c4cd0b7a9853404a36a8c8c",
     "sheets-pivots-final-broad-fixed-tests.txt": "1cf8f130fe0dcad04659f9abfe14c7a5281991f058ee9ad91a957a80806202cf",
     "sheets-pivots-empty-copy-format.txt": "5386c48985d29ed494cab02c7740cbe7e2fa31a2a5c7c2bb58e6c4a4e18f6941",
-    "sheets-pivots-layout-format-final-tests.txt": "86db4c14d4c5247ba31ed05c2b732729f3c5e5c5444ffe293e529f847918ca2b"
+    "sheets-pivots-layout-format-final-tests.txt": "86db4c14d4c5247ba31ed05c2b732729f3c5e5c5444ffe293e529f847918ca2b",
+    "sheets-pivots-review-focused-tests.txt": "603e16a582f6c5d237081002c87471f1f1cc740e19906a13090bd38e7e590728",
+    "sheets-pivots-review-format.txt": "8a4b9a41e06e97c9762a7d3d8dc18fd7a2fdd00a8c4cd0b7a9853404a36a8c8c",
+    "sheets-pivots-review-red-tests.txt": "a046c21b255a9070921466597826c979ca212b678d9425ee9f670395e717c0c1",
+    "sheets-pivots-ci-shard6.txt": "256f51694de44a05a7cf88483d397f133e0de76d5319befc575b87e4613c38e8",
+    "sheets-pivots-ci-fixed-tests.txt": "c0ca43e9c00335fa9ca8a950a48801f41c0c519c2ec3b2018f4fb00df16b66a8",
+    "sheets-pivots-ci-format.txt": "8a4b9a41e06e97c9762a7d3d8dc18fd7a2fdd00a8c4cd0b7a9853404a36a8c8c"
   },
   "verifier_sha256": "cc9474bffa5cf75d67a2b5f98f20ac656616099bd04512415f0eeb114c7598d2",
   "local_artifact_sha256": {
