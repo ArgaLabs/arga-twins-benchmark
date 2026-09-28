@@ -267,6 +267,10 @@
         {
           "path": "samples/workspace/evidence/sheets-resize-gestures-2026-09-27.json",
           "sha256": "6f69b812372fcc66f95a880b5d3035db24aabdcafef7a7423b32f8c977ed7b35"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-chart-gestures-2026-09-27.json",
+          "sha256": "96c5db039a7183cc256e13085d21be9ccc24973444ba03570c98ea23db0781bf"
         }
       ]
     },
@@ -604,7 +608,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "adea3615ac71fc31d738cc1e4538ab760767a605228863a8ba4105239821a942"
+          "sha256": "60d15a51665e7080d9eb1839f9db85be995e16b3fd4b97a4f67f63a470fa688d"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -636,5 +640,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "0a0b8e4e77fd9df1b41151445812f2161a3c12b357c1f1527df1db1ee155a555"
+  "sample_tree_sha256": "271b347e8f77627ead96762d22794ee96a9e911bd4fadfe00be3c1fd00a54d59"
 }

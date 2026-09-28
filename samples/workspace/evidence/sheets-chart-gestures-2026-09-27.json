@@ -1,0 +1,426 @@
+{
+  "date": "2026-09-27",
+  "status": "deployed_fresh_hosted_native_desktop_390px_pass",
+  "scope": [
+    "First-pointer ownership for chart dragging/resizing",
+    "Cancel on Escape, blur, pointercancel, lost capture, sheet load and changed workbook/sheet",
+    "Reject completion on busy grid or removed chart",
+    "Visible save failure and restored geometry when Chart editor is closed"
+  ],
+  "base_revision": "dc93e1316402dbf32dba80be072364c240a094ad",
+  "real_reference": {
+    "fixture_id": "10wqCI1zJ_wE_03VY5ST9ONyZyNMkX7O_9Ks2jCxx0_A",
+    "title": "Arga fidelity chart gestures 20260927-97ad",
+    "method": "Chrome CUA",
+    "viewport": [
+      1465,
+      806
+    ],
+    "observations": [
+      "Inserted default pie chart from Quarter/Revenue with Q1 12, Q2 18, Q3 4",
+      "Moved chart by dragging its top area; observed location shift",
+      "Resized from bottom-right corner; observed larger chart",
+      "Reload retained moved/resized chart and all source values",
+      "File moved to trash confirmation observed"
+    ],
+    "geometry_after_reload_approximate": {
+      "left": 302,
+      "top": 291,
+      "width": 651,
+      "height": 404
+    },
+    "limits": [
+      "Reference selected a pie chart; comparison covers movement/resize semantics, not chart-type rendering parity",
+      "Atomic CUA drags cannot exercise interrupted gestures",
+      "No physical touch or mobile app comparison"
+    ],
+    "cleanup": "recoverable Trash confirmed",
+    "screenshots_retained": false
+  },
+  "tests": {
+    "before_fix": {
+      "failed": 16,
+      "passed": 6
+    },
+    "gesture_and_write_cases": 29,
+    "workspace_editor_regressions": 1567,
+    "visible_error_before_fix": {
+      "failed": 1,
+      "passed": 25
+    },
+    "native_browser": {
+      "passed": true,
+      "native_commits": 6,
+      "only_final_change": "Chart 111 moved 40px right/30px down and resized from 320x220 to 360x250",
+      "all_values_formulas_permissions_unrelated_state_unchanged": true,
+      "failed_move_preserves_exact_native_state": true,
+      "negative_oracles": {
+        "selected value": "rejected",
+        "gap formula": "rejected",
+        "gap value": "rejected",
+        "wrong chart position": "rejected",
+        "wrong chart size": "rejected",
+        "permissions": "rejected",
+        "extra revision": "rejected",
+        "foreign history": "rejected",
+        "unrelated sheet": "rejected"
+      },
+      "browser": [
+        "Chart movement and corner resize commit only selected chart geometry",
+        "503 rejected move shows visible error, restores chart geometry and preserves all native state; retry succeeds",
+        "Two Undo actions restore original chart geometry; two Redo actions restore moved/resized geometry",
+        "Desktop/390px chart inspection and reload preserve geometry and formulas",
+        "Only the intentionally injected 503 error; no other console errors"
+      ],
+      "limits": [
+        "No physical touch or mobile-app comparison",
+        "Pointer interruption/second-pointer behavior covered by regression harness, not an interrupted host gesture"
+      ]
+    },
+    "ruff": "passed",
+    "pending_save_context": {
+      "before_fix": {
+        "failed": 2,
+        "passed": 26
+      },
+      "final_affected_checks": 44,
+      "behavior": "Capture workbook/sheet when requested and recheck immediately before native write after queued saves."
+    },
+    "committed_refresh_failure": {
+      "before_fix": {
+        "failed": 1,
+        "passed": 28
+      },
+      "final_affected_checks": 45,
+      "behavior": "A committed write with a failed refresh stays visibly Saved; reload to refresh, and never recommends retrying the write.",
+      "browser": {
+        "passed": true,
+        "native_commits": 1,
+        "browser": [
+          "Saved chart with failed refresh shows Saved; reload to refresh and a reload instruction, not a retry-write instruction",
+          "Reload reveals saved geometry without another write"
+        ],
+        "only_final_change": "Chart moved 40px right/30px down; size/spec and all values/formulas/permissions/unrelated state unchanged",
+        "checkpoint_equals_final": true,
+        "screenshots_retained": false
+      },
+      "artifact_sha256": {
+        "browser-trace.json": "3ae818923bc52c76e8089fbc662684bf043686485e9140ea8a84c2b343289546",
+        "checkpoint.json": "71f824a59c1f74f984829ae5f20afe551484cc9b8a6f839e2e6db136879df727",
+        "baseline.json": "643f03f8992d57f38bb24fed6d09409a17302beef0405a7f3d2d2d2707b13e46",
+        "verification.json": "b6afe89daee0fe4472ac13e2a0529d76af7589e90b29f71c93439b791b833f82",
+        "final.json": "71f824a59c1f74f984829ae5f20afe551484cc9b8a6f839e2e6db136879df727"
+      }
+    }
+  },
+  "source_sha256": {
+    "twins/google_sheets/charts_ui.py": "e5694c505549a330996077bd00701289501f9369c9f68db9c2420650a6021b10",
+    "twins/google_sheets/README.md": "2e58242f334d4731c13b1a6b3ec14a9d8b74c960432b9a3b4da3a32d1e6e20a2",
+    "twins/tests/test_google_sheets_charts_ui.py": "73b1a86117dbb12afba8f88cc5f444403f05c27004c325a9b218d67f32096543",
+    "twins/tests/test_google_sheets_chart_gestures.py": "b8af34adf629d166093a98a5dc4e1e04257ff3e8ddc1ea96f9e9a05819338a0f"
+  },
+  "artifact_sha256": {
+    "sheets-chart-gestures-red-tests.txt": "0cd7298525347d64827bc8ce2670f08e390f0f713c3f727d01d30c10198d99d1",
+    "sheets-chart-error-red-tests.txt": "83b0840b6c631369c422ebfc055a96fceaca2c3bfb8cc94e01f1e46f6e8c4413",
+    "sheets-chart-gestures-final-all-tests.txt": "bfcdc5a0176f00ea18b45360a53d34900e27dfb8d2f47d87bb33f360a54e30a2",
+    "sheets-chart-reference-20260927.json": "05d58d9707e9d1668cb9d8caf0acb10a34fd6ccea5be55261924ab7aab693a75",
+    "verify-sheets-chart-gestures-local.py": "eb7a373028721fee248ee4a53e0f6582ed276fc47f4ea80992aa0e625c2f33fc",
+    "sheets-chart-context-red-tests.txt": "128a2a1902b31e0881330d318d2a12b4aa891b709726a40843c1b7e37b668faf",
+    "sheets-chart-final-affected-tests.txt": "31f7e670408477a015d942018c52553d8214b460423d21e1157df080e21de192",
+    "sheets-chart-refresh-red-tests.txt": "9509630939a74861af3400479c70b91952373b06143bb520bae42d1c13ca756d",
+    "sheets-chart-review-affected-tests.txt": "f6cbd7432e525b5a7074ec5a59c1c0d22025880f2710fdefd1f1ded218bd3e7b"
+  },
+  "local_artifact_sha256": {
+    "browser-trace.json": "48ac89d7ea99916ddcc6d9a9e7eace10ad0b7b0e73fcf942d89e2ea8a3ac5114",
+    "checkpoint.json": "66fea539ac125d769d94c4f21d5502375ad84ef76ef6cb095656f91ed57f7d94",
+    "baseline.json": "66fea539ac125d769d94c4f21d5502375ad84ef76ef6cb095656f91ed57f7d94",
+    "verification.json": "0aa4e7e7c75eb5d66cd842a111387fb139988ede5da78497731d34c89ebdcd5d",
+    "final.json": "2150c566875b237dfb54503c2153ed70dd7bfda2c2a50344525641dd15ad465c",
+    "after-failed-move.json": "66fea539ac125d769d94c4f21d5502375ad84ef76ef6cb095656f91ed57f7d94"
+  },
+  "limits": [
+    "Atomic CUA drag does not expose an interruptible gesture; cancellation and multiple-pointer cases use executable regression coverage.",
+    "390px checks confirm responsive rendering and scrollable native chart geometry, not physical touch or mobile-app parity.",
+    "Full eight-provider frontend/AI/collaboration, exhaustive audits and final sample gates remain open. No final ZIP generated."
+  ],
+  "deployment": {
+    "pr": 1224,
+    "merge_revision": "6297116cf18b0d888a554558451a19cb2684348b",
+    "source_revision": "151131ecc6e4199d0d8dc2d085bf96ce89dea1b3",
+    "exact_head_checks": 33,
+    "fresh_merge_state": "CLEAN",
+    "twins_workflow": 36364979763,
+    "runtime_workflow": 36364979564,
+    "both_workflows": "success",
+    "serving_images": {
+      "revision": "6297116cf18b0d888a554558451a19cb2684348b",
+      "cloud_run": [
+        {
+          "latest_ready_revision": "preview-proxy-00329-p57",
+          "observed_at": "2026-09-28T01:11:45.768869+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy:6297116cf18b0d888a554558451a19cb2684348b",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:3a10586139570025accda5fbb29ef0297643abb6fa8f77d51e0a5f820b1397e5",
+                  "name": "preview-proxy-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/preview-proxy@sha256:3a10586139570025accda5fbb29ef0297643abb6fa8f77d51e0a5f820b1397e5"
+                }
+              ],
+              "ready": true,
+              "revision": "preview-proxy-00329-p57"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "preview-proxy",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "preview-proxy-00329-p57",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:3a10586139570025accda5fbb29ef0297643abb6fa8f77d51e0a5f820b1397e5",
+            "sha256:40b0bccd29a8e7528c83f7b098074d48e7f2eba3df97231d1196fec7c68468ab"
+          ],
+          "published_manifest_match": true
+        },
+        {
+          "latest_ready_revision": "arga-api-00699-8cj",
+          "observed_at": "2026-09-28T01:17:05.604832+00:00",
+          "region": "us-west1",
+          "requested_image": "us-west1-docker.pkg.dev/arga-labs/arga/api:6297116cf18b0d888a554558451a19cb2684348b",
+          "revisions": [
+            {
+              "containers": [
+                {
+                  "image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:de2ec56288f09856dbe47716980b41ed3d9e185f26280e75b877a6dcd47f2a50",
+                  "name": "api-1",
+                  "resolved_image": "us-west1-docker.pkg.dev/arga-labs/arga/api@sha256:de2ec56288f09856dbe47716980b41ed3d9e185f26280e75b877a6dcd47f2a50"
+                }
+              ],
+              "ready": true,
+              "revision": "arga-api-00699-8cj"
+            }
+          ],
+          "schema": "arga.cloud-run-images/1",
+          "service": "arga-api",
+          "status": "complete",
+          "traffic": [
+            {
+              "percent": 100,
+              "revision": "arga-api-00699-8cj",
+              "tag": null
+            }
+          ],
+          "published_manifest_digests": [
+            "sha256:03c648f1e6d9abe4b3cd150de6420fbdaa556fe9dd37df4aedb2b960b92df3dc",
+            "sha256:de2ec56288f09856dbe47716980b41ed3d9e185f26280e75b877a6dcd47f2a50"
+          ],
+          "published_manifest_match": true
+        }
+      ],
+      "log_sha256": "a99f223f0b1c642b459591beca8860f3ab1967e9ffc192591b455d8d97e8def8",
+      "status": "complete",
+      "limits": [
+        "Timestamped runtime observations; the complete worker-container evidence is recorded separately."
+      ]
+    },
+    "worker_images": {
+      "status": "complete",
+      "observed_at": "2026-09-28T01:18:33.852011+00:00",
+      "publication_sha256": "7709e5ba71c6c123e74288dca5d113c19c65ce9fa988f32d511f580fe16c0bf4",
+      "containers": {
+        "github": {
+          "published_revision": "0b9adb6191a772c397ade3858e7c6cbd88eda031",
+          "image_id": "sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:affbf13aa7207c96378f589b58051880fde165abf802abc4da98929c3d3daa29"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-github@sha256:6a9ae11f33d4865944254e9ff6230371a5db19585b1bf03d5907f77ff9559bd4"
+          ],
+          "matched": true
+        },
+        "gmail": {
+          "published_revision": "ecd5a11ae7f273224ff7bb2a99a2d3ccbf09bfef",
+          "image_id": "sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:7840d808ed3fc22532a0c40e8775a8a33f0136345f5a473d07e9ae01618e3604",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-gmail@sha256:91b142c7015a97d877c8f57f02d6e5f7c0cd49afe8ae50241f74dc2fcbf821c0"
+          ],
+          "matched": true
+        },
+        "google_calendar": {
+          "published_revision": "86b5840846ce088611c9d22793a33c81320d9ac9",
+          "image_id": "sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:16f12ce95a7ca7f35916ccd6830388a5035ee5cd2a8982c723dcc51251dfbb2a",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_calendar@sha256:6bf3e0be5e54d241ac0ca34b842681e9629ea1543e9a54dcd42869bba4eb6932"
+          ],
+          "matched": true
+        },
+        "google_docs": {
+          "published_revision": "24d9b8dc09ad41e3083d375dfedd8380a46b96d0",
+          "image_id": "sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:1d3b124fd3539de1a93308041917e979f6c829fc81aff484c46955c174056939",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_docs@sha256:a979178dea985778dddc7836aafa736a2bda57f864857dce6654a2e41af40e3e"
+          ],
+          "matched": true
+        },
+        "google_sheets": {
+          "published_revision": "6297116cf18b0d888a554558451a19cb2684348b",
+          "image_id": "sha256:ccfd4b2018338ce1ffd0c89a7223d97f119cfdfb17e3c6ff26c8efe612f4f88a",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:b495dea6ba1367eaca2bf086497d0c20f3399b15fb2d31a005fe1de16fa987ce",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:ccfd4b2018338ce1ffd0c89a7223d97f119cfdfb17e3c6ff26c8efe612f4f88a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-google_sheets@sha256:ccfd4b2018338ce1ffd0c89a7223d97f119cfdfb17e3c6ff26c8efe612f4f88a"
+          ],
+          "matched": true
+        },
+        "linear": {
+          "published_revision": "ace7a2b81d94daa980cc63bc1656c937a3b63fa5",
+          "image_id": "sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:512530f81f5d79a8fa5e4d06bcaae351d74a334ad0f21f2874f024db3220bd55"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-linear@sha256:296186788b2a1b535e54459f4789014a6e2c41f2e758f164320ee9afeeff7183"
+          ],
+          "matched": true
+        },
+        "notion": {
+          "published_revision": "31ce23293da893a6882b51b318cbcffed1064af4",
+          "image_id": "sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:2349a5eac4ae35486e8167a4cd0983ff52b298253e41296b3e3cbcc403ac24dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-notion@sha256:bb23a26fbc9d6bca7847dd21bdb2456fbc78aece17588eed34e62c14cd5e651c"
+          ],
+          "matched": true
+        },
+        "stripe": {
+          "published_revision": "c232855befa0b3d4373f32166979af326bee0fac",
+          "image_id": "sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc",
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:988163ff134aea11b480683fcb63cbf069eda86fd8fb205810b2d63ca155586a"
+          ],
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/twin-stripe@sha256:8539b709ef7b35feb4b4cbf689f0ba8853ba9907c917371190e5a89b771150dc"
+          ],
+          "matched": true
+        },
+        "app": {
+          "matched": true,
+          "configured_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-aabe17550bb944cdb0275568929e23e8",
+          "published_image": "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub:main-aabe17550bb944cdb0275568929e23e8@sha256:f1753d506788b3030d50c83ae9bcaa2ebba82cf0537d39e4ff5bbe51ba224230",
+          "observed_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:f1753d506788b3030d50c83ae9bcaa2ebba82cf0537d39e4ff5bbe51ba224230"
+          ],
+          "published_repo_digests": [
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:16ae206f90bfd682a476ae256f2f87ad1b328a6d4cf9635e978de7d859333038",
+            "us-west1-docker.pkg.dev/arga-labs/arga/client-images/client-argalabs-twin-quickstart-stub@sha256:f1753d506788b3030d50c83ae9bcaa2ebba82cf0537d39e4ff5bbe51ba224230"
+          ],
+          "builder_log_sha256": "0e20aed72bfde14c3504d963e68784206b45b3167262ef1c6a9c36fbc306881f"
+        },
+        "twin-gateway": {
+          "matched": true,
+          "observed_repo_digests": [
+            "caddy@sha256:af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+          ],
+          "official_registry_reference": "docker.io/library/caddy:2.8.4-alpine",
+          "official_manifest_sha256": "af32e97399febea808609119bb21544d0265c58a02836576e32a2d082c262c17"
+        }
+      }
+    }
+  },
+  "hosted": {
+    "verification": {
+      "passed": true,
+      "native_commits": 6,
+      "successful_browser_writes": 6,
+      "operator_mutations_after_baseline": 0,
+      "only_final_change": "Chart 111 moved 40px right/30px down and resized from 320x220 to 360x250",
+      "all_native_values_formulas_file_permissions_and_unrelated_states_unchanged": true,
+      "docs_sheets_native_file_metadata_and_changefeed_identical": true,
+      "provider_specific_links_unchanged": true,
+      "chart_editor_cancellation_preserves_exact_state": true
+    },
+    "native_preflight": {
+      "invalid_second_range_preserves_all_eight_native_states": true,
+      "passed": true
+    },
+    "negative_oracles": {
+      "selected value": "rejected",
+      "gap formula": "rejected",
+      "gap value": "rejected",
+      "wrong chart position": "rejected",
+      "wrong chart size": "rejected",
+      "permissions": "rejected",
+      "extra revision": "rejected",
+      "foreign history": "rejected",
+      "provider link": "rejected",
+      "unrelated provider": "rejected",
+      "Docs metadata": "rejected",
+      "extra browser write": "rejected"
+    },
+    "browser": {
+      "method": "Chrome CUA",
+      "widths": [
+        1465,
+        390
+      ],
+      "passed": [
+        "Chart editor cancellation preserves all eight native states",
+        "Actual chart movement and corner resize update only native chart geometry",
+        "Two Undo actions restore original chart position/size; two Redo actions restore moved/resized geometry",
+        "Desktop/390px presentation and reload preserve chart geometry, values and formulas",
+        "No console errors"
+      ],
+      "physical_touch": "not exercised",
+      "interruptions": "Regression harness; host CUA drags are atomic",
+      "screenshots_retained": false
+    },
+    "cleanup": {
+      "confirmed_status": "torn_down",
+      "outcome": "terminal_without_twins"
+    },
+    "artifact_sha256": {
+      "browser-trace.json": "c26f81f4c5410d42b98ebf998abb9f3333daf0aa0f31f2bc6f2a619d9c146a4e",
+      "image-comparison.json": "6475e2e9c84f987d6245ccb2bf21569d4be64e848a22f5e7d25df2bd34faf7b2",
+      "publication-catalog.json": "7709e5ba71c6c123e74288dca5d113c19c65ce9fa988f32d511f580fe16c0bf4",
+      "checkpoint.json": "27f01001cb751f451aa64cff3970e5e29ee4e6a99f0fc640021462fd5cf42cf6",
+      "cleanup.json": "413e39405db38e7c75693eb1c8bf69802ae58b949d6cb8ba1534f77c2ff069f5",
+      "runtime-image-evidence.json": "9aa70028e9ed25bf11bdcf3095985567f43140b33291d6dff2ca9697b6d1318e",
+      "baseline.json": "27f01001cb751f451aa64cff3970e5e29ee4e6a99f0fc640021462fd5cf42cf6",
+      "native-result.json": "b4c4b1ec8c160dbee842f5657b00f3c96ed6907da403d5c0a964ea95879fb9e8",
+      "scenario.json": "e154c7fb2bcbc1c50f73c20d53b834e64f668e911ef9f5260c8bcbfbef9c7a8b",
+      "verification.json": "6ac2fd8177462ff6208216ae0efa4814220b2d00c5f07ce37c0343f1b8bd3d5c",
+      "operator-api-trace.json": "4f8b50a23cc1efd8d7d7f2411b5ae54429e469431c70051d3b1b9411ddc82fc1",
+      "after-cancellation.json": "27f01001cb751f451aa64cff3970e5e29ee4e6a99f0fc640021462fd5cf42cf6",
+      "final-state.json": "384e99bbea7f15e658b124dc047af436d912db6fc2b505abc4568ac572032771",
+      "negative-oracles.json": "a9c83e98110dddffa803c5a01d9cbcb4dfb188da513790d711d9a9a6fa697dd0"
+    }
+  }
+}

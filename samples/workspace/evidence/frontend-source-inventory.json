@@ -6110,7 +6110,7 @@
         },
         {
           "path": "twins/google_sheets/charts_ui.py",
-          "sha256": "366a32c5a71708e450845a2de39df83e049759806e91c39eef4511f578b44fe3",
+          "sha256": "e5694c505549a330996077bd00701289501f9369c9f68db9c2420650a6021b10",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
