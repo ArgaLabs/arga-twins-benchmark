@@ -6599,7 +6599,7 @@
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
       "route_candidate_count": 0,
-      "markup_control_occurrences": 276,
+      "markup_control_occurrences": 286,
       "files": [
         {
           "path": "twins/google_sheets/borders_ui.py",
@@ -7609,6 +7609,108 @@
           ]
         },
         {
+          "path": "twins/google_sheets/gemini_ui.py",
+          "sha256": "2972f88b80f49ac564d204e79899af22a4f3e06d8b13ab99cf08353b8fb1d470",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 34,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-open",
+                    "aria-label": "Ask Gemini",
+                    "aria-controls": "sheet-gemini-panel",
+                    "hidden": null
+                  },
+                  "text": "{dynamic} Ask Gemini"
+                }
+              ]
+            },
+            {
+              "line": 39,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-close",
+                    "aria-label": "Close Gemini"
+                  },
+                  "text": "\u00d7"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-reload",
+                    "hidden": null
+                  },
+                  "text": "Reload spreadsheet"
+                },
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "sheet-gemini-form"
+                  }
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "id": "sheet-gemini-prompt",
+                    "aria-label": "Ask Gemini"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-cancel",
+                    "hidden": null
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit",
+                    "id": "sheet-gemini-submit",
+                    "aria-label": "Send prompt"
+                  },
+                  "text": "Send"
+                },
+                {
+                  "tag": "dialog",
+                  "attributes": {
+                    "id": "sheet-gemini-overwrite",
+                    "aria-labelledby": "sheet-gemini-overwrite-title"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-overwrite-cancel"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button",
+                    "id": "sheet-gemini-overwrite-confirm"
+                  },
+                  "text": "Overwrite data"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "path": "twins/google_sheets/grid_format_ui.py",
           "sha256": "0f73904e48f77860f795a92fcf8a0cdd2d846a55b3474792770f4c714648b188",
           "frontend_route_candidates": [],
@@ -8506,11 +8608,11 @@
         },
         {
           "path": "twins/google_sheets/ui.py",
-          "sha256": "d36b3ac5e1ec72e7bfc5be6c907b0b0f9d804e72863a7999414632a86275c4d5",
+          "sha256": "0876eaee11114698f91a4a0fd84693d553f3eb8131d4d5efdd951fc8295a915b",
           "frontend_route_candidates": [],
           "markup_expressions": [
             {
-              "line": 305,
+              "line": 306,
               "dynamic": false,
               "controls": [
                 {
@@ -13822,37 +13924,37 @@
   "shared_workspace_source_candidates": [
     {
       "path": "twins/google_drive/app.py",
-      "sha256": "f4e5acb0524401e60bfd0d1cb7c8a3e3a0220f4777bbfd0f393e0cbda4a4bc63",
+      "sha256": "cdff0b054b65121afb47d9d7a259e5e01e1b9a577bc2af46c5f814bcce59810a",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/",
           "handler": "index",
-          "line": 779
+          "line": 784
         },
         {
           "method": "POST",
           "path": "/ui/files",
           "handler": "ui_create_file",
-          "line": 1069
+          "line": 1074
         },
         {
           "method": "POST",
           "path": "/ui/files/content",
           "handler": "ui_update_file_content",
-          "line": 1095
+          "line": 1100
         },
         {
           "method": "GET",
           "path": "/mcp",
           "handler": "mcp_base_path_get",
-          "line": 1260
+          "line": 1265
         },
         {
           "method": "POST",
           "path": "/mcp",
           "handler": "mcp_base_path",
-          "line": 1785
+          "line": 1790
         },
         {
           "method": "GET",
@@ -13870,90 +13972,90 @@
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}",
           "handler": "workspace_ui_rename",
-          "line": 1322
+          "line": 1327
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/export",
           "handler": "workspace_ui_export",
-          "line": 1357
+          "line": 1362
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_list",
-          "line": 1402
+          "line": 1407
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/permissions",
           "handler": "workspace_ui_permissions_create",
-          "line": 1413
+          "line": 1418
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_delete",
-          "line": 1434
+          "line": 1439
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/permissions/{permission_id}",
           "handler": "workspace_ui_permissions_update",
-          "line": 1454
+          "line": 1459
         },
         {
           "method": "GET",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_list",
-          "line": 1473
+          "line": 1478
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments",
           "handler": "workspace_ui_comments_create",
-          "line": 1484
+          "line": 1489
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_update",
-          "line": 1496
+          "line": 1501
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}",
           "handler": "workspace_ui_comments_delete",
-          "line": 1514
+          "line": 1519
         },
         {
           "method": "POST",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies",
           "handler": "workspace_ui_replies_create",
-          "line": 1525
+          "line": 1530
         },
         {
           "method": "PATCH",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_update",
-          "line": 1543
+          "line": 1548
         },
         {
           "method": "DELETE",
           "path": "/ui/{dynamic}/{file_id}/comments/{comment_id}/replies/{reply_id}",
           "handler": "workspace_ui_replies_delete",
-          "line": 1567
+          "line": 1572
         },
         {
           "method": "GET",
           "path": "/ui/documents/{file_id}/access",
           "handler": "docs_ui_access",
-          "line": 1310
+          "line": 1315
         }
       ],
       "markup_expressions": [
         {
-          "line": 845,
+          "line": 850,
           "dynamic": false,
           "controls": [
             {
@@ -13966,7 +14068,7 @@
           ]
         },
         {
-          "line": 961,
+          "line": 966,
           "dynamic": true,
           "controls": [
             {
@@ -14031,7 +14133,7 @@
           ]
         },
         {
-          "line": 873,
+          "line": 878,
           "dynamic": true,
           "controls": [
             {
@@ -14042,7 +14144,7 @@
           ]
         },
         {
-          "line": 887,
+          "line": 892,
           "dynamic": false,
           "controls": [
             {
@@ -14055,7 +14157,7 @@
           ]
         },
         {
-          "line": 932,
+          "line": 937,
           "dynamic": true,
           "controls": [
             {
@@ -14066,7 +14168,7 @@
           ]
         },
         {
-          "line": 868,
+          "line": 873,
           "dynamic": true,
           "controls": [
             {
@@ -14079,7 +14181,7 @@
           ]
         },
         {
-          "line": 870,
+          "line": 875,
           "dynamic": true,
           "controls": [
             {
@@ -14092,7 +14194,7 @@
           ]
         },
         {
-          "line": 909,
+          "line": 914,
           "dynamic": true,
           "controls": [
             {
@@ -14105,7 +14207,7 @@
           ]
         },
         {
-          "line": 913,
+          "line": 918,
           "dynamic": true,
           "controls": [
             {
@@ -14118,7 +14220,7 @@
           ]
         },
         {
-          "line": 923,
+          "line": 928,
           "dynamic": true,
           "controls": [
             {
@@ -14148,7 +14250,7 @@
           ]
         },
         {
-          "line": 951,
+          "line": 956,
           "dynamic": true,
           "controls": [
             {
@@ -14161,7 +14263,7 @@
           ]
         },
         {
-          "line": 956,
+          "line": 961,
           "dynamic": true,
           "controls": [
             {
@@ -14278,115 +14380,146 @@
       "markup_expressions": []
     },
     {
+      "path": "twins/google_drive/sheets_gemini.py",
+      "sha256": "568caf40689761dcd1d087bebfb2127cc4340facf868220f41299974431c8195",
+      "frontend_route_candidates": [
+        {
+          "method": "GET",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/gemini",
+          "handler": "spreadsheet_gemini_settings",
+          "line": 66
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/gemini/generate",
+          "handler": "spreadsheet_gemini_generate",
+          "line": 84
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/gemini/target",
+          "handler": "spreadsheet_gemini_target",
+          "line": 151
+        },
+        {
+          "method": "POST",
+          "path": "/ui/spreadsheets/{spreadsheet_id}/gemini/insert",
+          "handler": "spreadsheet_gemini_insert",
+          "line": 162
+        }
+      ],
+      "markup_expressions": []
+    },
+    {
       "path": "twins/google_drive/workspace_editing.py",
-      "sha256": "eebf02e5913af849505ef0358865f5856e12bb187b67b675d60d2f0c9c01b525",
+      "sha256": "20e311d7af33fb7c116d9822d9c3e88f0cd9934ef8b0bc0e936479751786e383",
       "frontend_route_candidates": [
         {
           "method": "GET",
           "path": "/ui/documents/{document_id}/suggestions",
           "handler": "document_suggestions_list",
-          "line": 10215
+          "line": 10217
         },
         {
           "method": "POST",
           "path": "/ui/documents/{document_id}/tabs/{tab_id}/duplicate",
           "handler": "duplicate_document_tab",
-          "line": 10231
+          "line": 10233
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/history",
           "handler": "spreadsheet_history_status",
-          "line": 10312
+          "line": 10317
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/history",
           "handler": "spreadsheet_history_action",
-          "line": 10329
+          "line": 10334
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/protection-rules",
           "handler": "spreadsheet_protection_rules",
-          "line": 10367
+          "line": 10372
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/protections",
           "handler": "spreadsheet_protections",
-          "line": 10383
+          "line": 10388
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
           "handler": "spreadsheet_validation_rules",
-          "line": 10392
+          "line": 10397
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-rules",
           "handler": "spreadsheet_validation_edit",
-          "line": 10408
+          "line": 10413
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-selection",
           "handler": "spreadsheet_dropdown_selection",
-          "line": 10425
+          "line": 10430
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/dropdown-source",
           "handler": "spreadsheet_dropdown_source",
-          "line": 10442
+          "line": 10447
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/validation-preview",
           "handler": "spreadsheet_validation_preview",
-          "line": 10460
+          "line": 10465
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/selection-range",
           "handler": "spreadsheet_selection_range",
-          "line": 10467
+          "line": 10472
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-preview",
           "handler": "spreadsheet_filter_preview",
-          "line": 10483
+          "line": 10488
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-cell",
           "handler": "spreadsheet_filter_cell",
-          "line": 10490
+          "line": 10495
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-view",
           "handler": "spreadsheet_filter_view",
-          "line": 10499
+          "line": 10504
         },
         {
           "method": "POST",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-paste",
           "handler": "spreadsheet_filter_paste",
-          "line": 10508
+          "line": 10513
         },
         {
           "method": "GET",
           "path": "/ui/spreadsheets/{spreadsheet_id}/filter-options",
           "handler": "spreadsheet_filter_options",
-          "line": 10517
+          "line": 10522
         }
       ],
       "markup_expressions": []
     }
   ],
   "shared_workspace_binding_status": "candidate sources only; verify Google Docs/Sheets surface guards at runtime",
-  "shared_workspace_route_candidate_count": 44
+  "shared_workspace_route_candidate_count": 48
 }

@@ -117,7 +117,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
+          "sha256": "fd77814a5b75ce7d3fdd7ef4446e539cdd027d62a0492b0a9233fe77819f094d"
         }
       ]
     },
@@ -211,7 +211,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
+          "sha256": "fd77814a5b75ce7d3fdd7ef4446e539cdd027d62a0492b0a9233fe77819f094d"
         },
         {
           "path": "samples/workspace/evidence/gmail-compose-transitions-2026-09-28.json",
@@ -334,7 +334,11 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
+          "sha256": "fd77814a5b75ce7d3fdd7ef4446e539cdd027d62a0492b0a9233fe77819f094d"
+        },
+        {
+          "path": "samples/workspace/evidence/sheets-gemini-2026-09-28.json",
+          "sha256": "fcc9ad2f1d6e2e9f0863e5a0d69df293880015b480a9c965fa9c7ba23d504d84"
         }
       ]
     },
@@ -413,7 +417,7 @@
         },
         {
           "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
-          "sha256": "23d98e8ad46ad2d6641b16a87bee5d0dbdf7715dead9a0fa20510b149ab93e8b"
+          "sha256": "fd77814a5b75ce7d3fdd7ef4446e539cdd027d62a0492b0a9233fe77819f094d"
         }
       ]
     },
@@ -688,7 +692,7 @@
         },
         {
           "path": "samples/workspace/evidence/published-provider-images-2026-09-24.json",
-          "sha256": "1c66ca020d0e43bb04e6b698b3c8b692fbd04bc423354b990451d32c95a3c034"
+          "sha256": "79e3aa7e790b7c34d915b34432b54bbbec224f9c51709686f3869e211777d615"
         },
         {
           "path": "samples/workspace/evidence/workspace-editor-identity-2026-09-26.json",
@@ -720,5 +724,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "1a163c38fe6102883131be1a6fae65e51a3fd0a55639431b1eb826a58a69d602"
+  "sample_tree_sha256": "e4dddaf3362dd6828f0a02dabc7d0830f0055f8a31264280f66ad5c2312150ec"
 }
