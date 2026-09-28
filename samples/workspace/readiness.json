@@ -503,6 +503,14 @@
         {
           "path": "samples/workspace/evidence/eight-provider-fidelity-tests-2026-09-27.json",
           "sha256": "14ad7e48635e58c8bb7529004d8e27391a3dc681021d1f5017925e77132bfe9d"
+        },
+        {
+          "path": "samples/workspace/evidence/stripe-assistant-2026-09-28.json",
+          "sha256": "3d26a87a68e7e2d32af32fe8a8af8d0f8b7b50e6959854bbb423d115a198571e"
+        },
+        {
+          "path": "samples/workspace/evidence/frontend-mounted-routes-2026-09-28.json",
+          "sha256": "fd77814a5b75ce7d3fdd7ef4446e539cdd027d62a0492b0a9233fe77819f094d"
         }
       ]
     },
@@ -724,5 +732,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "e4dddaf3362dd6828f0a02dabc7d0830f0055f8a31264280f66ad5c2312150ec"
+  "sample_tree_sha256": "0288103cb622214ec1d0c3d9dfc5e1500334075d67c8c263b81ec73f6e153dfc"
 }
