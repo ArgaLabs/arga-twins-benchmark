@@ -26,8 +26,8 @@
       "reference_comparison_status": "pending",
       "permission_state_audit_status": "pending",
       "touch_audit_status": "pending",
-      "route_candidate_count": 51,
-      "markup_control_occurrences": 327,
+      "route_candidate_count": 52,
+      "markup_control_occurrences": 336,
       "files": [
         {
           "path": "twins/github/actions_ui.py",
@@ -574,144 +574,150 @@
         },
         {
           "path": "twins/github/frontend.py",
-          "sha256": "79954ed3eee6257d2f93187690b5a9c77ac235c7ea98b59442c0d6d9caa28a99",
+          "sha256": "196cb9394c40a77644721dfe15ea3c883f55109b2bc73f986096f2d7113ceee3",
           "frontend_route_candidates": [
             {
               "method": "POST",
               "path": "/_ui/scenarios/export",
               "handler": "export_scenario",
-              "line": 1143
+              "line": 1151
             },
             {
               "method": "GET",
               "path": "/",
               "handler": "dashboard",
-              "line": 1152
+              "line": 1160
             },
             {
               "method": "POST",
               "path": "/_ui/repos",
               "handler": "create_repo",
-              "line": 1262
+              "line": 1270
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}",
               "handler": "repo_detail",
-              "line": 1354
+              "line": 1362
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/blob/{file_path:path}",
               "handler": "file_view",
-              "line": 1576
+              "line": 1584
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/tree/{dir_path:path}",
               "handler": "dir_view",
-              "line": 1663
+              "line": 1671
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "pull_request_list",
-              "line": 1754
+              "line": 1762
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}",
               "handler": "pull_request_detail",
-              "line": 1869
+              "line": 1877
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments",
               "handler": "add_pull_comment_ui",
-              "line": 2083
+              "line": 2093
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/edit",
               "handler": "edit_pending_comment_ui",
-              "line": 2089
+              "line": 2099
+            },
+            {
+              "method": "POST",
+              "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/suggestions",
+              "handler": "apply_review_suggestions_ui",
+              "line": 2105
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/comments/{comment_id}/reactions",
               "handler": "add_pr_comment_reaction_ui",
-              "line": 2100
+              "line": 2116
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/toggle-task",
               "handler": "toggle_pr_task_ui",
-              "line": 2148
+              "line": 2164
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/edit",
               "handler": "edit_pr_title_body_ui",
-              "line": 2190
+              "line": 2206
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pull/{pull_number}/merge",
               "handler": "merge_pull_request_ui",
-              "line": 2233
+              "line": 2249
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "branch_list_page",
-              "line": 2305
+              "line": 2321
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/branches",
               "handler": "create_branch_ui",
-              "line": 2384
+              "line": 2400
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/pulls/new",
               "handler": "new_pull_request_form",
-              "line": 2426
+              "line": 2442
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/pulls",
               "handler": "create_pull_request",
-              "line": 2439
+              "line": 2455
             },
             {
               "method": "GET",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_form",
-              "line": 2571
+              "line": 2587
             },
             {
               "method": "POST",
               "path": "/_ui/repos/{owner}/{repo}/edit/{file_path:path}",
               "handler": "edit_file_submit",
-              "line": 2645
+              "line": 2661
             },
             {
               "method": "GET",
               "path": "/_ui/profile",
               "handler": "profile_page",
-              "line": 2875
+              "line": 2891
             },
             {
               "method": "POST",
               "path": "/_ui/profile",
               "handler": "update_profile",
-              "line": 2927
+              "line": 2943
             }
           ],
           "markup_expressions": [
             {
-              "line": 268,
+              "line": 274,
               "dynamic": true,
               "controls": [
                 {
@@ -768,7 +774,7 @@
               ]
             },
             {
-              "line": 363,
+              "line": 369,
               "dynamic": true,
               "controls": [
                 {
@@ -796,7 +802,7 @@
               ]
             },
             {
-              "line": 580,
+              "line": 586,
               "dynamic": true,
               "controls": [
                 {
@@ -810,7 +816,7 @@
               ]
             },
             {
-              "line": 585,
+              "line": 591,
               "dynamic": true,
               "controls": [
                 {
@@ -824,7 +830,7 @@
               ]
             },
             {
-              "line": 610,
+              "line": 616,
               "dynamic": true,
               "controls": [
                 {
@@ -933,7 +939,7 @@
               ]
             },
             {
-              "line": 679,
+              "line": 685,
               "dynamic": true,
               "controls": [
                 {
@@ -946,7 +952,7 @@
               ]
             },
             {
-              "line": 721,
+              "line": 728,
               "dynamic": true,
               "controls": [
                 {
@@ -1005,7 +1011,7 @@
               ]
             },
             {
-              "line": 1082,
+              "line": 1090,
               "dynamic": true,
               "controls": [
                 {
@@ -1058,7 +1064,7 @@
               ]
             },
             {
-              "line": 841,
+              "line": 849,
               "dynamic": true,
               "controls": [
                 {
@@ -1093,7 +1099,7 @@
               ]
             },
             {
-              "line": 1191,
+              "line": 1199,
               "dynamic": true,
               "controls": [
                 {
@@ -1142,7 +1148,7 @@
               ]
             },
             {
-              "line": 1233,
+              "line": 1241,
               "dynamic": true,
               "controls": [
                 {
@@ -1162,7 +1168,7 @@
               ]
             },
             {
-              "line": 1377,
+              "line": 1385,
               "dynamic": true,
               "controls": [
                 {
@@ -1217,7 +1223,7 @@
               ]
             },
             {
-              "line": 1450,
+              "line": 1458,
               "dynamic": true,
               "controls": [
                 {
@@ -1228,7 +1234,7 @@
               ]
             },
             {
-              "line": 1461,
+              "line": 1469,
               "dynamic": true,
               "controls": [
                 {
@@ -1248,7 +1254,7 @@
               ]
             },
             {
-              "line": 1536,
+              "line": 1544,
               "dynamic": true,
               "controls": [
                 {
@@ -1289,7 +1295,7 @@
               ]
             },
             {
-              "line": 1616,
+              "line": 1624,
               "dynamic": true,
               "controls": [
                 {
@@ -1302,7 +1308,7 @@
               ]
             },
             {
-              "line": 1623,
+              "line": 1631,
               "dynamic": true,
               "controls": [
                 {
@@ -1357,7 +1363,7 @@
               ]
             },
             {
-              "line": 1644,
+              "line": 1652,
               "dynamic": true,
               "controls": [
                 {
@@ -1370,7 +1376,7 @@
               ]
             },
             {
-              "line": 1712,
+              "line": 1720,
               "dynamic": true,
               "controls": [
                 {
@@ -1383,7 +1389,7 @@
               ]
             },
             {
-              "line": 1721,
+              "line": 1729,
               "dynamic": true,
               "controls": [
                 {
@@ -1438,7 +1444,7 @@
               ]
             },
             {
-              "line": 1774,
+              "line": 1782,
               "dynamic": true,
               "controls": [
                 {
@@ -1493,7 +1499,7 @@
               ]
             },
             {
-              "line": 1798,
+              "line": 1806,
               "dynamic": true,
               "controls": [
                 {
@@ -1520,7 +1526,7 @@
               ]
             },
             {
-              "line": 1985,
+              "line": 1994,
               "dynamic": true,
               "controls": [
                 {
@@ -1575,7 +1581,7 @@
               ]
             },
             {
-              "line": 2010,
+              "line": 2019,
               "dynamic": true,
               "controls": [
                 {
@@ -1617,7 +1623,7 @@
               ]
             },
             {
-              "line": 2342,
+              "line": 2358,
               "dynamic": true,
               "controls": [
                 {
@@ -1650,7 +1656,7 @@
               ]
             },
             {
-              "line": 2361,
+              "line": 2377,
               "dynamic": true,
               "controls": [
                 {
@@ -1670,7 +1676,7 @@
               ]
             },
             {
-              "line": 2600,
+              "line": 2616,
               "dynamic": true,
               "controls": [
                 {
@@ -1741,7 +1747,7 @@
               ]
             },
             {
-              "line": 2886,
+              "line": 2902,
               "dynamic": true,
               "controls": [
                 {
@@ -1815,7 +1821,7 @@
               ]
             },
             {
-              "line": 665,
+              "line": 671,
               "dynamic": true,
               "controls": [
                 {
@@ -1843,7 +1849,7 @@
               ]
             },
             {
-              "line": 673,
+              "line": 679,
               "dynamic": true,
               "controls": [
                 {
@@ -1871,7 +1877,7 @@
               ]
             },
             {
-              "line": 1026,
+              "line": 1034,
               "dynamic": true,
               "controls": [
                 {
@@ -1890,7 +1896,7 @@
               ]
             },
             {
-              "line": 1066,
+              "line": 1074,
               "dynamic": true,
               "controls": [
                 {
@@ -1903,7 +1909,7 @@
               ]
             },
             {
-              "line": 1069,
+              "line": 1077,
               "dynamic": true,
               "controls": [
                 {
@@ -1916,7 +1922,7 @@
               ]
             },
             {
-              "line": 1169,
+              "line": 1177,
               "dynamic": true,
               "controls": [
                 {
@@ -1929,7 +1935,7 @@
               ]
             },
             {
-              "line": 1186,
+              "line": 1194,
               "dynamic": true,
               "controls": [
                 {
@@ -1942,7 +1948,7 @@
               ]
             },
             {
-              "line": 1188,
+              "line": 1196,
               "dynamic": true,
               "controls": [
                 {
@@ -1955,7 +1961,7 @@
               ]
             },
             {
-              "line": 1220,
+              "line": 1228,
               "dynamic": true,
               "controls": [
                 {
@@ -1968,7 +1974,7 @@
               ]
             },
             {
-              "line": 1371,
+              "line": 1379,
               "dynamic": true,
               "controls": [
                 {
@@ -1981,7 +1987,7 @@
               ]
             },
             {
-              "line": 1419,
+              "line": 1427,
               "dynamic": true,
               "controls": [
                 {
@@ -1994,7 +2000,7 @@
               ]
             },
             {
-              "line": 1426,
+              "line": 1434,
               "dynamic": true,
               "controls": [
                 {
@@ -2007,7 +2013,7 @@
               ]
             },
             {
-              "line": 1445,
+              "line": 1453,
               "dynamic": true,
               "controls": [
                 {
@@ -2020,20 +2026,7 @@
               ]
             },
             {
-              "line": 1619,
-              "dynamic": true,
-              "controls": [
-                {
-                  "tag": "a",
-                  "attributes": {
-                    "href": "/_ui/repos/{dynamic}/tree/{dynamic}{dynamic}"
-                  },
-                  "text": "{dynamic}"
-                }
-              ]
-            },
-            {
-              "line": 1697,
+              "line": 1627,
               "dynamic": true,
               "controls": [
                 {
@@ -2052,6 +2045,19 @@
                 {
                   "tag": "a",
                   "attributes": {
+                    "href": "/_ui/repos/{dynamic}/tree/{dynamic}{dynamic}"
+                  },
+                  "text": "{dynamic}"
+                }
+              ]
+            },
+            {
+              "line": 1713,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "a",
+                  "attributes": {
                     "href": "/_ui/repos/{dynamic}/blob/{dynamic}{dynamic}"
                   },
                   "text": "{dynamic}"
@@ -2059,7 +2065,7 @@
               ]
             },
             {
-              "line": 1840,
+              "line": 1848,
               "dynamic": true,
               "controls": [
                 {
@@ -2072,7 +2078,7 @@
               ]
             },
             {
-              "line": 1971,
+              "line": 1980,
               "dynamic": true,
               "controls": [
                 {
@@ -2092,7 +2098,7 @@
               ]
             },
             {
-              "line": 2326,
+              "line": 2342,
               "dynamic": true,
               "controls": [
                 {
@@ -2105,7 +2111,7 @@
               ]
             },
             {
-              "line": 2339,
+              "line": 2355,
               "dynamic": true,
               "controls": [
                 {
@@ -2118,7 +2124,7 @@
               ]
             },
             {
-              "line": 625,
+              "line": 631,
               "dynamic": true,
               "controls": [
                 {
@@ -2131,7 +2137,7 @@
               ]
             },
             {
-              "line": 1716,
+              "line": 1724,
               "dynamic": true,
               "controls": [
                 {
@@ -3322,6 +3328,93 @@
               ]
             }
           ]
+        },
+        {
+          "path": "twins/github/review_suggestion_ui.py",
+          "sha256": "f58ffc5b86368ed39dc8bf69a911d7dd5d22648904d3b95b52b7107f426bcc9f",
+          "frontend_route_candidates": [],
+          "markup_expressions": [
+            {
+              "line": 29,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "form",
+                  "attributes": {
+                    "id": "{dynamic}",
+                    "method": "post",
+                    "action": "/_ui/repos/{dynamic}/pull/{dynamic}/suggestions"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "suggestions",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "input",
+                  "attributes": {
+                    "type": "hidden",
+                    "name": "{dynamic}",
+                    "value": "{dynamic}"
+                  }
+                },
+                {
+                  "tag": "textarea",
+                  "attributes": {
+                    "name": "message",
+                    "aria-label": "Commit message"
+                  }
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Cancel"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "submit"
+                  },
+                  "text": "Commit changes"
+                }
+              ]
+            },
+            {
+              "line": 50,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Commit suggestion"
+                },
+                {
+                  "tag": "button",
+                  "attributes": {
+                    "type": "button"
+                  },
+                  "text": "Add suggestion to batch"
+                }
+              ]
+            },
+            {
+              "line": 63,
+              "dynamic": true,
+              "controls": [
+                {
+                  "tag": "summary",
+                  "attributes": {},
+                  "text": "Commit suggestions 0"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -4329,61 +4422,61 @@
       "files": [
         {
           "path": "twins/google_calendar/app.py",
-          "sha256": "ef34747dd6d8fc7432f17356d31a9e352c68c2afe3d332a8eab41f05f9455645",
+          "sha256": "28abfc78607e4343ccb644a79e771d3ccf64c3be5fc971269e39a242c7fcaae3",
           "frontend_route_candidates": [
             {
               "method": "GET",
               "path": "/",
               "handler": "index",
-              "line": 752
+              "line": 753
             },
             {
               "method": "GET",
               "path": "/calendar/_ui/access-requests",
               "handler": "list_access_requests",
-              "line": 782
+              "line": 783
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/access-requests",
               "handler": "request_calendar_access",
-              "line": 786
+              "line": 787
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/access-requests/{request_id}/approve",
               "handler": "approve_calendar_access",
-              "line": 790
+              "line": 791
             },
             {
               "method": "GET",
               "path": "/calendar/_ui/tasks",
               "handler": "list_side_tasks",
-              "line": 810
+              "line": 811
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/task-lists",
               "handler": "create_side_task_list",
-              "line": 814
+              "line": 815
             },
             {
               "method": "API_ROUTE",
               "path": "/calendar/_ui/task-lists/{list_id}",
               "handler": "change_side_task_list",
-              "line": 818
+              "line": 819
             },
             {
               "method": "POST",
               "path": "/calendar/_ui/task-lists/{list_id}/tasks",
               "handler": "create_side_task",
-              "line": 822
+              "line": 823
             },
             {
               "method": "API_ROUTE",
               "path": "/calendar/_ui/task-lists/{list_id}/tasks/{task_id}",
               "handler": "change_side_task",
-              "line": 828
+              "line": 829
             }
           ],
           "markup_expressions": []
