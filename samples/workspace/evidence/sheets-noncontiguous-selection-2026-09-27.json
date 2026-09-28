@@ -123,7 +123,8 @@
   "limits": [
     "Physical touch and mobile-app parity not exercised.",
     "Disjoint row/column headers, charts, structural operations and complete clipboard semantics remain open.",
-    "Broad eight-provider AI/collaboration, exhaustive visual/permission coverage and final sample gates remain open. No final ZIP generated."
+    "Broad eight-provider AI/collaboration, exhaustive visual/permission coverage and final sample gates remain open. No final ZIP generated.",
+    "Unrelated GitHub preservation in this run compares the compact admin summary, not its complete resource snapshot. Workspace native state is fully compared; a later full GitHub snapshot must be used for comprehensive final-deployment preservation claims."
   ],
   "base_revision": "4e0fc3857bc523864776006f0d7948d1652b097d",
   "duplicate_selection_artifact_sha256": {

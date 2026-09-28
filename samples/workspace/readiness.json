@@ -250,27 +250,27 @@
         },
         {
           "path": "samples/workspace/evidence/sheets-dropdown-multiple-2026-09-27.json",
-          "sha256": "0942a56b561ba79d06f7b6c8d792bd78d82bf36789984744767c82129d626607"
+          "sha256": "37aaca32f823226c3f9cdce256376538e935e066ec0b700e05f6d898bc5f2ad5"
         },
         {
           "path": "samples/workspace/evidence/sheets-range-dropdown-colors-2026-09-27.json",
-          "sha256": "168202b8a6ce663e575467372048640cad9d75e3daf8bb457e0dcecb2faada51"
+          "sha256": "0475dece517871921d97c87c8643047ad6fd7a4d5751fed5aa3bfa8fdf08da46"
         },
         {
           "path": "samples/workspace/evidence/sheets-dropdown-ordering-2026-09-27.json",
-          "sha256": "aff9a7752e5f846798a7fe6413bd11f860746bfa49e19b6926cf908b2022ef1f"
+          "sha256": "b2eea1c54f525d7ab30c04b212d894a00916a201b29feb692b4a2cf3426e5670"
         },
         {
           "path": "samples/workspace/evidence/sheets-noncontiguous-selection-2026-09-27.json",
-          "sha256": "ca93e830ace146b3aa98f1f40417900812b1d8f3e44e04e1bcf1816c46be6acb"
+          "sha256": "9d3fd73d616a0284dfaa6b34986c76e9076635904df07ba06186df97bd6d3072"
         },
         {
           "path": "samples/workspace/evidence/sheets-resize-gestures-2026-09-27.json",
-          "sha256": "6f69b812372fcc66f95a880b5d3035db24aabdcafef7a7423b32f8c977ed7b35"
+          "sha256": "d91013acbd9b5607e904cc4797e362ea9ccbc1abd9386854a3f152efb021e2d9"
         },
         {
           "path": "samples/workspace/evidence/sheets-chart-gestures-2026-09-27.json",
-          "sha256": "96c5db039a7183cc256e13085d21be9ccc24973444ba03570c98ea23db0781bf"
+          "sha256": "9db87f6091c67b65faffdfe2757c6de74dc270a7768249d8216bff820a5e73c7"
         }
       ]
     },
@@ -640,5 +640,5 @@
       ]
     }
   ],
-  "sample_tree_sha256": "271b347e8f77627ead96762d22794ee96a9e911bd4fadfe00be3c1fd00a54d59"
+  "sample_tree_sha256": "792158b1bccdbee88613bc5959e7bb578017a6cb0f40c5c33b4c69001fd93dc5"
 }

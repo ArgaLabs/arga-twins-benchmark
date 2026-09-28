@@ -137,7 +137,8 @@
     "CI, production deployment and fresh hosted ordering verification pending.",
     "Physical touch and real-provider keyboard/interruption comparisons are unverified.",
     "Long-list edge scrolling remains open.",
-    "Broader eight-provider AI/collaboration, exhaustive audit and final sample gates remain open; no final ZIP generated."
+    "Broader eight-provider AI/collaboration, exhaustive audit and final sample gates remain open; no final ZIP generated.",
+    "Unrelated GitHub preservation in this run compares the compact admin summary, not its complete resource snapshot. Workspace native state is fully compared; a later full GitHub snapshot must be used for comprehensive final-deployment preservation claims."
   ],
   "focus_artifact_sha256": {
     "browser-trace.json": "7498305e5dda54efea207383cfffe8d5ff4853de27d709ee1ab1591e541620b1",
