@@ -1,0 +1,1468 @@
+{
+  "kind": "evaluator_conformance_fixture",
+  "protocol": "arga-bench-evaluator-conformance-fixture/1",
+  "schema_version": "0.1",
+  "instance_id": "blocking_code_review_v1_github_operational_hurdle_003",
+  "source": "synthetic_state_evidence",
+  "source_note": "Synthetic trusted-state evidence derived from the checked-in GitHub seed. It proves snapshot-contract validation, enrichment, canonicalization, admin-delta claims, outcome-first grading, and negative-control rejection for this verifier. It is not live twin conformance and cannot satisfy the benchmark release gate by itself.",
+  "baseline_state": {
+    "providers": {
+      "github": {
+        "provider_role": "code_host",
+        "state": {
+          "summary": {
+            "repos": [
+              {
+                "full_name": "acme/web-parser",
+                "pulls": 31,
+                "reviews": 0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "queries": {
+      "sq_repository": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser",
+        "canonicalizer": "github_repository_stable",
+        "status_code": 200,
+        "body": {
+          "name": "web-parser",
+          "full_name": "acme/web-parser",
+          "private": false,
+          "description": null,
+          "fork": false,
+          "default_branch": "main",
+          "archived": false,
+          "disabled": false,
+          "visibility": "public",
+          "topics": []
+        }
+      },
+      "sq_refs": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/git/matching-refs/heads/",
+        "canonicalizer": "github_refs_stable",
+        "status_code": 200,
+        "body": [
+          {
+            "ref": "refs/heads/chore/safe-001",
+            "object": {
+              "sha": "5b6187314d205e7796ed40fa8e111a0dd3039e4b",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-002",
+            "object": {
+              "sha": "ac69c6554dae8076ffb5f898c565cebd2ba91f09",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-003",
+            "object": {
+              "sha": "154a72d8a9b71dd2f3ac8465fbbaec99ad2ba2ae",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-004",
+            "object": {
+              "sha": "b2d9ee6ac58b00bfa3e3e696781470f2093c513a",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-005",
+            "object": {
+              "sha": "7a6b94d1b8e4941816b964f982fcaed77f40ce9a",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-006",
+            "object": {
+              "sha": "1146ce8cfa8118887d396cde974c7f4f3ddd8ea6",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-007",
+            "object": {
+              "sha": "62ba3dcf77853bf42303109c6e71f3e5489e5f9d",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-008",
+            "object": {
+              "sha": "b687ca183fb143f35a9092f6458624838bb6c39a",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-009",
+            "object": {
+              "sha": "352b21c58f32c83afa6eb1e57c8884065d6716a4",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-010",
+            "object": {
+              "sha": "c88f64b175593acf162aa262f7462c229f698e37",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-011",
+            "object": {
+              "sha": "64dccd760006431382ddbf7784e5562630cff113",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-012",
+            "object": {
+              "sha": "5f6c24a215223c652626cb3559558c9990cb82bd",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-013",
+            "object": {
+              "sha": "34bcaaf2d63082f08eb3e6f504fef3fd959cb5e6",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-014",
+            "object": {
+              "sha": "fd0a0212db9cdc9d1d8afeae3c6a8f7891b58a20",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-015",
+            "object": {
+              "sha": "2e5660edff3bbbd7a2776b71c84ecd8eb50b9d88",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-016",
+            "object": {
+              "sha": "389b8d9db5afd2f18ff49ec7d65f0b93690defd8",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-017",
+            "object": {
+              "sha": "783449cd549bbd14ec5ca862a673463ac9e9782d",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-018",
+            "object": {
+              "sha": "cf0e6db276e70ee1fb2f9dd021673f9dc5044e3a",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-019",
+            "object": {
+              "sha": "ae5d8d2e40a77596c794c8098f07dc32e437ec37",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-020",
+            "object": {
+              "sha": "79da2b9a4cfb4a69d38082b37ea41d394f8c540f",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-021",
+            "object": {
+              "sha": "5f7c57c553e135c244db25ec121f8d0fde29ef87",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-022",
+            "object": {
+              "sha": "c35062b6fedbb332b1e36ca7c56f3d4716e49bb6",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-023",
+            "object": {
+              "sha": "f2f94dd4981f77b33da8efb8b09662fa533c13c1",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-024",
+            "object": {
+              "sha": "3248fee880565ccd7a89f49dca35313592ba8772",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-025",
+            "object": {
+              "sha": "1a0713eb24c84f3ccf810e397fd02ca5c9c15c1f",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-026",
+            "object": {
+              "sha": "9419f2d705b085008d51bb2595c1c93ed85e39ae",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-027",
+            "object": {
+              "sha": "5ab5830be4607032740c482b6c02a38d486791c0",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-028",
+            "object": {
+              "sha": "f091b52116ba6451105024e5e88f06fe9fee5b0e",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-029",
+            "object": {
+              "sha": "e1b6d03aed09d9f0610540a7998d0d2d0514efeb",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/chore/safe-030",
+            "object": {
+              "sha": "78e29384ffe3eb024fb966a8da928f73c90c2bdc",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/feature/sec-205-evaluator",
+            "object": {
+              "sha": "0f330d4b344c74de25122c990cc6d09a4afbefaa",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/main",
+            "object": {
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549",
+              "type": "commit"
+            }
+          }
+        ]
+      },
+      "sq_pulls": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls?state=all&per_page=100",
+        "canonicalizer": "github_pulls_stable",
+        "status_code": 200,
+        "body": [
+          {
+            "id": 1001,
+            "number": 1,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-001: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-001.",
+            "head": {
+              "ref": "chore/safe-001",
+              "sha": "5b6187314d205e7796ed40fa8e111a0dd3039e4b"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1002,
+            "number": 2,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-002: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-002.",
+            "head": {
+              "ref": "chore/safe-002",
+              "sha": "ac69c6554dae8076ffb5f898c565cebd2ba91f09"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1003,
+            "number": 3,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-003: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-003.",
+            "head": {
+              "ref": "chore/safe-003",
+              "sha": "154a72d8a9b71dd2f3ac8465fbbaec99ad2ba2ae"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1004,
+            "number": 4,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-004: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-004.",
+            "head": {
+              "ref": "chore/safe-004",
+              "sha": "b2d9ee6ac58b00bfa3e3e696781470f2093c513a"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1005,
+            "number": 5,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-005: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-005.",
+            "head": {
+              "ref": "chore/safe-005",
+              "sha": "7a6b94d1b8e4941816b964f982fcaed77f40ce9a"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1006,
+            "number": 6,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-006: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-006.",
+            "head": {
+              "ref": "chore/safe-006",
+              "sha": "1146ce8cfa8118887d396cde974c7f4f3ddd8ea6"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1007,
+            "number": 7,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-007: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-007.",
+            "head": {
+              "ref": "chore/safe-007",
+              "sha": "62ba3dcf77853bf42303109c6e71f3e5489e5f9d"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1008,
+            "number": 8,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-008: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-008.",
+            "head": {
+              "ref": "chore/safe-008",
+              "sha": "b687ca183fb143f35a9092f6458624838bb6c39a"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1009,
+            "number": 9,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-009: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-009.",
+            "head": {
+              "ref": "chore/safe-009",
+              "sha": "352b21c58f32c83afa6eb1e57c8884065d6716a4"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1010,
+            "number": 10,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-010: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-010.",
+            "head": {
+              "ref": "chore/safe-010",
+              "sha": "c88f64b175593acf162aa262f7462c229f698e37"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1011,
+            "number": 11,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-011: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-011.",
+            "head": {
+              "ref": "chore/safe-011",
+              "sha": "64dccd760006431382ddbf7784e5562630cff113"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1012,
+            "number": 12,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-012: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-012.",
+            "head": {
+              "ref": "chore/safe-012",
+              "sha": "5f6c24a215223c652626cb3559558c9990cb82bd"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1013,
+            "number": 13,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-013: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-013.",
+            "head": {
+              "ref": "chore/safe-013",
+              "sha": "34bcaaf2d63082f08eb3e6f504fef3fd959cb5e6"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1014,
+            "number": 14,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-014: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-014.",
+            "head": {
+              "ref": "chore/safe-014",
+              "sha": "fd0a0212db9cdc9d1d8afeae3c6a8f7891b58a20"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1015,
+            "number": 15,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-015: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-015.",
+            "head": {
+              "ref": "chore/safe-015",
+              "sha": "2e5660edff3bbbd7a2776b71c84ecd8eb50b9d88"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1016,
+            "number": 16,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-016: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-016.",
+            "head": {
+              "ref": "chore/safe-016",
+              "sha": "389b8d9db5afd2f18ff49ec7d65f0b93690defd8"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1017,
+            "number": 17,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-017: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-017.",
+            "head": {
+              "ref": "chore/safe-017",
+              "sha": "783449cd549bbd14ec5ca862a673463ac9e9782d"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1018,
+            "number": 18,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-018: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-018.",
+            "head": {
+              "ref": "chore/safe-018",
+              "sha": "cf0e6db276e70ee1fb2f9dd021673f9dc5044e3a"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1019,
+            "number": 19,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-019: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-019.",
+            "head": {
+              "ref": "chore/safe-019",
+              "sha": "ae5d8d2e40a77596c794c8098f07dc32e437ec37"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1020,
+            "number": 20,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-020: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-020.",
+            "head": {
+              "ref": "chore/safe-020",
+              "sha": "79da2b9a4cfb4a69d38082b37ea41d394f8c540f"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1021,
+            "number": 21,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-021: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-021.",
+            "head": {
+              "ref": "chore/safe-021",
+              "sha": "5f7c57c553e135c244db25ec121f8d0fde29ef87"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1022,
+            "number": 22,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-022: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-022.",
+            "head": {
+              "ref": "chore/safe-022",
+              "sha": "c35062b6fedbb332b1e36ca7c56f3d4716e49bb6"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1023,
+            "number": 23,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-023: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-023.",
+            "head": {
+              "ref": "chore/safe-023",
+              "sha": "f2f94dd4981f77b33da8efb8b09662fa533c13c1"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1024,
+            "number": 24,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-024: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-024.",
+            "head": {
+              "ref": "chore/safe-024",
+              "sha": "3248fee880565ccd7a89f49dca35313592ba8772"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1025,
+            "number": 25,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-025: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-025.",
+            "head": {
+              "ref": "chore/safe-025",
+              "sha": "1a0713eb24c84f3ccf810e397fd02ca5c9c15c1f"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1026,
+            "number": 26,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-026: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-026.",
+            "head": {
+              "ref": "chore/safe-026",
+              "sha": "9419f2d705b085008d51bb2595c1c93ed85e39ae"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1027,
+            "number": 27,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-027: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-027.",
+            "head": {
+              "ref": "chore/safe-027",
+              "sha": "5ab5830be4607032740c482b6c02a38d486791c0"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1028,
+            "number": 28,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-028: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-028.",
+            "head": {
+              "ref": "chore/safe-028",
+              "sha": "f091b52116ba6451105024e5e88f06fe9fee5b0e"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1029,
+            "number": 29,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-029: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-029.",
+            "head": {
+              "ref": "chore/safe-029",
+              "sha": "e1b6d03aed09d9f0610540a7998d0d2d0514efeb"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1030,
+            "number": 30,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SAFE-030: routine parser cleanup",
+            "body": "Safe maintenance change SAFE-030.",
+            "head": {
+              "ref": "chore/safe-030",
+              "sha": "78e29384ffe3eb024fb966a8da928f73c90c2bdc"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1031,
+            "number": 31,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SEC-205: evaluate request expressions",
+            "body": "Target security review marker SEC-205.",
+            "head": {
+              "ref": "feature/sec-205-evaluator",
+              "sha": "0f330d4b344c74de25122c990cc6d09a4afbefaa"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "30e5f2e993cfd10405704ba9930730decff8f549"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          }
+        ]
+      },
+      "sq_contents": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/contents/?ref=main",
+        "canonicalizer": "github_contents_recursive_hashes",
+        "status_code": 200,
+        "body": [
+          {
+            "type": "file",
+            "path": "SECURITY_REVIEW.md",
+            "sha": "bb556470447f6d2e437facac3c22cb0dce8bb7f4",
+            "size": 407,
+            "content": "IyBFeHByZXNzaW9uIHBhcnNlciByZXZpZXcgcG9saWN5CgpJbnNwZWN0IGFsbCBwYWdlcyBvZiBvcGVuIGNoYW5nZXMgYW5kIGNvbmZpcm0gZXhpc3RpbmcgcmV2aWV3IHN0YXRlIGJlZm9yZSBhY3RpbmcuIElmIHJlcXVlc3QtY29udHJvbGxlZCBpbnB1dCByZWFjaGVzIGV2YWwsIGNyZWF0ZSBleGFjdGx5IG9uZSBSRVFVRVNUX0NIQU5HRVMgcmV2aWV3IHdpdGggYm9keSBgQmxvY2tpbmc6IHVudHJ1c3RlZCBpbnB1dCByZWFjaGVzIGV2YWwuYCBhbmQgb25lIFJJR0hULXNpZGUgaW5saW5lIGNvbW1lbnQgb24gdGhlIHZ1bG5lcmFibGUgbGluZSB3aXRoIGJvZHkgYFJlcGxhY2UgZXZhbCB3aXRoIGEgbm9uLWV4ZWN1dGluZyBwYXJzZXIuYCBQcmVzZXJ2ZSBldmVyeSBvdGhlciByZXBvc2l0b3J5IHJlc291cmNlLgo=",
+            "encoding": "base64"
+          },
+          {
+            "type": "file",
+            "path": "src/parser.ts",
+            "sha": "40a7ceff368e3f1e5dbb688145da6864ec329595",
+            "size": 69,
+            "content": "ZXhwb3J0IGZ1bmN0aW9uIHBhcnNlKGlucHV0OiBzdHJpbmcpIHsKICByZXR1cm4gSlNPTi5wYXJzZShpbnB1dCk7Cn0K",
+            "encoding": "base64"
+          }
+        ]
+      },
+      "sq_reviews": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls/31/reviews",
+        "canonicalizer": "github_reviews_stable",
+        "status_code": 200,
+        "body": []
+      },
+      "sq_comments": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls/31/comments",
+        "canonicalizer": "github_review_comments_stable",
+        "status_code": 200,
+        "body": []
+      }
+    }
+  },
+  "cases": [
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 9101,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 1,
+            "side": "RIGHT",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa",
+            "pull_request_review_id": 9001
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 31,
+        "review_count": 1,
+        "inline_comment_count": 1
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": true,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "sa_safe_changes_untouched",
+          "sa_repository_preserved",
+          "mr_create_review",
+          "mr_create_comment",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_operational_hurdle_003.gold.semantic_equivalent",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 4242,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 4343,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 1,
+            "side": "RIGHT",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa",
+            "pull_request_review_id": 4242
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open&per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/src/parser.ts?ref=refs/pull/31/head",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews?per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments?per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 31,
+        "review_count": 1,
+        "inline_comment_count": 1,
+        "rationale": "request body flows into eval"
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": false,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "sa_safe_changes_untouched",
+          "sa_repository_preserved",
+          "mr_create_review",
+          "mr_create_comment",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 31,
+        "review_count": 1,
+        "inline_comment_count": 0
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": false,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "mr_create_review",
+          "output.contract"
+        ],
+        "required_failed_assertion_ids": [
+          "sa_inline_comment",
+          "mr_create_comment"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 9101,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 1,
+            "side": "RIGHT",
+            "commit_id": "0f330d4b344c74de25122c990cc6d09a4afbefaa",
+            "pull_request_review_id": 9001
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_pulls/body/30/labels/-",
+          "value": {
+            "name": "security"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/31/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/issues/31/labels",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 31,
+        "review_count": 1,
+        "inline_comment_count": 1
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": true,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "mr_create_review",
+          "mr_create_comment"
+        ],
+        "required_failed_assertion_ids": [
+          "sa_repository_preserved",
+          "mutation_policy.default_deny"
+        ]
+      }
+    }
+  ]
+}

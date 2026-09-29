@@ -624,9 +624,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_clean_001.gold",
+        "pending_reason": null
       },
       "semantic_equivalent": {
         "case_id": "blocking_code_review_v1_github_clean_001.gold.semantic_equivalent",
@@ -636,9 +636,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_clean_001.gold.semantic_equivalent",
+        "pending_reason": null
       },
       "negative_controls": [
         {
@@ -651,7 +651,7 @@
           "intended_failure_assertion_ids": [],
           "static_status": "pending",
           "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "pending_reason": "Evaluator defect: a review on a non-target pull request is visible only through the trusted GitHub review total, which grading cannot attribute, so the trial raises a state-evidence error (invalid_grader) instead of failing. See the blocking_code_review fixture notes."
         },
         {
           "case_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
@@ -659,11 +659,14 @@
           "declared_control_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
           "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": false,
+          "intended_failure_assertion_ids": [
+            "sa_inline_comment",
+            "mr_create_inline_comment"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
+          "pending_reason": null
         },
         {
           "case_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
@@ -671,11 +674,15 @@
           "declared_control_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
           "reference_gold_id": "blocking_code_review_v1_github_clean_001.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "sa_target_preserved",
+            "sa_repository_preserved",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
+          "pending_reason": null
         }
       ],
       "lifecycle": {
@@ -700,9 +707,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_distractor_002.gold",
+        "pending_reason": null
       },
       "semantic_equivalent": {
         "case_id": "blocking_code_review_v1_github_distractor_002.gold.semantic_equivalent",
@@ -712,9 +719,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_distractor_002.gold.semantic_equivalent",
+        "pending_reason": null
       },
       "negative_controls": [
         {
@@ -727,7 +734,7 @@
           "intended_failure_assertion_ids": [],
           "static_status": "pending",
           "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "pending_reason": "Evaluator defect: a review on a non-target pull request is visible only through the trusted GitHub review total, which grading cannot attribute, so the trial raises a state-evidence error (invalid_grader) instead of failing. See the blocking_code_review fixture notes."
         },
         {
           "case_id": "blocking_code_review_v1_github_distractor_002.missing_required_action",
@@ -735,11 +742,14 @@
           "declared_control_id": "blocking_code_review_v1_github_distractor_002.missing_required_action",
           "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": false,
+          "intended_failure_assertion_ids": [
+            "sa_inline_comment",
+            "mr_create_comment"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_distractor_002.missing_required_action",
+          "pending_reason": null
         },
         {
           "case_id": "blocking_code_review_v1_github_distractor_002.collateral_mutation",
@@ -747,11 +757,14 @@
           "declared_control_id": "blocking_code_review_v1_github_distractor_002.collateral_mutation",
           "reference_gold_id": "blocking_code_review_v1_github_distractor_002.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "sa_repository_preserved",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_distractor_002.collateral_mutation",
+          "pending_reason": null
         }
       ],
       "lifecycle": {
@@ -776,9 +789,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
+        "pending_reason": null
       },
       "semantic_equivalent": {
         "case_id": "blocking_code_review_v1_github_operational_hurdle_003.gold.semantic_equivalent",
@@ -788,9 +801,9 @@
         "expected_task_success": true,
         "expected_collateral_damage": false,
         "intended_failure_assertion_ids": [],
-        "static_status": "pending",
-        "fixture_id": null,
-        "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+        "static_status": "executable",
+        "fixture_id": "blocking_code_review_v1_github_operational_hurdle_003.gold.semantic_equivalent",
+        "pending_reason": null
       },
       "negative_controls": [
         {
@@ -803,7 +816,7 @@
           "intended_failure_assertion_ids": [],
           "static_status": "pending",
           "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "pending_reason": "Evaluator defect: a review on a non-target pull request is visible only through the trusted GitHub review total, which grading cannot attribute, so the trial raises a state-evidence error (invalid_grader) instead of failing. See the blocking_code_review fixture notes."
         },
         {
           "case_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
@@ -811,11 +824,14 @@
           "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
           "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": false,
+          "intended_failure_assertion_ids": [
+            "sa_inline_comment",
+            "mr_create_comment"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_operational_hurdle_003.missing_required_action",
+          "pending_reason": null
         },
         {
           "case_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
@@ -823,11 +839,14 @@
           "declared_control_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
           "reference_gold_id": "blocking_code_review_v1_github_operational_hurdle_003.gold",
           "expected_task_success": false,
-          "expected_collateral_damage": null,
-          "intended_failure_assertion_ids": [],
-          "static_status": "pending",
-          "fixture_id": null,
-          "pending_reason": "No checked-in evaluator evidence fixture and live provider execution are available yet."
+          "expected_collateral_damage": true,
+          "intended_failure_assertion_ids": [
+            "sa_repository_preserved",
+            "mutation_policy.default_deny"
+          ],
+          "static_status": "executable",
+          "fixture_id": "blocking_code_review_v1_github_operational_hurdle_003.collateral_mutation",
+          "pending_reason": null
         }
       ],
       "lifecycle": {

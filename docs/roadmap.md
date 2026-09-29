@@ -31,7 +31,7 @@ leaderboard set.
 The checked-in conformance audit reports:
 
 - `leaderboard_ready=false`;
-- 5 of 240 evaluator cases passing and 235 pending; and
+- 17 of 240 evaluator cases passing and 223 pending; and
 - no live case or reset/isolation records.
 
 Promoting any of those 48 instances would require current-fingerprint gold,
