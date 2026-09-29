@@ -49,16 +49,16 @@ def test_representative_evaluator_fixtures_pass_and_pending_fails_closed(
     results = cast(list[dict[str, Any]], audit["evaluator_fixture_results"])
     by_case = {cast(str, item["case_id"]): item for item in results}
 
-    assert counts["executable_evaluator_cases"] == 5
-    assert counts["passed_evaluator_cases"] == 5
+    assert counts["executable_evaluator_cases"] == 17
+    assert counts["passed_evaluator_cases"] == 17
     assert counts["failed_evaluator_cases"] == 0
-    assert counts["pending_evaluator_cases"] == 235
+    assert counts["pending_evaluator_cases"] == 223
     assert all(item["passed"] is True for item in results)
     equivalent = by_case["stripe_price_normalization_v1.clean.gold.semantic_equivalent"]
     assert equivalent["task_success"] is True
     assert equivalent["trace_policy_passed"] is False
     assert audit["leaderboard_ready"] is False
-    assert "235 evaluator conformance cases are pending" in cast(list[str], audit["blockers"])
+    assert "223 evaluator conformance cases are pending" in cast(list[str], audit["blockers"])
 
 
 @pytest.mark.parametrize(
@@ -123,7 +123,7 @@ def test_registry_schema_rejects_duplicate_case_ids() -> None:
 def test_fixture_coverage_rejects_missing_duplicate_and_orphan_cases() -> None:
     registry = load_conformance_registry(REGISTRY)
     fixtures = load_fixture_bundles(FIXTURES)
-    assert len(fixtures) == 1
+    assert len(fixtures) == 4
 
     with pytest.raises(ConformanceError, match="has no evaluator fixture"):
         validate_fixture_coverage(registry=registry, fixtures=[])

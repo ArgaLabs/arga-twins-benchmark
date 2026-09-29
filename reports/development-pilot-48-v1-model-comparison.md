@@ -399,7 +399,7 @@ Static verifier declarations are not enough. Before any leaderboard or model ran
 7. proves unrelated mutations are visible to the canonical state reader;
 8. tears down through the CLI and confirms the Scenario remains reusable.
 
-The fail-closed registry now has one-to-one coverage for all 48 gold IDs, all 144 declared negative-control IDs, and 48 semantic-equivalent trajectories: 240 registered cases. The complete Stripe-clean pack provides five executable evaluator cases and passes. The remaining 235 evaluator cases are explicitly `pending`, and all 48 live lifecycle packs are `pending_live`; they cannot disappear from the audit through omission.
+The fail-closed registry now has one-to-one coverage for all 48 gold IDs, all 144 declared negative-control IDs, and 48 semantic-equivalent trajectories: 240 registered cases. The complete Stripe-clean pack provides five executable evaluator cases, and the three GitHub blocking-code-review packs provide four each (gold, semantic equivalent, omitted action, collateral mutation); all 17 pass. The remaining 223 evaluator cases are explicitly `pending`, and all 48 live lifecycle packs are `pending_live`; they cannot disappear from the audit through omission.
 
 ```bash
 # Release gate: exits nonzero while anything is pending or missing.
@@ -410,7 +410,7 @@ uv run arga-bench conformance audit
 uv run arga-bench conformance audit --allow-pending
 ```
 
-The checked-in [conformance audit](development-pilot-48-v1-conformance-audit.json) reports `leaderboard_ready=false`: 5/240 evaluator cases pass, 235/240 are pending, and there are zero live case or reset/isolation records. Until those blockers are cleared, even the corrected preserved-run artifact remains evaluator-development evidence rather than a benchmark score.
+The checked-in [conformance audit](development-pilot-48-v1-conformance-audit.json) reports `leaderboard_ready=false`: 17/240 evaluator cases pass, 223/240 are pending, and there are zero live case or reset/isolation records. Until those blockers are cleared, even the corrected preserved-run artifact remains evaluator-development evidence rather than a benchmark score.
 
 ## Three-repeat candidate-safe matrix
 

@@ -62,10 +62,42 @@ Those fixtures exercise trusted-state parsing, Stripe canonicalization,
 baseline-relative state evidence, mutation mapping, default-deny safety, output
 facts, and outcome-first grading. All five pass their conformance expectations.
 
-They are synthetic state-evidence fixtures. They do **not** prove live provider
-behavior, seeding, authorization semantics, or reset determinism. The other 235
-evaluator cases are explicitly `pending`, and no live case/lifecycle evidence
-is checked in. Consequently the benchmark is intentionally not
+The three GitHub `blocking_code_review_v1` variants (clean, distractor,
+operational hurdle) each execute four cases from
+`fixtures/blocking_code_review_github_*.json`:
+
+- the gold final state (one `REQUEST_CHANGES` review plus its attached inline
+  comment on the vulnerable line of the target pull request);
+- a semantically equivalent trajectory with different provider IDs, a
+  non-reference route, and a richer report, which passes on outcome while its
+  route diagnostics fail;
+- `missing_required_action`: the review without its inline comment, which fails
+  `sa_inline_comment` and the comment mutation rule without collateral damage;
+  and
+- `collateral_mutation`: the correct artifacts plus an unauthorized label on
+  the target, which fails repository preservation and default-deny.
+
+Unlike the Stripe negative controls, every blocking-review case is a
+trusted-state patch, so it exercises snapshot-contract validation, enrichment,
+canonicalization, and admin-delta claims as well as the verifier. The
+baselines are derived from the checked-in seeds by
+`scripts/build_blocking_code_review_fixtures.py`; run it with `--check` to
+detect drift.
+
+The three `wrong_target` controls remain `pending` because of an evaluator
+defect. None of these verifiers reads review state for non-target pull
+requests, so a blocking review on the wrong pull request is visible only
+through the trusted GitHub `summary.repos[].reviews` total. Grading cannot
+attribute that increment and raises `AdminDeltaClaimError` (clean, operational
+hurdle) or `StateCaptureError` (distractor), which the semantic grader records
+as `invalid_grader` instead of a failing trial. A strict xfail in
+`tests/unit/conformance/test_blocking_code_review_fixtures.py` pins this
+behavior, so fixing it forces the registry update.
+
+All of these are synthetic state-evidence fixtures. They do **not** prove live
+provider behavior, seeding, authorization semantics, or reset determinism. The
+other 223 evaluator cases are explicitly `pending`, and no live case/lifecycle
+evidence is checked in. Consequently the benchmark is intentionally not
 leaderboard-ready.
 
 ## Audit command

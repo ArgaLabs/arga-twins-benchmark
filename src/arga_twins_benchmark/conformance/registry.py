@@ -727,6 +727,7 @@ def registry_entry_template(
     evaluator_fixture_case_ids: set[str],
     intended_failure_assertions: dict[str, list[str]],
     negative_collateral_expectations: dict[str, bool] | None = None,
+    pending_reasons: dict[str, str] | None = None,
 ) -> dict[str, object]:
     """Return the deterministic checked-in registry representation for one verifier."""
 
@@ -754,7 +755,10 @@ def registry_entry_template(
             pending_reason=(
                 None
                 if executable
-                else "No checked-in evaluator evidence fixture and live provider execution are available yet."
+                else (pending_reasons or {}).get(
+                    case_id,
+                    "No checked-in evaluator evidence fixture and live provider execution are available yet.",
+                )
             ),
         ).model_dump(mode="json")
 

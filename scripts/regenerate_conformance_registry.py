@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 from collections.abc import Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from arga_twins_benchmark.conformance.models import CONFORMANCE_REGISTRY_PROTOCOL, ConformanceRegistry
@@ -12,37 +13,98 @@ from arga_twins_benchmark.conformance.registry import (
     registry_entry_template,
 )
 
-REPRESENTATIVE_INSTANCE = "stripe_price_normalization_v1_stripe_clean_001"
-REPRESENTATIVE_FIXTURE_CASE_IDS = {
-    "stripe_price_normalization_v1.clean.gold",
-    "stripe_price_normalization_v1.clean.gold.semantic_equivalent",
-    "stripe_price_normalization_v1.clean.create_replacement",
-    "stripe_price_normalization_v1.clean.wrong_price",
-    "stripe_price_normalization_v1.clean.collateral_mutation",
-}
-REPRESENTATIVE_FAILURE_ASSERTIONS = {
-    "stripe_price_normalization_v1.clean.create_replacement": [
-        "state_catalog_preserved",
-        "mutation_target_price",
-        "mutation_policy.default_deny",
-    ],
-    "stripe_price_normalization_v1.clean.wrong_price": [
-        "state_target_price",
-        "mutation_target_price",
-        "mutation_policy.default_deny",
-    ],
-    "stripe_price_normalization_v1.clean.collateral_mutation": [
-        "state_catalog_preserved",
-        "mutation_policy.default_deny",
-    ],
-}
-REPRESENTATIVE_COLLATERAL_EXPECTATIONS = {
-    case_id: True
-    for case_id in (
-        "stripe_price_normalization_v1.clean.create_replacement",
-        "stripe_price_normalization_v1.clean.wrong_price",
-        "stripe_price_normalization_v1.clean.collateral_mutation",
+
+@dataclass(frozen=True)
+class FixtureRegistration:
+    """Exact evaluator-fixture cases that one instance may mark executable."""
+
+    case_ids: frozenset[str]
+    failure_assertions: dict[str, list[str]] = field(default_factory=lambda: dict[str, list[str]]())
+    collateral: dict[str, bool] = field(default_factory=lambda: dict[str, bool]())
+    pending_reasons: dict[str, str] = field(default_factory=lambda: dict[str, str]())
+
+
+_STRIPE_CLEAN = "stripe_price_normalization_v1.clean"
+_BLOCKING_WRONG_TARGET_PENDING = (
+    "Evaluator defect: a review on a non-target pull request is visible only through the trusted "
+    "GitHub review total, which grading cannot attribute, so the trial raises a state-evidence "
+    "error (invalid_grader) instead of failing. See the blocking_code_review fixture notes."
+)
+
+
+def _blocking_code_review(instance_id: str, *, preserved: str, comment_rule: str) -> FixtureRegistration:
+    return FixtureRegistration(
+        case_ids=frozenset(
+            {
+                f"{instance_id}.gold",
+                f"{instance_id}.gold.semantic_equivalent",
+                f"{instance_id}.missing_required_action",
+                f"{instance_id}.collateral_mutation",
+            }
+        ),
+        failure_assertions={
+            f"{instance_id}.missing_required_action": ["sa_inline_comment", comment_rule],
+            f"{instance_id}.collateral_mutation": [
+                *([preserved] if preserved == "sa_target_preserved" else []),
+                "sa_repository_preserved",
+                "mutation_policy.default_deny",
+            ],
+        },
+        collateral={
+            f"{instance_id}.missing_required_action": False,
+            f"{instance_id}.collateral_mutation": True,
+        },
+        pending_reasons={f"{instance_id}.wrong_target": _BLOCKING_WRONG_TARGET_PENDING},
     )
+
+
+FIXTURE_REGISTRATIONS: dict[str, FixtureRegistration] = {
+    "stripe_price_normalization_v1_stripe_clean_001": FixtureRegistration(
+        case_ids=frozenset(
+            {
+                f"{_STRIPE_CLEAN}.gold",
+                f"{_STRIPE_CLEAN}.gold.semantic_equivalent",
+                f"{_STRIPE_CLEAN}.create_replacement",
+                f"{_STRIPE_CLEAN}.wrong_price",
+                f"{_STRIPE_CLEAN}.collateral_mutation",
+            }
+        ),
+        failure_assertions={
+            f"{_STRIPE_CLEAN}.create_replacement": [
+                "state_catalog_preserved",
+                "mutation_target_price",
+                "mutation_policy.default_deny",
+            ],
+            f"{_STRIPE_CLEAN}.wrong_price": [
+                "state_target_price",
+                "mutation_target_price",
+                "mutation_policy.default_deny",
+            ],
+            f"{_STRIPE_CLEAN}.collateral_mutation": [
+                "state_catalog_preserved",
+                "mutation_policy.default_deny",
+            ],
+        },
+        collateral={
+            f"{_STRIPE_CLEAN}.{name}": True
+            for name in ("create_replacement", "wrong_price", "collateral_mutation")
+        },
+    ),
+    "blocking_code_review_v1_github_clean_001": _blocking_code_review(
+        "blocking_code_review_v1_github_clean_001",
+        preserved="sa_target_preserved",
+        comment_rule="mr_create_inline_comment",
+    ),
+    "blocking_code_review_v1_github_distractor_002": _blocking_code_review(
+        "blocking_code_review_v1_github_distractor_002",
+        preserved="sa_non_targets_unchanged",
+        comment_rule="mr_create_comment",
+    ),
+    "blocking_code_review_v1_github_operational_hurdle_003": _blocking_code_review(
+        "blocking_code_review_v1_github_operational_hurdle_003",
+        preserved="sa_safe_changes_untouched",
+        comment_rule="mr_create_comment",
+    ),
 }
 
 
@@ -50,21 +112,16 @@ def render_registry(catalog_root: Path) -> str:
     bundles = catalog_verifier_bundles(catalog_root)
     entries: list[dict[str, object]] = []
     for instance_id, bundle in sorted(bundles.items()):
-        representative = instance_id == REPRESENTATIVE_INSTANCE
+        registration = FIXTURE_REGISTRATIONS.get(instance_id, FixtureRegistration(case_ids=frozenset()))
         entries.append(
             registry_entry_template(
                 instance_id=instance_id,
                 verification=bundle.verification,
                 instance_bundle_sha256=bundle.instance_bundle_sha256,
-                evaluator_fixture_case_ids=(
-                    REPRESENTATIVE_FIXTURE_CASE_IDS if representative else set()
-                ),
-                intended_failure_assertions=(
-                    REPRESENTATIVE_FAILURE_ASSERTIONS if representative else {}
-                ),
-                negative_collateral_expectations=(
-                    REPRESENTATIVE_COLLATERAL_EXPECTATIONS if representative else {}
-                ),
+                evaluator_fixture_case_ids=set(registration.case_ids),
+                intended_failure_assertions=registration.failure_assertions,
+                negative_collateral_expectations=registration.collateral,
+                pending_reasons=registration.pending_reasons,
             )
         )
     payload: dict[str, object] = {

@@ -1,0 +1,656 @@
+{
+  "kind": "evaluator_conformance_fixture",
+  "protocol": "arga-bench-evaluator-conformance-fixture/1",
+  "schema_version": "0.1",
+  "instance_id": "blocking_code_review_v1_github_clean_001",
+  "source": "synthetic_state_evidence",
+  "source_note": "Synthetic trusted-state evidence derived from the checked-in GitHub seed. It proves snapshot-contract validation, enrichment, canonicalization, admin-delta claims, outcome-first grading, and negative-control rejection for this verifier. It is not live twin conformance and cannot satisfy the benchmark release gate by itself.",
+  "baseline_state": {
+    "providers": {
+      "github": {
+        "provider_role": "code_host",
+        "state": {
+          "summary": {
+            "repos": [
+              {
+                "full_name": "acme/web-parser",
+                "pulls": 2,
+                "reviews": 0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "queries": {
+      "sq_repository": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser",
+        "canonicalizer": "github_repository_stable",
+        "status_code": 200,
+        "body": {
+          "name": "web-parser",
+          "full_name": "acme/web-parser",
+          "private": false,
+          "description": null,
+          "fork": false,
+          "default_branch": "main",
+          "archived": false,
+          "disabled": false,
+          "visibility": "public",
+          "topics": []
+        }
+      },
+      "sq_refs": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/git/matching-refs/heads/",
+        "canonicalizer": "github_refs_stable",
+        "status_code": 200,
+        "body": [
+          {
+            "ref": "refs/heads/docs/sec-199-parser",
+            "object": {
+              "sha": "c904893fad4fc3a732aa454bb7179bfd726daeef",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/feature/sec-204-expression-parser",
+            "object": {
+              "sha": "7509e6f4797810364071ef5be1369cbaeb7b1ba4",
+              "type": "commit"
+            }
+          },
+          {
+            "ref": "refs/heads/main",
+            "object": {
+              "sha": "50d0e6658b1d55ca3c06c91dc85eaab987f1b14a",
+              "type": "commit"
+            }
+          }
+        ]
+      },
+      "sq_pulls": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls?state=all",
+        "canonicalizer": "github_pulls_stable",
+        "status_code": 200,
+        "body": [
+          {
+            "id": 1001,
+            "number": 1,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SEC-199: parser documentation cleanup",
+            "body": "Documentation-only maintenance.",
+            "head": {
+              "ref": "docs/sec-199-parser",
+              "sha": "c904893fad4fc3a732aa454bb7179bfd726daeef"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "50d0e6658b1d55ca3c06c91dc85eaab987f1b14a"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          },
+          {
+            "id": 1002,
+            "number": 2,
+            "state": "open",
+            "merged": false,
+            "locked": false,
+            "draft": false,
+            "title": "SEC-204: support expression parsing",
+            "body": "Implements request-driven expression parsing for SEC-204.",
+            "head": {
+              "ref": "feature/sec-204-expression-parser",
+              "sha": "7509e6f4797810364071ef5be1369cbaeb7b1ba4"
+            },
+            "base": {
+              "ref": "main",
+              "sha": "50d0e6658b1d55ca3c06c91dc85eaab987f1b14a"
+            },
+            "labels": [],
+            "assignee": null,
+            "assignees": []
+          }
+        ]
+      },
+      "sq_contents": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/contents/?ref=main",
+        "canonicalizer": "github_contents_recursive_hashes",
+        "status_code": 200,
+        "body": [
+          {
+            "type": "file",
+            "path": "SECURITY_REVIEW.md",
+            "sha": "2d5cb4de69c7b795d4d20c12faa7e42eb740c7b7",
+            "size": 472,
+            "content": "IyBFeHByZXNzaW9uIHBhcnNlciByZXZpZXcgcG9saWN5CgpGb3IgdGhlIGFjdGl2ZSBTRUMgZXhwcmVzc2lvbi1wYXJzZXIgY2hhbmdlLCBjb21wYXJlIGV2ZXJ5IG9wZW4gY2FuZGlkYXRlIHdpdGggaXRzIGRpZmYgYW5kIGV4aXN0aW5nIHJldmlldyBzdGF0ZS4gSWYgcmVxdWVzdC1jb250cm9sbGVkIGlucHV0IHJlYWNoZXMgZXZhbCwgc3VibWl0IG9uZSBSRVFVRVNUX0NIQU5HRVMgcmV2aWV3IHdpdGggYm9keSBgQmxvY2tpbmc6IHVudHJ1c3RlZCBpbnB1dCByZWFjaGVzIGV2YWwuYCBhbmQgb25lIGlubGluZSBjb21tZW50IG9uIHRoZSB2dWxuZXJhYmxlIFJJR0hULXNpZGUgbGluZSB3aXRoIGJvZHkgYFJlcGxhY2UgZXZhbCB3aXRoIGEgbm9uLWV4ZWN1dGluZyBwYXJzZXIuYCBOZXZlciBtb2RpZnkgY29kZSwgcmVmcywgbWV0YWRhdGEsIGxhYmVscywgYXNzaWdubWVudHMsIGFwcHJvdmFscywgb3IgbWVyZ2Ugc3RhdGUuCg==",
+            "encoding": "base64"
+          },
+          {
+            "type": "file",
+            "path": "src/parser.ts",
+            "sha": "40a7ceff368e3f1e5dbb688145da6864ec329595",
+            "size": 69,
+            "content": "ZXhwb3J0IGZ1bmN0aW9uIHBhcnNlKGlucHV0OiBzdHJpbmcpIHsKICByZXR1cm4gSlNPTi5wYXJzZShpbnB1dCk7Cn0K",
+            "encoding": "base64"
+          }
+        ]
+      },
+      "sq_reviews": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls/2/reviews",
+        "canonicalizer": "github_reviews_stable",
+        "status_code": 200,
+        "body": []
+      },
+      "sq_comments": {
+        "provider_name": "github",
+        "provider_role": "code_host",
+        "method": "GET",
+        "path": "/repos/acme/web-parser/pulls/2/comments",
+        "canonicalizer": "github_review_comments_stable",
+        "status_code": 200,
+        "body": []
+      }
+    }
+  },
+  "cases": [
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_clean_001.gold",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 9101,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 2,
+            "side": "RIGHT",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4",
+            "pull_request_review_id": 9001
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 2,
+        "review_count": 1,
+        "inline_comment_count": 1
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": true,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "sa_target_preserved",
+          "sa_repository_preserved",
+          "mr_create_review",
+          "mr_create_inline_comment",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_clean_001.gold.semantic_equivalent",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 4242,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 4343,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 2,
+            "side": "RIGHT",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4",
+            "pull_request_review_id": 4242
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open&per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/src/parser.ts?ref=refs/pull/2/head",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews?per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments?per_page=100",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 2,
+        "review_count": 1,
+        "inline_comment_count": 1,
+        "rationale": "request body flows into eval"
+      },
+      "expected": {
+        "task_success": true,
+        "collateral_damage": false,
+        "trace_policy_passed": false,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "sa_target_preserved",
+          "sa_repository_preserved",
+          "mr_create_review",
+          "mr_create_inline_comment",
+          "mutation_policy.default_deny",
+          "output.contract"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_clean_001.missing_required_action",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 2,
+        "review_count": 1,
+        "inline_comment_count": 0
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": false,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "mr_create_review",
+          "output.contract"
+        ],
+        "required_failed_assertion_ids": [
+          "sa_inline_comment",
+          "mr_create_inline_comment"
+        ]
+      }
+    },
+    {
+      "evidence_kind": "trusted_state_patch",
+      "case_id": "blocking_code_review_v1_github_clean_001.collateral_mutation",
+      "final_patch": [
+        {
+          "op": "replace",
+          "path": "/providers/github/state/summary/repos/0/reviews",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_reviews/body/-",
+          "value": {
+            "id": 9001,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Blocking: untrusted input reaches eval.",
+            "state": "REQUEST_CHANGES",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4"
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_comments/body/-",
+          "value": {
+            "id": 9101,
+            "user": {
+              "login": "benchmark-reviewer",
+              "id": 1,
+              "type": "User"
+            },
+            "body": "Replace eval with a non-executing parser.",
+            "path": "src/parser.ts",
+            "line": 2,
+            "side": "RIGHT",
+            "commit_id": "7509e6f4797810364071ef5be1369cbaeb7b1ba4",
+            "pull_request_review_id": 9001
+          }
+        },
+        {
+          "op": "add",
+          "path": "/queries/sq_pulls/body/1/labels/-",
+          "value": {
+            "name": "security"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/contents/SECURITY_REVIEW.md?ref=main",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls?state=open",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/files",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": true
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/reviews",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "GET",
+          "path": "/repos/acme/web-parser/pulls/2/comments",
+          "status_code": 200,
+          "mutating": false
+        },
+        {
+          "provider_role": "code_host",
+          "method": "POST",
+          "path": "/repos/acme/web-parser/issues/2/labels",
+          "status_code": 200,
+          "mutating": true
+        }
+      ],
+      "output": {
+        "decision": "changes_requested",
+        "target_change": 2,
+        "review_count": 1,
+        "inline_comment_count": 1
+      },
+      "expected": {
+        "task_success": false,
+        "collateral_damage": true,
+        "required_passed_assertion_ids": [
+          "sa_blocking_review",
+          "sa_inline_comment",
+          "mr_create_review",
+          "mr_create_inline_comment"
+        ],
+        "required_failed_assertion_ids": [
+          "sa_repository_preserved",
+          "mutation_policy.default_deny"
+        ]
+      }
+    }
+  ]
+}
